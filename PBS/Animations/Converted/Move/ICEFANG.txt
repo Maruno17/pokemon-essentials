@@ -13,7 +13,6 @@ Name = ICEFANG
     Focus = Target
     SetX = 0,395
     SetY = 0,94
-    SetVisible = 0,true
     SetX = 1,390
     SetY = 1,92
     SetX = 2,389
@@ -41,7 +40,6 @@ Name = ICEFANG
 <Particle 3>
     Graphic = element fangs
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,330
     SetY = 7,111
     SetOpacity = 7,208
@@ -60,7 +58,6 @@ Name = ICEFANG
 <Particle 4>
     Graphic = element fangs
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,332
     SetY = 8,111
     SetOpacity = 8,133
@@ -76,7 +73,6 @@ Name = ICEFANG
 <Particle 5>
     Graphic = element fangs
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,473
     SetY = 8,65
     SetOpacity = 8,213
@@ -89,7 +85,6 @@ Name = ICEFANG
 <Particle 6>
     Graphic = element fangs
     Focus = Target
-    SetVisible = 0,true
     SetX = 9,399
     SetY = 9,30
     SetOpacity = 9,144
@@ -98,7 +93,6 @@ Name = ICEFANG
 <Particle 7>
     Graphic = element fangs
     Focus = Target
-    SetVisible = 0,true
     SetX = 10,450
     SetY = 10,90
     SetOpacity = 10,154

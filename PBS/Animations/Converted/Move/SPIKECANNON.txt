@@ -13,7 +13,6 @@ Name = SPIKECANNON
     Focus = UserAndTarget
     SetX = 0,147
     SetY = 0,211
-    SetVisible = 0,true
     SetX = 1,217
     SetY = 1,179
     SetX = 2,294
@@ -26,7 +25,6 @@ Name = SPIKECANNON
 <Particle 3>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,198
     SetX = 2,211
@@ -40,7 +38,6 @@ Name = SPIKECANNON
 <Particle 4>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,217
     SetY = 2,205
     SetX = 3,268
@@ -53,7 +50,6 @@ Name = SPIKECANNON
 <Particle 5>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,153
     SetY = 2,192
     SetX = 3,198
@@ -66,7 +62,6 @@ Name = SPIKECANNON
 <Particle 6>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,364
     SetY = 3,98
     SetOpacity = 3,50
@@ -86,7 +81,6 @@ Name = Spike Cannon hit 2
 <Particle 6>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,364
     SetY = 3,98
     SetOpacity = 3,50
@@ -95,7 +89,6 @@ Name = Spike Cannon hit 2
     Focus = UserAndTarget
     SetX = 0,147
     SetY = 0,211
-    SetVisible = 0,true
     SetX = 1,217
     SetY = 1,179
     SetX = 2,294
@@ -108,7 +101,6 @@ Name = Spike Cannon hit 2
 <Particle 3>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,198
     SetX = 2,211
@@ -122,7 +114,6 @@ Name = Spike Cannon hit 2
 <Particle 4>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,217
     SetY = 2,205
     SetX = 3,268
@@ -135,7 +126,6 @@ Name = Spike Cannon hit 2
 <Particle 5>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,153
     SetY = 2,192
     SetX = 3,198
@@ -161,7 +151,6 @@ Name = Spike Cannon hit 3
 <Particle 5>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,153
     SetY = 2,192
     SetX = 3,198
@@ -174,7 +163,6 @@ Name = Spike Cannon hit 3
 <Particle 6>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,364
     SetY = 3,98
     SetOpacity = 3,50
@@ -183,7 +171,6 @@ Name = Spike Cannon hit 3
     Focus = UserAndTarget
     SetX = 0,147
     SetY = 0,211
-    SetVisible = 0,true
     SetX = 1,217
     SetY = 1,179
     SetX = 2,294
@@ -196,7 +183,6 @@ Name = Spike Cannon hit 3
 <Particle 3>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,198
     SetX = 2,211
@@ -210,7 +196,6 @@ Name = Spike Cannon hit 3
 <Particle 4>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,217
     SetY = 2,205
     SetX = 3,268
@@ -236,7 +221,6 @@ Name = Spike Cannon hit 4
 <Particle 4>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,217
     SetY = 2,205
     SetX = 3,268
@@ -249,7 +233,6 @@ Name = Spike Cannon hit 4
 <Particle 5>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,153
     SetY = 2,192
     SetX = 3,198
@@ -262,7 +245,6 @@ Name = Spike Cannon hit 4
 <Particle 6>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,364
     SetY = 3,98
     SetOpacity = 3,50
@@ -271,7 +253,6 @@ Name = Spike Cannon hit 4
     Focus = UserAndTarget
     SetX = 0,147
     SetY = 0,211
-    SetVisible = 0,true
     SetX = 1,217
     SetY = 1,179
     SetX = 2,294
@@ -284,7 +265,6 @@ Name = Spike Cannon hit 4
 <Particle 3>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,198
     SetX = 2,211
@@ -311,7 +291,6 @@ Name = Spike Cannon hit 5
 <Particle 3>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,198
     SetX = 2,211
@@ -325,7 +304,6 @@ Name = Spike Cannon hit 5
 <Particle 4>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,217
     SetY = 2,205
     SetX = 3,268
@@ -338,7 +316,6 @@ Name = Spike Cannon hit 5
 <Particle 5>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,153
     SetY = 2,192
     SetX = 3,198
@@ -351,7 +328,6 @@ Name = Spike Cannon hit 5
 <Particle 6>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,364
     SetY = 3,98
     SetOpacity = 3,50
@@ -360,7 +336,6 @@ Name = Spike Cannon hit 5
     Focus = UserAndTarget
     SetX = 0,147
     SetY = 0,211
-    SetVisible = 0,true
     SetX = 1,217
     SetY = 1,179
     SetX = 2,294

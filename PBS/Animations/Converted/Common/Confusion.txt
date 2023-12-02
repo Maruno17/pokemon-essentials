@@ -13,7 +13,6 @@ Name = Confusion
     Focus = Target
     SetX = 0,384
     SetY = 0,63
-    SetVisible = 0,true
     SetY = 1,64
     SetY = 2,57
     SetX = 3,385

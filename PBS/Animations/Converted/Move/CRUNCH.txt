@@ -13,7 +13,6 @@ Name = CRUNCH
     Focus = Target
     SetX = 0,396
     SetY = 0,97
-    SetVisible = 0,true
     SetX = 1,391
     SetY = 1,98
     SetX = 2,387
@@ -39,7 +38,6 @@ Name = CRUNCH
 <Particle 3>
     Graphic = teeth
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,444
     SetY = 7,115
     SetX = 8,418
@@ -51,7 +49,6 @@ Name = CRUNCH
 <Particle 4>
     Graphic = teeth
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,343
     SetY = 7,94
     SetX = 8,329
@@ -63,7 +60,6 @@ Name = CRUNCH
 <Particle 5>
     Graphic = teeth
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,343
     SetY = 8,95
     SetX = 9,327
@@ -73,7 +69,6 @@ Name = CRUNCH
 <Particle 6>
     Graphic = teeth
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,442
     SetY = 8,99
     SetX = 9,391
@@ -83,7 +78,6 @@ Name = CRUNCH
 <Particle 7>
     Graphic = teeth
     Focus = Target
-    SetVisible = 0,true
     SetX = 10,325
     SetY = 10,96
 <SE>

@@ -13,7 +13,6 @@ Name = SMOKESCREEN
     Focus = Target
     SetX = 0,384
     SetY = 0,102
-    SetVisible = 0,true
     SetFlip = 5,true
     SetZoomX = 5,110
     SetZoomY = 5,110
@@ -30,7 +29,6 @@ Name = SMOKESCREEN
 <Particle 3>
     Graphic = Anima (2)
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,336
     SetY = 2,78
     SetX = 10,408
@@ -42,7 +40,6 @@ Name = SMOKESCREEN
 <Particle 4>
     Graphic = Anima (2)
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,408
     SetY = 3,62
     SetX = 10,440
@@ -55,7 +52,6 @@ Name = SMOKESCREEN
 <Particle 5>
     Graphic = Anima (2)
     Focus = Target
-    SetVisible = 0,true
     SetFlip = 3,true
     SetX = 3,352
     SetY = 3,126
@@ -75,7 +71,6 @@ Name = SMOKESCREEN
 <Particle 6>
     Graphic = Anima (2)
     Focus = Target
-    SetVisible = 0,true
     SetFlip = 4,true
     SetX = 4,352
     SetY = 4,126
@@ -88,7 +83,6 @@ Name = SMOKESCREEN
 <Particle 7>
     Graphic = Anima (2)
     Focus = Target
-    SetVisible = 0,true
     SetFlip = 5,true
     SetX = 5,352
     SetY = 5,126

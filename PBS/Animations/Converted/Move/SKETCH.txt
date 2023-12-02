@@ -15,7 +15,6 @@ Name = SKETCH
     SetY = 0,30
     SetZoomX = 0,75
     SetZoomY = 0,75
-    SetVisible = 0,true
     SetX = 1,184
     SetY = 1,54
     SetX = 2,224

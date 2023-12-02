@@ -13,7 +13,6 @@ Name = MAGICCOAT
     Focus = Target
     SetX = 0,385
     SetY = 0,98
-    SetVisible = 0,true
     SetOpacity = 0,37
     SetOpacity = 1,74
     SetOpacity = 9,72
@@ -21,7 +20,6 @@ Name = MAGICCOAT
 <Particle 3>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,388
     SetY = 2,27
     SetX = 3,372
@@ -43,7 +41,6 @@ Name = MAGICCOAT
 <Particle 4>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,403
     SetY = 2,46
     SetX = 3,353
@@ -65,7 +62,6 @@ Name = MAGICCOAT
 <Particle 5>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,428
     SetY = 2,159
     SetX = 3,340
@@ -84,7 +80,6 @@ Name = MAGICCOAT
 <Particle 6>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,405
     SetY = 2,164
     SetX = 3,417
@@ -102,7 +97,6 @@ Name = MAGICCOAT
 <Particle 7>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,337
     SetY = 2,147
     SetX = 3,430
@@ -114,7 +108,6 @@ Name = MAGICCOAT
 <Particle 8>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,337
     SetY = 2,120
     SetX = 6,453

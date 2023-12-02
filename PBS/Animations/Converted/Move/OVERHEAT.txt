@@ -13,7 +13,6 @@ Name = OVERHEAT
     Focus = UserAndTarget
     SetX = 0,134
     SetY = 0,179
-    SetVisible = 0,true
     SetY = 1,173
     SetY = 2,167
     SetY = 3,161
@@ -28,7 +27,6 @@ Name = OVERHEAT
 <Particle 3>
     Graphic = fire4
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,172
     SetY = 1,179
     SetX = 2,179
@@ -46,7 +44,6 @@ Name = OVERHEAT
 <Particle 4>
     Graphic = fire4
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,211
     SetY = 2,123
     SetX = 3,243
@@ -60,7 +57,6 @@ Name = OVERHEAT
 <Particle 5>
     Graphic = fire4
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,153
     SetY = 2,224
     SetX = 3,243
@@ -77,7 +73,6 @@ Name = OVERHEAT
 <Particle 6>
     Graphic = fire4
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,96
     SetY = 3,167
     SetX = 4,140
@@ -86,7 +81,6 @@ Name = OVERHEAT
 <Particle 7>
     Graphic = fire4
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,256
     SetY = 3,217
     SetX = 4,192
@@ -96,7 +90,6 @@ Name = OVERHEAT
 <Particle 8>
     Graphic = fire4
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,83
     SetY = 4,186
     SetX = 5,32
@@ -104,7 +97,6 @@ Name = OVERHEAT
 <Particle 9>
     Graphic = fire4
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,179
     SetY = 4,135
     SetX = 5,236

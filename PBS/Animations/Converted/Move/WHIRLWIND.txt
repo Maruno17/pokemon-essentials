@@ -13,6 +13,5 @@ Name = WHIRLWIND
     Focus = Target
     SetX = 0,392
     SetY = 0,94
-    SetVisible = 0,true
 <SE>
     Play = 0,Wind1,80,100

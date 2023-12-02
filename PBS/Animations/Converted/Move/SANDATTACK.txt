@@ -13,7 +13,6 @@ Name = SANDATTACK
     Focus = UserAndTarget
     SetX = 0,134
     SetY = 0,280
-    SetVisible = 0,true
     SetX = 2,121
     SetY = 2,268
     SetX = 3,166
@@ -33,7 +32,6 @@ Name = SANDATTACK
 <Particle 3>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,179
     SetY = 3,261
     SetX = 4,217
@@ -51,7 +49,6 @@ Name = SANDATTACK
 <Particle 4>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,147
     SetY = 1,249
     SetX = 2,179
@@ -86,7 +83,6 @@ Name = SANDATTACK
 <Particle 5>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,134
     SetY = 1,230
     SetX = 2,171
@@ -118,7 +114,6 @@ Name = SANDATTACK
 <Particle 6>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,268
     SetX = 2,200
@@ -151,7 +146,6 @@ Name = SANDATTACK
 <Particle 7>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,153
     SetY = 3,242
     SetX = 4,191
@@ -169,7 +163,6 @@ Name = SANDATTACK
 <Particle 8>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,115
     SetY = 4,261
     SetX = 5,134
@@ -189,7 +182,6 @@ Name = SANDATTACK
 <Particle 9>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,166
     SetY = 5,274
     SetX = 6,204
@@ -207,7 +199,6 @@ Name = SANDATTACK
 <Particle 10>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,160
     SetY = 5,268
     SetX = 6,200
@@ -225,7 +216,6 @@ Name = SANDATTACK
 <Particle 11>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,121
     SetY = 6,274
     SetX = 7,147
@@ -245,7 +235,6 @@ Name = SANDATTACK
 <Particle 12>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,172
     SetY = 7,268
     SetX = 8,209
@@ -263,7 +252,6 @@ Name = SANDATTACK
 <Particle 13>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,179
     SetY = 7,274
     SetX = 8,219
@@ -294,7 +282,6 @@ Name = SANDATTACK
     Focus = UserAndTarget
     SetX = 0,377
     SetY = 0,126
-    SetVisible = 0,true
     SetX = 1,352
     SetY = 1,142
     SetX = 2,314
@@ -329,7 +316,6 @@ Name = SANDATTACK
 <Particle 3>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,339
     SetY = 1,123
     SetX = 2,300
@@ -361,7 +347,6 @@ Name = SANDATTACK
 <Particle 4>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,352
     SetY = 1,142
     SetX = 2,313
@@ -393,7 +378,6 @@ Name = SANDATTACK
 <Particle 5>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,371
     SetY = 2,116
     SetX = 3,326
@@ -413,7 +397,6 @@ Name = SANDATTACK
 <Particle 6>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,339
     SetY = 3,148
     SetX = 4,302
@@ -431,7 +414,6 @@ Name = SANDATTACK
 <Particle 7>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,339
     SetY = 3,148
     SetX = 4,304
@@ -449,7 +431,6 @@ Name = SANDATTACK
 <Particle 8>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,396
     SetY = 4,142
     SetX = 5,352
@@ -469,7 +450,6 @@ Name = SANDATTACK
 <Particle 9>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,332
     SetY = 5,142
     SetX = 6,296
@@ -487,7 +467,6 @@ Name = SANDATTACK
 <Particle 10>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,339
     SetY = 5,148
     SetX = 6,301
@@ -505,7 +484,6 @@ Name = SANDATTACK
 <Particle 11>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 6,true
     SetX = 6,377
     SetY = 6,142
@@ -526,7 +504,6 @@ Name = SANDATTACK
 <Particle 12>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,326
     SetY = 7,129
     SetX = 8,289
@@ -544,7 +521,6 @@ Name = SANDATTACK
 <Particle 13>
     Graphic = Sand-Attack
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 7,true
     SetX = 7,358
     SetY = 7,135

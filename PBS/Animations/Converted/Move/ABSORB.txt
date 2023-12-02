@@ -13,7 +13,6 @@ Name = ABSORB
     Focus = UserAndTarget
     SetX = 0,358
     SetY = 0,91
-    SetVisible = 0,true
     SetX = 1,300
     SetY = 1,98
     SetX = 2,198
@@ -51,7 +50,6 @@ Name = ABSORB
 <Particle 3>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,396
     SetY = 1,104
     SetX = 2,364
@@ -87,7 +85,6 @@ Name = ABSORB
 <Particle 4>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,364
     SetY = 1,85
     SetX = 2,300
@@ -119,7 +116,6 @@ Name = ABSORB
 <Particle 5>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,384
     SetY = 2,91
     SetX = 3,345
@@ -145,7 +141,6 @@ Name = ABSORB
 <Particle 6>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,345
     SetY = 2,85
     SetX = 3,307
@@ -164,7 +159,6 @@ Name = ABSORB
 <Particle 7>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,390
     SetY = 3,110
     SetX = 4,371
@@ -174,7 +168,6 @@ Name = ABSORB
 <Particle 8>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,345
     SetY = 4,91
     SetX = 5,364

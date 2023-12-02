@@ -13,7 +13,6 @@ Name = FURYSWIPES
     Focus = Target
     SetX = 0,437
     SetY = 0,65
-    SetVisible = 0,true
     SetOpacity = 0,128
     SetX = 1,424
     SetY = 1,81
@@ -40,7 +39,6 @@ Name = FURYSWIPES
 <Particle 3>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,397
     SetY = 2,125
     SetX = 3,371
@@ -65,7 +63,6 @@ Name = FURYSWIPES
 <Particle 4>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,403
     SetY = 3,138
     SetX = 4,366
@@ -83,7 +80,6 @@ Name = FURYSWIPES
 <Particle 5>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,332
     SetY = 4,127
     SetX = 5,474
@@ -95,7 +91,6 @@ Name = FURYSWIPES
 <Particle 6>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,439
     SetY = 4,134
     SetX = 5,507
@@ -107,7 +102,6 @@ Name = FURYSWIPES
 <Particle 7>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,267
     SetY = 5,180
     SetX = 10,459
@@ -115,7 +109,6 @@ Name = FURYSWIPES
 <Particle 8>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,337
     SetY = 5,191
     SetX = 10,480
@@ -123,7 +116,6 @@ Name = FURYSWIPES
 <Particle 9>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,399
     SetY = 5,177
     SetX = 10,331
@@ -131,13 +123,11 @@ Name = FURYSWIPES
 <Particle 10>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,457
     SetY = 5,180
 <Particle 11>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,483
     SetY = 5,143
 <SE>
@@ -156,7 +146,6 @@ Name = Fury Swipes hit 2
     Focus = Target
     SetX = 0,437
     SetY = 0,65
-    SetVisible = 0,true
     SetOpacity = 0,128
     SetX = 1,424
     SetY = 1,81
@@ -183,7 +172,6 @@ Name = Fury Swipes hit 2
 <Particle 3>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,397
     SetY = 2,125
     SetX = 3,371
@@ -208,7 +196,6 @@ Name = Fury Swipes hit 2
 <Particle 4>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,403
     SetY = 3,138
     SetX = 4,366
@@ -226,7 +213,6 @@ Name = Fury Swipes hit 2
 <Particle 5>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,332
     SetY = 4,127
     SetX = 5,474
@@ -238,7 +224,6 @@ Name = Fury Swipes hit 2
 <Particle 6>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,439
     SetY = 4,134
     SetX = 5,507
@@ -250,7 +235,6 @@ Name = Fury Swipes hit 2
 <Particle 7>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,267
     SetY = 5,180
     SetX = 10,459
@@ -258,7 +242,6 @@ Name = Fury Swipes hit 2
 <Particle 8>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,337
     SetY = 5,191
     SetX = 10,480
@@ -266,7 +249,6 @@ Name = Fury Swipes hit 2
 <Particle 9>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,399
     SetY = 5,177
     SetX = 10,331
@@ -274,13 +256,11 @@ Name = Fury Swipes hit 2
 <Particle 10>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,457
     SetY = 5,180
 <Particle 11>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,483
     SetY = 5,143
 <SE>
@@ -299,7 +279,6 @@ Name = Fury Swipes hit 3
     Focus = Target
     SetX = 0,437
     SetY = 0,65
-    SetVisible = 0,true
     SetOpacity = 0,128
     SetX = 1,424
     SetY = 1,81
@@ -326,7 +305,6 @@ Name = Fury Swipes hit 3
 <Particle 3>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,397
     SetY = 2,125
     SetX = 3,371
@@ -351,7 +329,6 @@ Name = Fury Swipes hit 3
 <Particle 4>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,403
     SetY = 3,138
     SetX = 4,366
@@ -369,7 +346,6 @@ Name = Fury Swipes hit 3
 <Particle 5>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,332
     SetY = 4,127
     SetX = 5,474
@@ -381,7 +357,6 @@ Name = Fury Swipes hit 3
 <Particle 6>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,439
     SetY = 4,134
     SetX = 5,507
@@ -393,7 +368,6 @@ Name = Fury Swipes hit 3
 <Particle 7>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,267
     SetY = 5,180
     SetX = 10,459
@@ -401,7 +375,6 @@ Name = Fury Swipes hit 3
 <Particle 8>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,337
     SetY = 5,191
     SetX = 10,480
@@ -409,7 +382,6 @@ Name = Fury Swipes hit 3
 <Particle 9>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,399
     SetY = 5,177
     SetX = 10,331
@@ -417,13 +389,11 @@ Name = Fury Swipes hit 3
 <Particle 10>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,457
     SetY = 5,180
 <Particle 11>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,483
     SetY = 5,143
 <SE>
@@ -442,7 +412,6 @@ Name = Fury Swipes hit 4
     Focus = Target
     SetX = 0,437
     SetY = 0,65
-    SetVisible = 0,true
     SetOpacity = 0,128
     SetX = 1,424
     SetY = 1,81
@@ -469,7 +438,6 @@ Name = Fury Swipes hit 4
 <Particle 3>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,397
     SetY = 2,125
     SetX = 3,371
@@ -494,7 +462,6 @@ Name = Fury Swipes hit 4
 <Particle 4>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,403
     SetY = 3,138
     SetX = 4,366
@@ -512,7 +479,6 @@ Name = Fury Swipes hit 4
 <Particle 5>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,332
     SetY = 4,127
     SetX = 5,474
@@ -524,7 +490,6 @@ Name = Fury Swipes hit 4
 <Particle 6>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,439
     SetY = 4,134
     SetX = 5,507
@@ -536,7 +501,6 @@ Name = Fury Swipes hit 4
 <Particle 7>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,267
     SetY = 5,180
     SetX = 10,459
@@ -544,7 +508,6 @@ Name = Fury Swipes hit 4
 <Particle 8>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,337
     SetY = 5,191
     SetX = 10,480
@@ -552,7 +515,6 @@ Name = Fury Swipes hit 4
 <Particle 9>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,399
     SetY = 5,177
     SetX = 10,331
@@ -560,13 +522,11 @@ Name = Fury Swipes hit 4
 <Particle 10>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,457
     SetY = 5,180
 <Particle 11>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,483
     SetY = 5,143
 <SE>
@@ -585,7 +545,6 @@ Name = Fury Swipes hit 5
     Focus = Target
     SetX = 0,437
     SetY = 0,65
-    SetVisible = 0,true
     SetOpacity = 0,128
     SetX = 1,424
     SetY = 1,81
@@ -612,7 +571,6 @@ Name = Fury Swipes hit 5
 <Particle 3>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,397
     SetY = 2,125
     SetX = 3,371
@@ -637,7 +595,6 @@ Name = Fury Swipes hit 5
 <Particle 4>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,403
     SetY = 3,138
     SetX = 4,366
@@ -655,7 +612,6 @@ Name = Fury Swipes hit 5
 <Particle 5>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,332
     SetY = 4,127
     SetX = 5,474
@@ -667,7 +623,6 @@ Name = Fury Swipes hit 5
 <Particle 6>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,439
     SetY = 4,134
     SetX = 5,507
@@ -679,7 +634,6 @@ Name = Fury Swipes hit 5
 <Particle 7>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,267
     SetY = 5,180
     SetX = 10,459
@@ -687,7 +641,6 @@ Name = Fury Swipes hit 5
 <Particle 8>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,337
     SetY = 5,191
     SetX = 10,480
@@ -695,7 +648,6 @@ Name = Fury Swipes hit 5
 <Particle 9>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,399
     SetY = 5,177
     SetX = 10,331
@@ -703,13 +655,11 @@ Name = Fury Swipes hit 5
 <Particle 10>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,457
     SetY = 5,180
 <Particle 11>
     Graphic = Scratch + Shadow Claw
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,483
     SetY = 5,143
 <SE>

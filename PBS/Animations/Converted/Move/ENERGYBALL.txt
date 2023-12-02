@@ -15,7 +15,6 @@ Name = ENERGYBALL
     SetY = 0,117
     SetZoomX = 0,80
     SetZoomY = 0,80
-    SetVisible = 0,true
     SetZoomX = 1,90
     SetZoomY = 1,90
     SetZoomX = 2,100

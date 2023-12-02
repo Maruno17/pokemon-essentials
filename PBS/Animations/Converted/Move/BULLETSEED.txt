@@ -13,7 +13,6 @@ Name = BULLETSEED
     Focus = UserAndTarget
     SetX = 0,160
     SetY = 0,198
-    SetVisible = 0,true
     SetX = 1,211
     SetY = 1,173
     SetX = 2,249
@@ -38,7 +37,6 @@ Name = BULLETSEED
 <Particle 3>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,198
     SetX = 2,211
@@ -60,7 +58,6 @@ Name = BULLETSEED
 <Particle 4>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,172
     SetY = 2,198
     SetX = 3,211
@@ -76,7 +73,6 @@ Name = BULLETSEED
 <Particle 5>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,172
     SetY = 3,205
     SetX = 4,217
@@ -89,7 +85,6 @@ Name = BULLETSEED
 <Particle 6>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,179
     SetY = 4,217
     SetX = 5,217
@@ -116,7 +111,6 @@ Name = Bullet Seed hit 2
 <Particle 6>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,179
     SetY = 4,217
     SetX = 5,217
@@ -128,7 +122,6 @@ Name = Bullet Seed hit 2
     Focus = UserAndTarget
     SetX = 0,160
     SetY = 0,198
-    SetVisible = 0,true
     SetX = 1,211
     SetY = 1,173
     SetX = 2,249
@@ -153,7 +146,6 @@ Name = Bullet Seed hit 2
 <Particle 3>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,198
     SetX = 2,211
@@ -175,7 +167,6 @@ Name = Bullet Seed hit 2
 <Particle 4>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,172
     SetY = 2,198
     SetX = 3,211
@@ -191,7 +182,6 @@ Name = Bullet Seed hit 2
 <Particle 5>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,172
     SetY = 3,205
     SetX = 4,217
@@ -221,7 +211,6 @@ Name = Bullet Seed hit 3
 <Particle 5>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,172
     SetY = 3,205
     SetX = 4,217
@@ -234,7 +223,6 @@ Name = Bullet Seed hit 3
 <Particle 6>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,179
     SetY = 4,217
     SetX = 5,217
@@ -246,7 +234,6 @@ Name = Bullet Seed hit 3
     Focus = UserAndTarget
     SetX = 0,160
     SetY = 0,198
-    SetVisible = 0,true
     SetX = 1,211
     SetY = 1,173
     SetX = 2,249
@@ -271,7 +258,6 @@ Name = Bullet Seed hit 3
 <Particle 3>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,198
     SetX = 2,211
@@ -293,7 +279,6 @@ Name = Bullet Seed hit 3
 <Particle 4>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,172
     SetY = 2,198
     SetX = 3,211
@@ -326,7 +311,6 @@ Name = Bullet Seed hit 4
 <Particle 4>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,172
     SetY = 2,198
     SetX = 3,211
@@ -342,7 +326,6 @@ Name = Bullet Seed hit 4
 <Particle 5>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,172
     SetY = 3,205
     SetX = 4,217
@@ -355,7 +338,6 @@ Name = Bullet Seed hit 4
 <Particle 6>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,179
     SetY = 4,217
     SetX = 5,217
@@ -367,7 +349,6 @@ Name = Bullet Seed hit 4
     Focus = UserAndTarget
     SetX = 0,160
     SetY = 0,198
-    SetVisible = 0,true
     SetX = 1,211
     SetY = 1,173
     SetX = 2,249
@@ -392,7 +373,6 @@ Name = Bullet Seed hit 4
 <Particle 3>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,198
     SetX = 2,211
@@ -431,7 +411,6 @@ Name = Bullet Seed hit 5
 <Particle 3>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,160
     SetY = 1,198
     SetX = 2,211
@@ -453,7 +432,6 @@ Name = Bullet Seed hit 5
 <Particle 4>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,172
     SetY = 2,198
     SetX = 3,211
@@ -469,7 +447,6 @@ Name = Bullet Seed hit 5
 <Particle 5>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,172
     SetY = 3,205
     SetX = 4,217
@@ -482,7 +459,6 @@ Name = Bullet Seed hit 5
 <Particle 6>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,179
     SetY = 4,217
     SetX = 5,217
@@ -494,7 +470,6 @@ Name = Bullet Seed hit 5
     Focus = UserAndTarget
     SetX = 0,160
     SetY = 0,198
-    SetVisible = 0,true
     SetX = 1,211
     SetY = 1,173
     SetX = 2,249

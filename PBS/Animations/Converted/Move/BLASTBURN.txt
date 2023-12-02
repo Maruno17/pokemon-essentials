@@ -13,7 +13,6 @@ Name = BLASTBURN
     Focus = Target
     SetX = 0,128
     SetY = 0,236
-    SetVisible = 0,true
     SetFlip = 1,true
     SetAngle = 1,20
     SetX = 2,160
@@ -62,7 +61,6 @@ Name = BLASTBURN
 <Particle 3>
     Graphic = Firebird
     Focus = Target
-    SetVisible = 0,true
     SetFlip = 5,true
     SetX = 5,358
     SetY = 5,110
@@ -102,7 +100,6 @@ Name = BLASTBURN
 <Particle 4>
     Graphic = Firebird
     Focus = Target
-    SetVisible = 0,true
     SetX = 6,358
     SetY = 6,123
     SetX = 7,390
@@ -132,7 +129,6 @@ Name = BLASTBURN
 <Particle 5>
     Graphic = Firebird
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,364
     SetY = 7,154
     SetX = 9,326
@@ -153,7 +149,6 @@ Name = BLASTBURN
 <Particle 6>
     Graphic = Firebird
     Focus = Target
-    SetVisible = 0,true
     SetX = 9,384
     SetY = 9,91
     SetX = 10,345
@@ -172,7 +167,6 @@ Name = BLASTBURN
 <Particle 7>
     Graphic = Firebird
     Focus = Target
-    SetVisible = 0,true
     SetX = 9,441
     SetY = 9,167
     SetX = 10,339
@@ -187,7 +181,6 @@ Name = BLASTBURN
 <Particle 8>
     Graphic = Firebird
     Focus = Target
-    SetVisible = 0,true
     SetX = 10,371
     SetY = 10,66
     SetX = 11,320
@@ -200,7 +193,6 @@ Name = BLASTBURN
 <Particle 9>
     Graphic = Firebird
     Focus = Target
-    SetVisible = 0,true
     SetX = 10,339
     SetY = 10,179
 <SE>

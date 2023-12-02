@@ -13,7 +13,6 @@ Name = HEATWAVE
     Focus = UserAndTarget
     SetX = 0,256
     SetY = 0,167
-    SetVisible = 0,true
     SetZoomX = 1,110
     SetZoomY = 1,110
     SetOpacity = 1,240

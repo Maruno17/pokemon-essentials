@@ -11,7 +11,6 @@ Name = THUNDERWAVE
 <Particle 3>
     Graphic = T. Shock
     Focus = Target
-    SetVisible = 0,true
     SetX = 6,392
     SetY = 6,114
     SetX = 7,368
@@ -24,13 +23,11 @@ Name = THUNDERWAVE
 <Particle 4>
     Graphic = T. Shock
     Focus = Target
-    SetVisible = 0,true
     SetX = 6,368
     SetY = 6,114
 <Particle 2>
     Graphic = T. Shock
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,392
     SetY = 1,42
     SetY = 2,58

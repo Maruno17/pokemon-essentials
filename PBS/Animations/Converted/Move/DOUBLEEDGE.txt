@@ -11,7 +11,6 @@ Name = DOUBLEEDGE
 <Particle 3>
     Graphic = Divine_Smash
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,198
     SetY = 1,236
     SetY = 2,179
@@ -22,7 +21,6 @@ Name = DOUBLEEDGE
 <Particle 4>
     Graphic = Divine_Smash
     Focus = User
-    SetVisible = 0,true
     SetX = 2,96
     SetY = 2,230
 <Particle 2>
@@ -30,7 +28,6 @@ Name = DOUBLEEDGE
     Focus = Target
     SetX = 0,128
     SetY = 0,236
-    SetVisible = 0,true
     SetY = 1,192
     SetY = 2,129
     SetX = 3,198

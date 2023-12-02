@@ -13,7 +13,6 @@ Name = DRAGONBREATH
     Focus = UserAndTarget
     SetX = 0,153
     SetY = 0,205
-    SetVisible = 0,true
     SetX = 1,204
     SetY = 1,186
     SetX = 2,256
@@ -27,7 +26,6 @@ Name = DRAGONBREATH
 <Particle 3>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,179
     SetY = 1,198
     SetX = 2,217
@@ -44,7 +42,6 @@ Name = DRAGONBREATH
 <Particle 4>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 2,true
     SetX = 2,217
     SetY = 2,186
@@ -60,7 +57,6 @@ Name = DRAGONBREATH
 <Particle 5>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 2,true
     SetX = 2,179
     SetY = 2,205
@@ -73,7 +69,6 @@ Name = DRAGONBREATH
 <Particle 6>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,236
     SetY = 2,154
     SetZoomX = 2,50
@@ -85,7 +80,6 @@ Name = DRAGONBREATH
 <Particle 7>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 3,true
     SetX = 3,345
     SetY = 3,154
@@ -94,7 +88,6 @@ Name = DRAGONBREATH
 <Particle 8>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 3,true
     SetX = 3,294
     SetY = 3,142
@@ -103,7 +96,6 @@ Name = DRAGONBREATH
 <Particle 9>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,211
     SetY = 3,211
     SetZoomX = 3,75

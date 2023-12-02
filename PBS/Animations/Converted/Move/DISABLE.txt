@@ -11,14 +11,12 @@ Name = DISABLE
 <Particle 3>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,385
     SetY = 4,96
     SetAngle = 4,45
 <Particle 4>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,388
     SetY = 6,96
 <Particle 2>
@@ -26,7 +24,6 @@ Name = DISABLE
     Focus = UserAndTarget
     SetX = 0,385
     SetY = 0,101
-    SetVisible = 0,true
     SetX = 1,384
     SetY = 1,98
     SetY = 2,99

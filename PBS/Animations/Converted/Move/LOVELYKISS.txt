@@ -13,7 +13,6 @@ Name = LOVELYKISS
     Focus = UserAndTarget
     SetX = 0,395
     SetY = 0,130
-    SetVisible = 0,true
     SetX = 1,383
     SetY = 1,102
     SetX = 2,382
@@ -34,7 +33,6 @@ Name = LOVELYKISS
 <Particle 3>
     Graphic = poi.hear.mus
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,376
     SetY = 1,94
     SetX = 2,405
@@ -55,7 +53,6 @@ Name = LOVELYKISS
 <Particle 4>
     Graphic = poi.hear.mus
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,407
     SetY = 1,139
     SetX = 2,372
@@ -77,7 +74,6 @@ Name = LOVELYKISS
 <Particle 5>
     Graphic = poi.hear.mus
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,370
     SetY = 5,70
     SetX = 6,337
@@ -90,7 +86,6 @@ Name = LOVELYKISS
 <Particle 6>
     Graphic = poi.hear.mus
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,359
     SetY = 6,56
     SetX = 7,355
@@ -98,7 +93,6 @@ Name = LOVELYKISS
 <Particle 7>
     Graphic = poi.hear.mus
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,331
     SetY = 7,59
 <SE>

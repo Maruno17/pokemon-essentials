@@ -15,7 +15,6 @@ Name = FORESIGHT
     SetY = 0,22
     SetZoomX = 0,50
     SetZoomY = 0,50
-    SetVisible = 0,true
     SetOpacity = 0,150
     SetX = 1,304
     SetY = 1,54

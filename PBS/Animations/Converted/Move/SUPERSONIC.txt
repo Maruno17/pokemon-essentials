@@ -11,7 +11,6 @@ Name = SUPERSONIC
 <Particle 3>
     Graphic = Struggle
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,147
     SetY = 2,224
     SetAngle = 2,20
@@ -45,7 +44,6 @@ Name = SUPERSONIC
 <Particle 4>
     Graphic = Struggle
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,160
     SetY = 4,211
     SetAngle = 4,20
@@ -60,7 +58,6 @@ Name = SUPERSONIC
     Focus = UserAndTarget
     SetX = 0,128
     SetY = 0,236
-    SetVisible = 0,true
     SetAngle = 1,20
     SetX = 2,172
     SetY = 2,205

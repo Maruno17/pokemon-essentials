@@ -11,7 +11,6 @@ Name = TOXIC
 <Particle 3>
     Graphic = State1
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,440
     SetY = 2,86
     SetX = 14,400
@@ -23,7 +22,6 @@ Name = TOXIC
 <Particle 4>
     Graphic = State1
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,400
     SetY = 3,142
     SetX = 14,352
@@ -33,7 +31,6 @@ Name = TOXIC
 <Particle 5>
     Graphic = State1
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,352
     SetY = 4,102
     SetX = 14,328
@@ -41,7 +38,6 @@ Name = TOXIC
 <Particle 6>
     Graphic = State1
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,328
     SetY = 5,134
 <Particle 2>
@@ -49,7 +45,6 @@ Name = TOXIC
     Focus = Target
     SetX = 0,304
     SetY = 0,118
-    SetVisible = 0,true
     SetX = 14,440
     SetY = 14,86
     SetX = 15,400

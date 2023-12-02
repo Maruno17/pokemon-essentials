@@ -87,6 +87,14 @@ module AnimationEditor::ParticleDataHelper
     value = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[:visible]
     value = true if ["User", "Target", "SE"].include?(particle[:name])
     ret = []
+    if !["User", "Target", "SE"].include?(particle[:name])
+      earliest = duration
+      particle.each_pair do |prop, value|
+        next if !value.is_a?(Array) || value.length == 0
+        earliest = value[0][0] if earliest > value[0][0]
+      end
+      ret[earliest] = true
+    end
     if particle[:visible]
       particle[:visible].each { |cmd| ret[cmd[0]] = cmd[2] }
     end

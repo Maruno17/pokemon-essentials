@@ -15,7 +15,6 @@ Name = SILVERWIND
     SetY = 0,-10
     SetZoomX = 0,20
     SetZoomY = 0,20
-    SetVisible = 0,true
     SetX = 1,208
     SetY = 1,22
     SetX = 2,248
@@ -35,7 +34,6 @@ Name = SILVERWIND
 <Particle 3>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,96
     SetY = 1,30
     SetZoomX = 1,20
@@ -57,7 +55,6 @@ Name = SILVERWIND
 <Particle 4>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,136
     SetY = 1,-42
     SetZoomX = 1,20
@@ -79,7 +76,6 @@ Name = SILVERWIND
 <Particle 5>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,192
     SetY = 2,6
     SetZoomX = 2,20
@@ -99,7 +95,6 @@ Name = SILVERWIND
 <Particle 6>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,104
     SetY = 2,6
     SetZoomX = 2,20
@@ -119,7 +114,6 @@ Name = SILVERWIND
 <Particle 7>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,240
     SetY = 3,-42
     SetZoomX = 3,20
@@ -141,7 +135,6 @@ Name = SILVERWIND
 <Particle 8>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,96
     SetY = 3,-10
     SetZoomX = 3,20
@@ -159,7 +152,6 @@ Name = SILVERWIND
 <Particle 9>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,216
     SetY = 3,38
     SetOpacity = 3,50
@@ -178,7 +170,6 @@ Name = SILVERWIND
 <Particle 10>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,408
     SetY = 4,-42
     SetZoomX = 4,20
@@ -196,7 +187,6 @@ Name = SILVERWIND
 <Particle 11>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,216
     SetY = 4,38
     SetOpacity = 4,50
@@ -213,7 +203,6 @@ Name = SILVERWIND
 <Particle 12>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,424
     SetY = 5,6
     SetOpacity = 5,50
@@ -225,7 +214,6 @@ Name = SILVERWIND
 <Particle 13>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,184
     SetY = 5,-34
     SetZoomX = 5,20
@@ -237,7 +225,6 @@ Name = SILVERWIND
 <Particle 14>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,88
     SetY = 5,166
     SetZoomX = 5,20
@@ -249,7 +236,6 @@ Name = SILVERWIND
 <Particle 15>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,96
     SetY = 5,6
     SetZoomX = 5,20
@@ -259,7 +245,6 @@ Name = SILVERWIND
 <Particle 16>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,376
     SetY = 5,-50
     SetZoomX = 5,20
@@ -269,7 +254,6 @@ Name = SILVERWIND
 <Particle 17>
     Graphic = Heal5
     Focus = Target
-    SetVisible = 0,true
     SetFlip = 5,true
     SetX = 5,184
     SetY = 5,142

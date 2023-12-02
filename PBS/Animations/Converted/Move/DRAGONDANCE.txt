@@ -11,14 +11,12 @@ Name = DRAGONDANCE
 <Particle 3>
     Graphic = electric1
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,392
     SetY = 3,46
     SetY = 7,94
 <Particle 2>
     Graphic = electric1
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,392
     SetY = 1,94
     SetY = 7,46

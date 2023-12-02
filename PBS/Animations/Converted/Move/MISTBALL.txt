@@ -11,7 +11,6 @@ Name = MISTBALL
 <Particle 3>
     Graphic = fly copy
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,386
     SetY = 3,108
     SetOpacity = 3,200
@@ -30,7 +29,6 @@ Name = MISTBALL
     Focus = UserAndTarget
     SetX = 0,385
     SetY = 0,98
-    SetVisible = 0,true
     SetOpacity = 0,200
     SetX = 1,383
     SetY = 1,99

@@ -13,6 +13,5 @@ Name = SLAM
     Focus = Target
     SetX = 0,384
     SetY = 0,94
-    SetVisible = 0,true
 <SE>
     Play = 0,Blow6,80,100

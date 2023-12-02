@@ -15,7 +15,6 @@ Name = LOWKICK
     SetY = 0,158
     SetZoomX = 0,75
     SetZoomY = 0,75
-    SetVisible = 0,true
     SetOpacity = 0,100
     SetX = 1,424
     SetY = 1,134

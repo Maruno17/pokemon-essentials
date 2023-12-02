@@ -11,7 +11,6 @@ Name = DYNAMICPUNCH
 <Particle 3>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,389
     SetY = 1,99
     SetX = 2,386
@@ -26,7 +25,6 @@ Name = DYNAMICPUNCH
     Focus = Target
     SetX = 0,389
     SetY = 0,98
-    SetVisible = 0,true
     SetX = 1,386
     SetY = 1,96
     SetX = 2,389

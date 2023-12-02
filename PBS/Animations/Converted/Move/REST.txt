@@ -13,7 +13,6 @@ Name = REST
     Focus = Target
     SetX = 0,357
     SetY = 0,67
-    SetVisible = 0,true
     SetX = 1,338
     SetY = 1,49
     SetX = 2,320

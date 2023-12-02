@@ -13,7 +13,6 @@ Name = CUT
     Focus = Target
     SetX = 0,384
     SetY = 0,94
-    SetVisible = 0,true
 <SE>
     Play = 0,Slash10,80,100
     Play = 3,Slash2,80,100

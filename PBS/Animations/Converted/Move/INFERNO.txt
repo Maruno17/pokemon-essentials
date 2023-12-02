@@ -13,7 +13,6 @@ Name = INFERNO
     Focus = Target
     SetX = 0,368
     SetY = 0,128
-    SetVisible = 0,true
     SetX = 1,361
     SetY = 1,122
     SetX = 2,360
@@ -36,7 +35,6 @@ Name = INFERNO
     Focus = Target
     SetX = 0,405
     SetY = 0,123
-    SetVisible = 0,true
     SetX = 1,410
     SetY = 1,121
     SetX = 2,383
@@ -57,7 +55,6 @@ Name = INFERNO
 <Particle 4>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,387
     SetY = 1,119
     SetX = 2,407
@@ -79,7 +76,6 @@ Name = INFERNO
 <Particle 5>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,377
     SetY = 1,105
     SetX = 2,380
@@ -101,7 +97,6 @@ Name = INFERNO
 <Particle 6>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,402
     SetY = 1,107
     SetX = 2,397
@@ -123,7 +118,6 @@ Name = INFERNO
 <Particle 7>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,364
     SetY = 2,103
     SetX = 3,409
@@ -143,7 +137,6 @@ Name = INFERNO
 <Particle 8>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,386
     SetY = 2,95
     SetX = 3,349
@@ -163,7 +156,6 @@ Name = INFERNO
 <Particle 9>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,349
     SetY = 2,92
     SetX = 3,373
@@ -183,7 +175,6 @@ Name = INFERNO
 <Particle 10>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,393
     SetY = 3,99
     SetX = 4,402
@@ -199,7 +190,6 @@ Name = INFERNO
 <Particle 11>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,357
     SetY = 3,89
     SetX = 4,395
@@ -215,7 +205,6 @@ Name = INFERNO
 <Particle 12>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,412
     SetY = 3,95
     SetX = 4,357
@@ -227,7 +216,6 @@ Name = INFERNO
 <Particle 13>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,380
     SetY = 3,81
     SetX = 4,385
@@ -239,7 +227,6 @@ Name = INFERNO
 <Particle 14>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,367
     SetY = 4,74
     SetX = 7,355
@@ -249,7 +236,6 @@ Name = INFERNO
 <Particle 15>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,343
     SetY = 4,79
     SetX = 7,383
@@ -259,7 +245,6 @@ Name = INFERNO
 <Particle 16>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,402
     SetY = 4,76
     SetX = 7,419
@@ -269,7 +254,6 @@ Name = INFERNO
 <Particle 17>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,382
     SetY = 4,58
     SetX = 7,422
@@ -279,19 +263,16 @@ Name = INFERNO
 <Particle 18>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,423
     SetY = 8,116
 <Particle 19>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,414
     SetY = 8,138
 <Particle 20>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,396
     SetY = 8,33
 <SE>

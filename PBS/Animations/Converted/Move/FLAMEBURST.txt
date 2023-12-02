@@ -13,7 +13,6 @@ Name = FLAMEBURST
     Focus = Target
     SetX = 0,385
     SetY = 0,101
-    SetVisible = 0,true
     SetY = 1,98
     SetX = 2,375
     SetY = 2,109
@@ -32,7 +31,6 @@ Name = FLAMEBURST
 <Particle 3>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,400
     SetY = 1,114
     SetX = 2,365
@@ -51,7 +49,6 @@ Name = FLAMEBURST
 <Particle 4>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,371
     SetY = 1,110
     SetX = 2,397
@@ -71,7 +68,6 @@ Name = FLAMEBURST
 <Particle 5>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,389
     SetY = 2,94
     SetX = 3,367
@@ -88,7 +84,6 @@ Name = FLAMEBURST
 <Particle 6>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,399
     SetY = 3,83
     SetX = 4,382
@@ -104,7 +99,6 @@ Name = FLAMEBURST
 <Particle 7>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,410
     SetY = 3,111
     SetX = 4,400
@@ -120,7 +114,6 @@ Name = FLAMEBURST
 <Particle 8>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,380
     SetY = 3,78
     SetX = 4,358
@@ -136,7 +129,6 @@ Name = FLAMEBURST
 <Particle 9>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,369
     SetY = 4,77
     SetX = 5,372
@@ -150,7 +142,6 @@ Name = FLAMEBURST
 <Particle 10>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,394
     SetY = 4,77
     SetX = 5,400
@@ -164,7 +155,6 @@ Name = FLAMEBURST
 <Particle 11>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,413
     SetY = 4,107
     SetX = 5,400
@@ -178,7 +168,6 @@ Name = FLAMEBURST
 <Particle 12>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,414
     SetY = 5,114
     SetX = 6,413
@@ -190,7 +179,6 @@ Name = FLAMEBURST
 <Particle 13>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,420
     SetY = 5,92
     SetX = 6,388
@@ -202,7 +190,6 @@ Name = FLAMEBURST
 <Particle 14>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,405
     SetY = 5,82
     SetX = 6,367
@@ -214,7 +201,6 @@ Name = FLAMEBURST
 <Particle 15>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 6,422
     SetY = 6,130
     SetX = 7,377
@@ -223,7 +209,6 @@ Name = FLAMEBURST
 <Particle 16>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 6,344
     SetY = 6,76
     SetX = 7,354
@@ -233,7 +218,6 @@ Name = FLAMEBURST
 <Particle 17>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,405
     SetY = 7,61
     SetX = 8,431
@@ -241,7 +225,6 @@ Name = FLAMEBURST
 <Particle 18>
     Graphic = Flames
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,391
     SetY = 7,49
 <SE>

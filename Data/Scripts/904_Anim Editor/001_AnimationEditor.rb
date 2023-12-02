@@ -45,10 +45,15 @@ class AnimationEditor
   PARTICLE_LIST_WIDTH  = WINDOW_WIDTH - (BORDER_THICKNESS * 2)
   PARTICLE_LIST_HEIGHT = WINDOW_HEIGHT - PARTICLE_LIST_Y - BORDER_THICKNESS
 
+  ANIM_PROPERTIES_WIDTH  = SIDE_PANE_WIDTH + 80
+  ANIM_PROPERTIES_HEIGHT = WINDOW_HEIGHT * 3 / 4
+  ANIM_PROPERTIES_X      = (WINDOW_WIDTH - ANIM_PROPERTIES_WIDTH) / 2
+  ANIM_PROPERTIES_Y      = (WINDOW_HEIGHT - ANIM_PROPERTIES_HEIGHT) / 2
+
   def initialize(anim_id, anim)
     @anim_id = anim_id
     @anim = anim
-    @pbs_path = anim[:pbs_path]
+    @pbs_path = anim[:pbs_path].dup
     @quit = false
     # Viewports
     @viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -92,12 +97,19 @@ class AnimationEditor
       PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT, @viewport
     )
     @components[:particle_list].set_interactive_rects
+    # Animation properties pop-up window
+    @components[:animation_properties] = UIControls::ControlsContainer.new(
+      ANIM_PROPERTIES_X + 4, ANIM_PROPERTIES_Y + 4, ANIM_PROPERTIES_WIDTH - 8, ANIM_PROPERTIES_HEIGHT - 8
+    )
+    @components[:animation_properties].viewport.z = @pop_up_viewport.z + 1
+    @components[:animation_properties].label_offset_x = 170
     @captured = nil
     set_menu_bar_contents
     set_canvas_contents
+    set_play_controls_contents
     set_side_panes_contents
     set_particle_list_contents
-    set_play_controls_contents
+    set_animation_properties_contents
     refresh
   end
 
@@ -153,6 +165,10 @@ class AnimationEditor
 
   def set_canvas_contents
     @components[:canvas].bg_name = "indoor1"
+  end
+
+  def set_play_controls_contents
+    @components[:play_controls].duration = @components[:particle_list].duration
   end
 
   def set_commands_pane_contents
@@ -246,8 +262,44 @@ class AnimationEditor
     @components[:particle_list].set_particles(@anim[:particles])
   end
 
-  def set_play_controls_contents
-    @components[:play_controls].duration = @components[:particle_list].duration
+  def set_animation_properties_contents
+    anim_properties = @components[:animation_properties]
+    anim_properties.add_header_label(:header, _INTL("Animation properties"))
+    # Create animation type control
+    anim_properties.add_labelled_dropdown_list(:type, _INTL("Animation type"), {
+      :move   => _INTL("Move"),
+      :common => _INTL("Common")
+    }, :move)
+    # Create "opp" variant
+    anim_properties.add_labelled_checkbox(:opp_variant, _INTL("User is opposing?"), false)
+    # Create move control
+    # TODO: Also make a TextBox here for common animations, and toggle these two
+    #       controls' visibility depending on :type?
+    move_list = []
+    GameData::Move.each { |m| move_list.push([m.id.to_s, m.name]) }
+    move_list.sort! { |a, b| a[1] <=> b[1] }
+    # TODO: Make this a TextBoxDropdownList instead.
+    anim_properties.add_labelled_dropdown_list(:move, _INTL("Move"), move_list.to_h, move_list[0][0])
+    move_ctrl = anim_properties.get_control(:move)
+    move_ctrl.max_rows = 16
+    common_text = UIControls::TextBox.new(move_ctrl.width, move_ctrl.height, move_ctrl.viewport, "")
+    anim_properties.add_control_at(:common_anim, common_text, move_ctrl.x, move_ctrl.y)
+    # Create version control
+    anim_properties.add_labelled_number_text_box(:version, _INTL("Version"), 0, 99, 0)
+    # Create animation name control
+    anim_properties.add_labelled_text_box(:name, _INTL("Name"), "")
+    # Create filepath controls
+    # TODO: Have two TextBoxes, one for folder and one for filename?
+    anim_properties.add_labelled_text_box(:pbs_path, _INTL("PBS filepath"), "")
+    # Create "involves a target" control
+    anim_properties.add_labelled_checkbox(:has_target, _INTL("Involves a target?"), true)
+    # Create flags control
+    # TODO: List, TextBox and some Buttons to add/delete.
+    # Create "usable in battle" control
+    anim_properties.add_labelled_checkbox(:usable, _INTL("Can be used in battle?"), true)
+    # TODO: "Play if target is on the same side as the user".
+    anim_properties.add_button(:close, _INTL("Close"))
+    anim_properties.visible = false
   end
 
   #-----------------------------------------------------------------------------
@@ -367,7 +419,7 @@ class AnimationEditor
         "TARGET_BACK"  => _INTL("[[Target's back sprite]]"),
       }
       graphic_name = graphic_override_names[graphic_name] if graphic_override_names[graphic_name]
-      component.get_control(:graphic_name).label = graphic_name
+      component.get_control(:graphic_name).text = graphic_name
       # Enable/disable the Graphic and Focus controls for "User"/"Target"
       if ["User", "Target"].include?(@anim[:particles][particle_index][:name])
         component.get_control(:graphic).disable
@@ -376,6 +428,20 @@ class AnimationEditor
         component.get_control(:graphic).enable
         component.get_control(:focus).enable
       end
+    when :animation_properties
+      case @anim[:type]
+      when :move, :opp_move
+        component.get_control(:move_label).text = _INTL("Move")
+        component.get_control(:move).visible = true
+        component.get_control(:move).value = @anim[:move].dup
+        component.get_control(:common_anim).visible = false
+      when :common, :opp_common
+        component.get_control(:move_label).text = _INTL("Common animation")
+        component.get_control(:move).visible = false
+        component.get_control(:common_anim).visible = true
+        component.get_control(:common_anim).value = @anim[:move].dup
+      end
+      # TODO: Maybe other things as well?
     end
   end
 
@@ -403,12 +469,17 @@ class AnimationEditor
       when :save
         save
       when :name
-        # TODO: Open the animation properties pop-up window.
-        echoln "Animation's name button clicked"
+        edit_animation_properties
+        @components[:menu_bar].anim_name = get_animation_display_name
+        # TODO: May need to refresh other things.
+        refresh_component(:particle_list)
       end
     when :canvas
       # TODO: Detect and apply changes made in canvas, e.g. moving particle,
       #       double-clicking to add particle, deleting particle.
+    when :play_controls
+      # TODO: Will the play controls ever signal themselves as changed? I don't
+      #       think so.
     when :commands_pane
       case property
       when :color_tone   # Button
@@ -486,9 +557,31 @@ class AnimationEditor
     when :particle_list
 #      refresh if keyframe != old_keyframe || particle_index != old_particle_index
       # TODO: Lots of stuff here when buttons are added to it.
-    when :play_controls
-      # TODO: Will the play controls ever signal themselves as changed? I don't
-      #       think so.
+    when :animation_properties
+      case property
+      when :type, :opp_variant
+        type = @components[:animation_properties].get_control(:type).value
+        opp = @components[:animation_properties].get_control(:opp_variant).value
+        case type
+        when :move
+          @anim[:type] = (opp) ? :opp_move : :move
+        when :common
+          @anim[:type] = (opp) ? :opp_common : :common
+        end
+        refresh_component(:animation_properties)
+      when :common_anim
+        @anim[:move] = value
+      when :pbs_path
+        txt = value.dup.gsub!(/\.txt$/, "")
+        @anim[property] = txt
+      when :has_target
+        @anim[:no_target] = !value
+        # TODO: Add/delete the "Target" particle accordingly.
+      when :usable
+        @anim[:ignore] = !value
+      else
+        @anim[property] = value
+      end
     end
   end
 

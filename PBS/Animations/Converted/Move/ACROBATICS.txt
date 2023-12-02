@@ -11,7 +11,6 @@ Name = ACROBATICS
 <Particle 3>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,376
     SetY = 2,133
     SetZoomX = 2,41
@@ -31,7 +30,6 @@ Name = ACROBATICS
     SetY = 0,86
     SetZoomX = 0,25
     SetZoomY = 0,25
-    SetVisible = 0,true
     SetZoomX = 1,47
     SetZoomY = 1,47
     SetZoomX = 3,70

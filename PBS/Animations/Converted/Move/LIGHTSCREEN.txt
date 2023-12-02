@@ -11,7 +11,6 @@ Name = LIGHTSCREEN
 <Particle 3>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,442
     SetY = 1,57
     SetX = 2,446
@@ -34,7 +33,6 @@ Name = LIGHTSCREEN
 <Particle 4>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,368
     SetY = 4,111
     SetX = 5,412
@@ -52,7 +50,6 @@ Name = LIGHTSCREEN
 <Particle 5>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,440
     SetY = 7,160
     SetX = 8,421
@@ -64,7 +61,6 @@ Name = LIGHTSCREEN
 <Particle 6>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,384
     SetY = 8,42
     SetX = 9,421
@@ -74,7 +70,6 @@ Name = LIGHTSCREEN
 <Particle 2>
     Graphic = anim sheet
     Focus = Target
-    SetVisible = 0,true
     SetBlending = 1,1
     SetX = 1,390
     SetY = 1,95

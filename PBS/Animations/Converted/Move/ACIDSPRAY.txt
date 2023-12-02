@@ -15,7 +15,6 @@ Name = ACIDSPRAY
     SetY = 0,8
     SetZoomX = 0,85
     SetZoomY = 0,85
-    SetVisible = 0,true
     SetY = 1,17
     SetX = 3,335
     SetY = 3,48
@@ -35,7 +34,6 @@ Name = ACIDSPRAY
 <Particle 3>
     Graphic = fly copy
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,366
     SetY = 1,8
     SetZoomX = 1,85
@@ -57,7 +55,6 @@ Name = ACIDSPRAY
 <Particle 4>
     Graphic = fly copy
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,394
     SetY = 1,17
     SetZoomX = 1,85
@@ -78,7 +75,6 @@ Name = ACIDSPRAY
 <Particle 5>
     Graphic = fly copy
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,418
     SetY = 2,9
     SetZoomX = 2,85
@@ -101,7 +97,6 @@ Name = ACIDSPRAY
 <Particle 6>
     Graphic = fly copy
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,441
     SetY = 2,12
     SetZoomX = 2,85
@@ -123,7 +118,6 @@ Name = ACIDSPRAY
 <Particle 7>
     Graphic = fly copy
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,361
     SetY = 5,86
     SetZoomX = 5,85

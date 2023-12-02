@@ -13,7 +13,6 @@ Name = AMNESIA
     Focus = Target
     SetX = 0,428
     SetY = 0,80
-    SetVisible = 0,true
     SetOpacity = 0,200
     SetOpacity = 1,220
     SetOpacity = 2,250

@@ -13,7 +13,6 @@ Name = KARATECHOP
     Focus = Target
     SetX = 0,232
     SetY = 0,30
-    SetVisible = 0,true
     SetX = 1,272
     SetY = 1,38
     SetAngle = 1,350

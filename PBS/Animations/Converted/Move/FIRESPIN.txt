@@ -15,7 +15,6 @@ Name = FIRESPIN
     SetY = 0,94
     SetZoomX = 0,25
     SetZoomY = 0,25
-    SetVisible = 0,true
     SetOpacity = 0,100
     SetZoomX = 1,50
     SetZoomY = 1,50

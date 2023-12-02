@@ -13,7 +13,6 @@ Name = MEGADRAIN
     Focus = UserAndTarget
     SetX = 0,345
     SetY = 0,91
-    SetVisible = 0,true
     SetX = 1,294
     SetY = 1,98
     SetX = 2,211
@@ -26,7 +25,6 @@ Name = MEGADRAIN
 <Particle 3>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,396
     SetY = 1,116
     SetX = 2,358
@@ -46,7 +44,6 @@ Name = MEGADRAIN
 <Particle 4>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,339
     SetY = 2,104
     SetX = 3,262
@@ -64,7 +61,6 @@ Name = MEGADRAIN
 <Particle 5>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,371
     SetY = 3,123
     SetX = 4,320
@@ -79,7 +75,6 @@ Name = MEGADRAIN
 <Particle 6>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,371
     SetY = 3,91
     SetX = 4,307
@@ -93,7 +88,6 @@ Name = MEGADRAIN
 <Particle 7>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,377
     SetY = 4,104
     SetX = 5,352
@@ -105,7 +99,6 @@ Name = MEGADRAIN
 <Particle 8>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,371
     SetY = 4,85
     SetX = 5,313
@@ -127,7 +120,6 @@ Name = MEGADRAIN
 <Particle 3>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,129
     SetY = 1,237
     SetX = 2,191
@@ -158,7 +150,6 @@ Name = MEGADRAIN
 <Particle 4>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,129
     SetY = 2,218
     SetX = 3,211
@@ -188,7 +179,6 @@ Name = MEGADRAIN
 <Particle 5>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,132
     SetY = 3,224
     SetX = 4,349
@@ -214,7 +204,6 @@ Name = MEGADRAIN
 <Particle 6>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,307
     SetY = 4,97
     SetX = 5,249
@@ -231,7 +220,6 @@ Name = MEGADRAIN
     Focus = UserAndTarget
     SetX = 0,128
     SetY = 0,219
-    SetVisible = 0,true
     SetX = 1,149
     SetY = 1,233
     SetX = 2,221

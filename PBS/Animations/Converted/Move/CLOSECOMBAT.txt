@@ -11,7 +11,6 @@ Name = CLOSECOMBAT
 <Particle 2>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,383
     SetY = 4,57
     SetOpacity = 4,47
@@ -40,7 +39,6 @@ Name = CLOSECOMBAT
 <Particle 3>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,361
     SetY = 1,125
     SetX = 2,344
@@ -77,7 +75,6 @@ Name = CLOSECOMBAT
 <Particle 4>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,332
     SetY = 1,147
     SetX = 2,370
@@ -112,7 +109,6 @@ Name = CLOSECOMBAT
 <Particle 5>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,353
     SetY = 1,137
     SetX = 2,361
@@ -140,7 +136,6 @@ Name = CLOSECOMBAT
 <Particle 6>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,417
     SetY = 2,104
     SetX = 3,374
@@ -164,7 +159,6 @@ Name = CLOSECOMBAT
 <Particle 7>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,379
     SetY = 2,83
     SetX = 3,421
@@ -188,7 +182,6 @@ Name = CLOSECOMBAT
 <Particle 8>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,400
     SetY = 2,94
     SetX = 3,397
@@ -202,7 +195,6 @@ Name = CLOSECOMBAT
 <Particle 9>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,413
     SetY = 3,138
     SetX = 4,369
@@ -212,7 +204,6 @@ Name = CLOSECOMBAT
 <Particle 10>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,377
     SetY = 3,126
     SetX = 4,359
@@ -222,7 +213,6 @@ Name = CLOSECOMBAT
 <Particle 11>
     Graphic = finger.spoon
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,399
     SetY = 3,127
 <SE>

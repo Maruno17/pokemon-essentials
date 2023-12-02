@@ -13,7 +13,6 @@ Name = EXPLOSION
     Focus = Target
     SetX = 0,424
     SetY = 0,46
-    SetVisible = 0,true
     SetOpacity = 0,50
     SetX = 2,400
     SetY = 2,142
@@ -26,7 +25,6 @@ Name = EXPLOSION
 <Particle 4>
     Graphic = Fire3
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,424
     SetY = 2,46
     SetOpacity = 2,100
@@ -40,7 +38,6 @@ Name = EXPLOSION
 <Particle 5>
     Graphic = Fire3
     Focus = Target
-    SetVisible = 0,true
     SetX = 6,424
     SetY = 6,46
 <Particle 2>
@@ -48,7 +45,6 @@ Name = EXPLOSION
     Focus = Target
     SetX = 0,296
     SetY = 0,94
-    SetVisible = 0,true
     SetOpacity = 12,150
     SetX = 13,400
     SetY = 13,142

@@ -13,7 +13,6 @@ Name = THUNDERSHOCK
     Focus = Target
     SetX = 0,376
     SetY = 0,94
-    SetVisible = 0,true
     SetFlip = 9,true
     SetOpacity = 12,100
 <SE>

@@ -11,14 +11,12 @@ Name = IRONHEAD
 <Particle 2>
     Graphic = Iron Head
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,384
     SetY = 1,97
     SetOpacity = 7,128
 <Particle 3>
     Graphic = Iron Head
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,331
     SetY = 2,114
     SetX = 3,278
@@ -29,7 +27,6 @@ Name = IRONHEAD
 <Particle 4>
     Graphic = Iron Head
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,437
     SetY = 2,118
     SetX = 3,485
@@ -40,7 +37,6 @@ Name = IRONHEAD
 <Particle 5>
     Graphic = Iron Head
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,279
     SetY = 3,82
     SetX = 4,266
@@ -48,7 +44,6 @@ Name = IRONHEAD
 <Particle 6>
     Graphic = Iron Head
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,461
     SetY = 3,69
     SetX = 4,513
@@ -56,7 +51,6 @@ Name = IRONHEAD
 <Particle 7>
     Graphic = Iron Head
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,275
     SetY = 3,33
 <SE>

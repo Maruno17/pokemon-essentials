@@ -11,7 +11,6 @@ Name = ICYWIND
 <Particle 3>
     Graphic = Ice1
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,134
     SetY = 1,192
     SetX = 2,179
@@ -26,7 +25,6 @@ Name = ICYWIND
 <Particle 4>
     Graphic = Ice1
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,172
     SetY = 3,179
     SetX = 4,204
@@ -38,7 +36,6 @@ Name = ICYWIND
     Focus = UserAndTarget
     SetX = 0,140
     SetY = 0,192
-    SetVisible = 0,true
     SetX = 1,166
     SetY = 1,186
     SetX = 2,236

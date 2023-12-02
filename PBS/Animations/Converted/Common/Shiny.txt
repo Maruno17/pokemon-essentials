@@ -11,7 +11,6 @@ Name = Shiny
 <Particle 3>
     Graphic = leech-seed
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,440
     SetY = 2,126
     SetX = 4,327
@@ -27,7 +26,6 @@ Name = Shiny
 <Particle 4>
     Graphic = leech-seed
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,327
     SetY = 3,78
     SetX = 4,366
@@ -41,7 +39,6 @@ Name = Shiny
 <Particle 5>
     Graphic = leech-seed
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,416
     SetY = 5,54
     SetX = 6,368
@@ -53,7 +50,6 @@ Name = Shiny
     Focus = Target
     SetX = 0,360
     SetY = 0,110
-    SetVisible = 0,true
     SetX = 4,440
     SetY = 4,126
     SetX = 6,327

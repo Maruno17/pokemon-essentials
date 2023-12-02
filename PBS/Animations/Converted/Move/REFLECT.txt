@@ -13,7 +13,6 @@ Name = REFLECT
     Focus = Target
     SetX = 0,376
     SetY = 0,86
-    SetVisible = 0,true
     SetOpacity = 0,75
     SetOpacity = 1,100
     SetOpacity = 2,150
@@ -23,7 +22,6 @@ Name = REFLECT
 <Particle 3>
     Graphic = normal2
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,328
     SetY = 1,-18
     SetX = 2,304
@@ -43,7 +41,6 @@ Name = REFLECT
 <Particle 4>
     Graphic = normal2
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,464
     SetY = 1,-10
     SetX = 2,488
@@ -61,7 +58,6 @@ Name = REFLECT
 <Particle 5>
     Graphic = normal2
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,392
     SetY = 2,-18
     SetY = 3,22
@@ -74,7 +70,6 @@ Name = REFLECT
 <Particle 6>
     Graphic = normal2
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,328
     SetY = 3,-18
     SetX = 4,352
@@ -84,7 +79,6 @@ Name = REFLECT
 <Particle 7>
     Graphic = normal2
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,432
     SetY = 4,-10
     SetX = 5,400

@@ -13,7 +13,6 @@ Name = BITE
     Focus = Target
     SetX = 0,386
     SetY = 0,96
-    SetVisible = 0,true
     SetOpacity = 0,128
     SetOpacity = 2,192
     SetX = 3,385

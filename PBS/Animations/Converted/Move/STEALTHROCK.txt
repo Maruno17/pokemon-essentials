@@ -13,7 +13,6 @@ Name = STEALTHROCK
     Focus = Screen
     SetX = 0,128
     SetY = 0,224
-    SetVisible = 0,true
     SetX = 1,150
     SetY = 1,192
     SetX = 2,180
@@ -68,7 +67,6 @@ Name = STEALTHROCK
 <Particle 3>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 4,128
     SetY = 4,224
     SetX = 5,150
@@ -121,7 +119,6 @@ Name = STEALTHROCK
 <Particle 4>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 7,431
     SetY = 7,188
     SetOpacity = 7,128
@@ -157,7 +154,6 @@ Name = STEALTHROCK
 <Particle 5>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 8,295
     SetY = 8,174
     SetOpacity = 8,192
@@ -175,7 +171,6 @@ Name = STEALTHROCK
 <Particle 6>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 7,295
     SetY = 7,174
     SetOpacity = 7,128
@@ -197,7 +192,6 @@ Name = STEALTHROCK
 <Particle 7>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 11,475
     SetY = 11,175
     SetOpacity = 11,128
@@ -214,7 +208,6 @@ Name = STEALTHROCK
 <Particle 8>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 12,352
     SetY = 12,186
     SetOpacity = 12,192
@@ -231,7 +224,6 @@ Name = STEALTHROCK
 <Particle 9>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 15,395
     SetY = 15,190
     SetOpacity = 15,128
@@ -252,7 +244,6 @@ Name = STEALTHROCK
     Focus = Screen
     SetX = 0,376
     SetY = 0,84
-    SetVisible = 0,true
     SetX = 1,332
     SetY = 1,72
     SetX = 2,294
@@ -307,7 +298,6 @@ Name = STEALTHROCK
 <Particle 3>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 4,376
     SetY = 4,84
     SetX = 5,332
@@ -360,7 +350,6 @@ Name = STEALTHROCK
 <Particle 4>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 7,207
     SetY = 7,284
     SetOpacity = 7,128
@@ -396,7 +385,6 @@ Name = STEALTHROCK
 <Particle 5>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 8,71
     SetY = 8,270
     SetOpacity = 8,192
@@ -414,7 +402,6 @@ Name = STEALTHROCK
 <Particle 6>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 7,71
     SetY = 7,270
     SetOpacity = 7,128
@@ -436,7 +423,6 @@ Name = STEALTHROCK
 <Particle 7>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 11,251
     SetY = 11,271
     SetOpacity = 11,128
@@ -453,7 +439,6 @@ Name = STEALTHROCK
 <Particle 8>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 12,128
     SetY = 12,282
     SetOpacity = 12,192
@@ -470,7 +455,6 @@ Name = STEALTHROCK
 <Particle 9>
     Graphic = Rock Tomb
     Focus = Screen
-    SetVisible = 0,true
     SetX = 15,171
     SetY = 15,286
     SetOpacity = 15,128

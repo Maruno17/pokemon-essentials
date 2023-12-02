@@ -13,7 +13,6 @@ Name = HEADBUTT
     Focus = Target
     SetX = 0,384
     SetY = 0,94
-    SetVisible = 0,true
     SetAngle = 2,90
     SetAngle = 3,0
     SetZoomX = 4,120

@@ -13,7 +13,6 @@ Name = FINALGAMBIT
     Focus = Target
     SetX = 0,364
     SetY = 0,126
-    SetVisible = 0,true
     SetX = 1,362
     SetY = 1,122
     SetX = 2,391

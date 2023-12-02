@@ -11,7 +11,6 @@ Name = SPIKES
 <Particle 3>
     Graphic = normal2
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,128
     SetY = 3,236
     SetZoomX = 3,50
@@ -36,7 +35,6 @@ Name = SPIKES
 <Particle 4>
     Graphic = normal2
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,243
     SetY = 6,85
     SetZoomX = 6,50
@@ -55,7 +53,6 @@ Name = SPIKES
     SetY = 0,211
     SetZoomX = 0,50
     SetZoomY = 0,50
-    SetVisible = 0,true
     SetX = 1,140
     SetY = 1,161
     SetX = 2,166

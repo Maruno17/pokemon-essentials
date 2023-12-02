@@ -13,7 +13,6 @@ Name = BUBBLE
     Focus = UserAndTarget
     SetX = 0,128
     SetY = 0,236
-    SetVisible = 0,true
     SetX = 1,153
     SetY = 1,224
     SetX = 2,198
@@ -39,7 +38,6 @@ Name = BUBBLE
 <Particle 3>
     Graphic = 008-Weapon03
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,134
     SetY = 1,217
     SetX = 2,153
@@ -65,7 +63,6 @@ Name = BUBBLE
 <Particle 4>
     Graphic = 008-Weapon03
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,128
     SetY = 1,236
     SetX = 2,179
@@ -90,7 +87,6 @@ Name = BUBBLE
 <Particle 5>
     Graphic = 008-Weapon03
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,128
     SetY = 2,236
     SetX = 3,166
@@ -115,7 +111,6 @@ Name = BUBBLE
 <Particle 6>
     Graphic = 008-Weapon03
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,140
     SetY = 3,211
     SetX = 4,211
@@ -135,7 +130,6 @@ Name = BUBBLE
 <Particle 7>
     Graphic = 008-Weapon03
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,128
     SetY = 3,236
     SetX = 4,179
@@ -155,7 +149,6 @@ Name = BUBBLE
 <Particle 8>
     Graphic = 008-Weapon03
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,166
     SetY = 4,186
     SetX = 5,192
@@ -171,7 +164,6 @@ Name = BUBBLE
 <Particle 9>
     Graphic = 008-Weapon03
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,128
     SetY = 5,236
     SetX = 6,230
@@ -183,7 +175,6 @@ Name = BUBBLE
 <Particle 10>
     Graphic = 008-Weapon03
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,160
     SetY = 6,236
     SetX = 7,217
@@ -195,7 +186,6 @@ Name = BUBBLE
 <Particle 11>
     Graphic = 008-Weapon03
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,352
     SetY = 6,85
     SetOpacity = 6,100
@@ -213,7 +203,6 @@ Name = BUBBLE
 <Particle 12>
     Graphic = 008-Weapon03
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 8,358
     SetY = 8,91
     SetOpacity = 8,100

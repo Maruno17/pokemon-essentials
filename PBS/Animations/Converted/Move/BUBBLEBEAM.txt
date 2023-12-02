@@ -13,7 +13,6 @@ Name = BUBBLEBEAM
     Focus = UserAndTarget
     SetX = 0,128
     SetY = 0,236
-    SetVisible = 0,true
     SetX = 1,179
     SetY = 1,205
     SetX = 2,243
@@ -46,7 +45,6 @@ Name = BUBBLEBEAM
 <Particle 3>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,140
     SetY = 1,186
     SetX = 2,192
@@ -77,7 +75,6 @@ Name = BUBBLEBEAM
 <Particle 4>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,192
     SetY = 1,179
     SetX = 2,204
@@ -108,7 +105,6 @@ Name = BUBBLEBEAM
 <Particle 5>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,128
     SetY = 2,236
     SetX = 3,262
@@ -137,7 +133,6 @@ Name = BUBBLEBEAM
 <Particle 6>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,153
     SetY = 2,211
     SetX = 3,198
@@ -165,7 +160,6 @@ Name = BUBBLEBEAM
 <Particle 7>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,275
     SetY = 3,154
     SetX = 4,313
@@ -193,7 +187,6 @@ Name = BUBBLEBEAM
 <Particle 8>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,211
     SetY = 3,161
     SetX = 4,198
@@ -215,7 +208,6 @@ Name = BUBBLEBEAM
 <Particle 9>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,160
     SetY = 3,217
     SetX = 4,275
@@ -241,7 +233,6 @@ Name = BUBBLEBEAM
 <Particle 10>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,185
     SetY = 4,186
     SetX = 5,230
@@ -263,7 +254,6 @@ Name = BUBBLEBEAM
 <Particle 11>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,172
     SetY = 4,224
     SetX = 5,313
@@ -282,7 +272,6 @@ Name = BUBBLEBEAM
 <Particle 12>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,288
     SetY = 4,211
     SetX = 5,281
@@ -301,7 +290,6 @@ Name = BUBBLEBEAM
 <Particle 13>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,243
     SetY = 4,211
     SetX = 5,134
@@ -321,7 +309,6 @@ Name = BUBBLEBEAM
 <Particle 14>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,217
     SetY = 4,129
     SetY = 5,211
@@ -340,7 +327,6 @@ Name = BUBBLEBEAM
 <Particle 15>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,288
     SetY = 4,179
     SetX = 5,371
@@ -359,7 +345,6 @@ Name = BUBBLEBEAM
 <Particle 16>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,185
     SetY = 6,236
     SetX = 7,249
@@ -373,7 +358,6 @@ Name = BUBBLEBEAM
 <Particle 17>
     Graphic = 018-Water01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,307
     SetY = 6,186
     SetX = 7,326

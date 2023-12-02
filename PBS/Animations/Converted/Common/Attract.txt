@@ -11,7 +11,6 @@ Name = Attract
 <Particle 3>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,355
     SetY = 7,50
     SetX = 8,341
@@ -37,7 +36,6 @@ Name = Attract
 <Particle 4>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,349
     SetY = 8,50
     SetX = 9,333
@@ -61,7 +59,6 @@ Name = Attract
 <Particle 5>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 12,397
     SetY = 12,93
     SetX = 13,411
@@ -80,7 +77,6 @@ Name = Attract
     Focus = Target
     SetX = 0,374
     SetY = 0,67
-    SetVisible = 0,true
     SetX = 1,407
     SetY = 1,65
     SetX = 2,432

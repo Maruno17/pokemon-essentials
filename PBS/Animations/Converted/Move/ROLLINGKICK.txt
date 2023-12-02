@@ -11,7 +11,6 @@ Name = ROLLINGKICK
 <Particle 3>
     Graphic = normal1
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,360
     SetY = 4,78
     SetOpacity = 4,50
@@ -27,7 +26,6 @@ Name = ROLLINGKICK
     SetY = 0,102
     SetZoomX = 0,75
     SetZoomY = 0,75
-    SetVisible = 0,true
     SetX = 1,264
     SetY = 1,54
     SetX = 2,288

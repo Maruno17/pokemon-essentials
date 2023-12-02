@@ -13,7 +13,6 @@ Name = METEORMASH
     Focus = UserAndTarget
     SetX = 0,390
     SetY = 0,98
-    SetVisible = 0,true
     SetX = 1,395
     SetY = 1,100
     SetX = 2,390
@@ -25,7 +24,6 @@ Name = METEORMASH
 <Particle 3>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,389
     SetY = 1,150
     SetX = 2,386
@@ -47,7 +45,6 @@ Name = METEORMASH
 <Particle 4>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,340
     SetY = 1,116
     SetX = 2,334
@@ -68,7 +65,6 @@ Name = METEORMASH
 <Particle 5>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,419
     SetY = 2,61
     SetX = 3,412
@@ -88,7 +84,6 @@ Name = METEORMASH
 <Particle 6>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,429
     SetY = 2,131
     SetY = 3,136
@@ -103,7 +98,6 @@ Name = METEORMASH
 <Particle 7>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,369
     SetY = 3,68
     SetX = 5,341
@@ -115,7 +109,6 @@ Name = METEORMASH
 <Particle 8>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,371
     SetY = 5,67
     SetX = 6,385

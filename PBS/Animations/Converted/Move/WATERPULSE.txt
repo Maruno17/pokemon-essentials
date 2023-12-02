@@ -15,7 +15,6 @@ Name = WATERPULSE
     Focus = UserAndTarget
     SetX = 0,131
     SetY = 0,229
-    SetVisible = 0,true
     SetX = 1,208
     SetY = 1,192
     SetX = 2,232

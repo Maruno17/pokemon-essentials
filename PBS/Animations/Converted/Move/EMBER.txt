@@ -11,7 +11,6 @@ Name = EMBER
 <Particle 3>
     Graphic = Flames
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,144
     SetY = 1,204
     SetFlip = 2,true
@@ -37,7 +36,6 @@ Name = EMBER
 <Particle 2>
     Graphic = Flames
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 9,310
     SetY = 9,126
     SetFlip = 10,true

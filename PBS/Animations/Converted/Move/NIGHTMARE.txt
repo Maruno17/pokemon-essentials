@@ -11,7 +11,6 @@ Name = NIGHTMARE
 <Particle 3>
     Graphic = 022-Darkness01
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,424
     SetY = 1,46
     SetFlip = 5,true
@@ -43,7 +42,6 @@ Name = NIGHTMARE
 <Particle 4>
     Graphic = 022-Darkness01
     Focus = Target
-    SetVisible = 0,true
     SetFlip = 2,true
     SetX = 2,344
     SetY = 2,78
@@ -64,7 +62,6 @@ Name = NIGHTMARE
 <Particle 5>
     Graphic = 022-Darkness01
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,376
     SetY = 4,118
     SetOpacity = 4,100
@@ -81,7 +78,6 @@ Name = NIGHTMARE
 <Particle 6>
     Graphic = 022-Darkness01
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,424
     SetY = 4,86
     SetX = 5,392
@@ -96,7 +92,6 @@ Name = NIGHTMARE
     Focus = Target
     SetX = 0,384
     SetY = 0,102
-    SetVisible = 0,true
     SetOpacity = 0,100
     SetOpacity = 1,150
     SetOpacity = 2,200

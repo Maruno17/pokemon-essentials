@@ -11,7 +11,6 @@ Name = THUNDER
 <Particle 3>
     Graphic = Trovao
     Focus = Target
-    SetVisible = 0,true
     SetFlip = 1,true
     SetX = 1,376
     SetY = 1,86
@@ -28,7 +27,6 @@ Name = THUNDER
 <Particle 4>
     Graphic = Trovao
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,400
     SetY = 2,150
     SetX = 3,376
@@ -42,7 +40,6 @@ Name = THUNDER
     SetFlip = 0,true
     SetX = 0,392
     SetY = 0,-58
-    SetVisible = 0,true
     SetX = 1,352
     SetFlip = 2,false
     SetX = 2,376

@@ -13,7 +13,6 @@ Name = SWIFT
     Focus = UserAndTarget
     SetX = 0,128
     SetY = 0,236
-    SetVisible = 0,true
     SetX = 1,179
     SetY = 1,211
     SetX = 2,217
@@ -37,7 +36,6 @@ Name = SWIFT
 <Particle 3>
     Graphic = 007-Weapon02
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,128
     SetY = 1,236
     SetX = 2,172
@@ -61,7 +59,6 @@ Name = SWIFT
 <Particle 4>
     Graphic = 007-Weapon02
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,128
     SetY = 2,217
     SetX = 3,179
@@ -79,7 +76,6 @@ Name = SWIFT
 <Particle 5>
     Graphic = 007-Weapon02
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,192
     SetY = 3,224
     SetX = 4,224
@@ -94,7 +90,6 @@ Name = SWIFT
 <Particle 6>
     Graphic = 007-Weapon02
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,115
     SetY = 3,205
     SetX = 4,147
@@ -107,7 +102,6 @@ Name = SWIFT
 <Particle 7>
     Graphic = 007-Weapon02
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,128
     SetY = 4,242
 <SE>

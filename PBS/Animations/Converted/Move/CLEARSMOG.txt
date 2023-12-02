@@ -13,7 +13,6 @@ Name = CLEARSMOG
     Focus = UserAndTarget
     SetX = 0,384
     SetY = 0,98
-    SetVisible = 0,true
     SetX = 2,385
     SetY = 2,95
     SetY = 3,98

@@ -13,7 +13,6 @@ Name = DEFENSECURL
     Focus = User
     SetX = 0,133
     SetY = 0,224
-    SetVisible = 0,true
     SetOpacity = 0,100
     SetX = 1,131
     SetY = 1,223

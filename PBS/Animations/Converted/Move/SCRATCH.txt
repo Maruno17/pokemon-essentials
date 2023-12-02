@@ -11,7 +11,6 @@ Name = SCRATCH
 <Particle 2>
     Graphic = scratchbattle
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,399
     SetY = 1,74
     SetX = 2,383

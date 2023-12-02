@@ -13,7 +13,6 @@ Name = HARDEN
     Focus = User
     SetX = 0,133
     SetY = 0,221
-    SetVisible = 0,true
     SetOpacity = 0,70
     SetOpacity = 1,105
     SetOpacity = 2,140

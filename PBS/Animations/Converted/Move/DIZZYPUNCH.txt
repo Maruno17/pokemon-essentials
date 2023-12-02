@@ -13,7 +13,6 @@ Name = DIZZYPUNCH
     Focus = Target
     SetX = 0,384
     SetY = 0,97
-    SetVisible = 0,true
     SetY = 1,96
     SetY = 2,91
     SetX = 4,387
@@ -38,7 +37,6 @@ Name = DIZZYPUNCH
 <Particle 3>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,388
     SetY = 1,102
     SetX = 2,390
@@ -68,7 +66,6 @@ Name = DIZZYPUNCH
 <Particle 4>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,447
     SetY = 2,80
     SetX = 4,469
@@ -96,7 +93,6 @@ Name = DIZZYPUNCH
 <Particle 5>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,471
     SetY = 2,88
     SetX = 4,356
@@ -124,7 +120,6 @@ Name = DIZZYPUNCH
 <Particle 6>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,346
     SetY = 3,82
     SetX = 4,329
@@ -148,7 +143,6 @@ Name = DIZZYPUNCH
 <Particle 7>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,316
     SetY = 3,91
     SetX = 5,377
@@ -168,7 +162,6 @@ Name = DIZZYPUNCH
 <Particle 8>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,426
     SetY = 7,103
     SetX = 8,361
@@ -180,13 +173,11 @@ Name = DIZZYPUNCH
 <Particle 9>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,427
     SetY = 8,74
 <Particle 10>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,447
     SetY = 8,64
 <SE>

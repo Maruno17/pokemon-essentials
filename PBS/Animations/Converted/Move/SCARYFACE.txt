@@ -13,7 +13,6 @@ Name = SCARYFACE
     Focus = Target
     SetX = 0,384
     SetY = 0,102
-    SetVisible = 0,true
     SetOpacity = 0,150
     SetZoomX = 1,125
     SetZoomY = 1,125

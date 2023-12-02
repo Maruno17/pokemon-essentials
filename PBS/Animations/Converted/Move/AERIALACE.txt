@@ -17,7 +17,6 @@ Name = AERIALACE
     Focus = Target
     SetX = 0,468
     SetY = 0,46
-    SetVisible = 0,true
     SetOpacity = 0,128
     SetX = 1,76
     SetY = 1,230
@@ -53,7 +52,6 @@ Name = AERIALACE
 <Particle 3>
     Graphic = Aerial Ace
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,442
     SetY = 1,71
     SetToneRed = 1,-37
@@ -84,7 +82,6 @@ Name = AERIALACE
 <Particle 4>
     Graphic = Aerial Ace
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,411
     SetY = 2,98
     SetToneRed = 2,-74
@@ -117,7 +114,6 @@ Name = AERIALACE
 <Particle 5>
     Graphic = Aerial Ace
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,371
     SetY = 3,137
     SetX = 4,100
@@ -142,7 +138,6 @@ Name = AERIALACE
 <Particle 6>
     Graphic = Aerial Ace
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,100
     SetY = 5,272
     SetOpacity = 5,85
@@ -162,7 +157,6 @@ Name = AERIALACE
 <Particle 7>
     Graphic = Aerial Ace
     Focus = Target
-    SetVisible = 0,true
     SetX = 6,410
     SetY = 6,109
     SetOpacity = 6,128
@@ -179,7 +173,6 @@ Name = AERIALACE
 <Particle 8>
     Graphic = Aerial Ace
     Focus = Target
-    SetVisible = 0,true
     SetX = 6,408
     SetY = 6,125
     SetOpacity = 6,128
@@ -193,7 +186,6 @@ Name = AERIALACE
 <Particle 9>
     Graphic = Aerial Ace
     Focus = Target
-    SetVisible = 0,true
     SetX = 6,363
     SetY = 6,112
     SetOpacity = 6,128
@@ -207,7 +199,6 @@ Name = AERIALACE
 <Particle 10>
     Graphic = Aerial Ace
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,432
     SetY = 7,86
     SetX = 8,455
@@ -234,7 +225,6 @@ Name = AERIALACE
     Focus = User
     SetX = 0,229
     SetY = 0,168
-    SetVisible = 0,true
     SetOpacity = 0,128
     SetX = 1,209
     SetY = 1,185
@@ -246,7 +236,6 @@ Name = AERIALACE
 <Particle 3>
     Graphic = Aerial Ace
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,333
     SetY = 1,114
     SetOpacity = 2,170
@@ -259,7 +248,6 @@ Name = AERIALACE
 <Particle 4>
     Graphic = Aerial Ace
     Focus = User
-    SetVisible = 0,true
     SetX = 2,368
     SetY = 2,140
     SetX = 3,418
@@ -286,7 +274,6 @@ Name = AERIALACE
 <Particle 5>
     Graphic = Aerial Ace
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,368
     SetY = 3,140
     SetOpacity = 3,170
@@ -296,7 +283,6 @@ Name = AERIALACE
 <Particle 6>
     Graphic = Aerial Ace
     Focus = User
-    SetVisible = 0,true
     SetX = 5,158
     SetY = 5,237
     SetOpacity = 5,128
@@ -315,7 +301,6 @@ Name = AERIALACE
 <Particle 7>
     Graphic = Aerial Ace
     Focus = User
-    SetVisible = 0,true
     SetX = 5,125
     SetY = 5,227
     SetOpacity = 5,128
@@ -335,7 +320,6 @@ Name = AERIALACE
 <Particle 8>
     Graphic = Aerial Ace
     Focus = User
-    SetVisible = 0,true
     SetX = 5,101
     SetY = 5,250
     SetOpacity = 5,128
@@ -357,7 +341,6 @@ Name = AERIALACE
 <Particle 9>
     Graphic = Aerial Ace
     Focus = User
-    SetVisible = 0,true
     SetX = 5,147
     SetY = 5,274
     SetOpacity = 5,128

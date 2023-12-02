@@ -13,7 +13,6 @@ Name = ZAPCANNON
     Focus = Target
     SetX = 0,384
     SetY = 0,86
-    SetVisible = 0,true
     SetFlip = 6,true
     SetAngle = 6,180
     SetOpacity = 7,100

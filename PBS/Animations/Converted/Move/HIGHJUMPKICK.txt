@@ -15,7 +15,6 @@ Name = HIGHJUMPKICK
     SetY = 0,142
     SetZoomX = 0,75
     SetZoomY = 0,75
-    SetVisible = 0,true
     SetX = 1,488
     SetY = 1,110
     SetX = 2,456

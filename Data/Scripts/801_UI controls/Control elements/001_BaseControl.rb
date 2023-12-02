@@ -1,4 +1,3 @@
-# TODO: Add "disabled" greying out/non-editable.
 # TODO: Add indicator of whether the control's value is "lerping" between frames
 #       (use yellow somehow?).
 

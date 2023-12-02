@@ -7,7 +7,7 @@
 #===============================================================================
 class UIControls::TextBox < UIControls::BaseControl
   TEXT_BOX_X       = 2
-  TEXT_BOX_WIDTH   = 172
+  TEXT_BOX_WIDTH   = 200
   TEXT_BOX_HEIGHT  = 24
   TEXT_BOX_PADDING = 4   # Gap between sides of text box and text
   TEXT_OFFSET_Y    = 5

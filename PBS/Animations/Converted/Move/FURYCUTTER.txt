@@ -13,6 +13,5 @@ Name = FURYCUTTER
     Focus = Target
     SetX = 0,384
     SetY = 0,86
-    SetVisible = 0,true
 <SE>
     Play = 0,Slash10,80,100

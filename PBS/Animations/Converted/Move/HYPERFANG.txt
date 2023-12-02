@@ -13,7 +13,6 @@ Name = HYPERFANG
     Focus = Target
     SetX = 0,376
     SetY = 0,94
-    SetVisible = 0,true
     SetX = 2,384
     SetY = 2,102
     SetX = 4,376

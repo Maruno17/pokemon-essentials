@@ -3,11 +3,13 @@
 #===============================================================================
 class UIControls::DropdownList < UIControls::BaseControl
   TEXT_BOX_X       = 2
-  TEXT_BOX_WIDTH   = 172
+  TEXT_BOX_WIDTH   = 200
   TEXT_BOX_HEIGHT  = 24
   TEXT_BOX_PADDING = 4   # Gap between sides of text box and text
   TEXT_OFFSET_Y    = 5
   MAX_LIST_ROWS    = 8
+
+  attr_accessor :max_rows
 
   def initialize(width, height, viewport, options, value)
     # NOTE: options is a hash: keys are symbols, values are display names.
@@ -15,6 +17,7 @@ class UIControls::DropdownList < UIControls::BaseControl
     @options = options
     @value = value
     @toggling_dropdown_list = false
+    @max_rows = MAX_LIST_ROWS
   end
 
   def dispose
@@ -46,7 +49,7 @@ class UIControls::DropdownList < UIControls::BaseControl
   #-----------------------------------------------------------------------------
 
   def make_dropdown_menu
-    menu_height = UIControls::List::ROW_HEIGHT * [@options.length, MAX_LIST_ROWS].min
+    menu_height = UIControls::List::ROW_HEIGHT * [@options.length, @max_rows].min
     # Draw menu's background
     @dropdown_menu_bg = BitmapSprite.new(@button_rect.width, menu_height + 4, self.viewport)
     @dropdown_menu_bg.x = self.x + @button_rect.x

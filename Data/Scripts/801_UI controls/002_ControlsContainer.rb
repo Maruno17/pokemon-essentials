@@ -13,11 +13,12 @@
 #       don't think is ideal.
 #===============================================================================
 class UIControls::ControlsContainer
-  attr_reader :x, :y
-  attr_reader :controls
-  attr_reader :values
-  attr_reader :visible
-  attr_reader :viewport
+  attr_reader   :x, :y
+  attr_accessor :label_offset_x, :label_offset_y
+  attr_reader   :controls
+  attr_reader   :values
+  attr_reader   :visible
+  attr_reader   :viewport
 
   LINE_SPACING        = 28
   OFFSET_FROM_LABEL_X = 90
@@ -30,6 +31,8 @@ class UIControls::ControlsContainer
     @y = y
     @width = width
     @height = height
+    @label_offset_x = OFFSET_FROM_LABEL_X
+    @label_offset_y = OFFSET_FROM_LABEL_Y
     @controls = []
     @row_count = 0
     @pixel_offset = 0
@@ -196,7 +199,7 @@ class UIControls::ControlsContainer
 
   def control_size(has_label = false)
     if has_label
-      return @width - OFFSET_FROM_LABEL_X, LINE_SPACING - OFFSET_FROM_LABEL_Y
+      return @width - @label_offset_x, LINE_SPACING - @label_offset_y
     end
     return @width, LINE_SPACING
   end
@@ -213,9 +216,9 @@ class UIControls::ControlsContainer
     i = @controls.length
     row_x = 0
     row_y = (add_offset ? @row_count - 1 : @row_count) * LINE_SPACING
-    ctrl_x = row_x + (add_offset ? OFFSET_FROM_LABEL_X : 0)
+    ctrl_x = row_x + (add_offset ? @label_offset_x : 0)
     ctrl_x += 4 if control.is_a?(UIControls::List)
-    ctrl_y = row_y + (add_offset ? OFFSET_FROM_LABEL_Y : 0) + @pixel_offset
+    ctrl_y = row_y + (add_offset ? @label_offset_y : 0) + @pixel_offset
     add_control_at(id, control, ctrl_x, ctrl_y)
     @row_count += rows if !add_offset
     @pixel_offset -= (LINE_SPACING - UIControls::List::ROW_HEIGHT) * (rows - 1) if control.is_a?(UIControls::List)

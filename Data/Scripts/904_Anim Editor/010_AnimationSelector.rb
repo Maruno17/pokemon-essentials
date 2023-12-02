@@ -118,7 +118,7 @@ class AnimationEditor::AnimationSelector
       name = ""
       name += _INTL("[Foe]") + " " if anim.opposing_animation?
       name += "[#{anim.version}]" + " " if anim.version > 0
-      name += anim.name
+      name += (anim.name || anim.move)
       if anim.move_animation?
         move_name = GameData::Move.try_get(anim.move)&.name || anim.move
         @move_list.push([anim.move, move_name]) if !@move_animations[anim.move]
@@ -161,12 +161,12 @@ class AnimationEditor::AnimationSelector
       @components.get_control(:moves).disable
       @components.get_control(:commons).enable
       @components.get_control(:moves_list).values = @move_list
-      @components.get_control(:moves_label).label = _INTL("Moves")
+      @components.get_control(:moves_label).text = _INTL("Moves")
     when 1
       @components.get_control(:moves).enable
       @components.get_control(:commons).disable
       @components.get_control(:moves_list).values = @common_list
-      @components.get_control(:moves_label).label = _INTL("Common animations")
+      @components.get_control(:moves_label).text = _INTL("Common animations")
     end
     # Put the correct list into the animations list
     @components.get_control(:animations_list).values = selected_move_animations

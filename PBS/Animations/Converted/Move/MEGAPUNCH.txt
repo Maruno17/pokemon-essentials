@@ -11,7 +11,6 @@ Name = MEGAPUNCH
 <Particle 3>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,396
     SetY = 2,104
     SetX = 3,397
@@ -30,7 +29,6 @@ Name = MEGAPUNCH
     Focus = Target
     SetX = 0,384
     SetY = 0,95
-    SetVisible = 0,true
     SetX = 1,385
     SetY = 1,93
     SetX = 2,384

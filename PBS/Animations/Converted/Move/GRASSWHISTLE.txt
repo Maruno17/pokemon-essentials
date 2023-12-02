@@ -13,7 +13,6 @@ Name = GRASSWHISTLE
     Focus = UserAndTarget
     SetX = 0,147
     SetY = 0,205
-    SetVisible = 0,true
     SetX = 1,172
     SetY = 1,179
     SetX = 2,204
@@ -45,7 +44,6 @@ Name = GRASSWHISTLE
 <Particle 3>
     Graphic = normal1
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,140
     SetY = 2,192
     SetX = 3,179
@@ -75,7 +73,6 @@ Name = GRASSWHISTLE
 <Particle 4>
     Graphic = normal1
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,153
     SetY = 2,142
     SetX = 3,192
@@ -104,7 +101,6 @@ Name = GRASSWHISTLE
 <Particle 5>
     Graphic = normal1
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,236
     SetY = 4,110
     SetX = 5,307
@@ -126,7 +122,6 @@ Name = GRASSWHISTLE
 <Particle 6>
     Graphic = normal1
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,185
     SetY = 4,179
     SetX = 5,249
@@ -144,7 +139,6 @@ Name = GRASSWHISTLE
 <Particle 7>
     Graphic = normal1
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,300
     SetY = 6,167
     SetX = 8,320
@@ -154,7 +148,6 @@ Name = GRASSWHISTLE
 <Particle 8>
     Graphic = normal1
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,172
     SetY = 6,135
     SetY = 8,186

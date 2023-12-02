@@ -13,7 +13,6 @@ Name = FLAMEWHEEL
     Focus = UserAndTarget
     SetX = 0,156
     SetY = 0,171
-    SetVisible = 0,true
     SetX = 8,398
     SetY = 8,100
     SetX = 9,396
@@ -25,13 +24,11 @@ Name = FLAMEWHEEL
     Focus = UserAndTarget
     SetX = 0,186
     SetY = 0,191
-    SetVisible = 0,true
     SetX = 10,423
     SetY = 10,124
 <Particle 4>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,193
     SetY = 1,230
     SetX = 7,191
@@ -41,7 +38,6 @@ Name = FLAMEWHEEL
 <Particle 5>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,162
     SetY = 2,256
     SetX = 11,378
@@ -49,7 +45,6 @@ Name = FLAMEWHEEL
 <Particle 6>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,128
     SetY = 3,254
     SetX = 11,423
@@ -57,79 +52,66 @@ Name = FLAMEWHEEL
 <Particle 7>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,113
     SetY = 4,228
 <Particle 8>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,116
     SetY = 5,191
 <Particle 9>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,130
     SetY = 6,172
 <Particle 10>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,159
     SetY = 7,165
 <Particle 11>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,187
     SetY = 7,185
 <Particle 12>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,188
     SetY = 7,222
 <Particle 13>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,168
     SetY = 7,246
 <Particle 14>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,143
     SetY = 7,250
 <Particle 15>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,121
     SetY = 7,241
 <Particle 16>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,109
     SetY = 7,217
 <Particle 17>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,112
     SetY = 7,192
 <Particle 18>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,125
     SetY = 7,172
 <Particle 19>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,174
     SetY = 7,172
 <SE>
@@ -148,7 +130,6 @@ Name = FLAMEWHEEL
     Focus = UserAndTarget
     SetX = 0,397
     SetY = 0,63
-    SetVisible = 0,true
     SetX = 8,139
     SetY = 8,227
     SetX = 9,133
@@ -162,14 +143,12 @@ Name = FLAMEWHEEL
     Focus = UserAndTarget
     SetX = 0,417
     SetY = 0,75
-    SetVisible = 0,true
     SetX = 10,176
     SetY = 10,187
     SetX = 11,163
 <Particle 4>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,422
     SetY = 1,102
     SetX = 10,119
@@ -179,7 +158,6 @@ Name = FLAMEWHEEL
 <Particle 5>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,407
     SetY = 2,120
     SetX = 11,110
@@ -187,7 +165,6 @@ Name = FLAMEWHEEL
 <Particle 6>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,380
     SetY = 3,110
     SetX = 4,377
@@ -197,55 +174,46 @@ Name = FLAMEWHEEL
 <Particle 7>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,366
     SetY = 4,92
 <Particle 8>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,376
     SetY = 5,71
 <Particle 9>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,388
     SetY = 6,62
 <Particle 10>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,408
     SetY = 6,71
 <Particle 11>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,422
     SetY = 6,95
 <Particle 12>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,406
     SetY = 6,113
 <Particle 13>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,384
     SetY = 7,108
 <Particle 14>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,374
     SetY = 7,86
 <Particle 15>
     Graphic = punches
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,379
     SetY = 7,70
 <SE>

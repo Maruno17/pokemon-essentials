@@ -11,7 +11,6 @@ Name = RAZORLEAF
 <Particle 2>
     Graphic = grass
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,144
     SetY = 1,204
     SetX = 2,175
@@ -39,7 +38,6 @@ Name = RAZORLEAF
 <Particle 3>
     Graphic = grass
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,154
     SetY = 2,120
     SetX = 3,123
@@ -61,7 +59,6 @@ Name = RAZORLEAF
 <Particle 4>
     Graphic = grass
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,258
     SetY = 3,208
     SetX = 4,263
@@ -79,7 +76,6 @@ Name = RAZORLEAF
 <Particle 5>
     Graphic = grass
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,211
     SetY = 4,78
     SetX = 5,118
@@ -91,7 +87,6 @@ Name = RAZORLEAF
 <Particle 6>
     Graphic = grass
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,336
     SetY = 4,166
     SetX = 5,305
@@ -101,7 +96,6 @@ Name = RAZORLEAF
 <Particle 7>
     Graphic = grass
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,154
     SetY = 4,136
     SetX = 5,346
@@ -111,13 +105,11 @@ Name = RAZORLEAF
 <Particle 8>
     Graphic = grass
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,216
     SetY = 5,96
 <Particle 9>
     Graphic = grass
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,279
     SetY = 5,144
 <SE>

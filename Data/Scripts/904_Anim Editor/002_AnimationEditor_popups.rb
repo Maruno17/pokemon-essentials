@@ -344,4 +344,53 @@ class AnimationEditor
     @pop_up_bg_bitmap.visible = false
     return [ret, vol, ptch]
   end
+
+  #-----------------------------------------------------------------------------
+
+  def edit_animation_properties
+    # Show pop-up window
+    @pop_up_bg_bitmap.visible = true
+    bg_bitmap = create_pop_up_window(ANIM_PROPERTIES_WIDTH, ANIM_PROPERTIES_HEIGHT)
+    # TODO: Draw box around list control(s), i.e. flags.
+    @components[:animation_properties].visible = true
+    # Set control values
+    anim_properties = @components[:animation_properties]
+    case @anim[:type]
+    when :move, :opp_move
+      anim_properties.get_control(:type).value = :move
+    when :common, :opp_common
+      anim_properties.get_control(:type).value = :common
+    end
+    anim_properties.get_control(:opp_variant).value = ([:opp_move, :opp_common].include?(@anim[:type]))
+    anim_properties.get_control(:version).value = @anim[:version] || 0
+    anim_properties.get_control(:name).value = @anim[:name] || ""
+    anim_properties.get_control(:pbs_path).value = (@anim[:pbs_path] || "unsorted") + ".txt"
+    anim_properties.get_control(:has_target).value = !@anim[:no_target]
+    anim_properties.get_control(:usable).value = !(@anim[:ignore] || false)
+    # TODO: Populate flags.
+    refresh_component(:animation_properties)   # This sets the :move control's value
+    # Interaction loop
+    ret = nil
+    captured = nil
+    loop do
+      Graphics.update
+      Input.update
+      anim_properties.update
+      if anim_properties.changed?
+        break if anim_properties.values.keys.include?(:close)
+        anim_properties.values.each_pair do |property, value|
+          apply_changed_value(:animation_properties, property, value)
+        end
+        anim_properties.clear_changed
+      end
+      break if !anim_properties.busy? && Input.trigger?(Input::BACK)
+      anim_properties.repaint
+    end
+    # Dispose and return
+    bg_bitmap.dispose
+    @pop_up_bg_bitmap.visible = false
+    anim_properties.clear_changed
+    anim_properties.visible = false
+  end
+
 end

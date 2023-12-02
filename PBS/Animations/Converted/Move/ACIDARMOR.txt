@@ -13,7 +13,6 @@ Name = ACIDARMOR
     Focus = Target
     SetX = 0,392
     SetY = 0,94
-    SetVisible = 0,true
     SetX = 4,400
     SetY = 4,86
     SetX = 5,392

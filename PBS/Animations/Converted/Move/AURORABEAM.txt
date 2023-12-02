@@ -13,7 +13,6 @@ Name = AURORABEAM
     Focus = UserAndTarget
     SetX = 0,128
     SetY = 0,236
-    SetVisible = 0,true
     SetX = 1,313
     SetY = 1,186
     SetZoomX = 1,50
@@ -52,7 +51,6 @@ Name = AURORABEAM
 <Particle 3>
     Graphic = 023-Burst01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,102
     SetY = 1,72
     SetZoomX = 1,50
@@ -89,7 +87,6 @@ Name = AURORABEAM
 <Particle 4>
     Graphic = 023-Burst01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,128
     SetY = 1,236
     SetX = 2,192
@@ -118,7 +115,6 @@ Name = AURORABEAM
 <Particle 5>
     Graphic = 023-Burst01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,128
     SetY = 2,236
     SetX = 3,179
@@ -139,7 +135,6 @@ Name = AURORABEAM
 <Particle 6>
     Graphic = 023-Burst01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,64
     SetY = 2,66
     SetZoomX = 2,50
@@ -161,7 +156,6 @@ Name = AURORABEAM
 <Particle 7>
     Graphic = 023-Burst01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,345
     SetY = 2,236
     SetZoomX = 2,50
@@ -178,7 +172,6 @@ Name = AURORABEAM
 <Particle 8>
     Graphic = 023-Burst01
     Focus = User
-    SetVisible = 0,true
     SetX = 2,313
     SetY = 2,110
     SetZoomX = 2,50
@@ -190,7 +183,6 @@ Name = AURORABEAM
 <Particle 9>
     Graphic = 023-Burst01
     Focus = User
-    SetVisible = 0,true
     SetX = 3,115
     SetY = 3,148
     SetZoomX = 3,50
@@ -200,7 +192,6 @@ Name = AURORABEAM
 <Particle 10>
     Graphic = 023-Burst01
     Focus = User
-    SetVisible = 0,true
     SetX = 3,326
     SetY = 3,224
     SetZoomX = 3,50
@@ -210,7 +201,6 @@ Name = AURORABEAM
 <Particle 11>
     Graphic = 023-Burst01
     Focus = User
-    SetVisible = 0,true
     SetX = 3,262
     SetY = 3,148
     SetZoomX = 3,50
@@ -219,7 +209,6 @@ Name = AURORABEAM
 <Particle 12>
     Graphic = 023-Burst01
     Focus = User
-    SetVisible = 0,true
     SetX = 4,339
     SetY = 4,236
     SetZoomX = 4,50

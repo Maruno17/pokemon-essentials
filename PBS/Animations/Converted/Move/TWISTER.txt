@@ -13,7 +13,6 @@ Name = TWISTER
     Focus = Target
     SetX = 0,384
     SetY = 0,78
-    SetVisible = 0,true
     SetFlip = 11,true
 <SE>
     Play = 0,Water3,80,100

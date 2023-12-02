@@ -13,7 +13,6 @@ Name = LUCKYCHANT
     Focus = UserAndTarget
     SetX = 0,375
     SetY = 0,100
-    SetVisible = 0,true
     SetOpacity = 0,220
     SetOpacity = 9,128
 <Particle 3>
@@ -21,7 +20,6 @@ Name = LUCKYCHANT
     Focus = UserAndTarget
     SetX = 0,336
     SetY = 0,87
-    SetVisible = 0,true
     SetX = 1,426
     SetY = 1,151
     SetX = 2,352
@@ -42,7 +40,6 @@ Name = LUCKYCHANT
     Focus = UserAndTarget
     SetX = 0,336
     SetY = 0,104
-    SetVisible = 0,true
     SetX = 1,341
     SetY = 1,130
     SetX = 2,346
@@ -61,7 +58,6 @@ Name = LUCKYCHANT
 <Particle 5>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,343
     SetY = 1,143
     SetX = 2,358
@@ -80,7 +76,6 @@ Name = LUCKYCHANT
 <Particle 6>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,361
     SetY = 1,150
     SetX = 2,417
@@ -98,7 +93,6 @@ Name = LUCKYCHANT
 <Particle 7>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,432
     SetY = 2,129
     SetX = 3,351
@@ -115,7 +109,6 @@ Name = LUCKYCHANT
 <Particle 8>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,423
     SetY = 2,144
     SetX = 3,339
@@ -132,7 +125,6 @@ Name = LUCKYCHANT
 <Particle 9>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,406
     SetY = 2,145
     SetX = 3,425
@@ -149,7 +141,6 @@ Name = LUCKYCHANT
 <Particle 10>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,427
     SetY = 2,111
     SetX = 3,435
@@ -166,7 +157,6 @@ Name = LUCKYCHANT
 <Particle 11>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,358
     SetY = 2,109
     SetX = 3,432
@@ -183,7 +173,6 @@ Name = LUCKYCHANT
 <Particle 12>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,439
     SetY = 3,105
     SetY = 4,126
@@ -197,7 +186,6 @@ Name = LUCKYCHANT
 <Particle 13>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,353
     SetY = 3,96
     SetX = 4,435
@@ -212,7 +200,6 @@ Name = LUCKYCHANT
 <Particle 14>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,429
     SetY = 3,94
     SetX = 4,444
@@ -227,7 +214,6 @@ Name = LUCKYCHANT
 <Particle 15>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,427
     SetY = 4,91
     SetX = 5,434
@@ -240,7 +226,6 @@ Name = LUCKYCHANT
 <Particle 16>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,345
     SetY = 4,106
     SetX = 6,326
@@ -251,7 +236,6 @@ Name = LUCKYCHANT
 <Particle 17>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,340
     SetY = 6,76
     SetX = 7,446
@@ -260,35 +244,30 @@ Name = LUCKYCHANT
 <Particle 18>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,431
     SetY = 7,94
     SetOpacity = 9,128
 <Particle 19>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,442
     SetY = 7,82
     SetOpacity = 9,128
 <Particle 20>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,420
     SetY = 7,64
     SetOpacity = 9,128
 <Particle 21>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,407
     SetY = 7,55
     SetOpacity = 9,128
 <Particle 22>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,413
     SetY = 7,68
     SetOpacity = 9,128

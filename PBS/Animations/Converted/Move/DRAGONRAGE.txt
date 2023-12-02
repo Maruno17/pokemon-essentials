@@ -11,7 +11,6 @@ Name = DRAGONRAGE
 <Particle 3>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,179
     SetY = 1,198
     SetX = 2,217
@@ -28,7 +27,6 @@ Name = DRAGONRAGE
 <Particle 4>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 2,true
     SetX = 2,217
     SetY = 2,186
@@ -40,7 +38,6 @@ Name = DRAGONRAGE
 <Particle 5>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 3,true
     SetX = 3,230
     SetY = 3,198
@@ -49,7 +46,6 @@ Name = DRAGONRAGE
     Focus = UserAndTarget
     SetX = 0,153
     SetY = 0,205
-    SetVisible = 0,true
     SetX = 1,204
     SetY = 1,186
     SetX = 2,256

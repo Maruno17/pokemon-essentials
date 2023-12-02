@@ -13,7 +13,6 @@ Name = CRUSHCLAW
     Focus = Target
     SetX = 0,387
     SetY = 0,84
-    SetVisible = 0,true
     SetX = 1,392
     SetY = 1,87
     SetX = 2,402

@@ -13,7 +13,6 @@ Name = COTTONGUARD
     Focus = User
     SetX = 0,113
     SetY = 0,263
-    SetVisible = 0,true
     SetX = 1,123
     SetY = 1,272
     SetX = 2,135
@@ -28,7 +27,6 @@ Name = COTTONGUARD
 <Particle 3>
     Graphic = animsheet
     Focus = User
-    SetVisible = 0,true
     SetX = 1,156
     SetY = 1,258
     SetX = 2,166
@@ -44,7 +42,6 @@ Name = COTTONGUARD
 <Particle 4>
     Graphic = animsheet
     Focus = User
-    SetVisible = 0,true
     SetX = 3,133
     SetY = 3,263
     SetX = 4,170
@@ -56,7 +53,6 @@ Name = COTTONGUARD
 <Particle 5>
     Graphic = animsheet
     Focus = User
-    SetVisible = 0,true
     SetX = 3,167
     SetY = 3,266
     SetX = 4,138
@@ -68,7 +64,6 @@ Name = COTTONGUARD
 <Particle 6>
     Graphic = animsheet
     Focus = User
-    SetVisible = 0,true
     SetX = 3,176
     SetY = 3,220
     SetX = 4,190
@@ -80,7 +75,6 @@ Name = COTTONGUARD
 <Particle 7>
     Graphic = animsheet
     Focus = User
-    SetVisible = 0,true
     SetX = 4,129
     SetY = 4,237
 <SE>

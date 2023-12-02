@@ -15,7 +15,6 @@ Name = ShadowSky
     SetY = 0,132
     SetZoomX = 0,327
     SetZoomY = 0,242
-    SetVisible = 0,true
     SetOpacity = 0,128
     SetOpacity = 1,192
     SetOpacity = 2,249

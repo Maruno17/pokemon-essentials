@@ -15,7 +15,6 @@ Name = TRICKROOM
     SetY = 0,210
     SetZoomX = 0,446
     SetZoomY = 0,273
-    SetVisible = 0,true
     SetX = 1,311
     SetY = 1,209
     SetX = 3,313

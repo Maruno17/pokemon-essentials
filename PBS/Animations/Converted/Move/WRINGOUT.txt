@@ -13,7 +13,6 @@ Name = WRINGOUT
     Focus = Target
     SetX = 0,273
     SetY = 0,84
-    SetVisible = 0,true
     SetX = 1,283
     SetY = 1,139
     SetX = 2,323

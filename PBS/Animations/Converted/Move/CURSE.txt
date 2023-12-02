@@ -14,7 +14,6 @@ Name = CURSE
     SetX = 0,392
     SetY = 0,14
     SetAngle = 0,90
-    SetVisible = 0,true
     SetY = 1,54
     SetY = 2,70
     SetY = 3,78

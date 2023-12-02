@@ -13,7 +13,6 @@ Name = GRUDGE
     Focus = Target
     SetX = 0,512
     SetY = 0,102
-    SetVisible = 0,true
     SetX = 1,456
     SetY = 1,118
     SetX = 2,416
@@ -37,7 +36,6 @@ Name = GRUDGE
 <Particle 3>
     Graphic = ghost1
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,512
     SetY = 1,102
     SetX = 2,456
@@ -59,7 +57,6 @@ Name = GRUDGE
 <Particle 4>
     Graphic = ghost1
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,512
     SetY = 2,102
     SetX = 3,456
@@ -80,7 +77,6 @@ Name = GRUDGE
 <Particle 5>
     Graphic = ghost1
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,512
     SetY = 3,102
     SetX = 4,472
@@ -102,7 +98,6 @@ Name = GRUDGE
 <Particle 6>
     Graphic = ghost1
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,512
     SetY = 4,78
     SetX = 5,448
@@ -121,7 +116,6 @@ Name = GRUDGE
 <Particle 7>
     Graphic = ghost1
     Focus = Target
-    SetVisible = 0,true
     SetX = 6,504
     SetY = 6,102
     SetX = 7,464
@@ -137,7 +131,6 @@ Name = GRUDGE
 <Particle 8>
     Graphic = ghost1
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,504
     SetY = 7,86
     SetX = 8,456
@@ -151,7 +144,6 @@ Name = GRUDGE
 <Particle 9>
     Graphic = ghost1
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,496
     SetY = 8,102
     SetX = 9,448
@@ -162,7 +154,6 @@ Name = GRUDGE
 <Particle 10>
     Graphic = ghost1
     Focus = Target
-    SetVisible = 0,true
     SetX = 10,432
     SetY = 10,126
     SetX = 11,392

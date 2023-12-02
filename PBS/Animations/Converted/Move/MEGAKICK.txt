@@ -11,7 +11,6 @@ Name = MEGAKICK
 <Particle 3>
     Graphic = 003-Attack01
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,384
     SetY = 3,110
 <Particle 2>
@@ -19,7 +18,6 @@ Name = MEGAKICK
     Focus = Target
     SetX = 0,376
     SetY = 0,86
-    SetVisible = 0,true
     SetY = 1,94
     SetAngle = 1,45
     SetX = 2,384

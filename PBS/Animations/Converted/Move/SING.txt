@@ -13,7 +13,6 @@ Name = SING
     Focus = Target
     SetX = 0,200
     SetY = 0,211
-    SetVisible = 0,true
     SetX = 1,212
     SetY = 1,227
     SetX = 2,219
@@ -117,7 +116,6 @@ Name = SING
 <Particle 3>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,211
     SetY = 1,212
     SetX = 2,217
@@ -220,7 +218,6 @@ Name = SING
 <Particle 4>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,236
     SetY = 2,216
     SetX = 4,257
@@ -320,7 +317,6 @@ Name = SING
 <Particle 5>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,222
     SetY = 8,198
     SetX = 9,351
@@ -386,7 +382,6 @@ Name = SING
 <Particle 6>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 13,282
     SetY = 13,189
     SetX = 14,226
@@ -442,7 +437,6 @@ Name = SING
 <Particle 7>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 15,429
     SetY = 15,91
     SetX = 16,352
@@ -476,7 +470,6 @@ Name = SING
 <Particle 8>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 15,437
     SetY = 15,85
     SetX = 16,416
@@ -490,13 +483,11 @@ Name = SING
 <Particle 9>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 16,417
     SetY = 16,89
 <Particle 10>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 16,417
     SetY = 16,93
 <SE>
@@ -515,7 +506,6 @@ Name = SING
     Focus = Target
     SetX = 0,364
     SetY = 0,92
-    SetVisible = 0,true
     SetX = 1,369
     SetY = 1,117
     SetX = 2,358
@@ -601,7 +591,6 @@ Name = SING
     Focus = Target
     SetX = 0,365
     SetY = 0,125
-    SetVisible = 0,true
     SetX = 1,350
     SetY = 1,146
     SetX = 2,356
@@ -685,7 +674,6 @@ Name = SING
 <Particle 4>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,300
     SetY = 4,200
     SetX = 5,262
@@ -763,7 +751,6 @@ Name = SING
 <Particle 5>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,305
     SetY = 4,227
     SetX = 5,275
@@ -813,7 +800,6 @@ Name = SING
 <Particle 6>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 10,380
     SetY = 10,124
     SetX = 11,349
@@ -851,7 +837,6 @@ Name = SING
 <Particle 7>
     Graphic = poi.hear.mus
     Focus = Target
-    SetVisible = 0,true
     SetX = 11,319
     SetY = 11,172
     SetX = 13,361

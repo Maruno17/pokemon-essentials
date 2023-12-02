@@ -11,7 +11,6 @@ Name = ERUPTION
 <Particle 3>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,211
     SetY = 2,167
     SetAngle = 2,30
@@ -31,7 +30,6 @@ Name = ERUPTION
 <Particle 4>
     Graphic = fire5
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,147
     SetY = 4,161
     SetAngle = 4,30
@@ -46,7 +44,6 @@ Name = ERUPTION
     SetX = 0,160
     SetY = 0,167
     SetAngle = 0,30
-    SetVisible = 0,true
     SetX = 1,198
     SetY = 1,148
     SetAngle = 1,15

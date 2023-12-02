@@ -14,7 +14,6 @@ Name = QUICKATTACK
 <Particle 3>
     Graphic = Tackle_B
     Focus = User
-    SetVisible = 0,true
     SetX = 2,59
     SetY = 2,258
     SetOpacity = 3,170
@@ -22,7 +21,6 @@ Name = QUICKATTACK
 <Particle 4>
     Graphic = Tackle_B
     Focus = User
-    SetVisible = 0,true
     SetX = 3,100
     SetY = 3,272
     SetOpacity = 4,170
@@ -30,7 +28,6 @@ Name = QUICKATTACK
 <Particle 5>
     Graphic = Tackle_B
     Focus = User
-    SetVisible = 0,true
     SetX = 4,163
     SetY = 4,259
     SetOpacity = 5,170
@@ -38,7 +35,6 @@ Name = QUICKATTACK
 <Particle 6>
     Graphic = Tackle_B
     Focus = User
-    SetVisible = 0,true
     SetX = 5,140
     SetY = 5,230
     SetOpacity = 6,170
@@ -46,7 +42,6 @@ Name = QUICKATTACK
 <Particle 2>
     Graphic = Tackle_B
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,76
     SetY = 1,230
     SetOpacity = 2,170

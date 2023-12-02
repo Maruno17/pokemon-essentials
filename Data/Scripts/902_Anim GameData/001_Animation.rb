@@ -5,6 +5,7 @@ module GameData
     attr_reader :version      # Hit number
     attr_reader :name         # Shown in the sublist; cosmetic only
     attr_reader :no_target    # Whether there is no "Target" particle (false by default)
+    attr_reader :ignore       # Whether the animation can't be played in battle
     attr_reader :flags
     attr_reader :pbs_path     # Whole path minus "PBS/Animations/" at start and ".txt" at end
     attr_reader :particles
@@ -29,6 +30,7 @@ module GameData
                                             "Common" => :common, "OppCommon" => :opp_common}],
       "Name"        => [:name,      "s"],
       "NoTarget"    => [:no_target, "b"],
+      "Ignore"      => [:ignore,    "b"],
       # TODO: Boolean for whether the animation will be played if the target is
       #       on the same side as the user.
       # TODO: DamageFrame (keyframe at which the battle continues, i.e. damage
@@ -98,6 +100,7 @@ module GameData
       # TODO: Add "SetColor"/"SetTone" as shorthand for the above? They'd be
       #       converted in the Compiler.
       # TODO: Bitmap masking.
+      # TODO: Sprite cropping.
       # TODO: Hue? I don't think so; color/tone do the same job.
 
       # These properties are specifically for the "SE" particle.
@@ -187,6 +190,7 @@ module GameData
       @version    = hash[:version]   || 0
       @name       = hash[:name]
       @no_target  = hash[:no_target] || false
+      @ignore     = hash[:ignore]    || false
       @particles  = hash[:particles] || []
       @flags      = hash[:flags]     || []
       @pbs_path   = hash[:pbs_path]  || @move
@@ -197,9 +201,9 @@ module GameData
     def clone_as_hash
       ret = {}
       ret[:type] = @type
-      ret[:move] = @move
-      ret[:version] = @version
-      ret[:name] = @name
+      ret[:move] = @move.dup
+      ret[:version] = @version.dup
+      ret[:name] = @name.dup
       ret[:particles] = []   # Clone the @particles array, which is nested hashes and arrays
       @particles.each do |particle|
         new_p = {}

@@ -11,7 +11,6 @@ Name = LeechSeed
 <Particle 3>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,339
     SetY = 1,98
     SetX = 2,345
@@ -33,7 +32,6 @@ Name = LeechSeed
 <Particle 4>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,384
     SetY = 2,98
     SetX = 3,313
@@ -54,7 +52,6 @@ Name = LeechSeed
 <Particle 5>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,371
     SetY = 3,98
     SetX = 4,345
@@ -73,7 +70,6 @@ Name = LeechSeed
 <Particle 6>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,313
     SetY = 4,104
     SetX = 5,249
@@ -87,7 +83,6 @@ Name = LeechSeed
     Focus = UserAndTarget
     SetX = 0,384
     SetY = 0,98
-    SetVisible = 0,true
     SetY = 1,110
     SetX = 2,275
     SetY = 2,98

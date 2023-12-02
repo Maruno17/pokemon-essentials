@@ -11,7 +11,6 @@ Name = WILLOWISP
 <Particle 3>
     Graphic = 015-Fire01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 1,true
     SetX = 1,134
     SetY = 1,179
@@ -29,7 +28,6 @@ Name = WILLOWISP
 <Particle 4>
     Graphic = 015-Fire01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 2,true
     SetX = 2,224
     SetY = 2,186
@@ -43,7 +41,6 @@ Name = WILLOWISP
 <Particle 5>
     Graphic = 015-Fire01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,358
     SetY = 3,110
 <Particle 2>
@@ -53,7 +50,6 @@ Name = WILLOWISP
     SetX = 0,160
     SetY = 0,186
     SetAngle = 0,90
-    SetVisible = 0,true
     SetX = 1,198
     SetY = 1,167
     SetX = 2,262

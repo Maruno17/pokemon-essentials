@@ -11,7 +11,6 @@ Name = TWINEEDLE
 <Particle 4>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,364
     SetY = 4,104
     SetOpacity = 4,50
@@ -22,7 +21,6 @@ Name = TWINEEDLE
     Focus = UserAndTarget
     SetX = 0,128
     SetY = 0,192
-    SetVisible = 0,true
     SetX = 1,185
     SetY = 1,173
     SetX = 2,256
@@ -41,7 +39,6 @@ Name = TWINEEDLE
 <Particle 3>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,185
     SetY = 1,217
     SetX = 2,256
@@ -72,7 +69,6 @@ Name = Twineedle hit 2
 <Particle 3>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,185
     SetY = 1,217
     SetX = 2,256
@@ -89,7 +85,6 @@ Name = Twineedle hit 2
 <Particle 4>
     Graphic = poison3
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,364
     SetY = 4,104
     SetOpacity = 4,50
@@ -100,7 +95,6 @@ Name = Twineedle hit 2
     Focus = UserAndTarget
     SetX = 0,128
     SetY = 0,192
-    SetVisible = 0,true
     SetX = 1,185
     SetY = 1,173
     SetX = 2,256

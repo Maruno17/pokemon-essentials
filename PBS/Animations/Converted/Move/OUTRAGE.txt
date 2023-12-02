@@ -15,7 +15,6 @@ Name = OUTRAGE
     SetY = 0,161
     SetZoomX = 0,50
     SetZoomY = 0,50
-    SetVisible = 0,true
     SetFlip = 3,true
     SetFlip = 5,false
     SetX = 5,262
@@ -44,7 +43,6 @@ Name = OUTRAGE
 <Particle 3>
     Graphic = Fogo - 01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,179
     SetY = 2,198
     SetZoomX = 2,50
@@ -80,7 +78,6 @@ Name = OUTRAGE
 <Particle 4>
     Graphic = Fogo - 01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetFlip = 3,true
     SetX = 3,89
     SetY = 3,161
@@ -108,7 +105,6 @@ Name = OUTRAGE
 <Particle 5>
     Graphic = Fogo - 01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,185
     SetY = 4,224
     SetZoomX = 4,50
@@ -132,7 +128,6 @@ Name = OUTRAGE
 <Particle 6>
     Graphic = Fogo - 01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,224
     SetY = 5,217
     SetZoomX = 5,50
@@ -146,7 +141,6 @@ Name = OUTRAGE
 <Particle 7>
     Graphic = Fogo - 01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 5,166
     SetY = 5,198
     SetZoomX = 5,50
@@ -161,7 +155,6 @@ Name = OUTRAGE
 <Particle 8>
     Graphic = Fogo - 01
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,128
     SetY = 7,186
     SetZoomX = 7,50

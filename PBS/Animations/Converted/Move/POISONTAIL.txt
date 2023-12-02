@@ -13,7 +13,6 @@ Name = POISONTAIL
     Focus = Target
     SetX = 0,392
     SetY = 0,94
-    SetVisible = 0,true
     SetX = 1,384
     SetY = 2,86
     SetX = 4,376

@@ -11,7 +11,6 @@ Name = SWAGGER
 <Particle 2>
     Graphic = mixed status
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,405
     SetY = 4,40
     SetX = 5,402

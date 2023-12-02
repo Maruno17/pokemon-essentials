@@ -13,7 +13,6 @@ Name = FIREPUNCH
     Focus = Target
     SetX = 0,387
     SetY = 0,97
-    SetVisible = 0,true
     SetX = 1,402
     SetY = 1,88
     SetX = 2,403
@@ -29,7 +28,6 @@ Name = FIREPUNCH
 <Particle 3>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,390
     SetY = 1,95
     SetX = 2,384
@@ -45,7 +43,6 @@ Name = FIREPUNCH
 <Particle 4>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,385
     SetY = 3,101
     SetX = 4,395
@@ -57,7 +54,6 @@ Name = FIREPUNCH
 <Particle 5>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,384
     SetY = 4,103
     SetX = 5,381
@@ -67,7 +63,6 @@ Name = FIREPUNCH
 <Particle 6>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,387
     SetY = 5,104
     SetX = 6,392
@@ -75,37 +70,31 @@ Name = FIREPUNCH
 <Particle 7>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,403
     SetY = 7,82
 <Particle 8>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 8,374
     SetY = 8,81
 <Particle 9>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 9,398
     SetY = 9,64
 <Particle 10>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 10,388
     SetY = 10,102
 <Particle 11>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 11,403
     SetY = 11,110
 <Particle 12>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 11,377
     SetY = 11,115
 <SE>

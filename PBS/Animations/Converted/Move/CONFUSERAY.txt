@@ -13,7 +13,6 @@ Name = CONFUSERAY
     Focus = UserAndTarget
     SetX = 0,153
     SetY = 0,211
-    SetVisible = 0,true
     SetX = 1,166
     SetY = 1,205
     SetX = 2,172

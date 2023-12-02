@@ -13,7 +13,6 @@ Name = STOMP
     Focus = Target
     SetX = 0,384
     SetY = 0,-18
-    SetVisible = 0,true
     SetY = 1,22
     SetY = 2,54
     SetY = 3,70

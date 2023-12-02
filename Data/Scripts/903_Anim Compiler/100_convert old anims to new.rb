@@ -98,8 +98,6 @@ module AnimationConverter
           particle[:name] = "User"
         elsif i == 1
           particle[:name] = "Target"
-        else
-          particle[:visible] = [[0, 0, true]]
         end
 
         last_frame = last_frame_values[i] || default_frame.clone
@@ -165,11 +163,11 @@ end
 #===============================================================================
 # Add to Debug menu.
 #===============================================================================
-MenuHandlers.add(:debug_menu, :convert_anims, {
-  "name"        => "Convert old animation to PBS files",
-  "parent"      => :main,
-  "description" => "This is just for the sake of having lots of example animation PBS files.",
-  "effect"      => proc {
-    AnimationConverter.convert_old_animations_to_new
-  }
-})
+# MenuHandlers.add(:debug_menu, :convert_anims, {
+#   "name"        => "Convert old animation to PBS files",
+#   "parent"      => :main,
+#   "description" => "This is just for the sake of having lots of example animation PBS files.",
+#   "effect"      => proc {
+#     AnimationConverter.convert_old_animations_to_new
+#   }
+# })

@@ -13,7 +13,6 @@ Name = LICK
     Focus = Target
     SetX = 0,400
     SetY = 0,142
-    SetVisible = 0,true
     SetY = 1,118
     SetY = 2,94
     SetY = 3,70

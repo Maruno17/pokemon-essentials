@@ -11,7 +11,6 @@ Name = GASTROACID
 <Particle 3>
     Graphic = fly copy
     Focus = Target
-    SetVisible = 0,true
     SetX = 1,393
     SetY = 1,120
     SetZoomX = 1,85
@@ -36,7 +35,6 @@ Name = GASTROACID
 <Particle 4>
     Graphic = fly copy
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,363
     SetY = 2,114
     SetZoomX = 2,85
@@ -55,7 +53,6 @@ Name = GASTROACID
 <Particle 5>
     Graphic = fly copy
     Focus = Target
-    SetVisible = 0,true
     SetX = 3,402
     SetY = 3,119
     SetZoomX = 3,85
@@ -66,7 +63,6 @@ Name = GASTROACID
 <Particle 6>
     Graphic = fly copy
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,344
     SetY = 4,23
     SetZoomX = 4,85
@@ -79,7 +75,6 @@ Name = GASTROACID
     SetY = 0,110
     SetZoomX = 0,85
     SetZoomY = 0,85
-    SetVisible = 0,true
     SetOpacity = 0,200
     SetX = 1,352
     SetY = 1,85

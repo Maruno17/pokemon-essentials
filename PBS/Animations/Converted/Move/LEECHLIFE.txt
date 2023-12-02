@@ -13,7 +13,6 @@ Name = LEECHLIFE
     Focus = UserAndTarget
     SetX = 0,166
     SetY = 0,224
-    SetVisible = 0,true
     SetX = 1,224
     SetY = 1,179
     SetX = 2,294
@@ -43,7 +42,6 @@ Name = LEECHLIFE
 <Particle 3>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,339
     SetY = 4,98
     SetX = 5,332
@@ -62,7 +60,6 @@ Name = LEECHLIFE
 <Particle 4>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,384
     SetY = 4,154
     SetX = 5,345
@@ -80,7 +77,6 @@ Name = LEECHLIFE
 <Particle 5>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,384
     SetY = 6,116
     SetX = 7,326
@@ -92,7 +88,6 @@ Name = LEECHLIFE
 <Particle 6>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 6,339
     SetY = 6,79
     SetX = 7,256
@@ -101,20 +96,17 @@ Name = LEECHLIFE
 <Particle 7>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,377
     SetY = 7,85
     SetX = 8,268
 <Particle 8>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,320
     SetY = 7,79
 <Particle 9>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 7,396
     SetY = 7,129
 <SE>

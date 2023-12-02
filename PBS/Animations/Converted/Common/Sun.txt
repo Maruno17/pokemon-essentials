@@ -13,7 +13,6 @@ Name = Sun
     Focus = Screen
     SetX = 0,64
     SetY = 0,64
-    SetVisible = 0,true
     SetOpacity = 0,64
     SetX = 1,72
     SetY = 1,72

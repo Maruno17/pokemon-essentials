@@ -15,7 +15,6 @@ Name = MOONLIGHT
     SetY = 0,206
     SetZoomX = 0,50
     SetZoomY = 0,50
-    SetVisible = 0,true
     SetY = 1,190
     SetY = 2,158
     SetY = 3,110

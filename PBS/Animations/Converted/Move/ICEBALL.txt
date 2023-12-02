@@ -13,7 +13,6 @@ Name = ICEBALL
     Focus = UserAndTarget
     SetX = 0,128
     SetY = 0,236
-    SetVisible = 0,true
     SetX = 1,140
     SetY = 1,198
     SetX = 2,172

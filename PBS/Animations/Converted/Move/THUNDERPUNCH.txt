@@ -13,7 +13,6 @@ Name = THUNDERPUNCH
     Focus = Target
     SetX = 0,385
     SetY = 0,97
-    SetVisible = 0,true
     SetX = 1,384
     SetY = 1,93
     SetX = 2,395
@@ -35,7 +34,6 @@ Name = THUNDERPUNCH
 <Particle 3>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,412
     SetY = 2,82
     SetX = 3,378
@@ -55,7 +53,6 @@ Name = THUNDERPUNCH
 <Particle 4>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,385
     SetY = 2,92
     SetX = 3,386
@@ -74,7 +71,6 @@ Name = THUNDERPUNCH
 <Particle 5>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,387
     SetY = 4,70
     SetX = 5,443
@@ -86,7 +82,6 @@ Name = THUNDERPUNCH
 <Particle 6>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 4,389
     SetY = 4,99
     SetX = 5,385
@@ -97,13 +92,11 @@ Name = THUNDERPUNCH
 <Particle 7>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,351
     SetY = 7,135
 <Particle 8>
     Graphic = punches
     Focus = Target
-    SetVisible = 0,true
     SetX = 7,384
     SetY = 7,97
 <SE>

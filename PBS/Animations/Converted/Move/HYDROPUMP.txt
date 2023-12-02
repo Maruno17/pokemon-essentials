@@ -11,13 +11,11 @@ Name = HYDROPUMP
 <Particle 3>
     Graphic = icewater
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,480
     SetY = 2,94
 <Particle 4>
     Graphic = icewater
     Focus = Target
-    SetVisible = 0,true
     SetX = 5,296
     SetY = 5,94
 <Particle 2>
@@ -25,7 +23,6 @@ Name = HYDROPUMP
     Focus = Target
     SetX = 0,384
     SetY = 0,118
-    SetVisible = 0,true
     SetX = 3,392
     SetX = 4,400
     SetX = 5,376

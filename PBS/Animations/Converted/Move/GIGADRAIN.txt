@@ -13,7 +13,6 @@ Name = GIGADRAIN
     Focus = UserAndTarget
     SetX = 0,345
     SetY = 0,91
-    SetVisible = 0,true
     SetX = 1,294
     SetY = 1,98
     SetX = 2,211
@@ -28,7 +27,6 @@ Name = GIGADRAIN
     Focus = UserAndTarget
     SetX = 0,371
     SetY = 0,110
-    SetVisible = 0,true
     SetX = 1,396
     SetY = 1,116
     SetX = 2,358
@@ -48,7 +46,6 @@ Name = GIGADRAIN
 <Particle 4>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,345
     SetY = 1,142
     SetX = 2,339
@@ -70,7 +67,6 @@ Name = GIGADRAIN
 <Particle 5>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 1,339
     SetY = 1,85
     SetX = 2,268
@@ -89,7 +85,6 @@ Name = GIGADRAIN
 <Particle 6>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,288
     SetY = 2,91
     SetX = 3,371
@@ -106,7 +101,6 @@ Name = GIGADRAIN
 <Particle 7>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 2,377
     SetY = 2,104
     SetX = 3,166
@@ -122,7 +116,6 @@ Name = GIGADRAIN
 <Particle 8>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,236
     SetY = 3,116
     SetX = 4,371
@@ -136,7 +129,6 @@ Name = GIGADRAIN
 <Particle 9>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 3,326
     SetY = 3,142
     SetX = 4,166
@@ -146,7 +138,6 @@ Name = GIGADRAIN
 <Particle 10>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,275
     SetY = 4,167
     SetX = 5,179
@@ -154,7 +145,6 @@ Name = GIGADRAIN
 <Particle 11>
     Graphic = rockice
     Focus = UserAndTarget
-    SetVisible = 0,true
     SetX = 4,396
     SetY = 4,104
     SetX = 5,371

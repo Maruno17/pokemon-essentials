@@ -11,7 +11,6 @@ Name = TACKLE
 <Particle 2>
     Graphic = Tackle_B
     Focus = Target
-    SetVisible = 0,true
     SetX = 2,384
     SetY = 2,99
     SetOpacity = 2,150

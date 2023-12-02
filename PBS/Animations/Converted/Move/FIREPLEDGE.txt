@@ -14,7 +14,6 @@ Name = FIREPLEDGE
     SetX = 0,388
     SetY = 0,135
     SetZoomY = 0,30
-    SetVisible = 0,true
     SetX = 1,387
     SetY = 1,123
     SetZoomY = 1,50

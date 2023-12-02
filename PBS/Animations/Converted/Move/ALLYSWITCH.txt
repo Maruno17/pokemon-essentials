@@ -13,7 +13,6 @@ Name = ALLYSWITCH
     Focus = User
     SetX = 0,137
     SetY = 0,222
-    SetVisible = 0,true
     SetX = 1,139
     SetY = 1,224
     SetX = 2,137

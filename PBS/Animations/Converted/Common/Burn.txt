@@ -15,6 +15,5 @@ Name = Burn
     SetY = 0,96
     SetZoomX = 0,200
     SetZoomY = 0,200
-    SetVisible = 0,true
 <SE>
     Play = 0,Fire2,80,100

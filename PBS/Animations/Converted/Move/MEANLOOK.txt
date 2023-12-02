@@ -13,7 +13,6 @@ Name = MEANLOOK
     Focus = Target
     SetX = 0,384
     SetY = 0,92
-    SetVisible = 0,true
     SetY = 1,96
     SetY = 2,94
     SetX = 3,385
