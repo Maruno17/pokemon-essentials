@@ -51,4 +51,4 @@ Name = BARRIER
     SetX = 9,379
     SetY = 9,85
 <SE>
-    Play = 0,Flash2,80,100
+    Play = 0,Flash2,80

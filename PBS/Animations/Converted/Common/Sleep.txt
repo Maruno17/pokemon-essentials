@@ -64,4 +64,4 @@ Name = Sleep
     SetX = 10,309
     SetY = 10,25
 <SE>
-    Play = 0,Sleep,80,100
+    Play = 0,Sleep,80

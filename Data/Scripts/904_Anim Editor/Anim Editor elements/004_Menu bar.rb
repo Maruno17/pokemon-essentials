@@ -1,9 +1,5 @@
 #===============================================================================
-# TODO: Ideally the menu buttons (add_button) will be replaced by a proper
-#       menu control (basically multiple DropdownList controls where the headers
-#       have fixed names and, while captured, hovering over a header changes
-#       which list is displayed). The menu control should go under UI controls
-#       rather than be unique to the Animation Editor.
+#
 #===============================================================================
 class AnimationEditor::MenuBar < UIControls::ControlsContainer
   MENU_BUTTON_WIDTH = 80

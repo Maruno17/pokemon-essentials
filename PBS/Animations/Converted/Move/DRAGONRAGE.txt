@@ -57,4 +57,4 @@ Name = DRAGONRAGE
     SetX = 5,358
     SetY = 5,110
 <SE>
-    Play = 0,Fire6,80,100
+    Play = 0,Fire6,80

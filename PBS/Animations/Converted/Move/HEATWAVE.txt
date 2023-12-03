@@ -80,7 +80,7 @@ Name = HEATWAVE
     SetZoomY = 21,400
     SetOpacity = 21,30
 <SE>
-    Play = 0,Fire1,80,100
-    Play = 2,Fire2,80,100
-    Play = 6,Fire2,80,100
-    Play = 8,Fire2,80,100
+    Play = 0,Fire1,80
+    Play = 2,Fire2,80
+    Play = 6,Fire2,80
+    Play = 8,Fire2,80

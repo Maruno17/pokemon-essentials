@@ -27,4 +27,4 @@ Name = LOWKICK
     SetZoomY = 4,100
     SetOpacity = 5,100
 <SE>
-    Play = 2,Blow1,80,100
+    Play = 2,Blow1,80

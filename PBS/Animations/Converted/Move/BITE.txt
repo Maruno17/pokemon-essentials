@@ -20,4 +20,4 @@ Name = BITE
     SetOpacity = 3,255
     SetOpacity = 13,128
 <SE>
-    Play = 9,Sword2,80,100
+    Play = 9,Sword2,80

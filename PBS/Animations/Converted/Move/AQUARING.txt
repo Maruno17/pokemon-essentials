@@ -58,4 +58,4 @@ Name = AQUARING
     SetX = 5,394
     SetY = 5,104
 <SE>
-    Play = 0,Weatherball,80,100
+    Play = 0,Weatherball,80

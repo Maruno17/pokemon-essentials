@@ -25,7 +25,6 @@ module GameData
     # Properties that apply to the animation in general, not to individual
     # particles. They don't change during the animation.
     SCHEMA = {
-      # TODO: Add support for overworld animations.
       "SectionName" => [:id,        "esU", {"Move" => :move, "OppMove" => :opp_move,
                                             "Common" => :common, "OppCommon" => :opp_common}],
       "Name"        => [:name,      "s"],
@@ -36,8 +35,6 @@ module GameData
       # TODO: DamageFrame (keyframe at which the battle continues, i.e. damage
       #       animations start playing).
       "Flags"       => [:flags,     "*s"],
-      # TODO: If this is changed to be more than just a string, edit the
-      #       compiler's current_particle definition accordingly.
       "Particle"    => [:particles, "s"]   # Is a subheader line like <text>
     }
     # For individual particles. Any property whose schema begins with "^" can
@@ -49,9 +46,9 @@ module GameData
       # These properties cannot be changed partway through the animation.
       # NOTE: "Name" isn't a property here, because the particle's name comes
       #       from the "Particle" property above.
+      "Graphic"        => [:graphic,     "s"],
       # TODO: If more focus types are added, add ones that involve a target to
       #       the Compiler's check relating to "NoTarget".
-      "Graphic"        => [:graphic,     "s"],
       "Focus"          => [:focus,       "e", {"User" => :user, "Target" => :target,
                                                "UserAndTarget" => :user_and_target,
                                                "Screen" => :screen}],
@@ -59,8 +56,8 @@ module GameData
 
       # All properties below are "SetXYZ" or "MoveXYZ". "SetXYZ" has the
       # keyframe and the value, and "MoveXYZ" has the keyframe, duration and the
-      # value. All are "^". "SetXYZ" is turned into "MoveXYZ" when compiling by
-      # inserting a duration (second value) of 0.
+      # value. All have "^" in their schema. "SetXYZ" is turned into "MoveXYZ"
+      # when compiling by inserting a duration (second value) of 0.
       "SetFrame"       => [:frame,       "^uu"],   # Frame within the graphic if it's a spritesheet
       "MoveFrame"      => [:frame,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetBlending"    => [:blending,    "^uu"],   # 0, 1 or 2
@@ -144,7 +141,7 @@ module GameData
       :target_cry  => nil
     }
 
-    @@cmd_to_pbs_name = nil   # USed for writing animation PBS files
+    @@cmd_to_pbs_name = nil   # Used for writing animation PBS files
 
     extend ClassMethodsIDNumbers
     include InstanceMethods
@@ -161,27 +158,6 @@ module GameData
     def self.register(hash, id_num = -1)
       DATA[(id_num >= 0) ? id_num : DATA.keys.length] = self.new(hash)
     end
-
-    # TODO: Rewrite this to query animations from other criteria. Remember that
-    #       multiple animations could have the same move/version. Odds are this
-    #       method won't be used much at all.
-    # TODO: Separate exists? methods for move and common animations?
-#    def exists?(other)
-#    end
-
-    # TODO: Rewrite this to get animations from other criteria. Remember that
-    #       multiple animations could have the same move/version. Odds are this
-    #       method won't be used much at all.
-    # TODO: Separate get methods for move and common animations?
-#    def get(other)
-#    end
-
-    # TODO: Rewrite this to get animations from other criteria. Remember that
-    #       multiple animations could have the same move/version. Odds are this
-    #       method won't be used much at all.
-    # TODO: Separate try_get methods for move and common animations?
-#    def try_get(other)
-#    end
 
     def initialize(hash)
       # NOTE: hash has an :id entry, but it's unused here.
@@ -201,9 +177,9 @@ module GameData
     def clone_as_hash
       ret = {}
       ret[:type] = @type
-      ret[:move] = @move.dup
-      ret[:version] = @version.dup
-      ret[:name] = @name.dup
+      ret[:move] = @move
+      ret[:version] = @version
+      ret[:name] = @name
       ret[:particles] = []   # Clone the @particles array, which is nested hashes and arrays
       @particles.each do |particle|
         new_p = {}
@@ -254,10 +230,6 @@ module GameData
         # The User and Target particles have hardcoded graphics/foci, so they
         # don't need writing to PBS
         ret = nil if ["User", "Target"].include?(@particles[index][:name])
-      when "Play"
-        # TODO: Turn volume/pitch of 100 into nil.
-      when "PlayUserCry", "PlayTargetCry"
-        # TODO: Turn volume/pitch of 100 into nil.
       when "AllCommands"
         # Get translations of all properties to their names as seen in PBS
         # animation files
@@ -283,6 +255,14 @@ module GameData
               new_cmd.pop if new_cmd.last == :linear   # This is the default
               ret.push([@@cmd_to_pbs_name[key][1]] + new_cmd)   # ["MoveXYZ", keyframe, duration, value]
             else
+              case key
+              when :se
+                new_cmd[4] = nil if new_cmd[4] == 100   # Pitch
+                new_cmd[3] = nil if new_cmd[4].nil? && new_cmd[3] == 100   # Volume
+              when :user_cry, :target_cry
+                new_cmd[3] = nil if new_cmd[3] == 100   # Pitch
+                new_cmd[2] = nil if new_cmd[3].nil? && new_cmd[2] == 100   # Volume
+              end
               ret.push([@@cmd_to_pbs_name[key][0]] + new_cmd)   # ["SetXYZ", keyframe, duration, value]
             end
           end

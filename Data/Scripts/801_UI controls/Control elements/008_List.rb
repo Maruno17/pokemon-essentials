@@ -1,11 +1,5 @@
 #===============================================================================
-# TODO: Do I need to split self's bitmap into two (one for highlights and one
-#       for text)? This would be to reduce lag caused by redrawing text even if
-#       you're just waving the mouse over the control. There doesn't seem to be
-#       any lag at the moment with a tall list.
-# TODO: Make a viewport for the list, and allow scrolling positions halfway
-#       through a line? Nah.
-# TODO: This control cannot be disabled.
+#
 #===============================================================================
 class UIControls::List < UIControls::BaseControl
   LIST_X         = 0

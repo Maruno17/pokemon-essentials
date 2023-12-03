@@ -259,4 +259,4 @@ Name = SILVERWIND
     SetY = 5,142
     SetOpacity = 5,50
 <SE>
-    Play = 0,Wind8,80,100
+    Play = 0,Wind8,80

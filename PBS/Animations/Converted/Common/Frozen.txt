@@ -58,4 +58,4 @@ Name = Frozen
     SetY = 14,134
     SetOpacity = 14,255
 <SE>
-    Play = 0,Ice5,80,100
+    Play = 0,Ice5,80

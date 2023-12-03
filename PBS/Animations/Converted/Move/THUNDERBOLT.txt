@@ -35,4 +35,4 @@ Name = THUNDERBOLT
     SetFlip = 11,true
     SetOpacity = 11,20
 <SE>
-    Play = 0,Thunder9,80,100
+    Play = 0,Thunder9,80

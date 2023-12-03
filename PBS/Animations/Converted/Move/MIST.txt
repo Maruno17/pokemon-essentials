@@ -51,4 +51,4 @@ Name = MIST
     SetY = 8,93
     SetOpacity = 8,200
 <SE>
-    Play = 0,Smokescreen,80,100
+    Play = 0,Smokescreen,80

@@ -7,7 +7,6 @@ class AnimationEditor::Canvas < Sprite
   def initialize(viewport)
     super
     @bg_val = ""
-    # TODO: Add a second bg sprite for screen shake purposes.
     player_base_pos = Battle::Scene.pbBattlerPosition(0)
     @player_base = IconSprite.new(*player_base_pos, viewport)
     @player_base.z = 1
@@ -28,8 +27,9 @@ class AnimationEditor::Canvas < Sprite
   def bg_name=(val)
     return if @bg_name == val
     @bg_name = val
-    # TODO: Come up with a better way to define the base filenames, based on
-    #       which files actually exist.
+    # TODO: Make the choice of background graphics match the in-battle one in
+    #       def pbCreateBackdropSprites. Ideally make that method a class method
+    #       so the canvas can use it rather than duplicate it.
     self.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", @bg_name + "_bg")
     @player_base.setBitmap("Graphics/Battlebacks/" + @bg_name + "_base0")
     @player_base.ox = @player_base.bitmap.width / 2

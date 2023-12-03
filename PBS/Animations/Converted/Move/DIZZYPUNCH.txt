@@ -181,4 +181,4 @@ Name = DIZZYPUNCH
     SetX = 8,447
     SetY = 8,64
 <SE>
-    Play = 0,Dizzy Punch,100,100
+    Play = 0,Dizzy Punch

@@ -66,9 +66,9 @@ Name = SPIKECANNON
     SetY = 3,98
     SetOpacity = 3,50
 <SE>
-    Play = 0,Slash10,80,100
-    Play = 2,Slash10,80,100
-    Play = 4,Slash10,80,100
+    Play = 0,Slash10,80
+    Play = 2,Slash10,80
+    Play = 4,Slash10,80
 #-------------------------------
 [Move,SPIKECANNON,1]
 Name = Spike Cannon hit 2
@@ -136,9 +136,9 @@ Name = Spike Cannon hit 2
     SetX = 5,332
     SetY = 5,91
 <SE>
-    Play = 0,Slash10,80,100
-    Play = 2,Slash10,80,100
-    Play = 4,Slash10,80,100
+    Play = 0,Slash10,80
+    Play = 2,Slash10,80
+    Play = 4,Slash10,80
 #-------------------------------
 [Move,SPIKECANNON,2]
 Name = Spike Cannon hit 3
@@ -206,9 +206,9 @@ Name = Spike Cannon hit 3
     SetY = 5,110
     SetOpacity = 5,50
 <SE>
-    Play = 0,Slash10,80,100
-    Play = 2,Slash10,80,100
-    Play = 4,Slash10,80,100
+    Play = 0,Slash10,80
+    Play = 2,Slash10,80
+    Play = 4,Slash10,80
 #-------------------------------
 [Move,SPIKECANNON,3]
 Name = Spike Cannon hit 4
@@ -276,9 +276,9 @@ Name = Spike Cannon hit 4
     SetX = 5,320
     SetY = 5,104
 <SE>
-    Play = 0,Slash10,80,100
-    Play = 2,Slash10,80,100
-    Play = 4,Slash10,80,100
+    Play = 0,Slash10,80
+    Play = 2,Slash10,80
+    Play = 4,Slash10,80
 #-------------------------------
 [Move,SPIKECANNON,4]
 Name = Spike Cannon hit 5
@@ -346,6 +346,6 @@ Name = Spike Cannon hit 5
     SetX = 5,364
     SetY = 5,123
 <SE>
-    Play = 0,Slash10,80,100
-    Play = 2,Slash10,80,100
-    Play = 4,Slash10,80,100
+    Play = 0,Slash10,80
+    Play = 2,Slash10,80
+    Play = 4,Slash10,80

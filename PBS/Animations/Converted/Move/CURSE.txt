@@ -19,4 +19,4 @@ Name = CURSE
     SetY = 3,78
     SetX = 4,384
 <SE>
-    Play = 2,Darkness6,80,100
+    Play = 2,Darkness6,80

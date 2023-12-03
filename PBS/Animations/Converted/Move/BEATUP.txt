@@ -34,7 +34,7 @@ Name = BEATUP
     SetZoomY = 3,125
     SetOpacity = 3,50
 <SE>
-    Play = 0,Blow4,80,100
+    Play = 0,Blow4,80
 #-------------------------------
 [Move,BEATUP,1]
 Name = Beat Up hit 2
@@ -70,7 +70,7 @@ Name = Beat Up hit 2
     SetZoomY = 3,125
     SetOpacity = 3,100
 <SE>
-    Play = 0,Blow4,80,100
+    Play = 0,Blow4,80
 #-------------------------------
 [Move,BEATUP,2]
 Name = Beat Up hit 3
@@ -106,7 +106,7 @@ Name = Beat Up hit 3
     SetZoomY = 3,125
     SetOpacity = 3,50
 <SE>
-    Play = 0,Blow4,80,100
+    Play = 0,Blow4,80
 #-------------------------------
 [Move,BEATUP,3]
 Name = Beat Up hit 4
@@ -142,7 +142,7 @@ Name = Beat Up hit 4
     SetZoomY = 3,125
     SetOpacity = 3,100
 <SE>
-    Play = 0,Blow4,80,100
+    Play = 0,Blow4,80
 #-------------------------------
 [Move,BEATUP,4]
 Name = Beat Up hit 5
@@ -178,7 +178,7 @@ Name = Beat Up hit 5
     SetZoomY = 3,125
     SetOpacity = 3,50
 <SE>
-    Play = 0,Blow4,80,100
+    Play = 0,Blow4,80
 #-------------------------------
 [Move,BEATUP,5]
 Name = Beat Up hit 6
@@ -214,4 +214,4 @@ Name = Beat Up hit 6
     SetZoomY = 3,125
     SetOpacity = 3,100
 <SE>
-    Play = 0,Blow4,80,100
+    Play = 0,Blow4,80

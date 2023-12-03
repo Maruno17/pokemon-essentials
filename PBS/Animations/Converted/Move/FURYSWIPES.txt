@@ -131,7 +131,7 @@ Name = FURYSWIPES
     SetX = 5,483
     SetY = 5,143
 <SE>
-    Play = 0,Fury Swipes,100,100
+    Play = 0,Fury Swipes
 #-------------------------------
 [Move,FURYSWIPES,1]
 Name = Fury Swipes hit 2
@@ -264,7 +264,7 @@ Name = Fury Swipes hit 2
     SetX = 5,483
     SetY = 5,143
 <SE>
-    Play = 0,Fury Swipes,100,100
+    Play = 0,Fury Swipes
 #-------------------------------
 [Move,FURYSWIPES,2]
 Name = Fury Swipes hit 3
@@ -397,7 +397,7 @@ Name = Fury Swipes hit 3
     SetX = 5,483
     SetY = 5,143
 <SE>
-    Play = 0,Fury Swipes,100,100
+    Play = 0,Fury Swipes
 #-------------------------------
 [Move,FURYSWIPES,3]
 Name = Fury Swipes hit 4
@@ -530,7 +530,7 @@ Name = Fury Swipes hit 4
     SetX = 5,483
     SetY = 5,143
 <SE>
-    Play = 0,Fury Swipes,100,100
+    Play = 0,Fury Swipes
 #-------------------------------
 [Move,FURYSWIPES,4]
 Name = Fury Swipes hit 5
@@ -663,4 +663,4 @@ Name = Fury Swipes hit 5
     SetX = 5,483
     SetY = 5,143
 <SE>
-    Play = 0,Fury Swipes,100,100
+    Play = 0,Fury Swipes

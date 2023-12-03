@@ -21,7 +21,7 @@ Name = LEER
     SetX = 4,153
     SetY = 4,201
 <SE>
-    Play = 0,Saint9,100,100
+    Play = 0,Saint9
 #-------------------------------
 [OppMove,LEER]
 Name = LEER
@@ -44,4 +44,4 @@ Name = LEER
     SetX = 4,356
     SetY = 4,75
 <SE>
-    Play = 0,Saint9,100,100
+    Play = 0,Saint9

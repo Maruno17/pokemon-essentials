@@ -53,4 +53,4 @@ Name = FINALGAMBIT
     SetX = 20,407
     SetY = 20,108
 <SE>
-    Play = 0,MiningCollapse,100,100
+    Play = 0,MiningCollapse

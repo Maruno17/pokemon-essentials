@@ -99,4 +99,4 @@ Name = FIREPUNCH
     SetY = 11,115
 <SE>
     Play = 0,Slam,100,115
-    Play = 1,Explosion,100,100
+    Play = 1,Explosion

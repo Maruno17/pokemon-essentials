@@ -94,6 +94,6 @@ Name = MEGAHORN
     SetX = 9,339
     SetY = 9,110
 <SE>
-    Play = 0,Up,80,100
-    Play = 4,throw,80,100
-    Play = 7,Slash10,80,100
+    Play = 0,Up,80
+    Play = 4,throw,80
+    Play = 7,Slash10,80

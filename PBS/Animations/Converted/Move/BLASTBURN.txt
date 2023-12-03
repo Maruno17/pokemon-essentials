@@ -196,4 +196,4 @@ Name = BLASTBURN
     SetX = 10,339
     SetY = 10,179
 <SE>
-    Play = 3,Fire2,80,100
+    Play = 3,Fire2,80

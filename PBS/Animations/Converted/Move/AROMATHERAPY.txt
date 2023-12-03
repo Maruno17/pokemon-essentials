@@ -143,4 +143,4 @@ Name = AROMATHERAPY
     SetY = 5,-26
     SetX = 6,368
 <SE>
-    Play = 0,Saint8,80,100
+    Play = 0,Saint8,80

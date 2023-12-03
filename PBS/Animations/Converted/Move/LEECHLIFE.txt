@@ -110,6 +110,6 @@ Name = LEECHLIFE
     SetX = 7,396
     SetY = 7,129
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,Twine,80,100
-    Play = 3,Bow1,80,100
+    Play = 0,throw,80
+    Play = 2,Twine,80
+    Play = 3,Bow1,80

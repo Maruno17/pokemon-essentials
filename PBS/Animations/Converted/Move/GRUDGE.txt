@@ -159,4 +159,4 @@ Name = GRUDGE
     SetX = 11,392
     SetY = 11,134
 <SE>
-    Play = 0,Fire1,80,100
+    Play = 0,Fire1,80

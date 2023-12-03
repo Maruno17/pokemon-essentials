@@ -21,4 +21,4 @@ Name = SCRATCH
     SetY = 4,122
     SetY = 5,138
 <SE>
-    Play = 0,Slash10,80,100
+    Play = 0,Slash10,80

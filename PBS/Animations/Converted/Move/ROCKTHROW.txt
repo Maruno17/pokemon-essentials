@@ -25,5 +25,5 @@ Name = ROCKTHROW
     SetX = 3,352
     SetY = 3,110
 <SE>
-    Play = 0,throw,80,100
-    Play = 3,Earth1,80,100
+    Play = 0,throw,80
+    Play = 3,Earth1,80

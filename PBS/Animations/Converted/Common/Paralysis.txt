@@ -50,4 +50,4 @@ Name = Paralysis
     SetX = 10,448
     SetX = 11,312
 <SE>
-    Play = 0,Paralyze3,80,100
+    Play = 0,Paralyze3,80

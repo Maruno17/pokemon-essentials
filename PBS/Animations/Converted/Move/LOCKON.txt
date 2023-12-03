@@ -76,4 +76,4 @@ Name = LOCKON
     SetY = 29,93
     SetOpacity = 29,168
 <SE>
-    Play = 0,Lock On,88,100
+    Play = 0,Lock On,88

@@ -30,4 +30,4 @@ Name = REST
     SetX = 8,308
     SetY = 8,10
 <SE>
-    Play = 0,Refresh,80,100
+    Play = 0,Refresh,80

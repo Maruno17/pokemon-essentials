@@ -46,5 +46,5 @@ Name = ACID
     SetY = 4,110
     SetOpacity = 12,100
 <SE>
-    Play = 0,throw,80,100
-    Play = 3,Poison,80,100
+    Play = 0,throw,80
+    Play = 3,Poison,80

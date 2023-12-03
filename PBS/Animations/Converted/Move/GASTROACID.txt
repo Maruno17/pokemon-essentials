@@ -96,4 +96,4 @@ Name = GASTROACID
     SetY = 9,83
     SetX = 10,365
 <SE>
-    Play = 0,Sweet Scent,100,100
+    Play = 0,Sweet Scent

@@ -2,22 +2,23 @@
 #
 #===============================================================================
 class UIControls::DropdownList < UIControls::BaseControl
+  attr_accessor :box_width
+  attr_accessor :max_rows
+
   TEXT_BOX_X       = 2
   TEXT_BOX_WIDTH   = 200
   TEXT_BOX_HEIGHT  = 24
   TEXT_BOX_PADDING = 4   # Gap between sides of text box and text
-  TEXT_OFFSET_Y    = 5
   MAX_LIST_ROWS    = 8
 
-  attr_accessor :max_rows
-
+  # NOTE: options is a hash: keys are symbols, values are display names.
   def initialize(width, height, viewport, options, value)
-    # NOTE: options is a hash: keys are symbols, values are display names.
     super(width, height, viewport)
-    @options = options
-    @value = value
+    @options                = options
+    @value                  = value
+    @box_width              = TEXT_BOX_WIDTH
     @toggling_dropdown_list = false
-    @max_rows = MAX_LIST_ROWS
+    @max_rows               = MAX_LIST_ROWS
   end
 
   def dispose
@@ -33,7 +34,7 @@ class UIControls::DropdownList < UIControls::BaseControl
 
   def set_interactive_rects
     @button_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
-                              [TEXT_BOX_WIDTH, width].min, TEXT_BOX_HEIGHT)
+                              [@box_width, width - (TEXT_BOX_X * 2)].min, TEXT_BOX_HEIGHT)
     @interactions = {
       :button => @button_rect
     }

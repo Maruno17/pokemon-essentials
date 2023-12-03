@@ -27,8 +27,8 @@ Name = POISONSTING
     SetY = 6,110
     SetX = 7,358
 <SE>
-    Play = 0,throw,80,100
-    Play = 6,Slash10,80,100
+    Play = 0,throw,80
+    Play = 6,Slash10,80
 #-------------------------------
 [OppMove,POISONSTING]
 Name = POISONSTING
@@ -62,5 +62,5 @@ Name = POISONSTING
     SetX = 8,128
     SetY = 8,236
 <SE>
-    Play = 0,throw,80,100
-    Play = 6,Slash10,80,100
+    Play = 0,throw,80
+    Play = 6,Slash10,80

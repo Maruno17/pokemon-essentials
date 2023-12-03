@@ -52,4 +52,4 @@ Name = WRINGOUT
     SetX = 19,430
     SetY = 19,161
 <SE>
-    Play = 0,Wring Out,100,100
+    Play = 0,Wring Out

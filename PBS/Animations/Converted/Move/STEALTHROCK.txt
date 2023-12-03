@@ -229,7 +229,7 @@ Name = STEALTHROCK
     SetOpacity = 15,128
     SetOpacity = 16,192
 <SE>
-    Play = 0,Slam,80,100
+    Play = 0,Slam,80
 #-------------------------------
 [OppMove,STEALTHROCK]
 Name = STEALTHROCK
@@ -460,4 +460,4 @@ Name = STEALTHROCK
     SetOpacity = 15,128
     SetOpacity = 16,192
 <SE>
-    Play = 0,Slam,80,100
+    Play = 0,Slam,80

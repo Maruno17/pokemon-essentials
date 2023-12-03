@@ -206,7 +206,7 @@ Name = AERIALACE
     SetX = 9,487
     SetY = 9,62
 <SE>
-    Play = 0,Ace,80,100
+    Play = 0,Ace,80
 #-------------------------------
 [OppMove,AERIALACE]
 Name = AERIALACE
@@ -352,4 +352,4 @@ Name = AERIALACE
     SetX = 8,211
     SetY = 8,284
 <SE>
-    Play = 0,Ace,80,100
+    Play = 0,Ace,80

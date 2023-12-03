@@ -146,7 +146,6 @@ module AnimationEditor::ParticleDataHelper
       if cmd[1] > 0   # MoveXYZ
         dur = cmd[1]
         dur *= -1 if cmd[2] < val
-        # TODO: Support multiple interpolation types here (will be cmd[3]).
         ret[cmd[0]] = [dur, cmd[3] || :linear]
         ret[cmd[0] + cmd[1]] = 0
       else   # SetXYZ

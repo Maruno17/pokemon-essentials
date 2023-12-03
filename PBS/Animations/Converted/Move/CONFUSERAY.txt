@@ -47,5 +47,5 @@ Name = CONFUSERAY
     SetY = 16,110
     SetOpacity = 17,100
 <SE>
-    Play = 1,Twine,80,100
-    Play = 12,Confuse,80,100
+    Play = 1,Twine,80
+    Play = 12,Confuse,80

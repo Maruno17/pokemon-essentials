@@ -114,5 +114,5 @@ Name = STRINGSHOT
     SetZoomY = 14,100
     SetOpacity = 15,100
 <SE>
-    Play = 0,throw,80,100
-    Play = 0,Battle1,80,100
+    Play = 0,throw,80
+    Play = 0,Battle1,80

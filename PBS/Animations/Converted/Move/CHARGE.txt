@@ -92,8 +92,8 @@ Name = CHARGE
     SetX = 7,176
     SetY = 7,286
 <SE>
-    Play = 0,Thunder3,80,100
-    Play = 2,Thunder3,80,100
-    Play = 4,Thunder3,80,100
-    Play = 5,Thunder3,80,100
-    Play = 7,Thunder3,80,100
+    Play = 0,Thunder3,80
+    Play = 2,Thunder3,80
+    Play = 4,Thunder3,80
+    Play = 5,Thunder3,80
+    Play = 7,Thunder3,80

@@ -68,4 +68,4 @@ Name = PSYCHIC
     SetZoomY = 16,70
     SetOpacity = 16,150
 <SE>
-    Play = 2,Darkness2,80,100
+    Play = 2,Darkness2,80

@@ -8,21 +8,6 @@ Name = SuperShiny
 <Target>
     SetX = 0,384
     SetY = 0,96
-<Particle 3>
-    Graphic = leech-seed
-    Focus = Target
-    SetX = 2,440
-    SetY = 2,126
-    SetX = 4,327
-    SetY = 4,78
-    SetX = 6,366
-    SetY = 6,129
-    SetX = 7,416
-    SetY = 7,54
-    SetX = 8,368
-    SetY = 8,67
-    SetX = 9,416
-    SetY = 9,118
 <Particle 4>
     Graphic = leech-seed
     Focus = Target
@@ -62,5 +47,20 @@ Name = SuperShiny
     SetY = 9,67
     SetX = 10,416
     SetY = 10,118
+<Particle 3>
+    Graphic = leech-seed
+    Focus = Target
+    SetX = 2,440
+    SetY = 2,126
+    SetX = 4,327
+    SetY = 4,78
+    SetX = 6,366
+    SetY = 6,129
+    SetX = 7,416
+    SetY = 7,54
+    SetX = 8,368
+    SetY = 8,67
+    SetX = 9,416
+    SetY = 9,118
 <SE>
-    Play = 0,Shiny sparkle,100,100
+    Play = 0,Shiny sparkle

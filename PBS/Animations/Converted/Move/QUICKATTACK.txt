@@ -52,4 +52,4 @@ Name = QUICKATTACK
     SetOpacity = 8,255
     SetOpacity = 11,128
 <SE>
-    Play = 7,Blow4,100,100
+    Play = 7,Blow4

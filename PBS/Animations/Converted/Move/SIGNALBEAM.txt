@@ -376,5 +376,5 @@ Name = SIGNALBEAM
     SetX = 18,456
     SetY = 18,54
 <SE>
-    Play = 0,Teleport,80,100
-    Play = 2,Twine,80,100
+    Play = 0,Teleport,80
+    Play = 2,Twine,80

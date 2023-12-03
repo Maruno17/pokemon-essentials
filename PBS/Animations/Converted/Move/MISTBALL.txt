@@ -54,4 +54,4 @@ Name = MISTBALL
     SetX = 9,377
     SetY = 9,101
 <SE>
-    Play = 5,Wring Out,80,100
+    Play = 5,Wring Out,80

@@ -55,4 +55,4 @@ Name = ENCORE
     SetX = 17,160
     SetX = 18,128
 <SE>
-    Play = 0,Applause,80,100
+    Play = 0,Applause,80

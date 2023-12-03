@@ -66,11 +66,11 @@ class AnimationEditor::AnimationSelector
       btn.set_fixed_size
       @components.add_control_at(val[0], btn, TYPE_BUTTONS_X, TYPE_BUTTONS_Y + (i * TYPE_BUTTON_HEIGHT))
     end
-    # TODO: Filter text box for :moves_list's contents. Applies the filter upon
-    #       every change to the text box's value. Perhaps it should only do so
-    #       after 0.5 seconds of non-typing. What exactly should the filter be
-    #       applied to? Animation's name, move's name (if there is one), what
-    #       else?
+    # TODO: Add filter text box for :moves_list's contents. Applies the filter
+    #       upon every change to the text box's value. Perhaps it should only do
+    #       so after 0.5 seconds of non-typing. What exactly should the filter
+    #       be applied to? Animation's name, move's name (if there is one), what
+    #       else? Flags?
     # Moves list label
     label = UIControls::Label.new(MOVES_LIST_WIDTH, TYPE_BUTTON_HEIGHT, @viewport, _INTL("Moves"))
     label.header = true
@@ -190,7 +190,11 @@ class AnimationEditor::AnimationSelector
       @quit = true
       return   # Don't need to refresh the screen
     when :new
-      # TODO: New animation.
+      # TODO: New animation. Create a new animation hash with some default
+      #       contents, go into the edit screen and immediately open the
+      #       animation properties pop-up window. Use the first available ID
+      #       number from GameData::Animation for it. Don't register the
+      #       animation hash here, though.
     when :moves
       @animation_type = 0
       @components.get_control(:moves_list).selected = -1
@@ -204,19 +208,17 @@ class AnimationEditor::AnimationSelector
       if anim_id
         screen = AnimationEditor.new(anim_id, GameData::Animation.get(anim_id).clone_as_hash)
         screen.run
-        # TODO: Might want to select whichever options in each list get to
-        #       the animation with ID anim_id.
         generate_lists
       end
     when :copy
       anim_id = selected_animation_id
       if anim_id
-        # TODO: Copy animation.
+        # TODO: Copy animation. Append "(copy)" to its name.
       end
     when :delete
       anim_id = selected_animation_id
       if anim_id
-        # TODO: Delete animation.
+        # TODO: Delete animation. Ask the user if they're sure.
       end
     end
     refresh

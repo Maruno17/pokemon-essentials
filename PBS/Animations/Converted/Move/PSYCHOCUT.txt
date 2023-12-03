@@ -82,7 +82,7 @@ Name = PSYCHOCUT
     SetY = 12,264
     SetOpacity = 12,50
 <SE>
-    Play = 0,Psycho Cut,100,100
+    Play = 0,Psycho Cut
 #-------------------------------
 [OppMove,PSYCHOCUT]
 Name = PSYCHOCUT
@@ -177,4 +177,4 @@ Name = PSYCHOCUT
     SetAngle = 16,0
     SetOpacity = 16,85
 <SE>
-    Play = 0,Psycho Cut,100,100
+    Play = 0,Psycho Cut

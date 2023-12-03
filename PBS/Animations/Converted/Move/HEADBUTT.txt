@@ -19,4 +19,4 @@ Name = HEADBUTT
     SetZoomY = 4,120
     SetOpacity = 5,100
 <SE>
-    Play = 0,Blow3,80,100
+    Play = 0,Blow3,80

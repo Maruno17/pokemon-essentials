@@ -14,4 +14,4 @@ Name = BLOCK
     SetX = 0,385
     SetY = 0,96
 <SE>
-    Play = 0,buzzer,80,100
+    Play = 0,buzzer,80

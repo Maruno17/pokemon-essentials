@@ -63,4 +63,4 @@ Name = WILLOWISP
     SetX = 6,358
     SetAngle = 6,0
 <SE>
-    Play = 0,Fire2,80,100
+    Play = 0,Fire2,80

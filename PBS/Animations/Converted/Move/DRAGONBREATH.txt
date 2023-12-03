@@ -101,4 +101,4 @@ Name = DRAGONBREATH
     SetZoomX = 3,75
     SetZoomY = 3,75
 <SE>
-    Play = 0,Fire4,80,100
+    Play = 0,Fire4,80

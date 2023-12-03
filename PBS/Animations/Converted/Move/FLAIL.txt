@@ -59,4 +59,4 @@ Name = FLAIL
     SetX = 23,405
     SetY = 23,95
 <SE>
-    Play = 0,Flail,100,100
+    Play = 0,Flail

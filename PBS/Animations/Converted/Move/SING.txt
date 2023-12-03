@@ -491,7 +491,7 @@ Name = SING
     SetX = 16,417
     SetY = 16,93
 <SE>
-    Play = 0,Sing,80,100
+    Play = 0,Sing,80
 #-------------------------------
 [OppMove,SING]
 Name = SING
@@ -850,4 +850,4 @@ Name = SING
     SetX = 30,262
     SetY = 30,252
 <SE>
-    Play = 0,Sing,95,100
+    Play = 0,Sing,95

@@ -31,4 +31,4 @@ Name = MOONLIGHT
     SetZoomY = 9,80
     SetOpacity = 9,100
 <SE>
-    Play = 0,Saint6,80,100
+    Play = 0,Saint6,80

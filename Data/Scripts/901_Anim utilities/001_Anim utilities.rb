@@ -6,6 +6,15 @@ class Bitmap
     fill_rect(x + width - thickness, y, thickness, height, color)
   end
 
+  # Draws a series of concentric outline_rects around the defined area. From
+  # inside to outside, the color of each ring alternates.
+  def border_rect(x, y, width, height, thickness, color1, color2)
+    thickness.times do |i|
+      col = (i.even?) ? color1 : color2
+      outline_rect(x - i - 1, y - i - 1, width + (i * 2) + 2, height + (i * 2) + 2, col)
+    end
+  end
+
   def fill_diamond(x, y, radius, color)
     ((radius * 2) + 1).times do |i|
       height = (i <= radius) ? (i * 2) + 1 : (((radius * 2) - i) * 2) + 1

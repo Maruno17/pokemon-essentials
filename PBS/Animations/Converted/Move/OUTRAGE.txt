@@ -160,8 +160,8 @@ Name = OUTRAGE
     SetZoomX = 7,50
     SetZoomY = 7,50
 <SE>
-    Play = 0,Fire2,80,100
-    Play = 0,Explosion6,80,100
-    Play = 2,Fire2,80,100
-    Play = 5,Fire2,80,100
-    Play = 8,Fire2,80,100
+    Play = 0,Fire2,80
+    Play = 0,Explosion6,80
+    Play = 2,Fire2,80
+    Play = 5,Fire2,80
+    Play = 8,Fire2,80

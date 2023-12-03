@@ -22,4 +22,4 @@ Name = CLEARSMOG
     SetY = 5,101
     SetX = 6,382
 <SE>
-    Play = 0,Snore,86,100
+    Play = 0,Snore,86

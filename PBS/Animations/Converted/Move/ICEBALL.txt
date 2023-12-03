@@ -26,5 +26,5 @@ Name = ICEBALL
     SetX = 6,358
     SetY = 6,110
 <SE>
-    Play = 0,throw,80,100
-    Play = 7,Earth3,80,100
+    Play = 0,throw,80
+    Play = 7,Earth3,80

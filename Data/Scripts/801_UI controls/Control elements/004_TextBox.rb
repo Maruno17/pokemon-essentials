@@ -1,20 +1,18 @@
 #===============================================================================
-# TODO: Support selecting part of the text by remembering the initial
-#       cursor position and using it and the current cursor position to
-#       decide which characters are selected. Maybe? Note that this method
-#       is only triggered upon the initial mouse press, and isn't repeated
-#       while it's still held down.
+#
 #===============================================================================
 class UIControls::TextBox < UIControls::BaseControl
+  attr_accessor :box_width
+
   TEXT_BOX_X       = 2
   TEXT_BOX_WIDTH   = 200
   TEXT_BOX_HEIGHT  = 24
   TEXT_BOX_PADDING = 4   # Gap between sides of text box and text
-  TEXT_OFFSET_Y    = 5
 
   def initialize(width, height, viewport, value = "")
     super(width, height, viewport)
     @value        = value
+    @box_width    = TEXT_BOX_WIDTH
     @cursor_pos   = -1
     @display_pos  = 0
     @cursor_timer = nil
@@ -22,9 +20,13 @@ class UIControls::TextBox < UIControls::BaseControl
     @blacklist    = []
   end
 
+  def value
+    return @value.dup
+  end
+
   def value=(new_value)
     return if @value == new_value
-    @value = new_value
+    @value = new_value.dup
     invalidate
   end
 
@@ -59,7 +61,7 @@ class UIControls::TextBox < UIControls::BaseControl
 
   def set_interactive_rects
     @text_box_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
-                              [TEXT_BOX_WIDTH, width].min, TEXT_BOX_HEIGHT)
+                              [@box_width, width - (TEXT_BOX_X * 2)].min, TEXT_BOX_HEIGHT)
     @interactions = {
       :text_box => @text_box_rect
     }

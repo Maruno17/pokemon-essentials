@@ -14,8 +14,8 @@ Name = LEAFBLADE
     SetX = 0,384
     SetY = 0,94
 <SE>
-    Play = 0,Sword1,80,100
-    Play = 3,Slash3,80,100
-    Play = 7,Slash3,80,100
-    Play = 11,Slash3,80,100
-    Play = 15,Slash3,80,100
+    Play = 0,Sword1,80
+    Play = 3,Slash3,80
+    Play = 7,Slash3,80
+    Play = 11,Slash3,80
+    Play = 15,Slash3,80

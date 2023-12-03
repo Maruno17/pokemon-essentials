@@ -26,4 +26,4 @@ Name = METALCLAW
     SetX = 7,384
 <SE>
     Play = 0,metal,100,110
-    Play = 4,metal,100,100
+    Play = 4,metal

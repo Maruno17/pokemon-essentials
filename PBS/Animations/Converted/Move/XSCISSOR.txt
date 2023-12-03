@@ -35,4 +35,4 @@ Name = XSCISSOR
     SetX = 4,307
     SetY = 4,164
 <SE>
-    Play = 0,Slash,80,100
+    Play = 0,Slash,80

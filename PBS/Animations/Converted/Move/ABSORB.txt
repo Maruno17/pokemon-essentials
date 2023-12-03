@@ -173,9 +173,9 @@ Name = ABSORB
     SetX = 5,364
     SetY = 5,98
 <SE>
-    Play = 0,Absorb2,80,100
-    Play = 0,Absorb2,80,100
-    Play = 2,Absorb2,80,100
-    Play = 5,Absorb2,80,100
-    Play = 7,Absorb2,80,100
-    Play = 8,Saint7,80,100
+    Play = 0,Absorb2,80
+    Play = 0,Absorb2,80
+    Play = 2,Absorb2,80
+    Play = 5,Absorb2,80
+    Play = 7,Absorb2,80
+    Play = 8,Saint7,80

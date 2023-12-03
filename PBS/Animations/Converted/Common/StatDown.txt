@@ -131,4 +131,4 @@ Name = StatDown
     SetY = 2,58
     SetOpacity = 2,126
 <SE>
-    Play = 0,decrease,100,100
+    Play = 0,decrease

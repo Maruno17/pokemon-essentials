@@ -31,5 +31,5 @@ Name = FRENZYPLANT
     SetY = 13,98
     SetOpacity = 16,100
 <SE>
-    Play = 0,Earth4,80,100
-    Play = 8,Earth5,80,100
+    Play = 0,Earth4,80
+    Play = 8,Earth5,80

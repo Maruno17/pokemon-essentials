@@ -63,8 +63,8 @@ Name = SELFDESTRUCT
     SetX = 16,360
     SetY = 16,182
 <SE>
-    Play = 0,Explosion1,80,100
-    Play = 3,Explosion2,80,100
-    Play = 6,Explosion3,80,100
-    Play = 10,Explosion4,80,100
-    Play = 12,Explosion7,80,100
+    Play = 0,Explosion1,80
+    Play = 3,Explosion2,80
+    Play = 6,Explosion3,80
+    Play = 10,Explosion4,80
+    Play = 12,Explosion7,80

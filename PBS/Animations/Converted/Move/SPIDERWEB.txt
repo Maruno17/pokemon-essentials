@@ -64,4 +64,4 @@ Name = SPIDERWEB
     SetOpacity = 8,150
     SetOpacity = 9,50
 <SE>
-    Play = 0,throw,80,100
+    Play = 0,throw,80

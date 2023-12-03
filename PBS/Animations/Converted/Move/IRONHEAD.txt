@@ -54,4 +54,4 @@ Name = IRONHEAD
     SetX = 3,275
     SetY = 3,33
 <SE>
-    Play = 0,Damage1,100,100
+    Play = 0,Damage1

@@ -60,7 +60,7 @@ Name = GROWL
     SetX = 7,230
     SetY = 7,167
 <SE>
-    PlayUserCry = 0,100,100
+    PlayUserCry = 0
 #-------------------------------
 [OppMove,GROWL]
 Name = GROWL
@@ -123,4 +123,4 @@ Name = GROWL
     SetX = 6,296
     SetX = 7,281
 <SE>
-    PlayUserCry = 0,100,100
+    PlayUserCry = 0

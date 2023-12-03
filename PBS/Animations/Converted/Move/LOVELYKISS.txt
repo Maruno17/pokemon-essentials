@@ -96,4 +96,4 @@ Name = LOVELYKISS
     SetX = 7,331
     SetY = 7,59
 <SE>
-    Play = 0,Lovely Kiss,85,100
+    Play = 0,Lovely Kiss,85

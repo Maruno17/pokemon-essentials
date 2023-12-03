@@ -83,4 +83,4 @@ Name = FOLLOWME
     SetX = 11,388
     SetY = 11,111
 <SE>
-    Play = 0,Follow Me,80,100
+    Play = 0,Follow Me,80

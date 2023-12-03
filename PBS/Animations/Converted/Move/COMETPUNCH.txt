@@ -29,9 +29,9 @@ Name = COMETPUNCH
     SetX = 6,432
     SetY = 6,110
 <SE>
-    Play = 0,Blow1,80,100
-    Play = 2,Blow1,80,100
-    Play = 5,Blow1,80,100
+    Play = 0,Blow1,80
+    Play = 2,Blow1,80
+    Play = 5,Blow1,80
 #-------------------------------
 [Move,COMETPUNCH,1]
 Name = Comet Punch hit 2
@@ -62,9 +62,9 @@ Name = Comet Punch hit 2
     SetX = 5,432
     SetY = 5,110
 <SE>
-    Play = 0,Blow1,80,100
-    Play = 2,Blow1,80,100
-    Play = 5,Blow1,80,100
+    Play = 0,Blow1,80
+    Play = 2,Blow1,80
+    Play = 5,Blow1,80
 #-------------------------------
 [Move,COMETPUNCH,2]
 Name = Comet Punch hit 3
@@ -95,9 +95,9 @@ Name = Comet Punch hit 3
     SetX = 6,432
     SetY = 6,110
 <SE>
-    Play = 0,Blow1,80,100
-    Play = 2,Blow1,80,100
-    Play = 5,Blow1,80,100
+    Play = 0,Blow1,80
+    Play = 2,Blow1,80
+    Play = 5,Blow1,80
 #-------------------------------
 [Move,COMETPUNCH,3]
 Name = Comet Punch hit 4
@@ -128,9 +128,9 @@ Name = Comet Punch hit 4
     SetX = 5,432
     SetY = 5,110
 <SE>
-    Play = 0,Blow1,80,100
-    Play = 2,Blow1,80,100
-    Play = 5,Blow1,80,100
+    Play = 0,Blow1,80
+    Play = 2,Blow1,80
+    Play = 5,Blow1,80
 #-------------------------------
 [Move,COMETPUNCH,4]
 Name = Comet Punch hit 5
@@ -161,6 +161,6 @@ Name = Comet Punch hit 5
     SetX = 6,432
     SetY = 6,110
 <SE>
-    Play = 0,Blow1,80,100
-    Play = 2,Blow1,80,100
-    Play = 5,Blow1,80,100
+    Play = 0,Blow1,80
+    Play = 2,Blow1,80
+    Play = 5,Blow1,80

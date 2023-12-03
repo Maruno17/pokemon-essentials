@@ -47,4 +47,4 @@ Name = SCREECH
     SetY = 7,173
     SetY = 9,179
 <SE>
-    PlayUserCry = 0,100,100
+    PlayUserCry = 0

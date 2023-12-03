@@ -30,4 +30,4 @@ Name = DEFENSECURL
     SetX = 6,132
     SetOpacity = 6,233
 <SE>
-    Play = 0,Defense Curl,100,100
+    Play = 0,Defense Curl

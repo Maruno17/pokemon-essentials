@@ -52,6 +52,6 @@ Name = TOXIC
     SetX = 17,352
     SetY = 17,102
 <SE>
-    Play = 0,Poison,80,100
-    Play = 4,Poison,80,100
-    Play = 8,Poison,80,100
+    Play = 0,Poison,80
+    Play = 4,Poison,80
+    Play = 8,Poison,80

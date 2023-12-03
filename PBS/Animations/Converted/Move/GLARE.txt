@@ -34,4 +34,4 @@ Name = GLARE
     SetY = 3,90
     SetX = 4,420
 <SE>
-    Play = 0,Scary Face,80,100
+    Play = 0,Scary Face,80

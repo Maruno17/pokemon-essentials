@@ -57,4 +57,4 @@ Name = Fly charging
     SetX = 7,134
     SetY = 7,166
 <SE>
-    Play = 0,Trump Card,100,100
+    Play = 0,Trump Card

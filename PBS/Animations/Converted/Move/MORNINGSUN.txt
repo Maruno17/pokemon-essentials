@@ -22,4 +22,4 @@ Name = MORNINGSUN
     SetOpacity = 13,150
     SetOpacity = 14,100
 <SE>
-    Play = 0,Saint7,80,100
+    Play = 0,Saint7,80

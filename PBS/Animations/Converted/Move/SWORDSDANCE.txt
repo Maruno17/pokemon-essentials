@@ -94,4 +94,4 @@ Name = SWORDSDANCE
     SetY = 10,53
     SetX = 11,465
 <SE>
-    Play = 0,Swords Dance,90,100
+    Play = 0,Swords Dance,90

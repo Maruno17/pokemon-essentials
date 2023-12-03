@@ -14,4 +14,4 @@ Name = FURYCUTTER
     SetX = 0,384
     SetY = 0,86
 <SE>
-    Play = 0,Slash10,80,100
+    Play = 0,Slash10,80

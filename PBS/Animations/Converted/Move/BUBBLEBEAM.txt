@@ -369,9 +369,9 @@ Name = BUBBLEBEAM
     SetX = 10,153
     SetY = 10,217
 <SE>
-    Play = 0,Water5,80,100
-    Play = 3,Blow1,80,100
-    Play = 7,Blow1,80,100
-    Play = 9,Blow1,80,100
-    Play = 11,Blow1,80,100
-    Play = 13,Blow1,80,100
+    Play = 0,Water5,80
+    Play = 3,Blow1,80
+    Play = 7,Blow1,80
+    Play = 9,Blow1,80
+    Play = 11,Blow1,80
+    Play = 13,Blow1,80

@@ -63,4 +63,4 @@ Name = Shiny
     SetX = 10,416
     SetY = 10,118
 <SE>
-    Play = 0,Shiny sparkle,100,100
+    Play = 0,Shiny sparkle

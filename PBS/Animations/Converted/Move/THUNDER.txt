@@ -60,4 +60,4 @@ Name = THUNDER
     SetZoomY = 11,150
     SetOpacity = 11,20
 <SE>
-    Play = 0,Thunder1,80,100
+    Play = 0,Thunder1,80

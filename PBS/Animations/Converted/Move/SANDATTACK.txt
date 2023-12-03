@@ -267,7 +267,7 @@ Name = SANDATTACK
     SetX = 13,416
     SetY = 13,142
 <SE>
-    Play = 0,Sand,100,100
+    Play = 0,Sand
 #-------------------------------
 [OppMove,SANDATTACK]
 Name = SANDATTACK
@@ -537,4 +537,4 @@ Name = SANDATTACK
     SetX = 13,147
     SetY = 13,230
 <SE>
-    Play = 0,Sand,100,100
+    Play = 0,Sand

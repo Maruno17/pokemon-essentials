@@ -40,6 +40,6 @@ Name = WRAP
     SetX = 6,216
     SetX = 7,264
 <SE>
-    Play = 0,Slash10,80,100
-    Play = 3,Slash10,80,100
-    Play = 6,Slash10,80,100
+    Play = 0,Slash10,80
+    Play = 3,Slash10,80
+    Play = 6,Slash10,80

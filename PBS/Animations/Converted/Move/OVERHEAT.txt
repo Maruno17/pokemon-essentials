@@ -102,4 +102,4 @@ Name = OVERHEAT
     SetX = 5,236
     SetY = 5,79
 <SE>
-    Play = 0,Fire3,80,100
+    Play = 0,Fire3,80

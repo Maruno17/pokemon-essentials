@@ -124,4 +124,4 @@ Name = ACIDSPRAY
     SetZoomY = 5,85
     SetAngle = 5,180
 <SE>
-    Play = 0,Substitute,80,100
+    Play = 0,Substitute,80

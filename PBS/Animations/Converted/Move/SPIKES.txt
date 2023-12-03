@@ -75,7 +75,7 @@ Name = SPIKES
     SetX = 13,358
     SetY = 13,110
 <SE>
-    Play = 1,throw,80,100
-    Play = 5,Sword1,80,100
-    Play = 8,Sword1,80,100
-    Play = 10,Sword1,80,100
+    Play = 1,throw,80
+    Play = 5,Sword1,80
+    Play = 8,Sword1,80
+    Play = 10,Sword1,80

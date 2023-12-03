@@ -30,6 +30,6 @@ Name = HealthUp
     SetX = 11,344
     SetY = 11,70
 <SE>
-    Play = 0,Recovery,75,100
-    Play = 2,Recovery,80,100
-    Play = 5,Recovery,80,100
+    Play = 0,Recovery,75
+    Play = 2,Recovery,80
+    Play = 5,Recovery,80

@@ -300,5 +300,5 @@ Name = ANCIENTPOWER
     SetX = 28,432
     SetY = 28,136
 <SE>
-    Play = 0,Earth4,100,100
-    Play = 24,Earth5,100,100
+    Play = 0,Earth4
+    Play = 24,Earth5

@@ -57,7 +57,7 @@ Name = PAYDAY
     SetX = 8,358
     SetY = 8,110
 <SE>
-    Play = 0,Select,80,100
-    Play = 2,Select,80,100
-    Play = 5,Select,80,100
-    Play = 7,Select,80,100
+    Play = 0,Select,80
+    Play = 2,Select,80
+    Play = 5,Select,80
+    Play = 7,Select,80

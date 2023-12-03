@@ -113,8 +113,8 @@ Name = RAZORLEAF
     SetX = 5,279
     SetY = 5,144
 <SE>
-    Play = 1,Slash8,80,100
-    Play = 3,Slash8,80,100
-    Play = 6,Slash8,80,100
-    Play = 8,Slash8,80,100
-    Play = 10,Slash8,80,100
+    Play = 1,Slash8,80
+    Play = 3,Slash8,80
+    Play = 6,Slash8,80
+    Play = 8,Slash8,80
+    Play = 10,Slash8,80

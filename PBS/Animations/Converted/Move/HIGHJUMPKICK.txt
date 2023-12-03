@@ -31,5 +31,5 @@ Name = HIGHJUMPKICK
     SetY = 7,134
     SetOpacity = 7,100
 <SE>
-    Play = 0,throw,80,100
-    Play = 3,Blow4,80,100
+    Play = 0,throw,80
+    Play = 3,Blow4,80

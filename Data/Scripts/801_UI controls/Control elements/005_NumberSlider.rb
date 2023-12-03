@@ -1,6 +1,5 @@
 #===============================================================================
-# TODO: Is there a better knob design than a big black rectangle? I'd rather
-#       it not be a different colour.
+#
 #===============================================================================
 class UIControls::NumberSlider < UIControls::BaseControl
   attr_reader :min_value
@@ -14,7 +13,6 @@ class UIControls::NumberSlider < UIControls::BaseControl
   SLIDER_LENGTH = 128
   PLUS_X        = SLIDER_X + SLIDER_LENGTH + SLIDER_PADDING
   VALUE_X       = PLUS_X + PLUS_MINUS_SIZE + 5
-  TEXT_OFFSET_Y = 5
 
   def initialize(width, height, viewport, min_value, max_value, value)
     super(width, height, viewport)

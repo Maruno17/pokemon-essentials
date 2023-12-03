@@ -70,6 +70,6 @@ Name = SLUDGEBOMB
     SetX = 11,352
     SetX = 12,358
 <SE>
-    Play = 3,Poison,80,100
-    Play = 5,Poison,80,100
-    Play = 7,Poison,80,100
+    Play = 3,Poison,80
+    Play = 5,Poison,80
+    Play = 7,Poison,80

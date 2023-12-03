@@ -30,8 +30,8 @@ Name = DOUBLESLAP
     SetX = 7,384
     SetOpacity = 8,100
 <SE>
-    Play = 3,Blow5,80,100
-    Play = 7,Blow5,80,100
+    Play = 3,Blow5,80
+    Play = 7,Blow5,80
 #-------------------------------
 [Move,DOUBLESLAP,1]
 Name = DoubleSlap hit 2
@@ -63,8 +63,8 @@ Name = DoubleSlap hit 2
     SetX = 7,384
     SetOpacity = 7,255
 <SE>
-    Play = 3,Blow5,80,100
-    Play = 7,Blow5,80,100
+    Play = 3,Blow5,80
+    Play = 7,Blow5,80
 #-------------------------------
 [Move,DOUBLESLAP,2]
 Name = DoubleSlap hit 3
@@ -96,8 +96,8 @@ Name = DoubleSlap hit 3
     SetX = 7,384
     SetOpacity = 8,100
 <SE>
-    Play = 3,Blow5,80,100
-    Play = 7,Blow5,80,100
+    Play = 3,Blow5,80
+    Play = 7,Blow5,80
 #-------------------------------
 [Move,DOUBLESLAP,3]
 Name = DoubleSlap hit 4
@@ -129,8 +129,8 @@ Name = DoubleSlap hit 4
     SetX = 7,384
     SetOpacity = 7,255
 <SE>
-    Play = 3,Blow5,80,100
-    Play = 7,Blow5,80,100
+    Play = 3,Blow5,80
+    Play = 7,Blow5,80
 #-------------------------------
 [Move,DOUBLESLAP,4]
 Name = DoubleSlap hit 5
@@ -162,5 +162,5 @@ Name = DoubleSlap hit 5
     SetX = 7,384
     SetOpacity = 8,100
 <SE>
-    Play = 3,Blow5,80,100
-    Play = 7,Blow5,80,100
+    Play = 3,Blow5,80
+    Play = 7,Blow5,80

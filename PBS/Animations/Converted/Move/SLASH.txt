@@ -41,4 +41,4 @@ Name = SLASH
     SetX = 3,416
     SetY = 3,78
 <SE>
-    Play = 0,Slash3,80,100
+    Play = 0,Slash3,80

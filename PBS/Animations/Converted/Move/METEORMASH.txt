@@ -114,4 +114,4 @@ Name = METEORMASH
     SetX = 6,385
     SetY = 6,64
 <SE>
-    Play = 0,superdamage,100,100
+    Play = 0,superdamage

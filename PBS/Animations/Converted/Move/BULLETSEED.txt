@@ -92,13 +92,13 @@ Name = BULLETSEED
     SetX = 6,256
     SetY = 6,161
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 5,throw,80,100
-    Play = 5,Knock,80,100
-    Play = 7,Knock,80,100
-    Play = 8,throw,80,100
-    Play = 9,Knock,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 5,throw,80
+    Play = 5,Knock,80
+    Play = 7,Knock,80
+    Play = 8,throw,80
+    Play = 9,Knock,80
 #-------------------------------
 [Move,BULLETSEED,1]
 Name = Bullet Seed hit 2
@@ -192,13 +192,13 @@ Name = Bullet Seed hit 2
     SetY = 6,129
     SetX = 7,313
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 5,throw,80,100
-    Play = 5,Knock,80,100
-    Play = 7,Knock,80,100
-    Play = 8,throw,80,100
-    Play = 9,Knock,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 5,throw,80
+    Play = 5,Knock,80
+    Play = 7,Knock,80
+    Play = 8,throw,80
+    Play = 9,Knock,80
 #-------------------------------
 [Move,BULLETSEED,2]
 Name = Bullet Seed hit 3
@@ -292,13 +292,13 @@ Name = Bullet Seed hit 3
     SetX = 7,364
     SetY = 8,110
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 5,throw,80,100
-    Play = 5,Knock,80,100
-    Play = 7,Knock,80,100
-    Play = 8,throw,80,100
-    Play = 9,Knock,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 5,throw,80
+    Play = 5,Knock,80
+    Play = 7,Knock,80
+    Play = 8,throw,80
+    Play = 9,Knock,80
 #-------------------------------
 [Move,BULLETSEED,3]
 Name = Bullet Seed hit 4
@@ -392,13 +392,13 @@ Name = Bullet Seed hit 4
     SetX = 9,364
     SetY = 9,79
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 5,throw,80,100
-    Play = 5,Knock,80,100
-    Play = 7,Knock,80,100
-    Play = 8,throw,80,100
-    Play = 9,Knock,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 5,throw,80
+    Play = 5,Knock,80
+    Play = 7,Knock,80
+    Play = 8,throw,80
+    Play = 9,Knock,80
 #-------------------------------
 [Move,BULLETSEED,4]
 Name = Bullet Seed hit 5
@@ -492,10 +492,10 @@ Name = Bullet Seed hit 5
     SetX = 10,352
     SetY = 10,47
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 5,throw,80,100
-    Play = 5,Knock,80,100
-    Play = 7,Knock,80,100
-    Play = 8,throw,80,100
-    Play = 9,Knock,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 5,throw,80
+    Play = 5,Knock,80
+    Play = 7,Knock,80
+    Play = 8,throw,80
+    Play = 9,Knock,80

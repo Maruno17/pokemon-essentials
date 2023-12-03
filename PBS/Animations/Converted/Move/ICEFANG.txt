@@ -97,4 +97,4 @@ Name = ICEFANG
     SetY = 10,90
     SetOpacity = 10,154
 <SE>
-    Play = 6,Super Fang,80,100
+    Play = 6,Super Fang,80

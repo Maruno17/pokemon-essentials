@@ -272,4 +272,4 @@ Name = LUCKYCHANT
     SetY = 7,68
     SetOpacity = 9,128
 <SE>
-    Play = 0,Lucky Chant,100,100
+    Play = 0,Lucky Chant

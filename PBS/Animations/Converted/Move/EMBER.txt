@@ -43,4 +43,4 @@ Name = EMBER
     SetY = 10,116
     SetFlip = 11,false
 <SE>
-    Play = 1,Fire2,80,100
+    Play = 1,Fire2,80

@@ -105,7 +105,7 @@ Name = SWIFT
     SetX = 4,128
     SetY = 4,242
 <SE>
-    Play = 0,Saint3,80,100
-    Play = 2,Saint3,80,100
-    Play = 5,Saint3,80,100
-    Play = 8,Saint3,80,100
+    Play = 0,Saint3,80
+    Play = 2,Saint3,80
+    Play = 5,Saint3,80
+    Play = 8,Saint3,80

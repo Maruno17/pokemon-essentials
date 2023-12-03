@@ -115,6 +115,6 @@ Name = MAGICCOAT
     SetX = 8,369
     SetY = 8,89
 <SE>
-    Play = 0,Sword2,80,100
+    Play = 0,Sword2,80
     Play = 0,Sword2,80,101
-    Play = 4,Sword2,80,100
+    Play = 4,Sword2,80

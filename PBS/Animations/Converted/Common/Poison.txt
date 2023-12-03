@@ -14,4 +14,4 @@ Name = Poison
     SetX = 1,384
     SetY = 1,86
 <SE>
-    Play = 0,Poison,80,100
+    Play = 0,Poison,80

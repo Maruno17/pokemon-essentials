@@ -30,5 +30,5 @@ Name = KARATECHOP
     SetY = 6,94
     SetAngle = 6,0
 <SE>
-    Play = 0,Wind1,80,100
-    Play = 7,Blow3,80,100
+    Play = 0,Wind1,80
+    Play = 7,Blow3,80

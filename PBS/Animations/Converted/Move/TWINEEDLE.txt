@@ -53,10 +53,10 @@ Name = TWINEEDLE
     SetZoomY = 5,125
     SetOpacity = 5,50
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 4,Slash10,80,100
-    Play = 6,Slash10,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 4,Slash10,80
+    Play = 6,Slash10,80
 #-------------------------------
 [Move,TWINEEDLE,1]
 Name = Twineedle hit 2
@@ -111,7 +111,7 @@ Name = Twineedle hit 2
     SetZoomY = 6,125
     SetOpacity = 6,50
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 4,Slash10,80,100
-    Play = 6,Slash10,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 4,Slash10,80
+    Play = 6,Slash10,80

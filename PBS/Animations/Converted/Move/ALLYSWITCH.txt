@@ -48,4 +48,4 @@ Name = ALLYSWITCH
     SetOpacity = 18,42
     SetOpacity = 19,0
 <SE>
-    Play = 0,Uproar,100,100
+    Play = 0,Uproar

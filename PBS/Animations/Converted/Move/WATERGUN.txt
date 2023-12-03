@@ -103,7 +103,7 @@ Name = WATERGUN
     SetZoomX = 8,70
     SetOpacity = 8,224
 <SE>
-    Play = 0,Yawn,88,100
+    Play = 0,Yawn,88
 #-------------------------------
 [OppMove,WATERGUN]
 Name = WATERGUN
@@ -189,4 +189,4 @@ Name = WATERGUN
     SetY = 8,220
     SetOpacity = 8,240
 <SE>
-    Play = 0,Yawn,88,100
+    Play = 0,Yawn,88

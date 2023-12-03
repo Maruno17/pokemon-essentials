@@ -31,4 +31,4 @@ Name = HORNATTACK
     SetY = 4,110
     SetOpacity = 5,25
 <SE>
-    Play = 3,normaldamage,80,100
+    Play = 3,normaldamage,80

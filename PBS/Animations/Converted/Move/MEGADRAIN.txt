@@ -104,10 +104,10 @@ Name = MEGADRAIN
     SetX = 5,313
     SetY = 5,116
 <SE>
-    Play = 0,Absorb2,80,100
-    Play = 2,Absorb2,80,100
-    Play = 5,Absorb2,80,100
-    Play = 7,Absorb2,80,100
+    Play = 0,Absorb2,80
+    Play = 2,Absorb2,80
+    Play = 5,Absorb2,80
+    Play = 7,Absorb2,80
 #-------------------------------
 [OppMove,MEGADRAIN]
 Name = MEGADRAIN
@@ -253,4 +253,4 @@ Name = MEGADRAIN
     SetX = 19,408
     SetY = 19,80
 <SE>
-    Play = 0,Present - Heal,100,100
+    Play = 0,Present - Heal

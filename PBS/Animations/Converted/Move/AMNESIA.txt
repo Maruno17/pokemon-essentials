@@ -18,4 +18,4 @@ Name = AMNESIA
     SetOpacity = 2,250
     SetOpacity = 3,255
 <SE>
-    Play = 0,Yawn,100,100
+    Play = 0,Yawn

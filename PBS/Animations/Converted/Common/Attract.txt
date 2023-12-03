@@ -109,4 +109,4 @@ Name = Attract
     SetY = 17,-17
     SetOpacity = 17,64
 <SE>
-    Play = 0,infatuated,100,100
+    Play = 0,infatuated

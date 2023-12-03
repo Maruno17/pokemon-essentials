@@ -87,12 +87,12 @@ Name = PINMISSILE
     SetAngle = 9,0
     SetOpacity = 9,50
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 4,throw,80,100
-    Play = 4,Slash10,80,100
-    Play = 6,Slash10,80,100
-    Play = 8,Slash10,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 4,throw,80
+    Play = 4,Slash10,80
+    Play = 6,Slash10,80
+    Play = 8,Slash10,80
 #-------------------------------
 [Move,PINMISSILE,1]
 Name = Pin Missile hit 2
@@ -181,12 +181,12 @@ Name = Pin Missile hit 2
     SetY = 5,91
     SetOpacity = 5,50
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 4,throw,80,100
-    Play = 4,Slash10,80,100
-    Play = 6,Slash10,80,100
-    Play = 8,Slash10,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 4,throw,80
+    Play = 4,Slash10,80
+    Play = 6,Slash10,80
+    Play = 8,Slash10,80
 #-------------------------------
 [Move,PINMISSILE,2]
 Name = Pin Missile hit 3
@@ -275,12 +275,12 @@ Name = Pin Missile hit 3
     SetZoomX = 8,125
     SetZoomY = 8,125
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 4,throw,80,100
-    Play = 4,Slash10,80,100
-    Play = 6,Slash10,80,100
-    Play = 8,Slash10,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 4,throw,80
+    Play = 4,Slash10,80
+    Play = 6,Slash10,80
+    Play = 8,Slash10,80
 #-------------------------------
 [Move,PINMISSILE,3]
 Name = Pin Missile hit 4
@@ -369,12 +369,12 @@ Name = Pin Missile hit 4
     SetAngle = 8,0
     SetOpacity = 8,50
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 4,throw,80,100
-    Play = 4,Slash10,80,100
-    Play = 6,Slash10,80,100
-    Play = 8,Slash10,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 4,throw,80
+    Play = 4,Slash10,80
+    Play = 6,Slash10,80
+    Play = 8,Slash10,80
 #-------------------------------
 [Move,PINMISSILE,4]
 Name = Pin Missile hit 5
@@ -463,9 +463,9 @@ Name = Pin Missile hit 5
     SetAngle = 9,0
     SetOpacity = 9,50
 <SE>
-    Play = 0,throw,80,100
-    Play = 2,throw,80,100
-    Play = 4,throw,80,100
-    Play = 4,Slash10,80,100
-    Play = 6,Slash10,80,100
-    Play = 8,Slash10,80,100
+    Play = 0,throw,80
+    Play = 2,throw,80
+    Play = 4,throw,80
+    Play = 4,Slash10,80
+    Play = 6,Slash10,80
+    Play = 8,Slash10,80

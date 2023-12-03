@@ -121,4 +121,4 @@ Name = COUNTER
     SetX = 5,399
     SetY = 5,92
 <SE>
-    Play = 0,MiningCollapse,80,100
+    Play = 0,MiningCollapse,80

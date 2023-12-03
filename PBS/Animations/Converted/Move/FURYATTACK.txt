@@ -29,8 +29,8 @@ Name = FURYATTACK
     SetX = 5,264
     SetY = 5,146
 <SE>
-    Play = 3,normaldamage,80,100
-    Play = 5,normaldamage,80,100
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
 #-------------------------------
 [Move,FURYATTACK,1]
 Name = Fury Attack hit 2
@@ -61,8 +61,8 @@ Name = Fury Attack hit 2
     SetX = 3,358
     SetY = 3,110
 <SE>
-    Play = 3,normaldamage,80,100
-    Play = 5,normaldamage,80,100
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
 #-------------------------------
 [Move,FURYATTACK,2]
 Name = Fury Attack hit 3
@@ -93,8 +93,8 @@ Name = Fury Attack hit 3
     SetX = 5,264
     SetY = 5,146
 <SE>
-    Play = 3,normaldamage,80,100
-    Play = 5,normaldamage,80,100
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
 #-------------------------------
 [Move,FURYATTACK,3]
 Name = Fury Attack hit 4
@@ -125,8 +125,8 @@ Name = Fury Attack hit 4
     SetX = 3,358
     SetY = 3,110
 <SE>
-    Play = 3,normaldamage,80,100
-    Play = 5,normaldamage,80,100
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
 #-------------------------------
 [Move,FURYATTACK,4]
 Name = Fury Attack hit 5
@@ -157,8 +157,8 @@ Name = Fury Attack hit 5
     SetX = 5,264
     SetY = 5,146
 <SE>
-    Play = 3,normaldamage,80,100
-    Play = 5,normaldamage,80,100
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
 #-------------------------------
 [OppMove,FURYATTACK]
 Name = FURYATTACK
@@ -192,8 +192,8 @@ Name = FURYATTACK
     SetY = 3,242
     SetAngle = 3,0
 <SE>
-    Play = 3,normaldamage,80,100
-    Play = 5,normaldamage,80,100
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
 #-------------------------------
 [OppMove,FURYATTACK,1]
 Name = Fury Attack hit 2 opp
@@ -227,8 +227,8 @@ Name = Fury Attack hit 2 opp
     SetX = 5,220
     SetY = 5,197
 <SE>
-    Play = 3,normaldamage,80,100
-    Play = 5,normaldamage,80,100
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
 #-------------------------------
 [OppMove,FURYATTACK,2]
 Name = Fury Attack hit 3 opp
@@ -262,8 +262,8 @@ Name = Fury Attack hit 3 opp
     SetY = 3,242
     SetAngle = 3,0
 <SE>
-    Play = 3,normaldamage,80,100
-    Play = 5,normaldamage,80,100
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
 #-------------------------------
 [OppMove,FURYATTACK,3]
 Name = Fury Attack hit 4 opp
@@ -297,8 +297,8 @@ Name = Fury Attack hit 4 opp
     SetX = 5,220
     SetY = 5,197
 <SE>
-    Play = 3,normaldamage,80,100
-    Play = 5,normaldamage,80,100
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
 #-------------------------------
 [OppMove,FURYATTACK,4]
 Name = Fury Attack hit 5 opp
@@ -332,5 +332,5 @@ Name = Fury Attack hit 5 opp
     SetY = 3,242
     SetAngle = 3,0
 <SE>
-    Play = 3,normaldamage,80,100
-    Play = 5,normaldamage,80,100
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80

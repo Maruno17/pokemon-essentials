@@ -14,4 +14,4 @@ Name = FLASH
     SetX = 0,384
     SetY = 0,94
 <SE>
-    Play = 0,Saint7,80,100
+    Play = 0,Saint7,80

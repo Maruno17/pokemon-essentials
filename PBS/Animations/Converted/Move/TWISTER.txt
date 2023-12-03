@@ -15,8 +15,8 @@ Name = TWISTER
     SetY = 0,78
     SetFlip = 11,true
 <SE>
-    Play = 0,Water3,80,100
-    Play = 0,Twine,80,100
-    Play = 2,Water1,80,100
-    Play = 5,Water2,80,100
-    Play = 9,Water1,80,100
+    Play = 0,Water3,80
+    Play = 0,Twine,80
+    Play = 2,Water1,80
+    Play = 5,Water2,80
+    Play = 9,Water1,80

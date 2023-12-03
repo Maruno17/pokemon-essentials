@@ -16,4 +16,4 @@ Name = Burn
     SetZoomX = 0,200
     SetZoomY = 0,200
 <SE>
-    Play = 0,Fire2,80,100
+    Play = 0,Fire2,80

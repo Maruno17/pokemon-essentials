@@ -50,7 +50,7 @@ Name = SKETCH
     SetX = 17,344
     SetY = 17,-18
 <SE>
-    Play = 0,Slash6,80,100
-    Play = 6,Slash6,80,100
-    Play = 10,Slash6,80,100
-    Play = 15,Slash6,80,100
+    Play = 0,Slash6,80
+    Play = 6,Slash6,80
+    Play = 10,Slash6,80
+    Play = 15,Slash6,80

@@ -102,4 +102,4 @@ Name = StatUp
     SetY = 9,154
     SetOpacity = 9,0
 <SE>
-    Play = 0,increase,100,100
+    Play = 0,increase

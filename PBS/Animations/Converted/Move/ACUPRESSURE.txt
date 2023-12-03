@@ -85,4 +85,4 @@ Name = ACUPRESSURE
     SetX = 8,395
     SetY = 8,80
 <SE>
-    Play = 0,Acupressure,100,100
+    Play = 0,Acupressure

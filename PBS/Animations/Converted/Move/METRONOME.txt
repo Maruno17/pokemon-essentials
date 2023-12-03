@@ -42,7 +42,7 @@ Name = METRONOME
     SetX = 14,183
     SetY = 14,245
 <SE>
-    Play = 0,Metronome,94,100
+    Play = 0,Metronome,94
 #-------------------------------
 [OppMove,METRONOME]
 Name = METRONOME
@@ -88,4 +88,4 @@ Name = METRONOME
     SetX = 14,392
     SetY = 14,113
 <SE>
-    Play = 0,Metronome,80,100
+    Play = 0,Metronome,80

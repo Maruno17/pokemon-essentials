@@ -29,4 +29,4 @@ Name = VINEWHIP
     SetY = 2,94
     SetY = 3,118
 <SE>
-    Play = 2,Slash1,80,100
+    Play = 2,Slash1,80

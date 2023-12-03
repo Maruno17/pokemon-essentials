@@ -84,4 +84,4 @@ Name = REFLECT
     SetX = 5,400
     SetY = 5,54
 <SE>
-    Play = 0,Saint7,80,100
+    Play = 0,Saint7,80

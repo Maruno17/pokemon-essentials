@@ -109,4 +109,4 @@ Name = FIERYDANCE
     SetX = 7,351
     SetY = 7,107
 <SE>
-    Play = 0,Wring Out,80,100
+    Play = 0,Wring Out,80

@@ -10,6 +10,7 @@ class UIControls::BaseControl < BitmapSprite
 
   TEXT_COLOR          = Color.black
   TEXT_SIZE           = 18           # Default is 22 if size isn't explicitly set
+  TEXT_OFFSET_Y       = 5
   HOVER_COLOR         = Color.cyan   # For clickable area when hovering over it
   CAPTURE_COLOR       = Color.pink   # For area you clicked in but aren't hovering over
   DISABLED_COLOR      = Color.gray
@@ -19,7 +20,6 @@ class UIControls::BaseControl < BitmapSprite
     super(width, height, viewport)
     self.bitmap.font.color = TEXT_COLOR
     self.bitmap.font.size = TEXT_SIZE
-
     @disabled = false
     @hover_area = nil   # Is a symbol from the keys for @interactions if the mouse is hovering over that interaction
     @captured_area = nil   # Is a symbol from the keys for @interactions (or :none) if this control is clicked in
@@ -51,10 +51,7 @@ class UIControls::BaseControl < BitmapSprite
     return false if !@interactions || @interactions.empty?
     mouse_x, mouse_y = mouse_pos
     return false if !mouse_x || !mouse_y
-    @interactions.each_pair do |area, rect|
-      return true if rect.contains?(mouse_x, mouse_y)
-    end
-    return false
+    return @interactions.any? { |area, rect| rect.contains?(mouse_x, mouse_y) }
   end
 
   #-----------------------------------------------------------------------------
@@ -84,7 +81,7 @@ class UIControls::BaseControl < BitmapSprite
     @invalid = true
   end
 
-  # Makes the control no longer invalid.
+  # Makes the control no longer invalid. Called after repainting.
   def validate
     @invalid = false
   end
@@ -125,7 +122,6 @@ class UIControls::BaseControl < BitmapSprite
   end
 
   def refresh
-    # Paint over control to erase contents (intentionally not using self.bitmap.clear)
     self.bitmap.clear
     draw_area_highlight
   end
@@ -194,10 +190,8 @@ class UIControls::BaseControl < BitmapSprite
   # Updates the logic on the control, invalidating it if necessary.
   def update
     return if !self.visible
-    return if disabled? && !busy?
-
+    return if disabled? && !busy?   # This control still works if it becomes disabled while using it
     update_hover_highlight
-
     # Detect a mouse press/release
     if @interactions && !@interactions.empty?
       if Input.trigger?(Input::MOUSELEFT)
@@ -206,6 +200,5 @@ class UIControls::BaseControl < BitmapSprite
         on_mouse_release
       end
     end
-
   end
 end

@@ -1,8 +1,5 @@
 #===============================================================================
-# TODO: Would be nice to make command sprites wider than their viewport and
-#       change @commands_viewport's ox to @left_pos, similar to how the vertical
-#       scrollbar works, i.e. every visible @commands_sprites isn't redrawn each
-#       time the horizontal scrollbar changes.
+#
 #===============================================================================
 class AnimationEditor::ParticleList < UIControls::BaseControl
   VIEWPORT_SPACING     = 1
@@ -247,8 +244,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   #-----------------------------------------------------------------------------
 
   def calculate_duration
-    # TODO: Refresh lots of things if the duration changed (e.g. SE command
-    #       line).
     @duration = AnimationEditor::ParticleDataHelper.get_duration(@particles)
     @duration += DURATION_BUFFER
   end
@@ -269,7 +264,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   end
 
   def calculate_commands_for_particle(index)
-    # TODO: Delete everything from @commands that includes index.
+    @commands.delete_if { |cmd| cmd == index || (cmd.is_a?(Array) && cmd[0] == index) }
     overall_commands = []
     @particles[index].each_pair do |property, value|
       next if !value.is_a?(Array)
@@ -290,8 +285,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   # Returns whether the sprites need replacing due to the addition or
   # subtraction of one.
   def ensure_sprites
-    # TODO: Check through @particle_list to ensure only ones are shown which
-    #       correspond to something in @particles.
     # Go through all @particles to ensure there are sprites for each of them
     missing = false
     @particles.each_with_index do |particle, index|
@@ -379,7 +372,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
 
   def property_display_name(property)
     return {
-      :frame    => _INTL("Graphic frame"),
+      :frame    => _INTL("Frame"),
       :blending => _INTL("Blending"),
       :flip     => _INTL("Flip"),
       :x        => _INTL("X"),
@@ -438,7 +431,9 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     end
   end
 
-  # TODO: Add indicator that this is selected (if so).
+  # TODO: Add indicator that this is selected (if so). Some kind of arrow on the
+  #       left, or a red horizontal line (like the keyframe's vertical line), or
+  #       fill_rect with colour instead of outline_rect?
   def refresh_particle_list_sprite(index)
     spr = @list_sprites[index]
     return if !spr

@@ -47,4 +47,4 @@ Name = SHADOWBALL
     SetOpacity = 12,100
     SetOpacity = 13,50
 <SE>
-    Play = 0,Collapse1,80,100
+    Play = 0,Collapse1,80

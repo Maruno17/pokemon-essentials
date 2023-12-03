@@ -19,4 +19,4 @@ Name = HARDEN
     SetOpacity = 6,105
     SetOpacity = 7,70
 <SE>
-    Play = 0,Harden,100,100
+    Play = 0,Harden

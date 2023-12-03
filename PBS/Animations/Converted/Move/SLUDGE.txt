@@ -25,5 +25,5 @@ Name = SLUDGE
     SetY = 5,110
     SetAngle = 5,0
 <SE>
-    Play = 0,throw,80,100
-    Play = 7,Poison,80,100
+    Play = 0,throw,80
+    Play = 7,Poison,80

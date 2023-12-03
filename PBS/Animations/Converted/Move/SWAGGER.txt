@@ -39,4 +39,4 @@ Name = SWAGGER
     SetX = 17,411
     SetY = 17,61
 <SE>
-    Play = 0,Swagger,100,100
+    Play = 0,Swagger

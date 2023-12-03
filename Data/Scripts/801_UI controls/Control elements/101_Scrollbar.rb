@@ -1,7 +1,5 @@
 #===============================================================================
-# TODO: Make the slider a separate sprite that moves, instead of redrawing this
-#       sprite's bitmap whenever it moves? Intended to reduce lag. There doesn't
-#       seem to be any lag at the moment with a tall scrollbar.
+#
 #===============================================================================
 class UIControls::Scrollbar < UIControls::BaseControl
   SLIDER_WIDTH    = 16
@@ -122,9 +120,6 @@ class UIControls::Scrollbar < UIControls::BaseControl
     return if !self.visible
     super
     if @captured_area == :slider
-      # TODO: Have a display y position for the slider bar which is in pixels,
-      #       and round it to the nearest row when setting @top_row? This is
-      #       just to make the slider bar movement smoother.
       mouse_x, mouse_y = mouse_pos
       return if !mouse_x || !mouse_y
       long_coord = (@horizontal) ? mouse_x : mouse_y

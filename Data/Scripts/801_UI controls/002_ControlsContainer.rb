@@ -1,16 +1,6 @@
 #===============================================================================
 # Controls are arranged in a list in self's bitmap. Each control is given an
 # area of size "self's bitmap's width" x LINE_SPACING to draw itself in.
-# TODO: The act of "capturing" a control makes other controls in this container
-#       not update themselves, i.e. they won't colour themselves with a hover
-#       highlight if the mouse happens to move over it while another control is
-#       captured. Is there a better way of dealing with this? I'm leaning
-#       towards the control itself deciding if it's captured, and it being
-#       treated as uncaptured once it says its value has changed, but I think
-#       this would require manually telling all other controls in this container
-#       that something else is captured and they shouldn't show a hover
-#       highlight when updated (perhaps as a parameter in def update), which I
-#       don't think is ideal.
 #===============================================================================
 class UIControls::ControlsContainer
   attr_reader   :x, :y
@@ -171,11 +161,6 @@ class UIControls::ControlsContainer
     return if !@visible
     # Update controls
     if @captured
-      # TODO: Ideally all controls will be updated here, if only to redraw
-      #       themselves if they happen to be invalidated somehow. But that
-      #       involves telling each control whether any other control is busy,
-      #       to ensure that they don't show their hover colours or anything,
-      #       which is fiddly and I'm not sure if it's the best approach.
       @captured.update
       @captured = nil if !@captured.busy?
     else

@@ -62,5 +62,5 @@ Name = THUNDERFANG
     SetX = 12,384
     SetY = 12,97
 <SE>
-    Play = 6,Super Fang,100,100
+    Play = 6,Super Fang
     Play = 7,Uproar,83,137

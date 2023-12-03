@@ -1,20 +1,5 @@
-# TODO: Should I split this code into visual and mechanical classes, a la the
-#       other UI screens?
 #===============================================================================
-# TODO: When creating a new particle, blacklist the names "User", "Target" and
-#       "SE". Make particles with those names undeletable.
-# TODO: Remove the particle named "Target" if the animation's focus is changed
-#       to one that doesn't include a target, and vice versa. Do the same for
-#       "User"(?).
-# TODO: Things that need pop-up windows (draws a semi-transparent grey over the
-#       whole screen behind the window):
-#       - animation properties (Move/OppMove/Common/OppCommon, move, version,
-#         extra name, target, filepath, flags, etc.)
-#       - editor settings (theme, canvas BG graphics, user/target graphics,
-#         display of canvas particle boxes, etc.)
-# TODO: While playing the animation, draw a semi-transparent grey over the
-#       screen except for the canvas and playback controls. Can't edit anything
-#       while it's playing.
+#
 #===============================================================================
 class AnimationEditor
   WINDOW_WIDTH  = Settings::SCREEN_WIDTH + (32 * 10)
@@ -22,6 +7,7 @@ class AnimationEditor
 
   BORDER_THICKNESS = 4
 
+  # Components
   MENU_BAR_WIDTH  = WINDOW_WIDTH
   MENU_BAR_HEIGHT = 30
 
@@ -45,15 +31,43 @@ class AnimationEditor
   PARTICLE_LIST_WIDTH  = WINDOW_WIDTH - (BORDER_THICKNESS * 2)
   PARTICLE_LIST_HEIGHT = WINDOW_HEIGHT - PARTICLE_LIST_Y - BORDER_THICKNESS
 
-  ANIM_PROPERTIES_WIDTH  = SIDE_PANE_WIDTH + 80
-  ANIM_PROPERTIES_HEIGHT = WINDOW_HEIGHT * 3 / 4
-  ANIM_PROPERTIES_X      = (WINDOW_WIDTH - ANIM_PROPERTIES_WIDTH) / 2
-  ANIM_PROPERTIES_Y      = (WINDOW_HEIGHT - ANIM_PROPERTIES_HEIGHT) / 2
+  # Pop-up windows
+  ANIM_PROPERTIES_LABEL_WIDTH = UIControls::ControlsContainer::OFFSET_FROM_LABEL_X + 80
+  ANIM_PROPERTIES_WIDTH       = SIDE_PANE_WIDTH + 80 + 8
+  ANIM_PROPERTIES_HEIGHT      = WINDOW_HEIGHT * 3 / 4
+  ANIM_PROPERTIES_X           = (WINDOW_WIDTH - ANIM_PROPERTIES_WIDTH) / 2
+  ANIM_PROPERTIES_Y           = (WINDOW_HEIGHT - ANIM_PROPERTIES_HEIGHT) / 2
+
+  MESSAGE_BOX_WIDTH         = WINDOW_WIDTH * 3 / 4
+  MESSAGE_BOX_HEIGHT        = 160
+  MESSAGE_BOX_BUTTON_WIDTH  = 150
+  MESSAGE_BOX_BUTTON_HEIGHT = 32
+  MESSAGE_BOX_SPACING       = 16
+
+  CHOOSER_BUTTON_WIDTH     = 150
+  CHOOSER_BUTTON_HEIGHT    = MESSAGE_BOX_BUTTON_HEIGHT
+  CHOOSER_FILE_LIST_X      = 8
+  CHOOSER_FILE_LIST_Y      = 32
+  CHOOSER_FILE_LIST_WIDTH  = CHOOSER_BUTTON_WIDTH * 2
+  CHOOSER_FILE_LIST_HEIGHT = UIControls::List::ROW_HEIGHT * 15
+
+  GRAPHIC_CHOOSER_PREVIEW_SIZE  = 320   # Square
+  GRAPHIC_CHOOSER_WINDOW_WIDTH  = CHOOSER_FILE_LIST_X + CHOOSER_FILE_LIST_WIDTH + 10 + GRAPHIC_CHOOSER_PREVIEW_SIZE + 8 + (BORDER_THICKNESS * 2)
+  GRAPHIC_CHOOSER_WINDOW_HEIGHT = CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 10 + CHOOSER_BUTTON_HEIGHT + 8 + (BORDER_THICKNESS * 2)
+  GRAPHIC_CHOOSER_X             = ((WINDOW_WIDTH - GRAPHIC_CHOOSER_WINDOW_WIDTH) / 2)
+  GRAPHIC_CHOOSER_Y             = ((WINDOW_HEIGHT - GRAPHIC_CHOOSER_WINDOW_HEIGHT) / 2)
+
+  AUDIO_CHOOSER_LABEL_WIDTH   = UIControls::ControlsContainer::OFFSET_FROM_LABEL_X
+  AUDIO_CHOOSER_SLIDER_WIDTH  = (CHOOSER_BUTTON_WIDTH * 2) - AUDIO_CHOOSER_LABEL_WIDTH
+  AUDIO_CHOOSER_WINDOW_WIDTH  = CHOOSER_FILE_LIST_X + CHOOSER_FILE_LIST_WIDTH + 8 + (CHOOSER_BUTTON_WIDTH * 2) + 4 + (BORDER_THICKNESS * 2)
+  AUDIO_CHOOSER_WINDOW_HEIGHT = CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 10 + CHOOSER_BUTTON_HEIGHT + 8 + (BORDER_THICKNESS * 2)
+  AUDIO_CHOOSER_X             = ((WINDOW_WIDTH - AUDIO_CHOOSER_WINDOW_WIDTH) / 2)
+  AUDIO_CHOOSER_Y             = ((WINDOW_HEIGHT - AUDIO_CHOOSER_WINDOW_HEIGHT) / 2)
 
   def initialize(anim_id, anim)
     @anim_id = anim_id
     @anim = anim
-    @pbs_path = anim[:pbs_path].dup
+    @pbs_path = anim[:pbs_path]
     @quit = false
     # Viewports
     @viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -85,13 +99,10 @@ class AnimationEditor
     [:commands_pane, :se_pane, :particle_pane, :keyframe_pane].each do |pane|
       @components[pane] = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
     end
-    # TODO: Make more side panes for:
-    #       - colour/tone editor (accessed from @components[:commands_pane] via
-    #         a button; has Apply/Cancel buttons to only apply all its values at
-    #         the end of editing them, although canvas will be updated in real
-    #         time to show the changes)
-    #       - effects particle properties (depends on keyframe; for screen
-    #         shake, etc.)
+    # TODO: Make a side pane for colour/tone editor (accessed from
+    #       @components[:commands_pane] via a button; has Apply/Cancel buttons
+    #       to retain/undo all its changes, although changes are made normally
+    #       while in it and canvas is updated accordingly.
     # Timeline/particle list
     @components[:particle_list] = AnimationEditor::ParticleList.new(
       PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT, @viewport
@@ -99,17 +110,25 @@ class AnimationEditor
     @components[:particle_list].set_interactive_rects
     # Animation properties pop-up window
     @components[:animation_properties] = UIControls::ControlsContainer.new(
-      ANIM_PROPERTIES_X + 4, ANIM_PROPERTIES_Y + 4, ANIM_PROPERTIES_WIDTH - 8, ANIM_PROPERTIES_HEIGHT - 8
+      ANIM_PROPERTIES_X + BORDER_THICKNESS + 4, ANIM_PROPERTIES_Y + BORDER_THICKNESS,
+      ANIM_PROPERTIES_WIDTH - ((BORDER_THICKNESS + 4) * 2), ANIM_PROPERTIES_HEIGHT - (BORDER_THICKNESS * 2)
     )
     @components[:animation_properties].viewport.z = @pop_up_viewport.z + 1
     @components[:animation_properties].label_offset_x = 170
+    # Graphic chooser pop-up window
+    @components[:graphic_chooser] = UIControls::ControlsContainer.new(
+      GRAPHIC_CHOOSER_X + BORDER_THICKNESS, GRAPHIC_CHOOSER_Y + BORDER_THICKNESS,
+      GRAPHIC_CHOOSER_WINDOW_WIDTH - (BORDER_THICKNESS * 2), GRAPHIC_CHOOSER_WINDOW_HEIGHT - (BORDER_THICKNESS * 2)
+    )
+    @components[:graphic_chooser].viewport.z = @pop_up_viewport.z + 1
+    # Audio chooser pop-up window
+    @components[:audio_chooser] = UIControls::ControlsContainer.new(
+      AUDIO_CHOOSER_X + BORDER_THICKNESS, AUDIO_CHOOSER_Y + BORDER_THICKNESS,
+      AUDIO_CHOOSER_WINDOW_WIDTH - (BORDER_THICKNESS * 2), AUDIO_CHOOSER_WINDOW_HEIGHT - (BORDER_THICKNESS * 2)
+    )
+    @components[:audio_chooser].viewport.z = @pop_up_viewport.z + 1
     @captured = nil
-    set_menu_bar_contents
-    set_canvas_contents
-    set_play_controls_contents
-    set_side_panes_contents
-    set_particle_list_contents
-    set_animation_properties_contents
+    set_components_contents
     refresh
   end
 
@@ -121,6 +140,7 @@ class AnimationEditor
     @components.clear
     @viewport.dispose
     @canvas_viewport.dispose
+    @pop_up_viewport.dispose
   end
 
   def keyframe
@@ -178,8 +198,12 @@ class AnimationEditor
     # sprite, make this instead a choice of front/back/same as the main sprite/
     # opposite of the main sprite. Probably need two controls in the same space
     # and refresh_component(:commands_pane) makes the appropriate one visible.
-    commands_pane.add_labelled_number_text_box(:x, _INTL("X"), -128, CANVAS_WIDTH + 128, 64)
-    commands_pane.add_labelled_number_text_box(:y, _INTL("Y"), -128, CANVAS_HEIGHT + 128, 96)
+    commands_pane.add_labelled_number_text_box(:x, _INTL("X"), -(CANVAS_WIDTH + 128), CANVAS_WIDTH + 128, 0)
+    commands_pane.add_labelled_number_text_box(:y, _INTL("Y"), -(CANVAS_WIDTH + 128), CANVAS_HEIGHT + 128, 0)
+    # TODO: If the graphic is user's sprite/target's sprite, make :frame instead
+    #       a choice of front/back/same as the main sprite/opposite of the main
+    #       sprite. Will need two controls in the same space.
+    commands_pane.add_labelled_number_text_box(:frame, _INTL("Frame"), 0, 99, 0)
     commands_pane.add_labelled_checkbox(:visible, _INTL("Visible"), true)
     commands_pane.add_labelled_number_slider(:opacity, _INTL("Opacity"), 0, 255, 255)
     commands_pane.add_labelled_number_text_box(:zoom_x, _INTL("Zoom X"), 0, 1000, 100)
@@ -273,12 +297,14 @@ class AnimationEditor
     # Create "opp" variant
     anim_properties.add_labelled_checkbox(:opp_variant, _INTL("User is opposing?"), false)
     # Create move control
-    # TODO: Also make a TextBox here for common animations, and toggle these two
-    #       controls' visibility depending on :type?
+    # TODO: Instead of having the :common_anim TextBox control, make this a
+    #       TextBoxDropdownList control instead. Make it allow custom text
+    #       as well as any option in the list. Its options will be changed
+    #       depending on the animation's type. Also have a list of existing
+    #       Common animation names for it.
     move_list = []
     GameData::Move.each { |m| move_list.push([m.id.to_s, m.name]) }
     move_list.sort! { |a, b| a[1] <=> b[1] }
-    # TODO: Make this a TextBoxDropdownList instead.
     anim_properties.add_labelled_dropdown_list(:move, _INTL("Move"), move_list.to_h, move_list[0][0])
     move_ctrl = anim_properties.get_control(:move)
     move_ctrl.max_rows = 16
@@ -297,9 +323,69 @@ class AnimationEditor
     # TODO: List, TextBox and some Buttons to add/delete.
     # Create "usable in battle" control
     anim_properties.add_labelled_checkbox(:usable, _INTL("Can be used in battle?"), true)
-    # TODO: "Play if target is on the same side as the user".
     anim_properties.add_button(:close, _INTL("Close"))
     anim_properties.visible = false
+  end
+
+  def set_graphic_chooser_contents
+    graphic_chooser = @components[:graphic_chooser]
+    graphic_chooser.add_header_label(:header, _INTL("Choose a file"))
+    # List of files
+    list = UIControls::List.new(CHOOSER_FILE_LIST_WIDTH, CHOOSER_FILE_LIST_HEIGHT, graphic_chooser.viewport, [])
+    graphic_chooser.add_control_at(:list, list, CHOOSER_FILE_LIST_X, CHOOSER_FILE_LIST_Y)
+    # Buttons
+    [[:ok, _INTL("OK")], [:cancel, _INTL("Cancel")]].each_with_index do |option, i|
+      btn = UIControls::Button.new(CHOOSER_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, graphic_chooser.viewport, option[1])
+      btn.set_fixed_size
+      graphic_chooser.add_control_at(option[0], btn,
+                                     CHOOSER_FILE_LIST_X + (CHOOSER_BUTTON_WIDTH * i),
+                                     CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 4)
+    end
+    graphic_chooser.visible = false
+  end
+
+  def set_audio_chooser_contents
+    audio_chooser = @components[:audio_chooser]
+    audio_chooser.add_header_label(:header, _INTL("Choose a file"))
+    # List of files
+    list = UIControls::List.new(CHOOSER_FILE_LIST_WIDTH, CHOOSER_FILE_LIST_HEIGHT, audio_chooser.viewport, [])
+    audio_chooser.add_control_at(:list, list, CHOOSER_FILE_LIST_X, CHOOSER_FILE_LIST_Y)
+    # Buttons
+    [[:ok, _INTL("OK")], [:cancel, _INTL("Cancel")]].each_with_index do |option, i|
+      btn = UIControls::Button.new(CHOOSER_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, audio_chooser.viewport, option[1])
+      btn.set_fixed_size
+      audio_chooser.add_control_at(option[0], btn,
+                                   CHOOSER_FILE_LIST_X + (CHOOSER_BUTTON_WIDTH * i),
+                                   CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 4)
+    end
+    # Volume and pitch sliders
+    [[:volume, _INTL("Volume"), 0, 100], [:pitch, _INTL("Pitch"), 0, 200]].each_with_index do |option, i|
+      label = UIControls::Label.new(AUDIO_CHOOSER_LABEL_WIDTH, 28, audio_chooser.viewport, option[1])
+      audio_chooser.add_control_at((option[0].to_s + "_label").to_sym, label,
+                                   list.x + list.width + 8, list.y + (28 * i))
+      slider = UIControls::NumberSlider.new(AUDIO_CHOOSER_SLIDER_WIDTH, 28, audio_chooser.viewport, option[2], option[3], 100)
+      audio_chooser.add_control_at(option[0], slider, label.x + label.width, label.y)
+    end
+    # Playback buttons
+    [[:play, _INTL("Play")], [:stop, _INTL("Stop")]].each_with_index do |option, i|
+      btn = UIControls::Button.new(CHOOSER_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, audio_chooser.viewport, option[1])
+      btn.set_fixed_size
+      audio_chooser.add_control_at(option[0], btn,
+                                   list.x + list.width + 8 + (CHOOSER_BUTTON_WIDTH * i),
+                                   list.y + (28 * 2))
+    end
+    audio_chooser.visible = false
+  end
+
+  def set_components_contents
+    set_menu_bar_contents
+    set_canvas_contents
+    set_play_controls_contents
+    set_side_panes_contents
+    set_particle_list_contents
+    set_animation_properties_contents
+    set_graphic_chooser_contents
+    set_audio_chooser_contents
   end
 
   #-----------------------------------------------------------------------------
@@ -320,19 +406,17 @@ class AnimationEditor
   #-----------------------------------------------------------------------------
 
   def draw_editor_background
-    draw_big_outline = lambda do |bitmap, x, y, width, height|
-      BORDER_THICKNESS.times do |i|
-        col = (i.even?) ? Color.white : Color.black
-        bitmap.outline_rect(x - i - 1, y - i - 1, width + (i * 2) + 2, height + (i * 2) + 2, col)
-      end
-    end
     # Fill the whole screen with white
     @screen_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.white)
     # Outline around elements
-    draw_big_outline.call(@screen_bitmap.bitmap, CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT)
-    draw_big_outline.call(@screen_bitmap.bitmap, PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT)
-    draw_big_outline.call(@screen_bitmap.bitmap, SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
-    draw_big_outline.call(@screen_bitmap.bitmap, PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT)
+    @screen_bitmap.bitmap.border_rect(CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT,
+                                      BORDER_THICKNESS, Color.white, Color.black)
+    @screen_bitmap.bitmap.border_rect(PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT,
+                                      BORDER_THICKNESS, Color.white, Color.black)
+    @screen_bitmap.bitmap.border_rect(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT,
+                                      BORDER_THICKNESS, Color.white, Color.black)
+    @screen_bitmap.bitmap.border_rect(PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT,
+                                      BORDER_THICKNESS, Color.white, Color.black)
     # Draw box around SE list box in side pane
     @se_list_box_bitmap.bitmap.outline_rect(SIDE_PANE_X + 3, SIDE_PANE_Y + 24 + 4,
                                             SIDE_PANE_WIDTH - 6, (5 * UIControls::List::ROW_HEIGHT) + 4, Color.black)
@@ -365,14 +449,14 @@ class AnimationEditor
     case component_sym
     when :commands_pane
       new_vals = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(@anim[:particles][particle_index], keyframe)
-      # TODO: Need to do something special for :color, :tone and :frame which
-      #       all have button controls.
       component.controls.each do |ctrl|
         next if !new_vals.include?(ctrl[0])
         ctrl[1].value = new_vals[ctrl[0]][0] if ctrl[1].respond_to?("value=")
         # TODO: new_vals[ctrl[0]][1] is whether the value is being interpolated,
         #       which should be indicated somehow in ctrl[1].
       end
+      # TODO: component.get_control(:frame).disable if the particle's graphic is
+      #       not a spritesheet or is "USER"/"TARGET"/etc. (enable otherwise).
     when :se_pane
       se_particle = @anim[:particles].select { |p| p[:name] == "SE" }[0]
       kyfrm = keyframe
@@ -428,18 +512,20 @@ class AnimationEditor
         component.get_control(:graphic).enable
         component.get_control(:focus).enable
       end
+      # TODO: Set the possible focus options depending on whether the animation
+      #       has a target/user.
     when :animation_properties
       case @anim[:type]
       when :move, :opp_move
         component.get_control(:move_label).text = _INTL("Move")
         component.get_control(:move).visible = true
-        component.get_control(:move).value = @anim[:move].dup
+        component.get_control(:move).value = @anim[:move]
         component.get_control(:common_anim).visible = false
       when :common, :opp_common
         component.get_control(:move_label).text = _INTL("Common animation")
         component.get_control(:move).visible = false
         component.get_control(:common_anim).visible = true
-        component.get_control(:common_anim).value = @anim[:move].dup
+        component.get_control(:common_anim).value = @anim[:move]
       end
       # TODO: Maybe other things as well?
     end
@@ -458,8 +544,6 @@ class AnimationEditor
 
   #-----------------------------------------------------------------------------
 
-  # TODO: Every component that contains a button, etc. should respond to
-  #       "values", which returns the changed elements.
   def apply_changed_value(component_sym, property, value)
     case component_sym
     when :menu_bar
@@ -544,7 +628,7 @@ class AnimationEditor
         if @anim[:particles][p_index][:graphic] != new_file
           @anim[:particles][p_index][:graphic] = new_file
           refresh_component(:particle_pane)
-          # TODO: refresh_component(:canvas)
+          refresh_component(:canvas)
         end
       else
         particle = @anim[:particles][particle_index]
@@ -572,7 +656,7 @@ class AnimationEditor
       when :common_anim
         @anim[:move] = value
       when :pbs_path
-        txt = value.dup.gsub!(/\.txt$/, "")
+        txt = value.gsub!(/\.txt$/, "")
         @anim[property] = txt
       when :has_target
         @anim[:no_target] = !value

@@ -78,4 +78,4 @@ Name = COTTONGUARD
     SetX = 4,129
     SetY = 4,237
 <SE>
-    Play = 0,Substitute,80,100
+    Play = 0,Substitute,80

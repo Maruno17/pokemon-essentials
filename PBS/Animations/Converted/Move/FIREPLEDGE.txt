@@ -32,4 +32,4 @@ Name = FIREPLEDGE
     SetY = 6,98
     SetY = 7,95
 <SE>
-    Play = 0,Mega Punch,100,100
+    Play = 0,Mega Punch

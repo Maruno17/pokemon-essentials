@@ -26,4 +26,4 @@ Name = KINESIS
     SetX = 8,385
     SetY = 8,93
 <SE>
-    Play = 0,Trump Card,86,100
+    Play = 0,Trump Card,86

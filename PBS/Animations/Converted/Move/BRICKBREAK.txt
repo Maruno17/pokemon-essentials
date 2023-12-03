@@ -32,4 +32,4 @@ Name = BRICKBREAK
     SetX = 7,440
     SetY = 7,166
 <SE>
-    Play = 4,Blow7,80,100
+    Play = 4,Blow7,80

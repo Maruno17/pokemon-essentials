@@ -130,4 +130,4 @@ Name = POISONGAS
     SetX = 6,204
     SetY = 6,173
 <SE>
-    Play = 0,Wind8,80,100
+    Play = 0,Wind8,80

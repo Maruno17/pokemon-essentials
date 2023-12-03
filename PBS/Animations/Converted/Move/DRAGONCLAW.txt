@@ -18,5 +18,5 @@ Name = DRAGONCLAW
     SetY = 2,102
     SetAngle = 2,0
 <SE>
-    Play = 0,Slash9,80,100
-    Play = 0,Thunder4,80,100
+    Play = 0,Slash9,80
+    Play = 0,Thunder4,80
