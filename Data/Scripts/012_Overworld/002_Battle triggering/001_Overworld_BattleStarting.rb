@@ -38,6 +38,8 @@ class Game_Temp
     when "canrun"                 then rules["canRun"]              = true
     when "cannotrun"              then rules["canRun"]              = false
     when "roamerflees"            then rules["roamerFlees"]         = true
+    when "canswitch"              then rules["canSwitch"]           = true
+    when "cannotswitch"           then rules["canSwitch"]           = false
     when "noexp"                  then rules["expGain"]             = false
     when "nomoney"                then rules["moneyGain"]           = false
     when "disablepokeballs"       then rules["disablePokeBalls"]    = true
@@ -187,7 +189,8 @@ module BattleCreationHelperMethods
       ally = NPCTrainer.new($PokemonGlobal.partner[1], $PokemonGlobal.partner[0])
       ally.id    = $PokemonGlobal.partner[2]
       ally.party = $PokemonGlobal.partner[3]
-      ally_items[1] = ally.items.clone
+      data = GameData::Trainer.try_get($PokemonGlobal.partner[0], $PokemonGlobal.partner[1], $PokemonGlobal.partner[2])
+      ally_items[1] = data&.items.clone || []
       trainer_array.push(ally)
       pokemon_array = []
       $player.party.each { |pkmn| pokemon_array.push(pkmn) }
@@ -211,6 +214,8 @@ module BattleCreationHelperMethods
     battle.canLose = battleRules["canLose"] if !battleRules["canLose"].nil?
     # Whether the player can choose to run from the battle (default: true)
     battle.canRun = battleRules["canRun"] if !battleRules["canRun"].nil?
+    # Whether the player can manually choose to switch out Pokémon (default: true)
+    battle.canSwitch = battleRules["canSwitch"] if !battleRules["canSwitch"].nil?
     # Whether wild Pokémon always try to run from battle (default: nil)
     battle.rules["alwaysflee"] = battleRules["roamerFlees"]
     # Whether Pokémon gain Exp/EVs from defeating/catching a Pokémon (default: true)

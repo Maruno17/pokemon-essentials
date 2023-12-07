@@ -9,7 +9,7 @@ class Battle::AI
   # Returns a value between 0.0 and 1.0. All move scores are lowered by this
   # value multiplied by the highest-scoring move's score.
   def move_score_threshold
-    return 0.6 + 0.35 * (([@trainer.skill, 100].min / 100.0) ** 0.5)   # 0.635 to 0.95
+    return 0.6 + (0.35 * (([@trainer.skill, 100].min / 100.0)**0.5))   # 0.635 to 0.95
   end
 
   #-----------------------------------------------------------------------------
@@ -43,7 +43,7 @@ class Battle::AI
       end
       # Get the move's target type
       target_data = @move.pbTarget(@user.battler)
-      if @move.function == "CurseTargetOrLowerUserSpd1RaiseUserAtkDef1" &&
+      if @move.function_code == "CurseTargetOrLowerUserSpd1RaiseUserAtkDef1" &&
          @move.rough_type == :GHOST && @user.has_active_ability?([:LIBERO, :PROTEAN])
         target_data = GameData::Target.get((Settings::MECHANICS_GENERATION >= 8) ? :RandomNearFoe : :NearFoe)
       end
@@ -140,7 +140,7 @@ class Battle::AI
 
   # Set some extra class variables for the move being assessed.
   def set_up_move_check(move)
-    case move.function
+    case move.function_code
     when "UseLastMoveUsed"
       if @battle.lastMoveUsed &&
          GameData::Move.exists?(@battle.lastMoveUsed) &&
@@ -159,9 +159,9 @@ class Battle::AI
   def set_up_move_check_target(target)
     @target = (target) ? @battlers[target.index] : nil
     @target&.refresh_battler
-    if @target && @move.function == "UseLastMoveUsedByTarget"
+    if @target && @move.function_code == "UseLastMoveUsedByTarget"
       if @target.battler.lastRegularMoveUsed &&
-        GameData::Move.exists?(@target.battler.lastRegularMoveUsed) &&
+         GameData::Move.exists?(@target.battler.lastRegularMoveUsed) &&
          GameData::Move.get(@target.battler.lastRegularMoveUsed).has_flag?("CanMirrorMove")
         @battle.moldBreaker = @user.has_mold_breaker?
         mov = Battle::Move.from_pokemon_move(@battle, Pokemon::Move.new(@target.battler.lastRegularMoveUsed))
@@ -187,7 +187,7 @@ class Battle::AI
     return true if @battle.pbWeather == :HeavyRain && @move.rough_type == :FIRE
     return true if @battle.pbWeather == :HarshSun && @move.rough_type == :WATER
     # Move effect-specific checks
-    return true if Battle::AI::Handlers.move_will_fail?(@move.function, @move, @user, self, @battle)
+    return true if Battle::AI::Handlers.move_will_fail?(@move.function_code, @move, @user, self, @battle)
     return false
   end
 
@@ -195,7 +195,7 @@ class Battle::AI
   # no battle conditions change between now and using the move).
   def pbPredictMoveFailureAgainstTarget
     # Move effect-specific checks
-    return true if Battle::AI::Handlers.move_will_fail_against_target?(@move.function, @move, @user, @target, self, @battle)
+    return true if Battle::AI::Handlers.move_will_fail_against_target?(@move.function_code, @move, @user, @target, self, @battle)
     # Immunity to priority moves because of Psychic Terrain
     return true if @battle.field.terrain == :Psychic && @target.battler.affectedByTerrain? &&
                    @target.opposes?(@user) && @move.rough_priority(@user) > 0
@@ -273,12 +273,12 @@ class Battle::AI
     if @trainer.has_skill_flag?("ScoreMoves")
       # Modify the score according to the move's effect
       old_score = score
-      score = Battle::AI::Handlers.apply_move_effect_score(@move.function,
+      score = Battle::AI::Handlers.apply_move_effect_score(@move.function_code,
          score, @move, @user, self, @battle)
       PBDebug.log_score_change(score - old_score, "function code modifier (generic)")
       # Modify the score according to various other effects
       score = Battle::AI::Handlers.apply_general_move_score_modifiers(
-         score, @move, @user, self, @battle)
+        score, @move, @user, self, @battle)
     end
     score = score.to_i
     score = 0 if score < 0
@@ -302,12 +302,12 @@ class Battle::AI
     if @trainer.has_skill_flag?("ScoreMoves")
       # Modify the score according to the move's effect against the target
       old_score = score
-      score = Battle::AI::Handlers.apply_move_effect_against_target_score(@move.function,
+      score = Battle::AI::Handlers.apply_move_effect_against_target_score(@move.function_code,
          MOVE_BASE_SCORE, @move, @user, @target, self, @battle)
       PBDebug.log_score_change(score - old_score, "function code modifier (against target)")
       # Modify the score according to various other effects against the target
       score = Battle::AI::Handlers.apply_general_move_against_target_score_modifiers(
-         score, @move, @user, @target, self, @battle)
+        score, @move, @user, @target, self, @battle)
     end
     # Add the score against the target to the overall score
     target_data = @move.pbTarget(@user.battler)
@@ -342,13 +342,17 @@ class Battle::AI
     if @trainer.high_skill? && @user.can_switch_lax?
       badMoves = false
       if max_score <= MOVE_USELESS_SCORE
-        badMoves = true
+        badMoves = user.can_attack?
+        badMoves = true if !badMoves && pbAIRandom(100) < 25
       elsif max_score < MOVE_BASE_SCORE * move_score_threshold && user_battler.turnCount > 2
         badMoves = true if pbAIRandom(100) < 80
       end
       if badMoves
         PBDebug.log_ai("#{@user.name} wants to switch due to terrible moves")
-        return if pbChooseToSwitchOut(true)
+        if pbChooseToSwitchOut(true)
+          @battle.pbUnregisterMegaEvolution(@user.index)
+          return
+        end
         PBDebug.log_ai("#{@user.name} won't switch after all")
       end
     end

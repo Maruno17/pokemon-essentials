@@ -198,7 +198,7 @@ class Battle::Move::FailsIfTargetActed < Battle::Move
     end
     oppMove = @battle.choices[target.index][2]
     if !oppMove ||
-       (oppMove.function != "UseMoveTargetIsAboutToUse" &&
+       (oppMove.function_code != "UseMoveTargetIsAboutToUse" &&
        (target.movedThisRound? || oppMove.statusMove?))
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
@@ -604,7 +604,8 @@ end
 class Battle::Move::AttackTwoTurnsLater < Battle::Move
   def targetsPosition?; return true; end
 
-  def pbDamagingMove?   # Stops damage being dealt in the setting-up turn
+  # Stops damage being dealt in the setting-up turn.
+  def pbDamagingMove?
     return false if !@battle.futureSight
     return super
   end

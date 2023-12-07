@@ -28,6 +28,7 @@ class Game_Picture
     @opacity = 255.0
     @blend_type = 1
     @duration = 0
+    @move_timer_start = nil
     @target_x = @x
     @target_y = @y
     @target_zoom_x = @zoom_x
@@ -36,6 +37,7 @@ class Game_Picture
     @tone = Tone.new(0, 0, 0, 0)
     @tone_target = Tone.new(0, 0, 0, 0)
     @tone_duration = 0
+    @tone_timer_start = nil
     @angle = 0
     @rotate_speed = 0
   end
@@ -67,12 +69,13 @@ class Game_Picture
     @tone = Tone.new(0, 0, 0, 0)
     @tone_target = Tone.new(0, 0, 0, 0)
     @tone_duration = 0
+    @tone_timer_start = nil
     @angle = 0
     @rotate_speed = 0
   end
 
   # Move Picture
-  #     duration   : time
+  #     duration   : time in 1/20ths of a second
   #     origin     : starting point
   #     x          : x-coordinate
   #     y          : y-coordinate
@@ -81,57 +84,79 @@ class Game_Picture
   #     opacity    : opacity level
   #     blend_type : blend method
   def move(duration, origin, x, y, zoom_x, zoom_y, opacity, blend_type)
-    @duration       = duration
-    @origin         = origin
-    @target_x       = x.to_f
-    @target_y       = y.to_f
-    @target_zoom_x  = zoom_x.to_f
-    @target_zoom_y  = zoom_y.to_f
-    @target_opacity = opacity.to_f
-    @blend_type     = blend_type || 0
+    @duration         = duration / 20.0
+    @origin           = origin
+    @initial_x        = @x
+    @initial_y        = @y
+    @target_x         = x.to_f
+    @target_y         = y.to_f
+    @initial_zoom_x   = @zoom_x
+    @initial_zoom_y   = @zoom_y
+    @target_zoom_x    = zoom_x.to_f
+    @target_zoom_y    = zoom_y.to_f
+    @initial_opacity  = @opacity
+    @target_opacity   = opacity.to_f
+    @blend_type       = blend_type || 0
+    @move_timer_start = $stats.play_time
   end
 
   # Change Rotation Speed
-  #     speed : rotation speed
+  #     speed : rotation speed (degrees to change per 1/20th of a second)
   def rotate(speed)
+    @rotate_timer = (speed == 0) ? nil : System.uptime   # Time since last frame
     @rotate_speed = speed
   end
 
   # Start Change of Color Tone
   #     tone     : color tone
-  #     duration : time
+  #     duration : time in 1/20ths of a second
   def start_tone_change(tone, duration)
+    if duration == 0
+      @tone = tone.clone
+      return
+    end
+    @tone_initial = @tone.clone
     @tone_target = tone.clone
-    @tone_duration = duration
-    @tone = @tone_target.clone if @tone_duration == 0
+    @tone_duration = duration / 20.0
+    @tone_timer_start = $stats.play_time
   end
 
-  # Erase Picture
   def erase
     @name = ""
   end
 
-  # Frame Update
   def update
-    if @duration >= 1
-      d = @duration
-      @x = ((@x * (d - 1)) + @target_x) / d
-      @y = ((@y * (d - 1)) + @target_y) / d
-      @zoom_x = ((@zoom_x * (d - 1)) + @target_zoom_x) / d
-      @zoom_y = ((@zoom_y * (d - 1)) + @target_zoom_y) / d
-      @opacity = ((@opacity * (d - 1)) + @target_opacity) / d
-      @duration -= 1
+    return if @name == ""
+    now = $stats.play_time
+    if @move_timer_start
+      @x = lerp(@initial_x, @target_x, @duration, @move_timer_start, now)
+      @y = lerp(@initial_y, @target_y, @duration, @move_timer_start, now)
+      @zoom_x = lerp(@initial_zoom_x, @target_zoom_x, @duration, @move_timer_start, now)
+      @zoom_y = lerp(@initial_zoom_y, @target_zoom_y, @duration, @move_timer_start, now)
+      @opacity = lerp(@initial_opacity, @target_opacity, @duration, @move_timer_start, now)
+      if now - @move_timer_start >= @duration
+        @initial_x        = nil
+        @initial_y        = nil
+        @initial_zoom_x   = nil
+        @initial_zoom_y   = nil
+        @initial_opacity  = nil
+        @move_timer_start = nil
+      end
     end
-    if @tone_duration >= 1
-      d = @tone_duration
-      @tone.red = ((@tone.red * (d - 1)) + @tone_target.red) / d
-      @tone.green = ((@tone.green * (d - 1)) + @tone_target.green) / d
-      @tone.blue = ((@tone.blue * (d - 1)) + @tone_target.blue) / d
-      @tone.gray = ((@tone.gray * (d - 1)) + @tone_target.gray) / d
-      @tone_duration -= 1
+    if @tone_timer_start
+      @tone.red = lerp(@tone_initial.red, @tone_target.red, @tone_duration, @tone_timer_start, now)
+      @tone.green = lerp(@tone_initial.green, @tone_target.green, @tone_duration, @tone_timer_start, now)
+      @tone.blue = lerp(@tone_initial.blue, @tone_target.blue, @tone_duration, @tone_timer_start, now)
+      @tone.gray = lerp(@tone_initial.gray, @tone_target.gray, @tone_duration, @tone_timer_start, now)
+      if now - @tone_timer_start >= @tone_duration
+        @tone_initial = nil
+        @tone_timer_start = nil
+      end
     end
     if @rotate_speed != 0
-      @angle += @rotate_speed / 2.0
+      @rotate_timer = System.uptime if !@rotate_timer
+      @angle += @rotate_speed * (System.uptime - @rotate_timer) * 20.0
+      @rotate_timer = System.uptime
       while @angle < 0
         @angle += 360
       end

@@ -139,8 +139,8 @@ class Battle::AI
     # Find items usable on other Pokémon in the user's team
     # NOTE: Currently only checks Revives.
     usable_items = {}
-    @battle.eachInTeamFromBattlerIndex(@user.index) do |pkmn, i|
-      next if !pkmn.fainted?   # Remove this line to check unfainted Pokémon too
+    @battle.eachInTeamFromBattlerIndex(@user.index) do |team_pkmn, i|
+      next if !team_pkmn.fainted?   # Remove this line to check unfainted Pokémon too
       items.each do |item|
         usage = get_usability_of_item_on_pkmn(item, i, @user.side)
         usage.each_pair do |key, vals|

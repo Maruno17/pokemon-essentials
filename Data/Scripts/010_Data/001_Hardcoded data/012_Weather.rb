@@ -72,10 +72,10 @@ GameData::Weather.register({
   :id_number        => 1,   # Must be 1 (preset RMXP weather)
   :category         => :Rain,
   :graphics         => [["rain_1", "rain_2", "rain_3", "rain_4"]],   # Last is splash
-  :particle_delta_x => -1200,
-  :particle_delta_y => 4800,
+  :particle_delta_x => -600,
+  :particle_delta_y => 2400,
   :tone_proc        => proc { |strength|
-    next Tone.new(-strength * 3 / 4, -strength * 3 / 4, -strength * 3 / 4, 10)
+    next Tone.new(-strength / 2, -strength / 2, -strength / 2, 10)
   }
 })
 
@@ -85,10 +85,10 @@ GameData::Weather.register({
   :id_number        => 2,   # Must be 2 (preset RMXP weather)
   :category         => :Rain,
   :graphics         => [["storm_1", "storm_2", "storm_3", "storm_4"]],   # Last is splash
-  :particle_delta_x => -4800,
-  :particle_delta_y => 4800,
+  :particle_delta_x => -3600,
+  :particle_delta_y => 3600,
   :tone_proc        => proc { |strength|
-    next Tone.new(-strength * 3 / 2, -strength * 3 / 2, -strength * 3 / 2, 20)
+    next Tone.new(-strength * 3 / 4, -strength * 3 / 4, -strength * 3 / 4, 10)
   }
 })
 
@@ -110,10 +110,10 @@ GameData::Weather.register({
   :id_number        => 4,
   :category         => :Hail,
   :graphics         => [["blizzard_1", "blizzard_2", "blizzard_3", "blizzard_4"], ["blizzard_tile"]],
-  :particle_delta_x => -960,
+  :particle_delta_x => -720,
   :particle_delta_y => 240,
-  :tile_delta_x     => -1440,
-  :tile_delta_y     => 720,
+  :tile_delta_x     => -1200,
+  :tile_delta_y     => 600,
   :tone_proc        => proc { |strength|
     next Tone.new(strength * 3 / 4, strength * 3 / 4, strength * 3 / 4, 0)
   }
@@ -126,8 +126,8 @@ GameData::Weather.register({
   :graphics         => [["sandstorm_1", "sandstorm_2", "sandstorm_3", "sandstorm_4"], ["sandstorm_tile"]],
   :particle_delta_x => -1200,
   :particle_delta_y => 640,
-  :tile_delta_x     => -720,
-  :tile_delta_y     => 360,
+  :tile_delta_x     => -800,
+  :tile_delta_y     => 400,
   :tone_proc        => proc { |strength|
     next Tone.new(strength / 2, 0, -strength / 2, 0)
   }
@@ -138,10 +138,10 @@ GameData::Weather.register({
   :id_number        => 6,
   :category         => :Rain,
   :graphics         => [["storm_1", "storm_2", "storm_3", "storm_4"]],   # Last is splash
-  :particle_delta_x => -4800,
-  :particle_delta_y => 4800,
+  :particle_delta_x => -3600,
+  :particle_delta_y => 3600,
   :tone_proc        => proc { |strength|
-    next Tone.new(-strength * 3 / 2, -strength * 3 / 2, -strength * 3 / 2, 20)
+    next Tone.new(-strength * 3 / 4, -strength * 3 / 4, -strength * 3 / 4, 10)
   }
 })
 

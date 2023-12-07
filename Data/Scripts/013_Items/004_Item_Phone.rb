@@ -1,25 +1,3 @@
-# TODO: Add an information window with details of the person in a phone call.
-#       Make this work with common event calls (create and dispose the info
-#       window in start_message and end_message).
-# TODO: Look at the "ready to rematch" timers to see if they can be improved?
-#       Should they be limited to one trainer becoming ready every ~5 minutes?
-#       Should a rematch-ready contact become unready again after some time if
-#       they haven't told the player they're ready?
-# TODO: See if incoming phone calls can be made optional somehow. Maybe just
-#       interrupt as normal with the start of the call and ask if the player
-#       wants to answer? Wait for a couple of seconds before asking to make sure
-#       the player doesn't accidentally skip/answer a call they didn't want to.
-# TODO: Add a Debug way of upgrading old phone script calls to new ones, or at
-#       least to find events using old phone scripts for the dev to update.
-# TODO: More Debug control over contacts (changing their "time to rebattle",
-#       unhiding hidden contacts, etc.) and the phone (time until next call).
-
-# TODO: Add calling a contact at a particular time forcing rematch readiness.
-#       Add trainer comments for this.
-# TODO: Allow individual trainers to never arrange a rematch by themself, thus
-#       requiring the player to call them at their particular time of day/week.
-# TODO: Be able to put the Phone on silent mode (prevent all phone calls from
-#       trainers, but allow scripted calls as normal).
 #===============================================================================
 #
 #===============================================================================
@@ -201,7 +179,7 @@ class Phone
       else
         contact = $PokemonGlobal.phone.get(false, args[1])
       end
-      pbMessage(_INTL("\\me[Register phone]Registered {1} in the Pokégear!", contact.display_name))
+      pbMessage(_INTL("\\me[Register phone]Registered {1} in the Pokégear!", contact.display_name) + "\\wtnp[60]")
     end
     return ret
   end
@@ -342,7 +320,7 @@ class Phone
     module_function
 
     def can_make?
-      return false if $game_map.metadata.has_flag?("NoPhoneSignal")
+      return false if $game_map.metadata&.has_flag?("NoPhoneSignal")
       return true
     end
 
@@ -378,8 +356,8 @@ class Phone
       valid_contacts = []
       $PokemonGlobal.phone.contacts.each do |contact|
         next if !contact.trainer? || !contact.visible?
-        next if contact.map_id == $game_map.map_id
-        # TODO: next if the contact's map name is the same as the current map's?
+        next if contact.map_id == $game_map.map_id ||
+                pbGetMapNameFromId(contact.map_id) == $game_map.name
         caller_map_metadata = GameData::MapMetadata.try_get(contact.map_id)
         next if !caller_map_metadata || !caller_map_metadata.town_map_position
         next if caller_map_metadata.town_map_position[0] != player_region

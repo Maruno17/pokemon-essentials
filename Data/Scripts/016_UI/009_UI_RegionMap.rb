@@ -208,7 +208,7 @@ class PokemonRegionMap_Scene
     end
   end
 
-  def pbGetMapDetails(x, y)   # From Wichu, with my help
+  def pbGetMapDetails(x, y)
     return "" if !@map.point
     @map.point.each do |point|
       next if point[0] != x || point[1] != y
@@ -308,7 +308,8 @@ class PokemonRegionMap_Scene
         end
       elsif Input.trigger?(Input::USE) && @editor   # Intentionally after other USE input check
         pbChangeMapLocation(@map_x, @map_y)
-      elsif Input.trigger?(Input::ACTION) && !@wallmap && !@fly_map && pbCanFly?
+      elsif Input.trigger?(Input::ACTION) && Settings::CAN_FLY_FROM_TOWN_MAP &&
+            !@wallmap && !@fly_map && pbCanFly?
         pbPlayDecisionSE
         @mode = (@mode == 1) ? 0 : 1
         refresh_fly_screen

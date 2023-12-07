@@ -123,7 +123,6 @@ class Window
     @back_opacity = 255
     @contents_opacity = 255
     @cursor_rect = WindowCursorRect.new(self)
-    @cursorblink = 0
     @cursoropacity = 255
     @pause = false
     @pauseopacity = 255
@@ -302,12 +301,11 @@ class Window
     return if disposed?
     mustchange = false
     if @active
-      if @cursorblink == 0
-        @cursoropacity -= 8
-        @cursorblink = 1 if @cursoropacity <= 128
+      cursor_time = System.uptime / 0.4
+      if cursor_time.to_i.even?
+        @cursoropacity = lerp(255, 128, 0.4, cursor_time % 2)
       else
-        @cursoropacity += 8
-        @cursorblink = 0 if @cursoropacity >= 255
+        @cursoropacity = lerp(128, 255, 0.4, (cursor_time - 1) % 2)
       end
       mustchange = true if !@cursor_rect.empty?
     else
@@ -315,7 +313,7 @@ class Window
       @cursoropacity = 128
     end
     if @pause
-      @pauseframe = (Graphics.frame_count / 8) % 4
+      @pauseframe = (System.uptime * 5).to_i % 4   # 4 frames, 5 frames per second
       @pauseopacity = [@pauseopacity + 64, 255].min
       mustchange = true
     end

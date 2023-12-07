@@ -231,7 +231,7 @@ class PlayerRating
     t = (deviation * deviation) + (volatility * volatility)
     deviation = 1.0 / Math.sqrt((1.0 / t) + (1.0 / variance))
     # Update rating
-    rating = rating + (deviation * deviation * sum)
+    rating += deviation * deviation * sum
     setRating2(rating)
     setDeviation2(deviation)
     setVolatility2(volatility)

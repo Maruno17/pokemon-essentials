@@ -13,6 +13,7 @@ module GameData
     attr_reader :battle_use
     attr_reader :flags
     attr_reader :consumable
+    attr_reader :show_quantity
     attr_reader :move
     attr_reader :real_description
     attr_reader :pbs_file_suffix
@@ -37,6 +38,7 @@ module GameData
                                                                "OnBattler" => 3, "OnFoe" => 4, "Direct" => 5}],
       "Flags"             => [:flags,                    "*s"],
       "Consumable"        => [:consumable,               "b"],
+      "ShowQuantity"      => [:show_quantity,            "b"],
       "Move"              => [:move,                     "e", :Move],
       "Description"       => [:real_description,         "q"]
     }
@@ -63,6 +65,7 @@ module GameData
         ["BattleUse",         EnumProperty.new(battle_use_array),      _INTL("How this item can be used within a battle.")],
         ["Flags",             StringListProperty,                      _INTL("Words/phrases that can be used to group certain kinds of items.")],
         ["Consumable",        BooleanProperty,                         _INTL("Whether this item is consumed after use.")],
+        ["ShowQuantity",      BooleanProperty,                         _INTL("Whether the Bag shows how many of this item are in there.")],
         ["Move",              MoveProperty,                            _INTL("Move taught by this HM, TM or TR.")],
         ["Description",       StringProperty,                          _INTL("Description of this item.")]
       ]
@@ -128,6 +131,7 @@ module GameData
       @flags                    = hash[:flags]            || []
       @consumable               = hash[:consumable]
       @consumable               = !is_important? if @consumable.nil?
+      @show_quantity            = hash[:show_quantity]
       @move                     = hash[:move]
       @real_description         = hash[:real_description] || "???"
       @pbs_file_suffix          = hash[:pbs_file_suffix]  || ""
@@ -191,6 +195,10 @@ module GameData
 
     def consumed_after_use?
       return !is_important? && @consumable
+    end
+
+    def show_quantity?
+      return @show_quantity || !is_important?
     end
 
     def unlosable?(species, ability)

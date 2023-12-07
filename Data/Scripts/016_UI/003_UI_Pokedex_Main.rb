@@ -265,7 +265,7 @@ class PokemonPokedex_Scene
     @sliderbitmap       = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_slider")
     @typebitmap         = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_types"))
     @shapebitmap        = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_shapes")
-    @hwbitmap           = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_hw")
+    @hwbitmap           = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_hw"))
     @selbitmap          = AnimatedBitmap.new("Graphics/UI/Pokedex/icon_searchsel")
     @searchsliderbitmap = AnimatedBitmap.new(_INTL("Graphics/UI/Pokedex/icon_searchslider"))
     @sprites = {}
@@ -1054,7 +1054,7 @@ class PokemonPokedex_Scene
         break
       elsif Input.trigger?(Input::USE)
         if index == -2      # OK
-          pbPlayDecisionSE
+          pbSEPlay("GUI pokedex open")
           ret = selindex
           break
         elsif index == -3   # Cancel
@@ -1177,7 +1177,7 @@ class PokemonPokedex_Scene
         pbPlayCloseMenuSE
         break
       elsif Input.trigger?(Input::USE)
-        pbPlayDecisionSE if index != 9
+        pbSEPlay("GUI pokedex open") if index != 9
         case index
         when 0   # Choose sort order
           newparam = pbDexSearchCommands(0, [params[0]], index)
@@ -1264,21 +1264,20 @@ class PokemonPokedex_Scene
           pbRefresh
         end
         if Input.trigger?(Input::ACTION)
-          pbPlayDecisionSE
+          pbSEPlay("GUI pokedex open")
           @sprites["pokedex"].active = false
           pbDexSearch
           @sprites["pokedex"].active = true
         elsif Input.trigger?(Input::BACK)
+          pbPlayCloseMenuSE
           if @searchResults
-            pbPlayCancelSE
             pbCloseSearch
           else
-            pbPlayCloseMenuSE
             break
           end
         elsif Input.trigger?(Input::USE)
           if $player.seen?(@sprites["pokedex"].species)
-            pbPlayDecisionSE
+            pbSEPlay("GUI pokedex open")
             pbDexEntry(@sprites["pokedex"].index)
           end
         end

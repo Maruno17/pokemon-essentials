@@ -155,18 +155,23 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("EffectDependsOnEnvironme
       function_code = "ParalyzeTarget"
     when 9
       function_code = "FreezeTarget"
-    when 5
-      function_code = "LowerTargetAttack1"
-    when 14
-      function_code = "LowerTargetDefense1"
-    when 3
-      function_code = "LowerTargetSpAtk1"
-    when 4, 6, 12
-      function_code = "LowerTargetSpeed1"
-    when 8
-      function_code = "LowerTargetAccuracy1"
     when 7, 11, 13
       function_code = "FlinchTarget"
+    else
+      stat_lowered = nil
+      case move.move.secretPower
+      when 5
+        function_code = :ATTACK
+      when 14
+        function_code = :DEFENSE
+      when 3
+        function_code = :SPECIAL_ATTACK
+      when 4, 6, 12
+        function_code = :SPEED
+      when 8
+        function_code = :ACCURACY
+      end
+      next ai.get_score_for_target_stat_drop(score, target, [stat_lowered, 1]) if stat_lowered
     end
     if function_code
       next Battle::AI::Handlers.apply_move_effect_against_target_score(function_code,
@@ -531,7 +536,7 @@ Battle::AI::Handlers::MoveFailureCheck.add("UseRandomUserMoveIfAsleep",
   proc { |move, user, ai, battle|
     will_fail = true
     user.battler.eachMoveWithIndex do |m, i|
-      next if move.move.moveBlacklist.include?(m.function)
+      next if move.move.moveBlacklist.include?(m.function_code)
       next if !battle.pbCanChooseMove?(user.index, i, false, true)
       will_fail = false
       break

@@ -416,8 +416,8 @@ class Interpreter
         result = ($game_self_switches[key] == (@parameters[2] == 0))
       end
     when 3   # timer
-      if $game_system.timer_working
-        sec = $game_system.timer / Graphics.frame_rate
+      if $game_system.timer_start
+        sec = $game_system.timer
         result = (@parameters[2] == 0) ? (sec >= @parameters[1]) : (sec <= @parameters[1])
       end
 #    when 4, 5   # actor, enemy
@@ -588,13 +588,13 @@ class Interpreter
       end
     when 7   # other
       case @parameters[4]
-      when 0 then value = $game_map.map_id                             # map ID
-      when 1 then value = $player.pokemon_party.length                 # party members
-      when 2 then value = $player.money                                # gold
-#      when 3   # steps
-      when 4 then value = Graphics.frame_count / Graphics.frame_rate   # play time
-      when 5 then value = $game_system.timer / Graphics.frame_rate     # timer
-      when 6 then value = $game_system.save_count                      # save count
+      when 0 then value = $game_map.map_id          # map ID
+      when 1 then value = $player.pokemon_count     # party members
+      when 2 then value = $player.money             # gold
+      when 3 then value = $stats.distance_moved     # steps
+      when 4 then value = $stats.play_time          # play time
+      when 5 then value = $game_system.timer        # timer
+      when 6 then value = $game_system.save_count   # save count
       end
     end
     # Apply value and operation to all specified game variables
@@ -645,8 +645,8 @@ class Interpreter
   # * Control Timer
   #-----------------------------------------------------------------------------
   def command_124
-    $game_system.timer_working = (@parameters[0] == 0)
-    $game_system.timer = @parameters[1] * Graphics.frame_rate if @parameters[0] == 0
+    $game_system.timer_start = (@parameters[0] == 0) ? $stats.play_time : nil
+    $game_system.timer_duration = @parameters[1] if @parameters[0] == 0
     return true
   end
 
@@ -815,7 +815,7 @@ class Interpreter
   # * Change Fog Color Tone
   #-----------------------------------------------------------------------------
   def command_205
-    $game_map.start_fog_tone_change(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
+    $game_map.start_fog_tone_change(@parameters[0], @parameters[1])
     return true
   end
 
@@ -823,7 +823,7 @@ class Interpreter
   # * Change Fog Opacity
   #-----------------------------------------------------------------------------
   def command_206
-    $game_map.start_fog_opacity_change(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
+    $game_map.start_fog_opacity_change(@parameters[0], @parameters[1])
     return true
   end
 
@@ -897,7 +897,7 @@ class Interpreter
   # * Change Screen Color Tone
   #-----------------------------------------------------------------------------
   def command_223
-    $game_screen.start_tone_change(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
+    $game_screen.start_tone_change(@parameters[0], @parameters[1])
     return true
   end
 
@@ -905,7 +905,7 @@ class Interpreter
   # * Screen Flash
   #-----------------------------------------------------------------------------
   def command_224
-    $game_screen.start_flash(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
+    $game_screen.start_flash(@parameters[0], @parameters[1])
     return true
   end
 
@@ -913,7 +913,7 @@ class Interpreter
   # * Screen Shake
   #-----------------------------------------------------------------------------
   def command_225
-    $game_screen.start_shake(@parameters[0], @parameters[1], @parameters[2] * Graphics.frame_rate / 20)
+    $game_screen.start_shake(@parameters[0], @parameters[1], @parameters[2])
     return true
   end
 
@@ -946,8 +946,9 @@ class Interpreter
       x = $game_variables[@parameters[4]]
       y = $game_variables[@parameters[5]]
     end
-    $game_screen.pictures[number].move(@parameters[1] * Graphics.frame_rate / 20,
-                                       @parameters[2], x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
+    $game_screen.pictures[number].move(@parameters[1], @parameters[2], x, y,
+                                       @parameters[6], @parameters[7],
+                                       @parameters[8], @parameters[9])
     return true
   end
 
@@ -965,8 +966,7 @@ class Interpreter
   #-----------------------------------------------------------------------------
   def command_234
     number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
-    $game_screen.pictures[number].start_tone_change(@parameters[1],
-                                                    @parameters[2] * Graphics.frame_rate / 20)
+    $game_screen.pictures[number].start_tone_change(@parameters[1], @parameters[2])
     return true
   end
 

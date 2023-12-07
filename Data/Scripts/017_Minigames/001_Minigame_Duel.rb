@@ -46,7 +46,7 @@ class DuelWindow < Window_AdvancedTextPokemon
       name_tag = shadowc3tag(PLAYER_TEXT_BASE, PLAYER_TEXT_SHADOW)
     end
     hp_tag = shadowc3tag(HP_TEXT_BASE, HP_TEXT_SHADOW)
-    self.text = name_tag + fmtescape(@name) + "\n" + hp_tag + _INTL("HP: {1}", @hp)
+    self.text = name_tag + fmtEscape(@name) + "\n" + hp_tag + _INTL("HP: {1}", @hp)
   end
 end
 
@@ -60,7 +60,7 @@ class PokemonDuel
     @viewport.z = 99999
     @sprites = {}
     @sprites["player"] = IconSprite.new(-160, 96, @viewport)
-    @sprites["player"].setBitmap(GameData::TrainerType.front_sprite_filename($player.trainer_type))
+    @sprites["player"].setBitmap(GameData::TrainerType.player_front_sprite_filename($player.trainer_type))
     @sprites["opponent"] = IconSprite.new(Graphics.width + 32, 96, @viewport)
     @sprites["opponent"].setBitmap(GameData::TrainerType.front_sprite_filename(opponent.trainer_type))
     @sprites["playerwindow"] = DuelWindow.new($player.name, false)

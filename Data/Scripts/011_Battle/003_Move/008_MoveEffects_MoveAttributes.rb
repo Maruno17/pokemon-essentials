@@ -1121,6 +1121,7 @@ class Battle::Move::CategoryDependsOnHigherDamagePoisonTarget < Battle::Move::Po
 
   def pbOnStartUse(user, targets)
     target = targets[0]
+    return if !target
     max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
     stageMul = Battle::Battler::STAT_STAGE_MULTIPLIERS
     stageDiv = Battle::Battler::STAT_STAGE_DIVISORS

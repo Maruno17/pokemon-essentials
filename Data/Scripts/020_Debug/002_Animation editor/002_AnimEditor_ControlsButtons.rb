@@ -73,23 +73,27 @@ module BattleAnimationEditor
       return @invalid
     end
 
-    def invalidate   # Marks that the control must be redrawn to reflect current logic
+    # Marks that the control must be redrawn to reflect current logic.
+    def invalidate
       @invalid = true
     end
 
-    def update; end   # Updates the logic on the control, invalidating it if necessary
+    # Updates the logic on the control, invalidating it if necessary.
+    def update; end
 
-    def refresh; end   # Redraws the control
+    # Redraws the control.
+    def refresh; end
 
-    def validate   # Makes the control no longer invalid
+    # Makes the control no longer invalid.
+    def validate
       @invalid = false
     end
 
-    def repaint   # Redraws the control only if it is invalid
-      if self.invalid?
-        self.refresh
-        self.validate
-      end
+    # Redraws the control only if it is invalid.
+    def repaint
+      return if !self.invalid?
+      self.refresh
+      self.validate
     end
   end
 
@@ -237,12 +241,14 @@ module BattleAnimationEditor
 
     def text=(value)
       @text = value
+      @cursor_shown = true
       self.invalidate
     end
 
     def initialize(label, text)
       super(label)
-      @frame = 0
+      @cursor_timer_start = System.uptime
+      @cursor_shown = true
       @label = label
       @text = text
       @cursor = text.scan(/./m).length
@@ -254,7 +260,8 @@ module BattleAnimationEditor
       @text = ""
       chars.each { |char| @text += char }
       @cursor += 1
-      @frame = 0
+      @cursor_timer_start = System.uptime
+      @cursor_shown = true
       self.changed = true
       self.invalidate
     end
@@ -265,21 +272,25 @@ module BattleAnimationEditor
       @text = ""
       chars.each { |char| @text += char }
       @cursor -= 1
-      @frame = 0
+      @cursor_timer_start = System.uptime
+      @cursor_shown = true
       self.changed = true
       self.invalidate
     end
 
     def update
-      @frame += 1
-      @frame %= 20
+      cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i.even?
       self.changed = false
-      self.invalidate if (@frame % 10) == 0
+      if cursor_to_show != @cursor_shown
+        @cursor_shown = cursor_to_show
+        self.invalidate
+      end
       # Moving cursor
       if Input.triggerex?(:LEFT) || Input.repeatex?(:LEFT)
         if @cursor > 0
           @cursor -= 1
-          @frame = 0
+          @cursor_timer_start = System.uptime
+          @cursor_shown = true
           self.invalidate
         end
         return
@@ -287,7 +298,8 @@ module BattleAnimationEditor
       if Input.triggerex?(:RIGHT) || Input.repeatex?(:RIGHT)
         if @cursor < self.text.scan(/./m).length
           @cursor += 1
-          @frame = 0
+          @cursor_timer_start = System.uptime
+          @cursor_shown = true
           self.invalidate
         end
         return
@@ -344,13 +356,13 @@ module BattleAnimationEditor
         # Draw text
         shadowtext(bitmap, x, y, textwidth + 4, 32, c)
         # Draw cursor if necessary
-        if ((@frame / 10) & 1) == 0 && i == @cursor
+        if i == @cursor && @cursor_shown
           bitmap.fill_rect(x, y + 4, 2, 24, Color.new(120, 120, 120))
         end
         # Add x to drawn text width
         x += textwidth
       end
-      if ((@frame / 10) & 1) == 0 && textscan.length == @cursor
+      if textscan.length == @cursor && @cursor_shown
         bitmap.fill_rect(x, y + 4, 2, 24, Color.new(120, 120, 120))
       end
       # Draw outline
@@ -419,12 +431,12 @@ module BattleAnimationEditor
       left = toAbsoluteRect(@leftarrow)
       right = toAbsoluteRect(@rightarrow)
       oldvalue = self.curvalue
-      repeattime = Input.time?(Input::MOUSELEFT) / 1000
+      repeattime = Input.time?(Input::MOUSELEFT)
       # Left arrow
       if left.contains?(mousepos[0], mousepos[1])
-        if repeattime > 3000
+        if repeattime > 3.0
           self.curvalue -= 10
-        elsif repeattime > 1500
+        elsif repeattime > 1.5
           self.curvalue -= 5
         else
           self.curvalue -= 1
@@ -435,9 +447,9 @@ module BattleAnimationEditor
       end
       # Right arrow
       if right.contains?(mousepos[0], mousepos[1])
-        if repeattime > 3000
+        if repeattime > 3.0
           self.curvalue += 10
-        elsif repeattime > 1500
+        elsif repeattime > 1.5
           self.curvalue += 5
         else
           self.curvalue += 1
@@ -671,12 +683,12 @@ module BattleAnimationEditor
       left = toAbsoluteRect(@leftarrow)
       right = toAbsoluteRect(@rightarrow)
       oldvalue = self.curvalue
-      repeattime = Input.time?(Input::MOUSELEFT) / 1000
+      repeattime = Input.time?(Input::MOUSELEFT)
       # Left arrow
       if left.contains?(mousepos[0], mousepos[1])
-        if repeattime > 3000
+        if repeattime > 3.0
           self.curvalue -= 10
-        elsif repeattime > 1500
+        elsif repeattime > 1.5
           self.curvalue -= 5
         else
           self.curvalue -= 1
@@ -686,9 +698,9 @@ module BattleAnimationEditor
       end
       # Right arrow
       if right.contains?(mousepos[0], mousepos[1])
-        if repeattime > 3000
+        if repeattime > 3.0
           self.curvalue += 10
-        elsif repeattime > 1500
+        elsif repeattime > 1.5
           self.curvalue += 5
         else
           self.curvalue += 1

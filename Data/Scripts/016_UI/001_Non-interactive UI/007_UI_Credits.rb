@@ -43,62 +43,68 @@ class Scene_Credits
   TEXT_BASE_COLOR        = Color.new(255, 255, 255, 255)
   TEXT_SHADOW_COLOR      = Color.new(0, 0, 0, 100)
 
-  # This next piece of code is the credits.
-  # Start Editing
-  CREDIT = <<~_END_
+  def add_names_to_credits(credits, names, with_final_new_line = true)
+    if names.length >= 5
+      i = 0
+      loop do
+        credits.push(names[i] + "<s>" + (names[i + 1] || ""))
+        i += 2
+        break if i >= names.length
+      end
+    else
+      names.each { |name| credits.push(name) }
+    end
+    credits.push("") if with_final_new_line
+  end
 
-    Your credits go here.
-
-    Your credits go here.
-
-    Your credits go here.
-
-    Your credits go here.
-
-    Your credits go here.
-
-    {INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE}
-
-    "Pokémon Essentials" was created by:
-    Poccil (Peter O.)
-    Maruno
-    Inspired by work by Flameguru
-
-    With contributions from:
-    AvatarMonkeyKirby<s>Marin
-    Boushy<s>MiDas Mike
-    Brother1440<s>Near Fantastica
-    FL.<s>PinkMan
-    Genzai Kawakami<s>Popper
-    Golisopod User<s>Rataime
-    help-14<s>Savordez
-    IceGod64<s>SoundSpawn
-    Jacob O. Wobbrock<s>the__end
-    KitsuneKouta<s>Venom12
-    Lisa Anthony<s>Wachunga
-    Luka S.J.<s>
-    and everyone else who helped out
-
-    "mkxp-z" by:
-    Roza
-    Based on "mkxp" by Ancurio et al.
-
-    "RPG Maker XP" by:
-    Enterbrain
-
-    Pokémon is owned by:
-    The Pokémon Company
-    Nintendo
-    Affiliated with Game Freak
-
-
-
-    This is a non-profit fan-made game.
-    No copyright infringements intended.
-    Please support the official games!
-
-  _END_
-# Stop Editing
+  def get_text
+    ret = Settings.game_credits || []
+    # Add plugin credits
+    if PluginManager.plugins.length > 0
+      ret.push("", "", "")
+      PluginManager.plugins.each do |plugin|
+        pcred = PluginManager.credits(plugin)
+        ret.push(_INTL("\"{1}\" v.{2} by:", plugin, PluginManager.version(plugin)))
+        add_names_to_credits(ret, pcred)
+      end
+    end
+    # Add Essentials credits
+    ret.push("", "", "")
+    ret.push(_INTL("\"Pokémon Essentials\" was created by:"))
+    add_names_to_credits(ret, [
+      "Poccil (Peter O.)",
+      "Maruno",
+      _INTL("Inspired by work by Flameguru")
+    ])
+    ret.push(_INTL("With contributions from:"))
+    add_names_to_credits(ret, [
+      "AvatarMonkeyKirby", "Boushy", "Brother1440", "FL.", "Genzai Kawakami",
+      "Golisopod User", "help-14", "IceGod64", "Jacob O. Wobbrock", "KitsuneKouta",
+      "Lisa Anthony", "Luka S.J.", "Marin", "MiDas Mike", "Near Fantastica",
+      "PinkMan", "Popper", "Rataime", "Savordez", "SoundSpawn",
+      "the__end", "Venom12", "Wachunga"
+    ], false)
+    ret.push(_INTL("and everyone else who helped out"))
+    ret.push("")
+    ret.push(_INTL("\"mkxp-z\" by:"))
+    add_names_to_credits(ret, [
+      "Anon",
+      _INTL("Based on \"mkxp\" by Ancurio et al.")
+    ])
+    ret.push(_INTL("\"RPG Maker XP\" by:"))
+    add_names_to_credits(ret, ["Enterbrain"])
+    ret.push(_INTL("Pokémon is owned by:"))
+    add_names_to_credits(ret, [
+      "The Pokémon Company",
+      "Nintendo",
+      _INTL("Affiliated with Game Freak")
+    ])
+    ret.push("", "")
+    ret.push(_INTL("This is a non-profit fan-made game."),
+             _INTL("No copyright infringements intended."),
+             _INTL("Please support the official games!"))
+    return ret
+  end
 
   def main
     @quit = false
@@ -114,24 +120,7 @@ class Scene_Credits
     #-------------------------------
     # Credits text Setup
     #-------------------------------
-    plugin_credits = ""
-    PluginManager.plugins.each do |plugin|
-      pcred = PluginManager.credits(plugin)
-      plugin_credits << "\"#{plugin}\" v.#{PluginManager.version(plugin)} by:\n"
-      if pcred.size >= 5
-        plugin_credits << (pcred[0] + "\n")
-        i = 1
-        until i >= pcred.size
-          plugin_credits << (pcred[i] + "<s>" + (pcred[i + 1] || "") + "\n")
-          i += 2
-        end
-      else
-        pcred.each { |name| plugin_credits << (name + "\n") }
-      end
-      plugin_credits << "\n"
-    end
-    CREDIT.gsub!(/\{INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE\}/, plugin_credits)
-    credit_lines = CREDIT.split(/\n/)
+    credit_lines = get_text
     #-------------------------------
     # Make background and text sprites
     #-------------------------------
@@ -238,7 +227,7 @@ class Scene_Credits
     end
     return if cancel?
     return if last?
-    @realOY = SCROLL_SPEED * (System.uptime - @timer_start) - Graphics.height + @trim
+    @realOY = (SCROLL_SPEED * (System.uptime - @timer_start)) - Graphics.height + @trim
     @credit_sprites.each_with_index { |s, i| s.oy = @realOY - (@bitmap_height * i) }
   end
 end

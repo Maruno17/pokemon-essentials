@@ -1,0 +1,208 @@
+﻿# To localize this text for a particular language, please
+# translate every second line of this file.
+#-------------------------------
+[ITEM_PORTION_NAME_PLURALS]
+jars of Honey
+jars of Honey
+bags of Stardust
+bags of Stardust
+Relic Copper coins
+Relic Copper coins
+Relic Silver coins
+Relic Silver coins
+Relic Gold coins
+Relic Gold coins
+bags of Growth Mulch
+bags of Growth Mulch
+bags of Damp Mulch
+bags of Damp Mulch
+bags of Stable Mulch
+bags of Stable Mulch
+bags of Gooey Mulch
+bags of Gooey Mulch
+piles of Shoal Salt
+piles of Shoal Salt
+jars of Red Nectar
+jars of Red Nectar
+jars of Yellow Nectar
+jars of Yellow Nectar
+jars of Pink Nectar
+jars of Pink Nectar
+jars of Purple Nectar
+jars of Purple Nectar
+bags of Bright Powder
+bags of Bright Powder
+bags of BrightPowder
+bags of BrightPowder
+pairs of Safety Goggles
+pairs of Safety Goggles
+sets of Protective Pads
+sets of Protective Pads
+pairs of Heavy-Duty Boots
+pairs of Heavy-Duty Boots
+pairs of Choice Specs
+pairs of Choice Specs
+lumps of Light Clay
+lumps of Light Clay
+blobs of Black Sludge
+blobs of Black Sludge
+servings of Leftovers
+servings of Leftovers
+clumps of Luminous Moss
+clumps of Luminous Moss
+bottles of Throat Spray
+bottles of Throat Spray
+vouchers for Room Service
+vouchers for Room Service
+pairs of Wise Glasses
+pairs of Wise Glasses
+jars of Lax Incense
+jars of Lax Incense
+jars of Full Incense
+jars of Full Incense
+jars of Luck Incense
+jars of Luck Incense
+jars of Pure Incense
+jars of Pure Incense
+jars of Sea Incense
+jars of Sea Incense
+jars of Wave Incense
+jars of Wave Incense
+jars of Rose Incense
+jars of Rose Incense
+jars of Odd Incense
+jars of Odd Incense
+jars of Rock Incense
+jars of Rock Incense
+pieces of Charcoal
+pieces of Charcoal
+pieces of Never-Melt Ice
+pieces of Never-Melt Ice
+pieces of NeverMeltIce
+pieces of NeverMeltIce
+bags of Soft Sand
+bags of Soft Sand
+piles of Silver Powder
+piles of Silver Powder
+piles of SilverPowder
+piles of SilverPowder
+pairs of Black Glasses
+pairs of Black Glasses
+pairs of BlackGlasses
+pairs of BlackGlasses
+bags of Metal Powder
+bags of Metal Powder
+bags of Quick Powder
+bags of Quick Powder
+scraps of Reaper Cloth
+scraps of Reaper Cloth
+dollops of Whipped Dream
+dollops of Whipped Dream
+bags of Sacred Ash
+bags of Sacred Ash
+bags of Pewter Crunchies
+bags of Pewter Crunchies
+cups of Berry Juice
+cups of Berry Juice
+bottles of Fresh Water
+bottles of Fresh Water
+bottles of Soda Pop
+bottles of Soda Pop
+cans of Lemonade
+cans of Lemonade
+bottles of Moomoo Milk
+bottles of Moomoo Milk
+doses of Energy Powder
+doses of Energy Powder
+doses of EnergyPowder
+doses of EnergyPowder
+doses of Heal Powder
+doses of Heal Powder
+combs of Max Honey
+combs of Max Honey
+bottles of PP Up
+bottles of PP Up
+bottles of PP Max
+bottles of PP Max
+bottles of HP Up
+bottles of HP Up
+bottles of Protein
+bottles of Protein
+bottles of Iron
+bottles of Iron
+bottles of Calcium
+bottles of Calcium
+bottles of Zinc
+bottles of Zinc
+bottles of Carbos
+bottles of Carbos
+sprigs of Lonely Mint
+sprigs of Lonely Mint
+sprigs of Adamant Mint
+sprigs of Adamant Mint
+sprigs of Naughty Mint
+sprigs of Naughty Mint
+sprigs of Brave Mint
+sprigs of Brave Mint
+sprigs of Bold Mint
+sprigs of Bold Mint
+sprigs of Impish Mint
+sprigs of Impish Mint
+sprigs of Lax Mint
+sprigs of Lax Mint
+sprigs of Relaxed Mint
+sprigs of Relaxed Mint
+sprigs of Modest Mint
+sprigs of Modest Mint
+sprigs of Mild Mint
+sprigs of Mild Mint
+sprigs of Rash Mint
+sprigs of Rash Mint
+sprigs of Quiet Mint
+sprigs of Quiet Mint
+sprigs of Calm Mint
+sprigs of Calm Mint
+sprigs of Gentle Mint
+sprigs of Gentle Mint
+sprigs of Careful Mint
+sprigs of Careful Mint
+sprigs of Sassy Mint
+sprigs of Sassy Mint
+sprigs of Timid Mint
+sprigs of Timid Mint
+sprigs of Hasty Mint
+sprigs of Hasty Mint
+sprigs of Jolly Mint
+sprigs of Jolly Mint
+sprigs of Naive Mint
+sprigs of Naive Mint
+sprigs of Serious Mint
+sprigs of Serious Mint
+pieces of Grass Mail
+pieces of Grass Mail
+pieces of Flame Mail
+pieces of Flame Mail
+pieces of Bubble Mail
+pieces of Bubble Mail
+pieces of Bloom Mail
+pieces of Bloom Mail
+pieces of Tunnel Mail
+pieces of Tunnel Mail
+pieces of Steel Mail
+pieces of Steel Mail
+pieces of Heart Mail
+pieces of Heart Mail
+pieces of Snow Mail
+pieces of Snow Mail
+pieces of Space Mail
+pieces of Space Mail
+pieces of Air Mail
+pieces of Air Mail
+pieces of Mosaic Mail
+pieces of Mosaic Mail
+pieces of Brick Mail
+pieces of Brick Mail
+clusters of Max Mushrooms
+clusters of Max Mushrooms
+sets of Reins of Unity
+sets of Reins of Unity

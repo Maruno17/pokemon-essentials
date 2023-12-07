@@ -113,6 +113,8 @@ class Interpreter
         end
         @move_route_waiting = false
       end
+      # Do nothing if the player is jumping out of surfing
+      return if $game_temp.ending_surf
       # Do nothing while waiting
       if @wait_count > 0
         return if System.uptime - @wait_start < @wait_count
@@ -162,7 +164,7 @@ class Interpreter
       # Assemble error message
       err = "Script error in Interpreter\r\n"
       if $game_map
-        map_name = ($game_map.name rescue nil) || "???"
+        map_name = (pbGetBasicMapNameFromId($game_map.map_id) rescue nil) || "???"
         if event
           err = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{$game_map.map_id} (#{map_name})\r\n"
         else
@@ -381,7 +383,7 @@ class Interpreter
   end
 
   # Used in boulder events. Allows an event to be pushed.
-  def pbPushThisEvent
+  def pbPushThisEvent(strength = false)
     event = get_self
     old_x  = event.x
     old_y  = event.y
@@ -397,6 +399,7 @@ class Interpreter
     end
     $PokemonMap&.addMovedEvent(@event_id)
     if old_x != event.x || old_y != event.y
+      pbSEPlay("Strength push") if strength
       $game_player.lock
       loop do
         Graphics.update
@@ -409,7 +412,7 @@ class Interpreter
   end
 
   def pbPushThisBoulder
-    pbPushThisEvent if $PokemonMap.strengthUsed
+    pbPushThisEvent(true) if $PokemonMap.strengthUsed
     return true
   end
 

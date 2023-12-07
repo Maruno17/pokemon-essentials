@@ -18,7 +18,7 @@ class Sprite_Timer
 
   def update
     return if disposed?
-    if $game_system.timer_working
+    if $game_system.timer_start
       @timer.visible = true if @timer
       if !@timer
         @timer = Window_AdvancedTextPokemon.newWithSize("", Graphics.width - 120, 0, 120, 64)
@@ -27,7 +27,7 @@ class Sprite_Timer
         @timer.viewport = @viewport
         @timer.z = 99998
       end
-      curtime = $game_system.timer / Graphics.frame_rate
+      curtime = $game_system.timer
       curtime = 0 if curtime < 0
       if curtime != @total_sec
         # Calculate total number of seconds

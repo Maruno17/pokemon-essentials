@@ -430,8 +430,8 @@ class MapScreenScene
     if @dragging
       if @dragmapid >= 0
         sprite = getMapSprite(@dragmapid)
-        x = x + @dragOffsetX
-        y = y + @dragOffsetY
+        x += @dragOffsetX
+        y += @dragOffsetY
         sprite.x = x & ~3
         sprite.y = y & ~3
         @sprites["title"].text = _ISPRINTF("D: Help [{1:03d}: {2:s}]", mapid, @mapinfos[@dragmapid].name)

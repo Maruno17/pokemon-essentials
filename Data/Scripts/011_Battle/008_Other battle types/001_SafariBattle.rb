@@ -64,7 +64,7 @@ class Battle::Scene::SafariDataBox < Sprite
     super(viewport)
     @selected    = 0
     @battle      = battle
-    @databox     = AnimatedBitmap.new("Graphics/UI/Battle/databox_safari")
+    @databox     = AnimatedBitmap.new(_INTL("Graphics/UI/Battle/databox_safari"))
     self.x       = Graphics.width - 232
     self.y       = Graphics.height - 184
     @contents    = Bitmap.new(@databox.width, @databox.height)
@@ -84,10 +84,6 @@ class Battle::Scene::SafariDataBox < Sprite
     textpos.push([_INTL("Safari Balls"), 30, 14, :left, base, shadow])
     textpos.push([_INTL("Left: {1}", @battle.ballCount), 30, 44, :left, base, shadow])
     pbDrawTextPositions(self.bitmap, textpos)
-  end
-
-  def update(frameCounter = 0)
-    super()
   end
 end
 
@@ -476,6 +472,7 @@ class SafariBattle
         # End of round
         if @decision == 0
           if @ballCount <= 0
+            pbSEPlay("Safari Zone end")
             pbDisplay(_INTL("PA: You have no Safari Balls left! Game over!"))
             @decision = 2
           elsif pbRandom(100) < 5 * escapeFactor

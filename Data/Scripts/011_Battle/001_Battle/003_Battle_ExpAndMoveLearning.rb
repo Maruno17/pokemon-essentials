@@ -126,7 +126,7 @@ class Battle
     if Settings::SCALED_EXP_FORMULA
       exp /= 5
       levelAdjust = ((2 * level) + 10.0) / (pkmn.level + level + 10.0)
-      levelAdjust = levelAdjust**5
+      levelAdjust **= 5
       levelAdjust = Math.sqrt(levelAdjust)
       exp *= levelAdjust
       exp = exp.floor
@@ -214,7 +214,7 @@ class Battle
       pkmn.calc_stats
       battler&.pbUpdate(false)
       @scene.pbRefreshOne(battler.index) if battler
-      pbDisplayPaused(_INTL("{1} grew to Lv. {2}!", pkmn.name, curLevel))
+      pbDisplayPaused(_INTL("{1} grew to Lv. {2}!", pkmn.name, curLevel)) { pbSEPlay("Pkmn level up") }
       @scene.pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,
                        oldSpAtk, oldSpDef, oldSpeed)
       # Learn all moves learned at this level

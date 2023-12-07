@@ -59,7 +59,7 @@ class AnimatedSprite < Sprite
     self.frame = 0
   end
 
-  # Shorter version of AnimationSprite. All frames are placed on a single row
+  # Shorter version of AnimatedSprite. All frames are placed on a single row
   # of the bitmap, so that the width and height need not be defined beforehand.
   # frameskip is in 1/20ths of a second, and is the time between frame changes.
   def initializeShort(animname, framecount, frameskip)
@@ -118,21 +118,19 @@ class AnimatedSprite < Sprite
 
   def start
     @playing = true
-    @start_time = System.uptime
   end
 
   alias play start
 
   def stop
     @playing = false
-    @start_time = nil
   end
 
   def update
     super
-    if @playing && System.uptime - @start_time >= @time_per_frame
-      self.frame = (@frame + 1) % self.framecount
-      @start_time += @time_per_frame
+    if @playing
+      new_frame = (System.uptime / @time_per_frame).to_i % self.framecount
+      self.frame = new_frame if self.frame != new_frame
     end
   end
 end

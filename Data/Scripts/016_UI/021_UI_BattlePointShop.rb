@@ -488,8 +488,7 @@ class BattlePointShopScreen
       end
       if added == quantity
         $stats.battle_points_spent += price
-        # TODO: Add bpshop_items_bought to $stats?
-#        $stats.bpshop_items_bought += quantity
+        $stats.mart_items_bought += quantity
         @adapter.setBP(@adapter.getBP - price)
         @stock.delete_if { |itm| GameData::Item.get(itm).is_important? && $bag.has?(itm) }
         pbDisplayPaused(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }

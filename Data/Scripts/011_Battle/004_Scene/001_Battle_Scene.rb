@@ -98,8 +98,6 @@ class Battle::Scene
     # Update other graphics
     @sprites["battle_bg"].update if @sprites["battle_bg"].respond_to?("update")
     Graphics.update
-    @frameCounter += 1
-    @frameCounter = @frameCounter % (Graphics.frame_rate * 12 / 20)
   end
 
   def pbInputUpdate
@@ -114,9 +112,9 @@ class Battle::Scene
     cw&.update
     @battle.battlers.each_with_index do |b, i|
       next if !b
-      @sprites["dataBox_#{i}"]&.update(@frameCounter)
-      @sprites["pokemon_#{i}"]&.update(@frameCounter)
-      @sprites["shadow_#{i}"]&.update(@frameCounter)
+      @sprites["dataBox_#{i}"]&.update
+      @sprites["pokemon_#{i}"]&.update
+      @sprites["shadow_#{i}"]&.update
     end
   end
 
@@ -190,7 +188,7 @@ class Battle::Scene
     cw.setText(msg)
     PBDebug.log_message(msg)
     yielded = false
-    timer_start = System.uptime
+    timer_start = nil
     loop do
       pbUpdate(cw)
       if !cw.busy?
@@ -204,6 +202,7 @@ class Battle::Scene
           @briefMessage = true
           break
         end
+        timer_start = System.uptime if !timer_start
         if System.uptime - timer_start >= MESSAGE_PAUSE_TIME   # Autoclose after 1 second
           cw.text = ""
           cw.visible = false
@@ -235,7 +234,7 @@ class Battle::Scene
     cw.text = msg + "\1"
     PBDebug.log_message(msg)
     yielded = false
-    timer_start = System.uptime
+    timer_start = nil
     loop do
       pbUpdate(cw)
       if !cw.busy?
@@ -244,6 +243,7 @@ class Battle::Scene
           yielded = true
         end
         if !@battleEnd
+          timer_start = System.uptime if !timer_start
           if System.uptime - timer_start >= MESSAGE_PAUSE_TIME * 3   # Autoclose after 3 seconds
             cw.text = ""
             cw.visible = false
@@ -395,7 +395,8 @@ class Battle::Scene
     shadowSprite.visible = pkmn.species_data.shows_shadow? if shadowSprite && !back
   end
 
-  def pbResetMoveIndex(idxBattler)
+  def pbResetCommandsIndex(idxBattler)
+    @lastCmd[idxBattler] = 0
     @lastMove[idxBattler] = 0
   end
 

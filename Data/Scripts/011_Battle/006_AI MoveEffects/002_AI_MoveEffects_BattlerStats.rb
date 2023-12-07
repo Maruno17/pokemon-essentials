@@ -635,7 +635,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetAttack2Confus
     score = ai.get_score_for_target_stat_raise(score, target, [:ATTACK, 2], false)
     # Score for confusing the target
     next Battle::AI::Handlers.apply_move_effect_against_target_score(
-       "ConfuseTarget", score, move, user, target, ai, battle)
+      "ConfuseTarget", score, move, user, target, ai, battle)
   }
 )
 
@@ -657,7 +657,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetSpAtk1Confuse
     score = ai.get_score_for_target_stat_raise(score, target, [:SPECIAL_ATTACK, 1], false)
     # Score for confusing the target
     next Battle::AI::Handlers.apply_move_effect_against_target_score(
-       "ConfuseTarget", score, move, user, target, ai, battle)
+      "ConfuseTarget", score, move, user, target, ai, battle)
   }
 )
 
@@ -1428,7 +1428,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToStatStageLower
                                 m.is_a?(Battle::Move::TargetMultiStatDownMove) ||
                                 ["LowerPoisonedTargetAtkSpAtkSpd1",
                                  "PoisonTargetLowerTargetSpeed1",
-                                 "HealUserByTargetAttackLowerTargetAttack1"].include?(m.function) }
+                                 "HealUserByTargetAttackLowerTargetAttack1"].include?(m.function_code) }
         score += 15
         has_move = true
       end

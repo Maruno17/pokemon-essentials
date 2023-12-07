@@ -1,0 +1,1526 @@
+﻿# To localize this text for a particular language, please
+# translate every second line of this file.
+#-------------------------------
+[MOVE_NAMES]
+Megahorn
+Megahorn
+Attack Order
+Attack Order
+Bug Buzz
+Bug Buzz
+First Impression
+First Impression
+Pollen Puff
+Pollen Puff
+Leech Life
+Leech Life
+Lunge
+Lunge
+X-Scissor
+X-Scissor
+Signal Beam
+Signal Beam
+Skitter Smack
+Skitter Smack
+U-turn
+U-turn
+Steamroller
+Steamroller
+Bug Bite
+Bug Bite
+Silver Wind
+Silver Wind
+Fell Stinger
+Fell Stinger
+Struggle Bug
+Struggle Bug
+Fury Cutter
+Fury Cutter
+Pin Missile
+Pin Missile
+Twineedle
+Twineedle
+Infestation
+Infestation
+Defend Order
+Defend Order
+Heal Order
+Heal Order
+Powder
+Powder
+Quiver Dance
+Quiver Dance
+Rage Powder
+Rage Powder
+Spider Web
+Spider Web
+Sticky Web
+Sticky Web
+String Shot
+String Shot
+Tail Glow
+Tail Glow
+Hyperspace Fury
+Hyperspace Fury
+Foul Play
+Foul Play
+Fiery Wrath
+Fiery Wrath
+Darkest Lariat
+Darkest Lariat
+Night Daze
+Night Daze
+Crunch
+Crunch
+Dark Pulse
+Dark Pulse
+False Surrender
+False Surrender
+Jaw Lock
+Jaw Lock
+Throat Chop
+Throat Chop
+Wicked Blow
+Wicked Blow
+Lash Out
+Lash Out
+Night Slash
+Night Slash
+Sucker Punch
+Sucker Punch
+Knock Off
+Knock Off
+Assurance
+Assurance
+Bite
+Bite
+Brutal Swing
+Brutal Swing
+Feint Attack
+Feint Attack
+Faint Attack
+Faint Attack
+Thief
+Thief
+Snarl
+Snarl
+Payback
+Payback
+Pursuit
+Pursuit
+Beat Up
+Beat Up
+Fling
+Fling
+Power Trip
+Power Trip
+Punishment
+Punishment
+Dark Void
+Dark Void
+Embargo
+Embargo
+Fake Tears
+Fake Tears
+Flatter
+Flatter
+Hone Claws
+Hone Claws
+Memento
+Memento
+Nasty Plot
+Nasty Plot
+Obstruct
+Obstruct
+Parting Shot
+Parting Shot
+Quash
+Quash
+Snatch
+Snatch
+Switcheroo
+Switcheroo
+Taunt
+Taunt
+Topsy-Turvy
+Topsy-Turvy
+Torment
+Torment
+Eternabeam
+Eternabeam
+Dragon Energy
+Dragon Energy
+Roar of Time
+Roar of Time
+Draco Meteor
+Draco Meteor
+Outrage
+Outrage
+Clanging Scales
+Clanging Scales
+Core Enforcer
+Core Enforcer
+Dragon Rush
+Dragon Rush
+Dynamax Cannon
+Dynamax Cannon
+Spacial Rend
+Spacial Rend
+Dragon Hammer
+Dragon Hammer
+Dragon Pulse
+Dragon Pulse
+Dragon Claw
+Dragon Claw
+Breaking Swipe
+Breaking Swipe
+Dragon Breath
+Dragon Breath
+DragonBreath
+DragonBreath
+Dragon Tail
+Dragon Tail
+Dragon Darts
+Dragon Darts
+Dual Chop
+Dual Chop
+Twister
+Twister
+Scale Shot
+Scale Shot
+Dragon Rage
+Dragon Rage
+Clangorous Soul
+Clangorous Soul
+Dragon Dance
+Dragon Dance
+Bolt Strike
+Bolt Strike
+Volt Tackle
+Volt Tackle
+Zap Cannon
+Zap Cannon
+Aura Wheel
+Aura Wheel
+Thunder
+Thunder
+Fusion Bolt
+Fusion Bolt
+Plasma Fists
+Plasma Fists
+Thunderbolt
+Thunderbolt
+Wild Charge
+Wild Charge
+Bolt Beak
+Bolt Beak
+Discharge
+Discharge
+Overdrive
+Overdrive
+Thunder Cage
+Thunder Cage
+Zing Zap
+Zing Zap
+Thunder Punch
+Thunder Punch
+ThunderPunch
+ThunderPunch
+Rising Voltage
+Rising Voltage
+Volt Switch
+Volt Switch
+Parabolic Charge
+Parabolic Charge
+Spark
+Spark
+Thunder Fang
+Thunder Fang
+Shock Wave
+Shock Wave
+Electroweb
+Electroweb
+Charge Beam
+Charge Beam
+Thunder Shock
+Thunder Shock
+ThunderShock
+ThunderShock
+Nuzzle
+Nuzzle
+Electro Ball
+Electro Ball
+Charge
+Charge
+Eerie Impulse
+Eerie Impulse
+Electric Terrain
+Electric Terrain
+Electrify
+Electrify
+Ion Deluge
+Ion Deluge
+Magnet Rise
+Magnet Rise
+Magnetic Flux
+Magnetic Flux
+Thunder Wave
+Thunder Wave
+Light of Ruin
+Light of Ruin
+Fleur Cannon
+Fleur Cannon
+Misty Explosion
+Misty Explosion
+Moonblast
+Moonblast
+Play Rough
+Play Rough
+Strange Steam
+Strange Steam
+Dazzling Gleam
+Dazzling Gleam
+Spirit Break
+Spirit Break
+Draining Kiss
+Draining Kiss
+Disarming Voice
+Disarming Voice
+Fairy Wind
+Fairy Wind
+Nature's Madness
+Nature's Madness
+Aromatic Mist
+Aromatic Mist
+Baby-Doll Eyes
+Baby-Doll Eyes
+Charm
+Charm
+Crafty Shield
+Crafty Shield
+Decorate
+Decorate
+Fairy Lock
+Fairy Lock
+Floral Healing
+Floral Healing
+Flower Shield
+Flower Shield
+Geomancy
+Geomancy
+Misty Terrain
+Misty Terrain
+Moonlight
+Moonlight
+Sweet Kiss
+Sweet Kiss
+Focus Punch
+Focus Punch
+Meteor Assault
+Meteor Assault
+High Jump Kick
+High Jump Kick
+Hi Jump Kick
+Hi Jump Kick
+Close Combat
+Close Combat
+Focus Blast
+Focus Blast
+Superpower
+Superpower
+Cross Chop
+Cross Chop
+Dynamic Punch
+Dynamic Punch
+DynamicPunch
+DynamicPunch
+Flying Press
+Flying Press
+Hammer Arm
+Hammer Arm
+Jump Kick
+Jump Kick
+Sacred Sword
+Sacred Sword
+Thunderous Kick
+Thunderous Kick
+Secret Sword
+Secret Sword
+Sky Uppercut
+Sky Uppercut
+Aura Sphere
+Aura Sphere
+Body Press
+Body Press
+Submission
+Submission
+Brick Break
+Brick Break
+Drain Punch
+Drain Punch
+Vital Throw
+Vital Throw
+Wake-Up Slap
+Wake-Up Slap
+Low Sweep
+Low Sweep
+Circle Throw
+Circle Throw
+Force Palm
+Force Palm
+Revenge
+Revenge
+Rolling Kick
+Rolling Kick
+Storm Throw
+Storm Throw
+Karate Chop
+Karate Chop
+Mach Punch
+Mach Punch
+Power-Up Punch
+Power-Up Punch
+Rock Smash
+Rock Smash
+Vacuum Wave
+Vacuum Wave
+Double Kick
+Double Kick
+Arm Thrust
+Arm Thrust
+Triple Kick
+Triple Kick
+Counter
+Counter
+Final Gambit
+Final Gambit
+Low Kick
+Low Kick
+Reversal
+Reversal
+Seismic Toss
+Seismic Toss
+Bulk Up
+Bulk Up
+Coaching
+Coaching
+Detect
+Detect
+Mat Block
+Mat Block
+No Retreat
+No Retreat
+Octolock
+Octolock
+Quick Guard
+Quick Guard
+V-create
+V-create
+Blast Burn
+Blast Burn
+Eruption
+Eruption
+Mind Blown
+Mind Blown
+Shell Trap
+Shell Trap
+Blue Flare
+Blue Flare
+Burn Up
+Burn Up
+Overheat
+Overheat
+Flare Blitz
+Flare Blitz
+Pyro Ball
+Pyro Ball
+Fire Blast
+Fire Blast
+Fusion Flare
+Fusion Flare
+Inferno
+Inferno
+Magma Storm
+Magma Storm
+Sacred Fire
+Sacred Fire
+Searing Shot
+Searing Shot
+Heat Wave
+Heat Wave
+Flamethrower
+Flamethrower
+Blaze Kick
+Blaze Kick
+Fiery Dance
+Fiery Dance
+Fire Lash
+Fire Lash
+Fire Pledge
+Fire Pledge
+Lava Plume
+Lava Plume
+Fire Punch
+Fire Punch
+Mystical Fire
+Mystical Fire
+Burning Jealousy
+Burning Jealousy
+Flame Burst
+Flame Burst
+Fire Fang
+Fire Fang
+Flame Wheel
+Flame Wheel
+Incinerate
+Incinerate
+Flame Charge
+Flame Charge
+Ember
+Ember
+Fire Spin
+Fire Spin
+Heat Crash
+Heat Crash
+Sunny Day
+Sunny Day
+Will-O-Wisp
+Will-O-Wisp
+Sky Attack
+Sky Attack
+Brave Bird
+Brave Bird
+Dragon Ascent
+Dragon Ascent
+Hurricane
+Hurricane
+Aeroblast
+Aeroblast
+Beak Blast
+Beak Blast
+Fly
+Fly
+Bounce
+Bounce
+Drill Peck
+Drill Peck
+Oblivion Wing
+Oblivion Wing
+Air Slash
+Air Slash
+Chatter
+Chatter
+Aerial Ace
+Aerial Ace
+Air Cutter
+Air Cutter
+Pluck
+Pluck
+Sky Drop
+Sky Drop
+Wing Attack
+Wing Attack
+Acrobatics
+Acrobatics
+Dual Wingbeat
+Dual Wingbeat
+Gust
+Gust
+Peck
+Peck
+Defog
+Defog
+Feather Dance
+Feather Dance
+FeatherDance
+FeatherDance
+Mirror Move
+Mirror Move
+Roost
+Roost
+Tailwind
+Tailwind
+Astral Barrage
+Astral Barrage
+Shadow Force
+Shadow Force
+Poltergeist
+Poltergeist
+Moongeist Beam
+Moongeist Beam
+Phantom Force
+Phantom Force
+Spectral Thief
+Spectral Thief
+Shadow Bone
+Shadow Bone
+Shadow Ball
+Shadow Ball
+Spirit Shackle
+Spirit Shackle
+Shadow Claw
+Shadow Claw
+Hex
+Hex
+Ominous Wind
+Ominous Wind
+Shadow Punch
+Shadow Punch
+Shadow Sneak
+Shadow Sneak
+Astonish
+Astonish
+Lick
+Lick
+Night Shade
+Night Shade
+Confuse Ray
+Confuse Ray
+Curse
+Curse
+Destiny Bond
+Destiny Bond
+Grudge
+Grudge
+Nightmare
+Nightmare
+Spite
+Spite
+Trick-or-Treat
+Trick-or-Treat
+Frenzy Plant
+Frenzy Plant
+Leaf Storm
+Leaf Storm
+Solar Blade
+Solar Blade
+Petal Dance
+Petal Dance
+Power Whip
+Power Whip
+Seed Flare
+Seed Flare
+Solar Beam
+Solar Beam
+Wood Hammer
+Wood Hammer
+Energy Ball
+Energy Ball
+Leaf Blade
+Leaf Blade
+Petal Blizzard
+Petal Blizzard
+Apple Acid
+Apple Acid
+Drum Beating
+Drum Beating
+Grass Pledge
+Grass Pledge
+Grav Apple
+Grav Apple
+Seed Bomb
+Seed Bomb
+Giga Drain
+Giga Drain
+Horn Leech
+Horn Leech
+Grassy Glide
+Grassy Glide
+Trop Kick
+Trop Kick
+Leaf Tornado
+Leaf Tornado
+Magical Leaf
+Magical Leaf
+Needle Arm
+Needle Arm
+Razor Leaf
+Razor Leaf
+Vine Whip
+Vine Whip
+Branch Poke
+Branch Poke
+Leafage
+Leafage
+Mega Drain
+Mega Drain
+Snap Trap
+Snap Trap
+Bullet Seed
+Bullet Seed
+Absorb
+Absorb
+Grass Knot
+Grass Knot
+Aromatherapy
+Aromatherapy
+Cotton Guard
+Cotton Guard
+Cotton Spore
+Cotton Spore
+Forest's Curse
+Forest's Curse
+Grass Whistle
+Grass Whistle
+GrassWhistle
+GrassWhistle
+Grassy Terrain
+Grassy Terrain
+Ingrain
+Ingrain
+Jungle Healing
+Jungle Healing
+Leech Seed
+Leech Seed
+Sleep Powder
+Sleep Powder
+Spiky Shield
+Spiky Shield
+Spore
+Spore
+Strength Sap
+Strength Sap
+Stun Spore
+Stun Spore
+Synthesis
+Synthesis
+Worry Seed
+Worry Seed
+Precipice Blades
+Precipice Blades
+Earthquake
+Earthquake
+High Horsepower
+High Horsepower
+Earth Power
+Earth Power
+Land's Wrath
+Land's Wrath
+Thousand Arrows
+Thousand Arrows
+Thousand Waves
+Thousand Waves
+Dig
+Dig
+Drill Run
+Drill Run
+Stomping Tantrum
+Stomping Tantrum
+Scorching Sands
+Scorching Sands
+Bone Club
+Bone Club
+Mud Bomb
+Mud Bomb
+Bulldoze
+Bulldoze
+Mud Shot
+Mud Shot
+Bonemerang
+Bonemerang
+Sand Tomb
+Sand Tomb
+Bone Rush
+Bone Rush
+Mud-Slap
+Mud-Slap
+Fissure
+Fissure
+Magnitude
+Magnitude
+Mud Sport
+Mud Sport
+Rototiller
+Rototiller
+Sand Attack
+Sand Attack
+Sand-Attack
+Sand-Attack
+Shore Up
+Shore Up
+Spikes
+Spikes
+Freeze Shock
+Freeze Shock
+Ice Burn
+Ice Burn
+Glacial Lance
+Glacial Lance
+Blizzard
+Blizzard
+Ice Hammer
+Ice Hammer
+Ice Beam
+Ice Beam
+Icicle Crash
+Icicle Crash
+Ice Punch
+Ice Punch
+Freeze-Dry
+Freeze-Dry
+Aurora Beam
+Aurora Beam
+Glaciate
+Glaciate
+Ice Fang
+Ice Fang
+Avalanche
+Avalanche
+Frost Breath
+Frost Breath
+Icy Wind
+Icy Wind
+Ice Shard
+Ice Shard
+Powder Snow
+Powder Snow
+Ice Ball
+Ice Ball
+Icicle Spear
+Icicle Spear
+Triple Axel
+Triple Axel
+Sheer Cold
+Sheer Cold
+Aurora Veil
+Aurora Veil
+Hail
+Hail
+Haze
+Haze
+Mist
+Mist
+Explosion
+Explosion
+Self-Destruct
+Self-Destruct
+Selfdestruct
+Selfdestruct
+Giga Impact
+Giga Impact
+Hyper Beam
+Hyper Beam
+Boomburst
+Boomburst
+Last Resort
+Last Resort
+Skull Bash
+Skull Bash
+Double-Edge
+Double-Edge
+Head Charge
+Head Charge
+Mega Kick
+Mega Kick
+Multi-Attack
+Multi-Attack
+Techno Blast
+Techno Blast
+Thrash
+Thrash
+Egg Bomb
+Egg Bomb
+Judgment
+Judgment
+Hyper Voice
+Hyper Voice
+Revelation Dance
+Revelation Dance
+Rock Climb
+Rock Climb
+Take Down
+Take Down
+Uproar
+Uproar
+Body Slam
+Body Slam
+Extreme Speed
+Extreme Speed
+ExtremeSpeed
+ExtremeSpeed
+Hyper Fang
+Hyper Fang
+Mega Punch
+Mega Punch
+Razor Wind
+Razor Wind
+Slam
+Slam
+Strength
+Strength
+Tri Attack
+Tri Attack
+Crush Claw
+Crush Claw
+Relic Song
+Relic Song
+Chip Away
+Chip Away
+Dizzy Punch
+Dizzy Punch
+Facade
+Facade
+Headbutt
+Headbutt
+Retaliate
+Retaliate
+Secret Power
+Secret Power
+Slash
+Slash
+Smelling Salts
+Smelling Salts
+SmellingSalt
+SmellingSalt
+Horn Attack
+Horn Attack
+Stomp
+Stomp
+Covet
+Covet
+Hidden Power
+Hidden Power
+Round
+Round
+Swift
+Swift
+Vise Grip
+Vise Grip
+Vice Grip
+Vice Grip
+ViceGrip
+ViceGrip
+Cut
+Cut
+Rapid Spin
+Rapid Spin
+Snore
+Snore
+Terrain Pulse
+Terrain Pulse
+Weather Ball
+Weather Ball
+Echoed Voice
+Echoed Voice
+Fake Out
+Fake Out
+False Swipe
+False Swipe
+Hold Back
+Hold Back
+Pay Day
+Pay Day
+Pound
+Pound
+Quick Attack
+Quick Attack
+Scratch
+Scratch
+Tackle
+Tackle
+Double Hit
+Double Hit
+Feint
+Feint
+Tail Slap
+Tail Slap
+Rage
+Rage
+Spike Cannon
+Spike Cannon
+Comet Punch
+Comet Punch
+Fury Swipes
+Fury Swipes
+Barrage
+Barrage
+Bind
+Bind
+Double Slap
+Double Slap
+DoubleSlap
+DoubleSlap
+Fury Attack
+Fury Attack
+Wrap
+Wrap
+Constrict
+Constrict
+Bide
+Bide
+Crush Grip
+Crush Grip
+Endeavor
+Endeavor
+Flail
+Flail
+Frustration
+Frustration
+Guillotine
+Guillotine
+Horn Drill
+Horn Drill
+Natural Gift
+Natural Gift
+Present
+Present
+Return
+Return
+Sonic Boom
+Sonic Boom
+SonicBoom
+SonicBoom
+Spit Up
+Spit Up
+Super Fang
+Super Fang
+Trump Card
+Trump Card
+Wring Out
+Wring Out
+Acupressure
+Acupressure
+After You
+After You
+Assist
+Assist
+Attract
+Attract
+Baton Pass
+Baton Pass
+Belly Drum
+Belly Drum
+Bestow
+Bestow
+Block
+Block
+Camouflage
+Camouflage
+Captivate
+Captivate
+Celebrate
+Celebrate
+Confide
+Confide
+Conversion
+Conversion
+Conversion 2
+Conversion 2
+Copycat
+Copycat
+Court Change
+Court Change
+Defense Curl
+Defense Curl
+Disable
+Disable
+Double Team
+Double Team
+Encore
+Encore
+Endure
+Endure
+Entrainment
+Entrainment
+Flash
+Flash
+Focus Energy
+Focus Energy
+Follow Me
+Follow Me
+Foresight
+Foresight
+Glare
+Glare
+Growl
+Growl
+Growth
+Growth
+Happy Hour
+Happy Hour
+Harden
+Harden
+Heal Bell
+Heal Bell
+Helping Hand
+Helping Hand
+Hold Hands
+Hold Hands
+Howl
+Howl
+Laser Focus
+Laser Focus
+Leer
+Leer
+Lock-On
+Lock-On
+Lovely Kiss
+Lovely Kiss
+Lucky Chant
+Lucky Chant
+Me First
+Me First
+Mean Look
+Mean Look
+Metronome
+Metronome
+Milk Drink
+Milk Drink
+Mimic
+Mimic
+Mind Reader
+Mind Reader
+Minimize
+Minimize
+Morning Sun
+Morning Sun
+Nature Power
+Nature Power
+Noble Roar
+Noble Roar
+Odor Sleuth
+Odor Sleuth
+Pain Split
+Pain Split
+Perish Song
+Perish Song
+Play Nice
+Play Nice
+Protect
+Protect
+Psych Up
+Psych Up
+Recover
+Recover
+Recycle
+Recycle
+Reflect Type
+Reflect Type
+Refresh
+Refresh
+Roar
+Roar
+Safeguard
+Safeguard
+Scary Face
+Scary Face
+Screech
+Screech
+Sharpen
+Sharpen
+Shell Smash
+Shell Smash
+Simple Beam
+Simple Beam
+Sing
+Sing
+Sketch
+Sketch
+Slack Off
+Slack Off
+Sleep Talk
+Sleep Talk
+Smokescreen
+Smokescreen
+SmokeScreen
+SmokeScreen
+Soft-Boiled
+Soft-Boiled
+Softboiled
+Softboiled
+Splash
+Splash
+Spotlight
+Spotlight
+Stockpile
+Stockpile
+Stuff Cheeks
+Stuff Cheeks
+Substitute
+Substitute
+Supersonic
+Supersonic
+Swagger
+Swagger
+Swallow
+Swallow
+Sweet Scent
+Sweet Scent
+Swords Dance
+Swords Dance
+Tail Whip
+Tail Whip
+Tearful Look
+Tearful Look
+Teatime
+Teatime
+Teeter Dance
+Teeter Dance
+Tickle
+Tickle
+Transform
+Transform
+Whirlwind
+Whirlwind
+Wish
+Wish
+Work Up
+Work Up
+Yawn
+Yawn
+Belch
+Belch
+Gunk Shot
+Gunk Shot
+Sludge Wave
+Sludge Wave
+Shell Side Arm
+Shell Side Arm
+Sludge Bomb
+Sludge Bomb
+Poison Jab
+Poison Jab
+Cross Poison
+Cross Poison
+Sludge
+Sludge
+Venoshock
+Venoshock
+Clear Smog
+Clear Smog
+Poison Fang
+Poison Fang
+Poison Tail
+Poison Tail
+Acid
+Acid
+Acid Spray
+Acid Spray
+Smog
+Smog
+Poison Sting
+Poison Sting
+Acid Armor
+Acid Armor
+Baneful Bunker
+Baneful Bunker
+Coil
+Coil
+Corrosive Gas
+Corrosive Gas
+Gastro Acid
+Gastro Acid
+Poison Gas
+Poison Gas
+Poison Powder
+Poison Powder
+PoisonPowder
+PoisonPowder
+Purify
+Purify
+Toxic
+Toxic
+Toxic Spikes
+Toxic Spikes
+Toxic Thread
+Toxic Thread
+Venom Drench
+Venom Drench
+Prismatic Laser
+Prismatic Laser
+Psycho Boost
+Psycho Boost
+Future Sight
+Future Sight
+Synchronoise
+Synchronoise
+Dream Eater
+Dream Eater
+Photon Geyser
+Photon Geyser
+Psystrike
+Psystrike
+Freezing Glare
+Freezing Glare
+Psychic
+Psychic
+Psychic Fangs
+Psychic Fangs
+Eerie Spell
+Eerie Spell
+Expanding Force
+Expanding Force
+Extrasensory
+Extrasensory
+Hyperspace Hole
+Hyperspace Hole
+Psyshock
+Psyshock
+Zen Headbutt
+Zen Headbutt
+Luster Purge
+Luster Purge
+Mist Ball
+Mist Ball
+Psycho Cut
+Psycho Cut
+Psybeam
+Psybeam
+Heart Stamp
+Heart Stamp
+Confusion
+Confusion
+Stored Power
+Stored Power
+Mirror Coat
+Mirror Coat
+Psywave
+Psywave
+Agility
+Agility
+Ally Switch
+Ally Switch
+Amnesia
+Amnesia
+Barrier
+Barrier
+Calm Mind
+Calm Mind
+Cosmic Power
+Cosmic Power
+Gravity
+Gravity
+Guard Split
+Guard Split
+Guard Swap
+Guard Swap
+Heal Block
+Heal Block
+Heal Pulse
+Heal Pulse
+Healing Wish
+Healing Wish
+Heart Swap
+Heart Swap
+Hypnosis
+Hypnosis
+Imprison
+Imprison
+Instruct
+Instruct
+Kinesis
+Kinesis
+Light Screen
+Light Screen
+Lunar Dance
+Lunar Dance
+Magic Coat
+Magic Coat
+Magic Powder
+Magic Powder
+Magic Room
+Magic Room
+Meditate
+Meditate
+Miracle Eye
+Miracle Eye
+Power Split
+Power Split
+Power Swap
+Power Swap
+Power Trick
+Power Trick
+Psychic Terrain
+Psychic Terrain
+Psycho Shift
+Psycho Shift
+Reflect
+Reflect
+Rest
+Rest
+Role Play
+Role Play
+Skill Swap
+Skill Swap
+Speed Swap
+Speed Swap
+Telekinesis
+Telekinesis
+Teleport
+Teleport
+Trick
+Trick
+Trick Room
+Trick Room
+Wonder Room
+Wonder Room
+Head Smash
+Head Smash
+Rock Wrecker
+Rock Wrecker
+Meteor Beam
+Meteor Beam
+Diamond Storm
+Diamond Storm
+Stone Edge
+Stone Edge
+Power Gem
+Power Gem
+Rock Slide
+Rock Slide
+Ancient Power
+Ancient Power
+AncientPower
+AncientPower
+Rock Tomb
+Rock Tomb
+Rock Throw
+Rock Throw
+Smack Down
+Smack Down
+Accelerock
+Accelerock
+Rollout
+Rollout
+Rock Blast
+Rock Blast
+Rock Polish
+Rock Polish
+Sandstorm
+Sandstorm
+Stealth Rock
+Stealth Rock
+Tar Shot
+Tar Shot
+Wide Guard
+Wide Guard
+Doom Desire
+Doom Desire
+Steel Beam
+Steel Beam
+Steel Roller
+Steel Roller
+Behemoth Bash
+Behemoth Bash
+Behemoth Blade
+Behemoth Blade
+Iron Tail
+Iron Tail
+Sunsteel Strike
+Sunsteel Strike
+Meteor Mash
+Meteor Mash
+Anchor Shot
+Anchor Shot
+Flash Cannon
+Flash Cannon
+Iron Head
+Iron Head
+Smart Strike
+Smart Strike
+Steel Wing
+Steel Wing
+Double Iron Bash
+Double Iron Bash
+Mirror Shot
+Mirror Shot
+Magnet Bomb
+Magnet Bomb
+Gear Grind
+Gear Grind
+Metal Claw
+Metal Claw
+Bullet Punch
+Bullet Punch
+Gyro Ball
+Gyro Ball
+Heavy Slam
+Heavy Slam
+Metal Burst
+Metal Burst
+Autotomize
+Autotomize
+Gear Up
+Gear Up
+Iron Defense
+Iron Defense
+King's Shield
+King's Shield
+Metal Sound
+Metal Sound
+Shift Gear
+Shift Gear
+Hydro Cannon
+Hydro Cannon
+Water Spout
+Water Spout
+Hydro Pump
+Hydro Pump
+Origin Pulse
+Origin Pulse
+Steam Eruption
+Steam Eruption
+Crabhammer
+Crabhammer
+Aqua Tail
+Aqua Tail
+Muddy Water
+Muddy Water
+Sparkling Aria
+Sparkling Aria
+Surf
+Surf
+Fishious Rend
+Fishious Rend
+Liquidation
+Liquidation
+Dive
+Dive
+Scald
+Scald
+Snipe Shot
+Snipe Shot
+Water Pledge
+Water Pledge
+Waterfall
+Waterfall
+Razor Shell
+Razor Shell
+Brine
+Brine
+Bubble Beam
+Bubble Beam
+BubbleBeam
+BubbleBeam
+Octazooka
+Octazooka
+Flip Turn
+Flip Turn
+Water Pulse
+Water Pulse
+Aqua Jet
+Aqua Jet
+Bubble
+Bubble
+Water Gun
+Water Gun
+Clamp
+Clamp
+Whirlpool
+Whirlpool
+Surging Strikes
+Surging Strikes
+Water Shuriken
+Water Shuriken
+Aqua Ring
+Aqua Ring
+Life Dew
+Life Dew
+Rain Dance
+Rain Dance
+Soak
+Soak
+Water Sport
+Water Sport
+Withdraw
+Withdraw

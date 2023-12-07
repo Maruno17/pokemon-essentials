@@ -332,6 +332,15 @@ class Player < Trainer
       end
     end
 
+    def species_in_unlocked_dex?(species)
+      return true if @unlocked_dexes.last
+      (@unlocked_dexes.length - 1).times do |i|
+        next if !self.unlocked?(i)
+        return true if pbGetRegionalNumber(i, species) > 0
+      end
+      return false
+    end
+
     #---------------------------------------------------------------------------
 
     private

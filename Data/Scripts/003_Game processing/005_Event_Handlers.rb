@@ -70,7 +70,7 @@ class NamedEvent
 
   # Adds an event handler procedure from the event.
   def add(key, proc)
-    @callbacks[key] = proc if !@callbacks.has_key?(key)
+    @callbacks[key] = proc
   end
 
   # Removes an event handler procedure from the event.
@@ -210,7 +210,8 @@ class HandlerHashEnum
     @symbolCache = {}
   end
 
-  def [](sym)   # 'sym' can be an ID or symbol
+  # 'sym' can be an ID or symbol.
+  def [](sym)
     id = fromSymbol(sym)
     ret = nil
     ret = @hash[id] if id && @hash[id]   # Real ID from the item
@@ -246,7 +247,8 @@ class HandlerHashEnum
     return ret
   end
 
-  def add(sym, handler = nil, &handlerBlock) # 'sym' can be an ID or symbol
+  # 'sym' can be an ID or symbol.
+  def add(sym, handler = nil, &handlerBlock)
     if ![Proc, Hash].include?(handler.class) && !block_given?
       raise ArgumentError, "#{self.class.name} for #{sym.inspect} has no valid handler (#{handler.inspect} was given)"
     end

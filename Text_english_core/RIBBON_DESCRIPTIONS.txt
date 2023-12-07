@@ -1,0 +1,160 @@
+﻿# To localize this text for a particular language, please
+# translate every second line of this file.
+#-------------------------------
+[RIBBON_DESCRIPTIONS]
+Hoenn Cool Contest Normal Rank winner!
+Hoenn Cool Contest Normal Rank winner!
+Hoenn Cool Contest Super Rank winner!
+Hoenn Cool Contest Super Rank winner!
+Hoenn Cool Contest Hyper Rank winner!
+Hoenn Cool Contest Hyper Rank winner!
+Hoenn Cool Contest Master Rank winner!
+Hoenn Cool Contest Master Rank winner!
+Hoenn Beauty Contest Normal Rank winner!
+Hoenn Beauty Contest Normal Rank winner!
+Hoenn Beauty Contest Super Rank winner!
+Hoenn Beauty Contest Super Rank winner!
+Hoenn Beauty Contest Hyper Rank winner!
+Hoenn Beauty Contest Hyper Rank winner!
+Hoenn Beauty Contest Master Rank winner!
+Hoenn Beauty Contest Master Rank winner!
+Hoenn Cute Contest Normal Rank winner!
+Hoenn Cute Contest Normal Rank winner!
+Hoenn Cute Contest Super Rank winner!
+Hoenn Cute Contest Super Rank winner!
+Hoenn Cute Contest Hyper Rank winner!
+Hoenn Cute Contest Hyper Rank winner!
+Hoenn Cute Contest Master Rank winner!
+Hoenn Cute Contest Master Rank winner!
+Hoenn Smart Contest Normal Rank winner!
+Hoenn Smart Contest Normal Rank winner!
+Hoenn Smart Contest Super Rank winner!
+Hoenn Smart Contest Super Rank winner!
+Hoenn Smart Contest Hyper Rank winner!
+Hoenn Smart Contest Hyper Rank winner!
+Hoenn Smart Contest Master Rank winner!
+Hoenn Smart Contest Master Rank winner!
+Hoenn Tough Contest Normal Rank winner!
+Hoenn Tough Contest Normal Rank winner!
+Hoenn Tough Contest Super Rank winner!
+Hoenn Tough Contest Super Rank winner!
+Hoenn Tough Contest Hyper Rank winner!
+Hoenn Tough Contest Hyper Rank winner!
+Hoenn Tough Contest Master Rank winner!
+Hoenn Tough Contest Master Rank winner!
+Super Contest Cool Category Normal Rank winner!
+Super Contest Cool Category Normal Rank winner!
+Super Contest Cool Category Great Rank winner!
+Super Contest Cool Category Great Rank winner!
+Super Contest Cool Category Ultra Rank winner!
+Super Contest Cool Category Ultra Rank winner!
+Super Contest Cool Category Master Rank winner!
+Super Contest Cool Category Master Rank winner!
+Super Contest Beauty Category Normal Rank winner!
+Super Contest Beauty Category Normal Rank winner!
+Super Contest Beauty Category Great Rank winner!
+Super Contest Beauty Category Great Rank winner!
+Super Contest Beauty Category Ultra Rank winner!
+Super Contest Beauty Category Ultra Rank winner!
+Super Contest Beauty Category Master Rank winner!
+Super Contest Beauty Category Master Rank winner!
+Super Contest Cute Category Normal Rank winner!
+Super Contest Cute Category Normal Rank winner!
+Super Contest Cute Category Great Rank winner!
+Super Contest Cute Category Great Rank winner!
+Super Contest Cute Category Ultra Rank winner!
+Super Contest Cute Category Ultra Rank winner!
+Super Contest Cute Category Master Rank winner!
+Super Contest Cute Category Master Rank winner!
+Super Contest Smart Category Normal Rank winner!
+Super Contest Smart Category Normal Rank winner!
+Super Contest Smart Category Great Rank winner!
+Super Contest Smart Category Great Rank winner!
+Super Contest Smart Category Ultra Rank winner!
+Super Contest Smart Category Ultra Rank winner!
+Super Contest Smart Category Master Rank winner!
+Super Contest Smart Category Master Rank winner!
+Super Contest Tough Category Normal Rank winner!
+Super Contest Tough Category Normal Rank winner!
+Super Contest Tough Category Great Rank winner!
+Super Contest Tough Category Great Rank winner!
+Super Contest Tough Category Ultra Rank winner!
+Super Contest Tough Category Ultra Rank winner!
+Super Contest Tough Category Master Rank winner!
+Super Contest Tough Category Master Rank winner!
+Ribbon awarded for clearing Hoenn's Battle Tower's Lv. 50 challenge.
+Ribbon awarded for clearing Hoenn's Battle Tower's Lv. 50 challenge.
+Ribbon awarded for clearing Hoenn's Battle Tower's Lv. 100 challenge.
+Ribbon awarded for clearing Hoenn's Battle Tower's Lv. 100 challenge.
+A Ribbon awarded for defeating the Tower Tycoon at the Battle Tower.
+A Ribbon awarded for defeating the Tower Tycoon at the Battle Tower.
+A Ribbon awarded for completing the Battle Tower Double challenge.
+A Ribbon awarded for completing the Battle Tower Double challenge.
+A Ribbon awarded for completing the Battle Tower Multi challenge.
+A Ribbon awarded for completing the Battle Tower Multi challenge.
+A Ribbon awarded for completing the Battle Tower Link Multi challenge.
+A Ribbon awarded for completing the Battle Tower Link Multi challenge.
+A Ribbon awarded for completing the Wi-Fi Battle Tower challenge.
+A Ribbon awarded for completing the Wi-Fi Battle Tower challenge.
+Ribbon for clearing the Pokémon League and entering the Hall of Fame in another region.
+Ribbon for clearing the Pokémon League and entering the Hall of Fame in another region.
+Ribbon awarded for beating the Sinnoh Champion and entering the Hall of Fame.
+Ribbon awarded for beating the Sinnoh Champion and entering the Hall of Fame.
+A Ribbon awarded for setting an incredible record.
+A Ribbon awarded for setting an incredible record.
+Pokémon Event Participation Ribbon.
+Pokémon Event Participation Ribbon.
+A Ribbon awarded for setting a legendary record.
+A Ribbon awarded for setting a legendary record.
+An extraordinarily gorgeous and extravagant Ribbon.
+An extraordinarily gorgeous and extravagant Ribbon.
+An incredibly regal Ribbon with an air of nobility.
+An incredibly regal Ribbon with an air of nobility.
+A gorgeous and regal Ribbon that is the peak of fabulous.
+A gorgeous and regal Ribbon that is the peak of fabulous.
+A Ribbon for recalling an invigorating event that created life energy.
+A Ribbon for recalling an invigorating event that created life energy.
+A Ribbon for recalling a thrilling event that made life more exciting.
+A Ribbon for recalling a thrilling event that made life more exciting.
+A Ribbon for recalling feelings of sadness that added spice to life.
+A Ribbon for recalling feelings of sadness that added spice to life.
+A Ribbon for recalling a careless error that helped steer life decisions.
+A Ribbon for recalling a careless error that helped steer life decisions.
+A Ribbon for recalling a refreshing event that added sparkle to life.
+A Ribbon for recalling a refreshing event that added sparkle to life.
+A Ribbon for recalling a deep slumber that made life soothing.
+A Ribbon for recalling a deep slumber that made life soothing.
+A Ribbon for recalling that smiles enrich the quality of life.
+A Ribbon for recalling that smiles enrich the quality of life.
+A Ribbon awarded to a Pokémon deemed to have a top-quality footprint.
+A Ribbon awarded to a Pokémon deemed to have a top-quality footprint.
+Ribbon awarded for being chosen as a super sketch model in Hoenn.
+Ribbon awarded for being chosen as a super sketch model in Hoenn.
+Ribbon awarded for being an exceptionally hard worker.
+Ribbon awarded for being an exceptionally hard worker.
+A Ribbon to celebrate a birthday.
+A Ribbon to celebrate a birthday.
+A special Ribbon for a special day.
+A special Ribbon for a special day.
+A Ribbon that proclaims love for Pokémon.
+A Ribbon that proclaims love for Pokémon.
+Special Holiday Ribbon.
+Special Holiday Ribbon.
+A Ribbon to cherish a special memory.
+A Ribbon to cherish a special memory.
+A Ribbon said to make your wish come true.
+A Ribbon said to make your wish come true.
+A Ribbon awarded for overcoming all difficult challenges.
+A Ribbon awarded for overcoming all difficult challenges.
+Pokémon League Champion Ribbon.
+Pokémon League Champion Ribbon.
+Battle Competition Champion Ribbon.
+Battle Competition Champion Ribbon.
+Pokémon World Championships Regional Champion Ribbon.
+Pokémon World Championships Regional Champion Ribbon.
+A Ribbon awarded for winning 100 matches in a row.
+A Ribbon awarded for winning 100 matches in a row.
+Pokémon World Championships National Champion Ribbon.
+Pokémon World Championships National Champion Ribbon.
+Pokémon World Championships World Champion Ribbon.
+Pokémon World Championships World Champion Ribbon.

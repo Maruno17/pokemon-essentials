@@ -477,7 +477,7 @@ class Battle::Move::UsedAfterAllyRoundWithDoublePower < Battle::Move
     user.pbOwnSide.effects[PBEffects::Round] = true
     user.allAllies.each do |b|
       next if @battle.choices[b.index][0] != :UseMove || b.movedThisRound?
-      next if @battle.choices[b.index][2].function != @function
+      next if @battle.choices[b.index][2].function_code != @function_code
       b.effects[PBEffects::MoveNext] = true
       b.effects[PBEffects::Quash]    = 0
       break
@@ -620,9 +620,9 @@ class Battle::Move::TargetUsesItsLastUsedMoveAgain < Battle::Move
       return true
     end
     targetMove = @battle.choices[target.index][2]
-    if targetMove && (targetMove.function == "FailsIfUserDamagedThisTurn" ||   # Focus Punch
-                      targetMove.function == "UsedAfterUserTakesPhysicalDamage" ||   # Shell Trap
-                      targetMove.function == "BurnAttackerBeforeUserActs")    # Beak Blast
+    if targetMove && (targetMove.function_code == "FailsIfUserDamagedThisTurn" ||   # Focus Punch
+                      targetMove.function_code == "UsedAfterUserTakesPhysicalDamage" ||   # Shell Trap
+                      targetMove.function_code == "BurnAttackerBeforeUserActs")    # Beak Blast
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end

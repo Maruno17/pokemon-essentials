@@ -189,7 +189,7 @@ class Battle::AI
            # Type power boosters
            :BLACKBELT, :BLACKGLASSES, :CHARCOAL, :DRAGONFANG, :HARDSTONE,
            :MAGNET, :METALCOAT, :MIRACLESEED, :MYSTICWATER, :NEVERMELTICE,
-           :POISONBARB, :SHARPBEAK, :SILKSCARF,:SILVERPOWDER, :SOFTSAND,
+           :POISONBARB, :SHARPBEAK, :SILKSCARF, :SILVERPOWDER, :SOFTSAND,
            :SPELLTAG, :TWISTEDSPOON,
            :ODDINCENSE, :ROCKINCENSE, :ROSEINCENSE, :SEAINCENSE, :WAVEINCENSE,
            # Plates
@@ -218,8 +218,7 @@ class Battle::AI
            :BUGMEMORY, :DARKMEMORY, :DRAGONMEMORY, :ELECTRICMEMORY,
            :FAIRYMEMORY, :FIGHTINGMEMORY, :FIREMEMORY, :FLYINGMEMORY,
            :GHOSTMEMORY, :GRASSMEMORY, :GROUNDMEMORY, :ICEMEMORY, :POISONMEMORY,
-           :PSYCHICMEMORY, :ROCKMEMORY, :STEELMEMORY, :WATERMEMORY
-           ],
+           :PSYCHICMEMORY, :ROCKMEMORY, :STEELMEMORY, :WATERMEMORY],
     0  => [:SMOKEBALL],
     -5 => [:FULLINCENSE, :LAGGINGTAIL, :RINGTARGET],
     -6 => [:MACHOBRACE, :POWERANKLET, :POWERBAND, :POWERBELT, :POWERBRACER,
@@ -456,7 +455,7 @@ Battle::AI::Handlers::ItemRanking.add(:BLACKSLUDGE,
 Battle::AI::Handlers::ItemRanking.add(:CHESTOBERRY,
   proc { |item, score, battler, ai|
     if ai.trainer.high_skill?
-      score += 1 if battler.has_move_with_function("HealUserFullyAndFallAsleep")
+      score += 1 if battler.has_move_with_function?("HealUserFullyAndFallAsleep")
     end
     next score
   }
@@ -784,7 +783,7 @@ Battle::AI::Handlers::ItemRanking.add(:TOXICORB,
 Battle::AI::Handlers::ItemRanking.add(:WHITEHERB,
   proc { |item, score, battler, ai|
     if ai.trainer.high_skill?
-      score += 1 if battler.has_move_with_function("LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2")
+      score += 1 if battler.has_move_with_function?("LowerUserDefSpDef1RaiseUserAtkSpAtkSpd2")
     end
     next score
   }
@@ -852,7 +851,7 @@ Battle::AI::Handlers::ItemRanking.addIf(:type_boosting_items,
       :PSYCHIC  => [:TWISTEDSPOON, :MINDPLATE, :ODDINCENSE],
       :ROCK     => [:HARDSTONE, :STONEPLATE, :ROCKINCENSE],
       :STEEL    => [:METALCOAT, :IRONPLATE],
-      :WATER    => [:MYSTICWATER, :SPLASHPLATE, :SEAINCENSE, :WAVEINCENSE],
+      :WATER    => [:MYSTICWATER, :SPLASHPLATE, :SEAINCENSE, :WAVEINCENSE]
     }
     boosted_type = nil
     boosters.each_pair do |type, items|
@@ -891,7 +890,7 @@ Battle::AI::Handlers::ItemRanking.addIf(:gems,
       :PSYCHICGEM  => :PSYCHIC,
       :ROCKGEM     => :ROCK,
       :STEELGEM    => :STEEL,
-      :WATERGEM    => :WATER,
+      :WATERGEM    => :WATER
     }[item]
     next score if boosted_type && battler.has_damaging_move_of_type?(boosted_type)
     next 0

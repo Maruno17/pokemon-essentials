@@ -1,0 +1,536 @@
+﻿# To localize this text for a particular language, please
+# translate every second line of this file.
+#-------------------------------
+[ABILITY_NAMES]
+Stench
+Stench
+Drizzle
+Drizzle
+Speed Boost
+Speed Boost
+Battle Armor
+Battle Armor
+Sturdy
+Sturdy
+Damp
+Damp
+Limber
+Limber
+Sand Veil
+Sand Veil
+Static
+Static
+Volt Absorb
+Volt Absorb
+Water Absorb
+Water Absorb
+Oblivious
+Oblivious
+Cloud Nine
+Cloud Nine
+Compound Eyes
+Compound Eyes
+Insomnia
+Insomnia
+Color Change
+Color Change
+Immunity
+Immunity
+Flash Fire
+Flash Fire
+Shield Dust
+Shield Dust
+Own Tempo
+Own Tempo
+Suction Cups
+Suction Cups
+Intimidate
+Intimidate
+Shadow Tag
+Shadow Tag
+Rough Skin
+Rough Skin
+Wonder Guard
+Wonder Guard
+Levitate
+Levitate
+Effect Spore
+Effect Spore
+Synchronize
+Synchronize
+Clear Body
+Clear Body
+Natural Cure
+Natural Cure
+Lightning Rod
+Lightning Rod
+Serene Grace
+Serene Grace
+Swift Swim
+Swift Swim
+Chlorophyll
+Chlorophyll
+Illuminate
+Illuminate
+Trace
+Trace
+Huge Power
+Huge Power
+Poison Point
+Poison Point
+Inner Focus
+Inner Focus
+Magma Armor
+Magma Armor
+Water Veil
+Water Veil
+Magnet Pull
+Magnet Pull
+Soundproof
+Soundproof
+Rain Dish
+Rain Dish
+Sand Stream
+Sand Stream
+Pressure
+Pressure
+Thick Fat
+Thick Fat
+Early Bird
+Early Bird
+Flame Body
+Flame Body
+Run Away
+Run Away
+Keen Eye
+Keen Eye
+Hyper Cutter
+Hyper Cutter
+Pickup
+Pickup
+Truant
+Truant
+Hustle
+Hustle
+Cute Charm
+Cute Charm
+Plus
+Plus
+Minus
+Minus
+Forecast
+Forecast
+Sticky Hold
+Sticky Hold
+Shed Skin
+Shed Skin
+Guts
+Guts
+Marvel Scale
+Marvel Scale
+Liquid Ooze
+Liquid Ooze
+Overgrow
+Overgrow
+Blaze
+Blaze
+Torrent
+Torrent
+Swarm
+Swarm
+Rock Head
+Rock Head
+Drought
+Drought
+Arena Trap
+Arena Trap
+Vital Spirit
+Vital Spirit
+White Smoke
+White Smoke
+Pure Power
+Pure Power
+Shell Armor
+Shell Armor
+Air Lock
+Air Lock
+Tangled Feet
+Tangled Feet
+Motor Drive
+Motor Drive
+Rivalry
+Rivalry
+Steadfast
+Steadfast
+Snow Cloak
+Snow Cloak
+Gluttony
+Gluttony
+Anger Point
+Anger Point
+Unburden
+Unburden
+Heatproof
+Heatproof
+Simple
+Simple
+Dry Skin
+Dry Skin
+Download
+Download
+Iron Fist
+Iron Fist
+Poison Heal
+Poison Heal
+Adaptability
+Adaptability
+Skill Link
+Skill Link
+Hydration
+Hydration
+Solar Power
+Solar Power
+Quick Feet
+Quick Feet
+Normalize
+Normalize
+Sniper
+Sniper
+Magic Guard
+Magic Guard
+No Guard
+No Guard
+Stall
+Stall
+Technician
+Technician
+Leaf Guard
+Leaf Guard
+Klutz
+Klutz
+Mold Breaker
+Mold Breaker
+Super Luck
+Super Luck
+Aftermath
+Aftermath
+Anticipation
+Anticipation
+Forewarn
+Forewarn
+Unaware
+Unaware
+Tinted Lens
+Tinted Lens
+Filter
+Filter
+Slow Start
+Slow Start
+Scrappy
+Scrappy
+Storm Drain
+Storm Drain
+Ice Body
+Ice Body
+Solid Rock
+Solid Rock
+Snow Warning
+Snow Warning
+Honey Gather
+Honey Gather
+Frisk
+Frisk
+Reckless
+Reckless
+Multitype
+Multitype
+Flower Gift
+Flower Gift
+Bad Dreams
+Bad Dreams
+Pickpocket
+Pickpocket
+Sheer Force
+Sheer Force
+Contrary
+Contrary
+Unnerve
+Unnerve
+Defiant
+Defiant
+Defeatist
+Defeatist
+Cursed Body
+Cursed Body
+Healer
+Healer
+Friend Guard
+Friend Guard
+Weak Armor
+Weak Armor
+Heavy Metal
+Heavy Metal
+Light Metal
+Light Metal
+Multiscale
+Multiscale
+Toxic Boost
+Toxic Boost
+Flare Boost
+Flare Boost
+Harvest
+Harvest
+Telepathy
+Telepathy
+Moody
+Moody
+Overcoat
+Overcoat
+Poison Touch
+Poison Touch
+Regenerator
+Regenerator
+Big Pecks
+Big Pecks
+Sand Rush
+Sand Rush
+Wonder Skin
+Wonder Skin
+Analytic
+Analytic
+Illusion
+Illusion
+Imposter
+Imposter
+Infiltrator
+Infiltrator
+Mummy
+Mummy
+Moxie
+Moxie
+Justified
+Justified
+Rattled
+Rattled
+Magic Bounce
+Magic Bounce
+Sap Sipper
+Sap Sipper
+Prankster
+Prankster
+Sand Force
+Sand Force
+Iron Barbs
+Iron Barbs
+Zen Mode
+Zen Mode
+Victory Star
+Victory Star
+Turboblaze
+Turboblaze
+Teravolt
+Teravolt
+Aroma Veil
+Aroma Veil
+Flower Veil
+Flower Veil
+Cheek Pouch
+Cheek Pouch
+Protean
+Protean
+Fur Coat
+Fur Coat
+Magician
+Magician
+Bulletproof
+Bulletproof
+Competitive
+Competitive
+Strong Jaw
+Strong Jaw
+Refrigerate
+Refrigerate
+Sweet Veil
+Sweet Veil
+Stance Change
+Stance Change
+Gale Wings
+Gale Wings
+Mega Launcher
+Mega Launcher
+Grass Pelt
+Grass Pelt
+Symbiosis
+Symbiosis
+Tough Claws
+Tough Claws
+Pixilate
+Pixilate
+Gooey
+Gooey
+Aerilate
+Aerilate
+Parental Bond
+Parental Bond
+Dark Aura
+Dark Aura
+Fairy Aura
+Fairy Aura
+Aura Break
+Aura Break
+Primordial Sea
+Primordial Sea
+Desolate Land
+Desolate Land
+Delta Stream
+Delta Stream
+Stamina
+Stamina
+Wimp Out
+Wimp Out
+Emergency Exit
+Emergency Exit
+Water Compaction
+Water Compaction
+Merciless
+Merciless
+Shields Down
+Shields Down
+Stakeout
+Stakeout
+Water Bubble
+Water Bubble
+Steelworker
+Steelworker
+Berserk
+Berserk
+Slush Rush
+Slush Rush
+Long Reach
+Long Reach
+Liquid Voice
+Liquid Voice
+Triage
+Triage
+Galvanize
+Galvanize
+Surge Surfer
+Surge Surfer
+Schooling
+Schooling
+Disguise
+Disguise
+Battle Bond
+Battle Bond
+Power Construct
+Power Construct
+Corrosion
+Corrosion
+Comatose
+Comatose
+Queenly Majesty
+Queenly Majesty
+Innards Out
+Innards Out
+Dancer
+Dancer
+Battery
+Battery
+Fluffy
+Fluffy
+Dazzling
+Dazzling
+Soul-Heart
+Soul-Heart
+Tangling Hair
+Tangling Hair
+Receiver
+Receiver
+Power of Alchemy
+Power of Alchemy
+Beast Boost
+Beast Boost
+RKS System
+RKS System
+Electric Surge
+Electric Surge
+Psychic Surge
+Psychic Surge
+Misty Surge
+Misty Surge
+Grassy Surge
+Grassy Surge
+Full Metal Body
+Full Metal Body
+Shadow Shield
+Shadow Shield
+Prism Armor
+Prism Armor
+Neuroforce
+Neuroforce
+Intrepid Sword
+Intrepid Sword
+Dauntless Shield
+Dauntless Shield
+Libero
+Libero
+Ball Fetch
+Ball Fetch
+Cotton Down
+Cotton Down
+Propeller Tail
+Propeller Tail
+Mirror Armor
+Mirror Armor
+Gulp Missile
+Gulp Missile
+Stalwart
+Stalwart
+Steam Engine
+Steam Engine
+Punk Rock
+Punk Rock
+Sand Spit
+Sand Spit
+Ice Scales
+Ice Scales
+Ripen
+Ripen
+Ice Face
+Ice Face
+Power Spot
+Power Spot
+Mimicry
+Mimicry
+Screen Cleaner
+Screen Cleaner
+Steely Spirit
+Steely Spirit
+Perish Body
+Perish Body
+Wandering Spirit
+Wandering Spirit
+Gorilla Tactics
+Gorilla Tactics
+Neutralizing Gas
+Neutralizing Gas
+Pastel Veil
+Pastel Veil
+Hunger Switch
+Hunger Switch
+Quick Draw
+Quick Draw
+Unseen Fist
+Unseen Fist
+Curious Medicine
+Curious Medicine
+Transistor
+Transistor
+Dragon's Maw
+Dragon's Maw
+Chilling Neigh
+Chilling Neigh
+Grim Neigh
+Grim Neigh
+As One
+As One

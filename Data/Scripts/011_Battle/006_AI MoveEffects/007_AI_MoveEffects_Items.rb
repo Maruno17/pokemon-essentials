@@ -77,7 +77,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTargetSwapItems",
     # Don't prefer if user used this move in the last round
     score -= 15 if user.battler.lastMoveUsed &&
                    GameData::Move.exists?(user.battler.lastMoveUsed) &&
-                   GameData::Move.get(user.battler.lastMoveUsed).function_code == move.function
+                   GameData::Move.get(user.battler.lastMoveUsed).function_code == move.function_code
     next score
   }
 )
@@ -147,7 +147,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DestroyTargetBerryOrGem"
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("CorrodeTargetItem",
   proc { |move, user, target, ai, battle|
-    next true if !target.item || target.unlosableItem?(target.item) ||
+    next true if !target.item || target.battler.unlosableItem?(target.item) ||
                  target.effects[PBEffects::Substitute] > 0
     next true if target.has_active_ability?(:STICKYHOLD)
     next true if battle.corrosiveGas[target.index % 2][target.party_index]

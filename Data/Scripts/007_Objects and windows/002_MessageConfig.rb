@@ -24,8 +24,7 @@ module MessageConfig
   # 2 = Pause cursor is displayed at lower middle side
   CURSOR_POSITION          = 1
   WINDOW_OPACITY           = 255
-  TEXT_SPEED               = nil   # can be positive to wait frames, or negative
-                                   # to show multiple characters in a single frame
+  TEXT_SPEED               = nil   # Time in seconds between two characters
   @@systemFrame     = nil
   @@defaultTextSkin = nil
   @@textSpeed       = nil
@@ -100,13 +99,16 @@ module MessageConfig
     @@textSpeed = value
   end
 
+  # Text speed is the delay in seconds between two adjacent characters being
+  # shown.
   def self.pbSettingToTextSpeed(speed)
     case speed
-    when 0 then return 2
-    when 1 then return 1
-    when 2 then return -2
+    when 0 then return 4 / 80.0   # Slow
+    when 1 then return 2 / 80.0   # Medium
+    when 2 then return 1 / 80.0   # Fast
+    when 3 then return 0          # Instant
     end
-    return TEXT_SPEED || 1
+    return TEXT_SPEED || (2 / 80.0)   # Normal
   end
 
   #-----------------------------------------------------------------------------

@@ -3,12 +3,11 @@ class Battle::Scene
   # Create the battle scene and its elements
   #=============================================================================
   def initialize
-    @battle       = nil
-    @abortable    = false
-    @aborted      = false
-    @battleEnd    = false
-    @animations   = []
-    @frameCounter = 0
+    @battle     = nil
+    @abortable  = false
+    @aborted    = false
+    @battleEnd  = false
+    @animations = []
   end
 
   # Called whenever the battle begins.

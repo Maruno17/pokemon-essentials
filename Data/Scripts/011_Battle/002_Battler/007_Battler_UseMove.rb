@@ -89,7 +89,7 @@ class Battle::Battler
     @effects[PBEffects::Outrage]       = 0
     @effects[PBEffects::Uproar]        = 0
     @effects[PBEffects::Bide]          = 0
-    @currentMove = nil
+    @currentMove = nil if @effects[PBEffects::HyperBeam] == 0
     # Reset counters for moves which increase them when used in succession
     @effects[PBEffects::FuryCutter] = 0
   end
@@ -293,7 +293,7 @@ class Battle::Battler
     end
     # "But it failed!" checks
     if move.pbMoveFailed?(user, targets)
-      PBDebug.log(sprintf("[Move failed] In function code %s's def pbMoveFailed?", move.function))
+      PBDebug.log(sprintf("[Move failed] In function code %s's def pbMoveFailed?", move.function_code))
       user.lastMoveFailed = true
       pbCancelMoves
       pbEndTurn(choice)
@@ -314,7 +314,7 @@ class Battle::Battler
       user.lastMoveFailed = true
       if ![:Rain, :HeavyRain].include?(user.effectiveWeather) && user.takesIndirectDamage?
         user.pbTakeEffectDamage((user.totalhp / 4.0).round, false) do |hp_lost|
-          @battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
+          @battle.pbDisplay(_INTL("{1} is hurt by Powder!", user.pbThis))
         end
         @battle.pbGainExp   # In case user is KO'd by this
       end
@@ -356,7 +356,7 @@ class Battle::Battler
       #       Pokémon which becomes Ghost-type because of Protean, it should
       #       target and curse itself. I think this is silly, so I'm making it
       #       choose a random opponent to curse instead.
-      if move.function == "CurseTargetOrLowerUserSpd1RaiseUserAtkDef1" && targets.length == 0
+      if move.function_code == "CurseTargetOrLowerUserSpd1RaiseUserAtkDef1" && targets.length == 0
         choice[3] = -1
         targets = pbFindTargets(choice, move, user)
       end
@@ -528,7 +528,7 @@ class Battle::Battler
       oldLastRoundMoved = b.lastRoundMoved
       @battle.pbDisplay(_INTL("{1} used the move instructed by {2}!", b.pbThis, user.pbThis(true)))
       b.effects[PBEffects::Instructed] = true
-      if b.pbCanChooseMove?(@moves[idxMove], false)
+      if b.pbCanChooseMove?(b.moves[idxMove], false)
         PBDebug.logonerr do
           b.pbUseMoveSimple(b.lastMoveUsed, b.lastRegularMoveTarget, idxMove, false)
         end

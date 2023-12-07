@@ -17,10 +17,10 @@ class Window_DexesList < Window_CommandPokemon
   def drawItem(index, count, rect)
     super(index, count, rect)
     if index >= 0 && index < @commands2.length
-      pbDrawShadowText(self.contents, rect.x + 254, rect.y, 64, rect.height,
-                       @commands2[index][0].to_s, self.baseColor, self.shadowColor, 1)
-      pbDrawShadowText(self.contents, rect.x + 350, rect.y, 64, rect.height,
-                       @commands2[index][1].to_s, self.baseColor, self.shadowColor, 1)
+      pbDrawShadowText(self.contents, rect.x + 254, rect.y + (self.contents.text_offset_y || 0),
+                       64, rect.height, @commands2[index][0].to_s, self.baseColor, self.shadowColor, 1)
+      pbDrawShadowText(self.contents, rect.x + 350, rect.y + (self.contents.text_offset_y || 0),
+                       64, rect.height, @commands2[index][1].to_s, self.baseColor, self.shadowColor, 1)
       allseen = (@commands2[index][0] >= @commands2[index][2])
       allown  = (@commands2[index][1] >= @commands2[index][2])
       pbDrawImagePositions(
@@ -74,7 +74,7 @@ class PokemonPokedexMenu_Scene
         break
       elsif Input.trigger?(Input::USE)
         ret = @sprites["commands"].index
-        (ret == @commands.length - 1) ? pbPlayCloseMenuSE : pbPlayDecisionSE
+        (ret == @commands.length - 1) ? pbPlayCloseMenuSE : pbSEPlay("GUI pokedex open")
         break
       end
     end

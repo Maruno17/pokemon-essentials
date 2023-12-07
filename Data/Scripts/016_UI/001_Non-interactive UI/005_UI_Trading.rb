@@ -144,6 +144,8 @@ class PokemonTrade_Scene
     picturePoke.moveColor(delay, 5, Color.new(248, 176, 240, 0))
     cry = GameData::Species.cry_filename_from_pokemon(@pokemon2)
     picturePoke.setSE(delay, cry) if cry
+    cry_length = (GameData::Species.cry_length(@pokemon2) * 20).ceil
+    picturePoke.setVisible(delay + cry_length + 4, true)   # Time for the cry to play
     # Play animation
     pbRunPictures(
       [picturePoke, pictureBall],
@@ -179,19 +181,23 @@ class PokemonTrade_Scene
                                @pokemon.name, @pokemon.owner.public_id, @pokemon.owner.name) + "\\wtnp[0]") { pbUpdate }
     pbMessageWaitForInput(@sprites["msgwindow"], 50, true) { pbUpdate }
     pbPlayDecisionSE
+    pbBGMPlay("Evolution")
     pbScene1
     pbMessageDisplay(@sprites["msgwindow"],
                      _INTL("For {1}'s {2},\n{3} sends {4}.", @trader1, speciesname1, @trader2, speciesname2) + "\1") { pbUpdate }
     pbMessageDisplay(@sprites["msgwindow"],
                      _INTL("{1} bids farewell to {2}.", @trader2, speciesname2)) { pbUpdate }
     pbScene2
+    pbBGMStop
+    pbMEPlay("Battle capture success")
     pbMessageDisplay(@sprites["msgwindow"],
                      _ISPRINTF("{1:s}\nID: {2:05d}   OT: {3:s}",
                                @pokemon2.name, @pokemon2.owner.public_id, @pokemon2.owner.name) + "\1") { pbUpdate }
     pbMessageDisplay(@sprites["msgwindow"],
                      _INTL("Take good care of {1}.", speciesname2)) { pbUpdate }
     # Show Pokédex entry for new species if it hasn't been owned before
-    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned &&
+       $player.has_pokedex && $player.pokedex.species_in_unlocked_dex?(@pokemon2.species)
       pbMessageDisplay(@sprites["msgwindow"],
                        _INTL("{1}'s data was added to the Pokédex.", speciesname2)) { pbUpdate }
       $player.pokedex.register_last_seen(@pokemon2)

@@ -115,7 +115,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("OHKO",
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DamageTargetAlly",
   proc { |score, move, user, target, ai, battle|
     target.battler.allAllies.each do |b|
-      next if !b.near?(target.battler) || !b.battler.takesIndirectDamage?
+      next if !b.near?(target.battler) || !b.takesIndirectDamage?
       score += 10
       if ai.trainer.has_skill_flag?("HPAware")
         score += 10 if b.hp <= b.totalhp / 16
@@ -189,7 +189,7 @@ Battle::AI::Handlers::MoveBasePower.add("PowerHigherWithLessPP",
   proc { |power, move, user, target, ai, battle|
     next 0 if move.move.pp == 0 && move.move.totalpp > 0
     dmgs = [200, 80, 60, 50, 40]
-    ppLeft = [move.pp - 1, dmgs.length - 1].min
+    ppLeft = [move.move.pp - 1, dmgs.length - 1].min
     next dmgs[ppLeft]
   }
 )
@@ -463,7 +463,7 @@ Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
       next Battle::AI::MOVE_USELESS_SCORE
     end
     # Prefer if user knows a damaging move which won't definitely critical hit
-    if user.check_for_move { |m| m.damagingMove? && m.function != "AlwaysCriticalHit"}
+    if user.check_for_move { |m| m.damagingMove? && m.function_code != "AlwaysCriticalHit" }
       score += 15
     end
     next score
@@ -860,7 +860,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
       # Prefer if the foe's Attack can be lowered by this move
       if b.battler.affectedByContactEffect? && b.check_for_move { |m| m.contactMove? }
         drop_score = ai.get_score_for_target_stat_drop(
-           0, b, [:ATTACK, (Settings::MECHANICS_GENERATION >= 8) ? 1 : 2], false)
+          0, b, [:ATTACK, (Settings::MECHANICS_GENERATION >= 8) ? 1 : 2], false)
         score += drop_score / 2   # Halved because we don't know what move b will use
       end
       # Prefer if the foe is in the middle of using a two turn attack

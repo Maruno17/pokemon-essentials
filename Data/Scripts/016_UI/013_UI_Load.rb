@@ -17,7 +17,7 @@ class PokemonLoadPanel < Sprite
     @title = title
     @isContinue = isContinue
     @trainer = trainer
-    @totalsec = stats.play_time.to_i
+    @totalsec = stats&.play_time.to_i || 0
     @mapid = mapid
     @selected = (index == 0)
     @bgbitmap = AnimatedBitmap.new("Graphics/UI/Load/panels")
@@ -168,11 +168,14 @@ class PokemonLoad_Scene
     if meta
       filename = pbGetPlayerCharset(meta.walk_charset, trainer, true)
       @sprites["player"] = TrainerWalkingCharSprite.new(filename, @viewport)
+      if !@sprites["player"].bitmap
+        raise _INTL("Player character {1}'s walking charset was not found (filename: \"{2}\").", trainer.character_ID, filename)
+      end
       charwidth  = @sprites["player"].bitmap.width
       charheight = @sprites["player"].bitmap.height
-      @sprites["player"].x        = 112 - (charwidth / 8)
-      @sprites["player"].y        = 112 - (charheight / 8)
-      @sprites["player"].src_rect = Rect.new(0, 0, charwidth / 4, charheight / 4)
+      @sprites["player"].x = 112 - (charwidth / 8)
+      @sprites["player"].y = 112 - (charheight / 8)
+      @sprites["player"].z = 99999
     end
     trainer.party.each_with_index do |pkmn, i|
       @sprites["party#{i}"] = PokemonIconSprite.new(pkmn, @viewport)
@@ -276,6 +279,14 @@ class PokemonLoadScreen
   end
 
   def pbStartLoadScreen
+    if $DEBUG && !FileTest.exist?("Game.rgssad") && Settings::SKIP_CONTINUE_SCREEN
+      if @save_data.empty?
+        Game.start_new
+      else
+        Game.load(@save_data)
+      end
+      return
+    end
     commands = []
     cmd_continue     = -1
     cmd_new_game     = -1

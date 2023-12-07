@@ -328,7 +328,7 @@ class PokemonSummary_Scene
       status = GameData::Status.count
     end
     if status >= 0
-      imagepos.push(["Graphics/UI/statuses", 124, 100, 0, 16 * status, 44, 16])
+      imagepos.push([_INTL("Graphics/UI/statuses"), 124, 100, 0, 16 * status, 44, 16])
     end
     # Show Pokérus cured icon
     if @pokemon.pokerusStage == 2
@@ -712,7 +712,7 @@ class PokemonSummary_Scene
       move = @pokemon.moves[i]
       if move
         type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
-        imagepos.push(["Graphics/UI/types", 248, yPos - 4, 0, type_number * 28, 64, 28])
+        imagepos.push([_INTL("Graphics/UI/types"), 248, yPos - 4, 0, type_number * 28, 64, 28])
         textpos.push([move.name, 316, yPos, :left, moveBase, moveShadow])
         if move.total_pp > 0
           textpos.push([_INTL("PP"), 342, yPos + 32, :left, moveBase, moveShadow])
@@ -778,7 +778,7 @@ class PokemonSummary_Scene
       end
       if move
         type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
-        imagepos.push(["Graphics/UI/types", 248, yPos - 4, 0, type_number * 28, 64, 28])
+        imagepos.push([_INTL("Graphics/UI/types"), 248, yPos - 4, 0, type_number * 28, 64, 28])
         textpos.push([move.name, 316, yPos, :left, moveBase, moveShadow])
         if move.total_pp > 0
           textpos.push([_INTL("PP"), 342, yPos + 32, :left, moveBase, moveShadow])

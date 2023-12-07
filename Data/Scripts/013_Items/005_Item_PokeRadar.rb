@@ -128,20 +128,27 @@ def pbPokeRadarGetEncounter(rarity = 0)
   # Poké Radar-exclusive encounters can only be found in vigorously-shaking grass
   if rarity > 0
     # Get all Poké Radar-exclusive encounters for this map
-    map = $game_map.map_id
-    array = []
-    Settings::POKE_RADAR_ENCOUNTERS.each do |enc|
-      array.push(enc) if enc[0] == map && GameData::Species.exists?(enc[2])
+    map_id = $game_map.map_id
+    enc_list = nil
+    encounter_data = GameData::Encounter.get(map_id, $PokemonGlobal.encounter_version)
+    if encounter_data && encounter_data.types[:PokeRadar] &&
+       rand(100) < encounter_data.step_chances[:PokeRadar]
+      enc_list = encounter_data.types[:PokeRadar]
     end
     # If there are any exclusives, first have a chance of encountering those
-    if array.length > 0
-      rnd = rand(100)
-      array.each do |enc|
-        rnd -= enc[1]
+    if enc_list && enc_list.length > 0
+      chance_total = 0
+      enc_list.each { |a| chance_total += a[0] }
+      rnd = rand(chance_total)
+      encounter = nil
+      enc_list.each do |enc|
+        rnd -= enc[0]
         next if rnd >= 0
-        level = (enc[4] && enc[4] > enc[3]) ? rand(enc[3]..enc[4]) : enc[3]
-        return [enc[2], level]
+        encounter = enc
+        break
       end
+      level = rand(encounter[2]..encounter[3])
+      return [encounter[1], level]
     end
   end
   # Didn't choose a Poké Radar-exclusive species, choose a regular encounter instead

@@ -35,11 +35,12 @@ def pbDrawGauge(bitmap, rect, color, value, maxValue)
   end
 end
 
-def calcPoint(x, y, distance, angle) # angle in degrees
-  angle -= (angle / 360.0).floor * 360 # normalize
-  angle = (angle / 360.0) * (2 * Math::PI) # convert to radians
-  angle = -angle % (2 * Math::PI) # normalize radians
-  point = [(Math.cos(angle) * distance), (Math.sin(angle) * distance)]
+# angle is in degrees.
+def calcPoint(x, y, distance, angle)
+  angle -= (angle / 360.0).floor * 360   # normalize
+  angle = (angle / 360.0) * (2 * Math::PI)   # convert to radians
+  angle = -angle % (2 * Math::PI)   # normalize radians
+  point = [distance * Math.cos(angle), distance * Math.sin(angle)]
   point[0] += x
   point[1] += y
   return point
@@ -162,7 +163,8 @@ class PurifyChamber
   NUMSETS = 9
   SETSIZE = 4
 
-  def self.maximumTempo   # Calculates the maximum possible tempo
+  # Calculates the maximum possible tempo.
+  def self.maximumTempo
     x = SETSIZE + 1
     return (((x * x) + x) / 2) - 1
   end
@@ -187,7 +189,8 @@ class PurifyChamber
     return @sets[set].list
   end
 
-  def chamberFlow(chamber)   # for speeding up purification
+  # For speeding up purification.
+  def chamberFlow(chamber)
     return 0 if chamber < 0 || chamber >= NUMSETS
     return @sets[chamber].flow
   end
@@ -197,7 +200,8 @@ class PurifyChamber
     return @sets[chamber].shadow
   end
 
-  def setShadow(chamber, value)   # allow only "shadow" Pokemon
+  # Allow only Shadow Pokemon.
+  def setShadow(chamber, value)
     return if chamber < 0 || chamber >= NUMSETS
     @sets[chamber].shadow = value
   end
@@ -670,6 +674,9 @@ end
 #
 #===============================================================================
 class DirectFlowDiagram
+  # Distance travelled by a dot in 1 second.
+  DOT_SPEED = 80
+
   def initialize(viewport = nil)
     @points = []
     @angles = []
@@ -681,21 +688,25 @@ class DirectFlowDiagram
     @distance = 96
   end
 
+  def dispose
+    @points.each { |point| point.dispose }
+  end
+
   # 0=none, 1=weak, 2=strong
   def setFlowStrength(strength)
     @strength = strength
   end
 
   def visible=(value)
-    @points.each do |point|
-      point.visible = value
-    end
+    @points.each { |point| point.visible = value }
   end
 
-  def dispose
-    @points.each do |point|
-      point.dispose
-    end
+  def color=(value)
+    @points.each { |point| point.color = value }
+  end
+
+  def setAngle(angle1)
+    @angle = angle1 - ((angle1 / 360).floor * 360)
   end
 
   def ensurePoint(j)
@@ -725,18 +736,9 @@ class DirectFlowDiagram
       end
       i += (@strength == 2) ? 16 : 32
     end
-    @offset += (@strength == 2) ? 3 : 2
-    @offset %= @distance
-  end
-
-  def color=(value)
-    @points.each do |point|
-      point.color = value
-    end
-  end
-
-  def setAngle(angle1)
-    @angle = angle1 - ((angle1 / 360).floor * 360)
+    offset_delta = System.uptime * DOT_SPEED
+    offset_delta *= 1.5 if @strength == 2
+    @offset = offset_delta % @distance
   end
 end
 
@@ -744,6 +746,9 @@ end
 #
 #===============================================================================
 class FlowDiagram
+  # Distance travelled by a dot in 1 second.
+  DOT_SPEED = 80
+
   def initialize(viewport = nil)
     @points = []
     @angles = []
@@ -755,21 +760,21 @@ class FlowDiagram
     @distance = 96
   end
 
-  # 0=none, 1=weak, 2=strong
-  def setFlowStrength(strength)
-    @strength = strength
+  def dispose
+    @points.each { |point| point.dispose }
   end
 
   def visible=(value)
-    @points.each do |point|
-      point.visible = value
-    end
+    @points.each { |point| point.visible = value }
   end
 
-  def dispose
-    @points.each do |point|
-      point.dispose
-    end
+  def color=(value)
+    @points.each { |point| point.color = value }
+  end
+
+  # 0=none, 1=weak, 2=strong
+  def setFlowStrength(strength)
+    @strength = strength
   end
 
   def ensurePoint(j)
@@ -779,6 +784,15 @@ class FlowDiagram
     end
     @points[j].tone = (@strength == 2) ? Tone.new(232, 232, 248) : Tone.new(16, 16, 232)
     @points[j].visible = (@strength != 0)
+  end
+
+  def setRange(angle1, angle2)
+    @startAngle = angle1 - ((angle1 / 360).floor * 360)
+    @endAngle = angle2 - ((angle2 / 360).floor * 360)
+    if @startAngle == @endAngle && angle1 != angle2
+      @startAngle = 0
+      @endAngle = 359.99
+    end
   end
 
   def withinRange(angle, startAngle, endAngle)
@@ -808,23 +822,9 @@ class FlowDiagram
       end
       i += (@strength == 2) ? 10 : 20
     end
-    @offset -= (@strength == 2) ? 3 : 2
-    @offset %= (360 * 6)
-  end
-
-  def color=(value)
-    @points.each do |point|
-      point.color = value
-    end
-  end
-
-  def setRange(angle1, angle2)
-    @startAngle = angle1 - ((angle1 / 360).floor * 360)
-    @endAngle = angle2 - ((angle2 / 360).floor * 360)
-    if @startAngle == @endAngle && angle1 != angle2
-      @startAngle = 0
-      @endAngle = 359.99
-    end
+    offset_delta = -System.uptime * DOT_SPEED
+    offset_delta *= 1.5 if @strength == 2
+    @offset = offset_delta % (360 * 6)
   end
 end
 
@@ -870,7 +870,7 @@ class PurifyChamberSetView < Sprite
     setcount.times do |i|
       @flows[i] = FlowDiagram.new(self.viewport) if !@flows[i]
       angle = 360 - (i * 360 / setcount)
-      angle += 90 # start at 12 not 3 o'clock
+      angle += 90   # start at 12 not 3 o'clock
       endAngle = angle - (360 / setcount)
       @flows[i].setRange(endAngle, angle)
       @flows[i].setFlowStrength(@chamber[@set].affinity(i))
@@ -913,7 +913,7 @@ class PurifyChamberSetView < Sprite
       if pos.nil?
         @cursor = 0
       else
-        pos -= (pos / points).floor * points # modulus
+        pos -= (pos / points).floor * points   # modulus
         pos *= 2 if @chamber.setCount(@set) == PurifyChamber::SETSIZE
         @cursor = pos + 1
       end
@@ -1301,7 +1301,7 @@ MenuHandlers.add(:pc_menu, :purify_chamber, {
   "order"     => 30,
   "condition" => proc { next $player.seen_purify_chamber },
   "effect"    => proc { |menu|
-    pbMessage(_INTL("\\se[PC access]Accessed the Purify Chamber."))
+    pbMessage("\\se[PC access]" + _INTL("Accessed the Purify Chamber."))
     pbPurifyChamber
     next false
   }

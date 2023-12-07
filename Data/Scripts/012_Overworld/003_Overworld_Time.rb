@@ -234,7 +234,7 @@ end
 #===============================================================================
 # Moon phases and Zodiac
 #===============================================================================
-# Calculates the phase of the moon.
+# Calculates the phase of the moon. time is in UTC.
 # 0 - New Moon
 # 1 - Waxing Crescent
 # 2 - First Quarter
@@ -243,7 +243,7 @@ end
 # 5 - Waning Gibbous
 # 6 - Last Quarter
 # 7 - Waning Crescent
-def moonphase(time = nil) # in UTC
+def moonphase(time = nil)
   time = pbGetTimeNow if !time
   transitions = [
     1.8456618033125,

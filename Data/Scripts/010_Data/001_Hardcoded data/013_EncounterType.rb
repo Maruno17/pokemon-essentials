@@ -63,6 +63,12 @@ GameData::EncounterType.register({
 })
 
 GameData::EncounterType.register({
+  :id             => :PokeRadar,
+  :type           => :land,
+  :trigger_chance => 20
+})
+
+GameData::EncounterType.register({
   :id             => :Cave,
   :type           => :cave,
   :trigger_chance => 5

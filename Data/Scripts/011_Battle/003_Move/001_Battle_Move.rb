@@ -3,7 +3,7 @@ class Battle::Move
   attr_reader   :realMove
   attr_accessor :id
   attr_reader   :name
-  attr_reader   :function
+  attr_reader   :function_code
   attr_reader   :power
   attr_reader   :type
   attr_reader   :category
@@ -32,23 +32,23 @@ class Battle::Move
   # Creating a move
   #=============================================================================
   def initialize(battle, move)
-    @battle     = battle
-    @realMove   = move
-    @id         = move.id
-    @name       = move.name   # Get the move's name
+    @battle        = battle
+    @realMove      = move
+    @id            = move.id
+    @name          = move.name   # Get the move's name
     # Get data on the move
-    @function   = move.function_code
-    @power      = move.power
-    @type       = move.type
-    @category   = move.category
-    @accuracy   = move.accuracy
-    @pp         = move.pp   # Can be changed with Mimic/Transform
-    @target     = move.target
-    @priority   = move.priority
-    @flags      = move.flags.clone
-    @addlEffect = move.effect_chance
-    @powerBoost = false   # For Aerilate, Pixilate, Refrigerate, Galvanize
-    @snatched   = false
+    @function_code = move.function_code
+    @power         = move.power
+    @type          = move.type
+    @category      = move.category
+    @accuracy      = move.accuracy
+    @pp            = move.pp   # Can be changed with Mimic/Transform
+    @target        = move.target
+    @priority      = move.priority
+    @flags         = move.flags.clone
+    @addlEffect    = move.effect_chance
+    @powerBoost    = false   # For Aerilate, Pixilate, Refrigerate, Galvanize
+    @snatched      = false
   end
 
   # This is the code actually used to generate a Battle::Move object. The
@@ -145,7 +145,8 @@ class Battle::Move
   def nonLethal?(_user, _target); return false; end   # For False Swipe
   def preventsBattlerConsumingHealingBerry?(battler, targets); return false; end   # For Bug Bite/Pluck
 
-  def ignoresSubstitute?(user)   # user is the Pokémon using this move
+  # user is the Pokémon using this move.
+  def ignoresSubstitute?(user)
     if Settings::MECHANICS_GENERATION >= 6
       return true if soundMove?
       return true if user&.hasActiveAbility?(:INFILTRATOR)
@@ -154,7 +155,7 @@ class Battle::Move
   end
 
   def display_type(battler)
-    case @function
+    case @function_code
     when "TypeDependsOnUserMorpekoFormRaiseUserSpeed1"
       if battler.isSpecies?(:MORPEKO) || battler.effects[PBEffects::TransformSpecies] == :MORPEKO
         return pbBaseType(battler)
@@ -172,7 +173,7 @@ class Battle::Move
 
   def display_damage(battler)
 =begin
-    case @function
+    case @function_code
     when "TypeAndPowerDependOnUserBerry"
       return pbNaturalGiftBaseDamage(battler.item_id)
     when "TypeAndPowerDependOnWeather", "TypeAndPowerDependOnTerrain",
@@ -187,7 +188,7 @@ class Battle::Move
 
   def display_category(battler)
 =begin
-    case @function
+    case @function_code
     when "CategoryDependsOnHigherDamageIgnoreTargetAbility"
       pbOnStartUse(user, nil)
       return @calcCategory

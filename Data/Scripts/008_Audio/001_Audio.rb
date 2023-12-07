@@ -1,18 +1,3 @@
-# Needed because RGSS doesn't call at_exit procs on exit
-# Exit is not called when game is reset (using F12)
-$AtExitProcs = [] if !$AtExitProcs
-
-def exit(code = 0)
-  $AtExitProcs.each do |p|
-    p.call
-  end
-  raise SystemExit.new(code)
-end
-
-def at_exit(&block)
-  $AtExitProcs.push(Proc.new(&block))
-end
-
 #===============================================================================
 # Methods that determine the duration of an audio file.
 #===============================================================================

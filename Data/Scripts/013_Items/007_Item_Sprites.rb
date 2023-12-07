@@ -4,15 +4,17 @@
 class ItemIconSprite < Sprite
   attr_reader :item
 
-  ANIM_ICON_SIZE   = 48
-  FRAMES_PER_CYCLE = Graphics.frame_rate
+  # Height in pixels the item's icon graphic must be for it to be animated by
+  # being a horizontal set of frames.
+  ANIM_ICON_SIZE = 48
+  # Time in seconds for one animation cycle of this item icon.
+  ANIMATION_DURATION = 1.0
 
   def initialize(x, y, item, viewport = nil)
     super(viewport)
     @animbitmap = nil
-    @animframe = 0
-    @numframes = 1
-    @frame = 0
+    @frames_count = 1
+    @current_frame = 0
     self.x = x
     self.y = y
     @blankzero = false
@@ -28,7 +30,7 @@ class ItemIconSprite < Sprite
 
   def width
     return 0 if !self.bitmap || self.bitmap.disposed?
-    return (@numframes == 1) ? self.bitmap.width : ANIM_ICON_SIZE
+    return (@frames_count == 1) ? self.bitmap.width : ANIM_ICON_SIZE
   end
 
   def height
@@ -76,18 +78,21 @@ class ItemIconSprite < Sprite
       @animbitmap = AnimatedBitmap.new(GameData::Item.icon_filename(@item))
       self.bitmap = @animbitmap.bitmap
       if self.bitmap.height == ANIM_ICON_SIZE
-        @numframes = [(self.bitmap.width / ANIM_ICON_SIZE).floor, 1].max
+        @frames_count = [(self.bitmap.width / ANIM_ICON_SIZE).floor, 1].max
         self.src_rect = Rect.new(0, 0, ANIM_ICON_SIZE, ANIM_ICON_SIZE)
       else
-        @numframes = 1
+        @frames_count = 1
         self.src_rect = Rect.new(0, 0, self.bitmap.width, self.bitmap.height)
       end
-      @animframe = 0
-      @frame = 0
+      @current_frame = 0
     else
       self.bitmap = nil
     end
     changeOrigin
+  end
+
+  def update_frame
+    @current_frame = (@frames_count * (System.uptime % ANIMATION_DURATION) / ANIMATION_DURATION).floor
   end
 
   def update
@@ -96,14 +101,9 @@ class ItemIconSprite < Sprite
     if @animbitmap
       @animbitmap.update
       self.bitmap = @animbitmap.bitmap
-      if @numframes > 1
-        frameskip = (FRAMES_PER_CYCLE / @numframes).floor
-        @frame = (@frame + 1) % FRAMES_PER_CYCLE
-        if @frame >= frameskip
-          @animframe = (@animframe + 1) % @numframes
-          self.src_rect.x = @animframe * ANIM_ICON_SIZE
-          @frame = 0
-        end
+      if @frames_count > 1
+        update_frame
+        self.src_rect.x = @current_frame * ANIM_ICON_SIZE
       end
     end
     @updating = false

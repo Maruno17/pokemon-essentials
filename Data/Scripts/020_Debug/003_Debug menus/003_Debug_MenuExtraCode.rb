@@ -185,14 +185,14 @@ def pbDebugVariables(mode)
     end
     current_id = right_window.index + 1
     case mode
-    when 0 # Switches
+    when 0   # Switches
       if Input.trigger?(Input::USE)
         pbPlayDecisionSE
         $game_switches[current_id] = !$game_switches[current_id]
         right_window.refresh
         $game_map.need_refresh = true
       end
-    when 1 # Variables
+    when 1   # Variables
       if Input.repeat?(Input::LEFT)
         pbDebugSetVariable(current_id, -1)
         right_window.refresh
@@ -613,7 +613,7 @@ def pbImportAllAnimations
       Graphics.update
       audios = []
       files = Dir.glob(folder + "/*.*")
-      ["wav", "ogg", "mid", "wma"].each do |ext|   # mp3
+      ["wav", "ogg", "mp3", "midi", "mid", "wma"].each do |ext|
         upext = ext.upcase
         audios.concat(files.find_all { |f| f[f.length - 3, 3] == ext })
         audios.concat(files.find_all { |f| f[f.length - 3, 3] == upext })

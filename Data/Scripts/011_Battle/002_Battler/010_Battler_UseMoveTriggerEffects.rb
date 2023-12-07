@@ -18,6 +18,7 @@ class Battle::Battler
         #       target Cramorant attacking the user) and the ability splash
         #       shouldn't be shown.
         @battle.pbShowAbilitySplash(target)
+        target.pbChangeForm(0, nil)
         if user.takesIndirectDamage?(Battle::Scene::USE_ABILITY_SPLASH)
           @battle.scene.pbDamageAnimation(user)
           user.pbReduceHP(user.totalhp / 4, false)
@@ -135,7 +136,7 @@ class Battle::Battler
       end
     end
     # Room Service
-    if move.function == "StartSlowerBattlersActFirst" && @battle.field.effects[PBEffects::TrickRoom] > 0
+    if move.function_code == "StartSlowerBattlersActFirst" && @battle.field.effects[PBEffects::TrickRoom] > 0
       @battle.allBattlers.each do |b|
         next if !b.hasActiveItem?(:ROOMSERVICE)
         next if !b.pbCanLowerStatStage?(:SPEED)

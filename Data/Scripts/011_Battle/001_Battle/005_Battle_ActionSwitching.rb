@@ -290,7 +290,7 @@ class Battle
     sendOuts.each { |b| @peer.pbOnEnteringBattle(self, @battlers[b[0]], b[1]) }
     @scene.pbSendOutBattlers(sendOuts, startBattle)
     sendOuts.each do |b|
-      @scene.pbResetMoveIndex(b[0])
+      @scene.pbResetCommandsIndex(b[0])
       pbSetSeen(@battlers[b[0]])
       @usedInBattle[b[0] & 1][b[0] / 2] = true
     end

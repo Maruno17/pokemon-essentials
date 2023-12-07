@@ -74,7 +74,7 @@ end
 #===============================================================================
 FORMATREGEXP = /<(\/?)(c|c2|c3|o|fn|br|fs|i|b|r|pg|pog|u|s|icon|img|ac|ar|al|outln|outln2)(\s*\=\s*([^>]*))?>/i
 
-def fmtescape(text)
+def fmtEscape(text)
   if text[/[&<>]/]
     text2 = text.gsub(/&/, "&amp;")
     text2.gsub!(/</, "&lt;")
@@ -84,13 +84,20 @@ def fmtescape(text)
   return text
 end
 
+# Modifies text; does not return a modified copy of it.
+def fmtReplaceEscapes(text)
+  text.gsub!(/&lt;/, "<")
+  text.gsub!(/&gt;/, ">")
+  text.gsub!(/&apos;/, "'")
+  text.gsub!(/&quot;/, "\"")
+  text.gsub!(/&amp;/, "&")
+  text.gsub!(/&m;/, "♂")
+  text.gsub!(/&f;/, "♀")
+end
+
 def toUnformattedText(text)
   text2 = text.gsub(FORMATREGEXP, "")
-  text2.gsub!(/&lt;/, "<")
-  text2.gsub!(/&gt;/, ">")
-  text2.gsub!(/&apos;/, "'")
-  text2.gsub!(/&quot;/, "\"")
-  text2.gsub!(/&amp;/, "&")
+  fmtReplaceEscapes(text2)
   return text2
 end
 
@@ -376,13 +383,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
 #    realtextStart = oldtext[0, oldtext.length - realtext.length]
 #  end
   textchunks.push(text)
-  textchunks.each do |chunk|
-    chunk.gsub!(/&lt;/, "<")
-    chunk.gsub!(/&gt;/, ">")
-    chunk.gsub!(/&apos;/, "'")
-    chunk.gsub!(/&quot;/, "\"")
-    chunk.gsub!(/&amp;/, "&")
-  end
+  textchunks.each { |chunk| fmtReplaceEscapes(chunk) }
   textlen = 0
   controls.each_with_index do |control, i|
     textlen += textchunks[i].scan(/./m).length
@@ -818,23 +819,22 @@ def getLineBrokenText(bitmap, value, width, dims)
     words = [ccheck]
     words.length.times do |i|
       word = words[i]
-      if word && word != ""
-        textSize = bitmap.text_size(word)
-        textwidth = textSize.width
-        if x > 0 && x + textwidth >= width - 2
-          # Zero-length word break
-          ret.push(["", x, y, 0, textheight, line, position, column, 0])
-          x = 0
-          column = 0
-          y += (textheight == 0) ? bitmap.text_size("X").height : textheight
-          line += 1
-          textheight = 0
-        end
-        textheight = [textheight, textSize.height].max
-        ret.push([word, x, y, textwidth, textheight, line, position, column, length])
-        x += textwidth
-        dims[0] = x if dims && dims[0] < x
+      next if nil_or_empty?(word)
+      textSize = bitmap.text_size(word)
+      textwidth = textSize.width
+      if x > 0 && x + textwidth >= width - 2
+        # Zero-length word break
+        ret.push(["", x, y, 0, textheight, line, position, column, 0])
+        x = 0
+        column = 0
+        y += (textheight == 0) ? bitmap.text_size("X").height : textheight
+        line += 1
+        textheight = 0
       end
+      textheight = [textheight, textSize.height].max
+      ret.push([word, x, y, textwidth, textheight, line, position, column, length])
+      x += textwidth
+      dims[0] = x if dims && dims[0] < x
     end
     position += length
     column += length
@@ -911,16 +911,15 @@ def renderLineBrokenChunksWithShadow(bitmap, xDst, yDst, normtext, maxheight, ba
     width = text[3]
     textx = text[1] + xDst
     texty = text[2] + yDst
-    if maxheight == 0 || text[2] < maxheight
-      height = text[4]
-      text = text[0]
-      bitmap.font.color = shadowColor
-      bitmap.draw_text(textx + 2, texty, width + 2, height, text)
-      bitmap.draw_text(textx, texty + 2, width + 2, height, text)
-      bitmap.draw_text(textx + 2, texty + 2, width + 2, height, text)
-      bitmap.font.color = baseColor
-      bitmap.draw_text(textx, texty, width + 2, height, text)
-    end
+    next if maxheight != 0 && text[2] >= maxheight
+    height = text[4]
+    text = text[0]
+    bitmap.font.color = shadowColor
+    bitmap.draw_text(textx + 2, texty, width + 2, height, text)
+    bitmap.draw_text(textx, texty + 2, width + 2, height, text)
+    bitmap.draw_text(textx + 2, texty + 2, width + 2, height, text)
+    bitmap.font.color = baseColor
+    bitmap.draw_text(textx, texty, width + 2, height, text)
   end
 end
 

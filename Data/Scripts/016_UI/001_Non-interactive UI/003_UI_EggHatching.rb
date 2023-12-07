@@ -108,7 +108,8 @@ class PokemonEggHatch_Scene
     $player.pokedex.set_owned(@pokemon.species)
     $player.pokedex.set_seen_egg(@pokemon.species)
     # Show Pokédex entry for new species if it hasn't been owned before
-    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned &&
+       $player.has_pokedex && $player.pokedex.species_in_unlocked_dex?(@pokemon.species)
       pbMessage(_INTL("{1}'s data was added to the Pokédex.", @pokemon.name)) { update }
       $player.pokedex.register_last_seen(@pokemon)
       pbFadeOutIn do
@@ -165,7 +166,8 @@ class PokemonEggHatch_Scene
     @sprites["hatch"].x   = @sprites["pokemon"].x
   end
 
-  def updateScene(duration = 0.01)   # Can be used for "wait" effect
+  # Can be used for "wait" effect.
+  def updateScene(duration = 0.01)
     timer_start = System.uptime
     while System.uptime - timer_start < duration
       Graphics.update
@@ -227,7 +229,8 @@ def pbHatch(pokemon)
     $player.pokedex.set_owned(pokemon.species)
     $player.pokedex.set_seen_egg(pokemon.species)
     # Show Pokédex entry for new species if it hasn't been owned before
-    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned && $player.has_pokedex
+    if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned &&
+       $player.has_pokedex && $player.pokedex.species_in_unlocked_dex?(pokemon.species)
       pbMessage(_INTL("{1}'s data was added to the Pokédex.", speciesname))
       $player.pokedex.register_last_seen(pokemon)
       pbFadeOutIn do

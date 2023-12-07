@@ -1,7 +1,8 @@
 #===============================================================================
 # Load various wild battle music
 #===============================================================================
-def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokémon objects
+# wildParty is an array of Pokémon objects.
+def pbGetWildBattleBGM(_wildParty)
   return $PokemonGlobal.nextBattleBGM.clone if $PokemonGlobal.nextBattleBGM
   ret = nil
   if !ret
@@ -64,13 +65,20 @@ def pbPlayTrainerIntroBGM(trainer_type)
   return if nil_or_empty?(trainer_type_data.intro_BGM)
   bgm = pbStringToAudioFile(trainer_type_data.intro_BGM)
   if !$game_temp.memorized_bgm
-    $game_temp.memorized_bgm = $game_system.getPlayingBGM
-    $game_temp.memorized_bgm_position = (Audio.bgm_pos rescue 0)
+    if $game_temp.cue_bgm_delay
+      $game_temp.cue_bgm_delay = nil
+      $game_temp.memorized_bgm = $game_temp.cue_bgm
+      $game_temp.memorized_bgm_position = 0
+    else
+      $game_temp.memorized_bgm = $game_system.getPlayingBGM
+      $game_temp.memorized_bgm_position = (Audio.bgm_pos rescue 0)
+    end
   end
   pbBGMPlay(bgm)
 end
 
-def pbGetTrainerBattleBGM(trainer)   # can be a Player, NPCTrainer or an array of them
+# Can be a Player, NPCTrainer or an array of them.
+def pbGetTrainerBattleBGM(trainer)
   return $PokemonGlobal.nextBattleBGM.clone if $PokemonGlobal.nextBattleBGM
   ret = nil
   music = nil
@@ -112,7 +120,8 @@ def pbGetTrainerBattleBGMFromType(trainertype)
   return ret
 end
 
-def pbGetTrainerVictoryBGM(trainer)   # can be a Player, NPCTrainer or an array of them
+# Can be a Player, NPCTrainer or an array of them.
+def pbGetTrainerVictoryBGM(trainer)
   if $PokemonGlobal.nextBattleVictoryBGM
     return $PokemonGlobal.nextBattleVictoryBGM.clone
   end

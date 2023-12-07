@@ -35,6 +35,28 @@ class Player < Trainer
   # @return [Array<Array>] downloaded Mystery Gift data
   attr_accessor :mystery_gifts
 
+  def initialize(name, trainer_type)
+    super
+    @character_ID          = 0
+    @outfit                = 0
+    @badges                = [false] * 8
+    @money                 = GameData::Metadata.get.start_money
+    @coins                 = 0
+    @battle_points         = 0
+    @soot                  = 0
+    @pokedex               = Pokedex.new
+    @has_pokedex           = false
+    @has_pokegear          = false
+    @has_running_shoes     = false
+    @has_box_link          = false
+    @seen_storage_creator  = false
+    @has_exp_all           = false
+    @mystery_gift_unlocked = false
+    @mystery_gifts         = []
+  end
+
+  #=============================================================================
+
   def character_ID=(value)
     return if @character_ID == value
     @character_ID = value
@@ -97,27 +119,5 @@ class Player < Trainer
   # Shorthand for +self.pokedex.owned?+.
   def owned?(species)
     return @pokedex.owned?(species)
-  end
-
-  #=============================================================================
-
-  def initialize(name, trainer_type)
-    super
-    @character_ID          = 0
-    @outfit                = 0
-    @badges                = [false] * 8
-    @money                 = GameData::Metadata.get.start_money
-    @coins                 = 0
-    @battle_points         = 0
-    @soot                  = 0
-    @pokedex               = Pokedex.new
-    @has_pokedex           = false
-    @has_pokegear          = false
-    @has_running_shoes     = false
-    @has_box_link          = false
-    @seen_storage_creator  = false
-    @has_exp_all           = false
-    @mystery_gift_unlocked = false
-    @mystery_gifts         = []
   end
 end

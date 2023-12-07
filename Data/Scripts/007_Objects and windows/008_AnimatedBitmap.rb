@@ -43,19 +43,19 @@ class PngAnimatedBitmap
   def initialize(dir, filename, hue = 0)
     @frames       = []
     @currentFrame = 0
-    @framecount   = 0
+    @timer_start  = System.uptime
     panorama = RPG::Cache.load_bitmap(dir, filename, hue)
     if filename[/^\[(\d+)(?:,(\d+))?\]/]   # Starts with 1 or 2 numbers in brackets
       # File has a frame count
       numFrames = $1.to_i
-      delay     = $2.to_i
-      delay     = 10 if delay == 0
+      duration  = $2.to_i   # In 1/20ths of a second
+      duration  = 5 if duration == 0
       raise "Invalid frame count in #{filename}" if numFrames <= 0
-      raise "Invalid frame delay in #{filename}" if delay <= 0
+      raise "Invalid frame duration in #{filename}" if duration <= 0
       if panorama.width % numFrames != 0
         raise "Bitmap's width (#{panorama.width}) is not divisible by frame count: #{filename}"
       end
-      @frameDelay = delay
+      @frame_duration = duration / 20.0
       subWidth = panorama.width / numFrames
       numFrames.times do |i|
         subBitmap = Bitmap.new(subWidth, panorama.height)
@@ -68,21 +68,22 @@ class PngAnimatedBitmap
     end
   end
 
+  def dispose
+    return if @disposed
+    @frames.each { |f| f.dispose }
+    @disposed = true
+  end
+
+  def disposed?
+    return @disposed
+  end
+
   def [](index)
     return @frames[index]
   end
 
   def width;  self.bitmap.width;  end
   def height; self.bitmap.height; end
-
-  def deanimate
-    (1...@frames.length).each do |i|
-      @frames[i].dispose
-    end
-    @frames = [@frames[0]]
-    @currentFrame = 0
-    return @frames[0]
-  end
 
   def bitmap
     return @frames[@currentFrame]
@@ -92,43 +93,27 @@ class PngAnimatedBitmap
     return @currentFrame
   end
 
-  def frameDelay(_index)
-    return @frameDelay
-  end
-
   def length
     return @frames.length
+  end
+
+  # Actually returns the total number of 1/20ths of a second this animation lasts.
+  def totalFrames
+    return (@frame_duration * @frames.length * 20).to_i
   end
 
   def each
     @frames.each { |item| yield item }
   end
 
-  def totalFrames
-    return @frameDelay * @frames.length
-  end
-
-  def disposed?
-    return @disposed
-  end
-
-  def update
-    return if disposed?
-    if @frames.length > 1
-      @framecount += 1
-      if @framecount >= @frameDelay
-        @framecount = 0
-        @currentFrame += 1
-        @currentFrame %= @frames.length
-      end
+  def deanimate
+    (1...@frames.length).each do |i|
+      @frames[i].dispose
     end
-  end
-
-  def dispose
-    if !@disposed
-      @frames.each { |f| f.dispose }
-    end
-    @disposed = true
+    @frames = [@frames[0]]
+    @currentFrame = 0
+    @frame_duration = 0
+    return @frames[0]
   end
 
   def copy
@@ -136,6 +121,13 @@ class PngAnimatedBitmap
     x.frames = x.frames.clone
     x.frames.each_with_index { |frame, i| x.frames[i] = frame.copy }
     return x
+  end
+
+  def update
+    return if disposed?
+    if @frames.length > 1
+      @currentFrame = ((System.uptime - @timer_start) / @frame_duration).to_i % @frames.length
+    end
   end
 end
 

@@ -1,5 +1,5 @@
 class Sprite_SurfBase
-  attr_reader   :visible
+  attr_reader :visible
 
   def initialize(parent_sprite, viewport = nil)
     @parent_sprite = parent_sprite

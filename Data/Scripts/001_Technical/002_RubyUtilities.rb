@@ -81,7 +81,8 @@ end
 # class Array
 #===============================================================================
 class Array
-  def ^(other)   # xor of two arrays
+  # xor of two arrays
+  def ^(other)
     return (self | other) - (self & other)
   end
 
@@ -390,13 +391,16 @@ def nil_or_empty?(string)
   return string.nil? || !string.is_a?(String) || string.size == 0
 end
 
+#===============================================================================
 # Linear interpolation between two values, given the duration of the change and
 # either:
 #   - the time passed since the start of the change (delta), or
 #   - the start time of the change (delta) and the current time (now)
+#===============================================================================
 def lerp(start_val, end_val, duration, delta, now = nil)
+  return end_val if duration <= 0
   delta = now - delta if now
   return start_val if delta <= 0
   return end_val if delta >= duration
-  return start_val + (end_val - start_val) * delta / duration
+  return start_val + ((end_val - start_val) * delta / duration.to_f)
 end

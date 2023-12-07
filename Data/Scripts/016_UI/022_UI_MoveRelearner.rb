@@ -68,11 +68,11 @@ class MoveRelearner_Scene
       if moveobject
         moveData = GameData::Move.get(moveobject)
         type_number = GameData::Type.get(moveData.display_type(@pokemon)).icon_position
-        imagepos.push(["Graphics/UI/types", 12, yPos - 4, 0, type_number * 28, 64, 28])
+        imagepos.push([_INTL("Graphics/UI/types"), 12, yPos - 4, 0, type_number * 28, 64, 28])
         textpos.push([moveData.name, 80, yPos, :left, Color.new(248, 248, 248), Color.black])
         textpos.push([_INTL("PP"), 112, yPos + 32, :left, Color.new(64, 64, 64), Color.new(176, 176, 176)])
         if moveData.total_pp > 0
-          textpos.push([_INTL("{1}/{1}", moveData.total_pp), 230, yPos + 32, :right,
+          textpos.push([moveData.total_pp.to_s + "/" + moveData.total_pp.to_s, 230, yPos + 32, :right,
                         Color.new(64, 64, 64), Color.new(176, 176, 176)])
         else
           textpos.push(["--", 230, yPos + 32, :right, Color.new(64, 64, 64), Color.new(176, 176, 176)])

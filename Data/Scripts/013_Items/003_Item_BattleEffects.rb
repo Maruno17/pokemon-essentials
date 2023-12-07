@@ -501,6 +501,7 @@ ItemHandlers::BattleUseOnPokemon.add(:REVIVALHERB, proc { |item, pokemon, battle
 ItemHandlers::BattleUseOnPokemon.add(:ETHER, proc { |item, pokemon, battler, choices, scene|
   idxMove = choices[3]
   pbBattleRestorePP(pokemon, battler, idxMove, 10)
+  pbSEPlay("Use item in party")
   scene.pbDisplay(_INTL("PP was restored."))
 })
 
@@ -509,6 +510,7 @@ ItemHandlers::BattleUseOnPokemon.copy(:ETHER, :LEPPABERRY)
 ItemHandlers::BattleUseOnPokemon.add(:MAXETHER, proc { |item, pokemon, battler, choices, scene|
   idxMove = choices[3]
   pbBattleRestorePP(pokemon, battler, idxMove, pokemon.moves[idxMove].total_pp)
+  pbSEPlay("Use item in party")
   scene.pbDisplay(_INTL("PP was restored."))
 })
 
@@ -516,6 +518,7 @@ ItemHandlers::BattleUseOnPokemon.add(:ELIXIR, proc { |item, pokemon, battler, ch
   pokemon.moves.length.times do |i|
     pbBattleRestorePP(pokemon, battler, i, 10)
   end
+  pbSEPlay("Use item in party")
   scene.pbDisplay(_INTL("PP was restored."))
 })
 
@@ -523,6 +526,7 @@ ItemHandlers::BattleUseOnPokemon.add(:MAXELIXIR, proc { |item, pokemon, battler,
   pokemon.moves.length.times do |i|
     pbBattleRestorePP(pokemon, battler, i, pokemon.moves[i].total_pp)
   end
+  pbSEPlay("Use item in party")
   scene.pbDisplay(_INTL("PP was restored."))
 })
 

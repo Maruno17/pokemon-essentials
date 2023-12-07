@@ -22,22 +22,22 @@ end
 #===============================================================================
 class Battle::Move::Confusion < Battle::Move
   def initialize(battle, move)
-    @battle     = battle
-    @realMove   = move
-    @id         = :CONFUSEDAMAGE
-    @name       = ""
-    @function   = "None"
-    @power      = 40
-    @type       = nil
-    @category   = 0
-    @accuracy   = 100
-    @pp         = -1
-    @target     = :User
-    @priority   = 0
-    @flags      = []
-    @addlEffect = 0
-    @powerBoost = false
-    @snatched   = false
+    @battle        = battle
+    @realMove      = move
+    @id            = :CONFUSEDAMAGE
+    @name          = ""
+    @function_code = "None"
+    @power         = 40
+    @type          = nil
+    @category      = 0
+    @accuracy      = 100
+    @pp            = -1
+    @target        = :User
+    @priority      = 0
+    @flags         = []
+    @addlEffect    = 0
+    @powerBoost    = false
+    @snatched      = false
   end
 
   def physicalMove?(thisType = nil);   return true;  end
@@ -50,22 +50,22 @@ end
 #===============================================================================
 class Battle::Move::Struggle < Battle::Move
   def initialize(battle, move)
-    @battle     = battle
-    @realMove   = nil                     # Not associated with a move
-    @id         = :STRUGGLE
-    @name       = _INTL("Struggle")
-    @function   = "Struggle"
-    @power      = 50
-    @type       = nil
-    @category   = 0
-    @accuracy   = 0
-    @pp         = -1
-    @target     = :RandomNearFoe
-    @priority   = 0
-    @flags      = ["Contact", "CanProtect"]
-    @addlEffect = 0
-    @powerBoost = false
-    @snatched   = false
+    @battle        = battle
+    @realMove      = nil                     # Not associated with a move
+    @id            = :STRUGGLE
+    @name          = _INTL("Struggle")
+    @function_code = "Struggle"
+    @power         = 50
+    @type          = nil
+    @category      = 0
+    @accuracy      = 0
+    @pp            = -1
+    @target        = :RandomNearFoe
+    @priority      = 0
+    @flags         = ["Contact", "CanProtect"]
+    @addlEffect    = 0
+    @powerBoost    = false
+    @snatched      = false
   end
 
   def physicalMove?(thisType = nil); return true;  end
@@ -318,7 +318,8 @@ class Battle::Move::TwoTurnMove < Battle::Move
     return !@damagingTurn   # Deliberately not "return @chargingTurn"
   end
 
-  def pbDamagingMove?   # Stops damage being dealt in the first (charging) turn
+  # Stops damage being dealt in the first (charging) turn.
+  def pbDamagingMove?
     return false if !@damagingTurn
     return super
   end
@@ -339,7 +340,7 @@ class Battle::Move::TwoTurnMove < Battle::Move
            "TwoTurnAttackInvulnerableUnderwater",
            "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
            "TwoTurnAttackInvulnerableRemoveProtections",
-           "TwoTurnAttackInvulnerableInSkyTargetCannotAct"].include?(@function)
+           "TwoTurnAttackInvulnerableInSkyTargetCannotAct"].include?(@function_code)
         @battle.pbCommonAnimation("UseItem", user)
       end
       @battle.pbDisplay(_INTL("{1} became fully charged due to its Power Herb!", user.pbThis))
@@ -549,7 +550,7 @@ class Battle::Move::PledgeMove < Battle::Move
       move = @battle.choices[b.index][2]
       next if !move
       @combos.each do |i|
-        next if i[0] != move.function
+        next if i[0] != move.function_code
         @pledgeSetup = true
         @pledgeOtherUser = b
         break
@@ -584,7 +585,7 @@ class Battle::Move::PledgeMove < Battle::Move
     return if !@pledgeSetup
     @battle.pbDisplay(_INTL("{1} is waiting for {2}'s move...",
                             user.pbThis, @pledgeOtherUser.pbThis(true)))
-    @pledgeOtherUser.effects[PBEffects::FirstPledge] = @function
+    @pledgeOtherUser.effects[PBEffects::FirstPledge] = @function_code
     @pledgeOtherUser.effects[PBEffects::MoveNext]    = true
     user.lastMoveFailed = true   # Treated as a failure for Stomping Tantrum
   end

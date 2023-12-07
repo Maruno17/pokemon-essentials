@@ -104,7 +104,7 @@ class ChooseNumberParams
   end
 
   def initialNumber
-    return clamp(@initialNumber, self.minNumber, self.maxNumber)
+    return @initialNumber.clamp(self.minNumber, self.maxNumber)
   end
 
   def cancelNumber
@@ -148,10 +148,6 @@ class ChooseNumberParams
   #-----------------------------------------------------------------------------
 
   private
-
-  def clamp(v, mn, mx)
-    return v < mn ? mn : (v > mx ? mx : v)
-  end
 
   def numDigits(number)
     ans = 1
@@ -257,7 +253,7 @@ def pbGetBasicMapNameFromId(id)
 end
 
 def pbGetMapNameFromId(id)
-  name = GameData::MapMetadata.get(id)&.name
+  name = GameData::MapMetadata.try_get(id)&.name
   if nil_or_empty?(name)
     name = pbGetBasicMapNameFromId(id)
     name.gsub!(/\\PN/, $player.name) if $player
@@ -421,7 +417,6 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   msgwindow.waitcount = 0
   autoresume = false
   text = message.clone
-  msgback = nil
   linecount = (Graphics.height > 400) ? 3 : 2
   ### Text replacement
   text.gsub!(/\\sign\[([^\]]*)\]/i) do      # \sign[something] gets turned into
@@ -508,8 +503,8 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     controls[i][2] = textlen
   end
   text = textchunks.join
-  signWaitCount = 0
-  signWaitTime = Graphics.frame_rate / 2
+  appear_timer_start = nil
+  appear_duration = 0.5   # In seconds
   haveSpecialClose = false
   specialCloseSE = ""
   startSE = nil
@@ -518,7 +513,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     param = controls[i][1]
     case control
     when "op"
-      signWaitCount = signWaitTime + 1
+      appear_timer_start = System.uptime
     when "cl"
       text = text.sub(/\001\z/, "")   # fix: '$' can match end of line as well
       haveSpecialClose = true
@@ -548,7 +543,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   end
   if startSE
     pbSEPlay(pbStringToAudioFile(startSE))
-  elsif signWaitCount == 0 && letterbyletter
+  elsif !appear_timer_start && letterbyletter
     pbPlayDecisionSE
   end
   # Position message window
@@ -561,15 +556,12 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   atTop = (msgwindow.y == 0)
   # Show text
   msgwindow.text = text
-  Graphics.frame_reset if Graphics.frame_rate > 40
   loop do
-    if signWaitCount > 0
-      signWaitCount -= 1
-      if atTop
-        msgwindow.y = -msgwindow.height * signWaitCount / signWaitTime
-      else
-        msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime)
-      end
+    if appear_timer_start
+      y_start = (atTop) ? -msgwindow.height : Graphics.height
+      y_end = (atTop) ? 0 : Graphics.height - msgwindow.height
+      msgwindow.y = lerp(y_start, y_end, appear_duration, appear_timer_start, System.uptime)
+      appear_timer_start = nil if msgwindow.y == y_end
     end
     controls.length.times do |i|
       next if !controls[i]
@@ -599,34 +591,35 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
         battlepointswindow&.dispose
         battlepointswindow = pbDisplayBattlePointsWindow(msgwindow)
       when "wu"
-        msgwindow.y = 0
         atTop = true
-        msgback.y = msgwindow.y if msgback
+        msgwindow.y = 0
         pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        msgwindow.y = -msgwindow.height * signWaitCount / signWaitTime
+        if appear_timer_start
+          msgwindow.y = lerp(y_start, y_end, appear_duration, appear_timer_start, System.uptime)
+        end
       when "wm"
         atTop = false
         msgwindow.y = (Graphics.height - msgwindow.height) / 2
-        msgback.y = msgwindow.y if msgback
         pbPositionNearMsgWindow(facewindow, msgwindow, :left)
       when "wd"
         atTop = false
         msgwindow.y = Graphics.height - msgwindow.height
-        msgback.y = msgwindow.y if msgback
         pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - signWaitCount) / signWaitTime)
+        if appear_timer_start
+          msgwindow.y = lerp(y_start, y_end, appear_duration, appear_timer_start, System.uptime)
+        end
       when "ts"     # Change text speed
-        msgwindow.textspeed = (param == "") ? -999 : param.to_i
+        msgwindow.textspeed = (param == "") ? 0 : param.to_i / 80.0
       when "."      # Wait 0.25 seconds
-        msgwindow.waitcount += Graphics.frame_rate / 4
+        msgwindow.waitcount += 0.25
       when "|"      # Wait 1 second
-        msgwindow.waitcount += Graphics.frame_rate
+        msgwindow.waitcount += 1.0
       when "wt"     # Wait X/20 seconds
         param = param.sub(/\A\s+/, "").sub(/\s+\z/, "")
-        msgwindow.waitcount += param.to_i * Graphics.frame_rate / 20
+        msgwindow.waitcount += param.to_i / 20.0
       when "wtnp"   # Wait X/20 seconds, no pause
         param = param.sub(/\A\s+/, "").sub(/\s+\z/, "")
-        msgwindow.waitcount = param.to_i * Graphics.frame_rate / 20
+        msgwindow.waitcount = param.to_i / 20.0
         autoresume = true
       when "^"      # Wait, no pause
         autoresume = true
@@ -649,7 +642,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       if msgwindow.busy?
         pbPlayDecisionSE if msgwindow.pausing?
         msgwindow.resume
-      elsif signWaitCount == 0
+      elsif !appear_timer_start
         break
       end
     end
@@ -665,7 +658,6 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     $game_map.need_refresh = true if $game_map
   end
   ret = commandProc.call(msgwindow) if commandProc
-  msgback&.dispose
   goldwindow&.dispose
   coinwindow&.dispose
   battlepointswindow&.dispose
@@ -673,16 +665,17 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   if haveSpecialClose
     pbSEPlay(pbStringToAudioFile(specialCloseSE))
     atTop = (msgwindow.y == 0)
-    (0..signWaitTime).each do |i|
-      if atTop
-        msgwindow.y = -msgwindow.height * i / signWaitTime
-      else
-        msgwindow.y = Graphics.height - (msgwindow.height * (signWaitTime - i) / signWaitTime)
-      end
+    y_start = (atTop) ? 0 : Graphics.height - msgwindow.height
+    y_end = (atTop) ? -msgwindow.height : Graphics.height
+    disappear_duration = 0.5   # In seconds
+    disappear_timer_start = System.uptime
+    loop do
+      msgwindow.y = lerp(y_start, y_end, disappear_duration, disappear_timer_start, System.uptime)
       Graphics.update
       Input.update
       pbUpdateSceneMap
       msgwindow.update
+      break if msgwindow.y == y_end
     end
   end
   return ret

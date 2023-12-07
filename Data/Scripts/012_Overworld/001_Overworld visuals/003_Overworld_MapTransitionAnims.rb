@@ -21,7 +21,7 @@ def pbCaveEntranceEx(exiting)
     y = 0
     # Calculate color of each band
     totalBands.times do |k|
-      grays[k] = lerp(start_gray, end_gray, duration, timer_start + k * duration / totalBands, System.uptime)
+      grays[k] = lerp(start_gray, end_gray, duration, timer_start + (k * duration / totalBands), System.uptime)
     end
     # Draw gray rectangles
     rectwidth  = Graphics.width

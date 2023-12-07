@@ -2,7 +2,7 @@
 # HP/Status options
 #===============================================================================
 MenuHandlers.add(:battle_pokemon_debug_menu, :hp_status_menu, {
-  "name"   => _INTL("HP/Status..."),
+  "name"   => _INTL("HP/status..."),
   "parent" => :main,
   "usage"  => :both
 })

@@ -2,7 +2,7 @@
 # HP/Status options
 #===============================================================================
 MenuHandlers.add(:pokemon_debug_menu, :hp_status_menu, {
-  "name"   => _INTL("HP/Status..."),
+  "name"   => _INTL("HP/status..."),
   "parent" => :main
 })
 
@@ -206,7 +206,7 @@ MenuHandlers.add(:pokemon_debug_menu, :set_exp, {
 })
 
 MenuHandlers.add(:pokemon_debug_menu, :hidden_values, {
-  "name"   => _INTL("EV/IV/pID..."),
+  "name"   => _INTL("EV/IV/personal ID..."),
   "parent" => :level_stats,
   "effect" => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0

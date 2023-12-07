@@ -8,7 +8,7 @@ MenuHandlers.add(:battle_debug_menu, :battlers, {
 })
 
 MenuHandlers.add(:battle_debug_menu, :list_player_battlers, {
-  "name"        => _INTL("Player-Side Battlers"),
+  "name"        => _INTL("Player-side battlers"),
   "parent"      => :battlers,
   "description" => _INTL("Edit Pokémon on the player's side of battle."),
   "effect"      => proc { |battle|
@@ -34,7 +34,7 @@ MenuHandlers.add(:battle_debug_menu, :list_player_battlers, {
 })
 
 MenuHandlers.add(:battle_debug_menu, :list_foe_battlers, {
-  "name"        => _INTL("Foe-Side Battlers"),
+  "name"        => _INTL("Foe-side battlers"),
   "parent"      => :battlers,
   "description" => _INTL("Edit Pokémon on the opposing side of battle."),
   "effect"      => proc { |battle|
@@ -54,7 +54,7 @@ MenuHandlers.add(:battle_debug_menu, :list_foe_battlers, {
 })
 
 MenuHandlers.add(:battle_debug_menu, :speed_order, {
-  "name"        => _INTL("Battler Speed Order"),
+  "name"        => _INTL("View battler speed order"),
   "parent"      => :battlers,
   "description" => _INTL("Show all battlers in order from fastest to slowest."),
   "effect"      => proc { |battle|
@@ -74,7 +74,7 @@ MenuHandlers.add(:battle_debug_menu, :speed_order, {
 # Pokémon
 #===============================================================================
 MenuHandlers.add(:battle_debug_menu, :pokemon_teams, {
-  "name"        => _INTL("Pokémon Teams"),
+  "name"        => _INTL("Pokémon teams"),
   "parent"      => :main,
   "description" => _INTL("Look at and edit all Pokémon in each team."),
   "effect"      => proc { |battle|
@@ -133,13 +133,13 @@ MenuHandlers.add(:battle_debug_menu, :pokemon_teams, {
 # Trainer Options
 #===============================================================================
 MenuHandlers.add(:battle_debug_menu, :trainers, {
-  "name"        => _INTL("Trainer Options..."),
+  "name"        => _INTL("Trainer options..."),
   "parent"      => :main,
   "description" => _INTL("Variables that apply to trainers.")
 })
 
 MenuHandlers.add(:battle_debug_menu, :trainer_items, {
-  "name"        => _INTL("NPC Trainer Items"),
+  "name"        => _INTL("NPC trainer items"),
   "parent"      => :trainers,
   "description" => _INTL("View and change the items each NPC trainer has access to."),
   "effect"      => proc { |battle|
@@ -229,7 +229,7 @@ MenuHandlers.add(:battle_debug_menu, :mega_evolution, {
 # Field Options
 #===============================================================================
 MenuHandlers.add(:battle_debug_menu, :field, {
-  "name"        => _INTL("Field Effects..."),
+  "name"        => _INTL("Field effects..."),
   "parent"      => :main,
   "description" => _INTL("Effects that apply to the whole battlefield.")
 })
@@ -359,7 +359,7 @@ MenuHandlers.add(:battle_debug_menu, :terrain, {
 })
 
 MenuHandlers.add(:battle_debug_menu, :environment_time, {
-  "name"        => _INTL("Environment/Time"),
+  "name"        => _INTL("Environment/time"),
   "parent"      => :field,
   "description" => _INTL("Set the battle's environment and time of day."),
   "effect"      => proc { |battle|
@@ -397,7 +397,7 @@ MenuHandlers.add(:battle_debug_menu, :environment_time, {
 })
 
 MenuHandlers.add(:battle_debug_menu, :backdrop, {
-  "name"        => _INTL("Backdrop Names"),
+  "name"        => _INTL("Backdrop names"),
   "parent"      => :field,
   "description" => _INTL("Set the names of the backdrop and base graphics."),
   "effect"      => proc { |battle|
@@ -421,7 +421,7 @@ MenuHandlers.add(:battle_debug_menu, :backdrop, {
 })
 
 MenuHandlers.add(:battle_debug_menu, :set_field_effects, {
-  "name"        => _INTL("Other Field Effects..."),
+  "name"        => _INTL("Other field effects..."),
   "parent"      => :field,
   "description" => _INTL("View/set other effects that apply to the whole battlefield."),
   "effect"      => proc { |battle|
@@ -432,7 +432,7 @@ MenuHandlers.add(:battle_debug_menu, :set_field_effects, {
 })
 
 MenuHandlers.add(:battle_debug_menu, :player_side, {
-  "name"        => _INTL("Player's Side Effects..."),
+  "name"        => _INTL("Player's side effects..."),
   "parent"      => :field,
   "description" => _INTL("Effects that apply to the side the player is on."),
   "effect"      => proc { |battle|
@@ -443,7 +443,7 @@ MenuHandlers.add(:battle_debug_menu, :player_side, {
 })
 
 MenuHandlers.add(:battle_debug_menu, :opposing_side, {
-  "name"        => _INTL("Foe's Side Effects..."),
+  "name"        => _INTL("Foe's side effects..."),
   "parent"      => :field,
   "description" => _INTL("Effects that apply to the opposing side."),
   "effect"      => proc { |battle|
@@ -454,7 +454,7 @@ MenuHandlers.add(:battle_debug_menu, :opposing_side, {
 })
 
 MenuHandlers.add(:battle_debug_menu, :position_effects, {
-  "name"        => _INTL("Battler Position Effects..."),
+  "name"        => _INTL("Battler position effects..."),
   "parent"      => :field,
   "description" => _INTL("Effects that apply to individual battler positions."),
   "effect"      => proc { |battle|

@@ -67,7 +67,8 @@ class PokemonPokedexInfo_Scene
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 
-  def pbStartSceneBrief(species)  # For standalone access, shows first page only
+  # For standalone access, shows first page only.
+  def pbStartSceneBrief(species)
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
     dexnum = 0
@@ -124,8 +125,12 @@ class PokemonPokedexInfo_Scene
 
   def pbUpdate
     if @page == 2
-      intensity = (Graphics.frame_count % 40) * 12
-      intensity = 480 - intensity if intensity > 240
+      intensity_time = System.uptime % 1.0   # 1 second per glow
+      if intensity_time >= 0.5
+        intensity = lerp(64, 256 + 64, 0.5, intensity_time - 0.5)
+      else
+        intensity = lerp(256 + 64, 64, 0.5, intensity_time)
+      end
       @sprites["areahighlight"].opacity = intensity
     end
     pbUpdateSpriteHash(@sprites)
@@ -149,6 +154,7 @@ class PokemonPokedexInfo_Scene
   def pbGetAvailableForms
     ret = []
     multiple_forms = false
+    gender_differences = (GameData::Species.front_sprite_filename(@species, 0) != GameData::Species.front_sprite_filename(@species, 0, 1))
     # Find all genders/forms of @species that have been seen
     GameData::Species.each do |sp|
       next if sp.species != @species
@@ -160,6 +166,12 @@ class PokemonPokedexInfo_Scene
         next if !$player.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
         real_gender = 2 if sp.gender_ratio == :Genderless
         ret.push([sp.form_name, real_gender, sp.form])
+      elsif sp.form == 0 && !gender_differences
+        2.times do |real_gndr|
+          next if !$player.pokedex.seen_form?(@species, real_gndr, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
+          ret.push([sp.form_name || _INTL("One Form"), 0, sp.form])
+          break
+        end
       else   # Both male and female
         2.times do |real_gndr|
           next if !$player.pokedex.seen_form?(@species, real_gndr, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
@@ -172,7 +184,9 @@ class PokemonPokedexInfo_Scene
     ret.sort! { |a, b| (a[2] == b[2]) ? a[1] <=> b[1] : a[2] <=> b[2] }
     # Create form names for entries if they don't already exist
     ret.each do |entry|
-      if !entry[0] || entry[0].empty?   # Necessarily applies only to form 0
+      if entry[0]   # Alternate forms, and form 0 if no gender differences
+        entry[0] = "" if !multiple_forms && !gender_differences
+      else   # Necessarily applies only to form 0
         case entry[1]
         when 0 then entry[0] = _INTL("Male")
         when 1 then entry[0] = _INTL("Female")
@@ -314,7 +328,7 @@ class PokemonPokedexInfo_Scene
       map_metadata = GameData::MapMetadata.try_get(enc_data.map)
       next if !map_metadata || map_metadata.has_flag?("HideEncountersInPokedex")
       mappos = map_metadata.town_map_position
-      next if mappos[0] != @region   # Map isn't in the region being shown
+      next if !mappos || mappos[0] != @region   # Map isn't in the region being shown
       # Get the size and shape of the map in the Town Map
       map_size = map_metadata.town_map_size
       map_width = 1
@@ -484,6 +498,7 @@ class PokemonPokedexInfo_Scene
       elsif Input.trigger?(Input::USE)
         case @page
         when 1   # Info
+          pbPlayDecisionSE
           @show_battled_count = !@show_battled_count
           dorefresh = true
         when 2   # Area
@@ -548,11 +563,8 @@ class PokemonPokedexInfo_Scene
       if Input.trigger?(Input::ACTION)
         pbSEStop
         Pokemon.play_cry(@species, @form)
-      elsif Input.trigger?(Input::BACK)
+      elsif Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
         pbPlayCloseMenuSE
-        break
-      elsif Input.trigger?(Input::USE)
-        pbPlayDecisionSE
         break
       end
     end
@@ -574,7 +586,8 @@ class PokemonPokedexInfoScreen
     return ret   # Index of last species viewed in dexlist
   end
 
-  def pbStartSceneSingle(species)   # For use from a Pokémon's summary screen
+  # For use from a Pokémon's summary screen.
+  def pbStartSceneSingle(species)
     region = -1
     if Settings::USE_CURRENT_REGION_DEX
       region = pbGetCurrentRegion
@@ -597,7 +610,8 @@ class PokemonPokedexInfoScreen
     @scene.pbEndScene
   end
 
-  def pbDexEntry(species)   # For use when capturing a new species
+  # For use when capturing or otherwise obtaining a new species.
+  def pbDexEntry(species)
     @scene.pbStartSceneBrief(species)
     @scene.pbSceneBrief
     @scene.pbEndScene

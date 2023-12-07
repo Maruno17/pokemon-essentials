@@ -15,32 +15,34 @@
 #
 #===============================================================================
 class HallOfFame_Scene
-  # When true, all pokémon will be in one line
-  # When false, all pokémon will be in two lines
-  SINGLEROW = false
-  # Make the pokémon movement ON in hall entry
+  # When true, all pokémon will be in one line.
+  # When false, all pokémon will be in two lines.
+  SINGLE_ROW_OF_POKEMON = false
+  # Make the pokémon movement ON in hall entry.
   ANIMATION = true
-  # Speed in pokémon movement in hall entry. Don't use less than 2!
-  ANIMATIONSPEED = 32
-  # Entry wait time (in 1/20 seconds) between showing each Pokémon (and trainer)
-  ENTRYWAITTIME = 64
+  # Time in seconds for a Pokémon to slide to its position from off-screen.
+  APPEAR_SPEED = 0.4
+  # Entry wait time (in seconds) between showing each Pokémon (and trainer).
+  ENTRY_WAIT_TIME = 3.0
+  # Wait time (in seconds) when showing "Welcome to the Hall of Fame!".
+  WELCOME_WAIT_TIME = 4.0
   # Maximum number limit of simultaneous hall entries saved.
   # 0 = Doesn't save any hall. -1 = no limit
-  # Prefer to use larger numbers (like 500 and 1000) than don't put a limit
-  # If a player exceed this limit, the first one will be removed
-  HALLLIMIT = 50
-  # The entry music name. Put "" to doesn't play anything
-  ENTRYMUSIC = "Hall of Fame"
-  # Allow eggs to be show and saved in hall
-  ALLOWEGGS = true
-  # Remove the hallbars when the trainer sprite appears
-  REMOVEBARS = true
-  # The final fade speed on entry
-  FINALFADESPEED = 16
-  # Sprites opacity value when them aren't selected
+  # Prefer to use larger numbers (like 500 and 1000) than don't put a limit.
+  # If a player exceed this limit, the first one will be removed.
+  HALL_ENTRIES_LIMIT = 50
+  # The entry music name. Put "" to doesn't play anything.
+  HALL_OF_FAME_BGM = "Hall of Fame"
+  # Allow eggs to be show and saved in hall.
+  ALLOW_EGGS = true
+  # Remove the hallbars when the trainer sprite appears.
+  REMOVE_BARS_WHEN_SHOWING_TRAINER = true
+  # The final fade speed on entry.
+  FINAL_FADE_DURATION = 1.0
+  # Sprite's opacity value when it isn't selected.
   OPACITY = 64
-  BASECOLOR   = Color.new(248, 248, 248)
-  SHADOWCOLOR = Color.new(0, 0, 0)
+  TEXT_BASE_COLOR   = Color.new(248, 248, 248)
+  TEXT_SHADOW_COLOR = Color.new(0, 0, 0)
 
   # Placement for pokemon icons
   def pbStartScene
@@ -64,11 +66,10 @@ class HallOfFame_Scene
 
   def pbStartSceneEntry
     pbStartScene
-    @useMusic = (ENTRYMUSIC && ENTRYMUSIC != "")
-    pbBGMPlay(ENTRYMUSIC) if @useMusic
+    @useMusic = (HALL_OF_FAME_BGM && HALL_OF_FAME_BGM != "")
+    pbBGMPlay(HALL_OF_FAME_BGM) if @useMusic
     saveHallEntry
-    @xmovement = []
-    @ymovement = []
+    @movements = []
     createBattlers
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
@@ -90,22 +91,16 @@ class HallOfFame_Scene
     @viewport.dispose
   end
 
-  def slowFadeOut(sprites, exponent)   # 2 exponent
-    # To handle values above 8
-    extraWaitExponent = exponent - 9
-    exponent = 8 if exponent > 8
-    max = 2**exponent
-    speed = (2**8) / max
-    (0..max).each do |j|
-      if extraWaitExponent > -1
-        (2**extraWaitExponent).times do
-          Graphics.update
-          Input.update
-          pbUpdate
-        end
-      end
-      pbSetSpritesToColor(sprites, Color.new(0, 0, 0, j * speed))
-      block_given? ? yield : pbUpdateSpriteHash(sprites)
+  def slowFadeOut(duration)
+    col = Color.new(0, 0, 0, 0)
+    timer_start = System.uptime
+    loop do
+      col.alpha = lerp(0, 255, duration, timer_start, System.uptime)
+      @viewport.color = col
+      Graphics.update
+      Input.update
+      pbUpdate
+      break if col.alpha == 255
     end
   end
 
@@ -125,151 +120,123 @@ class HallOfFame_Scene
   def saveHallEntry
     $player.party.each do |pkmn|
       # Clones every pokémon object
-      @hallEntry.push(pkmn.clone) if !pkmn.egg? || ALLOWEGGS
+      @hallEntry.push(pkmn.clone) if !pkmn.egg? || ALLOW_EGGS
     end
     # Update the global variables
     $PokemonGlobal.hallOfFame.push(@hallEntry)
     $PokemonGlobal.hallOfFameLastNumber += 1
-    $PokemonGlobal.hallOfFame.delete_at(0) if HALLLIMIT > -1 &&
-                                              $PokemonGlobal.hallOfFame.size > HALLLIMIT
+    if HALL_ENTRIES_LIMIT >= 0 && $PokemonGlobal.hallOfFame.size > HALL_ENTRIES_LIMIT
+      $PokemonGlobal.hallOfFame.delete_at(0)
+    end
   end
 
   # Return the x/y point position in screen for battler index number
   # Don't use odd numbers!
   def xpointformula(battlernumber)
-    ret = 0
-    if SINGLEROW
-      ret = ((60 * (battlernumber / 2)) + 48) * (xpositionformula(battlernumber) - 1)
-      ret += (Graphics.width / 2) - 56
-    else
-      ret = 32 + (160 * xpositionformula(battlernumber))
+    if SINGLE_ROW_OF_POKEMON
+      ret = ((60 * (battlernumber / 2)) + 48) * (xpositionformula(battlernumber) - 1)   # -48, 48, -108, 108, -168, 168
+      return ret + (Graphics.width / 2)                   # 208, 304, 148, 364, 88, 424
     end
-    return ret
+    return 96 + (160 * xpositionformula(battlernumber))   # 256, 96, 456, 256, 456, 96
   end
 
   def ypointformula(battlernumber)
-    ret = 0
-    if SINGLEROW
-      ret = 96 - (8 * (battlernumber / 2))
-    else
-      ret = 32 + (128 * ypositionformula(battlernumber) / 2)
-    end
-    return ret
+    return 180 - (32 * (battlernumber / 2)) if SINGLE_ROW_OF_POKEMON   # 180, 180, 148, 148, 116, 116
+    return 96 + (64 * ypositionformula(battlernumber))                 # 90, 90, 90, 160, 160, 160
   end
 
-  # Returns 0, 1 or 2 as the x/y column value
+  # Returns 0, 1 or 2 as the x position value (left, middle, right column)
   def xpositionformula(battlernumber)
-    ret = 0
-    if SINGLEROW
-      ret = (battlernumber % 2) * 2
-    else
-      ret = (battlernumber / 3).even? ? (19 - battlernumber) % 3 : (19 + battlernumber) % 3
-    end
-    return ret
+    return (battlernumber % 2) * 2 if SINGLE_ROW_OF_POKEMON       # 0, 2, 0, 2, 0, 2
+    return (1 - battlernumber) % 3 if (battlernumber / 3).even?   # First 3 mons: 1, 0, 2
+    return (1 + battlernumber) % 3                                # Second 3 mons: 1, 2, 0
   end
 
+  # Returns 0, 1 or 2 as the y position value (top, middle, bottom row)
   def ypositionformula(battlernumber)
-    ret = 0
-    if SINGLEROW
-      ret = 1
-    else
-      ret = ((battlernumber / 3) % 2) * 2
-    end
-    return ret
+    return 1 if SINGLE_ROW_OF_POKEMON      # 1, 1, 1, 1, 1, 1
+    return ((battlernumber / 3) % 2) * 2   # 0, 0, 0, 2, 2, 2
   end
 
   def moveSprite(i)
     spritename = (i > -1) ? "pokemon#{i}" : "trainer"
-    speed = (i > -1) ? ANIMATIONSPEED : 2
-    if !ANIMATION   # Skips animation
-      @sprites[spritename].x -= speed * @xmovement[i]
-      @xmovement[i] = 0
-      @sprites[spritename].y -= speed * @ymovement[i]
-      @ymovement[i] = 0
+    if !ANIMATION   # Skips animation, place directly in end position
+      @sprites[spritename].x = @movements[i][1]
+      @sprites[spritename].y = @movements[i][3]
+      @movements[i][0] = @movements[i][1]
+      @movements[i][2] = @movements[i][3]
+      return
     end
-    if @xmovement[i] != 0
-      direction = (@xmovement[i] > 0) ? -1 : 1
-      @sprites[spritename].x += speed * direction
-      @xmovement[i] += direction
-    end
-    if @ymovement[i] != 0
-      direction = (@ymovement[i] > 0) ? -1 : 1
-      @sprites[spritename].y += speed * direction
-      @ymovement[i] += direction
-    end
+    @movements[i][4] = System.uptime if !@movements[i][4]
+    speed = (i > -1) ? APPEAR_SPEED : APPEAR_SPEED * 3
+    @sprites[spritename].x = lerp(@movements[i][0], @movements[i][1], speed, @movements[i][4], System.uptime)
+    @sprites[spritename].y = lerp(@movements[i][2], @movements[i][3], speed, @movements[i][4], System.uptime)
+    @movements[i][0] = @movements[i][1] if @sprites[spritename].x == @movements[i][1]
+    @movements[i][2] = @movements[i][3] if @sprites[spritename].y == @movements[i][3]
   end
 
   def createBattlers(hide = true)
     # Movement in animation
-    6.times do |i|
-      # Clear all 6 pokémon sprites and dispose the ones that exists every time
+    Settings::MAX_PARTY_SIZE.times do |i|
+      # Clear all pokémon sprites and dispose the ones that exists every time
       # that this method is call
       restartSpritePosition(@sprites, "pokemon#{i}")
       next if i >= @hallEntry.size
-      xpoint = xpointformula(i)
-      ypoint = ypointformula(i)
-      pok = @hallEntry[i]
+      end_x = xpointformula(i)
+      end_y = ypointformula(i)
       @sprites["pokemon#{i}"] = PokemonSprite.new(@viewport)
-      @sprites["pokemon#{i}"].setOffset(PictureOrigin::TOP_LEFT)
-      @sprites["pokemon#{i}"].setPokemonBitmap(pok)
+      @sprites["pokemon#{i}"].setPokemonBitmap(@hallEntry[i])
       # This method doesn't put the exact coordinates
-      @sprites["pokemon#{i}"].x = xpoint
-      @sprites["pokemon#{i}"].y = ypoint
-      if @sprites["pokemon#{i}"].bitmap && !@sprites["pokemon#{i}"].disposed?
-        @sprites["pokemon#{i}"].x += (128 - @sprites["pokemon#{i}"].bitmap.width) / 2
-        @sprites["pokemon#{i}"].y += (128 - @sprites["pokemon#{i}"].bitmap.height) / 2
-      end
-      @sprites["pokemon#{i}"].z = 7 - i if SINGLEROW
+      @sprites["pokemon#{i}"].x = end_x
+      @sprites["pokemon#{i}"].y = end_y
+      @sprites["pokemon#{i}"].z = Settings::MAX_PARTY_SIZE - i if SINGLE_ROW_OF_POKEMON
       next if !hide
       # Animation distance calculation
-      horizontal = 1 - xpositionformula(i)
-      vertical = 1 - ypositionformula(i)
-      xdistance = (horizontal == -1) ? -@sprites["pokemon#{i}"].bitmap.width : Graphics.width
-      ydistance = (vertical == -1) ? -@sprites["pokemon#{i}"].bitmap.height : Graphics.height
-      xdistance = ((xdistance - @sprites["pokemon#{i}"].x) / ANIMATIONSPEED).abs + 1
-      ydistance = ((ydistance - @sprites["pokemon#{i}"].y) / ANIMATIONSPEED).abs + 1
-      biggerdistance = (xdistance > ydistance) ? xdistance : ydistance
-      @xmovement[i] = biggerdistance
-      @xmovement[i] *= -1 if horizontal == -1
-      @xmovement[i] = 0   if horizontal == 0
-      @ymovement[i] = biggerdistance
-      @ymovement[i] *= -1 if vertical == -1
-      @ymovement[i] = 0   if vertical == 0
-      # Hide the battlers
-      @sprites["pokemon#{i}"].x += @xmovement[i] * ANIMATIONSPEED
-      @sprites["pokemon#{i}"].y += @ymovement[i] * ANIMATIONSPEED
+      x_direction = xpositionformula(i) - 1
+      y_direction = ypositionformula(i) - 1
+      distance = 0
+      if y_direction == 0
+        distance = (x_direction > 0) ? end_x : Graphics.width - end_x
+        distance += @sprites["pokemon#{i}"].bitmap.width / 2
+      else
+        distance = (y_direction > 0) ? end_y : Graphics.height - end_y
+        distance += @sprites["pokemon#{i}"].bitmap.height / 2
+      end
+      start_x = end_x - (x_direction * distance)
+      start_y = end_y - (y_direction * distance)
+      @sprites["pokemon#{i}"].x = start_x
+      @sprites["pokemon#{i}"].y = start_y
+      @movements[i] = [start_x, end_x, start_y, end_y]
     end
   end
 
   def createTrainerBattler
     @sprites["trainer"] = IconSprite.new(@viewport)
-    @sprites["trainer"].setBitmap(GameData::TrainerType.front_sprite_filename($player.trainer_type))
-    if SINGLEROW
+    @sprites["trainer"].setBitmap(GameData::TrainerType.player_front_sprite_filename($player.trainer_type))
+    if SINGLE_ROW_OF_POKEMON
       @sprites["trainer"].x = Graphics.width / 2
-      @sprites["trainer"].y = 178
+      @sprites["trainer"].y = 208
     else
       @sprites["trainer"].x = Graphics.width - 96
       @sprites["trainer"].y = 160
     end
+    @movements.push([Graphics.width / 2, @sprites["trainer"].x, @sprites["trainer"].y, @sprites["trainer"].y])
     @sprites["trainer"].z = 9
     @sprites["trainer"].ox = @sprites["trainer"].bitmap.width / 2
     @sprites["trainer"].oy = @sprites["trainer"].bitmap.height / 2
-    if REMOVEBARS
+    if REMOVE_BARS_WHEN_SHOWING_TRAINER
       @sprites["overlay"].bitmap.clear
       @sprites["hallbars"].visible = false
     end
-    @xmovement[@battlerIndex] = 0
-    @ymovement[@battlerIndex] = 0
-    if ANIMATION && !SINGLEROW   # Trainer Animation
-      startpoint = Graphics.width / 2
-      # 2 is the trainer speed
-      @xmovement[@battlerIndex] = (startpoint - @sprites["trainer"].x) / 2
-      @sprites["trainer"].x = startpoint
+    if ANIMATION && !SINGLE_ROW_OF_POKEMON   # Trainer Animation
+      @sprites["trainer"].x = @movements.last[0]
     else
-      ENTRYWAITTIME.times do
+      timer_start = System.uptime
+      loop do
         Graphics.update
         Input.update
         pbUpdate
+        break if System.uptime - timer_start >= ENTRY_WAIT_TIME
       end
     end
   end
@@ -319,16 +286,16 @@ class HallOfFame_Scene
       dexnumber = _ISPRINTF("No. {1:03d}", number)
     end
     textPositions = [
-      [dexnumber, 32, Graphics.height - 74, :left, BASECOLOR, SHADOWCOLOR],
-      [pokename, Graphics.width - 192, Graphics.height - 74, :center, BASECOLOR, SHADOWCOLOR],
+      [dexnumber, 32, Graphics.height - 74, :left, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR],
+      [pokename, Graphics.width - 192, Graphics.height - 74, :center, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR],
       [_INTL("Lv. {1}", pokemon.egg? ? "?" : pokemon.level),
-       64, Graphics.height - 42, :left, BASECOLOR, SHADOWCOLOR],
+       64, Graphics.height - 42, :left, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR],
       [_INTL("ID No. {1}", pokemon.egg? ? "?????" : idno),
-       Graphics.width - 192, Graphics.height - 42, :center, BASECOLOR, SHADOWCOLOR]
+       Graphics.width - 192, Graphics.height - 42, :center, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]
     ]
     if hallNumber > -1
-      textPositions.push([_INTL("Hall of Fame No."), (Graphics.width / 2) - 104, 6, :left, BASECOLOR, SHADOWCOLOR])
-      textPositions.push([hallNumber.to_s, (Graphics.width / 2) + 104, 6, :right, BASECOLOR, SHADOWCOLOR])
+      textPositions.push([_INTL("Hall of Fame No."), (Graphics.width / 2) - 104, 6, :left, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR])
+      textPositions.push([hallNumber.to_s, (Graphics.width / 2) + 104, 6, :right, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR])
     end
     pbDrawTextPositions(overlay, textPositions)
   end
@@ -337,7 +304,7 @@ class HallOfFame_Scene
     overlay = @sprites["overlay"].bitmap
     overlay.clear
     pbDrawTextPositions(overlay, [[_INTL("Welcome to the Hall of Fame!"),
-                                   Graphics.width / 2, Graphics.height - 68, :center, BASECOLOR, SHADOWCOLOR]])
+                                   Graphics.width / 2, Graphics.height - 68, :center, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]])
   end
 
   def pbAnimationLoop
@@ -379,33 +346,39 @@ class HallOfFame_Scene
 
   def pbUpdateAnimation
     if @battlerIndex <= @hallEntry.size
-      if @xmovement[@battlerIndex] != 0 || @ymovement[@battlerIndex] != 0
+      if @movements[@battlerIndex] &&
+         (@movements[@battlerIndex][0] != @movements[@battlerIndex][1] ||
+         @movements[@battlerIndex][2] != @movements[@battlerIndex][3])
         spriteIndex = (@battlerIndex < @hallEntry.size) ? @battlerIndex : -1
         moveSprite(spriteIndex)
       else
         @battlerIndex += 1
         if @battlerIndex <= @hallEntry.size
           # If it is a pokémon, write the pokémon text, wait the
-          # ENTRYWAITTIME and goes to the next battler
+          # ENTRY_WAIT_TIME and goes to the next battler
           @hallEntry[@battlerIndex - 1].play_cry
           writePokemonData(@hallEntry[@battlerIndex - 1])
-          (ENTRYWAITTIME * Graphics.frame_rate / 20).times do
+          timer_start = System.uptime
+          loop do
             Graphics.update
             Input.update
             pbUpdate
+            break if System.uptime - timer_start >= ENTRY_WAIT_TIME
           end
           if @battlerIndex < @hallEntry.size   # Preparates the next battler
             setPokemonSpritesOpacity(@battlerIndex, OPACITY)
             @sprites["overlay"].bitmap.clear
-          else   # Show the welcome message and preparates the trainer
+          else   # Show the welcome message and prepares the trainer
             setPokemonSpritesOpacity(-1)
             writeWelcome
-            (ENTRYWAITTIME * 2 * Graphics.frame_rate / 20).times do
+            timer_start = System.uptime
+            loop do
               Graphics.update
               Input.update
               pbUpdate
+              break if System.uptime - timer_start >= WELCOME_WAIT_TIME
             end
-            setPokemonSpritesOpacity(-1, OPACITY) if !SINGLEROW
+            setPokemonSpritesOpacity(-1, OPACITY) if !SINGLE_ROW_OF_POKEMON
             createTrainerBattler
           end
         end
@@ -413,14 +386,15 @@ class HallOfFame_Scene
     elsif @battlerIndex > @hallEntry.size
       # Write the trainer data and fade
       writeTrainerData
-      (ENTRYWAITTIME * Graphics.frame_rate / 20).times do
+      timer_start = System.uptime
+      loop do
         Graphics.update
         Input.update
         pbUpdate
+        break if System.uptime - timer_start >= ENTRY_WAIT_TIME
       end
-      fadeSpeed = ((Math.log(2**12) - Math.log(FINALFADESPEED)) / Math.log(2)).floor
-      pbBGMFade((2**fadeSpeed).to_f / 20) if @useMusic
-      slowFadeOut(@sprites, fadeSpeed) { pbUpdate }
+      pbBGMFade(FINAL_FADE_DURATION) if @useMusic
+      slowFadeOut(FINAL_FADE_DURATION)
       @alreadyFadedInEnd = true
       @battlerIndex += 1
     end
@@ -480,7 +454,7 @@ MenuHandlers.add(:pc_menu, :hall_of_fame, {
   "order"     => 40,
   "condition" => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
   "effect"    => proc { |menu|
-    pbMessage(_INTL("\\se[PC access]Accessed the Hall of Fame."))
+    pbMessage("\\se[PC access]" + _INTL("Accessed the Hall of Fame."))
     pbHallOfFamePC
     next false
   }

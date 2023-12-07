@@ -32,8 +32,13 @@ module Battle::CatchAndStoreMixin
           end
           next if party_index < 0   # Cancelled
           party_size = pbPlayer.party.length
-          # Send chosen Pokémon to storage
+          # Get chosen Pokémon and clear battle-related conditions
           send_pkmn = pbPlayer.party[party_index]
+          @peer.pbOnLeavingBattle(self, send_pkmn, @usedInBattle[0][party_index], true)
+          send_pkmn.statusCount = 0 if send_pkmn.status == :POISON   # Bad poison becomes regular
+          send_pkmn.makeUnmega
+          send_pkmn.makeUnprimal
+          # Send chosen Pokémon to storage
           stored_box = @peer.pbStorePokemon(pbPlayer, send_pkmn)
           pbPlayer.party.delete_at(party_index)
           box_name = @peer.pbBoxName(stored_box)
@@ -86,7 +91,7 @@ module Battle::CatchAndStoreMixin
       # Record the Pokémon's species as owned in the Pokédex
       if !pbPlayer.owned?(pkmn.species)
         pbPlayer.pokedex.set_owned(pkmn.species)
-        if $player.has_pokedex
+        if $player.has_pokedex && $player.pokedex.species_in_unlocked_dex?(pkmn.species)
           pbDisplayPaused(_INTL("{1}'s data was added to the Pokédex.", pkmn.name))
           pbPlayer.pokedex.register_last_seen(pkmn)
           @scene.pbShowPokedex(pkmn.species)

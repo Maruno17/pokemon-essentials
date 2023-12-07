@@ -1,0 +1,508 @@
+﻿# To localize this text for a particular language, please
+# translate every second line of this file.
+#-------------------------------
+[ABILITY_DESCRIPTIONS]
+The stench may cause the target to flinch.
+The stench may cause the target to flinch.
+The Pokémon makes it rain if it appears in battle.
+The Pokémon makes it rain if it appears in battle.
+Its Speed stat is gradually boosted.
+Its Speed stat is gradually boosted.
+The Pokémon is protected against critical hits.
+The Pokémon is protected against critical hits.
+It cannot be knocked out with one hit.
+It cannot be knocked out with one hit.
+Prevents the use of self-destructing moves.
+Prevents the use of self-destructing moves.
+The Pokémon is protected from paralysis.
+The Pokémon is protected from paralysis.
+Boosts the Pokémon's evasion in a sandstorm.
+Boosts the Pokémon's evasion in a sandstorm.
+Contact with the Pokémon may cause paralysis.
+Contact with the Pokémon may cause paralysis.
+Restores HP if hit by an Electric-type move.
+Restores HP if hit by an Electric-type move.
+Restores HP if hit by a Water-type move.
+Restores HP if hit by a Water-type move.
+Prevents it from becoming infatuated.
+Prevents it from becoming infatuated.
+Eliminates the effects of weather.
+Eliminates the effects of weather.
+The Pokémon's accuracy is boosted.
+The Pokémon's accuracy is boosted.
+Prevents the Pokémon from falling asleep.
+Prevents the Pokémon from falling asleep.
+Changes the Pokémon's type to the foe's move.
+Changes the Pokémon's type to the foe's move.
+Prevents the Pokémon from getting poisoned.
+Prevents the Pokémon from getting poisoned.
+It powers up Fire-type moves if it's hit by one.
+It powers up Fire-type moves if it's hit by one.
+Blocks the added effects of attacks taken.
+Blocks the added effects of attacks taken.
+Prevents the Pokémon from becoming confused.
+Prevents the Pokémon from becoming confused.
+Negates all moves that force switching out.
+Negates all moves that force switching out.
+Lowers the foe's Attack stat.
+Lowers the foe's Attack stat.
+Prevents the foe from escaping.
+Prevents the foe from escaping.
+Inflicts damage to the foe on contact.
+Inflicts damage to the foe on contact.
+Only super-effective moves will hit.
+Only super-effective moves will hit.
+Gives full immunity to all Ground-type moves.
+Gives full immunity to all Ground-type moves.
+Contact may poison or cause paralysis or sleep.
+Contact may poison or cause paralysis or sleep.
+Passes a burn, poison, or paralysis to the foe.
+Passes a burn, poison, or paralysis to the foe.
+Prevents other Pokémon from lowering its stats.
+Prevents other Pokémon from lowering its stats.
+All status problems heal when it switches out.
+All status problems heal when it switches out.
+Draws in all Electric-type moves to up Sp. Attack.
+Draws in all Electric-type moves to up Sp. Attack.
+Boosts the likelihood of added effects appearing.
+Boosts the likelihood of added effects appearing.
+Boosts the Pokémon's Speed in rain.
+Boosts the Pokémon's Speed in rain.
+Boosts the Pokémon's Speed in sunshine.
+Boosts the Pokémon's Speed in sunshine.
+Raises the likelihood of meeting wild Pokémon.
+Raises the likelihood of meeting wild Pokémon.
+The Pokémon copies a foe's Ability.
+The Pokémon copies a foe's Ability.
+Raises the Pokémon's Attack stat.
+Raises the Pokémon's Attack stat.
+Contact with the Pokémon may poison the attacker.
+Contact with the Pokémon may poison the attacker.
+The Pokémon is protected from flinching.
+The Pokémon is protected from flinching.
+Prevents the Pokémon from becoming frozen.
+Prevents the Pokémon from becoming frozen.
+Prevents the Pokémon from getting a burn.
+Prevents the Pokémon from getting a burn.
+Prevents Steel-type Pokémon from escaping.
+Prevents Steel-type Pokémon from escaping.
+Gives full immunity to all sound-based moves.
+Gives full immunity to all sound-based moves.
+The Pokémon gradually regains HP in rain.
+The Pokémon gradually regains HP in rain.
+The Pokémon summons a sandstorm in battle.
+The Pokémon summons a sandstorm in battle.
+The Pokémon raises the foe's PP usage.
+The Pokémon raises the foe's PP usage.
+Ups resistance to Fire- and Ice-type moves.
+Ups resistance to Fire- and Ice-type moves.
+The Pokémon awakens quickly from sleep.
+The Pokémon awakens quickly from sleep.
+Contact with the Pokémon may burn the attacker.
+Contact with the Pokémon may burn the attacker.
+Enables a sure getaway from wild Pokémon.
+Enables a sure getaway from wild Pokémon.
+Prevents other Pokémon from lowering accuracy.
+Prevents other Pokémon from lowering accuracy.
+Prevents other Pokémon from lowering Attack stat.
+Prevents other Pokémon from lowering Attack stat.
+The Pokémon may pick up items.
+The Pokémon may pick up items.
+Pokémon can't attack on consecutive turns.
+Pokémon can't attack on consecutive turns.
+Boosts the Attack stat, but lowers accuracy.
+Boosts the Attack stat, but lowers accuracy.
+Contact with the Pokémon may cause infatuation.
+Contact with the Pokémon may cause infatuation.
+Ups Sp. Atk if another Pokémon has Plus or Minus.
+Ups Sp. Atk if another Pokémon has Plus or Minus.
+Castform transforms with the weather.
+Castform transforms with the weather.
+Protects the Pokémon from item theft.
+Protects the Pokémon from item theft.
+The Pokémon may heal its own status problems.
+The Pokémon may heal its own status problems.
+Boosts Attack if there is a status problem.
+Boosts Attack if there is a status problem.
+Ups Defense if there is a status problem.
+Ups Defense if there is a status problem.
+Damages attackers using any draining move.
+Damages attackers using any draining move.
+Powers up Grass-type moves in a pinch.
+Powers up Grass-type moves in a pinch.
+Powers up Fire-type moves in a pinch.
+Powers up Fire-type moves in a pinch.
+Powers up Water-type moves in a pinch.
+Powers up Water-type moves in a pinch.
+Powers up Bug-type moves in a pinch.
+Powers up Bug-type moves in a pinch.
+Protects the Pokémon from recoil damage.
+Protects the Pokémon from recoil damage.
+Turns the sunlight harsh if it is in battle.
+Turns the sunlight harsh if it is in battle.
+Prevents the foe from fleeing.
+Prevents the foe from fleeing.
+Raises evasion if the Pokémon is confused.
+Raises evasion if the Pokémon is confused.
+Raises Speed if hit by an Electric-type move.
+Raises Speed if hit by an Electric-type move.
+Deals more damage to a foe of the same gender.
+Deals more damage to a foe of the same gender.
+Raises Speed each time the Pokémon flinches.
+Raises Speed each time the Pokémon flinches.
+Raises evasion in a hailstorm.
+Raises evasion in a hailstorm.
+Encourages the early use of a held Berry.
+Encourages the early use of a held Berry.
+Maxes Attack after taking a critical hit.
+Maxes Attack after taking a critical hit.
+Raises Speed if a held item is used.
+Raises Speed if a held item is used.
+Weakens the power of Fire-type moves.
+Weakens the power of Fire-type moves.
+The Pokémon is prone to wild stat changes.
+The Pokémon is prone to wild stat changes.
+Reduces HP if it is hot. Water restores HP.
+Reduces HP if it is hot. Water restores HP.
+Adjusts power according to a foe's defenses.
+Adjusts power according to a foe's defenses.
+Boosts the power of punching moves.
+Boosts the power of punching moves.
+Restores HP if the Pokémon is poisoned.
+Restores HP if the Pokémon is poisoned.
+Powers up moves of the same type.
+Powers up moves of the same type.
+Increases the frequency of multi-strike moves.
+Increases the frequency of multi-strike moves.
+Heals status problems if it is raining.
+Heals status problems if it is raining.
+In sunshine, Sp. Atk is boosted but HP decreases.
+In sunshine, Sp. Atk is boosted but HP decreases.
+Boosts Speed if there is a status problem.
+Boosts Speed if there is a status problem.
+All the Pokémon's moves become the Normal type.
+All the Pokémon's moves become the Normal type.
+Powers up moves if they become critical hits.
+Powers up moves if they become critical hits.
+The Pokémon only takes damage from attacks.
+The Pokémon only takes damage from attacks.
+Ensures attacks by or against the Pokémon land.
+Ensures attacks by or against the Pokémon land.
+The Pokémon moves after all other Pokémon do.
+The Pokémon moves after all other Pokémon do.
+Powers up the Pokémon's weaker moves.
+Powers up the Pokémon's weaker moves.
+Prevents problems with status in sunny weather.
+Prevents problems with status in sunny weather.
+The Pokémon can't use any held items.
+The Pokémon can't use any held items.
+Moves can be used regardless of Abilities.
+Moves can be used regardless of Abilities.
+Heightens the critical-hit ratios of moves.
+Heightens the critical-hit ratios of moves.
+Damages the attacker landing the finishing hit.
+Damages the attacker landing the finishing hit.
+Senses a foe's dangerous moves.
+Senses a foe's dangerous moves.
+Determines what moves a foe has.
+Determines what moves a foe has.
+Ignores any stat changes in the Pokémon.
+Ignores any stat changes in the Pokémon.
+Powers up "not very effective" moves.
+Powers up "not very effective" moves.
+Reduces damage from super-effective attacks.
+Reduces damage from super-effective attacks.
+Temporarily halves Attack and Speed.
+Temporarily halves Attack and Speed.
+Enables moves to hit Ghost-type Pokémon.
+Enables moves to hit Ghost-type Pokémon.
+Draws in all Water-type moves to up Sp. Attack.
+Draws in all Water-type moves to up Sp. Attack.
+The Pokémon gradually regains HP in a hailstorm.
+The Pokémon gradually regains HP in a hailstorm.
+The Pokémon summons a hailstorm in battle.
+The Pokémon summons a hailstorm in battle.
+The Pokémon may gather Honey from somewhere.
+The Pokémon may gather Honey from somewhere.
+The Pokémon can check a foe's held item.
+The Pokémon can check a foe's held item.
+Powers up moves that have recoil damage.
+Powers up moves that have recoil damage.
+Changes type to match the held Plate.
+Changes type to match the held Plate.
+Powers up party Pokémon when it is sunny.
+Powers up party Pokémon when it is sunny.
+Reduces a sleeping foe's HP.
+Reduces a sleeping foe's HP.
+Steals an item when hit by another Pokémon.
+Steals an item when hit by another Pokémon.
+Removes added effects to increase move damage.
+Removes added effects to increase move damage.
+Makes stat changes have an opposite effect.
+Makes stat changes have an opposite effect.
+Makes the foe nervous and unable to eat Berries.
+Makes the foe nervous and unable to eat Berries.
+When its stats are lowered its Attack increases.
+When its stats are lowered its Attack increases.
+Lowers stats when HP becomes half or less.
+Lowers stats when HP becomes half or less.
+May disable a move used on the Pokémon.
+May disable a move used on the Pokémon.
+May heal an ally's status conditions.
+May heal an ally's status conditions.
+Reduces damage done to allies.
+Reduces damage done to allies.
+Physical attacks lower Defense and raise Speed.
+Physical attacks lower Defense and raise Speed.
+Doubles the Pokémon's weight.
+Doubles the Pokémon's weight.
+Halves the Pokémon's weight.
+Halves the Pokémon's weight.
+Reduces damage when HP is full.
+Reduces damage when HP is full.
+Powers up physical attacks when poisoned.
+Powers up physical attacks when poisoned.
+Powers up special attacks when burned.
+Powers up special attacks when burned.
+May create another Berry after one is used.
+May create another Berry after one is used.
+Anticipates an ally's attack and dodges it.
+Anticipates an ally's attack and dodges it.
+Raises one stat and lowers another.
+Raises one stat and lowers another.
+Protects the Pokémon from damage from weather.
+Protects the Pokémon from damage from weather.
+May poison targets when a Pokémon makes contact.
+May poison targets when a Pokémon makes contact.
+Restores a little HP when withdrawn from battle.
+Restores a little HP when withdrawn from battle.
+Protects from Defense-lowering attacks.
+Protects from Defense-lowering attacks.
+Boosts the Pokémon's Speed in a sandstorm.
+Boosts the Pokémon's Speed in a sandstorm.
+Makes status-changing moves more likely to miss.
+Makes status-changing moves more likely to miss.
+Boosts move power when the Pokémon moves last.
+Boosts move power when the Pokémon moves last.
+Comes out disguised as the Pokémon in back.
+Comes out disguised as the Pokémon in back.
+It transforms itself into the Pokémon it is facing.
+It transforms itself into the Pokémon it is facing.
+Passes through the foe's barrier and strikes.
+Passes through the foe's barrier and strikes.
+Contact with this Pokémon spreads this Ability.
+Contact with this Pokémon spreads this Ability.
+Boosts Attack after knocking out any Pokémon.
+Boosts Attack after knocking out any Pokémon.
+Raises Attack when hit by a Dark-type move.
+Raises Attack when hit by a Dark-type move.
+Some move types scare it and boost its Speed.
+Some move types scare it and boost its Speed.
+Reflects status-changing moves.
+Reflects status-changing moves.
+Boosts Attack when hit by a Grass-type move.
+Boosts Attack when hit by a Grass-type move.
+Gives priority to a status move.
+Gives priority to a status move.
+Boosts certain moves' power in a sandstorm.
+Boosts certain moves' power in a sandstorm.
+Inflicts damage to the Pokémon on contact.
+Inflicts damage to the Pokémon on contact.
+Changes the Pokémon's shape when HP is halved.
+Changes the Pokémon's shape when HP is halved.
+Boosts the accuracy of its allies and itself.
+Boosts the accuracy of its allies and itself.
+Protects against attacks that limit move choices.
+Protects against attacks that limit move choices.
+Protects Grass-type allies from stat/status effects.
+Protects Grass-type allies from stat/status effects.
+Restores HP as well when the Pokémon eats a Berry.
+Restores HP as well when the Pokémon eats a Berry.
+It changes type to that of the move it's about to use.
+It changes type to that of the move it's about to use.
+Halves the damage from physical moves.
+Halves the damage from physical moves.
+Steals the held item of a Pokémon it hits.
+Steals the held item of a Pokémon it hits.
+Protects the Pokémon from some ball and bomb moves.
+Protects the Pokémon from some ball and bomb moves.
+Sharply boosts Sp. Atk when a stat is lowered.
+Sharply boosts Sp. Atk when a stat is lowered.
+Boosts the power of biting moves.
+Boosts the power of biting moves.
+Normal-type moves become Ice-type and powered up.
+Normal-type moves become Ice-type and powered up.
+Prevents itself and allies from falling asleep.
+Prevents itself and allies from falling asleep.
+Changes between Blade and Shield Forme with attacks.
+Changes between Blade and Shield Forme with attacks.
+Flying-type moves gain priority when its HP is full.
+Flying-type moves gain priority when its HP is full.
+Powers up aura and pulse moves.
+Powers up aura and pulse moves.
+Boosts the Defense stat on Grassy Terrain.
+Boosts the Defense stat on Grassy Terrain.
+Passes its held item to an ally that has used theirs.
+Passes its held item to an ally that has used theirs.
+Powers up moves that make direct contact.
+Powers up moves that make direct contact.
+Normal-type moves become Fairy-type and powered up.
+Normal-type moves become Fairy-type and powered up.
+Contact with it lowers the attacker's Speed stat.
+Contact with it lowers the attacker's Speed stat.
+Normal-type moves become Flying-type and power up.
+Normal-type moves become Flying-type and power up.
+Parent and child each attacks.
+Parent and child each attacks.
+Powers up each Pokémon's Dark-type moves.
+Powers up each Pokémon's Dark-type moves.
+Powers up each Pokémon's Fairy-type moves.
+Powers up each Pokémon's Fairy-type moves.
+Reverses "Aura" Abilities to weaken affected moves.
+Reverses "Aura" Abilities to weaken affected moves.
+Changes the weather to nullify Fire-type moves.
+Changes the weather to nullify Fire-type moves.
+Changes the weather to nullify Water-type moves.
+Changes the weather to nullify Water-type moves.
+Alters weather to remove Flying-type's weaknesses.
+Alters weather to remove Flying-type's weaknesses.
+Boosts Defense when hit by an attack.
+Boosts Defense when hit by an attack.
+Cowardly switches out if its HP becomes half or less.
+Cowardly switches out if its HP becomes half or less.
+Switches out if its HP becomes half or less.
+Switches out if its HP becomes half or less.
+Sharply ups Defense when hit by a Water-type move.
+Sharply ups Defense when hit by a Water-type move.
+Its attacks are critical hits when it is poisoned.
+Its attacks are critical hits when it is poisoned.
+Its shell breaks if its HP becomes half or less.
+Its shell breaks if its HP becomes half or less.
+Deals doubles damage to a target's replacement.
+Deals doubles damage to a target's replacement.
+Weakens incoming Fire-type moves and prevents burns.
+Weakens incoming Fire-type moves and prevents burns.
+Powers up Steel-type moves.
+Powers up Steel-type moves.
+Ups Sp. Atk if a hit makes its HP half or less.
+Ups Sp. Atk if a hit makes its HP half or less.
+Boosts the Pokémon's Speed stat in a hailstorm.
+Boosts the Pokémon's Speed stat in a hailstorm.
+Uses moves without making contact with the target.
+Uses moves without making contact with the target.
+Its sound-based moves become Water-type.
+Its sound-based moves become Water-type.
+Gives priority to a healing move.
+Gives priority to a healing move.
+Normal-type moves become Electric-type and powered.
+Normal-type moves become Electric-type and powered.
+Doubles Speed on Electric Terrain.
+Doubles Speed on Electric Terrain.
+Forms a powerful school while it has a lot of HP.
+Forms a powerful school while it has a lot of HP.
+Its shroud protects it from an attack just once.
+Its shroud protects it from an attack just once.
+Defeating a foe lets it become Ash-Greninja.
+Defeating a foe lets it become Ash-Greninja.
+Changes with other Cells if HP becomes half or less.
+Changes with other Cells if HP becomes half or less.
+It can poison Steel- and Poison-type targets.
+It can poison Steel- and Poison-type targets.
+It's always drowsing, and attacks without waking.
+It's always drowsing, and attacks without waking.
+Makes foes unable to use priority attacks.
+Makes foes unable to use priority attacks.
+Damages an attacker that lands the finishing hit.
+Damages an attacker that lands the finishing hit.
+Repeats another Pokémon's dance move immediately.
+Repeats another Pokémon's dance move immediately.
+Powers up ally Pokémon's special moves.
+Powers up ally Pokémon's special moves.
+Resists contact damage but weaker to Fire-type.
+Resists contact damage but weaker to Fire-type.
+Boosts Sp. Atk each time a Pokémon faints.
+Boosts Sp. Atk each time a Pokémon faints.
+Contact with it lowers the attacker's Speed.
+Contact with it lowers the attacker's Speed.
+Copies the Ability of a defeated ally.
+Copies the Ability of a defeated ally.
+Boosts its best stat each time it deals a KO.
+Boosts its best stat each time it deals a KO.
+Its type matches the memory disc it holds.
+Its type matches the memory disc it holds.
+Turns the ground into Electric Terrain.
+Turns the ground into Electric Terrain.
+Turns the ground into Psychic Terrain.
+Turns the ground into Psychic Terrain.
+Turns the ground into Misty Terrain.
+Turns the ground into Misty Terrain.
+Turns the ground into Grassy Terrain.
+Turns the ground into Grassy Terrain.
+Resists damage while its HP is full.
+Resists damage while its HP is full.
+Powers up moves that are super-effective.
+Powers up moves that are super-effective.
+Boosts Attack when entering a battle.
+Boosts Attack when entering a battle.
+Boosts Defense when entering a battle.
+Boosts Defense when entering a battle.
+Retrieves the first thrown Poké Ball if it failed.
+Retrieves the first thrown Poké Ball if it failed.
+Scatters Speed-lowering cotton fluff when hit.
+Scatters Speed-lowering cotton fluff when hit.
+This Pokémon's moves cannot be redirected.
+This Pokémon's moves cannot be redirected.
+Bounces back stat-lowering effects.
+Bounces back stat-lowering effects.
+Catches prey via Surf or Dive, spits it out when hit.
+Catches prey via Surf or Dive, spits it out when hit.
+Boosts Speed drastically if hit by a Fire or Water move.
+Boosts Speed drastically if hit by a Fire or Water move.
+Powers up own sound moves. Resists other sound moves.
+Powers up own sound moves. Resists other sound moves.
+Creates a sandstorm when hit by an attack.
+Creates a sandstorm when hit by an attack.
+Halves the damage taken from special moves.
+Halves the damage taken from special moves.
+Ripens Berries and doubles their effect.
+Ripens Berries and doubles their effect.
+Blocks a physical hit, but the ice head breaks.
+Blocks a physical hit, but the ice head breaks.
+Just being next to the Pokémon powers up moves.
+Just being next to the Pokémon powers up moves.
+Changes type depending on the terrain.
+Changes type depending on the terrain.
+On entering battle, clears effects of Reflect, etc.
+On entering battle, clears effects of Reflect, etc.
+Powers up ally Pokémon's Steel-type moves.
+Powers up ally Pokémon's Steel-type moves.
+Both Pokémon faint 3 turns after taking a contact hit.
+Both Pokémon faint 3 turns after taking a contact hit.
+Swaps Abilities with contact-making Pokémon.
+Swaps Abilities with contact-making Pokémon.
+Boosts Attack, but allows only one move to be used.
+Boosts Attack, but allows only one move to be used.
+Nullifies the effects of all other Abilities.
+Nullifies the effects of all other Abilities.
+Protects the Pokémon and its allies from poisoning.
+Protects the Pokémon and its allies from poisoning.
+Changes between Full Belly and Hangry Mode each turn.
+Changes between Full Belly and Hangry Mode each turn.
+Enables the Pokémon to move first occasionally.
+Enables the Pokémon to move first occasionally.
+The Pokémon's contact moves ignore protections.
+The Pokémon's contact moves ignore protections.
+Removes all allies' stat changes on joining battle.
+Removes all allies' stat changes on joining battle.
+Powers up Electric-type moves.
+Powers up Electric-type moves.
+Powers up Dragon-type moves.
+Powers up Dragon-type moves.
+When knocking out a target, raises Attack.
+When knocking out a target, raises Attack.
+When knocking out a target, raises Sp. Atk.
+When knocking out a target, raises Sp. Atk.
+Combines Unnerve and Chilling Neigh Abilities.
+Combines Unnerve and Chilling Neigh Abilities.
+Combines Unnerve and Grim Neigh Abilities.
+Combines Unnerve and Grim Neigh Abilities.

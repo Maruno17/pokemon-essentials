@@ -1,0 +1,1304 @@
+﻿# To localize this text for a particular language, please
+# translate every second line of this file.
+#-------------------------------
+[SPECIES_CATEGORIES]
+Seed
+Seed
+Lizard
+Lizard
+Flame
+Flame
+Tiny Turtle
+Tiny Turtle
+Turtle
+Turtle
+Shellfish
+Shellfish
+Worm
+Worm
+Cocoon
+Cocoon
+Butterfly
+Butterfly
+Hairy Bug
+Hairy Bug
+Poison Bee
+Poison Bee
+Tiny Bird
+Tiny Bird
+Bird
+Bird
+Mouse
+Mouse
+Beak
+Beak
+Snake
+Snake
+Cobra
+Cobra
+Poison Pin
+Poison Pin
+Drill
+Drill
+Fairy
+Fairy
+Fox
+Fox
+Balloon
+Balloon
+Bat
+Bat
+Weed
+Weed
+Flower
+Flower
+Mushroom
+Mushroom
+Insect
+Insect
+Poison Moth
+Poison Moth
+Mole
+Mole
+Scratch Cat
+Scratch Cat
+Classy Cat
+Classy Cat
+Duck
+Duck
+Pig Monkey
+Pig Monkey
+Puppy
+Puppy
+Legendary
+Legendary
+Tadpole
+Tadpole
+Psi
+Psi
+Superpower
+Superpower
+Flycatcher
+Flycatcher
+Jellyfish
+Jellyfish
+Rock
+Rock
+Megaton
+Megaton
+Fire Horse
+Fire Horse
+Dopey
+Dopey
+Hermit Crab
+Hermit Crab
+Magnet
+Magnet
+Wild Duck
+Wild Duck
+Twin Bird
+Twin Bird
+Triple Bird
+Triple Bird
+Sea Lion
+Sea Lion
+Sludge
+Sludge
+Bivalve
+Bivalve
+Gas
+Gas
+Shadow
+Shadow
+Rock Snake
+Rock Snake
+Hypnosis
+Hypnosis
+River Crab
+River Crab
+Pincer
+Pincer
+Ball
+Ball
+Egg
+Egg
+Coconut
+Coconut
+Lonely
+Lonely
+Bone Keeper
+Bone Keeper
+Kicking
+Kicking
+Punching
+Punching
+Licking
+Licking
+Poison Gas
+Poison Gas
+Spikes
+Spikes
+Vine
+Vine
+Parent
+Parent
+Dragon
+Dragon
+Goldfish
+Goldfish
+Star Shape
+Star Shape
+Mysterious
+Mysterious
+Barrier
+Barrier
+Mantis
+Mantis
+Human Shape
+Human Shape
+Electric
+Electric
+Spitfire
+Spitfire
+Stag Beetle
+Stag Beetle
+Wild Bull
+Wild Bull
+Fish
+Fish
+Atrocious
+Atrocious
+Transport
+Transport
+Transform
+Transform
+Evolution
+Evolution
+Bubble Jet
+Bubble Jet
+Lightning
+Lightning
+Virtual
+Virtual
+Spiral
+Spiral
+Fossil
+Fossil
+Sleeping
+Sleeping
+Freeze
+Freeze
+Genetic
+Genetic
+New Species
+New Species
+Leaf
+Leaf
+Herb
+Herb
+Fire Mouse
+Fire Mouse
+Volcano
+Volcano
+Big Jaw
+Big Jaw
+Scout
+Scout
+Long Body
+Long Body
+Owl
+Owl
+Five Star
+Five Star
+String Spit
+String Spit
+Long Leg
+Long Leg
+Angler
+Angler
+Light
+Light
+Tiny Mouse
+Tiny Mouse
+Spike Ball
+Spike Ball
+Happiness
+Happiness
+Mystic
+Mystic
+Wool
+Wool
+Aqua Mouse
+Aqua Mouse
+Aqua Rabbit
+Aqua Rabbit
+Imitation
+Imitation
+Frog
+Frog
+Cottonweed
+Cottonweed
+Long Tail
+Long Tail
+Sun
+Sun
+Clear Wing
+Clear Wing
+Water Fish
+Water Fish
+Moonlight
+Moonlight
+Darkness
+Darkness
+Royal
+Royal
+Screech
+Screech
+Symbol
+Symbol
+Patient
+Patient
+Long Neck
+Long Neck
+Bagworm
+Bagworm
+Land Snake
+Land Snake
+Fly Scorpion
+Fly Scorpion
+Iron Snake
+Iron Snake
+Mold
+Mold
+Single Horn
+Single Horn
+Sharp Claw
+Sharp Claw
+Little Bear
+Little Bear
+Hibernator
+Hibernator
+Lava
+Lava
+Pig
+Pig
+Swine
+Swine
+Coral
+Coral
+Jet
+Jet
+Delivery
+Delivery
+Kite
+Kite
+Armor Bird
+Armor Bird
+Dark
+Dark
+Long Nose
+Long Nose
+Armor
+Armor
+Big Horn
+Big Horn
+Painter
+Painter
+Scuffle
+Scuffle
+Handstand
+Handstand
+Kiss
+Kiss
+Live Coal
+Live Coal
+Milk Cow
+Milk Cow
+Thunder
+Thunder
+Aurora
+Aurora
+Rock Skin
+Rock Skin
+Hard Shell
+Hard Shell
+Diving
+Diving
+Rainbow
+Rainbow
+Time Travel
+Time Travel
+Wood Gecko
+Wood Gecko
+Forest
+Forest
+Chick
+Chick
+Young Fowl
+Young Fowl
+Blaze
+Blaze
+Mud Fish
+Mud Fish
+Bite
+Bite
+Tiny Raccoon
+Tiny Raccoon
+Rushing
+Rushing
+Water Weed
+Water Weed
+Jolly
+Jolly
+Carefree
+Carefree
+Acorn
+Acorn
+Wily
+Wily
+Wicked
+Wicked
+Tiny Swallow
+Tiny Swallow
+Swallow
+Swallow
+Seagull
+Seagull
+Water Bird
+Water Bird
+Feeling
+Feeling
+Emotion
+Emotion
+Embrace
+Embrace
+Pond Skater
+Pond Skater
+Eyeball
+Eyeball
+Slacker
+Slacker
+Wild Monkey
+Wild Monkey
+Lazy
+Lazy
+Trainee
+Trainee
+Ninja
+Ninja
+Shed
+Shed
+Whisper
+Whisper
+Big Voice
+Big Voice
+Loud Noise
+Loud Noise
+Guts
+Guts
+Arm Thrust
+Arm Thrust
+Polka Dot
+Polka Dot
+Compass
+Compass
+Kitten
+Kitten
+Prim
+Prim
+Deceiver
+Deceiver
+Iron Armor
+Iron Armor
+Meditate
+Meditate
+Discharge
+Discharge
+Cheering
+Cheering
+Firefly
+Firefly
+Thorn
+Thorn
+Stomach
+Stomach
+Poison Bag
+Poison Bag
+Savage
+Savage
+Brutal
+Brutal
+Ball Whale
+Ball Whale
+Float Whale
+Float Whale
+Numb
+Numb
+Eruption
+Eruption
+Coal
+Coal
+Bounce
+Bounce
+Manipulate
+Manipulate
+Spot Panda
+Spot Panda
+Ant Pit
+Ant Pit
+Vibration
+Vibration
+Cactus
+Cactus
+Scarecrow
+Scarecrow
+Cotton Bird
+Cotton Bird
+Humming
+Humming
+Cat Ferret
+Cat Ferret
+Fang Snake
+Fang Snake
+Meteorite
+Meteorite
+Whiskers
+Whiskers
+Ruffian
+Ruffian
+Rogue
+Rogue
+Clay Doll
+Clay Doll
+Sea Lily
+Sea Lily
+Barnacle
+Barnacle
+Old Shrimp
+Old Shrimp
+Plate
+Plate
+Tender
+Tender
+Weather
+Weather
+Color Swap
+Color Swap
+Puppet
+Puppet
+Marionette
+Marionette
+Requiem
+Requiem
+Beckon
+Beckon
+Fruit
+Fruit
+Wind Chime
+Wind Chime
+Disaster
+Disaster
+Bright
+Bright
+Snow Hat
+Snow Hat
+Face
+Face
+Clap
+Clap
+Ball Roll
+Ball Roll
+Ice Break
+Ice Break
+Deep Sea
+Deep Sea
+South Sea
+South Sea
+Longevity
+Longevity
+Rendezvous
+Rendezvous
+Rock Head
+Rock Head
+Endurance
+Endurance
+Iron Ball
+Iron Ball
+Iron Claw
+Iron Claw
+Iron Leg
+Iron Leg
+Rock Peak
+Rock Peak
+Iceberg
+Iceberg
+Iron
+Iron
+Eon
+Eon
+Sea Basin
+Sea Basin
+Continent
+Continent
+Sky High
+Sky High
+Wish
+Wish
+DNA
+DNA
+Tiny Leaf
+Tiny Leaf
+Grove
+Grove
+Chimp
+Chimp
+Playful
+Playful
+Penguin
+Penguin
+Emperor
+Emperor
+Starling
+Starling
+Predator
+Predator
+Plump Mouse
+Plump Mouse
+Beaver
+Beaver
+Cricket
+Cricket
+Flash
+Flash
+Spark
+Spark
+Gleam Eyes
+Gleam Eyes
+Bud
+Bud
+Bouquet
+Bouquet
+Head Butt
+Head Butt
+Shield
+Shield
+Moth
+Moth
+Tiny Bee
+Tiny Bee
+Beehive
+Beehive
+EleSquirrel
+EleSquirrel
+Sea Weasel
+Sea Weasel
+Cherry
+Cherry
+Blossom
+Blossom
+Sea Slug
+Sea Slug
+Blimp
+Blimp
+Rabbit
+Rabbit
+Magical
+Magical
+Big Boss
+Big Boss
+Catty
+Catty
+Tiger Cat
+Tiger Cat
+Bell
+Bell
+Skunk
+Skunk
+Bronze
+Bronze
+Bronze Bell
+Bronze Bell
+Bonsai
+Bonsai
+Mime
+Mime
+Playhouse
+Playhouse
+Music Note
+Music Note
+Forbidden
+Forbidden
+Land Shark
+Land Shark
+Cave
+Cave
+Mach
+Mach
+Big Eater
+Big Eater
+Emanation
+Emanation
+Aura
+Aura
+Hippo
+Hippo
+Heavyweight
+Heavyweight
+Scorpion
+Scorpion
+Ogre Scorpion
+Ogre Scorpion
+Toxic Mouth
+Toxic Mouth
+Bug Catcher
+Bug Catcher
+Wing Fish
+Wing Fish
+Neon
+Neon
+Frost Tree
+Frost Tree
+Magnet Area
+Magnet Area
+Thunderbolt
+Thunderbolt
+Blast
+Blast
+Jubilee
+Jubilee
+Ogre Darner
+Ogre Darner
+Verdant
+Verdant
+Fresh Snow
+Fresh Snow
+Fang Scorpion
+Fang Scorpion
+Twin Tusk
+Twin Tusk
+Blade
+Blade
+Gripper
+Gripper
+Snow Land
+Snow Land
+Plasma
+Plasma
+Knowledge
+Knowledge
+Willpower
+Willpower
+Temporal
+Temporal
+Spatial
+Spatial
+Lava Dome
+Lava Dome
+Colossal
+Colossal
+Renegade
+Renegade
+Lunar
+Lunar
+Sea Drifter
+Sea Drifter
+Seafaring
+Seafaring
+Pitch-Black
+Pitch-Black
+Gratitude
+Gratitude
+Alpha
+Alpha
+Victory
+Victory
+Grass Snake
+Grass Snake
+Regal
+Regal
+Fire Pig
+Fire Pig
+Mega Fire Pig
+Mega Fire Pig
+Sea Otter
+Sea Otter
+Discipline
+Discipline
+Formidable
+Formidable
+Lookout
+Lookout
+Loyal Dog
+Loyal Dog
+Big-Hearted
+Big-Hearted
+Devious
+Devious
+Cruel
+Cruel
+Grass Monkey
+Grass Monkey
+Thorn Monkey
+Thorn Monkey
+High Temp
+High Temp
+Ember
+Ember
+Spray
+Spray
+Geyser
+Geyser
+Dream Eater
+Dream Eater
+Drowsing
+Drowsing
+Tiny Pigeon
+Tiny Pigeon
+Wild Pigeon
+Wild Pigeon
+Proud
+Proud
+Electrified
+Electrified
+Mantle
+Mantle
+Ore
+Ore
+Compressed
+Compressed
+Courting
+Courting
+Subterrene
+Subterrene
+Hearing
+Hearing
+Muscular
+Muscular
+Judo
+Judo
+Karate
+Karate
+Sewing
+Sewing
+Leaf-Wrapped
+Leaf-Wrapped
+Nurturing
+Nurturing
+Centipede
+Centipede
+Curlipede
+Curlipede
+Megapede
+Megapede
+Cotton Puff
+Cotton Puff
+Windveiled
+Windveiled
+Bulb
+Bulb
+Flowering
+Flowering
+Hostile
+Hostile
+Desert Croc
+Desert Croc
+Intimidation
+Intimidation
+Zen Charm
+Zen Charm
+Blazing
+Blazing
+Rock Inn
+Rock Inn
+Stone Home
+Stone Home
+Shedding
+Shedding
+Hoodlum
+Hoodlum
+Avianoid
+Avianoid
+Spirit
+Spirit
+Coffin
+Coffin
+Prototurtle
+Prototurtle
+First Bird
+First Bird
+Trash Bag
+Trash Bag
+Trash Heap
+Trash Heap
+Tricky Fox
+Tricky Fox
+Illusion Fox
+Illusion Fox
+Chinchilla
+Chinchilla
+Scarf
+Scarf
+Fixation
+Fixation
+Astral Body
+Astral Body
+Cell
+Cell
+Mitosis
+Mitosis
+Multiplying
+Multiplying
+White Bird
+White Bird
+Icy Snow
+Icy Snow
+Snowstorm
+Snowstorm
+Season
+Season
+Sky Squirrel
+Sky Squirrel
+Clamping
+Clamping
+Cavalry
+Cavalry
+Floating
+Floating
+Caring
+Caring
+Attaching
+Attaching
+EleSpider
+EleSpider
+Thorn Seed
+Thorn Seed
+Thorn Pod
+Thorn Pod
+Gear
+Gear
+EleFish
+EleFish
+Cerebral
+Cerebral
+Candle
+Candle
+Lamp
+Lamp
+Luring
+Luring
+Tusk
+Tusk
+Axe Jaw
+Axe Jaw
+Chill
+Chill
+Freezing
+Freezing
+Crystallizing
+Crystallizing
+Snail
+Snail
+Shell Out
+Shell Out
+Trap
+Trap
+Martial Arts
+Martial Arts
+Automaton
+Automaton
+Sharp Blade
+Sharp Blade
+Sword Blade
+Sword Blade
+Bash Buffalo
+Bash Buffalo
+Eaglet
+Eaglet
+Valiant
+Valiant
+Diapered
+Diapered
+Bone Vulture
+Bone Vulture
+Anteater
+Anteater
+Iron Ant
+Iron Ant
+Irate
+Irate
+Torch
+Torch
+Iron Will
+Iron Will
+Cavern
+Cavern
+Grassland
+Grassland
+Cyclone
+Cyclone
+Bolt Strike
+Bolt Strike
+Vast White
+Vast White
+Deep Black
+Deep Black
+Abundance
+Abundance
+Boundary
+Boundary
+Colt
+Colt
+Melody
+Melody
+Paleozoic
+Paleozoic
+Spiny Nut
+Spiny Nut
+Spiny Armor
+Spiny Armor
+Bubble Frog
+Bubble Frog
+Digging
+Digging
+Tiny Robin
+Tiny Robin
+Scorching
+Scorching
+Scatterdust
+Scatterdust
+Scale
+Scale
+Lion Cub
+Lion Cub
+Single Bloom
+Single Bloom
+Garden
+Garden
+Mount
+Mount
+Daunting
+Daunting
+Poodle
+Poodle
+Restraint
+Restraint
+Constraint
+Constraint
+Sword
+Sword
+Royal Sword
+Royal Sword
+Perfume
+Perfume
+Fragrance
+Fragrance
+Cotton Candy
+Cotton Candy
+Meringue
+Meringue
+Revolving
+Revolving
+Overturning
+Overturning
+Two-Handed
+Two-Handed
+Collective
+Collective
+Mock Kelp
+Mock Kelp
+Water Gun
+Water Gun
+Howitzer
+Howitzer
+Generator
+Generator
+Royal Heir
+Royal Heir
+Despot
+Despot
+Tundra
+Tundra
+Intertwining
+Intertwining
+Wrestling
+Wrestling
+Antenna
+Antenna
+Jewel
+Jewel
+Soft Tissue
+Soft Tissue
+Key Ring
+Key Ring
+Stump
+Stump
+Elder Tree
+Elder Tree
+Pumpkin
+Pumpkin
+Ice Chunk
+Ice Chunk
+Sound Wave
+Sound Wave
+Life
+Life
+Destruction
+Destruction
+Order
+Order
+Mischief
+Mischief
+Steam
+Steam
+Grass Quill
+Grass Quill
+Blade Quill
+Blade Quill
+Arrow Quill
+Arrow Quill
+Fire Cat
+Fire Cat
+Heel
+Heel
+Pop Star
+Pop Star
+Soloist
+Soloist
+Woodpecker
+Woodpecker
+Bugle Beak
+Bugle Beak
+Cannon
+Cannon
+Loitering
+Loitering
+Stakeout
+Stakeout
+Larva
+Larva
+Battery
+Battery
+Boxing
+Boxing
+Woolly Crab
+Woolly Crab
+Dancing
+Dancing
+Bee Fly
+Bee Fly
+Wolf
+Wolf
+Small Fry
+Small Fry
+Brutal Star
+Brutal Star
+Donkey
+Donkey
+Draft Horse
+Draft Horse
+Water Bubble
+Water Bubble
+Sickle Grass
+Sickle Grass
+Bloom Sickle
+Bloom Sickle
+Illuminating
+Illuminating
+Toxic Lizard
+Toxic Lizard
+Flailing
+Flailing
+Strong Arm
+Strong Arm
+Posy Picker
+Posy Picker
+Sage
+Sage
+Teamwork
+Teamwork
+Turn Tail
+Turn Tail
+Hard Scale
+Hard Scale
+Sand Heap
+Sand Heap
+Sand Castle
+Sand Castle
+Sea Cucumber
+Sea Cucumber
+Synthetic
+Synthetic
+Meteor
+Meteor
+Blast Turtle
+Blast Turtle
+Roly-Poly
+Roly-Poly
+Disguise
+Disguise
+Gnash Teeth
+Gnash Teeth
+Placid
+Placid
+Sea Creeper
+Sea Creeper
+Scaly
+Scaly
+Land Spirit
+Land Spirit
+Nebula
+Nebula
+Protostar
+Protostar
+Sunne
+Sunne
+Moone
+Moone
+Parasite
+Parasite
+Swollen
+Swollen
+Lissome
+Lissome
+Glowing
+Glowing
+Launch
+Launch
+Drawn Sword
+Drawn Sword
+Junkivore
+Junkivore
+Prism
+Prism
+Artificial
+Artificial
+Gloomdweller
+Gloomdweller
+Rampart
+Rampart
+Fireworks
+Fireworks
+Thunderclap
+Thunderclap
+Hex Nut
+Hex Nut
+Beat
+Beat
+Drummer
+Drummer
+Striker
+Striker
+Water Lizard
+Water Lizard
+Secret Agent
+Secret Agent
+Cheeky
+Cheeky
+Greedy
+Greedy
+Raven
+Raven
+Radome
+Radome
+Seven Spot
+Seven Spot
+Cotton Bloom
+Cotton Bloom
+Sheep
+Sheep
+Snapping
+Snapping
+Dog
+Dog
+Apple Core
+Apple Core
+Apple Wing
+Apple Wing
+Apple Nectar
+Apple Nectar
+Sand Snake
+Sand Snake
+Gulp
+Gulp
+Rush
+Rush
+Skewer
+Skewer
+Baby
+Baby
+Punk
+Punk
+Radiator
+Radiator
+Tantrum
+Tantrum
+Jujitsu
+Jujitsu
+Black Tea
+Black Tea
+Calm
+Calm
+Serene
+Serene
+Silent
+Silent
+Bulk Up
+Bulk Up
+Blocking
+Blocking
+Viking
+Viking
+Comedian
+Comedian
+Grudge
+Grudge
+Cream
+Cream
+Formation
+Formation
+Sea Urchin
+Sea Urchin
+Frost Moth
+Frost Moth
+Big Rock
+Big Rock
+Two-Sided
+Two-Sided
+Copperderm
+Copperderm
+Alloy
+Alloy
+Lingering
+Lingering
+Caretaker
+Caretaker
+Stealth
+Stealth
+Warrior
+Warrior
+Gigantic
+Gigantic
+Wushu
+Wushu
+Rogue Monkey
+Rogue Monkey
+Electron
+Electron
+Dragon Orb
+Dragon Orb
+Wild Horse
+Wild Horse
+Swift Horse
+Swift Horse
+King
+King
+Unique Horn
+Unique Horn
+Strong Legs
+Strong Legs
+Malevolent
+Malevolent
+Hexpert
+Hexpert
+High King
+High King

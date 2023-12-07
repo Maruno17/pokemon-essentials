@@ -289,10 +289,10 @@ class Battle::Move::StartNegateHeldItems < Battle::Move
 end
 
 #===============================================================================
-# The user consumes its held berry and gains its effect. Also, increases the
-# user's Defense by 2 stages. The berry can be consumed even if Unnerve/Magic
-# Room apply. Fails if the user is not holding a berry. This move cannot be
-# chosen to be used if the user is not holding a berry. (Stuff Cheeks)
+# The user consumes its held berry increases its Defense by 2 stages. It also
+# gains the berry's effect if it has one. The berry can be consumed even if
+# Unnerve/Magic Room apply. Fails if the user is not holding a berry. This move
+# cannot be chosen to be used if the user is not holding a berry. (Stuff Cheeks)
 #===============================================================================
 class Battle::Move::UserConsumeBerryRaiseDefense2 < Battle::Move::StatUpMove
   def initialize(battle, move)
@@ -319,7 +319,6 @@ class Battle::Move::UserConsumeBerryRaiseDefense2 < Battle::Move::StatUpMove
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    # TODO: Should this return super? It can consume the berry at this point.
     return super
   end
 

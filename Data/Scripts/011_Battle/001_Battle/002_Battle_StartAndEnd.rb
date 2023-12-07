@@ -530,7 +530,7 @@ class Battle
     return 2 if counts[0] < counts[1]       # Loss (foe has more able Pokémon)
     return 1 if hpTotals[0] > hpTotals[1]   # Win (player has more HP in total)
     return 2 if hpTotals[0] < hpTotals[1]   # Loss (foe has more HP in total)
-    return 5                              # Draw
+    return 5                                # Draw
   end
 
   # Unused
@@ -549,10 +549,10 @@ class Battle
     return 2 if counts[0] < counts[1]       # Loss (foe has more able Pokémon)
     return 1 if hpTotals[0] > hpTotals[1]   # Win (player has a bigger average HP %)
     return 2 if hpTotals[0] < hpTotals[1]   # Loss (foe has a bigger average HP %)
-    return 5                              # Draw
+    return 5                                # Draw
   end
 
-  def pbDecisionOnDraw; return 5; end     # Draw
+  def pbDecisionOnDraw; return 5; end   # Draw
 
   def pbJudge
     fainted1 = pbAllFainted?(0)

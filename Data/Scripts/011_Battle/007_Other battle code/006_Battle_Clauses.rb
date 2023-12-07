@@ -25,12 +25,12 @@ class Battle
   def pbJudgeCheckpoint(user, move = nil)
     if pbAllFainted?(0) && pbAllFainted?(1)
       if @rules["drawclause"]   # NOTE: Also includes Life Orb (not implemented)
-        if !(move && move.function == "HealUserByHalfOfDamageDone")
+        if !(move && move.function_code == "HealUserByHalfOfDamageDone")
           # Not a draw if fainting occurred due to Liquid Ooze
           @decision = (user.opposes?) ? 1 : 2   # win / loss
         end
       elsif @rules["modifiedselfdestructclause"]
-        if move && move.function == "UserFaintsExplosive"   # Self-Destruct
+        if move && move.function_code == "UserFaintsExplosive"   # Self-Destruct
           @decision = (user.opposes?) ? 1 : 2   # win / loss
         end
       end

@@ -154,7 +154,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:good_move_for_choice_item,
                   !user.has_active_ability?(:GORILLATACTICS)
     old_score = score
     # Really don't prefer status moves (except Trick)
-    if move.statusMove? && move.function != "UserTargetSwapItems"
+    if move.statusMove? && move.function_code != "UserTargetSwapItems"
       score -= 25
       PBDebug.log_score_change(score - old_score, "don't want to be Choiced into a status move")
       next score
@@ -489,7 +489,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:damaging_a_biding_targe
           hits_possible = target.effects[PBEffects::Bide] - 1
           eor_dmg *= hits_possible
           hits_possible += 1 if user.faster_than?(target)
-          next score if dmg * hits_possible + eor_dmg > target.hp * 1.1
+          next score if (dmg * hits_possible) + eor_dmg > target.hp * 1.1
         end
         old_score = score
         score -= 20

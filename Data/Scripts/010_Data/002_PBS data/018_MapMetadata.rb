@@ -13,6 +13,7 @@ module GameData
     attr_reader :dark_map
     attr_reader :safari_map
     attr_reader :snap_edges
+    attr_reader :still_reflections
     attr_reader :random_dungeon
     attr_reader :battle_background
     attr_reader :wild_battle_BGM
@@ -43,6 +44,7 @@ module GameData
       "DarkMap"           => [:dark_map,             "b"],
       "SafariMap"         => [:safari_map,           "b"],
       "SnapEdges"         => [:snap_edges,           "b"],
+      "StillReflections"  => [:still_reflections,    "b"],
       "Dungeon"           => [:random_dungeon,       "b"],
       "BattleBack"        => [:battle_background,    "s"],
       "WildBattleBGM"     => [:wild_battle_BGM,      "s"],
@@ -73,6 +75,7 @@ module GameData
         ["DarkMap",           BooleanProperty,         _INTL("If true, this map is dark and a circle of light appears around the player. Flash can be used to expand the circle.")],
         ["SafariMap",         BooleanProperty,         _INTL("If true, this map is part of the Safari Zone (both indoor and outdoor). Not to be used in the reception desk.")],
         ["SnapEdges",         BooleanProperty,         _INTL("If true, when the player goes near this map's edge, the game doesn't center the player as usual.")],
+        ["StillReflections",  BooleanProperty,         _INTL("If true, reflections of events and the player will not ripple horizontally.")],
         ["Dungeon",           BooleanProperty,         _INTL("If true, this map has a randomly generated layout. See the wiki for more information.")],
         ["BattleBack",        StringProperty,          _INTL("PNG files named 'XXX_bg', 'XXX_base0', 'XXX_base1', 'XXX_message' in Battlebacks folder, where XXX is this property's value.")],
         ["WildBattleBGM",     BGMProperty,             _INTL("Default BGM for wild Pokémon battles on this map.")],
@@ -100,6 +103,7 @@ module GameData
       @dark_map             = hash[:dark_map]
       @safari_map           = hash[:safari_map]
       @snap_edges           = hash[:snap_edges]
+      @still_reflections    = hash[:still_reflections]
       @random_dungeon       = hash[:random_dungeon]
       @battle_background    = hash[:battle_background]
       @wild_battle_BGM      = hash[:wild_battle_BGM]

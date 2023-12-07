@@ -343,13 +343,20 @@ end
 # stage. On the second turn, does damage. (Meteor Beam)
 #===============================================================================
 class Battle::Move::TwoTurnAttackChargeRaiseUserSpAtk1 < Battle::Move::TwoTurnMove
+  attr_reader :statUp
+
+  def initialize(battle, move)
+    super
+    @statUp = [:SPECIAL_ATTACK, 1]
+  end
+
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} is overflowing with space power!", user.pbThis))
   end
 
   def pbChargingTurnEffect(user, target)
-    if user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self)
-      user.pbRaiseStatStage(:SPECIAL_ATTACK, 1, user)
+    if user.pbCanRaiseStatStage?(@statUp[0], user, self)
+      user.pbRaiseStatStage(@statUp[0], @statUp[1], user)
     end
   end
 end
@@ -464,8 +471,8 @@ class Battle::Move::TwoTurnAttackInvulnerableInSkyTargetCannotAct < Battle::Move
     target.effects[PBEffects::SkyDrop] = user.index
   end
 
-  def pbAttackingTurnEffect(user, target)
-    target.effects[PBEffects::SkyDrop] = -1
+  def pbEffectAfterAllHits(user, target)
+    target.effects[PBEffects::SkyDrop] = -1 if @damagingTurn
   end
 end
 
@@ -599,7 +606,8 @@ class Battle::Move::MultiTurnAttackBideThenReturnDoubleDamage < Battle::Move::Fi
     end
   end
 
-  def pbDamagingMove?   # Stops damage being dealt in the charging turns
+  # Stops damage being dealt in the charging turns.
+  def pbDamagingMove?
     return false if !@damagingTurn
     return super
   end

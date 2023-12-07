@@ -65,7 +65,7 @@ class Battle::DebugSceneNoVisuals
   def pbSendOutBattlers(sendOuts, startBattle = false); end
   def pbRecall(idxBattler); end
   def pbItemMenu(idxBattler, firstAction); return -1; end
-  def pbResetMoveIndex(idxBattler); end
+  def pbResetCommandsIndex(idxBattler); end
 
   def pbHPChanged(battler, oldHP, showAnim = false); end
   def pbChangePokemon(idxBattler, pkmn); end

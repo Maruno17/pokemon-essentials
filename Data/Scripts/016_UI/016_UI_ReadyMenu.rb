@@ -69,7 +69,10 @@ class ReadyMenuButton < Sprite
     self.bitmap.clear
     rect = Rect.new(0, (sel) ? @button.height / 2 : 0, @button.width, @button.height / 2)
     self.bitmap.blt(0, 0, @button.bitmap, rect)
-    textx = (@command[2]) ? 164 : (GameData::Item.get(@command[0]).is_important?) ? 146 : 124
+    textx = 164
+    if !@command[2]
+      textx = (GameData::Item.get(@command[0]).is_important?) ? 146 : 124
+    end
     textpos = [
       [@command[1], textx, 24, :center, Color.new(248, 248, 248), Color.new(40, 40, 40), :outline]
     ]

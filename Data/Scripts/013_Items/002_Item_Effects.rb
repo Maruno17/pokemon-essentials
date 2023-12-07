@@ -7,6 +7,14 @@ ItemHandlers::UseText.add(:BICYCLE, proc { |item|
 
 ItemHandlers::UseText.copy(:BICYCLE, :MACHBIKE, :ACROBIKE)
 
+ItemHandlers::UseText.add(:EXPALLOFF, proc { |item|
+  next _INTL("Turn on")
+})
+
+ItemHandlers::UseText.add(:EXPALL, proc { |item|
+  next _INTL("Turn off")
+})
+
 #===============================================================================
 # UseFromBag handlers
 # Return values: 0 = not used
@@ -117,6 +125,7 @@ def pbRepel(item, steps)
     pbMessage(_INTL("But a repellent's effect still lingers from earlier."))
     return false
   end
+  pbSEPlay("Repel")
   $stats.repel_count += 1
   pbUseItemMessage(item)
   $PokemonGlobal.repel = steps
@@ -236,6 +245,7 @@ ItemHandlers::UseInField.add(:SACREDASH, proc { |item|
     scene = PokemonParty_Scene.new
     screen = PokemonPartyScreen.new(scene, $player.party)
     screen.pbStartScene(_INTL("Using item..."), false)
+    pbSEPlay("Use item in party")
     $player.party.each_with_index do |pkmn, i|
       next if !pkmn.fainted?
       revived += 1
@@ -307,36 +317,37 @@ ItemHandlers::UseInField.add(:SUPERROD, proc { |item|
 
 ItemHandlers::UseInField.add(:ITEMFINDER, proc { |item|
   $stats.itemfinder_count += 1
+  pbSEPlay("Itemfinder")
   event = pbClosestHiddenItem
-  if event
-    offsetX = event.x - $game_player.x
-    offsetY = event.y - $game_player.y
-    if offsetX == 0 && offsetY == 0   # Standing on the item, spin around
-      4.times do
-        pbWait(0.2)
-        $game_player.turn_right_90
-      end
-      pbWait(0.3)
-      pbMessage(_INTL("The {1}'s indicating something right underfoot!", GameData::Item.get(item).name))
-    else   # Item is nearby, face towards it
-      direction = $game_player.direction
-      if offsetX.abs > offsetY.abs
-        direction = (offsetX < 0) ? 4 : 6
-      else
-        direction = (offsetY < 0) ? 8 : 2
-      end
-      case direction
-      when 2 then $game_player.turn_down
-      when 4 then $game_player.turn_left
-      when 6 then $game_player.turn_right
-      when 8 then $game_player.turn_up
-      end
-      pbWait(0.3)
-      pbMessage(_INTL("Huh? The {1}'s responding!", GameData::Item.get(item).name) + "\1")
-      pbMessage(_INTL("There's an item buried around here!"))
-    end
-  else
+  if !event
     pbMessage(_INTL("... \\wt[10]... \\wt[10]... \\wt[10]... \\wt[10]Nope! There's no response."))
+    next true
+  end
+  offsetX = event.x - $game_player.x
+  offsetY = event.y - $game_player.y
+  if offsetX == 0 && offsetY == 0   # Standing on the item, spin around
+    4.times do
+      pbWait(0.2)
+      $game_player.turn_right_90
+    end
+    pbWait(0.3)
+    pbMessage(_INTL("The {1}'s indicating something right underfoot!", GameData::Item.get(item).name))
+  else   # Item is nearby, face towards it
+    direction = $game_player.direction
+    if offsetX.abs > offsetY.abs
+      direction = (offsetX < 0) ? 4 : 6
+    else
+      direction = (offsetY < 0) ? 8 : 2
+    end
+    case direction
+    when 2 then $game_player.turn_down
+    when 4 then $game_player.turn_left
+    when 6 then $game_player.turn_right
+    when 8 then $game_player.turn_up
+    end
+    pbWait(0.3)
+    pbMessage(_INTL("Huh? The {1}'s responding!", GameData::Item.get(item).name) + "\1")
+    pbMessage(_INTL("There's an item buried around here!"))
   end
   next true
 })
@@ -446,6 +457,7 @@ ItemHandlers::UseOnPokemon.add(:AWAKENING, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} woke up.", pkmn.name))
@@ -459,6 +471,7 @@ ItemHandlers::UseOnPokemon.add(:ANTIDOTE, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} was cured of its poisoning.", pkmn.name))
@@ -472,6 +485,7 @@ ItemHandlers::UseOnPokemon.add(:BURNHEAL, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1}'s burn was healed.", pkmn.name))
@@ -485,6 +499,7 @@ ItemHandlers::UseOnPokemon.add(:PARALYZEHEAL, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} was cured of paralysis.", pkmn.name))
@@ -498,6 +513,7 @@ ItemHandlers::UseOnPokemon.add(:ICEHEAL, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} was thawed out.", pkmn.name))
@@ -511,6 +527,7 @@ ItemHandlers::UseOnPokemon.add(:FULLHEAL, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} became healthy.", pkmn.name))
@@ -528,6 +545,7 @@ ItemHandlers::UseOnPokemon.add(:FULLRESTORE, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   hpgain = pbItemRestoreHP(pkmn, pkmn.totalhp - pkmn.hp)
   pkmn.heal_status
   scene.pbRefresh
@@ -544,6 +562,7 @@ ItemHandlers::UseOnPokemon.add(:REVIVE, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   pkmn.hp = (pkmn.totalhp / 2).floor
   pkmn.hp = 1 if pkmn.hp <= 0
   pkmn.heal_status
@@ -557,6 +576,7 @@ ItemHandlers::UseOnPokemon.add(:MAXREVIVE, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   pkmn.heal_HP
   pkmn.heal_status
   scene.pbRefresh
@@ -587,6 +607,7 @@ ItemHandlers::UseOnPokemon.add(:HEALPOWDER, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   pkmn.heal_status
   pkmn.changeHappiness("powder")
   scene.pbRefresh
@@ -599,6 +620,7 @@ ItemHandlers::UseOnPokemon.add(:REVIVALHERB, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   pkmn.heal_HP
   pkmn.heal_status
   pkmn.changeHappiness("revivalherb")
@@ -614,6 +636,7 @@ ItemHandlers::UseOnPokemon.add(:ETHER, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   scene.pbDisplay(_INTL("PP was restored."))
   next true
 })
@@ -627,6 +650,7 @@ ItemHandlers::UseOnPokemon.add(:MAXETHER, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   scene.pbDisplay(_INTL("PP was restored."))
   next true
 })
@@ -640,6 +664,7 @@ ItemHandlers::UseOnPokemon.add(:ELIXIR, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   scene.pbDisplay(_INTL("PP was restored."))
   next true
 })
@@ -653,38 +678,37 @@ ItemHandlers::UseOnPokemon.add(:MAXELIXIR, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
+  pbSEPlay("Use item in party")
   scene.pbDisplay(_INTL("PP was restored."))
   next true
 })
 
 ItemHandlers::UseOnPokemon.add(:PPUP, proc { |item, qty, pkmn, scene|
   move = scene.pbChooseMove(pkmn, _INTL("Boost PP of which move?"))
-  if move >= 0
-    if pkmn.moves[move].total_pp <= 1 || pkmn.moves[move].ppup >= 3
-      scene.pbDisplay(_INTL("It won't have any effect."))
-      next false
-    end
-    pkmn.moves[move].ppup += 1
-    movename = pkmn.moves[move].name
-    scene.pbDisplay(_INTL("{1}'s PP increased.", movename))
-    next true
+  next false if move < 0
+  if pkmn.moves[move].total_pp <= 1 || pkmn.moves[move].ppup >= 3
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
   end
-  next false
+  pbSEPlay("Use item in party")
+  pkmn.moves[move].ppup += 1
+  movename = pkmn.moves[move].name
+  scene.pbDisplay(_INTL("{1}'s PP increased.", movename))
+  next true
 })
 
 ItemHandlers::UseOnPokemon.add(:PPMAX, proc { |item, qty, pkmn, scene|
   move = scene.pbChooseMove(pkmn, _INTL("Boost PP of which move?"))
-  if move >= 0
-    if pkmn.moves[move].total_pp <= 1 || pkmn.moves[move].ppup >= 3
-      scene.pbDisplay(_INTL("It won't have any effect."))
-      next false
-    end
-    pkmn.moves[move].ppup = 3
-    movename = pkmn.moves[move].name
-    scene.pbDisplay(_INTL("{1}'s PP increased.", movename))
-    next true
+  next false if move < 0
+  if pkmn.moves[move].total_pp <= 1 || pkmn.moves[move].ppup >= 3
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
   end
-  next false
+  pbSEPlay("Use item in party")
+  pkmn.moves[move].ppup = 3
+  movename = pkmn.moves[move].name
+  scene.pbDisplay(_INTL("{1}'s PP increased.", movename))
+  next true
 })
 
 ItemHandlers::UseOnPokemonMaximum.add(:HPUP, proc { |item, pkmn|
@@ -917,6 +941,7 @@ ItemHandlers::UseOnPokemon.add(:RARECANDY, proc { |item, qty, pkmn, scene|
     next true
   end
   # Level up
+  pbSEPlay("Pkmn level up")
   pbChangeLevel(pkmn, pkmn.level + qty, scene)
   scene.pbHardRefresh
   next true

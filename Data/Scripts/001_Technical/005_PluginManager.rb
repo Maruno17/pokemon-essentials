@@ -248,8 +248,7 @@ module PluginManager
         incompats = [incompats] if !incompats.is_a?(Array)
         incompats.each do |incompat|
           if self.installed?(incompat)
-            self.error("Plugin '#{name}' is incompatible with '#{incompat}'. " +
-                       "They cannot both be used at the same time.")
+            self.error("Plugin '#{name}' is incompatible with '#{incompat}'. They cannot both be used at the same time.")
           end
         end
       when :credits # Plugin credits
@@ -271,8 +270,7 @@ module PluginManager
     end
     @@Plugins.each_value do |plugin|
       if plugin[:incompatibilities]&.include?(name)
-        self.error("Plugin '#{plugin[:name]}' is incompatible with '#{name}'. " +
-                   "They cannot both be used at the same time.")
+        self.error("Plugin '#{plugin[:name]}' is incompatible with '#{name}'. They cannot both be used at the same time.")
       end
     end
     # Add plugin to class variable
@@ -382,7 +380,6 @@ module PluginManager
     e.backtrace[0, 10].each { |i| message += "#{i}\r\n" }
     # output to log
     errorlog = "errorlog.txt"
-    errorlog = RTP.getSaveFileName("errorlog.txt") if (Object.const_defined?(:RTP) rescue false)
     File.open(errorlog, "ab") do |f|
       f.write("\r\n=================\r\n\r\n[#{Time.now}]\r\n")
       f.write(message)
@@ -413,7 +410,7 @@ module PluginManager
     Compiler.pbCompilerEachPreppedLine(filename) do |line, line_no|
       # split line up into property name and values
       if !line[/^\s*(\w+)\s*=\s*(.*)$/]
-        raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\n{1}", FileLineData.linereport)
+        raise _INTL("Bad line syntax (expected syntax like XXX=YYY).") + "\n" + FileLineData.linereport
       end
       property = $~[1].upcase
       data = $~[2].split(",")
@@ -557,6 +554,7 @@ module PluginManager
   def self.needCompiling?(order, plugins)
     # fixed actions
     return false if !$DEBUG || FileTest.exist?("Game.rgssad")
+    return true if $full_compile
     return true if !FileTest.exist?("Data/PluginScripts.rxdata")
     Input.update
     return true if Input.press?(Input::SHIFT) || Input.press?(Input::CTRL)

@@ -25,7 +25,7 @@ module FileLineData
     @section = section
     @key     = key
     if value && value.length > 200
-      @value = _INTL("{1}...", value[0, 200])
+      @value = value[0, 200].to_s + "..."
     else
       @value = (value) ? value.clone : ""
     end
@@ -112,11 +112,11 @@ module Compiler
         else
           if sectionname.nil?
             FileLineData.setLine(line, lineno)
-            raise _INTL("Expected a section at the beginning of the file. This error may also occur if the file was not saved in UTF-8.\n{1}", FileLineData.linereport)
+            raise _INTL("Expected a section at the beginning of the file.\nThis error may also occur if the file was not saved in UTF-8.") + "\n" + FileLineData.linereport
           end
           if !line[/^\s*(\w+)\s*=\s*(.*)$/]
             FileLineData.setSection(sectionname, nil, line)
-            raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\n{1}", FileLineData.linereport)
+            raise _INTL("Bad line syntax (expected syntax like XXX=YYY).") + "\n" + FileLineData.linereport
           end
           r1 = $~[1]
           r2 = $~[2]
@@ -261,7 +261,7 @@ module Compiler
       value = values[i]
       next if !value || value.empty?
       quote_count = value.count('"')
-      if !quote_count.zero?
+      if quote_count != 0
         # Quote marks found in value
         (i...(values.length - 1)).each do |j|
           quote_count = values[i].count('"')
@@ -316,7 +316,7 @@ module Compiler
       end
       str[0, fieldbytes] = ""
       if !str[/^\s*,/] && !str[/^\s*$/]
-        raise _INTL("Invalid quoted field (in: {1})\n{2}", str, FileLineData.linereport)
+        raise _INTL("Invalid quoted field (in: {1}).", str) + "\n" + FileLineData.linereport
       end
       str[0, str.length] = $~.post_match
     else
@@ -337,14 +337,14 @@ module Compiler
     field = csvfield!(str)
     return true if field[/^(?:1|TRUE|YES|Y)$/i]
     return false if field[/^(?:0|FALSE|NO|N)$/i]
-    raise _INTL("Field {1} is not a Boolean value (true, false, 1, 0)\n{2}", field, FileLineData.linereport)
+    raise _INTL("Field '{1}' is not a Boolean value (true, false, 1, 0).", field) + "\n" + FileLineData.linereport
   end
 
   # Unused
   def csvInt!(str, _line = -1)
     ret = csvfield!(str)
     if !ret[/^\-?\d+$/]
-      raise _INTL("Field {1} is not an integer\n{2}", ret, FileLineData.linereport)
+      raise _INTL("Field '{1}' is not an integer.", ret) + "\n" + FileLineData.linereport
     end
     return ret.to_i
   end
@@ -353,7 +353,7 @@ module Compiler
   def csvPosInt!(str, _line = -1)
     ret = csvfield!(str)
     if !ret[/^\d+$/]
-      raise _INTL("Field {1} is not a positive integer\n{2}", ret, FileLineData.linereport)
+      raise _INTL("Field '{1}' is not a positive integer.", ret) + "\n" + FileLineData.linereport
     end
     return ret.to_i
   end
@@ -361,7 +361,7 @@ module Compiler
   # Unused
   def csvFloat!(str, _line = -1)
     ret = csvfield!(str)
-    return Float(ret) rescue raise _INTL("Field {1} is not a number\n{2}", ret, FileLineData.linereport)
+    return Float(ret) rescue raise _INTL("Field '{1}' is not a number.", ret) + "\n" + FileLineData.linereport
   end
 
   # Unused
@@ -384,52 +384,52 @@ module Compiler
   def cast_csv_value(value, schema, enumer = nil)
     case schema.downcase
     when "i"   # Integer
-      if !value[/^\-?\d+$/]
-        raise _INTL("Field {1} is not an integer\n{2}", value, FileLineData.linereport)
+      if !value || !value[/^\-?\d+$/]
+        raise _INTL("Field '{1}' is not an integer.", value) + "\n" + FileLineData.linereport
       end
       return value.to_i
     when "u"   # Positive integer or zero
-      if !value[/^\d+$/]
-        raise _INTL("Field {1} is not a positive integer or 0\n{2}", value, FileLineData.linereport)
+      if !value || !value[/^\d+$/]
+        raise _INTL("Field '{1}' is not a positive integer or 0.", value) + "\n" + FileLineData.linereport
       end
       return value.to_i
     when "v"   # Positive integer
-      if !value[/^\d+$/]
-        raise _INTL("Field {1} is not a positive integer\n{2}", value, FileLineData.linereport)
+      if !value || !value[/^\d+$/]
+        raise _INTL("Field '{1}' is not a positive integer.", value) + "\n" + FileLineData.linereport
       end
       if value.to_i == 0
-        raise _INTL("Field '{1}' must be greater than 0\n{2}", value, FileLineData.linereport)
+        raise _INTL("Field '{1}' must be greater than 0.", value) + "\n" + FileLineData.linereport
       end
       return value.to_i
     when "x"   # Hexadecimal number
-      if !value[/^[A-F0-9]+$/i]
-        raise _INTL("Field '{1}' is not a hexadecimal number\n{2}", value, FileLineData.linereport)
+      if !value || !value[/^[A-F0-9]+$/i]
+        raise _INTL("Field '{1}' is not a hexadecimal number.", value) + "\n" + FileLineData.linereport
       end
       return value.hex
     when "f"   # Floating point number
-      if !value[/^\-?^\d*\.?\d*$/]
-        raise _INTL("Field {1} is not a number\n{2}", value, FileLineData.linereport)
+      if !value || !value[/^\-?^\d*\.?\d*$/]
+        raise _INTL("Field '{1}' is not a number.", value) + "\n" + FileLineData.linereport
       end
       return value.to_f
     when "b"   # Boolean
-      return true if value[/^(?:1|TRUE|YES|Y)$/i]
-      return false if value[/^(?:0|FALSE|NO|N)$/i]
-      raise _INTL("Field {1} is not a Boolean value (true, false, 1, 0)\n{2}", value, FileLineData.linereport)
+      return true if value && value[/^(?:1|TRUE|YES|Y)$/i]
+      return false if value && value[/^(?:0|FALSE|NO|N)$/i]
+      raise _INTL("Field '{1}' is not a Boolean value (true, false, 1, 0).", value) + "\n" + FileLineData.linereport
     when "n"   # Name
-      if !value[/^(?![0-9])\w+$/]
-        raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.\n{2}", value, FileLineData.linereport)
+      if !value || !value[/^(?![0-9])\w+$/]
+        raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.", value) + "\n" + FileLineData.linereport
       end
     when "s"   # String
     when "q"   # Unformatted text
     when "m"   # Symbol
-      if !value[/^(?![0-9])\w+$/]
-        raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.\n{2}", value, FileLineData.linereport)
+      if !value || !value[/^(?![0-9])\w+$/]
+        raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.", value) + "\n" + FileLineData.linereport
       end
       return value.to_sym
     when "e"   # Enumerable
       return checkEnumField(value, enumer)
     when "y"   # Enumerable or integer
-      return value.to_i if value[/^\-?\d+$/]
+      return value.to_i if value && value[/^\-?\d+$/]
       return checkEnumField(value, enumer)
     end
     return value
@@ -440,10 +440,10 @@ module Compiler
     when Module
       begin
         if nil_or_empty?(ret) || !enumer.const_defined?(ret)
-          raise _INTL("Undefined value {1} in {2}\n{3}", ret, enumer.name, FileLineData.linereport)
+          raise _INTL("Undefined value {1} in {2}.", ret, enumer.name) + "\n" + FileLineData.linereport
         end
       rescue NameError
-        raise _INTL("Incorrect value {1} in {2}\n{3}", ret, enumer.name, FileLineData.linereport)
+        raise _INTL("Incorrect value {1} in {2}.", ret, enumer.name) + "\n" + FileLineData.linereport
       end
       return enumer.const_get(ret.to_sym)
     when Symbol, String
@@ -451,36 +451,36 @@ module Compiler
         enumer = GameData.const_get(enumer.to_sym)
         begin
           if nil_or_empty?(ret) || !enumer.exists?(ret.to_sym)
-            raise _INTL("Undefined value {1} in {2}\n{3}", ret, enumer.name, FileLineData.linereport)
+            raise _INTL("Undefined value {1} in {2}.", ret, enumer.name) + "\n" + FileLineData.linereport
           end
         rescue NameError
-          raise _INTL("Incorrect value {1} in {2}\n{3}", ret, enumer.name, FileLineData.linereport)
+          raise _INTL("Incorrect value {1} in {2}.", ret, enumer.name) + "\n" + FileLineData.linereport
         end
         return ret.to_sym
       end
       enumer = Object.const_get(enumer.to_sym)
       begin
         if nil_or_empty?(ret) || !enumer.const_defined?(ret)
-          raise _INTL("Undefined value {1} in {2}\n{3}", ret, enumer.name, FileLineData.linereport)
+          raise _INTL("Undefined value {1} in {2}.", ret, enumer.name) + "\n" + FileLineData.linereport
         end
       rescue NameError
-        raise _INTL("Incorrect value {1} in {2}\n{3}", ret, enumer.name, FileLineData.linereport)
+        raise _INTL("Incorrect value {1} in {2}.", ret, enumer.name) + "\n" + FileLineData.linereport
       end
       return enumer.const_get(ret.to_sym)
     when Array
-      idx = findIndex(enumer) { |item| ret == item }
+      idx = (nil_or_empty?(ret)) ? -1 : findIndex(enumer) { |item| ret == item }
       if idx < 0
-        raise _INTL("Undefined value {1} (expected one of: {2})\n{3}", ret, enumer.inspect, FileLineData.linereport)
+        raise _INTL("Undefined value {1} (expected one of: {2}).", ret, enumer.inspect) + "\n" + FileLineData.linereport
       end
       return idx
     when Hash
-      value = enumer[ret]
+      value = (nil_or_empty?(ret)) ? nil : enumer[ret]
       if value.nil?
-        raise _INTL("Undefined value {1} (expected one of: {2})\n{3}", ret, enumer.keys.inspect, FileLineData.linereport)
+        raise _INTL("Undefined value {1} (expected one of: {2}).", ret, enumer.keys.inspect) + "\n" + FileLineData.linereport
       end
       return value
     end
-    raise _INTL("Enumeration not defined\n{1}", FileLineData.linereport)
+    raise _INTL("Enumeration not defined.") + "\n" + FileLineData.linereport
   end
 
   # Unused
@@ -540,7 +540,7 @@ module Compiler
           if nil_or_empty?(field)
             subrecord.push(nil)
           elsif !field[/^\-?\d+$/]
-            raise _INTL("Field {1} is not an integer\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' is not an integer.", field) + "\n" + FileLineData.linereport
           else
             subrecord.push(field.to_i)
           end
@@ -551,29 +551,29 @@ module Compiler
           if nil_or_empty?(field)
             subrecord.push(nil)
           elsif !field[/^\d+$/]
-            raise _INTL("Field '{1}' must be 0 or greater\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' must be 0 or greater.", field) + "\n" + FileLineData.linereport
           else
             subrecord.push(field.to_i)
           end
         when "v"   # Positive integer
           field = csvPosInt!(rec, lineno)
-          raise _INTL("Field '{1}' must be greater than 0\n{2}", field, FileLineData.linereport) if field == 0
+          raise _INTL("Field '{1}' must be greater than 0.", field) + "\n" + FileLineData.linereport if field == 0
           subrecord.push(field)
         when "V"   # Optional positive integer
           field = csvfield!(rec)
           if nil_or_empty?(field)
             subrecord.push(nil)
           elsif !field[/^\d+$/]
-            raise _INTL("Field '{1}' must be greater than 0\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' must be greater than 0.", field) + "\n" + FileLineData.linereport
           elsif field.to_i == 0
-            raise _INTL("Field '{1}' must be greater than 0\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' must be greater than 0.", field) + "\n" + FileLineData.linereport
           else
             subrecord.push(field.to_i)
           end
         when "x"   # Hexadecimal number
           field = csvfield!(rec)
           if !field[/^[A-Fa-f0-9]+$/]
-            raise _INTL("Field '{1}' is not a hexadecimal number\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' is not a hexadecimal number.", field) + "\n" + FileLineData.linereport
           end
           subrecord.push(field.hex)
         when "X"   # Optional hexadecimal number
@@ -581,7 +581,7 @@ module Compiler
           if nil_or_empty?(field)
             subrecord.push(nil)
           elsif !field[/^[A-Fa-f0-9]+$/]
-            raise _INTL("Field '{1}' is not a hexadecimal number\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' is not a hexadecimal number.", field) + "\n" + FileLineData.linereport
           else
             subrecord.push(field.hex)
           end
@@ -592,7 +592,7 @@ module Compiler
           if nil_or_empty?(field)
             subrecord.push(nil)
           elsif !field[/^\-?^\d*\.?\d*$/]
-            raise _INTL("Field {1} is not a floating point number\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' is not a floating point number.", field) + "\n" + FileLineData.linereport
           else
             subrecord.push(field.to_f)
           end
@@ -610,7 +610,7 @@ module Compiler
         when "n"   # Name
           field = csvfield!(rec)
           if !field[/^(?![0-9])\w+$/]
-            raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.", field) + "\n" + FileLineData.linereport
           end
           subrecord.push(field)
         when "N"   # Optional name
@@ -618,7 +618,7 @@ module Compiler
           if nil_or_empty?(field)
             subrecord.push(nil)
           elsif !field[/^(?![0-9])\w+$/]
-            raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.", field) + "\n" + FileLineData.linereport
           else
             subrecord.push(field)
           end
@@ -640,7 +640,7 @@ module Compiler
         when "m"   # Symbol
           field = csvfield!(rec)
           if !field[/^(?![0-9])\w+$/]
-            raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.", field) + "\n" + FileLineData.linereport
           end
           subrecord.push(field.to_sym)
         when "M"   # Optional symbol
@@ -648,7 +648,7 @@ module Compiler
           if nil_or_empty?(field)
             subrecord.push(nil)
           elsif !field[/^(?![0-9])\w+$/]
-            raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.\n{2}", field, FileLineData.linereport)
+            raise _INTL("Field '{1}' must contain only letters, digits, and\nunderscores and can't begin with a number.", field) + "\n" + FileLineData.linereport
           else
             subrecord.push(field.to_sym)
           end
@@ -754,72 +754,85 @@ module Compiler
             later_value_found = true if !rec[j].nil?
             break if later_value_found
           end
-          break if !later_value_found
+          if !later_value_found
+            start = -1
+            break
+          end
         end
         file.write(",") if index > 0
-        if value.nil?
-          # do nothing
-        elsif value.is_a?(String)
-          if schema[1][i, 1].downcase == "q"
-            file.write(value)
-          else
-            file.write(csvQuote(value))
-          end
-        elsif value.is_a?(Symbol)
-          file.write(csvQuote(value.to_s))
-        elsif value == true
-          file.write("true")
-        elsif value == false
-          file.write("false")
-        elsif value.is_a?(Numeric)
-          case schema[1][i, 1]
-          when "e", "E"   # Enumerable
-            enumer = schema[2 + i]
-            case enumer
-            when Array
-              file.write(enumer[value])
-            when Symbol, String
+        next if value.nil?
+        case schema[1][i, 1]
+        when "e", "E"   # Enumerable
+          enumer = schema[2 + i - start]
+          case enumer
+          when Array
+            file.write((value.is_a?(Integer) && enumer[value].nil?) ? enumer[value] : value)
+          when Symbol, String
+            if GameData.const_defined?(enumer.to_sym)
+              mod = GameData.const_get(enumer.to_sym)
+              file.write(mod.get(value).id.to_s)
+            else
               mod = Object.const_get(enumer.to_sym)
               file.write(getConstantName(mod, value))
-            when Module
-              file.write(getConstantName(enumer, value))
-            when Hash
-              enumer.each_key do |key|
-                if enumer[key] == value
-                  file.write(key)
-                  break
-                end
-              end
             end
-          when "y", "Y"   # Enumerable or integer
-            enumer = schema[2 + i]
-            case enumer
-            when Array
-              if enumer[value].nil?
-                file.write(value)
-              else
-                file.write(enumer[value])
-              end
-            when Symbol, String
-              mod = Object.const_get(enumer.to_sym)
-              file.write(getConstantNameOrValue(mod, value))
-            when Module
-              file.write(getConstantNameOrValue(enumer, value))
-            when Hash
-              hasenum = false
+          when Module
+            file.write(getConstantName(enumer, value))
+          when Hash
+            if value.is_a?(String)
+              file.write(value)
+            else
               enumer.each_key do |key|
                 next if enumer[key] != value
                 file.write(key)
-                hasenum = true
                 break
               end
-              file.write(value) unless hasenum
             end
-          else   # Any other record type
-            file.write(value.inspect)
+          end
+        when "y", "Y"   # Enumerable or integer
+          enumer = schema[2 + i - start]
+          case enumer
+          when Array
+            file.write((value.is_a?(Integer) && enumer[value].nil?) ? enumer[value] : value)
+          when Symbol, String
+            if !Kernel.const_defined?(enumer.to_sym) && GameData.const_defined?(enumer.to_sym)
+              mod = GameData.const_get(enumer.to_sym)
+              if mod.exists?(value)
+                file.write(mod.get(value).id.to_s)
+              else
+                file.write(value.to_s)
+              end
+            else
+              mod = Object.const_get(enumer.to_sym)
+              file.write(getConstantNameOrValue(mod, value))
+            end
+          when Module
+            file.write(getConstantNameOrValue(enumer, value))
+          when Hash
+            if value.is_a?(String)
+              file.write(value)
+            else
+              has_enum = false
+              enumer.each_key do |key|
+                next if enumer[key] != value
+                file.write(key)
+                has_enum = true
+                break
+              end
+              file.write(value) if !has_enum
+            end
           end
         else
-          file.write(value.inspect)
+          if value.is_a?(String)
+            file.write((schema[1][i, 1].downcase == "q") ? value : csvQuote(value))
+          elsif value.is_a?(Symbol)
+            file.write(csvQuote(value.to_s))
+          elsif value == true
+            file.write("true")
+          elsif value == false
+            file.write("false")
+          else
+            file.write(value.inspect)
+          end
         end
       end
       break if start > 0 && index >= rec.length - 1
@@ -851,7 +864,7 @@ module Compiler
     clonitem.sub!(/\s*$/, "")
     itm = GameData::Item.try_get(clonitem)
     if !itm
-      raise _INTL("Undefined item constant name: {1}\nMake sure the item is defined in PBS/items.txt.\n{2}", item, FileLineData.linereport)
+      raise _INTL("Undefined item constant name: {1}.\nMake sure the item is defined in PBS/items.txt.", item) + "\n" + FileLineData.linereport
     end
     return itm.id
   end
@@ -864,7 +877,7 @@ module Compiler
     clonspecies = "NIDORANfE" if clonspecies == "NIDORANFE"
     spec = GameData::Species.try_get(clonspecies)
     if !spec
-      raise _INTL("Undefined species constant name: {1}\nMake sure the species is defined in PBS/pokemon.txt.\n{2}", species, FileLineData.linereport)
+      raise _INTL("Undefined species constant name: {1}.\nMake sure the species is defined in PBS/pokemon.txt.", species) + "\n" + FileLineData.linereport
     end
     return spec.id
   end
@@ -876,7 +889,7 @@ module Compiler
     mov = GameData::Move.try_get(clonmove)
     if !mov
       return nil if skip_unknown
-      raise _INTL("Undefined move constant name: {1}\nMake sure the move is defined in PBS/moves.txt.\n{2}", move, FileLineData.linereport)
+      raise _INTL("Undefined move constant name: {1}.\nMake sure the move is defined in PBS/moves.txt.", move) + "\n" + FileLineData.linereport
     end
     return mov.id
   end
@@ -888,7 +901,7 @@ module Compiler
     clonnature.sub!(/\s*$/, "")
     nat = GameData::Nature.try_get(clonnature)
     if !nat
-      raise _INTL("Undefined nature constant name: {1}\nMake sure the nature is defined in the scripts.\n{2}", nature, FileLineData.linereport)
+      raise _INTL("Undefined nature constant name: {1}.\nMake sure the nature is defined in the scripts.", nature) + "\n" + FileLineData.linereport
     end
     return nat.id
   end
@@ -900,7 +913,7 @@ module Compiler
     clontype.sub!(/\s*$/, "")
     typ = GameData::TrainerType.try_get(clontype)
     if !typ
-      raise _INTL("Undefined Trainer type constant name: {1}\nMake sure the trainer type is defined in PBS/trainer_types.txt.\n{2}", type, FileLineData.linereport)
+      raise _INTL("Undefined trainer type constant name: {1}.\nMake sure the trainer type is defined in PBS/trainer_types.txt.", type) + "\n" + FileLineData.linereport
     end
     return typ.id
   end
@@ -1075,7 +1088,7 @@ module Compiler
       mustCompile |= (latestTextTime >= latestDataTime)
       # Should recompile if holding Ctrl
       Input.update
-      mustCompile = true if Input.press?(Input::CTRL)
+      mustCompile = true if $full_compile || Input.press?(Input::CTRL)
       # Delete old data files in preparation for recompiling
       if mustCompile
         data_files.each do |filename|
@@ -1098,9 +1111,7 @@ module Compiler
         end
       end
       raise Reset.new if e.is_a?(Hangup)
-      loop do
-        Graphics.update
-      end
+      raise "Unknown exception when compiling."
     end
   end
 end
