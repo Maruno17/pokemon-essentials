@@ -96,8 +96,8 @@ Section {1} has an odd number of entries (section was recognized as a hash becau
 Section {1} has an odd number of entries (section was recognized as a hash because its first line is not a number).
 Expected a number in section {1}, got {2} instead
 Expected a number in section {1}, got {2} instead
-Bad line syntax (expected syntax like XXX=YYY)<<n>>{1}
-Bad line syntax (expected syntax like XXX=YYY)<<n>>{1}
+Bad line syntax (expected syntax like XXX=YYY).
+Bad line syntax (expected syntax like XXX=YYY).
 The method is slated to be removed in Essentials {1}.
 The method is slated to be removed in Essentials {1}.
 Use "{1}" instead.
@@ -2990,8 +2990,6 @@ The player is not on a map, so the region could not be determined.
 The player is not on a map, so the region could not be determined.
 The current map has no region set. Please set the MapPosition metadata setting for this map.
 The current map has no region set. Please set the MapPosition metadata setting for this map.
-{1} {2}
-{1} {2}
 Please enter the first Pokémon.
 Please enter the first Pokémon.
 Add another Pokémon?
@@ -3856,6 +3854,8 @@ Accessed {1}'s PC.
 Accessed {1}'s PC.
 Log off
 Log off
+{1} {2}
+{1} {2}
 $ {1}
 $ {1}
 Quit shopping.
@@ -4734,6 +4734,8 @@ Delete this encounter slot?
 Delete this encounter slot?
 Trainer Types
 Trainer Types
+Delete this trainer type?
+Delete this trainer type?
 The Trainer type was deleted.
 The Trainer type was deleted.
 Please enter the trainer type's name.
@@ -4776,6 +4778,8 @@ An item used by the Trainer during battle.
 An item used by the Trainer during battle.
 Trainer Battles
 Trainer Battles
+Delete this trainer battle?
+Delete this trainer battle?
 The Trainer battle was deleted.
 The Trainer battle was deleted.
 Can't save. No trainer type was chosen.
@@ -4866,6 +4870,8 @@ Global Metadata
 Global Metadata
 Metadata for player character {1} was not found.
 Metadata for player character {1} was not found.
+Delete this item?
+Delete this item?
 The item was deleted.
 The item was deleted.
 Please enter the item's name.
@@ -4882,6 +4888,8 @@ Put the item's graphic ({1}.png) in Graphics/Items, or it will be blank.
 Put the item's graphic ({1}.png) in Graphics/Items, or it will be blank.
 Pokémon species
 Pokémon species
+Delete this species?
+Delete this species?
 The species was deleted.
 The species was deleted.
 Data saved.
@@ -5268,8 +5276,8 @@ Lower level wild Pokémon
 Lower level wild Pokémon
 Higher level wild Pokémon
 Higher level wild Pokémon
-Set the Pokémon's level.
-Set the Pokémon's level.
+Set the number of steps remaining.
+Set the number of steps remaining.
 You're not in a dark map!
 You're not in a dark map!
 Refresh map
@@ -5408,6 +5416,8 @@ Add Pokémon
 Add Pokémon
 Give yourself a Pokémon of a chosen species/level. Goes to PC if party is full.
 Give yourself a Pokémon of a chosen species/level. Goes to PC if party is full.
+Set the Pokémon's level.
+Set the Pokémon's level.
 Added {1} to party.
 Added {1} to party.
 Added {1} to Pokémon storage.
@@ -6444,50 +6454,50 @@ File {1}, section {2}, key {3}<<n>>{4}
 File {1}, section {2}, key {3}<<n>>{4}
 File {1}, line {2}<<n>>{3}
 File {1}, line {2}<<n>>{3}
-Expected a section at the beginning of the file. This error may also occur if the file was not saved in UTF-8.<<n>>{1}
-Expected a section at the beginning of the file. This error may also occur if the file was not saved in UTF-8.<<n>>{1}
+Expected a section at the beginning of the file.<<n>>This error may also occur if the file was not saved in UTF-8.
+Expected a section at the beginning of the file.<<n>>This error may also occur if the file was not saved in UTF-8.
 Expected a section at the beginning of the file (line {1}). Sections begin with '[name of section]'.
 Expected a section at the beginning of the file (line {1}). Sections begin with '[name of section]'.
-Invalid quoted field (in: {1})<<n>>{2}
-Invalid quoted field (in: {1})<<n>>{2}
-Field {1} is not a Boolean value (true, false, 1, 0)<<n>>{2}
-Field {1} is not a Boolean value (true, false, 1, 0)<<n>>{2}
-Field {1} is not an integer<<n>>{2}
-Field {1} is not an integer<<n>>{2}
-Field {1} is not a positive integer<<n>>{2}
-Field {1} is not a positive integer<<n>>{2}
-Field {1} is not a number<<n>>{2}
-Field {1} is not a number<<n>>{2}
-Field {1} is not a positive integer or 0<<n>>{2}
-Field {1} is not a positive integer or 0<<n>>{2}
-Field '{1}' must be greater than 0<<n>>{2}
-Field '{1}' must be greater than 0<<n>>{2}
-Field '{1}' is not a hexadecimal number<<n>>{2}
-Field '{1}' is not a hexadecimal number<<n>>{2}
-Field '{1}' must contain only letters, digits, and<<n>>underscores and can't begin with a number.<<n>>{2}
-Field '{1}' must contain only letters, digits, and<<n>>underscores and can't begin with a number.<<n>>{2}
-Undefined value {1} in {2}<<n>>{3}
-Undefined value {1} in {2}<<n>>{3}
-Incorrect value {1} in {2}<<n>>{3}
-Incorrect value {1} in {2}<<n>>{3}
-Undefined value {1} (expected one of: {2})<<n>>{3}
-Undefined value {1} (expected one of: {2})<<n>>{3}
-Enumeration not defined<<n>>{1}
-Enumeration not defined<<n>>{1}
-Field '{1}' must be 0 or greater<<n>>{2}
-Field '{1}' must be 0 or greater<<n>>{2}
-Field {1} is not a floating point number<<n>>{2}
-Field {1} is not a floating point number<<n>>{2}
-Undefined item constant name: {1}<<n>>Make sure the item is defined in PBS/items.txt.<<n>>{2}
-Undefined item constant name: {1}<<n>>Make sure the item is defined in PBS/items.txt.<<n>>{2}
-Undefined species constant name: {1}<<n>>Make sure the species is defined in PBS/pokemon.txt.<<n>>{2}
-Undefined species constant name: {1}<<n>>Make sure the species is defined in PBS/pokemon.txt.<<n>>{2}
-Undefined move constant name: {1}<<n>>Make sure the move is defined in PBS/moves.txt.<<n>>{2}
-Undefined move constant name: {1}<<n>>Make sure the move is defined in PBS/moves.txt.<<n>>{2}
-Undefined nature constant name: {1}<<n>>Make sure the nature is defined in the scripts.<<n>>{2}
-Undefined nature constant name: {1}<<n>>Make sure the nature is defined in the scripts.<<n>>{2}
-Undefined Trainer type constant name: {1}<<n>>Make sure the trainer type is defined in PBS/trainer_types.txt.<<n>>{2}
-Undefined Trainer type constant name: {1}<<n>>Make sure the trainer type is defined in PBS/trainer_types.txt.<<n>>{2}
+Invalid quoted field (in: {1}).
+Invalid quoted field (in: {1}).
+Field '{1}' is not a Boolean value (true, false, 1, 0).
+Field '{1}' is not a Boolean value (true, false, 1, 0).
+Field '{1}' is not an integer.
+Field '{1}' is not an integer.
+Field '{1}' is not a positive integer.
+Field '{1}' is not a positive integer.
+Field '{1}' is not a number.
+Field '{1}' is not a number.
+Field '{1}' is not a positive integer or 0.
+Field '{1}' is not a positive integer or 0.
+Field '{1}' must be greater than 0.
+Field '{1}' must be greater than 0.
+Field '{1}' is not a hexadecimal number.
+Field '{1}' is not a hexadecimal number.
+Field '{1}' must contain only letters, digits, and<<n>>underscores and can't begin with a number.
+Field '{1}' must contain only letters, digits, and<<n>>underscores and can't begin with a number.
+Undefined value {1} in {2}.
+Undefined value {1} in {2}.
+Incorrect value {1} in {2}.
+Incorrect value {1} in {2}.
+Undefined value {1} (expected one of: {2}).
+Undefined value {1} (expected one of: {2}).
+Enumeration not defined.
+Enumeration not defined.
+Field '{1}' must be 0 or greater.
+Field '{1}' must be 0 or greater.
+Field '{1}' is not a floating point number.
+Field '{1}' is not a floating point number.
+Undefined item constant name: {1}.<<n>>Make sure the item is defined in PBS/items.txt.
+Undefined item constant name: {1}.<<n>>Make sure the item is defined in PBS/items.txt.
+Undefined species constant name: {1}.<<n>>Make sure the species is defined in PBS/pokemon.txt.
+Undefined species constant name: {1}.<<n>>Make sure the species is defined in PBS/pokemon.txt.
+Undefined move constant name: {1}.<<n>>Make sure the move is defined in PBS/moves.txt.
+Undefined move constant name: {1}.<<n>>Make sure the move is defined in PBS/moves.txt.
+Undefined nature constant name: {1}.<<n>>Make sure the nature is defined in the scripts.
+Undefined nature constant name: {1}.<<n>>Make sure the nature is defined in the scripts.
+Undefined trainer type constant name: {1}.<<n>>Make sure the trainer type is defined in PBS/trainer_types.txt.
+Undefined trainer type constant name: {1}.<<n>>Make sure the trainer type is defined in PBS/trainer_types.txt.
 Compiling PBS file `{1}`...
 Compiling PBS file `{1}`...
 Writing PBS file `{1}`...
@@ -6500,82 +6510,84 @@ Saving messages...
 Saving messages...
 Successfully compiled all game data
 Successfully compiled all game data
-Section name '{1}' is used twice.<<n>>{2}
-Section name '{1}' is used twice.<<n>>{2}
-Warning: Map {1}, as mentioned in the map connection data, was not found.<<n>>{2}
-Warning: Map {1}, as mentioned in the map connection data, was not found.<<n>>{2}
-North side of first map must connect with south side of second map<<n>>{1}
-North side of first map must connect with south side of second map<<n>>{1}
-South side of first map must connect with north side of second map<<n>>{1}
-South side of first map must connect with north side of second map<<n>>{1}
-East side of first map must connect with west side of second map<<n>>{1}
-East side of first map must connect with west side of second map<<n>>{1}
-West side of first map must connect with east side of second map<<n>>{1}
-West side of first map must connect with east side of second map<<n>>{1}
-'{1}' is not a defined type ({2}, section {3}, Weaknesses).
-'{1}' is not a defined type ({2}, section {3}, Weaknesses).
-'{1}' is not a defined type ({2}, section {3}, Resistances).
-'{1}' is not a defined type ({2}, section {3}, Resistances).
-'{1}' is not a defined type ({2}, section {3}, Immunities).
-'{1}' is not a defined type ({2}, section {3}, Immunities).
-Move {1} is defined as a Status move with a non-zero base damage.<<n>>{2}
-Move {1} is defined as a Status move with a non-zero base damage.<<n>>{2}
-Warning: Move {1} is defined as Physical or Special but has a base damage of 0. Changing it to a Status move.<<n>>{2}
-Warning: Move {1} is defined as Physical or Special but has a base damage of 0. Changing it to a Status move.<<n>>{2}
-Undefined species ID '{1}'.<<n>>{3}
-Undefined species ID '{1}'.<<n>>{3}
-Form {1} for species ID {2} is defined twice.<<n>>{3}
-Form {1} for species ID {2} is defined twice.<<n>>{3}
-Dex list number {1} is defined at least twice.<<n>>{2}
-Dex list number {1} is defined at least twice.<<n>>{2}
-Expected a section at the beginning of the file.<<n>>{1}
-Expected a section at the beginning of the file.<<n>>{1}
-Dex list number {1} has species {2} listed twice.<<n>>{3}
-Dex list number {1} has species {2} listed twice.<<n>>{3}
-Expected a species entry line for encounter type {1} for map '{2}', got "{3}" instead.<<n>>{4}
-Expected a species entry line for encounter type {1} for map '{2}', got "{3}" instead.<<n>>{4}
-Level number {1} is not valid (max. {2}).<<n>>{3}
-Level number {1} is not valid (max. {2}).<<n>>{3}
-Minimum level is greater than maximum level: {1}<<n>>{2}
-Minimum level is greater than maximum level: {1}<<n>>{2}
-Encounters for map '{1}' are defined twice.<<n>>{2}
-Encounters for map '{1}' are defined twice.<<n>>{2}
-Expected a map number, got "{1}" instead.<<n>>{2}
-Expected a map number, got "{1}" instead.<<n>>{2}
-Undefined encounter type "{1}" for map '{2}'.<<n>>{3}
-Undefined encounter type "{1}" for map '{2}'.<<n>>{3}
-Pokémon hasn't been defined yet!<<n>>{1}
-Pokémon hasn't been defined yet!<<n>>{1}
-Trainer with ID {1} has no Pokémon.<<n>>{2}
-Trainer with ID {1} has no Pokémon.<<n>>{2}
-Invalid Pokémon level {1} (must be 1-{2}).<<n>>{3}
-Invalid Pokémon level {1} (must be 1-{2}).<<n>>{3}
-Invalid Pokémon nickname: {1} (must be 1-{2} characters).<<n>>{3}
-Invalid Pokémon nickname: {1} (must be 1-{2} characters).<<n>>{3}
-Invalid IV: {1} (must be 0-{2}).<<n>>{3}
-Invalid IV: {1} (must be 0-{2}).<<n>>{3}
-Invalid EV: {1} (must be 0-{2}).<<n>>{3}
-Invalid EV: {1} (must be 0-{2}).<<n>>{3}
-Invalid EV set (must sum to {1} or less).<<n>>{2}
-Invalid EV set (must sum to {1} or less).<<n>>{2}
-Bad happiness: {1} (must be 0-255).<<n>>{2}
-Bad happiness: {1} (must be 0-255).<<n>>{2}
-Value {1} isn't a defined Poké Ball.<<n>>{2}
-Value {1} isn't a defined Poké Ball.<<n>>{2}
-No trainer data file given in section {1}.<<n>>{2}
-No trainer data file given in section {1}.<<n>>{2}
-Global metadata ID '{1}' is used twice.<<n>>{2}
-Global metadata ID '{1}' is used twice.<<n>>{2}
-Player metadata ID '{1}' is used twice.<<n>>{2}
-Player metadata ID '{1}' is used twice.<<n>>{2}
-The entry 'Home' is required in metadata.txt section 0.<<n>>{1}
-The entry 'Home' is required in metadata.txt section 0.<<n>>{1}
-Global metadata is not defined in metadata.txt but should be.<<n>>{1}
-Global metadata is not defined in metadata.txt but should be.<<n>>{1}
-Metadata for player character 1 is not defined in metadata.txt but should be.<<n>>{1}
-Metadata for player character 1 is not defined in metadata.txt but should be.<<n>>{1}
-Version {1} of dungeon area {2} is defined twice.<<n>>{3}
-Version {1} of dungeon area {2} is defined twice.<<n>>{3}
+Section name '{1}' is used twice.
+Section name '{1}' is used twice.
+Warning: Map {1}, as mentioned in the map connection data, was not found.
+Warning: Map {1}, as mentioned in the map connection data, was not found.
+North side of first map must connect with south side of second map.
+North side of first map must connect with south side of second map.
+South side of first map must connect with north side of second map.
+South side of first map must connect with north side of second map.
+East side of first map must connect with west side of second map.
+East side of first map must connect with west side of second map.
+West side of first map must connect with east side of second map.
+West side of first map must connect with east side of second map.
+'{1}' is not a defined type (type {2}, Weaknesses).
+'{1}' is not a defined type (type {2}, Weaknesses).
+'{1}' is not a defined type (type {2}, Resistances).
+'{1}' is not a defined type (type {2}, Resistances).
+'{1}' is not a defined type (type {2}, Immunities).
+'{1}' is not a defined type (type {2}, Immunities).
+Move {1} is defined as a Status move with a non-zero base damage.
+Move {1} is defined as a Status move with a non-zero base damage.
+Warning: Move {1} is defined as Physical or Special but has a base damage of 0. Changing it to a Status move.
+Warning: Move {1} is defined as Physical or Special but has a base damage of 0. Changing it to a Status move.
+Evolution method {1} requires a parameter, but none was given.
+Evolution method {1} requires a parameter, but none was given.
+Undefined species ID '{1}'.
+Undefined species ID '{1}'.
+Form {1} for species ID '{2}' is defined twice.
+Form {1} for species ID '{2}' is defined twice.
+Dex list number {1} is defined at least twice.
+Dex list number {1} is defined at least twice.
+Expected a section at the beginning of the file.
+Expected a section at the beginning of the file.
+Dex list number {1} has species {2} listed twice.
+Dex list number {1} has species {2} listed twice.
+Expected a species entry line for encounter type {1} for map {2}.
+Expected a species entry line for encounter type {1} for map {2}.
+Level number {1} is not valid (max. {2}).
+Level number {1} is not valid (max. {2}).
+Minimum level is greater than maximum level.
+Minimum level is greater than maximum level.
+Encounters for map '{1}' are defined twice.
+Encounters for map '{1}' are defined twice.
+Expected a map number, got "{1}" instead.
+Expected a map number, got "{1}" instead.
+Undefined encounter type "{1}" for map '{2}'.
+Undefined encounter type "{1}" for map '{2}'.
+Pokémon hasn't been defined yet!
+Pokémon hasn't been defined yet!
+Trainer with ID '{1}' has no Pokémon.
+Trainer with ID '{1}' has no Pokémon.
+Invalid Pokémon level {1} (must be 1-{2}).
+Invalid Pokémon level {1} (must be 1-{2}).
+Invalid Pokémon nickname: {1} (must be 1-{2} characters).
+Invalid Pokémon nickname: {1} (must be 1-{2} characters).
+Invalid IV: {1} (must be 0-{2}).
+Invalid IV: {1} (must be 0-{2}).
+Invalid EV: {1} (must be 0-{2}).
+Invalid EV: {1} (must be 0-{2}).
+Invalid EV set (must sum to {1} or less).
+Invalid EV set (must sum to {1} or less).
+Bad happiness: {1} (must be 0-255).
+Bad happiness: {1} (must be 0-255).
+Value '{1}' isn't a defined Poké Ball.
+Value '{1}' isn't a defined Poké Ball.
+No trainer data file given in section {1}.
+No trainer data file given in section {1}.
+Global metadata ID '{1}' is used twice.
+Global metadata ID '{1}' is used twice.
+Player metadata ID '{1}' is used twice.
+Player metadata ID '{1}' is used twice.
+The entry 'Home' is required in metadata.txt section 0.
+The entry 'Home' is required in metadata.txt section 0.
+Global metadata is not defined in metadata.txt but should be.
+Global metadata is not defined in metadata.txt but should be.
+Metadata for player character 1 is not defined in metadata.txt but should be.
+Metadata for player character 1 is not defined in metadata.txt but should be.
+Version {1} of dungeon area {2} is defined twice.
+Version {1} of dungeon area {2} is defined twice.
 Compiling animations...
 Compiling animations...
 See the documentation on the wiki to learn how to edit this file.
