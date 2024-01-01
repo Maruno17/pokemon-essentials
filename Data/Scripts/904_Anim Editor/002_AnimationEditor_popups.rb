@@ -3,21 +3,18 @@
 #===============================================================================
 class AnimationEditor
   def create_pop_up_window(width, height)
-    ret = BitmapSprite.new(width, height, @pop_up_viewport)
-    ret.x = (WINDOW_WIDTH - width) / 2
-    ret.y = (WINDOW_HEIGHT - height) / 2
+    ret = BitmapSprite.new(width + (BORDER_THICKNESS * 2),
+                           height + (BORDER_THICKNESS * 2), @pop_up_viewport)
+    ret.x = (WINDOW_WIDTH - ret.width) / 2
+    ret.y = (WINDOW_HEIGHT - ret.height) / 2
     ret.z = -1
     ret.bitmap.font.color = Color.black
     ret.bitmap.font.size = 18
-    # Draw message box border
-    ret.bitmap.border_rect(BORDER_THICKNESS, BORDER_THICKNESS,
-                           ret.width - (BORDER_THICKNESS * 2), ret.height - (BORDER_THICKNESS * 2),
+    # Draw pop-up box border
+    ret.bitmap.border_rect(BORDER_THICKNESS, BORDER_THICKNESS, width, height,
                            BORDER_THICKNESS, Color.white, Color.black)
-    # Fill message box with white
-    ret.bitmap.fill_rect(BORDER_THICKNESS, BORDER_THICKNESS,
-                         ret.width - (BORDER_THICKNESS * 2),
-                         ret.height - (BORDER_THICKNESS * 2),
-                         Color.white)
+    # Fill pop-up box with white
+    ret.bitmap.fill_rect(BORDER_THICKNESS, BORDER_THICKNESS, width, height, Color.white)
     return ret
   end
 
@@ -79,6 +76,55 @@ class AnimationEditor
 
   #-----------------------------------------------------------------------------
 
+  def edit_animation_properties
+    # Show pop-up window
+    @pop_up_bg_bitmap.visible = true
+    bg_bitmap = create_pop_up_window(ANIM_PROPERTIES_WIDTH, ANIM_PROPERTIES_HEIGHT)
+    # TODO: Draw box around list control(s), i.e. flags. Note that an extra +4
+    #       should be added to its x coordinate because of padding created when
+    #       defining @components[:animation_properties].
+    anim_properties = @components[:animation_properties]
+    anim_properties.visible = true
+    # Set control values
+    case @anim[:type]
+    when :move, :opp_move
+      anim_properties.get_control(:type).value = :move
+    when :common, :opp_common
+      anim_properties.get_control(:type).value = :common
+    end
+    anim_properties.get_control(:opp_variant).value = ([:opp_move, :opp_common].include?(@anim[:type]))
+    anim_properties.get_control(:version).value = @anim[:version] || 0
+    anim_properties.get_control(:name).value = @anim[:name] || ""
+    anim_properties.get_control(:pbs_path).value = (@anim[:pbs_path] || "unsorted") + ".txt"
+    anim_properties.get_control(:has_target).value = !@anim[:no_target]
+    anim_properties.get_control(:usable).value = !(@anim[:ignore] || false)
+    # TODO: Populate flags.
+    refresh_component(:animation_properties)   # This sets the :move control's value
+    # Interaction loop
+    ret = nil
+    loop do
+      Graphics.update
+      Input.update
+      anim_properties.update
+      if anim_properties.changed?
+        break if anim_properties.values.keys.include?(:close)
+        anim_properties.values.each_pair do |property, value|
+          apply_changed_value(:animation_properties, property, value)
+        end
+        anim_properties.clear_changed
+      end
+      break if !anim_properties.busy? && Input.trigger?(Input::BACK)
+      anim_properties.repaint
+    end
+    # Dispose and return
+    bg_bitmap.dispose
+    @pop_up_bg_bitmap.visible = false
+    anim_properties.clear_changed
+    anim_properties.visible = false
+  end
+
+  #-----------------------------------------------------------------------------
+
   # Generates a list of all files in the given folder which have a file
   # extension that matches one in exts. Removes any files from the list whose
   # filename is the same as one in prepends (case insensitive), and then adds
@@ -106,7 +152,7 @@ class AnimationEditor
     graphic_chooser.visible = true
     # Draw box around list control
     list = graphic_chooser.get_control(:list)
-    bg_bitmap.bitmap.outline_rect(list.x + BORDER_THICKNESS - 2, list.y + BORDER_THICKNESS - 2,
+    bg_bitmap.bitmap.outline_rect(BORDER_THICKNESS + list.x - 2, BORDER_THICKNESS + list.y - 2,
                                   list.width + 4, list.height + 4, Color.black)
     # Get a list of files
     files = get_all_files_in_folder_and_prepend(
@@ -210,7 +256,7 @@ class AnimationEditor
     audio_chooser.visible = true
     # Draw box around list control
     list = audio_chooser.get_control(:list)
-    bg_bitmap.bitmap.outline_rect(list.x + BORDER_THICKNESS - 2, list.y + BORDER_THICKNESS - 2,
+    bg_bitmap.bitmap.outline_rect(BORDER_THICKNESS + list.x - 2, BORDER_THICKNESS + list.y - 2,
                                   list.width + 4, list.height + 4, Color.black)
     # Get a list of files
     files = get_all_files_in_folder_and_prepend(
@@ -272,53 +318,6 @@ class AnimationEditor
     audio_chooser.clear_changed
     audio_chooser.visible = false
     return [ret, vol, ptch]
-  end
-
-  #-----------------------------------------------------------------------------
-
-  def edit_animation_properties
-    # Show pop-up window
-    @pop_up_bg_bitmap.visible = true
-    bg_bitmap = create_pop_up_window(ANIM_PROPERTIES_WIDTH, ANIM_PROPERTIES_HEIGHT)
-    # TODO: Draw box around list control(s), i.e. flags.
-    anim_properties = @components[:animation_properties]
-    anim_properties.visible = true
-    # Set control values
-    case @anim[:type]
-    when :move, :opp_move
-      anim_properties.get_control(:type).value = :move
-    when :common, :opp_common
-      anim_properties.get_control(:type).value = :common
-    end
-    anim_properties.get_control(:opp_variant).value = ([:opp_move, :opp_common].include?(@anim[:type]))
-    anim_properties.get_control(:version).value = @anim[:version] || 0
-    anim_properties.get_control(:name).value = @anim[:name] || ""
-    anim_properties.get_control(:pbs_path).value = (@anim[:pbs_path] || "unsorted") + ".txt"
-    anim_properties.get_control(:has_target).value = !@anim[:no_target]
-    anim_properties.get_control(:usable).value = !(@anim[:ignore] || false)
-    # TODO: Populate flags.
-    refresh_component(:animation_properties)   # This sets the :move control's value
-    # Interaction loop
-    ret = nil
-    loop do
-      Graphics.update
-      Input.update
-      anim_properties.update
-      if anim_properties.changed?
-        break if anim_properties.values.keys.include?(:close)
-        anim_properties.values.each_pair do |property, value|
-          apply_changed_value(:animation_properties, property, value)
-        end
-        anim_properties.clear_changed
-      end
-      break if !anim_properties.busy? && Input.trigger?(Input::BACK)
-      anim_properties.repaint
-    end
-    # Dispose and return
-    bg_bitmap.dispose
-    @pop_up_bg_bitmap.visible = false
-    anim_properties.clear_changed
-    anim_properties.visible = false
   end
 
 end

@@ -91,7 +91,9 @@ class UIControls::List < UIControls::BaseControl
   end
 
   def mouse_in_control?
-    return true if super
+    mouse_x, mouse_y = mouse_pos
+    return false if !mouse_x || !mouse_y
+    return true if Rect.new(0, 0, width, height).contains?(mouse_x, mouse_y)
     return true if @scrollbar.mouse_in_control?
     return false
   end
@@ -219,10 +221,12 @@ class UIControls::List < UIControls::BaseControl
       @selected = @hover_area if @hover_area.is_a?(Integer)
     elsif @hover_area
       wheel_v = Input.scroll_v
+      scroll_dist = UIControls::Scrollbar::SCROLL_DISTANCE
+      scroll_dist /= 2 if @values.length / @rows_count > 20   # Arbitrary 20
       if wheel_v > 0   # Scroll up
-        @scrollbar.slider_top -= UIControls::Scrollbar::SCROLL_DISTANCE
+        @scrollbar.slider_top -= scroll_dist
       elsif wheel_v < 0   # Scroll down
-        @scrollbar.slider_top += UIControls::Scrollbar::SCROLL_DISTANCE
+        @scrollbar.slider_top += scroll_dist
       end
       if wheel_v != 0
         self.top_row = (@scrollbar.position.to_f / ROW_HEIGHT).round

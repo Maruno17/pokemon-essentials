@@ -147,6 +147,15 @@ class UIControls::ControlsContainer
     add_dropdown_list(id, options, value, true)
   end
 
+  def add_text_box_dropdown_list(id, options, value, has_label = false)
+    add_control(id, UIControls::TextBoxDropdownList.new(*control_size(has_label), @viewport, options, value), has_label)
+  end
+
+  def add_labelled_text_box_dropdown_list(id, label, options, value)
+    add_label(id, label)
+    add_text_box_dropdown_list(id, options, value, true)
+  end
+
   #-----------------------------------------------------------------------------
 
   def repaint

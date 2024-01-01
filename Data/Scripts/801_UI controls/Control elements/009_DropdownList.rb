@@ -34,7 +34,7 @@ class UIControls::DropdownList < UIControls::BaseControl
 
   def set_interactive_rects
     @button_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
-                              [@box_width, width - (TEXT_BOX_X * 2)].min, TEXT_BOX_HEIGHT)
+                            [@box_width, width - (TEXT_BOX_X * 2)].min, TEXT_BOX_HEIGHT)
     @interactions = {
       :button => @button_rect
     }

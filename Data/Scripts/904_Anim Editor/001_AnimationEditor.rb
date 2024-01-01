@@ -32,17 +32,17 @@ class AnimationEditor
   PARTICLE_LIST_HEIGHT = WINDOW_HEIGHT - PARTICLE_LIST_Y - BORDER_THICKNESS
 
   # Pop-up windows
-  ANIM_PROPERTIES_LABEL_WIDTH = UIControls::ControlsContainer::OFFSET_FROM_LABEL_X + 80
-  ANIM_PROPERTIES_WIDTH       = SIDE_PANE_WIDTH + 80 + 8
-  ANIM_PROPERTIES_HEIGHT      = WINDOW_HEIGHT * 3 / 4
-  ANIM_PROPERTIES_X           = (WINDOW_WIDTH - ANIM_PROPERTIES_WIDTH) / 2
-  ANIM_PROPERTIES_Y           = (WINDOW_HEIGHT - ANIM_PROPERTIES_HEIGHT) / 2
-
   MESSAGE_BOX_WIDTH         = WINDOW_WIDTH * 3 / 4
   MESSAGE_BOX_HEIGHT        = 160
   MESSAGE_BOX_BUTTON_WIDTH  = 150
   MESSAGE_BOX_BUTTON_HEIGHT = 32
   MESSAGE_BOX_SPACING       = 16
+
+  ANIM_PROPERTIES_LABEL_WIDTH = UIControls::ControlsContainer::OFFSET_FROM_LABEL_X + 80
+  ANIM_PROPERTIES_WIDTH       = SIDE_PANE_WIDTH + 80
+  ANIM_PROPERTIES_HEIGHT      = WINDOW_HEIGHT * 3 / 4
+  ANIM_PROPERTIES_X           = (WINDOW_WIDTH - ANIM_PROPERTIES_WIDTH) / 2
+  ANIM_PROPERTIES_Y           = (WINDOW_HEIGHT - ANIM_PROPERTIES_HEIGHT) / 2
 
   CHOOSER_BUTTON_WIDTH     = 150
   CHOOSER_BUTTON_HEIGHT    = MESSAGE_BOX_BUTTON_HEIGHT
@@ -52,17 +52,36 @@ class AnimationEditor
   CHOOSER_FILE_LIST_HEIGHT = UIControls::List::ROW_HEIGHT * 15
 
   GRAPHIC_CHOOSER_PREVIEW_SIZE  = 320   # Square
-  GRAPHIC_CHOOSER_WINDOW_WIDTH  = CHOOSER_FILE_LIST_X + CHOOSER_FILE_LIST_WIDTH + 10 + GRAPHIC_CHOOSER_PREVIEW_SIZE + 8 + (BORDER_THICKNESS * 2)
-  GRAPHIC_CHOOSER_WINDOW_HEIGHT = CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 10 + CHOOSER_BUTTON_HEIGHT + 8 + (BORDER_THICKNESS * 2)
+  GRAPHIC_CHOOSER_WINDOW_WIDTH  = CHOOSER_FILE_LIST_X + CHOOSER_FILE_LIST_WIDTH + 10 + GRAPHIC_CHOOSER_PREVIEW_SIZE + 8
+  GRAPHIC_CHOOSER_WINDOW_HEIGHT = CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 10 + CHOOSER_BUTTON_HEIGHT + 8
   GRAPHIC_CHOOSER_X             = ((WINDOW_WIDTH - GRAPHIC_CHOOSER_WINDOW_WIDTH) / 2)
   GRAPHIC_CHOOSER_Y             = ((WINDOW_HEIGHT - GRAPHIC_CHOOSER_WINDOW_HEIGHT) / 2)
 
   AUDIO_CHOOSER_LABEL_WIDTH   = UIControls::ControlsContainer::OFFSET_FROM_LABEL_X
   AUDIO_CHOOSER_SLIDER_WIDTH  = (CHOOSER_BUTTON_WIDTH * 2) - AUDIO_CHOOSER_LABEL_WIDTH
-  AUDIO_CHOOSER_WINDOW_WIDTH  = CHOOSER_FILE_LIST_X + CHOOSER_FILE_LIST_WIDTH + 8 + (CHOOSER_BUTTON_WIDTH * 2) + 4 + (BORDER_THICKNESS * 2)
-  AUDIO_CHOOSER_WINDOW_HEIGHT = CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 10 + CHOOSER_BUTTON_HEIGHT + 8 + (BORDER_THICKNESS * 2)
+  AUDIO_CHOOSER_WINDOW_WIDTH  = CHOOSER_FILE_LIST_X + CHOOSER_FILE_LIST_WIDTH + 8 + (CHOOSER_BUTTON_WIDTH * 2) + 4
+  AUDIO_CHOOSER_WINDOW_HEIGHT = CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 10 + CHOOSER_BUTTON_HEIGHT + 8
   AUDIO_CHOOSER_X             = ((WINDOW_WIDTH - AUDIO_CHOOSER_WINDOW_WIDTH) / 2)
   AUDIO_CHOOSER_Y             = ((WINDOW_HEIGHT - AUDIO_CHOOSER_WINDOW_HEIGHT) / 2)
+
+  # This list of animations was gathered manually by looking at all instances of
+  # pbCommonAnimation.
+  COMMON_ANIMATIONS = [
+    "Attract", "BanefulBunker", "BeakBlast", "Bind", "Burn",
+    "Clamp", "Confusion", "CraftyShield", "EatBerry", "ElectricTerrain",
+    "FireSpin", "FocusPunch", "Frozen", "GrassyTerrain", "Hail",
+    "HarshSun", "HealingWish", "HealthDown", "HealthUp", "HeavyRain",
+    "Infestation", "KingsShield", "LeechSeed", "LevelUp", "LunarDance",
+    "MagmaStorm", "MegaEvolution", "MegaEvolution2", "MistyTerrain", "Obstruct",
+    "Octolock", "Paralysis", "ParentalBond", "Poison", "Powder",
+    "PrimalGroudon", "PrimalGroudon2", "PrimalKyogre", "PrimalKyogre2", "Protect",
+    "PsychicTerrain", "QuickGuard", "Rain", "Rainbow", "RainbowOpp",
+    "Sandstorm", "SandTomb", "SeaOfFire", "SeaOfFireOpp", "Shadow",
+    "ShadowSky", "ShellTrap", "Shiny", "Sleep", "SpikyShield",
+    "StatDown", "StatUp", "StrongWinds", "Sun", "SuperShiny",
+    "Swamp", "SwampOpp", "Toxic", "UseItem", "WideGuard",
+    "Wrap"
+  ]
 
   def initialize(anim_id, anim)
     @anim_id = anim_id
@@ -110,21 +129,18 @@ class AnimationEditor
     @components[:particle_list].set_interactive_rects
     # Animation properties pop-up window
     @components[:animation_properties] = UIControls::ControlsContainer.new(
-      ANIM_PROPERTIES_X + BORDER_THICKNESS + 4, ANIM_PROPERTIES_Y + BORDER_THICKNESS,
-      ANIM_PROPERTIES_WIDTH - ((BORDER_THICKNESS + 4) * 2), ANIM_PROPERTIES_HEIGHT - (BORDER_THICKNESS * 2)
+      ANIM_PROPERTIES_X + 4, ANIM_PROPERTIES_Y, ANIM_PROPERTIES_WIDTH - 8, ANIM_PROPERTIES_HEIGHT
     )
     @components[:animation_properties].viewport.z = @pop_up_viewport.z + 1
     @components[:animation_properties].label_offset_x = 170
     # Graphic chooser pop-up window
     @components[:graphic_chooser] = UIControls::ControlsContainer.new(
-      GRAPHIC_CHOOSER_X + BORDER_THICKNESS, GRAPHIC_CHOOSER_Y + BORDER_THICKNESS,
-      GRAPHIC_CHOOSER_WINDOW_WIDTH - (BORDER_THICKNESS * 2), GRAPHIC_CHOOSER_WINDOW_HEIGHT - (BORDER_THICKNESS * 2)
+      GRAPHIC_CHOOSER_X, GRAPHIC_CHOOSER_Y, GRAPHIC_CHOOSER_WINDOW_WIDTH, GRAPHIC_CHOOSER_WINDOW_HEIGHT
     )
     @components[:graphic_chooser].viewport.z = @pop_up_viewport.z + 1
     # Audio chooser pop-up window
     @components[:audio_chooser] = UIControls::ControlsContainer.new(
-      AUDIO_CHOOSER_X + BORDER_THICKNESS, AUDIO_CHOOSER_Y + BORDER_THICKNESS,
-      AUDIO_CHOOSER_WINDOW_WIDTH - (BORDER_THICKNESS * 2), AUDIO_CHOOSER_WINDOW_HEIGHT - (BORDER_THICKNESS * 2)
+      AUDIO_CHOOSER_X, AUDIO_CHOOSER_Y, AUDIO_CHOOSER_WINDOW_WIDTH, AUDIO_CHOOSER_WINDOW_HEIGHT
     )
     @components[:audio_chooser].viewport.z = @pop_up_viewport.z + 1
     @captured = nil
@@ -297,19 +313,9 @@ class AnimationEditor
     # Create "opp" variant
     anim_properties.add_labelled_checkbox(:opp_variant, _INTL("User is opposing?"), false)
     # Create move control
-    # TODO: Instead of having the :common_anim TextBox control, make this a
-    #       TextBoxDropdownList control instead. Make it allow custom text
-    #       as well as any option in the list. Its options will be changed
-    #       depending on the animation's type. Also have a list of existing
-    #       Common animation names for it.
-    move_list = []
-    GameData::Move.each { |m| move_list.push([m.id.to_s, m.name]) }
-    move_list.sort! { |a, b| a[1] <=> b[1] }
-    anim_properties.add_labelled_dropdown_list(:move, _INTL("Move"), move_list.to_h, move_list[0][0])
+    anim_properties.add_labelled_text_box_dropdown_list(:move, "", [], "")
     move_ctrl = anim_properties.get_control(:move)
     move_ctrl.max_rows = 16
-    common_text = UIControls::TextBox.new(move_ctrl.width, move_ctrl.height, move_ctrl.viewport, "")
-    anim_properties.add_control_at(:common_anim, common_text, move_ctrl.x, move_ctrl.y)
     # Create version control
     anim_properties.add_labelled_number_text_box(:version, _INTL("Version"), 0, 99, 0)
     # Create animation name control
@@ -444,6 +450,20 @@ class AnimationEditor
     end
   end
 
+  def refresh_move_property_options
+    ctrl = @components[:animation_properties].get_control(:move)
+    case @anim[:type]
+    when :move, :opp_move
+      move_list = []
+      GameData::Move.each { |m| move_list.push([m.id.to_s, m.name]) }
+      move_list.push(["STRUGGLE", _INTL("Struggle")]) if move_list.none? { |val| val[0] == "STRUGGLE" }
+      move_list.sort! { |a, b| a[1] <=> b[1] }
+      ctrl.values = move_list.to_h
+    when :common, :opp_common
+      ctrl.values = COMMON_ANIMATIONS
+    end
+  end
+
   def refresh_component_values(component_sym)
     component = @components[component_sym]
     case component_sym
@@ -515,17 +535,13 @@ class AnimationEditor
       # TODO: Set the possible focus options depending on whether the animation
       #       has a target/user.
     when :animation_properties
+      refresh_move_property_options
       case @anim[:type]
       when :move, :opp_move
         component.get_control(:move_label).text = _INTL("Move")
-        component.get_control(:move).visible = true
         component.get_control(:move).value = @anim[:move]
-        component.get_control(:common_anim).visible = false
       when :common, :opp_common
         component.get_control(:move_label).text = _INTL("Common animation")
-        component.get_control(:move).visible = false
-        component.get_control(:common_anim).visible = true
-        component.get_control(:common_anim).value = @anim[:move]
       end
       # TODO: Maybe other things as well?
     end
@@ -653,8 +669,6 @@ class AnimationEditor
           @anim[:type] = (opp) ? :opp_common : :common
         end
         refresh_component(:animation_properties)
-      when :common_anim
-        @anim[:move] = value
       when :pbs_path
         txt = value.gsub!(/\.txt$/, "")
         @anim[property] = txt
