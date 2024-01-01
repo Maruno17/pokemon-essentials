@@ -766,7 +766,7 @@ module Compiler
           enumer = schema[2 + i - start]
           case enumer
           when Array
-            file.write((value.is_a?(Integer) && enumer[value].nil?) ? enumer[value] : value)
+            file.write((value.is_a?(Integer) && !enumer[value].nil?) ? enumer[value] : value)
           when Symbol, String
             if GameData.const_defined?(enumer.to_sym)
               mod = GameData.const_get(enumer.to_sym)
@@ -792,7 +792,7 @@ module Compiler
           enumer = schema[2 + i - start]
           case enumer
           when Array
-            file.write((value.is_a?(Integer) && enumer[value].nil?) ? enumer[value] : value)
+            file.write((value.is_a?(Integer) && !enumer[value].nil?) ? enumer[value] : value)
           when Symbol, String
             if !Kernel.const_defined?(enumer.to_sym) && GameData.const_defined?(enumer.to_sym)
               mod = GameData.const_get(enumer.to_sym)

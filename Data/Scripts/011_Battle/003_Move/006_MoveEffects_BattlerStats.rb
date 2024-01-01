@@ -970,7 +970,7 @@ class Battle::Move::LowerTargetDefense1 < Battle::Move::TargetStatDownMove
 end
 
 #===============================================================================
-# Decreases the target's Defense by 1 stage. Power is mutliplied by 1.5 if
+# Decreases the target's Defense by 1 stage. Power is multiplied by 1.5 if
 # Gravity is in effect. (Grav Apple)
 #===============================================================================
 class Battle::Move::LowerTargetDefense1PowersUpInGravity < Battle::Move::LowerTargetDefense1

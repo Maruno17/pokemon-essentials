@@ -1250,7 +1250,7 @@ ItemHandlers::UseOnPokemon.add(:ROTOMCATALOG, proc { |item, qty, pkmn, scene|
   if new_form == pkmn.form
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
-  elsif new_form > 0 && new_form < choices.length - 1
+  elsif new_form >= 0 && new_form < choices.length - 1
     pkmn.setForm(new_form) do
       scene.pbRefresh
       scene.pbDisplay(_INTL("{1} transformed!", pkmn.name))

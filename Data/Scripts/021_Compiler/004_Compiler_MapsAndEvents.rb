@@ -309,7 +309,7 @@ module Compiler
     end
 
     def mapFilename(mapID)
-      return sprintf("Data/map%03d.rxdata", mapID)
+      return sprintf("Data/Map%03d.rxdata", mapID)
     end
 
     def getMap(mapID)
