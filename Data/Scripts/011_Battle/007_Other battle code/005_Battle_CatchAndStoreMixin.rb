@@ -17,9 +17,10 @@ module Battle::CatchAndStoreMixin
               _INTL("Send to a Box"),
               _INTL("See {1}'s summary", pkmn.name),
               _INTL("Check party")]
-      cmds.delete_at(1) if @sendToBoxes == 2
+      cmds.delete_at(1) if @sendToBoxes == 2   # Remove "Send to a Box" option
       loop do
         cmd = pbShowCommands(_INTL("Where do you want to send {1} to?", pkmn.name), cmds, 99)
+        next if cmd == 99 && @sendToBoxes == 2   # Can't cancel if must add to party
         break if cmd == 99   # Cancelling = send to a Box
         cmd += 1 if cmd >= 1 && @sendToBoxes == 2
         case cmd

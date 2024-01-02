@@ -80,7 +80,7 @@
     // Index all accessible assets via their lower case path (emulates Windows
     // case insensitivity).
     //
-    // "pathCache": true,
+    "pathCache": false,
 
     //==========================================================================
     // Window size, scaling, rendering and frame rate.

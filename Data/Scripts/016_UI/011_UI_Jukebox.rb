@@ -106,10 +106,12 @@ class PokemonJukeboxScreen
         pbPlayDecisionSE
         files = []
         Dir.chdir("Audio/BGM/") do
-          Dir.glob("*.ogg") { |f| files.push(f) }
           Dir.glob("*.wav") { |f| files.push(f) }
-          Dir.glob("*.mid") { |f| files.push(f) }
+          Dir.glob("*.ogg") { |f| files.push(f) }
+          Dir.glob("*.mp3") { |f| files.push(f) }
           Dir.glob("*.midi") { |f| files.push(f) }
+          Dir.glob("*.mid") { |f| files.push(f) }
+          Dir.glob("*.wma") { |f| files.push(f) }
         end
         files.map! { |f| File.basename(f, ".*") }
         files.uniq!

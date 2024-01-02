@@ -120,7 +120,7 @@ module Settings
   # End of battle
   #-----------------------------------------------------------------------------
 
-  # The Game Switch which, whie ON, prevents the player from losing money if
+  # The Game Switch which, while ON, prevents the player from losing money if
   # they lose a battle (they can still gain money from trainers for winning).
   NO_MONEY_LOSS                       = 33
   # Whether party Pokémon check whether they can evolve after all battles
