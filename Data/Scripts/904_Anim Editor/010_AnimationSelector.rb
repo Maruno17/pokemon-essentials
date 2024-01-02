@@ -2,6 +2,8 @@
 #
 #===============================================================================
 class AnimationEditor::AnimationSelector
+  BORDER_THICKNESS       = 4
+
   QUIT_BUTTON_WIDTH      = 80
   QUIT_BUTTON_HEIGHT     = 30
 
@@ -25,11 +27,23 @@ class AnimationEditor::AnimationSelector
   ACTION_BUTTON_X        = ANIMATIONS_LIST_X + ANIMATIONS_LIST_WIDTH + 4
   ACTION_BUTTON_Y        = TYPE_BUTTONS_Y + ((ANIMATIONS_LIST_HEIGHT - (ACTION_BUTTON_HEIGHT * 3)) / 2) + 4
 
+  # Pop-up window
+  MESSAGE_BOX_WIDTH         = AnimationEditor::WINDOW_WIDTH * 3 / 4
+  MESSAGE_BOX_HEIGHT        = 160
+  MESSAGE_BOX_BUTTON_WIDTH  = 150
+  MESSAGE_BOX_BUTTON_HEIGHT = 32
+  MESSAGE_BOX_SPACING       = 16
+
   def initialize
     generate_lists
     @viewport = Viewport.new(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
     @viewport.z = 99999
+    @pop_up_viewport = Viewport.new(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
+    @pop_up_viewport.z = @viewport.z + 50
     @screen_bitmap = BitmapSprite.new(AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, @viewport)
+    @pop_up_bg_bitmap = BitmapSprite.new(AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, @pop_up_viewport)
+    @pop_up_bg_bitmap.z = -100
+    @pop_up_bg_bitmap.visible = false
     draw_editor_background
     @animation_type = 0   # 0=move, 1=common
     @quit = false
@@ -39,8 +53,10 @@ class AnimationEditor::AnimationSelector
 
   def dispose
     @screen_bitmap.dispose
+    @pop_up_bg_bitmap.dispose
     @components.dispose
     @viewport.dispose
+    @pop_up_viewport.dispose
   end
 
   LABEL_OFFSET_X = -4
@@ -104,6 +120,80 @@ class AnimationEditor::AnimationSelector
     areas.each do |area|
       @screen_bitmap.bitmap.outline_rect(area[0] - 2, area[1] - 2, area[2] + 4, area[3] + 4, Color.black)
     end
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def create_pop_up_window(width, height)
+    ret = BitmapSprite.new(width + (BORDER_THICKNESS * 2),
+                           height + (BORDER_THICKNESS * 2), @pop_up_viewport)
+    ret.x = (AnimationEditor::WINDOW_WIDTH - ret.width) / 2
+    ret.y = (AnimationEditor::WINDOW_HEIGHT - ret.height) / 2
+    ret.z = -1
+    ret.bitmap.font.color = Color.black
+    ret.bitmap.font.size = 18
+    # Draw pop-up box border
+    ret.bitmap.border_rect(BORDER_THICKNESS, BORDER_THICKNESS, width, height,
+                           BORDER_THICKNESS, Color.white, Color.black)
+    # Fill pop-up box with white
+    ret.bitmap.fill_rect(BORDER_THICKNESS, BORDER_THICKNESS, width, height, Color.white)
+    return ret
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def message(text, *options)
+    @pop_up_bg_bitmap.visible = true
+    msg_bitmap = create_pop_up_window(MESSAGE_BOX_WIDTH, MESSAGE_BOX_HEIGHT)
+    # Draw text
+    text_size = msg_bitmap.bitmap.text_size(text)
+    msg_bitmap.bitmap.draw_text(0, (msg_bitmap.height / 2) - MESSAGE_BOX_BUTTON_HEIGHT,
+                                msg_bitmap.width, text_size.height, text, 1)
+    # Create buttons
+    buttons = []
+    options.each_with_index do |option, i|
+      btn = UIControls::Button.new(MESSAGE_BOX_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, @pop_up_viewport, option[1])
+      btn.x = msg_bitmap.x + (msg_bitmap.width - (MESSAGE_BOX_BUTTON_WIDTH * options.length)) / 2
+      btn.x += MESSAGE_BOX_BUTTON_WIDTH * i
+      btn.y = msg_bitmap.y + msg_bitmap.height - MESSAGE_BOX_BUTTON_HEIGHT - MESSAGE_BOX_SPACING
+      btn.set_fixed_size
+      btn.set_interactive_rects
+      buttons.push([option[0], btn])
+    end
+    # Interaction loop
+    ret = nil
+    captured = nil
+    loop do
+      Graphics.update
+      Input.update
+      if captured
+        captured.update
+        captured = nil if !captured.busy?
+      else
+        buttons.each do |btn|
+          btn[1].update
+          captured = btn[1] if btn[1].busy?
+        end
+      end
+      buttons.each do |btn|
+        next if !btn[1].changed?
+        ret = btn[0]
+        break
+      end
+      ret = :cancel if Input.trigger?(Input::BACK)
+      break if ret
+      buttons.each { |btn| btn[1].repaint }
+    end
+    # Dispose and return
+    buttons.each { |btn| btn[1].dispose }
+    buttons.clear
+    msg_bitmap.dispose
+    @pop_up_bg_bitmap.visible = false
+    return ret
+  end
+
+  def confirm_message(text)
+    return message(text, [:yes, _INTL("Yes")], [:no, _INTL("No")]) == :yes
   end
 
   #-----------------------------------------------------------------------------
@@ -190,11 +280,11 @@ class AnimationEditor::AnimationSelector
       @quit = true
       return   # Don't need to refresh the screen
     when :new
-      # TODO: New animation. Create a new animation hash with some default
-      #       contents, go into the edit screen and immediately open the
-      #       animation properties pop-up window. Use the first available ID
-      #       number from GameData::Animation for it. Don't register the
-      #       animation hash here, though.
+      new_anim = GameData::Animation.new_hash(@animation_type, @components.get_control(:moves_list).value)
+      new_id = GameData::Animation.keys.max + 1
+      screen = AnimationEditor.new(new_id, new_anim)
+      screen.run
+      generate_lists
     when :moves
       @animation_type = 0
       @components.get_control(:moves_list).selected = -1
@@ -213,12 +303,24 @@ class AnimationEditor::AnimationSelector
     when :copy
       anim_id = selected_animation_id
       if anim_id
-        # TODO: Copy animation. Append "(copy)" to its name.
+        new_anim = GameData::Animation.get(anim_id).clone_as_hash
+        new_anim[:name] += " " + _INTL("(copy)") if !nil_or_empty?(new_anim[:name])
+        new_id = GameData::Animation.keys.max + 1
+        screen = AnimationEditor.new(new_id, new_anim)
+        screen.run
+        generate_lists
       end
     when :delete
       anim_id = selected_animation_id
-      if anim_id
-        # TODO: Delete animation. Ask the user if they're sure.
+      if anim_id && confirm_message(_INTL("Are you sure you want to delete this animation?"))
+        pbs_path = GameData::Animation.get(anim_id).pbs_path
+        GameData::Animation::DATA.delete(anim_id)
+        if GameData::Animation::DATA.any? { |_key, anim| anim.pbs_path == pbs_path }
+          Compiler.write_battle_animation_file(pbs_path)
+        elsif FileTest.exist?("PBS/Animations/" + pbs_path + ".txt")
+          File.delete("PBS/Animations/" + pbs_path + ".txt")
+        end
+        generate_lists
       end
     end
     refresh

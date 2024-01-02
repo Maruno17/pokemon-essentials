@@ -159,6 +159,25 @@ module GameData
       DATA[(id_num >= 0) ? id_num : DATA.keys.length] = self.new(hash)
     end
 
+    def self.new_hash(anim_type = 0, move = nil)
+      ret = {}
+      ret[:type]      = (anim_type == 0) ? :move : :common
+      ret[:move]      = (anim_type == 0) ? "STRUGGLE" : "Shiny"
+      ret[:move]      = move if !move.nil?
+      ret[:version]   = 0
+      ret[:name]      = _INTL("New animation")
+      ret[:no_target] = false
+      ret[:ignore]    = false
+      ret[:particles] = [
+        {:name => "User", :focus => :user, :graphic => "USER"},
+        {:name => "Target", :focus => :target, :graphic => "TARGET"},
+        {:name => "SE"}
+      ]
+      ret[:flags]     = []
+      ret[:pbs_path]  = "New animation"
+      return ret
+    end
+
     def initialize(hash)
       # NOTE: hash has an :id entry, but it's unused here.
       @type       = hash[:type]
@@ -180,6 +199,8 @@ module GameData
       ret[:move] = @move
       ret[:version] = @version
       ret[:name] = @name
+      ret[:no_target] = @no_target
+      ret[:ignore] = @ignore
       ret[:particles] = []   # Clone the @particles array, which is nested hashes and arrays
       @particles.each do |particle|
         new_p = {}
