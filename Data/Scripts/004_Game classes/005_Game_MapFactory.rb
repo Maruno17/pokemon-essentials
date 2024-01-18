@@ -93,7 +93,7 @@ class PokemonMapFactory
   # Detects whether the player has moved onto a connected map, and if so, causes
   # their transfer to that map.
   def setCurrentMap
-    return if $game_player.moving?
+    return if $game_player.moving? || $game_player.jumping?
     return if $game_map.valid?($game_player.x, $game_player.y)
     newmap = getNewMap($game_player.x, $game_player.y)
     return if !newmap

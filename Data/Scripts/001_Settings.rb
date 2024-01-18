@@ -255,6 +255,9 @@ module Settings
   # from a Mart at once (true), or 1 Premier Ball for buying 10+ regular Poké
   # Balls (false).
   MORE_BONUS_PREMIER_BALLS             = (MECHANICS_GENERATION >= 8)
+  # The default sell price of an item to a Poké Mart is its buy price divided by
+  # this number.
+  ITEM_SELL_PRICE_DIVISOR              = (MECHANICS_GENERATION >= 9) ? 4 : 2
 
   #-----------------------------------------------------------------------------
   # Bag

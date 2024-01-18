@@ -181,6 +181,7 @@ class Battle
     battler = @battlers[idxBattler]
     return if !battler || !battler.pokemon || battler.fainted?
     return if !battler.hasPrimal? || battler.primal?
+    $stats.primal_reversion_count += 1 if battler.pbOwnedByPlayer?
     if battler.isSpecies?(:KYOGRE)
       pbCommonAnimation("PrimalKyogre", battler)
     elsif battler.isSpecies?(:GROUDON)

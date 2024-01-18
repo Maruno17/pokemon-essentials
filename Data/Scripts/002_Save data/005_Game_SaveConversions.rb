@@ -418,3 +418,15 @@ SaveData.register_conversion(:v21_add_bump_stat) do
     end
   end
 end
+
+#===============================================================================
+
+SaveData.register_conversion(:v22_add_primal_reversion_stat) do
+  essentials_version 22
+  display_title "Adding a primal reversion stat"
+  to_value :stats do |stats|
+    stats.instance_eval do
+      @primal_reversion_count = 0 if !@primal_reversion_count
+    end
+  end
+end

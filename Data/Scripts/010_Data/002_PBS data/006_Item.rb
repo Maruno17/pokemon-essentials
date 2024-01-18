@@ -59,7 +59,7 @@ module GameData
         ["PortionNamePlural", ItemNameProperty,                        _INTL("Name of 2 or more portions of this item as displayed by the game.")],
         ["Pocket",            PocketProperty,                          _INTL("Pocket in the Bag where this item is stored.")],
         ["Price",             LimitProperty.new(Settings::MAX_MONEY),  _INTL("Purchase price of this item.")],
-        ["SellPrice",         LimitProperty2.new(Settings::MAX_MONEY), _INTL("Sell price of this item. If blank, is half the purchase price.")],
+        ["SellPrice",         LimitProperty2.new(Settings::MAX_MONEY), _INTL("Sell price of this item. If blank, is usually half the purchase price.")],
         ["BPPrice",           LimitProperty.new(Settings::MAX_BATTLE_POINTS), _INTL("Purchase price of this item in Battle Points (BP).")],
         ["FieldUse",          EnumProperty.new(field_use_array),       _INTL("How this item can be used outside of battle.")],
         ["BattleUse",         EnumProperty.new(battle_use_array),      _INTL("How this item can be used within a battle.")],
@@ -124,7 +124,7 @@ module GameData
       @real_portion_name_plural = hash[:real_portion_name_plural]
       @pocket                   = hash[:pocket]           || 1
       @price                    = hash[:price]            || 0
-      @sell_price               = hash[:sell_price]       || (@price / 2)
+      @sell_price               = hash[:sell_price]       || (@price / Settings::ITEM_SELL_PRICE_DIVISOR)
       @bp_price                 = hash[:bp_price]         || 1
       @field_use                = hash[:field_use]        || 0
       @battle_use               = hash[:battle_use]       || 0
@@ -255,7 +255,7 @@ module GameData
       ret = __orig__get_property_for_PBS(key)
       case key
       when "SellPrice"
-        ret = nil if ret == @price / 2
+        ret = nil if ret == @price / Settings::ITEM_SELL_PRICE_DIVISOR
       when "BPPrice"
         ret = nil if ret == 1
       when "FieldUse", "BattleUse"
