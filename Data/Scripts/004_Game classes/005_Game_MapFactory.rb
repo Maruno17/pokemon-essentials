@@ -154,14 +154,14 @@ class PokemonMapFactory
   end
 
   # Similar to Game_Player#passable?, but supports map connections
-  def isPassableFromEdge?(x, y)
+  def isPassableFromEdge?(x, y, dir = 0)
     return true if $game_map.valid?(x, y)
     newmap = getNewMap(x, y, $game_map.map_id)
     return false if !newmap
-    return isPassable?(newmap[0].map_id, newmap[1], newmap[2])
+    return isPassable?(newmap[0].map_id, newmap[1], newmap[2], dir)
   end
 
-  def isPassable?(mapID, x, y, thisEvent = nil)
+  def isPassable?(mapID, x, y, dir = 0, thisEvent = nil)
     thisEvent = $game_player if !thisEvent
     map = getMapNoAdd(mapID)
     return false if !map
@@ -169,7 +169,7 @@ class PokemonMapFactory
     return true if thisEvent.through
     # Check passability of tile
     return true if $DEBUG && Input.press?(Input::CTRL) && thisEvent.is_a?(Game_Player)
-    return false if !map.passable?(x, y, 0, thisEvent)
+    return false if !map.passable?(x, y, dir, thisEvent)
     # Check passability of event(s) in that spot
     map.events.each_value do |event|
       next if event == thisEvent || !event.at_coordinate?(x, y)

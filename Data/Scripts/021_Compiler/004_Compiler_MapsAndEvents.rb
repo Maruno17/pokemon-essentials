@@ -922,7 +922,7 @@ module Compiler
     if thisEvent.pages[0].graphic.character_name == "" &&
        thisEvent.pages[0].list.length <= 12 &&
        thisEvent.pages[0].list.any? { |cmd| cmd.code == 201 } &&   # Transfer Player
-#       mapData.isPassable?(mapID,thisEvent.x,thisEvent.y+1) &&
+#       mapData.isPassable?(mapID, thisEvent.x, thisEvent.y + 1) &&
        mapData.isPassable?(mapID, thisEvent.x, thisEvent.y) &&
        !mapData.isPassable?(mapID, thisEvent.x - 1, thisEvent.y) &&
        !mapData.isPassable?(mapID, thisEvent.x + 1, thisEvent.y) &&

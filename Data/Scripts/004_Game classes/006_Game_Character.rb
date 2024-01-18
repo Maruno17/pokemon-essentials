@@ -234,17 +234,17 @@ class Game_Character
   #=============================================================================
   # Passability
   #=============================================================================
-  def passable?(x, y, d, strict = false)
-    new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
-    new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
+  def passable?(x, y, dir, strict = false)
+    new_x = x + (dir == 6 ? 1 : dir == 4 ? -1 : 0)
+    new_y = y + (dir == 2 ? 1 : dir == 8 ? -1 : 0)
     return false unless self.map.valid?(new_x, new_y)
     return true if @through
     if strict
-      return false unless self.map.passableStrict?(x, y, d, self)
-      return false unless self.map.passableStrict?(new_x, new_y, 10 - d, self)
+      return false unless self.map.passableStrict?(x, y, dir, self)
+      return false unless self.map.passableStrict?(new_x, new_y, 10 - dir, self)
     else
-      return false unless self.map.passable?(x, y, d, self)
-      return false unless self.map.passable?(new_x, new_y, 10 - d, self)
+      return false unless self.map.passable?(x, y, dir, self)
+      return false unless self.map.passable?(new_x, new_y, 10 - dir, self)
     end
     self.map.events.each_value do |event|
       next if self == event || !event.at_coordinate?(new_x, new_y) || event.through
