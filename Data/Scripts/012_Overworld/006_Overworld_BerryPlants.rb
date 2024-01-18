@@ -268,9 +268,9 @@ class BerryPlantSprite
       end
       if berry_plant.new_mechanics && @old_stage != berry_plant.growth_stage &&
          @old_stage > 0 && berry_plant.growth_stage <= GameData::BerryPlant::NUMBER_OF_GROWTH_STAGES + 1
-        spriteset = $scene.spriteset(@map.map_id)
-        spriteset&.addUserAnimation(Settings::PLANT_SPARKLE_ANIMATION_ID,
-                                    @event.x, @event.y, false, 1)
+        @event.animation_id = Settings::PLANT_SPARKLE_ANIMATION_ID
+        @event.animation_height = 1
+        @event.animation_regular_tone = true
       end
     end
     @old_stage = berry_plant.growth_stage

@@ -176,9 +176,9 @@ class Sprite_Character < RPG::Sprite
     self.z = @character.screen_z(@ch)
     self.opacity = @character.opacity
     self.blend_type = @character.blend_type
-    if @character.animation_id != 0
+    if @character.animation_id && @character.animation_id != 0
       animation = $data_animations[@character.animation_id]
-      animation(animation, true)
+      animation(animation, true, @character.animation_height || 3, @character.animation_regular_tone || false)
       @character.animation_id = 0
     end
     @reflection&.update

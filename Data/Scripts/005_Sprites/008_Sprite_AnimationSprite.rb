@@ -28,12 +28,13 @@ class SpriteAnimation
     dispose_loop_animation
   end
 
-  def animation(animation, hit, height = 3)
+  def animation(animation, hit, height = 3, no_tone = false)
     dispose_animation
     @_animation = animation
     return if @_animation.nil?
     @_animation_hit      = hit
     @_animation_height   = height
+    @_animation_no_tone  = no_tone
     @_animation_duration = @_animation.frame_max
     @_animation_index    = -1
     fr = 20
@@ -207,7 +208,7 @@ class SpriteAnimation
       sprite.zoom_y     = cell_data[i, 3] / 100.0
       sprite.angle      = cell_data[i, 4]
       sprite.mirror     = (cell_data[i, 5] == 1)
-      sprite.tone       = self.tone
+      sprite.tone       = self.tone if !@_animation_no_tone
       sprite.opacity    = cell_data[i, 6] * self.opacity / 255.0
       sprite.blend_type = cell_data[i, 7]
     end
@@ -301,6 +302,9 @@ class Spriteset_Map
     _animationSprite_initialize(map)
   end
 
+  # Used to display animations that remain in the same location on the map.
+  # Typically for grass rustling and dust clouds, and other animations that
+  # aren't relative to an event.
   def addUserAnimation(animID, x, y, tinting = false, height = 3)
     sprite = AnimationContainerSprite.new(animID, self.map, x, y, @@viewport1, tinting, height)
     addUserSprite(sprite)

@@ -191,25 +191,21 @@ def pbTimeEventValid(variableNumber)
   return ret
 end
 
-def pbExclaim(event, id = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
-  if event.is_a?(Array)
-    sprite = nil
-    done = []
-    event.each do |i|
-      next if done.include?(i.id)
-      spriteset = $scene.spriteset(i.map_id)
-      sprite ||= spriteset&.addUserAnimation(id, i.x, i.y, tinting, 2)
-      done.push(i.id)
-    end
-  else
-    spriteset = $scene.spriteset(event.map_id)
-    sprite = spriteset&.addUserAnimation(id, event.x, event.y, tinting, 2)
+def pbExclaim(events, anim = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
+  events = [events] if !events.is_a?(Array)
+  events.each do |ev|
+    ev.animation_id = anim
+    ev.animation_height = 3
+    ev.animation_regular_tone = !tinting
   end
-  until sprite.disposed?
-    Graphics.update
-    Input.update
-    pbUpdateSceneMap
+  anim_data = $data_animations[anim]
+  frame_count = anim_data.frame_max
+  frame_rate = 20
+  if anim_data.name[/\[\s*(\d+?)\s*\]\s*$/]
+    frame_rate = $~[1].to_i
   end
+  pbWait(frame_count / frame_rate.to_f)
+  events.each { |i| i.animation_id = 0 }
 end
 
 def pbNoticePlayer(event, always_show_exclaim = false)

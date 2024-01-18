@@ -22,7 +22,9 @@ class Game_Character
   attr_accessor :lock_pattern
   attr_reader   :move_route_forcing
   attr_accessor :through
-  attr_accessor :animation_id
+  attr_reader   :animation_id
+  attr_accessor :animation_height
+  attr_accessor :animation_regular_tone
   attr_accessor :transparent
   attr_reader   :move_speed
   attr_reader   :jump_speed
@@ -54,7 +56,7 @@ class Game_Character
     @lock_pattern              = false
     @move_route_forcing        = false
     @through                   = false
-    @animation_id              = 0
+    animation_id               = 0
     @transparent               = false
     @original_direction        = 2
     @original_pattern          = 0
@@ -84,6 +86,14 @@ class Game_Character
     @moveto_happened           = false
     @locked                    = false
     @prelock_direction         = 0
+  end
+
+  def animation_id=(value)
+    @animation_id = value
+    if value == 0
+      @animation_height = 3
+      @animation_regular_tone = false
+    end
   end
 
   def x_offset; return @x_offset || 0; end

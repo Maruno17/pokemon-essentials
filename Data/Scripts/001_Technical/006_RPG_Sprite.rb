@@ -49,9 +49,9 @@ module RPG
       array.push(anim)
     end
 
-    def animation(animation, hit, height = 3)
+    def animation(animation, hit, height = 3, no_tone = false)
       anim = SpriteAnimation.new(self)
-      anim.animation(animation, hit, height)
+      anim.animation(animation, hit, height, no_tone)
       pushAnimation(@animations, anim)
     end
 
