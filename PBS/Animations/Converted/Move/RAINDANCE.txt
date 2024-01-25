@@ -3,16 +3,18 @@
 [Move,RAINDANCE]
 Name = RAINDANCE
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 0,2
     SetX = 0,197
     SetY = 0,25
+    SetZ = 0,27
     SetX = 1,72
     SetY = 1,49
     SetX = 2,60
@@ -32,9 +34,11 @@ Name = RAINDANCE
     SetY = 9,55
 <Particle 3>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 0,2
     SetX = 0,275
     SetY = 0,47
+    SetZ = 0,28
     SetX = 1,229
     SetY = 1,216
     SetX = 2,193
@@ -55,9 +59,11 @@ Name = RAINDANCE
     SetY = 9,148
 <Particle 4>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 0,2
     SetX = 0,355
     SetY = 0,51
+    SetZ = 0,29
     SetX = 1,109
     SetY = 1,217
     SetX = 2,265
@@ -78,9 +84,11 @@ Name = RAINDANCE
     SetY = 9,274
 <Particle 5>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 0,2
     SetX = 0,450
     SetY = 0,50
+    SetZ = 0,30
     SetX = 1,223
     SetY = 1,110
     SetX = 2,228
@@ -101,9 +109,11 @@ Name = RAINDANCE
     SetY = 9,243
 <Particle 6>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 0,2
     SetX = 0,83
     SetY = 0,81
+    SetZ = 0,31
     SetX = 1,399
     SetY = 1,120
     SetX = 2,350
@@ -124,9 +134,11 @@ Name = RAINDANCE
     SetY = 9,238
 <Particle 7>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 0,2
     SetX = 0,231
     SetY = 0,170
+    SetZ = 0,32
     SetX = 1,480
     SetY = 1,83
     SetX = 2,399
@@ -147,9 +159,11 @@ Name = RAINDANCE
     SetY = 9,245
 <Particle 8>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 0,2
     SetX = 0,352
     SetY = 0,212
+    SetZ = 0,33
     SetX = 1,362
     SetY = 1,63
     SetX = 2,488
@@ -170,9 +184,11 @@ Name = RAINDANCE
     SetY = 9,205
 <Particle 9>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 0,2
     SetX = 0,467
     SetY = 0,254
+    SetZ = 0,34
     SetX = 1,376
     SetY = 1,192
     SetX = 2,434
@@ -193,9 +209,11 @@ Name = RAINDANCE
     SetY = 9,25
 <Particle 10>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 1,2
     SetX = 1,482
     SetY = 1,244
+    SetZ = 1,35
     SetX = 2,121
     SetY = 2,249
     SetX = 3,382
@@ -204,36 +222,78 @@ Name = RAINDANCE
     SetY = 4,150
     SetX = 5,422
     SetY = 5,252
-    SetX = 7,471
-    SetY = 7,126
-    SetX = 9,247
-    SetY = 9,72
+    SetVisible = 6,false
 <Particle 11>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 2,2
     SetX = 2,27
     SetY = 2,241
+    SetZ = 2,36
     SetX = 3,88
     SetY = 3,177
     SetX = 4,337
     SetY = 4,243
     SetX = 5,319
     SetY = 5,241
-    SetX = 7,363
-    SetY = 7,237
-    SetX = 9,365
-    SetY = 9,42
+    SetVisible = 6,false
 <Particle 12>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 4,2
     SetX = 4,409
     SetY = 4,203
-    SetX = 7,443
-    SetY = 7,194
-    SetX = 9,479
-    SetY = 9,180
+    SetZ = 4,37
+    SetVisible = 5,false
 <Particle 13>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
+    SetFrame = 7,2
+    SetX = 7,471
+    SetY = 7,126
+    SetZ = 7,35
+    SetVisible = 8,false
+<Particle 14>
+    Graphic = weather
+    Focus = Foreground
+    SetFrame = 7,2
+    SetX = 7,363
+    SetY = 7,237
+    SetZ = 7,36
+    SetVisible = 8,false
+<Particle 15>
+    Graphic = weather
+    Focus = Foreground
+    SetFrame = 7,2
+    SetX = 7,443
+    SetY = 7,194
+    SetZ = 7,37
+    SetVisible = 8,false
+<Particle 16>
+    Graphic = weather
+    Focus = Foreground
+    SetFrame = 9,2
+    SetX = 9,247
+    SetY = 9,72
+    SetZ = 9,35
+<Particle 17>
+    Graphic = weather
+    Focus = Foreground
+    SetFrame = 9,2
+    SetX = 9,365
+    SetY = 9,42
+    SetZ = 9,36
+<Particle 18>
+    Graphic = weather
+    Focus = Foreground
+    SetFrame = 9,2
+    SetX = 9,479
+    SetY = 9,180
+    SetZ = 9,37
+<Particle 19>
+    Graphic = weather
+    Focus = Foreground
+    SetFrame = 9,2
     SetX = 9,474
     SetY = 9,41
+    SetZ = 9,38

@@ -3,22 +3,28 @@
 [Move,SCRATCH]
 Name = SCRATCH
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = scratchbattle
     Focus = Target
-    SetX = 1,399
-    SetY = 1,74
-    SetX = 2,383
-    SetY = 2,90
-    SetX = 3,367
-    SetY = 3,106
-    SetX = 4,351
-    SetY = 4,122
-    SetY = 5,138
+    SetX = 1,15
+    SetY = 1,-22
+    SetZ = 1,27
+    SetFrame = 2,1
+    SetX = 2,-1
+    SetY = 2,-6
+    SetFrame = 3,2
+    SetX = 3,-17
+    SetY = 3,10
+    SetFrame = 4,3
+    SetX = 4,-33
+    SetY = 4,26
+    SetFrame = 5,4
+    SetY = 5,42
+    SetVisible = 6,false
 <SE>
     Play = 0,Slash10,80

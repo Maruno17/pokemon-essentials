@@ -3,19 +3,27 @@
 [Move,POISONTAIL]
 Name = POISONTAIL
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = firepoison
     Focus = Target
-    SetX = 0,392
-    SetY = 0,94
-    SetX = 1,384
-    SetY = 2,86
-    SetX = 4,376
+    SetFrame = 0,8
+    SetX = 0,8
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,9
+    SetX = 1,0
+    SetFrame = 2,10
+    SetY = 2,-10
+    SetFrame = 3,11
+    SetFrame = 4,12
+    SetX = 4,-8
+    SetFrame = 5,13
+    SetFrame = 6,14
     SetZoomX = 7,110
     SetZoomY = 7,110
     SetOpacity = 7,100

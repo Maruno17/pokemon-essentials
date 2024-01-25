@@ -3,31 +3,45 @@
 [Move,FURYATTACK]
 Name = FURYATTACK
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 0,128
-    SetY = 0,236
-    SetX = 1,217
-    SetY = 1,179
-    SetX = 2,294
-    SetY = 2,129
-    SetX = 3,358
-    SetY = 3,110
+    SetFrame = 0,5
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,69
+    SetY = 1,-70
+    SetFrame = 2,7
+    SetX = 2,129
+    SetY = 2,-148
+    SetFrame = 3,0
+    SetX = 3,179
+    SetY = 3,-178
+    SetFrame = 4,1
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
 <Particle 3>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 3,128
-    SetY = 3,236
-    SetX = 4,199
-    SetY = 4,200
-    SetX = 5,264
-    SetY = 5,146
+    SetFrame = 3,5
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetFrame = 4,6
+    SetX = 4,55
+    SetY = 4,-37
+    SetFrame = 5,7
+    SetX = 5,106
+    SetY = 5,-121
+    SetVisible = 6,false
 <SE>
     Play = 3,normaldamage,80
     Play = 5,normaldamage,80
@@ -35,31 +49,45 @@ Name = FURYATTACK
 [Move,FURYATTACK,1]
 Name = Fury Attack hit 2
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 3,128
-    SetY = 3,236
-    SetX = 4,199
-    SetY = 4,200
-    SetX = 5,264
-    SetY = 5,146
+    SetFrame = 3,5
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetFrame = 4,6
+    SetX = 4,55
+    SetY = 4,-37
+    SetFrame = 5,7
+    SetX = 5,106
+    SetY = 5,-121
+    SetVisible = 6,false
 <Particle 2>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 0,128
-    SetY = 0,236
-    SetX = 1,217
-    SetY = 1,179
-    SetX = 2,294
-    SetY = 2,129
-    SetX = 3,358
-    SetY = 3,110
+    SetFrame = 0,5
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,69
+    SetY = 1,-70
+    SetFrame = 2,7
+    SetX = 2,129
+    SetY = 2,-148
+    SetFrame = 3,0
+    SetX = 3,179
+    SetY = 3,-178
+    SetFrame = 4,1
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
 <SE>
     Play = 3,normaldamage,80
     Play = 5,normaldamage,80
@@ -67,31 +95,45 @@ Name = Fury Attack hit 2
 [Move,FURYATTACK,2]
 Name = Fury Attack hit 3
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 0,128
-    SetY = 0,236
-    SetX = 1,217
-    SetY = 1,179
-    SetX = 2,294
-    SetY = 2,129
-    SetX = 3,358
-    SetY = 3,110
+    SetFrame = 0,5
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,69
+    SetY = 1,-70
+    SetFrame = 2,7
+    SetX = 2,129
+    SetY = 2,-148
+    SetFrame = 3,0
+    SetX = 3,179
+    SetY = 3,-178
+    SetFrame = 4,1
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
 <Particle 3>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 3,128
-    SetY = 3,236
-    SetX = 4,199
-    SetY = 4,200
-    SetX = 5,264
-    SetY = 5,146
+    SetFrame = 3,5
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetFrame = 4,6
+    SetX = 4,55
+    SetY = 4,-37
+    SetFrame = 5,7
+    SetX = 5,106
+    SetY = 5,-121
+    SetVisible = 6,false
 <SE>
     Play = 3,normaldamage,80
     Play = 5,normaldamage,80
@@ -99,31 +141,45 @@ Name = Fury Attack hit 3
 [Move,FURYATTACK,3]
 Name = Fury Attack hit 4
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 3,128
-    SetY = 3,236
-    SetX = 4,199
-    SetY = 4,200
-    SetX = 5,264
-    SetY = 5,146
+    SetFrame = 3,5
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetFrame = 4,6
+    SetX = 4,55
+    SetY = 4,-37
+    SetFrame = 5,7
+    SetX = 5,106
+    SetY = 5,-121
+    SetVisible = 6,false
 <Particle 2>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 0,128
-    SetY = 0,236
-    SetX = 1,217
-    SetY = 1,179
-    SetX = 2,294
-    SetY = 2,129
-    SetX = 3,358
-    SetY = 3,110
+    SetFrame = 0,5
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,69
+    SetY = 1,-70
+    SetFrame = 2,7
+    SetX = 2,129
+    SetY = 2,-148
+    SetFrame = 3,0
+    SetX = 3,179
+    SetY = 3,-178
+    SetFrame = 4,1
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
 <SE>
     Play = 3,normaldamage,80
     Play = 5,normaldamage,80
@@ -131,31 +187,45 @@ Name = Fury Attack hit 4
 [Move,FURYATTACK,4]
 Name = Fury Attack hit 5
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 0,128
-    SetY = 0,236
-    SetX = 1,217
-    SetY = 1,179
-    SetX = 2,294
-    SetY = 2,129
-    SetX = 3,358
-    SetY = 3,110
+    SetFrame = 0,5
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,69
+    SetY = 1,-70
+    SetFrame = 2,7
+    SetX = 2,129
+    SetY = 2,-148
+    SetFrame = 3,0
+    SetX = 3,179
+    SetY = 3,-178
+    SetFrame = 4,1
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
 <Particle 3>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 3,128
-    SetY = 3,236
-    SetX = 4,199
-    SetY = 4,200
-    SetX = 5,264
-    SetY = 5,146
+    SetFrame = 3,5
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetFrame = 4,6
+    SetX = 4,55
+    SetY = 4,-37
+    SetFrame = 5,7
+    SetX = 5,106
+    SetY = 5,-121
+    SetVisible = 6,false
 <SE>
     Play = 3,normaldamage,80
     Play = 5,normaldamage,80
@@ -163,34 +233,58 @@ Name = Fury Attack hit 5
 [OppMove,FURYATTACK]
 Name = FURYATTACK
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = 003-Attack01
+    Focus = User
+    SetX = 3,1
+    SetY = 3,18
+    SetZ = 3,27
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 3,332
-    SetY = 3,127
+    SetFrame = 3,5
+    SetX = 3,159
+    SetY = 3,-151
+    SetZ = 3,28
     SetAngle = 3,180
-    SetX = 4,283
-    SetY = 4,158
-    SetX = 5,220
-    SetY = 5,197
+    SetFrame = 4,6
+    SetX = 4,121
+    SetY = 4,-103
+    SetFrame = 5,7
+    SetX = 5,71
+    SetY = 5,-42
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = 003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 4,1
+    SetX = 4,0
+    SetY = 4,28
+    SetZ = 4,27
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
 <Particle 2>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 0,338
-    SetY = 0,128
+    SetFrame = 0,5
+    SetX = 0,164
+    SetY = 0,-150
+    SetZ = 0,27
     SetAngle = 0,180
-    SetX = 1,288
-    SetY = 1,155
-    SetX = 2,213
-    SetY = 2,203
-    SetX = 3,129
-    SetY = 3,242
-    SetAngle = 3,0
+    SetFrame = 1,6
+    SetX = 1,125
+    SetY = 1,-107
+    SetFrame = 2,7
+    SetX = 2,66
+    SetY = 2,-32
+    SetVisible = 3,false
 <SE>
     Play = 3,normaldamage,80
     Play = 5,normaldamage,80
@@ -198,34 +292,58 @@ Name = FURYATTACK
 [OppMove,FURYATTACK,1]
 Name = Fury Attack hit 2 opp
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 0,338
-    SetY = 0,128
+    SetFrame = 0,5
+    SetX = 0,164
+    SetY = 0,-150
+    SetZ = 0,27
     SetAngle = 0,180
-    SetX = 1,288
-    SetY = 1,155
-    SetX = 2,213
-    SetY = 2,203
-    SetX = 3,129
-    SetY = 3,242
-    SetAngle = 3,0
+    SetFrame = 1,6
+    SetX = 1,125
+    SetY = 1,-107
+    SetFrame = 2,7
+    SetX = 2,66
+    SetY = 2,-32
+    SetVisible = 3,false
 <Particle 3>
     Graphic = 003-Attack01
+    Focus = User
+    SetX = 3,1
+    SetY = 3,18
+    SetZ = 3,27
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 3,332
-    SetY = 3,127
+    SetFrame = 3,5
+    SetX = 3,159
+    SetY = 3,-151
+    SetZ = 3,28
     SetAngle = 3,180
-    SetX = 4,283
-    SetY = 4,158
-    SetX = 5,220
-    SetY = 5,197
+    SetFrame = 4,6
+    SetX = 4,121
+    SetY = 4,-103
+    SetFrame = 5,7
+    SetX = 5,71
+    SetY = 5,-42
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = 003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 4,1
+    SetX = 4,0
+    SetY = 4,28
+    SetZ = 4,27
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
 <SE>
     Play = 3,normaldamage,80
     Play = 5,normaldamage,80
@@ -233,34 +351,58 @@ Name = Fury Attack hit 2 opp
 [OppMove,FURYATTACK,2]
 Name = Fury Attack hit 3 opp
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
-<Particle 3>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 5>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 3,332
-    SetY = 3,127
-    SetAngle = 3,180
-    SetX = 4,283
-    SetY = 4,158
-    SetX = 5,220
-    SetY = 5,197
+    SetFrame = 4,1
+    SetX = 4,0
+    SetY = 4,28
+    SetZ = 4,27
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
 <Particle 2>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 0,338
-    SetY = 0,128
+    SetFrame = 0,5
+    SetX = 0,164
+    SetY = 0,-150
+    SetZ = 0,27
     SetAngle = 0,180
-    SetX = 1,288
-    SetY = 1,155
-    SetX = 2,213
-    SetY = 2,203
-    SetX = 3,129
-    SetY = 3,242
-    SetAngle = 3,0
+    SetFrame = 1,6
+    SetX = 1,125
+    SetY = 1,-107
+    SetFrame = 2,7
+    SetX = 2,66
+    SetY = 2,-32
+    SetVisible = 3,false
+<Particle 3>
+    Graphic = 003-Attack01
+    Focus = User
+    SetX = 3,1
+    SetY = 3,18
+    SetZ = 3,27
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = 003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,159
+    SetY = 3,-151
+    SetZ = 3,28
+    SetAngle = 3,180
+    SetFrame = 4,6
+    SetX = 4,121
+    SetY = 4,-103
+    SetFrame = 5,7
+    SetX = 5,71
+    SetY = 5,-42
+    SetVisible = 6,false
 <SE>
     Play = 3,normaldamage,80
     Play = 5,normaldamage,80
@@ -268,34 +410,58 @@ Name = Fury Attack hit 3 opp
 [OppMove,FURYATTACK,3]
 Name = Fury Attack hit 4 opp
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
+<Particle 4>
+    Graphic = 003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,159
+    SetY = 3,-151
+    SetZ = 3,28
+    SetAngle = 3,180
+    SetFrame = 4,6
+    SetX = 4,121
+    SetY = 4,-103
+    SetFrame = 5,7
+    SetX = 5,71
+    SetY = 5,-42
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = 003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 4,1
+    SetX = 4,0
+    SetY = 4,28
+    SetZ = 4,27
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
 <Particle 2>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 0,338
-    SetY = 0,128
+    SetFrame = 0,5
+    SetX = 0,164
+    SetY = 0,-150
+    SetZ = 0,27
     SetAngle = 0,180
-    SetX = 1,288
-    SetY = 1,155
-    SetX = 2,213
-    SetY = 2,203
-    SetX = 3,129
-    SetY = 3,242
-    SetAngle = 3,0
+    SetFrame = 1,6
+    SetX = 1,125
+    SetY = 1,-107
+    SetFrame = 2,7
+    SetX = 2,66
+    SetY = 2,-32
+    SetVisible = 3,false
 <Particle 3>
     Graphic = 003-Attack01
-    Focus = UserAndTarget
-    SetX = 3,332
-    SetY = 3,127
-    SetAngle = 3,180
-    SetX = 4,283
-    SetY = 4,158
-    SetX = 5,220
-    SetY = 5,197
+    Focus = User
+    SetX = 3,1
+    SetY = 3,18
+    SetZ = 3,27
+    SetVisible = 4,false
 <SE>
     Play = 3,normaldamage,80
     Play = 5,normaldamage,80
@@ -303,34 +469,58 @@ Name = Fury Attack hit 4 opp
 [OppMove,FURYATTACK,4]
 Name = Fury Attack hit 5 opp
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = 003-Attack01
+    Focus = User
+    SetX = 3,1
+    SetY = 3,18
+    SetZ = 3,27
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 3,332
-    SetY = 3,127
+    SetFrame = 3,5
+    SetX = 3,159
+    SetY = 3,-151
+    SetZ = 3,28
     SetAngle = 3,180
-    SetX = 4,283
-    SetY = 4,158
-    SetX = 5,220
-    SetY = 5,197
+    SetFrame = 4,6
+    SetX = 4,121
+    SetY = 4,-103
+    SetFrame = 5,7
+    SetX = 5,71
+    SetY = 5,-42
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = 003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 4,1
+    SetX = 4,0
+    SetY = 4,28
+    SetZ = 4,27
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
 <Particle 2>
     Graphic = 003-Attack01
     Focus = UserAndTarget
-    SetX = 0,338
-    SetY = 0,128
+    SetFrame = 0,5
+    SetX = 0,164
+    SetY = 0,-150
+    SetZ = 0,27
     SetAngle = 0,180
-    SetX = 1,288
-    SetY = 1,155
-    SetX = 2,213
-    SetY = 2,203
-    SetX = 3,129
-    SetY = 3,242
-    SetAngle = 3,0
+    SetFrame = 1,6
+    SetX = 1,125
+    SetY = 1,-107
+    SetFrame = 2,7
+    SetX = 2,66
+    SetY = 2,-32
+    SetVisible = 3,false
 <SE>
     Play = 3,normaldamage,80
     Play = 5,normaldamage,80

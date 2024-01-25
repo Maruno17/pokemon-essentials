@@ -34,7 +34,12 @@ module AnimationEditor::ParticleDataHelper
           next
         end
         # In a "MoveXYZ" command; need to interpolate
-        ret[0] = lerp(ret[0], cmd[2], cmd[1], cmd[0], frame).to_i
+        case (cmd[3] || :linear)
+        when :linear
+          ret[0] = lerp(ret[0], cmd[2], cmd[1], cmd[0], frame).to_i
+        else
+          # TODO: Use an appropriate interpolation.
+        end
         ret[1] = true   # Interpolating
         break
       end

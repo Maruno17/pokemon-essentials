@@ -84,6 +84,7 @@ class AnimationEditor
   ]
 
   def initialize(anim_id, anim)
+    load_settings
     @anim_id = anim_id
     @anim = anim
     @pbs_path = anim[:pbs_path]
@@ -109,11 +110,7 @@ class AnimationEditor
     # Menu bar
     @components[:menu_bar] = AnimationEditor::MenuBar.new(0, 0, MENU_BAR_WIDTH, MENU_BAR_HEIGHT, @viewport)
     # Canvas
-    @components[:canvas] = AnimationEditor::Canvas.new(@canvas_viewport)
-    # Play controls
-    @components[:play_controls] = AnimationEditor::PlayControls.new(
-      PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT, @viewport
-    )
+    @components[:canvas] = AnimationEditor::Canvas.new(@canvas_viewport, @anim, @settings)
     # Side panes
     [:commands_pane, :se_pane, :particle_pane, :keyframe_pane].each do |pane|
       @components[pane] = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
@@ -127,6 +124,10 @@ class AnimationEditor
       PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT, @viewport
     )
     @components[:particle_list].set_interactive_rects
+    # Play controls
+    @components[:play_controls] = AnimationEditor::PlayControls.new(
+      PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT, @viewport
+    )
     # Animation properties pop-up window
     @components[:animation_properties] = UIControls::ControlsContainer.new(
       ANIM_PROPERTIES_X + 4, ANIM_PROPERTIES_Y, ANIM_PROPERTIES_WIDTH - 8, ANIM_PROPERTIES_HEIGHT
@@ -200,22 +201,14 @@ class AnimationEditor
   end
 
   def set_canvas_contents
-    @components[:canvas].bg_name = "indoor1"
-  end
-
-  def set_play_controls_contents
-    @components[:play_controls].duration = @components[:particle_list].duration
   end
 
   def set_commands_pane_contents
     commands_pane = @components[:commands_pane]
     commands_pane.add_header_label(:header, _INTL("Edit particle at keyframe"))
-    # :frame (related to graphic) - If the graphic is user's sprite/target's
-    # sprite, make this instead a choice of front/back/same as the main sprite/
-    # opposite of the main sprite. Probably need two controls in the same space
-    # and refresh_component(:commands_pane) makes the appropriate one visible.
-    commands_pane.add_labelled_number_text_box(:x, _INTL("X"), -(CANVAS_WIDTH + 128), CANVAS_WIDTH + 128, 0)
-    commands_pane.add_labelled_number_text_box(:y, _INTL("Y"), -(CANVAS_WIDTH + 128), CANVAS_HEIGHT + 128, 0)
+    commands_pane.add_labelled_number_text_box(:x, _INTL("X"), -200, 200, 0)
+    commands_pane.add_labelled_number_text_box(:y, _INTL("Y"), -200, 200, 0)
+    commands_pane.add_labelled_number_slider(:z, _INTL("Priority"), -50, 50, 0)
     # TODO: If the graphic is user's sprite/target's sprite, make :frame instead
     #       a choice of front/back/same as the main sprite/opposite of the main
     #       sprite. Will need two controls in the same space.
@@ -232,13 +225,6 @@ class AnimationEditor
       2 => _INTL("Subtractive")
     }, 0)
     commands_pane.add_labelled_button(:color_tone, _INTL("Color/Tone"), _INTL("Edit"))
-    # commands_pane.add_labelled_dropdown_list(:priority, _INTL("Priority"), {   # TODO: Include sub-priority.
-    #   :behind_all  => _INTL("Behind all"),
-    #   :behind_user => _INTL("Behind user"),
-    #   :above_user  => _INTL("In front of user"),
-    #   :above_all   => _INTL("In front of everything")
-    # }, :above_user)
-    # :sub_priority
 #    commands_pane.add_labelled_button(:masking, _INTL("Masking"), _INTL("Edit"))
     # TODO: Add buttons that shift all commands from the current keyframe and
     #       later forwards/backwards in time?
@@ -271,12 +257,7 @@ class AnimationEditor
     particle_pane.get_control(:name).set_blacklist("User", "Target", "SE")
     particle_pane.add_labelled_label(:graphic_name, _INTL("Graphic"), "")
     particle_pane.add_labelled_button(:graphic, "", _INTL("Change"))
-    particle_pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {
-      :user            => _INTL("User"),
-      :target          => _INTL("Target"),
-      :user_and_target => _INTL("User and target"),
-      :screen          => _INTL("Screen")
-    }, :user)
+    particle_pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {}, :user)
     # FlipIfFoe
     # RotateIfFoe
     # Delete button (if not "User"/"Target"/"SE")
@@ -300,6 +281,10 @@ class AnimationEditor
 
   def set_particle_list_contents
     @components[:particle_list].set_particles(@anim[:particles])
+  end
+
+  def set_play_controls_contents
+    @components[:play_controls].duration = @components[:particle_list].duration
   end
 
   def set_animation_properties_contents
@@ -386,15 +371,30 @@ class AnimationEditor
   def set_components_contents
     set_menu_bar_contents
     set_canvas_contents
-    set_play_controls_contents
     set_side_panes_contents
     set_particle_list_contents
+    set_play_controls_contents   # Intentionally after set_particle_list_contents
     set_animation_properties_contents
     set_graphic_chooser_contents
     set_audio_chooser_contents
   end
 
   #-----------------------------------------------------------------------------
+
+  def load_settings
+    # TODO: Load these from a saved file.
+    @settings = {
+      :side_sizes         => [1, 1],
+      :user_index         => 0,
+      :target_indices     => [1],
+      :user_opposes       => false,
+      # TODO: Ideally be able to independently choose base graphics, which will
+      #       be a separate setting here.
+      :canvas_bg          => "indoor1",
+      :user_sprite_name   => "ARCANINE",
+      :target_sprite_name => "ABOMASNOW"
+    }
+  end
 
   def save
     GameData::Animation.register(@anim, @anim_id)
@@ -454,6 +454,7 @@ class AnimationEditor
     ctrl = @components[:animation_properties].get_control(:move)
     case @anim[:type]
     when :move, :opp_move
+      # TODO: Cache this list?
       move_list = []
       GameData::Move.each { |m| move_list.push([m.id.to_s, m.name]) }
       move_list.push(["STRUGGLE", _INTL("Struggle")]) if move_list.none? { |val| val[0] == "STRUGGLE" }
@@ -467,6 +468,8 @@ class AnimationEditor
   def refresh_component_values(component_sym)
     component = @components[component_sym]
     case component_sym
+    when :canvas
+      component.keyframe = keyframe
     when :commands_pane
       new_vals = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(@anim[:particles][particle_index], keyframe)
       component.controls.each do |ctrl|
@@ -475,8 +478,45 @@ class AnimationEditor
         # TODO: new_vals[ctrl[0]][1] is whether the value is being interpolated,
         #       which should be indicated somehow in ctrl[1].
       end
-      # TODO: component.get_control(:frame).disable if the particle's graphic is
-      #       not a spritesheet or is "USER"/"TARGET"/etc. (enable otherwise).
+      # Set an appropriate range for the X and Y properties depending on the
+      # particle's focus
+      case @anim[:particles][particle_index][:focus]
+      when :foreground, :midground, :background   # Cover the whole screen
+        component.get_control(:x).min_value = -128
+        component.get_control(:x).max_value = CANVAS_WIDTH + 128
+        component.get_control(:y).min_value = -128
+        component.get_control(:y).max_value = CANVAS_HEIGHT + 128
+      when :user, :target, :user_side_foreground, :user_side_background,
+           :target_side_foreground, :target_side_background   # Around the focus
+        component.get_control(:x).min_value = -CANVAS_WIDTH
+        component.get_control(:x).max_value = CANVAS_WIDTH
+        component.get_control(:y).min_value = -CANVAS_HEIGHT
+        component.get_control(:y).max_value = CANVAS_HEIGHT
+      when :user_and_target   # Covers both foci
+        component.get_control(:x).min_value = -CANVAS_WIDTH
+        component.get_control(:x).max_value = GameData::Animation::USER_AND_TARGET_SEPARATION[0] + CANVAS_WIDTH
+        component.get_control(:y).min_value = GameData::Animation::USER_AND_TARGET_SEPARATION[1] - CANVAS_HEIGHT
+        component.get_control(:y).max_value = CANVAS_HEIGHT
+      end
+      # Set an appropriate range for the priority (z) property depending on the
+      # particle's focus
+      case @anim[:particles][particle_index][:focus]
+      when :user_and_target
+        component.get_control(:z).min_value = GameData::Animation::USER_AND_TARGET_SEPARATION[2] - 50
+        component.get_control(:z).max_value = 50
+      else
+        component.get_control(:z).min_value = -50
+        component.get_control(:z).max_value = 50
+      end
+      # Disable the "Frame" control if the particle's graphic is predefined to
+      # be the user's or target's sprite
+      # TODO: Also disable it if the particle's graphic isn't a spritesheet.
+      if ["USER", "USER_OPP", "USER_FRONT", "USER_BACK",
+          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"].include?(@anim[:particles][particle_index][:graphic])
+        component.get_control(:frame).disable
+      else
+        component.get_control(:frame).enable
+      end
     when :se_pane
       se_particle = @anim[:particles].select { |p| p[:name] == "SE" }[0]
       kyfrm = keyframe
@@ -532,8 +572,32 @@ class AnimationEditor
         component.get_control(:graphic).enable
         component.get_control(:focus).enable
       end
-      # TODO: Set the possible focus options depending on whether the animation
-      #       has a target/user.
+      # Set the possible foci depending on whether the animation involves a
+      # target
+      # TODO: Also filter for user/no user if implemented.
+      if @anim[:no_target]
+        component.get_control(:focus).values = {
+          :foreground           => _INTL("Foreground"),
+          :midground            => _INTL("Midground"),
+          :background           => _INTL("Background"),
+          :user                 => _INTL("User"),
+          :user_side_foreground => _INTL("In front of user's side"),
+          :user_side_background => _INTL("Behind user's side")
+        }
+      else
+        component.get_control(:focus).values = {
+          :foreground             => _INTL("Foreground"),
+          :midground              => _INTL("Midground"),
+          :background             => _INTL("Background"),
+          :user                   => _INTL("User"),
+          :target                 => _INTL("Target"),
+          :user_and_target        => _INTL("User and target"),
+          :user_side_foreground   => _INTL("In front of user's side"),
+          :user_side_background   => _INTL("Behind user's side"),
+          :target_side_foreground => _INTL("In front of target's side"),
+          :target_side_background => _INTL("Behind target's side")
+        }
+      end
     when :animation_properties
       refresh_move_property_options
       case @anim[:type]
@@ -596,6 +660,7 @@ class AnimationEditor
         @components[:particle_list].change_particle_commands(particle_index)
         @components[:play_controls].duration = @components[:particle_list].duration
         refresh_component(:commands_pane)
+        refresh_component(:canvas)
       end
     when :se_pane
       case property
@@ -651,6 +716,7 @@ class AnimationEditor
         new_cmds = AnimationEditor::ParticleDataHelper.set_property(particle, property, value)
         @components[:particle_list].change_particle(particle_index)
         refresh_component(:particle_pane)
+        refresh_component(:canvas)
       end
     when :keyframe_pane
       # TODO: Stuff here once I decide what controls to add.
@@ -658,6 +724,8 @@ class AnimationEditor
 #      refresh if keyframe != old_keyframe || particle_index != old_particle_index
       # TODO: Lots of stuff here when buttons are added to it.
     when :animation_properties
+      # TODO: Will changes here need to refresh any other components (e.g. side
+      #       panes)? Probably.
       case property
       when :type, :opp_variant
         type = @components[:animation_properties].get_control(:type).value
@@ -669,12 +737,15 @@ class AnimationEditor
           @anim[:type] = (opp) ? :opp_common : :common
         end
         refresh_component(:animation_properties)
+        refresh_component(:canvas)
       when :pbs_path
         txt = value.gsub!(/\.txt$/, "")
         @anim[property] = txt
       when :has_target
         @anim[:no_target] = !value
-        # TODO: Add/delete the "Target" particle accordingly.
+        # TODO: Add/delete the "Target" particle accordingly. Then refresh a lot
+        #       of components.
+        refresh_component(:canvas)
       when :usable
         @anim[:ignore] = !value
       else
@@ -704,6 +775,7 @@ class AnimationEditor
         end
         component.clear_changed
       end
+      # TODO: Call repaint only if component responds to it? Canvas won't.
       component.repaint if sym == :particle_list || sym == :menu_bar
       if @captured
         @captured = nil if !component.busy?

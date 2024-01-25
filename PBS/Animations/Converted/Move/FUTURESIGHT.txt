@@ -3,24 +3,30 @@
 [Move,FUTURESIGHT]
 Name = FUTURESIGHT
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = face and eye
     Focus = User
-    SetX = 0,145
-    SetY = 0,224
-    SetX = 2,141
-    SetY = 2,222
-    SetX = 3,131
-    SetY = 3,221
-    SetX = 4,143
-    SetY = 4,219
-    SetX = 5,131
-    SetY = 5,220
+    SetFrame = 0,10
+    SetX = 0,17
+    SetY = 0,0
+    SetZ = 0,27
+    SetFrame = 2,11
+    SetX = 2,13
+    SetY = 2,-2
+    SetFrame = 3,12
+    SetX = 3,3
+    SetY = 3,-3
+    SetFrame = 4,13
+    SetX = 4,15
+    SetY = 4,-5
+    SetFrame = 5,14
+    SetX = 5,3
+    SetY = 5,-4
     SetOpacity = 8,192
     SetOpacity = 9,96
 <SE>
@@ -29,24 +35,30 @@ Name = FUTURESIGHT
 [Move,FUTURESIGHT,1]
 Name = Future Sight hit
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = face and eye
     Focus = Target
-    SetX = 0,401
-    SetY = 0,96
-    SetX = 2,397
-    SetY = 2,94
-    SetX = 3,387
-    SetY = 3,93
-    SetX = 4,399
-    SetY = 4,91
-    SetX = 5,387
-    SetY = 5,92
+    SetFrame = 0,10
+    SetX = 0,17
+    SetY = 0,0
+    SetZ = 0,27
+    SetFrame = 2,11
+    SetX = 2,13
+    SetY = 2,-2
+    SetFrame = 3,12
+    SetX = 3,3
+    SetY = 3,-3
+    SetFrame = 4,13
+    SetX = 4,15
+    SetY = 4,-5
+    SetFrame = 5,14
+    SetX = 5,3
+    SetY = 5,-4
     SetOpacity = 8,192
     SetOpacity = 9,96
 <SE>

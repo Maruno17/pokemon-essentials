@@ -3,16 +3,21 @@
 [Move,ROCKSMASH]
 Name = ROCKSMASH
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = rockice
     Focus = Target
-    SetX = 0,392
-    SetY = 0,86
+    SetX = 0,8
+    SetY = 0,-10
+    SetZ = 0,27
+    SetFrame = 3,1
+    SetFrame = 4,2
+    SetFrame = 5,3
+    SetFrame = 6,4
 <SE>
     Play = 2,Earth1,80
     Play = 2,Blow6,80

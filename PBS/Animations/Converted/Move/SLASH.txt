@@ -3,42 +3,55 @@
 [Move,SLASH]
 Name = SLASH
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = zan03
     Focus = Target
-    SetX = 0,280
-    SetY = 0,6
-    SetX = 1,344
-    SetY = 1,54
-    SetX = 2,376
-    SetY = 2,70
-    SetX = 3,384
-    SetY = 3,94
+    SetX = 0,-104
+    SetY = 0,-90
+    SetZ = 0,28
+    SetFrame = 1,1
+    SetX = 1,-40
+    SetY = 1,-42
+    SetFrame = 2,2
+    SetX = 2,-8
+    SetY = 2,-26
+    SetX = 3,0
+    SetY = 3,-2
+    SetVisible = 4,false
 <Particle 4>
     Graphic = zan03
     Focus = Target
-    SetX = 0,304
-    SetY = 0,-26
-    SetX = 1,320
-    SetY = 1,86
-    SetX = 2,336
-    SetX = 3,352
-    SetY = 3,118
+    SetX = 0,-80
+    SetY = 0,-122
+    SetZ = 0,29
+    SetFrame = 1,1
+    SetX = 1,-64
+    SetY = 1,-10
+    SetFrame = 2,2
+    SetX = 2,-48
+    SetX = 3,-32
+    SetY = 3,22
+    SetVisible = 4,false
 <Particle 2>
     Graphic = zan03
     Focus = Target
-    SetX = 0,256
-    SetY = 0,38
-    SetX = 1,368
-    SetY = 1,30
-    SetX = 2,408
-    SetY = 2,54
-    SetX = 3,416
-    SetY = 3,78
+    SetX = 0,-128
+    SetY = 0,-58
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetX = 1,-16
+    SetY = 1,-66
+    SetFrame = 2,2
+    SetX = 2,24
+    SetY = 2,-42
+    SetFrame = 3,3
+    SetX = 3,32
+    SetY = 3,-18
+    SetVisible = 4,false
 <SE>
     Play = 0,Slash3,80

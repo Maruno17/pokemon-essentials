@@ -3,22 +3,27 @@
 [Move,POUND]
 Name = POUND
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = many
     Focus = Target
-    SetX = 3,392
-    SetY = 3,94
+    SetFrame = 3,20
+    SetX = 3,8
+    SetY = 3,-2
+    SetZ = 3,28
     SetOpacity = 4,100
+    SetVisible = 5,false
 <Particle 2>
     Graphic = many
     Focus = Target
-    SetX = 0,384
-    SetY = 0,94
+    SetFrame = 0,17
+    SetX = 0,0
+    SetY = 0,-2
+    SetZ = 0,27
     SetOpacity = 0,100
     SetOpacity = 1,255
     SetZoomX = 2,120
@@ -27,6 +32,7 @@ Name = POUND
     SetZoomY = 3,130
     SetZoomX = 4,110
     SetZoomY = 4,110
+    SetFrame = 5,19
     SetZoomX = 5,100
     SetZoomY = 5,100
     SetOpacity = 5,100

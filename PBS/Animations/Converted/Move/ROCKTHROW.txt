@@ -3,27 +3,37 @@
 [Move,ROCKTHROW]
 Name = ROCKTHROW
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = Earth1
     Focus = UserAndTarget
-    SetX = 3,352
-    SetY = 3,110
+    SetFrame = 3,1
+    SetX = 3,175
+    SetY = 3,-178
+    SetZ = 3,28
+    SetVisible = 4,false
 <Particle 2>
     Graphic = Earth1
     Focus = UserAndTarget
-    SetX = 0,128
-    SetY = 0,236
-    SetX = 1,198
-    SetY = 1,186
-    SetX = 2,307
-    SetY = 2,123
-    SetX = 3,352
-    SetY = 3,110
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetX = 1,54
+    SetY = 1,-59
+    SetX = 2,139
+    SetY = 2,-157
+    SetFrame = 3,2
+    SetX = 3,175
+    SetY = 3,-178
+    SetFrame = 4,3
+    SetFrame = 5,4
+    SetFrame = 6,5
+    SetFrame = 7,6
 <SE>
     Play = 0,throw,80
     Play = 3,Earth1,80

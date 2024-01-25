@@ -3,27 +3,37 @@
 [Move,CRUSHCLAW]
 Name = CRUSHCLAW
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = dragon claw
     Focus = Target
-    SetX = 0,387
-    SetY = 0,84
-    SetX = 1,392
-    SetY = 1,87
-    SetX = 2,402
-    SetY = 2,93
-    SetX = 3,400
-    SetY = 3,112
-    SetX = 4,397
-    SetY = 4,105
-    SetY = 5,110
-    SetX = 6,392
-    SetX = 7,384
+    SetFrame = 0,1
+    SetX = 0,3
+    SetY = 0,-12
+    SetZ = 0,27
+    SetFrame = 1,2
+    SetX = 1,8
+    SetY = 1,-9
+    SetFrame = 2,3
+    SetX = 2,18
+    SetY = 2,-3
+    SetFrame = 3,4
+    SetX = 3,16
+    SetY = 3,16
+    SetFrame = 4,5
+    SetX = 4,13
+    SetY = 4,9
+    SetFrame = 5,6
+    SetY = 5,14
+    SetFrame = 6,7
+    SetX = 6,8
+    SetFrame = 7,8
+    SetX = 7,0
+    SetVisible = 8,false
 <SE>
     Play = 0,Slash,100,135
     Play = 4,Slash,100,135

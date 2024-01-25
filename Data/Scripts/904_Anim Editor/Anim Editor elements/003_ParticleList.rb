@@ -19,10 +19,16 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   INTERP_LINE_Y        = (ROW_HEIGHT / 2) - (INTERP_LINE_HEIGHT / 2)
   DURATION_BUFFER      = 20   # Extra keyframes shown after the animation's end
   CONTROL_BG_COLORS    = {
-    :user            => Color.new(96, 248, 96),   # Green
-    :target          => Color.new(248, 96, 96),   # Red
-    :user_and_target => Color.new(248, 248, 96),   # Yellow
-    :screen          => Color.new(128, 160, 248)   # Blue
+    :foreground             => Color.new(128, 160, 248),   # Blue
+    :midground              => Color.new(128, 160, 248),   # Blue
+    :background             => Color.new(128, 160, 248),   # Blue
+    :user                   => Color.new(96, 248, 96),     # Green
+    :target                 => Color.new(248, 96, 96),     # Red
+    :user_and_target        => Color.new(248, 248, 96),    # Yellow
+    :user_side_foreground   => Color.new(128, 248, 248),   # Cyan
+    :user_side_background   => Color.new(128, 248, 248),   # Cyan
+    :target_side_foreground => Color.new(128, 248, 248),   # Cyan
+    :target_side_background => Color.new(128, 248, 248)    # Cyan
   }
   SE_CONTROL_BG        = Color.gray
 

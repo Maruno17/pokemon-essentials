@@ -3,25 +3,27 @@
 [Move,MOONLIGHT]
 Name = MOONLIGHT
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = normal2
     Focus = Target
-    SetX = 0,384
-    SetY = 0,206
+    SetFrame = 0,12
+    SetX = 0,0
+    SetY = 0,110
+    SetZ = 0,27
     SetZoomX = 0,50
     SetZoomY = 0,50
-    SetY = 1,190
-    SetY = 2,158
-    SetY = 3,110
-    SetY = 4,70
-    SetY = 5,38
-    SetY = 6,14
-    SetY = 7,-10
+    SetY = 1,94
+    SetY = 2,62
+    SetY = 3,14
+    SetY = 4,-26
+    SetY = 5,-58
+    SetY = 6,-82
+    SetY = 7,-106
     SetZoomX = 7,60
     SetZoomY = 7,60
     SetZoomX = 8,70

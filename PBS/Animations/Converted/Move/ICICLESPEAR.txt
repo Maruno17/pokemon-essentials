@@ -3,28 +3,32 @@
 [Move,ICICLESPEAR]
 Name = ICICLESPEAR
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = rockice
     Focus = UserAndTarget
+    SetFrame = 0,5
     SetFlip = 0,true
-    SetX = 0,192
-    SetY = 0,192
+    SetX = 0,50
+    SetY = 0,-50
+    SetZ = 0,27
     SetAngle = 0,135
-    SetX = 1,256
-    SetY = 1,173
-    SetX = 2,294
-    SetY = 2,142
-    SetX = 3,332
-    SetY = 3,135
-    SetX = 4,345
-    SetY = 4,129
-    SetX = 5,352
-    SetY = 5,123
+    SetX = 1,100
+    SetY = 1,-79
+    SetX = 2,129
+    SetY = 2,-128
+    SetX = 3,159
+    SetY = 3,-139
+    SetFrame = 4,6
+    SetX = 4,169
+    SetY = 4,-148
+    SetFrame = 5,7
+    SetX = 5,175
+    SetY = 5,-157
 <SE>
     Play = 0,throw,80
     Play = 2,Crash,50,115
@@ -33,28 +37,32 @@ Name = ICICLESPEAR
 [Move,ICICLESPEAR,1]
 Name = Icicle Spear hit 2
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = rockice
     Focus = UserAndTarget
+    SetFrame = 0,5
     SetFlip = 0,true
-    SetX = 0,192
-    SetY = 0,192
+    SetX = 0,50
+    SetY = 0,-50
+    SetZ = 0,27
     SetAngle = 0,135
-    SetX = 1,256
-    SetY = 1,173
-    SetX = 2,294
-    SetY = 2,142
-    SetX = 3,332
-    SetY = 3,135
-    SetX = 4,345
-    SetY = 4,129
-    SetX = 5,352
-    SetY = 5,123
+    SetX = 1,100
+    SetY = 1,-79
+    SetX = 2,129
+    SetY = 2,-128
+    SetX = 3,159
+    SetY = 3,-139
+    SetFrame = 4,6
+    SetX = 4,169
+    SetY = 4,-148
+    SetFrame = 5,7
+    SetX = 5,175
+    SetY = 5,-157
 <SE>
     Play = 0,throw,80
     Play = 2,Crash,50,115
@@ -63,28 +71,32 @@ Name = Icicle Spear hit 2
 [Move,ICICLESPEAR,2]
 Name = Icicle Spear hit 3
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = rockice
     Focus = UserAndTarget
+    SetFrame = 0,5
     SetFlip = 0,true
-    SetX = 0,192
-    SetY = 0,192
+    SetX = 0,50
+    SetY = 0,-50
+    SetZ = 0,27
     SetAngle = 0,135
-    SetX = 1,256
-    SetY = 1,173
-    SetX = 2,294
-    SetY = 2,142
-    SetX = 3,332
-    SetY = 3,135
-    SetX = 4,345
-    SetY = 4,129
-    SetX = 5,352
-    SetY = 5,123
+    SetX = 1,100
+    SetY = 1,-79
+    SetX = 2,129
+    SetY = 2,-128
+    SetX = 3,159
+    SetY = 3,-139
+    SetFrame = 4,6
+    SetX = 4,169
+    SetY = 4,-148
+    SetFrame = 5,7
+    SetX = 5,175
+    SetY = 5,-157
 <SE>
     Play = 0,throw,80
     Play = 2,Crash,50,115
@@ -93,28 +105,32 @@ Name = Icicle Spear hit 3
 [Move,ICICLESPEAR,3]
 Name = Icicle Spear hit 4
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = rockice
     Focus = UserAndTarget
+    SetFrame = 0,5
     SetFlip = 0,true
-    SetX = 0,192
-    SetY = 0,192
+    SetX = 0,50
+    SetY = 0,-50
+    SetZ = 0,27
     SetAngle = 0,135
-    SetX = 1,256
-    SetY = 1,173
-    SetX = 2,294
-    SetY = 2,142
-    SetX = 3,332
-    SetY = 3,135
-    SetX = 4,345
-    SetY = 4,129
-    SetX = 5,352
-    SetY = 5,123
+    SetX = 1,100
+    SetY = 1,-79
+    SetX = 2,129
+    SetY = 2,-128
+    SetX = 3,159
+    SetY = 3,-139
+    SetFrame = 4,6
+    SetX = 4,169
+    SetY = 4,-148
+    SetFrame = 5,7
+    SetX = 5,175
+    SetY = 5,-157
 <SE>
     Play = 0,throw,80
     Play = 2,Crash,50,115
@@ -123,28 +139,32 @@ Name = Icicle Spear hit 4
 [Move,ICICLESPEAR,4]
 Name = Icicle Spear hit 5
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = rockice
     Focus = UserAndTarget
+    SetFrame = 0,5
     SetFlip = 0,true
-    SetX = 0,192
-    SetY = 0,192
+    SetX = 0,50
+    SetY = 0,-50
+    SetZ = 0,27
     SetAngle = 0,135
-    SetX = 1,256
-    SetY = 1,173
-    SetX = 2,294
-    SetY = 2,142
-    SetX = 3,332
-    SetY = 3,135
-    SetX = 4,345
-    SetY = 4,129
-    SetX = 5,352
-    SetY = 5,123
+    SetX = 1,100
+    SetY = 1,-79
+    SetX = 2,129
+    SetY = 2,-128
+    SetX = 3,159
+    SetY = 3,-139
+    SetFrame = 4,6
+    SetX = 4,169
+    SetY = 4,-148
+    SetFrame = 5,7
+    SetX = 5,175
+    SetY = 5,-157
 <SE>
     Play = 0,throw,80
     Play = 2,Crash,50,115

@@ -3,25 +3,30 @@
 [Move,DETECT]
 Name = DETECT
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = anim sheet
     Focus = UserAndTarget
-    SetX = 0,422
-    SetY = 0,66
-    SetX = 1,423
-    SetY = 1,68
-    SetX = 2,416
-    SetY = 2,73
-    SetX = 3,420
-    SetY = 3,72
-    SetX = 4,408
-    SetY = 4,74
-    SetX = 5,409
-    SetY = 5,78
+    SetFrame = 0,8
+    SetX = 0,229
+    SetY = 0,-246
+    SetZ = 0,27
+    SetX = 1,230
+    SetY = 1,-243
+    SetFrame = 2,7
+    SetX = 2,225
+    SetY = 2,-235
+    SetX = 3,228
+    SetY = 3,-237
+    SetFrame = 4,6
+    SetX = 4,218
+    SetY = 4,-234
+    SetX = 5,219
+    SetY = 5,-228
+    SetVisible = 6,false
 <SE>
     Play = 0,Flash2,80,85

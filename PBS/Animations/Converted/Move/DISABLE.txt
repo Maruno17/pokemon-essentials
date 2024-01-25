@@ -3,33 +3,40 @@
 [Move,DISABLE]
 Name = DISABLE
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetX = 4,385
-    SetY = 4,96
+    SetFrame = 4,8
+    SetX = 4,200
+    SetY = 4,-200
+    SetZ = 4,28
     SetAngle = 4,45
 <Particle 4>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetX = 6,388
-    SetY = 6,96
+    SetFrame = 6,7
+    SetX = 6,203
+    SetY = 6,-200
+    SetZ = 6,29
 <Particle 2>
     Graphic = leech-seed
     Focus = UserAndTarget
-    SetX = 0,385
-    SetY = 0,101
-    SetX = 1,384
-    SetY = 1,98
-    SetY = 2,99
-    SetX = 3,385
-    SetY = 3,96
-    SetX = 4,387
-    SetY = 4,98
+    SetFrame = 0,10
+    SetX = 0,200
+    SetY = 0,-192
+    SetZ = 0,27
+    SetX = 1,200
+    SetY = 1,-196
+    SetFrame = 2,8
+    SetY = 2,-195
+    SetX = 3,200
+    SetY = 3,-200
+    SetX = 4,202
+    SetY = 4,-196
 <SE>
     Play = 0,Sword2,80,121

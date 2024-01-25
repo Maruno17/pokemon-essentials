@@ -3,16 +3,17 @@
 [Common,ParentalBond]
 Name = ParentalBond
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = Tackle_B
     Focus = Target
-    SetX = 2,384
-    SetY = 2,99
+    SetX = 2,0
+    SetY = 2,3
+    SetZ = 2,27
     SetOpacity = 2,150
     SetOpacity = 3,255
     SetOpacity = 8,150

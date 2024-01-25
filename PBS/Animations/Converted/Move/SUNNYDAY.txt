@@ -3,16 +3,17 @@
 [Move,SUNNYDAY]
 Name = SUNNYDAY
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
-<Particle 3>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
     Graphic = weather
-    Focus = Screen
+    Focus = Foreground
     SetX = 0,64
     SetY = 0,64
+    SetZ = 0,28
     SetOpacity = 0,64
     SetX = 1,72
     SetY = 1,72

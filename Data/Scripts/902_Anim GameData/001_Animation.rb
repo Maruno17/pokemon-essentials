@@ -14,6 +14,25 @@ module GameData
     DATA_FILENAME = "animations.dat"
     OPTIONAL = true
 
+    # TODO: All mentions of focus types can be found by searching for
+    #       :user_and_target, plus there's :foreground in PARTICLE_DEFAULT_VALUES
+    #       below.
+    # TODO: Add :user_ground, :target_ground?
+    FOCUS_TYPES = {
+      "Foreground"           => :foreground,
+      "Midground"            => :midground,
+      "Background"           => :background,
+      "User"                 => :user,
+      "Target"               => :target,
+      "UserAndTarget"        => :user_and_target,
+      "UserSideForeground"   => :user_side_foreground,
+      "UserSideBackground"   => :user_side_background,
+      "TargetSide"           => :target_side_foreground,
+      "TargetSideBackground" => :target_side_background,
+    }
+    FOCUS_TYPES_WITH_TARGET = [
+      :target, :user_and_target, :target_side_foreground, :target_side_background
+    ]
     INTERPOLATION_TYPES = {
       "None"     => :none,
       "Linear"   => :linear,
@@ -21,6 +40,7 @@ module GameData
       "EaseOut"  => :ease_out,
       "EaseBoth" => :ease_both
     }
+    USER_AND_TARGET_SEPARATION = [200, -200, -200]   # x, y, z (from user to target)
 
     # Properties that apply to the animation in general, not to individual
     # particles. They don't change during the animation.
@@ -49,9 +69,7 @@ module GameData
       "Graphic"        => [:graphic,     "s"],
       # TODO: If more focus types are added, add ones that involve a target to
       #       the Compiler's check relating to "NoTarget".
-      "Focus"          => [:focus,       "e", {"User" => :user, "Target" => :target,
-                                               "UserAndTarget" => :user_and_target,
-                                               "Screen" => :screen}],
+      "Focus"          => [:focus,       "e", FOCUS_TYPES],
       # TODO: FlipIfFoe, RotateIfFoe kinds of thing.
 
       # All properties below are "SetXYZ" or "MoveXYZ". "SetXYZ" has the
@@ -66,6 +84,8 @@ module GameData
       "MoveX"          => [:x,           "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetY"           => [:y,           "^ui"],
       "MoveY"          => [:y,           "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetZ"           => [:z,           "^ui"],
+      "MoveZ"          => [:z,           "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetZoomX"       => [:zoom_x,      "^uu"],
       "MoveZoomX"      => [:zoom_x,      "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetZoomY"       => [:zoom_y,      "^uu"],
@@ -91,9 +111,6 @@ module GameData
       "MoveToneBlue"   => [:tone_blue,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetToneGray"    => [:tone_gray,   "^ui"],
       "MoveToneGray"   => [:tone_gray,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      # TODO: SetPriority should be an enum (above all, above user, etc.). There
-      #       should also be a property (set and move) for the sub-priority
-      #       within that priority bracket.
       # TODO: Add "SetColor"/"SetTone" as shorthand for the above? They'd be
       #       converted in the Compiler.
       # TODO: Bitmap masking.
@@ -112,7 +129,7 @@ module GameData
     PARTICLE_DEFAULT_VALUES = {
       :name    => "",
       :graphic => "",
-      :focus   => :screen
+      :focus   => :foreground
     }
     # NOTE: Particles are invisible until their first command, and automatically
     #       become visible then. "User" and "Target" are visible from the start,
@@ -123,6 +140,7 @@ module GameData
       :flip        => false,
       :x           => 0,
       :y           => 0,
+      :z           => 0,
       :zoom_x      => 100,
       :zoom_y      => 100,
       :angle       => 0,

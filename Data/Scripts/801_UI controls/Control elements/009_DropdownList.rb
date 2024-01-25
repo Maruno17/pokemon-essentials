@@ -9,7 +9,7 @@ class UIControls::DropdownList < UIControls::BaseControl
   TEXT_BOX_WIDTH   = 200
   TEXT_BOX_HEIGHT  = 24
   TEXT_BOX_PADDING = 4   # Gap between sides of text box and text
-  MAX_LIST_ROWS    = 8
+  MAX_LIST_ROWS    = 10
 
   # NOTE: options is a hash: keys are symbols, values are display names.
   def initialize(width, height, viewport, options, value)
@@ -30,6 +30,11 @@ class UIControls::DropdownList < UIControls::BaseControl
     return if @value == new_value
     @value = new_value
     invalidate
+  end
+
+  def values=(new_vals)
+    @options = new_vals
+    @dropdown_menu.values = @options if @dropdown_menu
   end
 
   def set_interactive_rects

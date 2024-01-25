@@ -135,7 +135,7 @@ module Compiler
         case particle[:name]
         when "User"   then particle[:focus] = :user
         when "Target" then particle[:focus] = :target
-        else               particle[:focus] = :screen
+        else               particle[:focus] = GameData::Animation::PARTICLE_DEFAULT_VALUES[:focus]
         end
       end
       # Ensure user/target particles have a default graphic if not given
@@ -145,9 +145,11 @@ module Compiler
         when "Target" then particle[:graphic] = "TARGET"
         end
       end
+      # TODO: Ensure that particles don't have a focus involving a user if the
+      #       animation itself doesn't involve a user.
       # Ensure that particles don't have a focus involving a target if the
       # animation itself doesn't involve a target
-      if hash[:no_target] && [:target, :user_and_target].include?(particle[:focus])
+      if hash[:no_target] && GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
         raise _INTL("Particle \"{1}\" can't have a \"Focus\" that involves a target if property \"NoTarget\" is set to true.",
           particle[:name]) + "\n" + FileLineData.linereport
       end

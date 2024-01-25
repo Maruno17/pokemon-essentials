@@ -3,36 +3,43 @@
 [Move,XSCISSOR]
 Name = XSCISSOR
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = X-Scizzor
     Focus = Target
-    SetX = 0,319
-    SetY = 0,36
-    SetX = 1,351
-    SetY = 1,62
-    SetX = 2,384
-    SetY = 2,96
-    SetX = 3,347
-    SetY = 3,135
-    SetX = 4,455
-    SetY = 4,165
+    SetFrame = 0,1
+    SetX = 0,-65
+    SetY = 0,-60
+    SetZ = 0,28
+    SetX = 1,-33
+    SetY = 1,-34
+    SetFrame = 2,0
+    SetX = 2,0
+    SetY = 2,0
+    SetX = 3,-37
+    SetY = 3,39
+    SetFrame = 4,1
+    SetX = 4,71
+    SetY = 4,69
 <Particle 2>
     Graphic = X-Scizzor
     Focus = Target
-    SetX = 0,455
-    SetY = 0,37
-    SetX = 1,420
-    SetY = 1,62
-    SetX = 2,384
-    SetY = 2,96
-    SetX = 3,418
-    SetY = 3,135
-    SetX = 4,307
-    SetY = 4,164
+    SetX = 0,71
+    SetY = 0,-59
+    SetZ = 0,27
+    SetX = 1,36
+    SetY = 1,-34
+    SetFrame = 2,1
+    SetX = 2,0
+    SetY = 2,0
+    SetX = 3,34
+    SetY = 3,39
+    SetFrame = 4,0
+    SetX = 4,-77
+    SetY = 4,68
 <SE>
     Play = 0,Slash,80

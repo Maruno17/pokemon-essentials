@@ -3,20 +3,25 @@
 [Move,HYPERFANG]
 Name = HYPERFANG
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = normal2
     Focus = Target
-    SetX = 0,376
-    SetY = 0,94
-    SetX = 2,384
-    SetY = 2,102
-    SetX = 4,376
-    SetY = 4,110
+    SetX = 0,-8
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetX = 2,0
+    SetY = 2,6
+    SetFrame = 3,3
+    SetFrame = 4,4
+    SetX = 4,-8
+    SetY = 4,14
     SetOpacity = 6,150
     SetOpacity = 7,100
 <SE>

@@ -3,32 +3,46 @@
 [Move,DOUBLESLAP]
 Name = DOUBLESLAP
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
-<Particle 3>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 4>
     Graphic = many
     Focus = Target
-    SetX = 3,392
-    SetY = 3,94
-    SetOpacity = 3,100
-    SetX = 7,384
-    SetOpacity = 7,255
+    SetFrame = 7,20
+    SetX = 7,0
+    SetY = 7,-2
+    SetZ = 7,28
+    SetVisible = 8,false
 <Particle 2>
     Graphic = many
     Focus = Target
-    SetX = 0,520
-    SetY = 0,94
-    SetX = 1,480
-    SetX = 2,424
-    SetX = 3,392
-    SetX = 4,224
-    SetX = 5,296
-    SetX = 6,344
-    SetX = 7,384
+    SetFrame = 0,15
+    SetX = 0,136
+    SetY = 0,-2
+    SetZ = 0,27
+    SetX = 1,96
+    SetX = 2,40
+    SetX = 3,8
+    SetFrame = 4,16
+    SetX = 4,-160
+    SetX = 5,-88
+    SetX = 6,-40
+    SetX = 7,0
+    SetFrame = 8,19
     SetOpacity = 8,100
+<Particle 3>
+    Graphic = many
+    Focus = Target
+    SetFrame = 3,20
+    SetX = 3,8
+    SetY = 3,-2
+    SetZ = 3,28
+    SetOpacity = 3,100
+    SetFrame = 4,19
+    SetVisible = 5,false
 <SE>
     Play = 3,Blow5,80
     Play = 7,Blow5,80
@@ -36,32 +50,46 @@ Name = DOUBLESLAP
 [Move,DOUBLESLAP,1]
 Name = DoubleSlap hit 2
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
-<Particle 2>
-    Graphic = many
-    Focus = Target
-    SetX = 0,520
-    SetY = 0,94
-    SetX = 1,480
-    SetX = 2,424
-    SetX = 3,392
-    SetX = 4,224
-    SetX = 5,296
-    SetX = 6,344
-    SetX = 7,384
-    SetOpacity = 8,100
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = many
     Focus = Target
-    SetX = 3,392
-    SetY = 3,94
+    SetFrame = 3,20
+    SetX = 3,8
+    SetY = 3,-2
+    SetZ = 3,28
     SetOpacity = 3,100
-    SetX = 7,384
-    SetOpacity = 7,255
+    SetFrame = 4,19
+    SetVisible = 5,false
+<Particle 4>
+    Graphic = many
+    Focus = Target
+    SetFrame = 7,20
+    SetX = 7,0
+    SetY = 7,-2
+    SetZ = 7,28
+    SetVisible = 8,false
+<Particle 2>
+    Graphic = many
+    Focus = Target
+    SetFrame = 0,15
+    SetX = 0,136
+    SetY = 0,-2
+    SetZ = 0,27
+    SetX = 1,96
+    SetX = 2,40
+    SetX = 3,8
+    SetFrame = 4,16
+    SetX = 4,-160
+    SetX = 5,-88
+    SetX = 6,-40
+    SetX = 7,0
+    SetFrame = 8,19
+    SetOpacity = 8,100
 <SE>
     Play = 3,Blow5,80
     Play = 7,Blow5,80
@@ -69,32 +97,46 @@ Name = DoubleSlap hit 2
 [Move,DOUBLESLAP,2]
 Name = DoubleSlap hit 3
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
-<Particle 3>
-    Graphic = many
-    Focus = Target
-    SetX = 3,392
-    SetY = 3,94
-    SetOpacity = 3,100
-    SetX = 7,384
-    SetOpacity = 7,255
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = many
     Focus = Target
-    SetX = 0,520
-    SetY = 0,94
-    SetX = 1,480
-    SetX = 2,424
-    SetX = 3,392
-    SetX = 4,224
-    SetX = 5,296
-    SetX = 6,344
-    SetX = 7,384
+    SetFrame = 0,15
+    SetX = 0,136
+    SetY = 0,-2
+    SetZ = 0,27
+    SetX = 1,96
+    SetX = 2,40
+    SetX = 3,8
+    SetFrame = 4,16
+    SetX = 4,-160
+    SetX = 5,-88
+    SetX = 6,-40
+    SetX = 7,0
+    SetFrame = 8,19
     SetOpacity = 8,100
+<Particle 3>
+    Graphic = many
+    Focus = Target
+    SetFrame = 3,20
+    SetX = 3,8
+    SetY = 3,-2
+    SetZ = 3,28
+    SetOpacity = 3,100
+    SetFrame = 4,19
+    SetVisible = 5,false
+<Particle 4>
+    Graphic = many
+    Focus = Target
+    SetFrame = 7,20
+    SetX = 7,0
+    SetY = 7,-2
+    SetZ = 7,28
+    SetVisible = 8,false
 <SE>
     Play = 3,Blow5,80
     Play = 7,Blow5,80
@@ -102,32 +144,46 @@ Name = DoubleSlap hit 3
 [Move,DOUBLESLAP,3]
 Name = DoubleSlap hit 4
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
+<Particle 4>
+    Graphic = many
+    Focus = Target
+    SetFrame = 7,20
+    SetX = 7,0
+    SetY = 7,-2
+    SetZ = 7,28
+    SetVisible = 8,false
 <Particle 2>
     Graphic = many
     Focus = Target
-    SetX = 0,520
-    SetY = 0,94
-    SetX = 1,480
-    SetX = 2,424
-    SetX = 3,392
-    SetX = 4,224
-    SetX = 5,296
-    SetX = 6,344
-    SetX = 7,384
+    SetFrame = 0,15
+    SetX = 0,136
+    SetY = 0,-2
+    SetZ = 0,27
+    SetX = 1,96
+    SetX = 2,40
+    SetX = 3,8
+    SetFrame = 4,16
+    SetX = 4,-160
+    SetX = 5,-88
+    SetX = 6,-40
+    SetX = 7,0
+    SetFrame = 8,19
     SetOpacity = 8,100
 <Particle 3>
     Graphic = many
     Focus = Target
-    SetX = 3,392
-    SetY = 3,94
+    SetFrame = 3,20
+    SetX = 3,8
+    SetY = 3,-2
+    SetZ = 3,28
     SetOpacity = 3,100
-    SetX = 7,384
-    SetOpacity = 7,255
+    SetFrame = 4,19
+    SetVisible = 5,false
 <SE>
     Play = 3,Blow5,80
     Play = 7,Blow5,80
@@ -135,31 +191,45 @@ Name = DoubleSlap hit 4
 [Move,DOUBLESLAP,4]
 Name = DoubleSlap hit 5
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = many
     Focus = Target
-    SetX = 3,392
-    SetY = 3,94
+    SetFrame = 3,20
+    SetX = 3,8
+    SetY = 3,-2
+    SetZ = 3,28
     SetOpacity = 3,100
-    SetX = 7,384
-    SetOpacity = 7,255
+    SetFrame = 4,19
+    SetVisible = 5,false
+<Particle 4>
+    Graphic = many
+    Focus = Target
+    SetFrame = 7,20
+    SetX = 7,0
+    SetY = 7,-2
+    SetZ = 7,28
+    SetVisible = 8,false
 <Particle 2>
     Graphic = many
     Focus = Target
-    SetX = 0,520
-    SetY = 0,94
-    SetX = 1,480
-    SetX = 2,424
-    SetX = 3,392
-    SetX = 4,224
-    SetX = 5,296
-    SetX = 6,344
-    SetX = 7,384
+    SetFrame = 0,15
+    SetX = 0,136
+    SetY = 0,-2
+    SetZ = 0,27
+    SetX = 1,96
+    SetX = 2,40
+    SetX = 3,8
+    SetFrame = 4,16
+    SetX = 4,-160
+    SetX = 5,-88
+    SetX = 6,-40
+    SetX = 7,0
+    SetFrame = 8,19
     SetOpacity = 8,100
 <SE>
     Play = 3,Blow5,80

@@ -3,16 +3,18 @@
 [Move,HARDEN]
 Name = HARDEN
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 2>
     Graphic = anim sheet
     Focus = User
-    SetX = 0,133
-    SetY = 0,221
+    SetFrame = 0,15
+    SetX = 0,5
+    SetY = 0,-3
+    SetZ = 0,27
     SetOpacity = 0,70
     SetOpacity = 1,105
     SetOpacity = 2,140

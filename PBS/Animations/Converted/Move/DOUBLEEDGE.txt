@@ -3,43 +3,65 @@
 [Move,DOUBLEEDGE]
 Name = DOUBLEEDGE
 <User>
-    SetX = 0,128
-    SetY = 0,224
+    SetX = 0,0
+    SetY = 0,0
 <Target>
-    SetX = 0,384
-    SetY = 0,96
+    SetX = 0,0
+    SetY = 0,0
 <Particle 3>
     Graphic = Divine_Smash
-    Focus = Target
-    SetX = 1,198
-    SetY = 1,236
-    SetY = 2,179
-    SetX = 3,96
-    SetY = 3,167
-    SetX = 8,358
-    SetY = 8,110
+    Focus = User
+    SetFrame = 1,11
+    SetX = 1,70
+    SetY = 1,12
+    SetZ = 1,28
+    SetY = 2,-45
+    SetX = 3,-32
+    SetY = 3,-57
+    SetVisible = 4,false
 <Particle 4>
     Graphic = Divine_Smash
     Focus = User
-    SetX = 2,96
-    SetY = 2,230
-<Particle 2>
+    SetFrame = 2,11
+    SetX = 2,-32
+    SetY = 2,6
+    SetZ = 2,29
+    SetVisible = 3,false
+<Particle 5>
     Graphic = Divine_Smash
     Focus = Target
-    SetX = 0,128
-    SetY = 0,236
-    SetY = 1,192
-    SetY = 2,129
-    SetX = 3,198
-    SetY = 3,116
-    SetX = 4,96
-    SetY = 4,129
-    SetX = 5,358
-    SetY = 5,110
+    SetFrame = 5,14
+    SetX = 5,-26
+    SetY = 5,14
+    SetZ = 5,27
     SetOpacity = 5,50
+    SetFrame = 7,3
     SetOpacity = 7,255
-    SetX = 10,352
+    SetFrame = 9,4
+    SetX = 10,-32
     SetAngle = 10,90
+<Particle 6>
+    Graphic = Divine_Smash
+    Focus = Target
+    SetFrame = 8,4
+    SetX = 8,-26
+    SetY = 8,14
+    SetZ = 8,28
+    SetVisible = 9,false
+<Particle 2>
+    Graphic = Divine_Smash
+    Focus = User
+    SetFrame = 0,11
+    SetX = 0,0
+    SetY = 0,12
+    SetZ = 0,27
+    SetY = 1,-32
+    SetY = 2,-95
+    SetX = 3,70
+    SetY = 3,-108
+    SetX = 4,-32
+    SetY = 4,-95
+    SetVisible = 5,false
 <SE>
     Play = 0,throw,80
     Play = 6,Damage1,80
