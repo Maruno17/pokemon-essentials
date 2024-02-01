@@ -8408,7 +8408,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = DoublePowerIfTargetNotActed
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,Biting
 Description = The user rends the target with its hard gills. Power doubles if the user moves first.
 #-------------------------------
 [LIQUIDATION]

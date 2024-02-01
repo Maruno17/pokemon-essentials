@@ -241,30 +241,30 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BindTarget",
     next score if target.effects[PBEffects::Substitute] > 0
     # Prefer if the user has a Binding Band or Grip Claw (because why have it if
     # you don't want to use it?)
-    score += 5 if user.has_active_item?([:BINDINGBAND, :GRIPCLAW])
+    score += 4 if user.has_active_item?([:BINDINGBAND, :GRIPCLAW])
     # Target will take damage at the end of each round from the binding
-    score += 10 if target.battler.takesIndirectDamage?
+    score += 8 if target.battler.takesIndirectDamage?
     # Check whether the target will be trapped in battle by the binding
     if target.can_become_trapped?
-      score += 8   # Prefer if the target will become trapped by this move
+      score += 4   # Prefer if the target will become trapped by this move
       eor_damage = target.rough_end_of_round_damage
       if eor_damage > 0
         # Prefer if the target will take damage at the end of each round on top
         # of binding damage
-        score += 10
+        score += 5
       elsif eor_damage < 0
         # Don't prefer if the target will heal itself at the end of each round
-        score -= 10
+        score -= 5
       end
       # Prefer if the target has been Perish Songed
-      score += 15 if target.effects[PBEffects::PerishSong] > 0
+      score += 10 if target.effects[PBEffects::PerishSong] > 0
     end
     # Don't prefer if the target can remove the binding (and the binding has an
     # effect)
     if target.can_become_trapped? || target.battler.takesIndirectDamage?
       if ai.trainer.medium_skill? &&
          target.has_move_with_function?("RemoveUserBindingAndEntryHazards")
-        score -= 10
+        score -= 8
       end
     end
     next score

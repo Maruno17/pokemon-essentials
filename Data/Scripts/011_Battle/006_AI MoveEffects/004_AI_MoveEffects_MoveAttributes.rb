@@ -647,6 +647,8 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenPhysicalDamageAgainstUserS
   proc { |score, move, user, ai, battle|
     # Doesn't stack with Aurora Veil
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+    # Prefer if the user is newly in battle
+    score += 15 if user.turnCount < 2
     # Don't prefer the lower the user's HP is
     if ai.trainer.has_skill_flag?("HPAware") && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       if user.hp <= user.totalhp / 2
@@ -677,6 +679,8 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenSpecialDamageAgainstUserSi
   proc { |score, move, user, ai, battle|
     # Doesn't stack with Aurora Veil
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+    # Prefer if the user is newly in battle
+    score += 15 if user.turnCount < 2
     # Don't prefer the lower the user's HP is
     if ai.trainer.has_skill_flag?("HPAware") && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       if user.hp <= user.totalhp / 2
@@ -710,6 +714,8 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenDamageAgainstUserSideIfHai
     # Doesn't stack with Reflect/Light Screen
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::Reflect] > 0 &&
                                            user.pbOwnSide.effects[PBEffects::LightScreen] > 0
+    # Prefer if the user is newly in battle
+    score += 15 if user.turnCount < 2
     # Don't prefer the lower the user's HP is
     if ai.trainer.has_skill_flag?("HPAware") && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       if user.hp <= user.totalhp / 2

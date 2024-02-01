@@ -429,7 +429,21 @@ class Interpreter
       result = (@parameters[2] == 0) ? (gold >= @parameters[1]) : (gold <= @parameters[1])
 #    when 8, 9, 10   # item, weapon, armor
     when 11   # button
-      result = Input.press?(@parameters[1])
+      button = {
+        2  => Input::DOWN,
+        4  => Input::LEFT,
+        6  => Input::RIGHT,
+        8  => Input::UP,
+        11 => Input::ACTION,
+        12 => Input::BACK,
+        13 => Input::USE,
+        14 => Input::JUMPUP,
+        15 => Input::JUMPDOWN,
+        16 => Input::SPECIAL,
+        17 => Input::AUX1,
+        18 => Input::AUX2
+      }[@parameters[1]]
+      result = button && Input.press?(button)
     when 12   # script
       result = execute_script(@parameters[1])
     end

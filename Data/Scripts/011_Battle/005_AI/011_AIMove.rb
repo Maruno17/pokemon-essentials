@@ -543,21 +543,34 @@ class Battle::AI::AIMove
   #-----------------------------------------------------------------------------
 
   # Return values:
-  #   0: Regular additional effect chance or isn't an additional effect
+  #   0: Isn't an additional effect or always triggers
   #   -999: Additional effect will be negated
   #   Other: Amount to add to a move's score
+  # TODO: This value just gets added to the score, but it should only modify the
+  #       score for the additional effect and shouldn't reduce that to less than
+  #       0.
   def get_score_change_for_additional_effect(user, target = nil)
+    chance = @move.addlEffect
     # Doesn't have an additional effect
-    return 0 if @move.addlEffect == 0
+    return 0 if chance == 0
     # Additional effect will be negated
     return -999 if user.has_active_ability?(:SHEERFORCE)
     return -999 if target && user.index != target.index &&
                    target.has_active_ability?(:SHIELDDUST) && !@ai.battle.moldBreaker
-    # Prefer if the additional effect will have an increased chance of working
-    return 5 if @move.addlEffect < 100 &&
-                (Settings::MECHANICS_GENERATION >= 6 || function_code != "EffectDependsOnEnvironment") &&
-                (user.has_active_ability?(:SERENEGRACE) || user.pbOwnSide.effects[PBEffects::Rainbow] > 0)
-    # No change to score
-    return 0
+    # Additional effect will always trigger
+    return 0 if chance > 100
+    # Calculate the chance
+    chance *= 2 if (Settings::MECHANICS_GENERATION >= 6 || function_code != "EffectDependsOnEnvironment") &&
+                   (user.has_active_ability?(:SERENEGRACE) || user.pbOwnSide.effects[PBEffects::Rainbow] > 0)
+    # Don't prefer if the additional effect has a low chance of happening
+    ret = 0
+    if chance <= 10
+      ret -= 10
+    elsif chance <= 50
+      ret -= 5
+    elsif chance >= 80
+      ret += 5
+    end
+    return ret
   end
 end
