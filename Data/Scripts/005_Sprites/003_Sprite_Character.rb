@@ -135,6 +135,7 @@ class Sprite_Character < RPG::Sprite
       self.bitmap = nil
       @cw = 0
       @ch = 0
+      @reflection&.update
     end
     @character.sprite_size = [@cw, @ch]
   end
