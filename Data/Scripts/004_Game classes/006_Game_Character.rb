@@ -719,14 +719,22 @@ class Game_Character
       (rand(2) == 0) ? abs_sx += 1 : abs_sy += 1
     end
     if abs_sx > abs_sy
-      (sx > 0) ? move_left : move_right
+      if abs_sx >= 1
+        (sx > 0) ? move_left : move_right
+      end
       if !moving? && sy != 0
-        (sy > 0) ? move_up : move_down
+        if abs_sy >= 1
+          (sy > 0) ? move_up : move_down
+        end
       end
     else
-      (sy > 0) ? move_up : move_down
+      if abs_sy >= 1
+        (sy > 0) ? move_up : move_down
+      end
       if !moving? && sx != 0
-        (sx > 0) ? move_left : move_right
+        if abs_sx >= 1
+          (sx > 0) ? move_left : move_right
+        end
       end
     end
   end

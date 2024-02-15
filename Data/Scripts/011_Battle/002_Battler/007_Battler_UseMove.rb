@@ -736,6 +736,7 @@ class Battle::Battler
     targets.each do |b|
       next if b.damageState.unaffected
       next if !b.damageState.berryWeakened
+      b.damageState.berryWeakened = false   # Weakening only applies for one hit
       @battle.pbDisplay(_INTL("The {1} weakened the damage to {2}!", b.itemName, b.pbThis(true)))
       b.pbConsumeItem
     end
