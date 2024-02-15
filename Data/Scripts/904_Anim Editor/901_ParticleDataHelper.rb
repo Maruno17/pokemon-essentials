@@ -190,17 +190,37 @@ module AnimationEditor::ParticleDataHelper
     end
     interps[frame] = interp if interp != :none
     set_points[frame] = value
+    # For visibility only, set the keyframe with the first command (of any kind)
+    # to be visible, unless the command being added overwrites it. Also figure
+    # out the first keyframe that has a command, and the first keyframe that has
+    # a non-visibility command (used below).
+    if property == :visible
+      first_cmd = (["User", "Target", "SE"].include?(particle[:name])) ? 0 : -1
+      first_non_visible_cmd = -1
+      particle.each_pair do |prop, value|
+        next if !value.is_a?(Array) || value.length == 0
+        next if prop == property && value[0][0] == frame
+        first_cmd = value[0][0] if first_cmd < 0 || first_cmd > value[0][0]
+        next if prop == :visible
+        first_non_visible_cmd = value[0][0] if first_non_visible_cmd < 0 || first_non_visible_cmd > value[0][0]
+      end
+      set_points[first_cmd] = true if first_cmd >= 0 && set_points[first_cmd].nil?
+    end
     # Convert points and interps back into particle[property]
     ret = []
     if !GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.include?(property)
       raise _INTL("Couldn't get default value for property {1}.", property)
     end
     val = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[property]
-    val = true if property == :visible && ["User", "Target", "SE"].include?(particle[:name])
     length = [set_points.length, end_points.length].max
     length.times do |i|
-      if !set_points[i].nil? && set_points[i] != val
-        ret.push([i, 0, set_points[i]])
+      if !set_points[i].nil?
+        if property == :visible && first_cmd >= 0 && i == first_cmd &&
+           first_non_visible_cmd >= 0 && i == first_non_visible_cmd
+          ret.push([i, 0, set_points[i]]) if !set_points[i]
+        elsif set_points[i] != val
+          ret.push([i, 0, set_points[i]])
+        end
         val = set_points[i]
       end
       if interps[i] && interps[i] != :none
@@ -295,5 +315,28 @@ module AnimationEditor::ParticleDataHelper
       particle[:se].delete_if { |s| s[0] == frame && s[2] == filename }
       particle.delete(:se) if particle[:se].empty?
     end
+  end
+
+  #-----------------------------------------------------------------------------
+
+  # Creates a new particle and inserts it at index. If there is a particle above
+  # the new one, the new particle will inherit its focus; otherwise it gets a
+  # default focus of :foreground.
+  def add_particle(particles, index)
+    new_particle = {
+      :name    => _INTL("New particle"),
+      :graphic => GameData::Animation::PARTICLE_DEFAULT_VALUES[:graphic],
+      :focus   => GameData::Animation::PARTICLE_DEFAULT_VALUES[:focus]
+    }
+    if index > 0 && index <= particles.length - 1
+      old_particle = particles[index - 1]
+      new_particle[:focus] = old_particle[:focus]
+    end
+    index = particles.length - 1 if index < 0
+    particles.insert(index, new_particle)
+  end
+
+  def swap_particles(particles, index1, index2)
+    particles[index1], particles[index2] = particles[index2], particles[index1]
   end
 end

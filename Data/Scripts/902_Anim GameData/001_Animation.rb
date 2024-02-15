@@ -40,7 +40,7 @@ module GameData
       "EaseOut"  => :ease_out,
       "EaseBoth" => :ease_both
     }
-    USER_AND_TARGET_SEPARATION = [200, -200, -200]   # x, y, z (from user to target)
+    USER_AND_TARGET_SEPARATION = [200, -200, -100]   # x, y, z (from user to target)
 
     # Properties that apply to the animation in general, not to individual
     # particles. They don't change during the animation.

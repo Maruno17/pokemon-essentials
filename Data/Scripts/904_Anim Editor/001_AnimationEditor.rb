@@ -206,8 +206,8 @@ class AnimationEditor
   def set_commands_pane_contents
     commands_pane = @components[:commands_pane]
     commands_pane.add_header_label(:header, _INTL("Edit particle at keyframe"))
-    commands_pane.add_labelled_number_text_box(:x, _INTL("X"), -200, 200, 0)
-    commands_pane.add_labelled_number_text_box(:y, _INTL("Y"), -200, 200, 0)
+    commands_pane.add_labelled_number_text_box(:x, _INTL("X"), -999, 999, 0)
+    commands_pane.add_labelled_number_text_box(:y, _INTL("Y"), -999, 999, 0)
     commands_pane.add_labelled_number_slider(:z, _INTL("Priority"), -50, 50, 0)
     # TODO: If the graphic is user's sprite/target's sprite, make :frame instead
     #       a choice of front/back/same as the main sprite/opposite of the main
@@ -257,7 +257,7 @@ class AnimationEditor
     particle_pane.get_control(:name).set_blacklist("User", "Target", "SE")
     particle_pane.add_labelled_label(:graphic_name, _INTL("Graphic"), "")
     particle_pane.add_labelled_button(:graphic, "", _INTL("Change"))
-    particle_pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {}, :user)
+    particle_pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {}, :undefined)
     # FlipIfFoe
     # RotateIfFoe
     # Delete button (if not "User"/"Target"/"SE")
@@ -430,6 +430,8 @@ class AnimationEditor
     @pop_up_bg_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.new(0, 0, 0, 128))
   end
 
+  #-----------------------------------------------------------------------------
+
   def refresh_component_visibility(component_sym)
     component = @components[component_sym]
     # Panes are all mutually exclusive
@@ -477,26 +479,6 @@ class AnimationEditor
         ctrl[1].value = new_vals[ctrl[0]][0] if ctrl[1].respond_to?("value=")
         # TODO: new_vals[ctrl[0]][1] is whether the value is being interpolated,
         #       which should be indicated somehow in ctrl[1].
-      end
-      # Set an appropriate range for the X and Y properties depending on the
-      # particle's focus
-      case @anim[:particles][particle_index][:focus]
-      when :foreground, :midground, :background   # Cover the whole screen
-        component.get_control(:x).min_value = -128
-        component.get_control(:x).max_value = CANVAS_WIDTH + 128
-        component.get_control(:y).min_value = -128
-        component.get_control(:y).max_value = CANVAS_HEIGHT + 128
-      when :user, :target, :user_side_foreground, :user_side_background,
-           :target_side_foreground, :target_side_background   # Around the focus
-        component.get_control(:x).min_value = -CANVAS_WIDTH
-        component.get_control(:x).max_value = CANVAS_WIDTH
-        component.get_control(:y).min_value = -CANVAS_HEIGHT
-        component.get_control(:y).max_value = CANVAS_HEIGHT
-      when :user_and_target   # Covers both foci
-        component.get_control(:x).min_value = -CANVAS_WIDTH
-        component.get_control(:x).max_value = GameData::Animation::USER_AND_TARGET_SEPARATION[0] + CANVAS_WIDTH
-        component.get_control(:y).min_value = GameData::Animation::USER_AND_TARGET_SEPARATION[1] - CANVAS_HEIGHT
-        component.get_control(:y).max_value = CANVAS_HEIGHT
       end
       # Set an appropriate range for the priority (z) property depending on the
       # particle's focus
@@ -597,6 +579,20 @@ class AnimationEditor
           :target_side_foreground => _INTL("In front of target's side"),
           :target_side_background => _INTL("Behind target's side")
         }
+      end
+    when :particle_list
+      # Disable the "move particle up/down" buttons if the selected particle
+      # can't move that way (or there is no selected particle)
+      cur_index = particle_index
+      if cur_index < 1
+        component.get_control(:move_particle_up).disable
+      else
+        component.get_control(:move_particle_up).enable
+      end
+      if cur_index < 0 || cur_index >= @anim[:particles].length - 2
+        component.get_control(:move_particle_down).disable
+      else
+        component.get_control(:move_particle_down).enable
       end
     when :animation_properties
       refresh_move_property_options
@@ -721,8 +717,33 @@ class AnimationEditor
     when :keyframe_pane
       # TODO: Stuff here once I decide what controls to add.
     when :particle_list
-#      refresh if keyframe != old_keyframe || particle_index != old_particle_index
-      # TODO: Lots of stuff here when buttons are added to it.
+      case property
+      when :add_particle
+        new_idx = particle_index
+        if new_idx >= 0
+          new_idx += 1
+          new_idx = @anim[:particles].length - 1 if new_idx == 0 || new_idx >= @anim[:particles].length
+        end
+        AnimationEditor::ParticleDataHelper.add_particle(@anim[:particles], new_idx)
+        @components[:particle_list].set_particles(@anim[:particles])
+        @components[:particle_list].particle_index = (new_idx >= 0) ? new_idx : @anim[:particles].length - 2
+        @components[:particle_list].keyframe = -1
+        refresh
+      when :move_particle_up
+        idx1 = particle_index
+        idx2 = idx1 - 1
+        AnimationEditor::ParticleDataHelper.swap_particles(@anim[:particles], idx1, idx2)
+        @components[:particle_list].set_particles(@anim[:particles])
+        @components[:particle_list].particle_index = idx2
+        refresh
+      when :move_particle_down
+        idx1 = particle_index
+        idx2 = idx1 + 1
+        AnimationEditor::ParticleDataHelper.swap_particles(@anim[:particles], idx1, idx2)
+        @components[:particle_list].set_particles(@anim[:particles])
+        @components[:particle_list].particle_index = idx2
+        refresh
+      end
     when :animation_properties
       # TODO: Will changes here need to refresh any other components (e.g. side
       #       panes)? Probably.
@@ -769,14 +790,15 @@ class AnimationEditor
         if component.respond_to?("values")
           # TODO: Make undo/redo snapshot.
           values = component.values
-          values.each_pair do |property, value|
-            apply_changed_value(sym, property, value)
+          if values
+            values.each_pair do |property, value|
+              apply_changed_value(sym, property, value)
+            end
           end
         end
         component.clear_changed
       end
-      # TODO: Call repaint only if component responds to it? Canvas won't.
-      component.repaint if sym == :particle_list || sym == :menu_bar
+      component.repaint if [:particle_list, :menu_bar].include?(sym)
       if @captured
         @captured = nil if !component.busy?
         break

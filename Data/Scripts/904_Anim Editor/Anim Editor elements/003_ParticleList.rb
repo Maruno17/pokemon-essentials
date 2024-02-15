@@ -1,5 +1,6 @@
 #===============================================================================
-#
+# TODO: The Add/Up/Down buttons don't get captured, and don't prevent anything
+#       else in this control highlighting when hovered over, and vice versa.
 #===============================================================================
 class AnimationEditor::ParticleList < UIControls::BaseControl
   VIEWPORT_SPACING     = 1
@@ -33,6 +34,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   SE_CONTROL_BG        = Color.gray
 
   attr_reader :keyframe   # The selected keyframe
+  attr_reader :values
 
   def initialize(x, y, width, height, viewport)
     super(width, height, viewport)
@@ -75,6 +77,23 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @position_sprite = BitmapSprite.new(3, height - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, @position_viewport)
     @position_sprite.ox = @position_sprite.width / 2
     @position_sprite.bitmap.fill_rect(0, 0, @position_sprite.bitmap.width, @position_sprite.bitmap.height, Color.red)
+    # Selected particle line sprite
+    @particle_line_sprite = BitmapSprite.new(@position_viewport.rect.width, 3, @commands_viewport)
+    @particle_line_sprite.z = -10
+    @particle_line_sprite.oy = @particle_line_sprite.height / 2
+    @particle_line_sprite.bitmap.fill_rect(0, 0, @particle_line_sprite.bitmap.width, @particle_line_sprite.bitmap.height, Color.red)
+    # Buttons and button bitmaps
+    initialze_button_bitmaps
+    @controls = []
+    add_particle_button = UIControls::BitmapButton.new(x + 1, y + 1, viewport, @add_button_bitmap)
+    add_particle_button.set_interactive_rects
+    @controls.push([:add_particle, add_particle_button])
+    up_particle_button = UIControls::BitmapButton.new(x + 22, y + 1, viewport, @up_button_bitmap)
+    up_particle_button.set_interactive_rects
+    @controls.push([:move_particle_up, up_particle_button])
+    down_particle_button = UIControls::BitmapButton.new(x + 43, y + 1, viewport, @down_button_bitmap)
+    down_particle_button.set_interactive_rects
+    @controls.push([:move_particle_down, down_particle_button])
     # List sprites and commands sprites
     @list_sprites = []
     @commands_bg_sprites = []
@@ -92,6 +111,22 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @particle_list = []   # Each element is index in @particles or [index, property]
     @visibilities = []   # Per particle
     @commands = {}
+  end
+
+  def initialze_button_bitmaps
+    @add_button_bitmap = Bitmap.new(12, 12)
+    @add_button_bitmap.fill_rect(1, 5, 10, 2, TEXT_COLOR)
+    @add_button_bitmap.fill_rect(5, 1, 2, 10, TEXT_COLOR)
+    @up_button_bitmap = Bitmap.new(12, 12)
+    5.times do |i|
+      @up_button_bitmap.fill_rect(1 + i, 7 - i, 1, (i == 0) ? 2 : 3, TEXT_COLOR)
+      @up_button_bitmap.fill_rect(10 - i, 7 - i, 1, (i == 0) ? 2 : 3, TEXT_COLOR)
+    end
+    @down_button_bitmap = Bitmap.new(12, 12)
+    5.times do |i|
+      @down_button_bitmap.fill_rect(1 + i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, TEXT_COLOR)
+      @down_button_bitmap.fill_rect(10 - i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, TEXT_COLOR)
+    end
   end
 
   def draw_control_background
@@ -117,6 +152,12 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @time_scrollbar.dispose
     @timeline_sprite.dispose
     @position_sprite.dispose
+    @particle_line_sprite.dispose
+    @controls.each { |c| c[1].dispose }
+    @controls.clear
+    @add_button_bitmap.dispose
+    @up_button_bitmap.dispose
+    @down_button_bitmap.dispose
     dispose_listed_sprites
     @list_viewport.dispose
     @commands_bg_viewport.dispose
@@ -133,6 +174,19 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     return (ret.is_a?(Array)) ? ret[0] : ret
   end
 
+  def particle_index=(val)
+    old_index = @row_index
+    @row_index = @particle_list.index { |row| (row.is_a?(Array) && row[0] == val) ||
+                                              (!row.is_a?(Array) && row == val) }
+    invalidate if @row_index != old_index
+  end
+
+  def keyframe=(val)
+    return if @keyframe == val
+    @keyframe = val
+    invalidate
+  end
+
   def top_pos=(val)
     old_val = @top_pos
     total_height = (@particle_list.length * ROW_HEIGHT) + 1
@@ -146,6 +200,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @commands_bg_viewport.oy = @top_pos
     @commands_viewport.oy = @top_pos
     if @top_pos != old_val
+      refresh_particle_line
       invalidate_rows
       @old_top_pos = old_val
     end
@@ -245,6 +300,34 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @invalid_time = false
     @invalid_rows = false
     @invalid_commands = false
+  end
+
+  def busy?
+    return true if @controls.any? { |c| c[1].busy? }
+    return super
+  end
+
+  def changed?
+    return @changed
+  end
+
+  def set_changed
+    @changed = true
+    @values = {}
+  end
+
+  def clear_changed
+    super
+    @values = nil
+  end
+
+  def get_control(id)
+    ret = nil
+    @controls.each do |c|
+      ret = c[1] if c[0] == id
+      break if ret
+    end
+    return ret
   end
 
   #-----------------------------------------------------------------------------
@@ -383,6 +466,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       :flip     => _INTL("Flip"),
       :x        => _INTL("X"),
       :y        => _INTL("Y"),
+      :z        => _INTL("Priority"),
       :zoom_x   => _INTL("Zoom X"),
       :zoom_y   => _INTL("Zoom Y"),
       :angle    => _INTL("Angle"),
@@ -394,6 +478,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   def repaint
     @list_scrollbar.repaint if @list_scrollbar.invalid?
     @time_scrollbar.repaint if @time_scrollbar.invalid?
+    @controls.each { |c| c[1].repaint if c[1].invalid? }
     super if invalid?
   end
 
@@ -434,6 +519,13 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @position_sprite.visible = (@keyframe >= 0)
     if @keyframe >= 0
       @position_sprite.x = TIMELINE_LEFT_BUFFER + (@keyframe * KEYFRAME_SPACING) - @left_pos
+    end
+  end
+
+  def refresh_particle_line
+    @particle_line_sprite.visible = (particle_index >= 0)
+    if particle_index >= 0
+      @particle_line_sprite.y = ((@row_index + 0.5) * ROW_HEIGHT).to_i
     end
   end
 
@@ -576,6 +668,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
 
   def refresh
     @old_top_pos = nil if @invalid
+    @controls.each { |c| c[1].refresh }
     draw_area_highlight
     refresh_timeline if @invalid || @invalid_time
     each_visible_particle do |i|
@@ -717,12 +810,22 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     return if !self.visible
     @list_scrollbar.update
     @time_scrollbar.update
+    @controls.each { |c| c[1].update }
     super
     # Refresh sprites if a scrollbar has been moved
     self.top_pos = @list_scrollbar.position
     self.left_pos = @time_scrollbar.position
     # Update the current keyframe line's position
     refresh_position_line
+    # Update the selected particle line's position
+    refresh_particle_line
+    # Add/move particle buttons
+    @controls.each do |c|
+      next if !c[1].changed?
+      set_changed
+      @values[c[0]] = true
+      c[1].clear_changed
+    end
 
     if Input.release?(Input::MOUSERIGHT)
       on_right_mouse_release

@@ -299,7 +299,7 @@ class AnimationEditor::Canvas < Sprite
       spr.x = user_pos[0] + ((values[:x].to_f / distance[0]) * (target_pos[0] - user_pos[0])).to_i
       spr.y = user_pos[1] + ((values[:y].to_f / distance[1]) * (target_pos[1] - user_pos[1])).to_i
     when :user_side_foreground, :user_side_background
-      base_coords = Battle::Scene.pbBattlerPosition(target_idx)
+      base_coords = Battle::Scene.pbBattlerPosition(user_index)
       spr.x += base_coords[0]
       spr.y += base_coords[1]
     when :target_side_foreground, :target_side_background
@@ -350,9 +350,12 @@ class AnimationEditor::Canvas < Sprite
       spr.y += spr.bitmap.height / 2
     else
       spr.bitmap = RPG::Cache.load_bitmap("Graphics/Battle animations/", particle[:graphic])
-      # TODO: Set the oy to spr.bitmap.height if particle[:graphic] has
-      #       something special in it (don't know what yet).
-      if spr.bitmap.width > spr.bitmap.height * 2
+      if [:foreground, :midground, :background].include?(particle[:focus]) &&
+         spr.bitmap.width == AnimationEditor::CANVAS_WIDTH &&
+         spr.bitmap.height >= AnimationEditor::CANVAS_HEIGHT - @message_bar_sprite.y
+        spr.ox = 0
+        spr.oy = 0
+      elsif spr.bitmap.width > spr.bitmap.height * 2
         spr.src_rect.set(values[:frame] * spr.bitmap.height, 0, spr.bitmap.height, spr.bitmap.height)
         spr.ox = spr.bitmap.height / 2
         spr.oy = spr.bitmap.height / 2
@@ -360,6 +363,9 @@ class AnimationEditor::Canvas < Sprite
         spr.src_rect.set(0, 0, spr.bitmap.width, spr.bitmap.height)
         spr.ox = spr.bitmap.width / 2
         spr.oy = spr.bitmap.height / 2
+      end
+      if particle[:graphic][/\[\s*bottom\s*\]\s*$/i]   # [bottom] at end of filename
+        spr.oy = spr.bitmap.height
       end
     end
     # Set z (priority)
@@ -379,7 +385,13 @@ class AnimationEditor::Canvas < Sprite
       user_pos = 1000 + ((100 * ((user_index / 2) + 1)) * (user_index.even? ? 1 : -1))
       target_pos = 1000 + ((100 * ((target_idx / 2) + 1)) * (target_idx.even? ? 1 : -1))
       distance = GameData::Animation::USER_AND_TARGET_SEPARATION[2]
-      spr.z = user_pos + ((values[:z].to_f / distance) * (target_pos - user_pos)).to_i
+      if values[:z] >= 0
+        spr.z += user_pos
+      elsif values[:z] <= distance
+        spr.z += target_pos
+      else
+        spr.z = user_pos + ((values[:z].to_f / distance) * (target_pos - user_pos)).to_i
+      end
     when :user_side_foreground, :target_side_foreground
       this_idx = (particle[:focus] == :user_side_foreground) ? user_index : target_idx
       spr.z += 1000
