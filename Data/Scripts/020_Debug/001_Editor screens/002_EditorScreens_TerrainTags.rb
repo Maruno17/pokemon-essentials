@@ -46,6 +46,8 @@ class PokemonTilesetScene
       $game_player.center($game_player.x, $game_player.y)
       if $scene.is_a?(Scene_Map)
         $scene.dispose
+        # Reset map objects in each follower event
+        $game_temp.followers = Game_FollowerFactory.new
         $scene.createSpritesets
       end
     end
