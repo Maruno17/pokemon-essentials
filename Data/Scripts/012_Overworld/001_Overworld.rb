@@ -370,6 +370,7 @@ end
 
 # Returns whether event is able to walk up to the player.
 def pbEventCanReachPlayer?(event, player, distance)
+  return false if event.map_id != player.map_id
   return false if !pbEventFacesPlayer?(event, player, distance)
   delta_x = (event.direction == 6) ? 1 : (event.direction == 4) ? -1 : 0
   delta_y = (event.direction == 2) ? 1 : (event.direction == 8) ? -1 : 0
@@ -394,6 +395,7 @@ end
 # Returns whether the two events are standing next to each other and facing each
 # other.
 def pbFacingEachOther(event1, event2)
+  return false if event1.map_id != event2.map_id
   return pbEventFacesPlayer?(event1, event2, 1) && pbEventFacesPlayer?(event2, event1, 1)
 end
 
