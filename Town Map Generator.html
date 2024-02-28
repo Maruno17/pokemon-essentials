@@ -250,7 +250,13 @@
 
   function createMapPoint(imgfile,x,y){
     e=document.createElement("div")
-    e.innerHTML="<img src='"+imgfile+"' alt=''/>"
+    if(imgfile=="selpoint.bmp"){
+      e.innerHTML="<img src='data:image/bmp;base64,Qk32AAAAAAAAADYAAAAoAAAACAAAAAgAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAAAADAAADAAADAAADAAADAAADAAADAAADAAADA////////////////////////AADAAADA////////////////////////AADAAADA////////AADAAADA////////AADAAADA////////AADAAADA////////AADAAADA////////////////////////AADAAADA////////////////////////AADAAADAAADAAADAAADAAADAAADAAADAAAD=' alt=''/>"
+    }
+    if(imgfile=="knownpoint.bmp"){
+      e.innerHTML="<img src='data:image/bmp;base64,Qk32AAAAAAAAADYAAAAoAAAACAAAAAgAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAAgICAgICAgICAgICAgICAgICAgICAgICAgICA////////////////////////gICAgICA////////////////////////gICAgICA////////////////////////gICAgICA////////////////////////gICAgICA////////////////////////gICAgICA////////////////////////gICAgICAgICAgICAgICAgICAgICAgICAgIC=' alt=''/>"
+    }
+//    e.innerHTML="<img src='"+imgfile+"' alt=''/>"
     e.style.left=elempos[0]+x*document.mf.sqwidth.value+(document.mf.sqwidth.value-8)/2
     e.style.top=elempos[1]+y*document.mf.sqheight.value+(document.mf.sqheight.value-8)/2
     e.style.position="absolute"
