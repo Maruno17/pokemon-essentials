@@ -4,6 +4,7 @@ module GameData
     attr_reader :move         # Either the move's ID or the common animation's name (both are strings)
     attr_reader :version      # Hit number
     attr_reader :name         # Shown in the sublist; cosmetic only
+    attr_reader :no_user      # Whether there is no "User" particle (false by default)
     attr_reader :no_target    # Whether there is no "Target" particle (false by default)
     attr_reader :ignore       # Whether the animation can't be played in battle
     attr_reader :flags
@@ -14,7 +15,7 @@ module GameData
     DATA_FILENAME = "animations.dat"
     OPTIONAL = true
 
-    # TODO: All mentions of focus types can be found by searching for
+    # NOTE: All mentions of focus types can be found by searching for
     #       :user_and_target, plus there's :foreground in PARTICLE_DEFAULT_VALUES
     #       below.
     # TODO: Add :user_ground, :target_ground?
@@ -30,6 +31,9 @@ module GameData
       "TargetSide"           => :target_side_foreground,
       "TargetSideBackground" => :target_side_background,
     }
+    FOCUS_TYPES_WITH_USER = [
+      :user, :user_and_target, :user_side_foreground, :user_side_background
+    ]
     FOCUS_TYPES_WITH_TARGET = [
       :target, :user_and_target, :target_side_foreground, :target_side_background
     ]
@@ -48,6 +52,7 @@ module GameData
       "SectionName" => [:id,        "esU", {"Move" => :move, "OppMove" => :opp_move,
                                             "Common" => :common, "OppCommon" => :opp_common}],
       "Name"        => [:name,      "s"],
+      "NoUser"      => [:no_user,   "b"],
       "NoTarget"    => [:no_target, "b"],
       "Ignore"      => [:ignore,    "b"],
       # TODO: Boolean for whether the animation will be played if the target is
@@ -184,6 +189,7 @@ module GameData
       ret[:move]      = move if !move.nil?
       ret[:version]   = 0
       ret[:name]      = _INTL("New animation")
+      ret[:no_user]   = false
       ret[:no_target] = false
       ret[:ignore]    = false
       ret[:particles] = [
@@ -202,6 +208,7 @@ module GameData
       @move       = hash[:move]
       @version    = hash[:version]   || 0
       @name       = hash[:name]
+      @no_user    = hash[:no_user]   || false
       @no_target  = hash[:no_target] || false
       @ignore     = hash[:ignore]    || false
       @particles  = hash[:particles] || []
@@ -217,6 +224,7 @@ module GameData
       ret[:move] = @move
       ret[:version] = @version
       ret[:name] = @name
+      ret[:no_user] = @no_user
       ret[:no_target] = @no_target
       ret[:ignore] = @ignore
       ret[:particles] = []   # Clone the @particles array, which is nested hashes and arrays

@@ -2,10 +2,9 @@
 #
 #===============================================================================
 class AnimationEditor
-  WINDOW_WIDTH  = Settings::SCREEN_WIDTH + (32 * 10)
-  WINDOW_HEIGHT = Settings::SCREEN_HEIGHT + (32 * 10)
-
   BORDER_THICKNESS = 4
+  WINDOW_WIDTH  = Settings::SCREEN_WIDTH + 328 + (BORDER_THICKNESS * 4)
+  WINDOW_HEIGHT = Settings::SCREEN_HEIGHT + 320 + (BORDER_THICKNESS * 4)
 
   # Components
   MENU_BAR_WIDTH  = WINDOW_WIDTH
@@ -25,6 +24,7 @@ class AnimationEditor
   SIDE_PANE_Y      = CANVAS_Y
   SIDE_PANE_WIDTH  = WINDOW_WIDTH - SIDE_PANE_X - BORDER_THICKNESS
   SIDE_PANE_HEIGHT = CANVAS_HEIGHT + PLAY_CONTROLS_HEIGHT + (BORDER_THICKNESS * 2)
+  SIDE_PANE_DELETE_MARGIN = 32
 
   PARTICLE_LIST_X      = BORDER_THICKNESS
   PARTICLE_LIST_Y      = SIDE_PANE_Y + SIDE_PANE_HEIGHT + (BORDER_THICKNESS * 2)
@@ -82,6 +82,9 @@ class AnimationEditor
     "Swamp", "SwampOpp", "Toxic", "UseItem", "WideGuard",
     "Wrap"
   ]
+  DELETABLE_COMMAND_PANE_PROPERTIES = [
+    :x, :y, :z, :frame, :visible, :opacity, :zoom_x, :zoom_y, :angle, :flip, :blending
+  ]
 
   def initialize(anim_id, anim)
     load_settings
@@ -113,7 +116,8 @@ class AnimationEditor
     @components[:canvas] = AnimationEditor::Canvas.new(@canvas_viewport, @anim, @settings)
     # Side panes
     [:commands_pane, :se_pane, :particle_pane, :keyframe_pane].each do |pane|
-      @components[pane] = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT)
+      @components[pane] = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT,
+                                                            (pane == :commands_pane) ? SIDE_PANE_DELETE_MARGIN : 0)
     end
     # TODO: Make a side pane for colour/tone editor (accessed from
     #       @components[:commands_pane] via a button; has Apply/Cancel buttons
@@ -228,6 +232,27 @@ class AnimationEditor
 #    commands_pane.add_labelled_button(:masking, _INTL("Masking"), _INTL("Edit"))
     # TODO: Add buttons that shift all commands from the current keyframe and
     #       later forwards/backwards in time?
+    # Add all "delete" buttons
+    delete_bitmap = Bitmap.new(16, 16)
+    delete_disabled_bitmap = Bitmap.new(16, 16)
+    14.times do |i|
+      case i
+      when 0, 13 then wid = 3
+      when 1, 12 then wid = 4
+      else            wid = 5
+      end
+      delete_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.red)
+      delete_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.red)
+      delete_disabled_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.new(160, 160, 160))
+      delete_disabled_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.new(160, 160, 160))
+    end
+    DELETABLE_COMMAND_PANE_PROPERTIES.each do |property|
+      parent = commands_pane.get_control(property)
+      btn = UIControls::BitmapButton.new(parent.x + parent.width + 6, parent.y + 2,
+                                         commands_pane.viewport, delete_bitmap, delete_disabled_bitmap)
+      btn.set_interactive_rects
+      commands_pane.controls.push([(property.to_s + "_delete").to_sym, btn])
+    end
   end
 
   def set_se_pane_contents
@@ -260,8 +285,10 @@ class AnimationEditor
     particle_pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {}, :undefined)
     # FlipIfFoe
     # RotateIfFoe
-    # Delete button (if not "User"/"Target"/"SE")
     # Duplicate button
+    particle_pane.add_button(:duplicate, _INTL("Duplicate this particle"))
+    # Delete button (if not "User"/"Target"/"SE")
+    particle_pane.add_button(:delete, _INTL("Delete this particle"))
     # Shift all command timings by X keyframes (text box and button)
     # Move particle up/down the list?
   end
@@ -308,6 +335,8 @@ class AnimationEditor
     # Create filepath controls
     # TODO: Have two TextBoxes, one for folder and one for filename?
     anim_properties.add_labelled_text_box(:pbs_path, _INTL("PBS filepath"), "")
+    # Create "involves a user" control
+    anim_properties.add_labelled_checkbox(:has_user, _INTL("Involves a user?"), true)
     # Create "involves a target" control
     anim_properties.add_labelled_checkbox(:has_target, _INTL("Involves a target?"), true)
     # Create flags control
@@ -499,6 +528,14 @@ class AnimationEditor
       else
         component.get_control(:frame).enable
       end
+      # Enable/disable property delete buttons
+      DELETABLE_COMMAND_PANE_PROPERTIES.each do |property|
+        if AnimationEditor::ParticleDataHelper.has_command_at?(@anim[:particles][particle_index], property, keyframe)
+          component.get_control((property.to_s + "_delete").to_sym).enable
+        else
+          component.get_control((property.to_s + "_delete").to_sym).disable
+        end
+      end
     when :se_pane
       se_particle = @anim[:particles].select { |p| p[:name] == "SE" }[0]
       kyfrm = keyframe
@@ -554,32 +591,39 @@ class AnimationEditor
         component.get_control(:graphic).enable
         component.get_control(:focus).enable
       end
-      # Set the possible foci depending on whether the animation involves a
-      # target
-      # TODO: Also filter for user/no user if implemented.
-      if @anim[:no_target]
-        component.get_control(:focus).values = {
-          :foreground           => _INTL("Foreground"),
-          :midground            => _INTL("Midground"),
-          :background           => _INTL("Background"),
-          :user                 => _INTL("User"),
-          :user_side_foreground => _INTL("In front of user's side"),
-          :user_side_background => _INTL("Behind user's side")
-        }
+      # Enable/disable the Duplicate button
+      if ["SE"].include?(@anim[:particles][particle_index][:name])
+        component.get_control(:duplicate).disable
       else
-        component.get_control(:focus).values = {
-          :foreground             => _INTL("Foreground"),
-          :midground              => _INTL("Midground"),
-          :background             => _INTL("Background"),
-          :user                   => _INTL("User"),
-          :target                 => _INTL("Target"),
-          :user_and_target        => _INTL("User and target"),
-          :user_side_foreground   => _INTL("In front of user's side"),
-          :user_side_background   => _INTL("Behind user's side"),
-          :target_side_foreground => _INTL("In front of target's side"),
-          :target_side_background => _INTL("Behind target's side")
-        }
+        component.get_control(:duplicate).enable
       end
+      # Enable/disable the Delete button
+      if ["User", "Target", "SE"].include?(@anim[:particles][particle_index][:name])
+        component.get_control(:delete).disable
+      else
+        component.get_control(:delete).enable
+      end
+      # Set the possible foci depending on whether the animation involves a user
+      # and target
+      focus_values = {
+        :foreground             => _INTL("Foreground"),
+        :midground              => _INTL("Midground"),
+        :background             => _INTL("Background"),
+        :user                   => _INTL("User"),
+        :target                 => _INTL("Target"),
+        :user_and_target        => _INTL("User and target"),
+        :user_side_foreground   => _INTL("In front of user's side"),
+        :user_side_background   => _INTL("Behind user's side"),
+        :target_side_foreground => _INTL("In front of target's side"),
+        :target_side_background => _INTL("Behind target's side")
+      }
+      if @anim[:no_user]
+        GameData::Animation::FOCUS_TYPES_WITH_USER.each { |f| focus_values.delete(f) }
+      end
+      if @anim[:no_target]
+        GameData::Animation::FOCUS_TYPES_WITH_TARGET.each { |f| focus_values.delete(f) }
+      end
+      component.get_control(:focus).values = focus_values
     when :particle_list
       # Disable the "move particle up/down" buttons if the selected particle
       # can't move that way (or there is no selected particle)
@@ -647,11 +691,17 @@ class AnimationEditor
         echoln "Color/Tone button clicked"
       else
         particle = @anim[:particles][particle_index]
-        new_cmds = AnimationEditor::ParticleDataHelper.add_command(particle, property, keyframe, value)
-        if new_cmds
-          particle[property] = new_cmds
+        prop = property
+        if property.to_s[/_delete$/]
+          prop = property.to_s.sub(/_delete$/, "").to_sym
+          new_cmds = AnimationEditor::ParticleDataHelper.delete_command(particle, prop, keyframe)
         else
-          particle.delete(property)
+          new_cmds = AnimationEditor::ParticleDataHelper.add_command(particle, property, keyframe, value)
+        end
+        if new_cmds
+          particle[prop] = new_cmds
+        else
+          particle.delete(prop)
         end
         @components[:particle_list].change_particle_commands(particle_index)
         @components[:play_controls].duration = @components[:particle_list].duration
@@ -706,6 +756,18 @@ class AnimationEditor
           @anim[:particles][p_index][:graphic] = new_file
           refresh_component(:particle_pane)
           refresh_component(:canvas)
+        end
+      when :duplicate
+        AnimationEditor::ParticleDataHelper.duplicate_particle(@anim[:particles], particle_index)
+        @components[:particle_list].set_particles(@anim[:particles])
+        @components[:particle_list].particle_index = particle_index + 1
+        refresh
+      when :delete
+        if confirm_message(_INTL("Are you sure you want to delete this particle?"))
+          AnimationEditor::ParticleDataHelper.delete_particle(@anim[:particles], particle_index)
+          @components[:particle_list].set_particles(@anim[:particles])
+          @components[:particle_list].keyframe = 0 if @anim[:particles][particle_index][:name] == "SE"
+          refresh
         end
       else
         particle = @anim[:particles][particle_index]
@@ -762,10 +824,17 @@ class AnimationEditor
       when :pbs_path
         txt = value.gsub!(/\.txt$/, "")
         @anim[property] = txt
+      when :has_user
+        @anim[:no_user] = !value
+        # TODO: Add/delete the "User" particle accordingly, and change the foci
+        #       of any other particle involving a user. Then refresh a lot of
+        #       components.
+        refresh_component(:canvas)
       when :has_target
         @anim[:no_target] = !value
-        # TODO: Add/delete the "Target" particle accordingly. Then refresh a lot
-        #       of components.
+        # TODO: Add/delete the "Target" particle accordingly, and change the
+        #       foci of any other particle involving a target. Then refresh a
+        #       lot of components.
         refresh_component(:canvas)
       when :usable
         @anim[:ignore] = !value

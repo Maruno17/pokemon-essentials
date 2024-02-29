@@ -7,7 +7,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   TIMELINE_HEIGHT      = 24 - VIEWPORT_SPACING
   LIST_X               = 0
   LIST_Y               = TIMELINE_HEIGHT + VIEWPORT_SPACING
-  LIST_WIDTH           = 150 - VIEWPORT_SPACING
+  LIST_WIDTH           = 180 - VIEWPORT_SPACING
   COMMANDS_X           = LIST_WIDTH + VIEWPORT_SPACING
   COMMANDS_Y           = LIST_Y
 
@@ -83,7 +83,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @particle_line_sprite.oy = @particle_line_sprite.height / 2
     @particle_line_sprite.bitmap.fill_rect(0, 0, @particle_line_sprite.bitmap.width, @particle_line_sprite.bitmap.height, Color.red)
     # Buttons and button bitmaps
-    initialze_button_bitmaps
+    initialize_button_bitmaps
     @controls = []
     add_particle_button = UIControls::BitmapButton.new(x + 1, y + 1, viewport, @add_button_bitmap)
     add_particle_button.set_interactive_rects
@@ -113,7 +113,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @commands = {}
   end
 
-  def initialze_button_bitmaps
+  def initialize_button_bitmaps
     @add_button_bitmap = Bitmap.new(12, 12)
     @add_button_bitmap.fill_rect(1, 5, 10, 2, TEXT_COLOR)
     @add_button_bitmap.fill_rect(5, 1, 2, 10, TEXT_COLOR)
@@ -529,9 +529,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     end
   end
 
-  # TODO: Add indicator that this is selected (if so). Some kind of arrow on the
-  #       left, or a red horizontal line (like the keyframe's vertical line), or
-  #       fill_rect with colour instead of outline_rect?
   def refresh_particle_list_sprite(index)
     spr = @list_sprites[index]
     return if !spr

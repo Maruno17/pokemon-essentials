@@ -167,6 +167,10 @@ module AnimationEditor::ParticleDataHelper
     particle[property] = value
   end
 
+  def has_command_at?(particle, property, frame)
+    return particle[property]&.any? { |cmd| (cmd[0] == frame) || (cmd[0] + cmd[1] == frame) }
+  end
+
   def add_command(particle, property, frame, value)
     # Split particle[property] into values and interpolation arrays
     set_points = []   # All SetXYZ commands (the values thereof)
@@ -242,6 +246,44 @@ module AnimationEditor::ParticleDataHelper
       end
     end
     return (ret.empty?) ? nil : ret
+  end
+
+  # Cases:
+  # * SetXYZ - delete it
+  # * MoveXYZ start - turn into a SetXYZ at the end point
+  # * MoveXYZ end - delete it (this may happen to remove the start diamond too)
+  # * MoveXYZ end and start - merge both together (use first's type)
+  # * SetXYZ and MoveXYZ start - delete SetXYZ (leave MoveXYZ alone)
+  # * SetXYZ and MoveXYZ end - (unlikely) delete both
+  # * SetXYZ and MoveXYZ start and end - (unlikely) delete SetXYZ, merge Moves together
+  def delete_command(particle, property, frame)
+    # Find all relevant commands
+    set_now = nil
+    move_ending_now = nil
+    move_starting_now = nil
+    particle[property].each do |cmd|
+      if cmd[1] == 0
+        set_now = cmd if cmd[0] == frame
+      else
+        move_starting_now = cmd if cmd[0] == frame
+        move_ending_now = cmd if cmd[0] + cmd[1] == frame
+      end
+    end
+    # Delete SetXYZ if it is at frame
+    particle[property].delete(set_now) if set_now
+    # Edit/delete MoveXYZ commands starting/ending at frame
+    if move_ending_now && move_starting_now   # Merge both MoveXYZ commands
+      move_ending_now[1] += move_starting_now[1]
+      particle[property].delete(move_starting_now)
+    elsif move_ending_now   # Delete MoveXYZ ending now
+      particle[property].delete(move_ending_now)
+    elsif move_starting_now && !set_now   # Turn into SetXYZ at its end point
+      move_starting_now[0] += move_starting_now[1]
+      move_starting_now[1] = 0
+      move_starting_now[3] = nil
+      move_starting_now.compact!
+    end
+    return (particle[property].empty?) ? nil : particle[property]
   end
 
   #-----------------------------------------------------------------------------
@@ -336,7 +378,29 @@ module AnimationEditor::ParticleDataHelper
     particles.insert(index, new_particle)
   end
 
+  # Copies the particle at index and inserts the copy immediately after that
+  # index.
+  def duplicate_particle(particles, index)
+    new_particle = {}
+    particles[index].each_pair do |key, value|
+      if value.is_a?(Array)
+        new_particle[key] = []
+        value.each { |cmd| new_particle[key].push(cmd.clone) }
+      else
+        new_particle[key] = value.clone
+      end
+    end
+    new_particle[:name] += " (copy)"
+    particles.insert(index + 1, new_particle)
+  end
+
   def swap_particles(particles, index1, index2)
     particles[index1], particles[index2] = particles[index2], particles[index1]
+  end
+
+  # Deletes the particle at the given index
+  def delete_particle(particles, index)
+    particles[index] = nil
+    particles.compact!
   end
 end

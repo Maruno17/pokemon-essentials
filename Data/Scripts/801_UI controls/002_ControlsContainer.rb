@@ -14,13 +14,14 @@ class UIControls::ControlsContainer
   OFFSET_FROM_LABEL_X = 90
   OFFSET_FROM_LABEL_Y = 0
 
-  def initialize(x, y, width, height)
+  def initialize(x, y, width, height, right_margin = 0)
     @viewport = Viewport.new(x, y, width, height)
     @viewport.z = 99999
     @x = x
     @y = y
     @width = width
     @height = height
+    @right_margin = right_margin
     @label_offset_x = OFFSET_FROM_LABEL_X
     @label_offset_y = OFFSET_FROM_LABEL_Y
     @controls = []
@@ -193,7 +194,7 @@ class UIControls::ControlsContainer
 
   def control_size(has_label = false)
     if has_label
-      return @width - @label_offset_x, LINE_SPACING - @label_offset_y
+      return @width - @label_offset_x - @right_margin, LINE_SPACING - @label_offset_y
     end
     return @width, LINE_SPACING
   end

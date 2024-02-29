@@ -96,6 +96,7 @@ class AnimationEditor
     anim_properties.get_control(:version).value = @anim[:version] || 0
     anim_properties.get_control(:name).value = @anim[:name] || ""
     anim_properties.get_control(:pbs_path).value = (@anim[:pbs_path] || "unsorted") + ".txt"
+    anim_properties.get_control(:has_user).value = !@anim[:no_user]
     anim_properties.get_control(:has_target).value = !@anim[:no_target]
     anim_properties.get_control(:usable).value = !(@anim[:ignore] || false)
     # TODO: Populate flags.

@@ -430,7 +430,7 @@ class AnimationEditor::Canvas < Sprite
     end
     @anim[:particles].each_with_index do |particle, i|
       if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-        refresh_particle(i)
+        refresh_particle(i)   # Because there can be multiple targets
       else
         refresh_sprite(i) if particle[:name] != "SE"
       end

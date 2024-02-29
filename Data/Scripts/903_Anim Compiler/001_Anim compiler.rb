@@ -94,12 +94,21 @@ module Compiler
     hash[:type] = hash[:id][0]
     hash[:move] = hash[:id][1]
     hash[:version] = hash[:id][2] || 0
+    # Ensure there is at most one each of "User", "Target" and "SE" particles
+    ["User", "Target", "SE"].each do |type|
+      next if hash[:particles].count { |particle| particle[:name] == type } <= 1
+      raise _INTL("Animation has more than 1 \"{1}\" particle, which isn't allowed.", type) + "\n" + FileLineData.linereport
+    end
+    # Ensure there is no "User" particle if "NoUser" is set
+    if hash[:particles].any? { |particle| particle[:name] == "User" } && hash[:no_user]
+      raise _INTL("Can't define a \"User\" particle and also set property \"NoUser\" to true.") + "\n" + FileLineData.linereport
+    end
     # Ensure there is no "Target" particle if "NoTarget" is set
     if hash[:particles].any? { |particle| particle[:name] == "Target" } && hash[:no_target]
       raise _INTL("Can't define a \"Target\" particle and also set property \"NoTarget\" to true.") + "\n" + FileLineData.linereport
     end
-    # Create "User", "SE" and "Target" particles if they don't exist but should
-    if hash[:particles].none? { |particle| particle[:name] == "User" }
+    # Create "User", "Target" and "SE" particles if they don't exist but should
+    if hash[:particles].none? { |particle| particle[:name] == "User" } && !hash[:no_user]
       hash[:particles].push({:name => "User"})
     end
     if hash[:particles].none? { |particle| particle[:name] == "Target" } && !hash[:no_target]
@@ -145,8 +154,12 @@ module Compiler
         when "Target" then particle[:graphic] = "TARGET"
         end
       end
-      # TODO: Ensure that particles don't have a focus involving a user if the
-      #       animation itself doesn't involve a user.
+      # Ensure that particles don't have a focus involving a user if the
+      # animation itself doesn't involve a user
+      if hash[:no_user] && GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+        raise _INTL("Particle \"{1}\" can't have a \"Focus\" that involves a user if property \"NoUser\" is set to true.",
+          particle[:name]) + "\n" + FileLineData.linereport
+      end
       # Ensure that particles don't have a focus involving a target if the
       # animation itself doesn't involve a target
       if hash[:no_target] && GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])

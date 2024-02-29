@@ -41,9 +41,14 @@ class UIControls::NumberTextBox < UIControls::TextBox
     self.invalidate
   end
 
-  # TODO: If current value is 0, replace it with ch instead of inserting ch?
-  def insert_char(ch)
-    self.value = @value.to_s.insert(@cursor_pos, ch).to_i
+  def insert_char(ch, index = -1)
+    old_val = @value
+    if @value == 0
+      @value = ch.to_i
+    else
+      self.value = @value.to_s.insert((index >= 0) ? index : @cursor_pos, ch).to_i
+    end
+    return if @value == old_val
     @cursor_pos += 1
     @cursor_pos = @cursor_pos.clamp(0, @value.to_s.length)
     @cursor_timer = System.uptime
@@ -107,17 +112,20 @@ class UIControls::NumberTextBox < UIControls::TextBox
   def update_text_entry
     ret = false
     Input.gets.each_char do |ch|
-      next if !["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"].include?(ch)
-      if ch == "-"
-        next if @min_value >= 0 || @cursor_pos > 1 || (@cursor_pos > 0 && @value >= 0)
-        if @value < 0
+      case ch
+      when "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+        insert_char(ch)
+        ret = true
+      when "-", "+"
+        if @value > 0 && @min_value < 0 && ch == "-"
+          insert_char(ch, 0)   # Add a negative sign at the start
+          ret = true
+        elsif @value < 0
           delete_at(0)   # Remove the negative sign
           ret = true
-          next
         end
+        next
       end
-      insert_char(ch)
-      ret = true
     end
     return ret
   end
