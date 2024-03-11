@@ -774,6 +774,12 @@ module Compiler
   end
 
   def validate_compiled_trainer_type(hash)
+    # Ensure valid Poké Ball
+    if hash[:poke_ball]
+      if !GameData::Item.get(hash[:poke_ball]).is_poke_ball?
+        raise _INTL("Value '{1}' isn't a defined Poké Ball.", hash[:poke_ball]) + "\n" + FileLineData.linereport
+      end
+    end
   end
 
   def validate_all_compiled_trainer_types

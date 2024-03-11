@@ -22,6 +22,7 @@ SaveData.register(:game_system) do
   save_value { $game_system }
   load_value { |value| $game_system = value }
   new_game_value { Game_System.new }
+  reset_on_new_game
 end
 
 SaveData.register(:pokemon_system) do

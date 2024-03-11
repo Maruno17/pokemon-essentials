@@ -495,6 +495,7 @@ MenuHandlers.add(:options_menu, :speech_frame, {
   "type"        => NumberOption,
   "parameters"  => 1..Settings::SPEECH_WINDOWSKINS.length,
   "description" => _INTL("Choose the appearance of dialogue boxes."),
+  "condition"   => proc { next Settings::SPEECH_WINDOWSKINS.length > 1 },
   "get_proc"    => proc { next $PokemonSystem.textskin },
   "set_proc"    => proc { |value, scene|
     $PokemonSystem.textskin = value
@@ -510,6 +511,7 @@ MenuHandlers.add(:options_menu, :menu_frame, {
   "type"        => NumberOption,
   "parameters"  => 1..Settings::MENU_WINDOWSKINS.length,
   "description" => _INTL("Choose the appearance of menu boxes."),
+  "condition"   => proc { next Settings::MENU_WINDOWSKINS.length > 1 },
   "get_proc"    => proc { next $PokemonSystem.frame },
   "set_proc"    => proc { |value, scene|
     $PokemonSystem.frame = value

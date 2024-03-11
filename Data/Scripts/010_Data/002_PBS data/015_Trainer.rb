@@ -171,7 +171,11 @@ module GameData
           pkmn.makeShadow
           pkmn.shiny = false
         end
-        pkmn.poke_ball = pkmn_data[:poke_ball] if pkmn_data[:poke_ball]
+        if pkmn_data[:poke_ball]
+          pkmn.poke_ball = pkmn_data[:poke_ball]
+        elsif trainer.default_poke_ball
+          pkmn.poke_ball = trainer.default_poke_ball
+        end
         pkmn.calc_stats
       end
       return trainer
