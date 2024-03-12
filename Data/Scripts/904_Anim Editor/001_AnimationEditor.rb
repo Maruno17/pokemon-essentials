@@ -215,7 +215,10 @@ class AnimationEditor
     commands_pane.add_labelled_number_slider(:z, _INTL("Priority"), -50, 50, 0)
     # TODO: If the graphic is user's sprite/target's sprite, make :frame instead
     #       a choice of front/back/same as the main sprite/opposite of the main
-    #       sprite. Will need two controls in the same space.
+    #       sprite. Will need two controls in the same space, which is doable.
+    #       Will also need to change the graphic chooser to only have "user"/
+    #       "target" options rather than all the variants that this control
+    #       would manage.
     commands_pane.add_labelled_number_text_box(:frame, _INTL("Frame"), 0, 99, 0)
     commands_pane.add_labelled_checkbox(:visible, _INTL("Visible"), true)
     commands_pane.add_labelled_number_slider(:opacity, _INTL("Opacity"), 0, 255, 255)
@@ -317,6 +320,8 @@ class AnimationEditor
   def set_animation_properties_contents
     anim_properties = @components[:animation_properties]
     anim_properties.add_header_label(:header, _INTL("Animation properties"))
+    # Create "usable in battle" control
+    anim_properties.add_labelled_checkbox(:usable, _INTL("Can be used in battle?"), true)
     # Create animation type control
     anim_properties.add_labelled_dropdown_list(:type, _INTL("Animation type"), {
       :move   => _INTL("Move"),
@@ -341,8 +346,6 @@ class AnimationEditor
     anim_properties.add_labelled_checkbox(:has_target, _INTL("Involves a target?"), true)
     # Create flags control
     # TODO: List, TextBox and some Buttons to add/delete.
-    # Create "usable in battle" control
-    anim_properties.add_labelled_checkbox(:usable, _INTL("Can be used in battle?"), true)
     anim_properties.add_button(:close, _INTL("Close"))
     anim_properties.visible = false
   end
@@ -420,6 +423,8 @@ class AnimationEditor
       # TODO: Ideally be able to independently choose base graphics, which will
       #       be a separate setting here.
       :canvas_bg          => "indoor1",
+      # NOTE: These sprite names are also used in Pokemon.play_cry and so should
+      #       be a species ID (being a string is fine).
       :user_sprite_name   => "ARCANINE",
       :target_sprite_name => "ABOMASNOW"
     }

@@ -12,10 +12,9 @@
 
 # TODO: Should the canvas be able to show boxes/faded sprites of particles from
 #       the previous keyframe? I suppose ideally, but don't worry about it.
-# TODO: Battler/particle sprites should be their own class, which combine a
-#       sprite and a target-dependent coloured frame. Alternatively, have the
-#       frame be a separate sprite but only draw it around the currently
-#       selected particle(s).
+# TODO: Show a focus-dependent coloured frame around just the currently selected
+#       particle. Only show one frame even if the focus involves a target and
+#       there are multiple targets.
 # TODO: Ideally refresh the canvas while editing a particle's property in the
 #       :commands_pane component (e.g. moving a number slider but not finalising
 #       it). Refresh a single particle. I don't think any other side pane needs

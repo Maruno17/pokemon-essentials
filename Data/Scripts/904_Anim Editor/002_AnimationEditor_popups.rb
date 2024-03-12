@@ -187,15 +187,28 @@ class AnimationEditor
     preview_bitmap = nil
     set_preview_graphic = lambda do |sprite, filename|
       preview_bitmap&.dispose
-      # TODO: When the canvas works, use the proper user's/target's sprite here.
-      case filename
-      when "USER", "USER_BACK", "TARGET_BACK", "TARGET_OPP"
-        preview_bitmap = AnimatedBitmap.new("Graphics/Pokemon/Back/" + "000")
-      when "TARGET", "TARGET_FRONT", "USER_FRONT", "USER_OPP"
-        preview_bitmap = AnimatedBitmap.new("Graphics/Pokemon/Front/" + "000")
-      else
-        preview_bitmap = AnimatedBitmap.new(sprite_folder + filename)
+      folder = sprite_folder
+      fname = filename
+      if ["USER", "USER_BACK", "USER_FRONT", "USER_OPP",
+          "TARGET", "TARGET_FRONT", "TARGET_BACK", "TARGET_OPP"].include?(filename)
+        chunks = filename.split("_")
+        fname = (chunks[0] == "USER") ? @settings[:user_sprite_name].to_s : @settings[:target_sprite_name].to_s
+        case chunks[1] || ""
+        when "", "OPP"
+          # TODO: "TARGET" and "TARGET_OPP" will not be accurate in cases where
+          #       the target is on the same side as the user.
+          if (chunks[0] == "USER") ^ (chunks[1] == "OPP")   # xor
+            folder = (@settings[:user_opposes]) ? "Graphics/Pokemon/Front/" : "Graphics/Pokemon/Back/"
+          else
+            folder = (@settings[:user_opposes]) ? "Graphics/Pokemon/Back/" : "Graphics/Pokemon/Front/"
+          end
+        when "FRONT"
+          folder = "Graphics/Pokemon/Front/"
+        when "BACK"
+          folder = "Graphics/Pokemon/Back/"
+        end
       end
+      preview_bitmap = AnimatedBitmap.new(folder + fname)
       bg_bitmap.bitmap.fill_rect(BORDER_THICKNESS + list.x + list.width + 10, BORDER_THICKNESS + list.y,
                                  GRAPHIC_CHOOSER_PREVIEW_SIZE, GRAPHIC_CHOOSER_PREVIEW_SIZE,
                                  Color.white)
@@ -294,10 +307,14 @@ class AnimationEditor
           when :play
             vol = audio_chooser.get_control(:volume).value
             ptch = audio_chooser.get_control(:pitch).value
-            # TODO: Play appropriate things if a cry is selected. See which
-            #       battlers are defined in the editor's settings, and use their
-            #       cries.
-            pbSEPlay(RPG::AudioFile.new("Anim/" + list.value, vol, ptch))
+            case list.value
+            when "USER"
+              Pokemon.play_cry(@settings[:user_sprite_name])
+            when "TARGET"
+              Pokemon.play_cry(@settings[:target_sprite_name])
+            else
+              pbSEPlay(RPG::AudioFile.new("Anim/" + list.value, vol, ptch))
+            end
           when :stop
             pbSEStop
           end

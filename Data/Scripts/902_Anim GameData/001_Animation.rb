@@ -72,8 +72,6 @@ module GameData
       # NOTE: "Name" isn't a property here, because the particle's name comes
       #       from the "Particle" property above.
       "Graphic"        => [:graphic,     "s"],
-      # TODO: If more focus types are added, add ones that involve a target to
-      #       the Compiler's check relating to "NoTarget".
       "Focus"          => [:focus,       "e", FOCUS_TYPES],
       # TODO: FlipIfFoe, RotateIfFoe kinds of thing.
 

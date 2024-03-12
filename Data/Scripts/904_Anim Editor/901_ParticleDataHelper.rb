@@ -37,8 +37,24 @@ module AnimationEditor::ParticleDataHelper
         case (cmd[3] || :linear)
         when :linear
           ret[0] = lerp(ret[0], cmd[2], cmd[1], cmd[0], frame).to_i
+        when :ease_in   # Quadratic
+          x = (frame - cmd[0]) / cmd[1].to_f
+          ret[0] += (cmd[2] - ret[0]) * x * x
+          ret[0] = ret[0].round
+        when :ease_out   # Quadratic
+          x = (frame - cmd[0]) / cmd[1].to_f
+          ret[0] += (cmd[2] - ret[0]) * (1 - ((1 - x) * (1 - x)))
+          ret[0] = ret[0].round
+        when :ease_both   # Quadratic
+          x = (frame - cmd[0]) / cmd[1].to_f
+          if x < 0.5
+            ret[0] += (cmd[2] - ret[0]) * x * x * 2
+          else
+            ret[0] += (cmd[2] - ret[0]) * (1 - (((-2 * x) + 2) * ((-2 * x) + 2) / 2))
+          end
+          ret[0] = ret[0].round
         else
-          # TODO: Use an appropriate interpolation.
+          raise _INTL("Unknown interpolation method {1}.", cmd[3])
         end
         ret[1] = true   # Interpolating
         break

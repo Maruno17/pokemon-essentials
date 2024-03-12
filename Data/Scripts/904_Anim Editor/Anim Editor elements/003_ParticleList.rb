@@ -31,7 +31,8 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     :target_side_foreground => Color.new(128, 248, 248),   # Cyan
     :target_side_background => Color.new(128, 248, 248)    # Cyan
   }
-  SE_CONTROL_BG        = Color.gray
+  SE_CONTROL_BG_COLOR        = Color.gray
+  TIME_AFTER_ANIMATION_COLOR = Color.new(224, 224, 224)
 
   attr_reader :keyframe   # The selected keyframe
   attr_reader :values
@@ -56,7 +57,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @commands_viewport = Viewport.new(@commands_bg_viewport.rect.x, @commands_bg_viewport.rect.y,
                                       @commands_bg_viewport.rect.width, @commands_bg_viewport.rect.height)
     @commands_viewport.z = self.viewport.z + 3
-    # Create scrollbar
+    # Create scrollbars
     @list_scrollbar = UIControls::Scrollbar.new(
       x + width - UIControls::Scrollbar::SLIDER_WIDTH, @commands_bg_viewport.rect.y,
       @commands_bg_viewport.rect.height, self.viewport, false, true
@@ -67,6 +68,13 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       @commands_bg_viewport.rect.width, self.viewport, true, true
     )
     @time_scrollbar.set_interactive_rects
+    # Time background bitmap sprite
+    @time_bg_sprite = BitmapSprite.new(
+      @commands_viewport.rect.width,
+      TIMELINE_HEIGHT + VIEWPORT_SPACING + @list_viewport.rect.height, self.viewport
+    )
+    @time_bg_sprite.x = @commands_viewport.rect.x
+    @time_bg_sprite.y = self.y
     # Timeline bitmap sprite
     @timeline_sprite = BitmapSprite.new(@commands_viewport.rect.width, TIMELINE_HEIGHT, self.viewport)
     @timeline_sprite.x = @commands_viewport.rect.x
@@ -150,6 +158,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   def dispose
     @list_scrollbar.dispose
     @time_scrollbar.dispose
+    @time_bg_sprite.dispose
     @timeline_sprite.dispose
     @position_sprite.dispose
     @particle_line_sprite.dispose
@@ -483,7 +492,16 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   end
 
   def refresh_timeline
+    @time_bg_sprite.bitmap.clear
     @timeline_sprite.bitmap.clear
+    # Draw grey over the time after the end of the animation
+    dur = duration
+    draw_x = TIMELINE_LEFT_BUFFER + (dur * KEYFRAME_SPACING) - @left_pos
+    greyed_width = @time_bg_sprite.width - draw_x
+    if greyed_width > 0
+      @time_bg_sprite.bitmap.fill_rect(draw_x, 0, greyed_width, @time_bg_sprite.height, TIME_AFTER_ANIMATION_COLOR)
+      @time_bg_sprite.bitmap.fill_rect(draw_x, TIMELINE_HEIGHT, greyed_width, VIEWPORT_SPACING, Color.black)
+    end
     # Draw hover highlight
     hover_color = nil
     if @captured_keyframe && !@captured_row
@@ -538,7 +556,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     p_index = (@particle_list[index].is_a?(Array)) ? @particle_list[index][0] : @particle_list[index]
     particle_data = @particles[p_index]
     if particle_data[:name] == "SE"
-      bg_color = SE_CONTROL_BG
+      bg_color = SE_CONTROL_BG_COLOR
     else
       bg_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
     end
@@ -575,7 +593,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     particle_data = @particles[p_index]
     # Get the background color
     if particle_data[:name] == "SE"
-      bg_color = SE_CONTROL_BG
+      bg_color = SE_CONTROL_BG_COLOR
     else
       bg_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
     end
