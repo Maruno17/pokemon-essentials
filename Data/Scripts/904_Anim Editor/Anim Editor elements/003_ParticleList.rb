@@ -8,10 +8,15 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   LIST_X               = 0
   LIST_Y               = TIMELINE_HEIGHT + VIEWPORT_SPACING
   LIST_WIDTH           = 180 - VIEWPORT_SPACING
+  EXPAND_BUTTON_X      = VIEWPORT_SPACING
+  EXPAND_BUTTON_WIDTH  = 19
+  LIST_BOX_X           = EXPAND_BUTTON_X + EXPAND_BUTTON_WIDTH + VIEWPORT_SPACING
+  LIST_INDENT          = 8
   COMMANDS_X           = LIST_WIDTH + VIEWPORT_SPACING
   COMMANDS_Y           = LIST_Y
 
   ROW_HEIGHT           = 24
+  ROW_SPACING          = 1   # Gap at top of each row
   DIAMOND_SIZE         = 3
   TIMELINE_LEFT_BUFFER = DIAMOND_SIZE + 1   # Allows diamonds at keyframe 0 to be drawn fully
   TIMELINE_TEXT_SIZE   = 16
@@ -19,6 +24,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   INTERP_LINE_HEIGHT   = KEYFRAME_SPACING - ((DIAMOND_SIZE * 2) + 3)
   INTERP_LINE_Y        = (ROW_HEIGHT / 2) - (INTERP_LINE_HEIGHT / 2)
   DURATION_BUFFER      = 20   # Extra keyframes shown after the animation's end
+  PROPERTY_BG_COLOR    = Color.new(224, 224, 224)
   CONTROL_BG_COLORS    = {
     :foreground             => Color.new(128, 160, 248),   # Blue
     :midground              => Color.new(128, 160, 248),   # Blue
@@ -32,7 +38,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     :target_side_background => Color.new(128, 248, 248)    # Cyan
   }
   SE_CONTROL_BG_COLOR        = Color.gray
-  TIME_AFTER_ANIMATION_COLOR = Color.new(224, 224, 224)
+  TIME_AFTER_ANIMATION_COLOR = Color.new(160, 160, 160)
 
   attr_reader :keyframe   # The selected keyframe
   attr_reader :values
@@ -312,8 +318,12 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   end
 
   def busy?
-    return true if @controls.any? { |c| c[1].busy? }
+    return true if controls_busy?
     return super
+  end
+
+  def controls_busy?
+    return @controls.any? { |c| c[1].busy? }
   end
 
   def changed?
@@ -366,7 +376,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     overall_commands = []
     @particles[index].each_pair do |property, value|
       next if !value.is_a?(Array)
-      cmds = AnimationEditor::ParticleDataHelper.get_particle_property_commands_timeline(@particles[index], value, property)
+      cmds = AnimationEditor::ParticleDataHelper.get_particle_property_commands_timeline(@particles[index], property, value)
       @commands[[index, property]] = cmds
       cmds.each_with_index do |cmd, i|
         next if !cmd
@@ -468,22 +478,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
 
   #-----------------------------------------------------------------------------
 
-  def property_display_name(property)
-    return {
-      :frame    => _INTL("Frame"),
-      :blending => _INTL("Blending"),
-      :flip     => _INTL("Flip"),
-      :x        => _INTL("X"),
-      :y        => _INTL("Y"),
-      :z        => _INTL("Priority"),
-      :zoom_x   => _INTL("Zoom X"),
-      :zoom_y   => _INTL("Zoom Y"),
-      :angle    => _INTL("Angle"),
-      :visible  => _INTL("Visible"),
-      :opacity  => _INTL("Opacity")
-    }[property] || property.capitalize
-  end
-
   def repaint
     @list_scrollbar.repaint if @list_scrollbar.invalid?
     @time_scrollbar.repaint if @time_scrollbar.invalid?
@@ -503,21 +497,23 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       @time_bg_sprite.bitmap.fill_rect(draw_x, TIMELINE_HEIGHT, greyed_width, VIEWPORT_SPACING, Color.black)
     end
     # Draw hover highlight
-    hover_color = nil
-    if @captured_keyframe && !@captured_row
-      if @hover_keyframe && @hover_keyframe == @captured_keyframe && !@hover_row
+    if !controls_busy?
+      hover_color = nil
+      if @captured_keyframe && !@captured_row
+        if @hover_keyframe && @hover_keyframe == @captured_keyframe && !@hover_row
+          hover_color = HOVER_COLOR
+        else
+          hover_color = CAPTURE_COLOR
+        end
+        draw_x = TIMELINE_LEFT_BUFFER + (@captured_keyframe * KEYFRAME_SPACING) - @left_pos
+        @timeline_sprite.bitmap.fill_rect(draw_x - (KEYFRAME_SPACING / 2), 0,
+                                          KEYFRAME_SPACING, TIMELINE_HEIGHT - 1, hover_color)
+      elsif !@captured_keyframe && !@captured_row && @hover_keyframe && !@hover_row
         hover_color = HOVER_COLOR
-      else
-        hover_color = CAPTURE_COLOR
+        draw_x = TIMELINE_LEFT_BUFFER + (@hover_keyframe * KEYFRAME_SPACING) - @left_pos
+        @timeline_sprite.bitmap.fill_rect(draw_x - (KEYFRAME_SPACING / 2), 0,
+                                          KEYFRAME_SPACING, TIMELINE_HEIGHT - 1, hover_color)
       end
-      draw_x = TIMELINE_LEFT_BUFFER + (@captured_keyframe * KEYFRAME_SPACING) - @left_pos
-      @timeline_sprite.bitmap.fill_rect(draw_x - (KEYFRAME_SPACING / 2), 0,
-                                        KEYFRAME_SPACING, TIMELINE_HEIGHT - 1, hover_color)
-    elsif !@captured_keyframe && !@captured_row && @hover_keyframe && !@hover_row
-      hover_color = HOVER_COLOR
-      draw_x = TIMELINE_LEFT_BUFFER + (@hover_keyframe * KEYFRAME_SPACING) - @left_pos
-      @timeline_sprite.bitmap.fill_rect(draw_x - (KEYFRAME_SPACING / 2), 0,
-                                        KEYFRAME_SPACING, TIMELINE_HEIGHT - 1, hover_color)
     end
     # Draw timeline markings
     each_visible_keyframe(true) do |i|
@@ -551,37 +547,81 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     spr = @list_sprites[index]
     return if !spr
     spr.bitmap.clear
-    box_x = (@particle_list[index].is_a?(Array)) ? 16 : 0
-    # Get the background color
-    p_index = (@particle_list[index].is_a?(Array)) ? @particle_list[index][0] : @particle_list[index]
+    # Get useful information
+    is_property = @particle_list[index].is_a?(Array)
+    p_index = (is_property) ? @particle_list[index][0] : @particle_list[index]
     particle_data = @particles[p_index]
+    box_x = LIST_BOX_X
+    box_x += LIST_INDENT if is_property
+    # Get the background color
     if particle_data[:name] == "SE"
       bg_color = SE_CONTROL_BG_COLOR
+    elsif is_property
+      bg_color = PROPERTY_BG_COLOR
     else
       bg_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
     end
     # Draw hover highlight
-    hover_color = nil
-    if @captured_row && !@captured_keyframe
-      if @captured_row == index
-        if @hover_row && @hover_row == index && !@hover_keyframe
-          hover_color = HOVER_COLOR
-        else
-          hover_color = CAPTURE_COLOR
+    if !controls_busy? && !@captured_keyframe
+      hover_color = nil
+      if @captured_row
+        if @captured_row == index
+          if !@hover_keyframe && @hover_row && @hover_row == index &&
+             @captured_row_button && @hover_row_button == @captured_row_button
+            hover_color = HOVER_COLOR
+          else
+            hover_color = CAPTURE_COLOR
+          end
+        end
+      elsif @hover_row && @hover_row == index && !@hover_keyframe
+        hover_color = HOVER_COLOR
+      end
+      if hover_color
+        case @captured_row_button || @hover_row_button
+        when :expand
+          spr.bitmap.fill_rect(EXPAND_BUTTON_X, (ROW_HEIGHT - EXPAND_BUTTON_WIDTH + 1) / 2,
+                               EXPAND_BUTTON_WIDTH, EXPAND_BUTTON_WIDTH, hover_color)
+        when :row
+          spr.bitmap.fill_rect(box_x, ROW_SPACING, spr.width - box_x, spr.height - ROW_SPACING, hover_color)
         end
       end
-    elsif !@captured_row && !@captured_keyframe && @hover_row && @hover_row == index && !@hover_keyframe
-      hover_color = HOVER_COLOR
     end
-    spr.bitmap.fill_rect(box_x, 1, spr.width - box_x, spr.height - 1, hover_color) if hover_color
     # Draw outline
-    spr.bitmap.outline_rect(box_x, 1, spr.width - box_x, spr.height - 1, bg_color, 2)
+    spr.bitmap.outline_rect(box_x, ROW_SPACING, spr.width - box_x, spr.height - ROW_SPACING, bg_color, 2)
     # Draw text
-    if @particle_list[index].is_a?(Array)
-      draw_text(spr.bitmap, box_x + 4, 0, "→")   # ►
-      draw_text(spr.bitmap, box_x + 4 + 17, 3, property_display_name(@particle_list[index][1]))
+    if is_property
+      draw_text(spr.bitmap, box_x + 4, 3, GameData::Animation.property_display_name(@particle_list[index][1]) + ":")
     else
-      draw_text(spr.bitmap, 4, 3, @particles[p_index][:name] || "Unnamed")
+      draw_text(spr.bitmap, box_x + 4, 3, @particles[p_index][:name] || "Unnamed")
+    end
+    # Draw expand/collapse arrow or dotted lines
+    if is_property
+      6.times do |j|
+        spr.bitmap.fill_rect(10, j * 2, 1, 1, Color.black)
+      end
+      9.times do |i|
+        spr.bitmap.fill_rect(10 + (i * 2), 12, 1, 1, Color.black)
+      end
+    elsif @expanded_particles.include?(p_index)
+      11.times do |i|
+        j = (i == 0 || i == 10) ? 1 : 0
+        h = [2, 4, 5, 6, 7, 8, 7, 6, 5, 4, 2][i]
+        h = ((i > 5) ? 10 - i : i) + 3 - j
+        spr.bitmap.fill_rect(5 + i, 9 + j, 1, h, Color.black)
+      end
+    elsif particle_data[:name] != "SE"
+      11.times do |j|
+        i = (j == 0 || j == 10) ? 1 : 0
+        w = [2, 4, 5, 6, 7, 8, 7, 6, 5, 4, 2][j]
+        w = ((j > 5) ? 10 - j : j) + 3 - i
+        spr.bitmap.fill_rect(7 + i, 7 + j, w, 1, Color.black)
+      end
+    end
+    # Draw dotted line leading to the next property line
+    if @particle_list[index + 1]&.is_a?(Array)
+      5.times do |j|
+        spr.bitmap.fill_rect(10, 14 + (j * 2), 1, 1, Color.black)
+      end
     end
   end
 
@@ -589,11 +629,14 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     bg_spr = @commands_bg_sprites[index]
     return if !bg_spr
     bg_spr.bitmap.clear
-    p_index = (@particle_list[index].is_a?(Array)) ? @particle_list[index][0] : @particle_list[index]
+    is_property = @particle_list[index].is_a?(Array)
+    p_index = (is_property) ? @particle_list[index][0] : @particle_list[index]
     particle_data = @particles[p_index]
     # Get the background color
     if particle_data[:name] == "SE"
       bg_color = SE_CONTROL_BG_COLOR
+    elsif is_property
+      bg_color = PROPERTY_BG_COLOR
     else
       bg_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
     end
@@ -604,33 +647,53 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       draw_x = TIMELINE_LEFT_BUFFER + (i * KEYFRAME_SPACING) - @left_pos
       # Draw bg
       if i < @duration - DURATION_BUFFER && visible_cmds[i]
-        bg_spr.bitmap.fill_rect(draw_x, 1, KEYFRAME_SPACING, ROW_HEIGHT - 2, bg_color)
+        bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING, KEYFRAME_SPACING, ROW_HEIGHT - ROW_SPACING, bg_color)
       end
       # Draw hover highlight
       hover_color = nil
-      if @captured_row && @captured_keyframe
-        if @captured_row == index && @captured_keyframe == i
-          if @hover_row && @hover_row == index && @hover_keyframe && @hover_keyframe == i
-            hover_color = HOVER_COLOR
-          else
-            hover_color = CAPTURE_COLOR
-          end
+      if !controls_busy?
+        earlier_captured_keyframe = @captured_keyframe
+        later_captured_keyframe = (earlier_captured_keyframe || -1) + 1
+        earlier_hovered_keyframe = @hover_keyframe
+        later_hovered_keyframe = (earlier_hovered_keyframe || -1) + 1
+        if is_property
+          later_captured_keyframe = @captured_row_button || 0
+          later_hovered_keyframe = @hover_row_button || 0
         end
-      elsif !@captured_row && !@captured_keyframe &&
-            @hover_row && @hover_row == index && @hover_keyframe && @hover_keyframe == i
-        hover_color = HOVER_COLOR
+        if @captured_row && @captured_keyframe
+          if @captured_row == index && i >= earlier_captured_keyframe && i < later_captured_keyframe
+            if @hover_row && @hover_row == index && @hover_keyframe && i >= earlier_hovered_keyframe && i < later_hovered_keyframe
+              hover_color = HOVER_COLOR
+            else
+              hover_color = CAPTURE_COLOR
+            end
+          end
+        elsif !@captured_row && !@captured_keyframe && @hover_row && @hover_keyframe &&
+              @hover_row == index && i >= earlier_hovered_keyframe && i < later_hovered_keyframe
+          hover_color = HOVER_COLOR
+        end
       end
-      bg_spr.bitmap.fill_rect(draw_x - (KEYFRAME_SPACING / 2), 2, KEYFRAME_SPACING, ROW_HEIGHT - 3, hover_color) if hover_color
+      if hover_color
+        if is_property
+          bg_spr.bitmap.fill_rect(draw_x, 2, KEYFRAME_SPACING, ROW_HEIGHT - 3, hover_color)
+        else
+          bg_spr.bitmap.fill_rect(draw_x - (KEYFRAME_SPACING / 2), 2, KEYFRAME_SPACING, ROW_HEIGHT - 3, hover_color)
+        end
+      end
       next if i >= @duration - DURATION_BUFFER
       next if !visible_cmds[i]
       # Draw outline
-      bg_spr.bitmap.fill_rect(draw_x, 1, KEYFRAME_SPACING, 1, Color.black)   # Top
-      bg_spr.bitmap.fill_rect(draw_x, ROW_HEIGHT - 1, KEYFRAME_SPACING, 1, Color.black)   # Bottom
+      outline_color = Color.black
+      if is_property
+        outline_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
+      end
+      bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING, KEYFRAME_SPACING, 1, outline_color)   # Top
+      bg_spr.bitmap.fill_rect(draw_x, ROW_HEIGHT - 1, KEYFRAME_SPACING, 1, outline_color)   # Bottom
       if i <= 0 || !visible_cmds[i - 1]
-        bg_spr.bitmap.fill_rect(draw_x, 1, 1, ROW_HEIGHT - 1, Color.black)   # Left
+        bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING, 1, ROW_HEIGHT - ROW_SPACING, outline_color)   # Left
       end
       if i == @duration - DURATION_BUFFER - 1 || (i < @duration - 1 && !visible_cmds[i + 1])
-        bg_spr.bitmap.fill_rect(draw_x + KEYFRAME_SPACING, 1, 1, ROW_HEIGHT - 1, Color.black)   # Right
+        bg_spr.bitmap.fill_rect(draw_x + KEYFRAME_SPACING, ROW_SPACING, 1, ROW_HEIGHT - ROW_SPACING, outline_color)   # Right
       end
     end
   end
@@ -714,17 +777,47 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         listed_element = @particle_list[new_hover_row]
         p_index = listed_element.is_a?(Array) ? listed_element[0] : listed_element
         break if @particles[p_index][:name] == "SE"
-        ret = [area, nil, new_hover_row]
+        mouse_y_in_row = mouse_y + @top_pos - (new_hover_row * ROW_HEIGHT) - rect.y
+        case mouse_x
+        when EXPAND_BUTTON_X...(EXPAND_BUTTON_X + EXPAND_BUTTON_WIDTH)
+          next if listed_element.is_a?(Array)
+          next if mouse_y_in_row < (ROW_HEIGHT - EXPAND_BUTTON_WIDTH + 1) / 2
+          next if mouse_y_in_row >= ((ROW_HEIGHT - EXPAND_BUTTON_WIDTH + 1) / 2) + EXPAND_BUTTON_WIDTH
+          ret = [area, nil, new_hover_row, :expand]
+        when LIST_BOX_X...(@list_viewport.rect.width)
+          next if listed_element.is_a?(Array)
+          next if mouse_y_in_row < ROW_SPACING
+          ret = [area, nil, new_hover_row, :row]
+        end
       when :timeline
         new_hover_keyframe = (mouse_x + @left_pos - rect.x - TIMELINE_LEFT_BUFFER + (KEYFRAME_SPACING / 2) - 1) / KEYFRAME_SPACING
         break if new_hover_keyframe < 0 || new_hover_keyframe >= @duration
         ret = [area, new_hover_keyframe, nil]
       when :commands
         new_hover_row = (mouse_y + @top_pos - rect.y) / ROW_HEIGHT
-        new_hover_keyframe = (mouse_x + @left_pos - rect.x - TIMELINE_LEFT_BUFFER + (KEYFRAME_SPACING / 2) - 1) / KEYFRAME_SPACING
         break if new_hover_row >= @particle_list.length
+        listed_element = @particle_list[new_hover_row]
+        if listed_element.is_a?(Array)
+          new_hover_keyframe = (mouse_x + @left_pos - rect.x - TIMELINE_LEFT_BUFFER - 1) / KEYFRAME_SPACING
+        else
+          new_hover_keyframe = (mouse_x + @left_pos - rect.x - TIMELINE_LEFT_BUFFER + (KEYFRAME_SPACING / 2) - 1) / KEYFRAME_SPACING
+        end
         break if new_hover_keyframe < 0 || new_hover_keyframe >= @duration
-        ret = [area, new_hover_keyframe, new_hover_row]
+        if listed_element.is_a?(Array)
+          break if !GameData::Animation.property_can_interpolate?(listed_element[1])
+          cmds = @commands[listed_element]
+          break if !cmds
+          earlier_keyframe = nil
+          later_keyframe = nil
+          cmds.each_with_index do |cmd, i|
+            earlier_keyframe = i if cmd && i <= new_hover_keyframe
+            later_keyframe = i if cmd && !later_keyframe && i > new_hover_keyframe
+          end
+          break if !earlier_keyframe || !later_keyframe
+          ret = [area, earlier_keyframe, new_hover_row, later_keyframe]
+        else
+          ret = [area, new_hover_keyframe, new_hover_row]
+        end
       end
       break
     end
@@ -738,6 +831,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       @captured_area = hover_element[0]
       @captured_keyframe = hover_element[1]
       @captured_row = hover_element[2]
+      @captured_row_button = hover_element[3]
     end
   end
 
@@ -748,19 +842,38 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     if hover_element.is_a?(Array)
       if @captured_area == hover_element[0] &&
          @captured_keyframe == hover_element[1] &&
-         @captured_row == hover_element[2]
-        if @captured_row && @particle_list[@captured_row].is_a?(Array)
-          # TODO: If I want to be able to select individual property rows and/or
-          #       diamonds, I shouldn't have this line.
-          @captured_row = @particle_list.index(@particle_list[@captured_row][0])
+         @captured_row == hover_element[2] &&
+         @captured_row_button == hover_element[3]
+        if @captured_area == :commands && @captured_row && @particle_list[@captured_row].is_a?(Array)
+          set_changed
+          @values[:cycle_interpolation] = [*@particle_list[@captured_row], @captured_keyframe]
+        else
+          case @captured_row_button
+          when :expand
+            particle_index = @particle_list[@captured_row]
+            particle_index = particle_index[0] if particle_index.is_a?(Array)
+            if @expanded_particles.include?(particle_index)   # Contract
+              @expanded_particles.delete(particle_index)
+            else                                              # Expand
+              @expanded_particles.push(particle_index)
+            end
+            set_particles(@particles)
+          else   # :row button or somewhere in the commands area or timeline, just change selection
+            if @captured_row && @particle_list[@captured_row].is_a?(Array)
+              @captured_row = @particle_list.index(@particle_list[@captured_row][0])
+            end
+            set_changed if @keyframe != @captured_keyframe || @row_index != @captured_row
+            @keyframe = @captured_keyframe || -1
+            # TODO: If :keyframe_pane should be accessible by clicking on the
+            #       timeline, change the below line to = @captured_row || -1.
+            @row_index = @captured_row if @captured_row
+          end
         end
-        set_changed if @keyframe != @captured_keyframe || @row_index != @captured_row
-        @keyframe = @captured_keyframe || -1
-        @row_index = @captured_row || -1
       end
     end
     @captured_keyframe = nil
     @captured_row = nil
+    @captured_row_button = nil
     super   # Make this control not busy again
   end
 
@@ -778,6 +891,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       @hover_area = nil
       @hover_keyframe = nil
       @hover_row = nil
+      @hover_row_button = nil
       return
     end
     # Check each interactive area for whether the mouse is hovering over it, and
@@ -787,7 +901,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       invalidate if @hover_area != hover_element[0]   # Moved to a different region
       case hover_element[0]
       when :list
-        invalidate_rows if @hover_row != hover_element[2]
+        invalidate_rows if @hover_row != hover_element[2] || @hover_row_button != hover_element[3]
       when :timeline
         invalidate_time if @hover_keyframe != hover_element[1]
       when :commands
@@ -797,6 +911,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       @hover_area = hover_element[0]
       @hover_keyframe = hover_element[1]
       @hover_row = hover_element[2]
+      @hover_row_button = hover_element[3]
     elsif hover_element
       if @hover_area == hover_element
         case @hover_area
@@ -813,11 +928,13 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       @hover_area = hover_element
       @hover_keyframe = nil
       @hover_row = nil
+      @hover_row_button = nil
     else
       invalidate if @hover_area
       @hover_area = nil
       @hover_keyframe = nil
       @hover_row = nil
+      @hover_row_button = nil
     end
   end
 
@@ -825,7 +942,9 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     return if !self.visible
     @list_scrollbar.update
     @time_scrollbar.update
-    @controls.each { |c| c[1].update }
+    if !@captured_area
+      @controls.each { |c| c[1].update }
+    end
     super
     # Refresh sprites if a scrollbar has been moved
     self.top_pos = @list_scrollbar.position

@@ -296,6 +296,9 @@ class AnimationEditor
     # Move particle up/down the list?
   end
 
+  # TODO: :keyframe_pane is currently inaccessible (intentionally). If it will
+  #       have its own commands and should be accessible again, change def
+  #       on_mouse_release in ParticleList.
   def set_keyframe_pane_contents
     keyframe_pane = @components[:keyframe_pane]
     keyframe_pane.add_header_label(:header, _INTL("Edit keyframe"))
@@ -810,6 +813,24 @@ class AnimationEditor
         @components[:particle_list].set_particles(@anim[:particles])
         @components[:particle_list].particle_index = idx2
         refresh
+      when :cycle_interpolation
+        # value is [particle index, property, keyframe]
+        # Get current interpolation type
+        interp_type = nil
+        @anim[:particles][value[0]][value[1]].each do |cmd|
+          next if cmd[0] != value[2]
+          interp_type = cmd[3] if !interp_type
+        end
+        interp_type ||= :none
+        # Get the interpolation type to change to
+        interps = GameData::Animation::INTERPOLATION_TYPES.values
+        idx = (interps.index(interp_type) + 1) % interps.length
+        interp_type = interps[idx]
+        # Set the new interpolation type
+        AnimationEditor::ParticleDataHelper.set_interpolation(@anim[:particles][value[0]], value[1], value[2], interp_type)
+        @components[:particle_list].change_particle_commands(value[0])
+        refresh_component(:commands_pane)
+        refresh_component(:canvas)
       end
     when :animation_properties
       # TODO: Will changes here need to refresh any other components (e.g. side

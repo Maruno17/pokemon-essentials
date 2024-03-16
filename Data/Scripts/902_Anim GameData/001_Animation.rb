@@ -41,8 +41,8 @@ module GameData
       "None"     => :none,
       "Linear"   => :linear,
       "EaseIn"   => :ease_in,
-      "EaseOut"  => :ease_out,
-      "EaseBoth" => :ease_both
+      "EaseBoth" => :ease_both,
+      "EaseOut"  => :ease_out
     }
     USER_AND_TARGET_SEPARATION = [200, -200, -100]   # x, y, z (from user to target)
 
@@ -66,7 +66,7 @@ module GameData
     # change during the animation.
     # TODO: If more "SetXYZ"/"MoveXYZ" properties are added, ensure the "SetXYZ"
     #       ones are given a duration of 0 in def validate_compiled_animation.
-    #       Also add display names to def property_display_name.
+    #       Also add display names to def self.property_display_name.
     SUB_SCHEMA = {
       # These properties cannot be changed partway through the animation.
       # NOTE: "Name" isn't a property here, because the particle's name comes
@@ -161,6 +161,30 @@ module GameData
       :user_cry    => nil,
       :target_cry  => nil
     }
+
+    def self.property_display_name(property)
+      return {
+        :frame    => _INTL("Frame"),
+        :blending => _INTL("Blending"),
+        :flip     => _INTL("Flip"),
+        :x        => _INTL("X"),
+        :y        => _INTL("Y"),
+        :z        => _INTL("Priority"),
+        :zoom_x   => _INTL("Zoom X"),
+        :zoom_y   => _INTL("Zoom Y"),
+        :angle    => _INTL("Angle"),
+        :visible  => _INTL("Visible"),
+        :opacity  => _INTL("Opacity")
+      }[property] || property.capitalize
+    end
+
+    def self.property_can_interpolate?(property)
+      return false if !property
+      SUB_SCHEMA.each_value do |prop|
+        return true if prop[0] == property && prop[5] && prop[5] == INTERPOLATION_TYPES
+      end
+      return false
+    end
 
     @@cmd_to_pbs_name = nil   # Used for writing animation PBS files
 

@@ -16,7 +16,7 @@ module AnimationEditor::ParticleDataHelper
     return ret
   end
 
-  def get_keyframe_particle_value(particle, frame, property)
+  def get_keyframe_particle_value(particle, property, frame)
     if !GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.include?(property)
       raise _INTL("Couldn't get default value for property {1} for particle {2}.",
                   property, particle[:name])
@@ -81,7 +81,7 @@ module AnimationEditor::ParticleDataHelper
   def get_all_keyframe_particle_values(particle, frame)
     ret = {}
     GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.each_pair do |prop, default|
-      ret[prop] = get_keyframe_particle_value(particle, frame, prop)
+      ret[prop] = get_keyframe_particle_value(particle, prop, frame)
     end
     return ret
   end
@@ -151,7 +151,7 @@ module AnimationEditor::ParticleDataHelper
   #   0   - SetXYZ
   #   [+/- duration, interpolation type] --- MoveXYZ (duration's sign is whether
   #                                          it makes the value higher or lower)
-  def get_particle_property_commands_timeline(particle, commands, property)
+  def get_particle_property_commands_timeline(particle, property, commands)
     return nil if !commands || commands.length == 0
     if particle[:name] == "SE"
       ret = []
@@ -188,6 +188,93 @@ module AnimationEditor::ParticleDataHelper
   end
 
   def add_command(particle, property, frame, value)
+    # Return a new set of commands if there isn't one
+    if !particle[property] || particle[property].empty?
+      return [[frame, 0, value]]
+    end
+    # Find all relevant commands
+    set_now = nil
+    move_ending_now = nil
+    move_overlapping_now = nil
+    particle[property].each do |cmd|
+      if cmd[1] == 0
+        set_now = cmd if cmd[0] == frame
+      else
+        move_ending_now = cmd if cmd[0] + cmd[1] == frame
+        move_overlapping_now = cmd if cmd[0] < frame && cmd[0] + cmd[1] > frame
+      end
+    end
+    new_command_needed = true
+    # Replace existing command at frame if it has a duration of 0
+    if set_now
+      set_now[2] = value
+      new_command_needed = false
+    end
+    # If a command has a duration >0 and ends at frame, replace its value
+    if move_ending_now
+      move_ending_now[2] = value
+      new_command_needed = false
+    end
+    return particle[property] if !new_command_needed
+    # Add a new command
+    new_cmd = [frame, 0, value]
+    particle[property].push(new_cmd)
+    # If the new command interrupts an interpolation, split that interpolation
+    if move_overlapping_now
+      end_frame = move_overlapping_now[0] + move_overlapping_now[1]
+      new_cmd[1] = end_frame - frame         # Duration
+      new_cmd[2] = move_overlapping_now[2]   # Value
+      new_cmd[3] = move_overlapping_now[3]   # Interpolation type
+      move_overlapping_now[1] = frame - move_overlapping_now[0]   # Duration
+      move_overlapping_now[2] = value                             # Value
+    end
+    # Sort and return the commands
+    particle[property].sort! { |a, b| a[0] == b[0] ? a[1] == b[1] ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
+    return particle[property]
+  end
+
+  # Cases:
+  # * SetXYZ - delete it
+  # * MoveXYZ start - turn into a SetXYZ at the end point
+  # * MoveXYZ end - delete it (this may happen to remove the start diamond too)
+  # * MoveXYZ end and start - merge both together (use first's type)
+  # * SetXYZ and MoveXYZ start - delete SetXYZ (leave MoveXYZ alone)
+  # * SetXYZ and MoveXYZ end - (unlikely) delete both
+  # * SetXYZ and MoveXYZ start and end - (unlikely) delete SetXYZ, merge Moves together
+  def delete_command(particle, property, frame)
+    # Find all relevant commands
+    set_now = nil
+    move_ending_now = nil
+    move_starting_now = nil
+    particle[property].each do |cmd|
+      if cmd[1] == 0
+        set_now = cmd if cmd[0] == frame
+      else
+        move_starting_now = cmd if cmd[0] == frame
+        move_ending_now = cmd if cmd[0] + cmd[1] == frame
+      end
+    end
+    # Delete SetXYZ if it is at frame
+    particle[property].delete(set_now) if set_now
+    # Edit/delete MoveXYZ commands starting/ending at frame
+    if move_ending_now && move_starting_now   # Merge both MoveXYZ commands
+      move_ending_now[1] += move_starting_now[1]   # Duration
+      move_ending_now[2] = move_starting_now[2]    # Value
+      particle[property].delete(move_starting_now)
+    elsif move_ending_now   # Delete MoveXYZ ending now
+      particle[property].delete(move_ending_now)
+    elsif move_starting_now && !set_now   # Turn into SetXYZ at its end point
+      move_starting_now[0] += move_starting_now[1]
+      move_starting_now[1] = 0
+      move_starting_now[3] = nil
+      move_starting_now.compact!
+    end
+    return (particle[property].empty?) ? nil : particle[property]
+  end
+
+  # Removes commands for the particle's given property if they don't make a
+  # difference. Returns the resulting set of commands.
+  def optimize_commands(particle, property)
     # Split particle[property] into values and interpolation arrays
     set_points = []   # All SetXYZ commands (the values thereof)
     end_points = []   # End points of MoveXYZ commands (the values thereof)
@@ -202,14 +289,6 @@ module AnimationEditor::ParticleDataHelper
         end
       end
     end
-    # Add new command to points (may replace an existing command)
-    interp = :none
-    (frame + 1).times do |i|
-      interp = :none if set_points[i] || end_points[i]
-      interp = interps[i] if interps[i]
-    end
-    interps[frame] = interp if interp != :none
-    set_points[frame] = value
     # For visibility only, set the keyframe with the first command (of any kind)
     # to be visible, unless the command being added overwrites it. Also figure
     # out the first keyframe that has a command, and the first keyframe that has
@@ -264,42 +343,60 @@ module AnimationEditor::ParticleDataHelper
     return (ret.empty?) ? nil : ret
   end
 
-  # Cases:
-  # * SetXYZ - delete it
-  # * MoveXYZ start - turn into a SetXYZ at the end point
-  # * MoveXYZ end - delete it (this may happen to remove the start diamond too)
-  # * MoveXYZ end and start - merge both together (use first's type)
-  # * SetXYZ and MoveXYZ start - delete SetXYZ (leave MoveXYZ alone)
-  # * SetXYZ and MoveXYZ end - (unlikely) delete both
-  # * SetXYZ and MoveXYZ start and end - (unlikely) delete SetXYZ, merge Moves together
-  def delete_command(particle, property, frame)
-    # Find all relevant commands
+  # SetXYZ at frame
+  #   - none: Do nothing.
+  #   - interp: Add MoveXYZ (calc duration/value at end).
+  # MoveXYZ at frame
+  #   - none: Turn into two SetXYZ (MoveXYZ's value for end point, calc value
+  #           for start point).
+  #   - interp: Change type.
+  # SetXYZ and MoveXYZ at frame
+  #   - none: Turn MoveXYZ into SetXYZ at the end point.
+  #   - interp: Change MoveXYZ's type.
+  # End of earlier MoveXYZ (or nothing) at frame
+  #   - none: Do nothing.
+  #   - interp: Add MoveXYZ (calc duration/value at end).
+  def set_interpolation(particle, property, frame, type)
+    # Find relevant command
     set_now = nil
-    move_ending_now = nil
     move_starting_now = nil
     particle[property].each do |cmd|
-      if cmd[1] == 0
-        set_now = cmd if cmd[0] == frame
+      next if cmd[0] != frame
+      set_now = cmd if cmd[1] == 0
+      move_starting_now = cmd if cmd[1] != 0
+    end
+    if move_starting_now
+      # If a MoveXYZ command exists at frame, amend it
+      if type == :none
+        old_end_point = move_starting_now[0] + move_starting_now[1]
+        old_value = move_starting_now[2]
+        # Turn the MoveXYZ command into a SetXYZ (or just delete it if a SetXYZ
+        # already exists at frame)
+        if set_now
+          particle[property].delete(move_starting_now)
+        else
+          move_starting_now[1] = 0
+          move_starting_now[2] = get_keyframe_particle_value(particle, property, frame)[0]
+          move_starting_now[3] = nil
+          move_starting_now.compact!
+        end
+        # Add a new SetXYZ at the end of the (former) interpolation
+        add_command(particle, property, old_end_point, old_value)
       else
-        move_starting_now = cmd if cmd[0] == frame
-        move_ending_now = cmd if cmd[0] + cmd[1] == frame
+        # Simply change the type
+        move_starting_now[3] = type
+      end
+    elsif type != :none
+      # If no MoveXYZ command exists at frame, make one (if type isn't :none)
+      particle[property].each do |cmd|   # Assumes commands are sorted by keyframe
+        next if cmd[0] <= frame
+        val_at_end = get_keyframe_particle_value(particle, property, cmd[0])[0]
+        particle[property].push([frame, cmd[0] - frame, val_at_end, type])
+        particle[property].sort! { |a, b| a[0] == b[0] ? a[1] == b[1] ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
+        break
       end
     end
-    # Delete SetXYZ if it is at frame
-    particle[property].delete(set_now) if set_now
-    # Edit/delete MoveXYZ commands starting/ending at frame
-    if move_ending_now && move_starting_now   # Merge both MoveXYZ commands
-      move_ending_now[1] += move_starting_now[1]
-      particle[property].delete(move_starting_now)
-    elsif move_ending_now   # Delete MoveXYZ ending now
-      particle[property].delete(move_ending_now)
-    elsif move_starting_now && !set_now   # Turn into SetXYZ at its end point
-      move_starting_now[0] += move_starting_now[1]
-      move_starting_now[1] = 0
-      move_starting_now[3] = nil
-      move_starting_now.compact!
-    end
-    return (particle[property].empty?) ? nil : particle[property]
+    return particle[property]
   end
 
   #-----------------------------------------------------------------------------
