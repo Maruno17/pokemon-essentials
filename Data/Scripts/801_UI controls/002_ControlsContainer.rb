@@ -11,7 +11,7 @@ class UIControls::ControlsContainer
   attr_reader   :viewport
 
   LINE_SPACING        = 28
-  OFFSET_FROM_LABEL_X = 90
+  OFFSET_FROM_LABEL_X = 100
   OFFSET_FROM_LABEL_Y = 0
 
   def initialize(x, y, width, height, right_margin = 0)
@@ -199,6 +199,15 @@ class UIControls::ControlsContainer
     return @width, LINE_SPACING
   end
 
+  def next_control_position(add_offset = false)
+    row_x = 0
+    row_x += @label_offset_x if add_offset
+    row_y = @row_count * LINE_SPACING
+    row_y += @label_offset_y - LINE_SPACING if add_offset
+    row_y += @pixel_offset
+    return row_x, row_y
+  end
+
   def add_control_at(id, control, x, y)
     control.x = x
     control.y = y
@@ -209,13 +218,14 @@ class UIControls::ControlsContainer
 
   def add_control(id, control, add_offset = false, rows = 1)
     i = @controls.length
-    row_x = 0
-    row_y = (add_offset ? @row_count - 1 : @row_count) * LINE_SPACING
-    ctrl_x = row_x + (add_offset ? @label_offset_x : 0)
+    ctrl_x, ctrl_y = next_control_position(add_offset)
     ctrl_x += 4 if control.is_a?(UIControls::List)
-    ctrl_y = row_y + (add_offset ? @label_offset_y : 0) + @pixel_offset
     add_control_at(id, control, ctrl_x, ctrl_y)
-    @row_count += rows if !add_offset
+    increment_row_count(rows) if !add_offset
     @pixel_offset -= (LINE_SPACING - UIControls::List::ROW_HEIGHT) * (rows - 1) if control.is_a?(UIControls::List)
+  end
+
+  def increment_row_count(count)
+    @row_count += count
   end
 end

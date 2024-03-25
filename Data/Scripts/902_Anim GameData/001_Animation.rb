@@ -149,9 +149,9 @@ module GameData
       :angle       => 0,
       :visible     => false,
       :opacity     => 255,
-      :color_red   => 255,
-      :color_green => 255,
-      :color_blue  => 255,
+      :color_red   => 0,
+      :color_green => 0,
+      :color_blue  => 0,
       :color_alpha => 0,
       :tone_red    => 0,
       :tone_green  => 0,
@@ -164,18 +164,26 @@ module GameData
 
     def self.property_display_name(property)
       return {
-        :frame    => _INTL("Frame"),
-        :blending => _INTL("Blending"),
-        :flip     => _INTL("Flip"),
-        :x        => _INTL("X"),
-        :y        => _INTL("Y"),
-        :z        => _INTL("Priority"),
-        :zoom_x   => _INTL("Zoom X"),
-        :zoom_y   => _INTL("Zoom Y"),
-        :angle    => _INTL("Angle"),
-        :visible  => _INTL("Visible"),
-        :opacity  => _INTL("Opacity")
-      }[property] || property.capitalize
+        :frame       => _INTL("Frame"),
+        :blending    => _INTL("Blending"),
+        :flip        => _INTL("Flip"),
+        :x           => _INTL("X"),
+        :y           => _INTL("Y"),
+        :z           => _INTL("Priority"),
+        :zoom_x      => _INTL("Zoom X"),
+        :zoom_y      => _INTL("Zoom Y"),
+        :angle       => _INTL("Angle"),
+        :visible     => _INTL("Visible"),
+        :opacity     => _INTL("Opacity"),
+        :color_red   => _INTL("Color Red"),
+        :color_green => _INTL("Color Green"),
+        :color_blue  => _INTL("Color Blue"),
+        :color_alpha => _INTL("Color Alpha"),
+        :tone_red    => _INTL("Tone Red"),
+        :tone_green  => _INTL("Tone Green"),
+        :tone_blue   => _INTL("Tone Blue"),
+        :tone_gray   => _INTL("Tone Gray")
+      }[property] || property.to_s.capitalize
     end
 
     def self.property_can_interpolate?(property)

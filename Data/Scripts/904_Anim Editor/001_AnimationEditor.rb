@@ -3,8 +3,8 @@
 #===============================================================================
 class AnimationEditor
   BORDER_THICKNESS = 4
-  WINDOW_WIDTH  = Settings::SCREEN_WIDTH + 328 + (BORDER_THICKNESS * 4)
-  WINDOW_HEIGHT = Settings::SCREEN_HEIGHT + 320 + (BORDER_THICKNESS * 4)
+  WINDOW_WIDTH     = Settings::SCREEN_WIDTH + 352 + (BORDER_THICKNESS * 4)
+  WINDOW_HEIGHT    = Settings::SCREEN_HEIGHT + 352 + (BORDER_THICKNESS * 4)
 
   # Components
   MENU_BAR_WIDTH  = WINDOW_WIDTH
@@ -20,10 +20,10 @@ class AnimationEditor
   PLAY_CONTROLS_WIDTH  = CANVAS_WIDTH
   PLAY_CONTROLS_HEIGHT = 64 - (BORDER_THICKNESS * 2)
 
-  SIDE_PANE_X      = CANVAS_X + CANVAS_WIDTH + (BORDER_THICKNESS * 2)
-  SIDE_PANE_Y      = CANVAS_Y
-  SIDE_PANE_WIDTH  = WINDOW_WIDTH - SIDE_PANE_X - BORDER_THICKNESS
-  SIDE_PANE_HEIGHT = CANVAS_HEIGHT + PLAY_CONTROLS_HEIGHT + (BORDER_THICKNESS * 2)
+  SIDE_PANE_X             = CANVAS_X + CANVAS_WIDTH + (BORDER_THICKNESS * 2)
+  SIDE_PANE_Y             = CANVAS_Y
+  SIDE_PANE_WIDTH         = WINDOW_WIDTH - SIDE_PANE_X - BORDER_THICKNESS
+  SIDE_PANE_HEIGHT        = CANVAS_HEIGHT + PLAY_CONTROLS_HEIGHT + (BORDER_THICKNESS * 2)
   SIDE_PANE_DELETE_MARGIN = 32
 
   PARTICLE_LIST_X      = BORDER_THICKNESS
@@ -85,44 +85,64 @@ class AnimationEditor
   DELETABLE_COMMAND_PANE_PROPERTIES = [
     :x, :y, :z, :frame, :visible, :opacity, :zoom_x, :zoom_y, :angle, :flip, :blending
   ]
+  DELETABLE_COLOR_TONE_PANE_PROPERTIES = [
+    :color_red, :color_green, :color_blue, :color_alpha,
+    :tone_red, :tone_green, :tone_blue, :tone_gray
+  ]
+
+  #-----------------------------------------------------------------------------
 
   def initialize(anim_id, anim)
     load_settings
     @anim_id = anim_id
     @anim = anim
     @pbs_path = anim[:pbs_path]
+    @property_pane = :commands_pane
     @quit = false
-    # Viewports
+    initialize_viewports
+    initialize_bitmaps
+    initialize_components
+    @captured = nil
+    set_components_contents
+    refresh
+  end
+
+  def initialize_viewports
     @viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
     @viewport.z = 99999
     @canvas_viewport = Viewport.new(CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT)
     @canvas_viewport.z = @viewport.z
     @pop_up_viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
     @pop_up_viewport.z = @viewport.z + 50
-    # Background sprite
+  end
+
+  def initialize_bitmaps
+    # Background for main editor
     @screen_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
     @screen_bitmap.z = -100
+    # Background in which to draw the outline of the SE list box in the SE side pane
     @se_list_box_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
     @se_list_box_bitmap.z = -90
     @se_list_box_bitmap.visible = false
+    # Semi-transparent black overlay to dim the screen while a pop-up window is open
     @pop_up_bg_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @pop_up_viewport)
     @pop_up_bg_bitmap.z = -100
     @pop_up_bg_bitmap.visible = false
+    # Draw in these bitmaps
     draw_editor_background
+  end
+
+  def initialize_components
     @components = {}
     # Menu bar
     @components[:menu_bar] = AnimationEditor::MenuBar.new(0, 0, MENU_BAR_WIDTH, MENU_BAR_HEIGHT, @viewport)
     # Canvas
     @components[:canvas] = AnimationEditor::Canvas.new(@canvas_viewport, @anim, @settings)
     # Side panes
-    [:commands_pane, :se_pane, :particle_pane, :keyframe_pane].each do |pane|
+    [:commands_pane, :color_tone_pane, :se_pane, :particle_pane, :keyframe_pane].each do |pane|
       @components[pane] = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT,
-                                                            (pane == :commands_pane) ? SIDE_PANE_DELETE_MARGIN : 0)
+                                                            ([:commands_pane, :color_tone_pane].include?(pane)) ? SIDE_PANE_DELETE_MARGIN : 0)
     end
-    # TODO: Make a side pane for colour/tone editor (accessed from
-    #       @components[:commands_pane] via a button; has Apply/Cancel buttons
-    #       to retain/undo all its changes, although changes are made normally
-    #       while in it and canvas is updated accordingly.
     # Timeline/particle list
     @components[:particle_list] = AnimationEditor::ParticleList.new(
       PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT, @viewport
@@ -148,9 +168,6 @@ class AnimationEditor
       AUDIO_CHOOSER_X, AUDIO_CHOOSER_Y, AUDIO_CHOOSER_WINDOW_WIDTH, AUDIO_CHOOSER_WINDOW_HEIGHT
     )
     @components[:audio_chooser].viewport.z = @pop_up_viewport.z + 1
-    @captured = nil
-    set_components_contents
-    refresh
   end
 
   def dispose
@@ -163,6 +180,8 @@ class AnimationEditor
     @canvas_viewport.dispose
     @pop_up_viewport.dispose
   end
+
+  #-----------------------------------------------------------------------------
 
   def keyframe
     return @components[:particle_list].keyframe
@@ -198,6 +217,8 @@ class AnimationEditor
     return ret
   end
 
+  #-----------------------------------------------------------------------------
+
   def set_menu_bar_contents
     @components[:menu_bar].add_button(:quit, _INTL("Quit"))
     @components[:menu_bar].add_button(:save, _INTL("Save"))
@@ -207,35 +228,24 @@ class AnimationEditor
   def set_canvas_contents
   end
 
-  def set_commands_pane_contents
-    commands_pane = @components[:commands_pane]
-    commands_pane.add_header_label(:header, _INTL("Edit particle at keyframe"))
-    commands_pane.add_labelled_number_text_box(:x, _INTL("X"), -999, 999, 0)
-    commands_pane.add_labelled_number_text_box(:y, _INTL("Y"), -999, 999, 0)
-    commands_pane.add_labelled_number_slider(:z, _INTL("Priority"), -50, 50, 0)
-    # TODO: If the graphic is user's sprite/target's sprite, make :frame instead
-    #       a choice of front/back/same as the main sprite/opposite of the main
-    #       sprite. Will need two controls in the same space, which is doable.
-    #       Will also need to change the graphic chooser to only have "user"/
-    #       "target" options rather than all the variants that this control
-    #       would manage.
-    commands_pane.add_labelled_number_text_box(:frame, _INTL("Frame"), 0, 99, 0)
-    commands_pane.add_labelled_checkbox(:visible, _INTL("Visible"), true)
-    commands_pane.add_labelled_number_slider(:opacity, _INTL("Opacity"), 0, 255, 255)
-    commands_pane.add_labelled_number_text_box(:zoom_x, _INTL("Zoom X"), 0, 1000, 100)
-    commands_pane.add_labelled_number_text_box(:zoom_y, _INTL("Zoom Y"), 0, 1000, 100)
-    commands_pane.add_labelled_number_text_box(:angle, _INTL("Angle"), -1080, 1080, 0)
-    commands_pane.add_labelled_checkbox(:flip, _INTL("Flip"), false)
-    commands_pane.add_labelled_dropdown_list(:blending, _INTL("Blending"), {
-      0 => _INTL("None"),
-      1 => _INTL("Additive"),
-      2 => _INTL("Subtractive")
-    }, 0)
-    commands_pane.add_labelled_button(:color_tone, _INTL("Color/Tone"), _INTL("Edit"))
-#    commands_pane.add_labelled_button(:masking, _INTL("Masking"), _INTL("Edit"))
-    # TODO: Add buttons that shift all commands from the current keyframe and
-    #       later forwards/backwards in time?
-    # Add all "delete" buttons
+  def add_side_pane_tab_buttons(component, pane)
+    next_pos_x, next_pos_y = pane.next_control_position
+    # TODO: Add masking tab and properties.
+    [
+      [:commands_pane, :general_tab, _INTL("General")],
+      [:color_tone_pane, :color_tone_tab, _INTL("Color/Tone")],
+#      [:masking_pane, :masking_tab, _INTL("Masking")]
+    ].each_with_index do |tab, i|
+      btn = UIControls::Button.new(100, 28, pane.viewport, tab[2])
+      btn.set_fixed_size
+      btn.disable if tab[0] == component
+      pane.add_control_at(tab[1], btn, next_pos_x, next_pos_y)
+      next_pos_x += btn.width
+    end
+    pane.increment_row_count(1)
+  end
+
+  def generate_delete_property_button_bitmaps
     delete_bitmap = Bitmap.new(16, 16)
     delete_disabled_bitmap = Bitmap.new(16, 16)
     14.times do |i|
@@ -249,49 +259,106 @@ class AnimationEditor
       delete_disabled_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.new(160, 160, 160))
       delete_disabled_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.new(160, 160, 160))
     end
+    return delete_bitmap, delete_disabled_bitmap
+  end
+
+  def set_commands_pane_contents
+    pane = @components[:commands_pane]
+    pane.add_header_label(:header, _INTL("Edit particle at keyframe"))
+    # Tab buttons
+    add_side_pane_tab_buttons(:commands_pane, pane)
+    # Properties
+    pane.add_labelled_number_text_box(:x, _INTL("X"), -999, 999, 0)
+    pane.add_labelled_number_text_box(:y, _INTL("Y"), -999, 999, 0)
+    pane.add_labelled_number_slider(:z, _INTL("Priority"), -50, 50, 0)
+    # TODO: If the graphic is user's sprite/target's sprite, make :frame instead
+    #       a choice of front/back/same as the main sprite/opposite of the main
+    #       sprite. Will need two controls in the same space, which is doable.
+    #       Will also need to change the graphic chooser to only have "user"/
+    #       "target" options rather than all the variants that this control
+    #       would manage.
+    pane.add_labelled_number_text_box(:frame, _INTL("Frame"), 0, 99, 0)
+    pane.add_labelled_checkbox(:visible, _INTL("Visible"), true)
+    pane.add_labelled_number_slider(:opacity, _INTL("Opacity"), 0, 255, 255)
+    pane.add_labelled_number_text_box(:zoom_x, _INTL("Zoom X"), 0, 1000, 100)
+    pane.add_labelled_number_text_box(:zoom_y, _INTL("Zoom Y"), 0, 1000, 100)
+    pane.add_labelled_number_text_box(:angle, _INTL("Angle"), -1080, 1080, 0)
+    pane.add_labelled_checkbox(:flip, _INTL("Flip"), false)
+    pane.add_labelled_dropdown_list(:blending, _INTL("Blending"), {
+      0 => _INTL("None"),
+      1 => _INTL("Additive"),
+      2 => _INTL("Subtractive")
+    }, 0)
+    # TODO: Add buttons that shift all commands from the current keyframe and
+    #       later forwards/backwards in time?
+    # Add all "delete" buttons
+    delete_bitmap, delete_disabled_bitmap = generate_delete_property_button_bitmaps
     DELETABLE_COMMAND_PANE_PROPERTIES.each do |property|
-      parent = commands_pane.get_control(property)
+      parent = pane.get_control(property)
       btn = UIControls::BitmapButton.new(parent.x + parent.width + 6, parent.y + 2,
-                                         commands_pane.viewport, delete_bitmap, delete_disabled_bitmap)
+                                         pane.viewport, delete_bitmap, delete_disabled_bitmap)
       btn.set_interactive_rects
-      commands_pane.controls.push([(property.to_s + "_delete").to_sym, btn])
+      pane.controls.push([(property.to_s + "_delete").to_sym, btn])
+    end
+  end
+
+  def set_color_tone_pane_contents
+    pane = @components[:color_tone_pane]
+    pane.add_header_label(:header, _INTL("Edit particle at keyframe"))
+    # Tab buttons
+    add_side_pane_tab_buttons(:color_tone_pane, pane)
+    # Properties
+    pane.add_labelled_number_slider(:color_red, _INTL("Color Red"), 0, 255, 0)
+    pane.add_labelled_number_slider(:color_green, _INTL("Color Green"), 0, 255, 0)
+    pane.add_labelled_number_slider(:color_blue, _INTL("Color Blue"), 0, 255, 0)
+    pane.add_labelled_number_slider(:color_alpha, _INTL("Color Alpha"), 0, 255, 0)
+    pane.add_labelled_number_slider(:tone_red, _INTL("Tone Red"), -255, 255, 0)
+    pane.add_labelled_number_slider(:tone_green, _INTL("Tone Green"), -255, 255, 0)
+    pane.add_labelled_number_slider(:tone_blue, _INTL("Tone Blue"), -255, 255, 0)
+    pane.add_labelled_number_slider(:tone_gray, _INTL("Tone Gray"), 0, 255, 0)
+    # Add all "delete" buttons
+    delete_bitmap, delete_disabled_bitmap = generate_delete_property_button_bitmaps
+    DELETABLE_COLOR_TONE_PANE_PROPERTIES.each do |property|
+      parent = pane.get_control(property)
+      btn = UIControls::BitmapButton.new(parent.x + parent.width + 6, parent.y + 2,
+                                         pane.viewport, delete_bitmap, delete_disabled_bitmap)
+      btn.set_interactive_rects
+      pane.controls.push([(property.to_s + "_delete").to_sym, btn])
     end
   end
 
   def set_se_pane_contents
-    se_pane = @components[:se_pane]
-    se_pane.add_header_label(:header, _INTL("Edit sound effects at keyframe"))
-    size = se_pane.control_size
+    pane = @components[:se_pane]
+    pane.add_header_label(:header, _INTL("Edit sound effects at keyframe"))
+    size = pane.control_size
     size[0] -= 10
     size[1] = UIControls::List::ROW_HEIGHT * 5   # 5 rows
-    list = UIControls::List.new(*size, se_pane.viewport, [])
-    se_pane.add_control_at(:list, list, 5, 30)
+    list = UIControls::List.new(*size, pane.viewport, [])
+    pane.add_control_at(:list, list, 5, 30)
     button_height = UIControls::ControlsContainer::LINE_SPACING
-    add = UIControls::Button.new(101, button_height, se_pane.viewport, _INTL("Add"))
+    add = UIControls::Button.new(101, button_height, pane.viewport, _INTL("Add"))
     add.set_fixed_size
-    se_pane.add_control_at(:add, add, 1, 154)
-    edit = UIControls::Button.new(100, button_height, se_pane.viewport, _INTL("Edit"))
+    pane.add_control_at(:add, add, 1, 154)
+    edit = UIControls::Button.new(100, button_height, pane.viewport, _INTL("Edit"))
     edit.set_fixed_size
-    se_pane.add_control_at(:edit, edit, 102, 154)
-    delete = UIControls::Button.new(101, button_height, se_pane.viewport, _INTL("Delete"))
+    pane.add_control_at(:edit, edit, 102, 154)
+    delete = UIControls::Button.new(101, button_height, pane.viewport, _INTL("Delete"))
     delete.set_fixed_size
-    se_pane.add_control_at(:delete, delete, 202, 154)
+    pane.add_control_at(:delete, delete, 202, 154)
   end
 
   def set_particle_pane_contents
-    particle_pane = @components[:particle_pane]
-    particle_pane.add_header_label(:header, _INTL("Edit particle properties"))
-    particle_pane.add_labelled_text_box(:name, _INTL("Name"), "")
-    particle_pane.get_control(:name).set_blacklist("User", "Target", "SE")
-    particle_pane.add_labelled_label(:graphic_name, _INTL("Graphic"), "")
-    particle_pane.add_labelled_button(:graphic, "", _INTL("Change"))
-    particle_pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {}, :undefined)
+    pane = @components[:particle_pane]
+    pane.add_header_label(:header, _INTL("Edit particle properties"))
+    pane.add_labelled_text_box(:name, _INTL("Name"), "")
+    pane.get_control(:name).set_blacklist("User", "Target", "SE")
+    pane.add_labelled_label(:graphic_name, _INTL("Graphic"), "")
+    pane.add_labelled_button(:graphic, "", _INTL("Change"))
+    pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {}, :undefined)
     # FlipIfFoe
     # RotateIfFoe
-    # Duplicate button
-    particle_pane.add_button(:duplicate, _INTL("Duplicate this particle"))
-    # Delete button (if not "User"/"Target"/"SE")
-    particle_pane.add_button(:delete, _INTL("Delete this particle"))
+    pane.add_button(:duplicate, _INTL("Duplicate this particle"))
+    pane.add_button(:delete, _INTL("Delete this particle"))
     # Shift all command timings by X keyframes (text box and button)
     # Move particle up/down the list?
   end
@@ -307,6 +374,7 @@ class AnimationEditor
 
   def set_side_panes_contents
     set_commands_pane_contents
+    set_color_tone_pane_contents
     set_se_pane_contents
     set_particle_pane_contents
     set_keyframe_pane_contents
@@ -323,32 +391,22 @@ class AnimationEditor
   def set_animation_properties_contents
     anim_properties = @components[:animation_properties]
     anim_properties.add_header_label(:header, _INTL("Animation properties"))
-    # Create "usable in battle" control
     anim_properties.add_labelled_checkbox(:usable, _INTL("Can be used in battle?"), true)
-    # Create animation type control
     anim_properties.add_labelled_dropdown_list(:type, _INTL("Animation type"), {
       :move   => _INTL("Move"),
       :common => _INTL("Common")
     }, :move)
-    # Create "opp" variant
     anim_properties.add_labelled_checkbox(:opp_variant, _INTL("User is opposing?"), false)
-    # Create move control
     anim_properties.add_labelled_text_box_dropdown_list(:move, "", [], "")
     move_ctrl = anim_properties.get_control(:move)
     move_ctrl.max_rows = 16
-    # Create version control
     anim_properties.add_labelled_number_text_box(:version, _INTL("Version"), 0, 99, 0)
-    # Create animation name control
     anim_properties.add_labelled_text_box(:name, _INTL("Name"), "")
-    # Create filepath controls
     # TODO: Have two TextBoxes, one for folder and one for filename?
     anim_properties.add_labelled_text_box(:pbs_path, _INTL("PBS filepath"), "")
-    # Create "involves a user" control
     anim_properties.add_labelled_checkbox(:has_user, _INTL("Involves a user?"), true)
-    # Create "involves a target" control
     anim_properties.add_labelled_checkbox(:has_target, _INTL("Involves a target?"), true)
-    # Create flags control
-    # TODO: List, TextBox and some Buttons to add/delete.
+    # TODO: Flags control. Includes a List, TextBox and some add/delete Buttons.
     anim_properties.add_button(:close, _INTL("Close"))
     anim_properties.visible = false
   end
@@ -429,7 +487,7 @@ class AnimationEditor
       # NOTE: These sprite names are also used in Pokemon.play_cry and so should
       #       be a species ID (being a string is fine).
       :user_sprite_name   => "ARCANINE",
-      :target_sprite_name => "ABOMASNOW"
+      :target_sprite_name => "CHARIZARD"
     }
   end
 
@@ -473,10 +531,11 @@ class AnimationEditor
     component = @components[component_sym]
     # Panes are all mutually exclusive
     case component_sym
-    when :commands_pane
+    when :commands_pane, :color_tone_pane
       component.visible = (keyframe >= 0 && particle_index >= 0 &&
                           @anim[:particles][particle_index] &&
-                          @anim[:particles][particle_index][:name] != "SE")
+                          @anim[:particles][particle_index][:name] != "SE") &&
+                          @property_pane == component_sym
     when :se_pane
       component.visible = (keyframe >= 0 && particle_index >= 0 &&
                           @anim[:particles][particle_index] &&
@@ -538,6 +597,22 @@ class AnimationEditor
       end
       # Enable/disable property delete buttons
       DELETABLE_COMMAND_PANE_PROPERTIES.each do |property|
+        if AnimationEditor::ParticleDataHelper.has_command_at?(@anim[:particles][particle_index], property, keyframe)
+          component.get_control((property.to_s + "_delete").to_sym).enable
+        else
+          component.get_control((property.to_s + "_delete").to_sym).disable
+        end
+      end
+    when :color_tone_pane
+      new_vals = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(@anim[:particles][particle_index], keyframe)
+      component.controls.each do |ctrl|
+        next if !new_vals.include?(ctrl[0])
+        ctrl[1].value = new_vals[ctrl[0]][0] if ctrl[1].respond_to?("value=")
+        # TODO: new_vals[ctrl[0]][1] is whether the value is being interpolated,
+        #       which should be indicated somehow in ctrl[1].
+      end
+      # Enable/disable property delete buttons
+      DELETABLE_COLOR_TONE_PANE_PROPERTIES.each do |property|
         if AnimationEditor::ParticleDataHelper.has_command_at?(@anim[:particles][particle_index], property, keyframe)
           component.get_control((property.to_s + "_delete").to_sym).enable
         else
@@ -692,11 +767,16 @@ class AnimationEditor
     when :play_controls
       # TODO: Will the play controls ever signal themselves as changed? I don't
       #       think so.
-    when :commands_pane
+    when :commands_pane, :color_tone_pane
       case property
-      when :color_tone   # Button
-        # TODO: Open the colour/tone side pane.
-        echoln "Color/Tone button clicked"
+      when :general_tab
+        @property_pane = :commands_pane
+        refresh_component(component_sym)
+        refresh_component(@property_pane)
+      when :color_tone_tab
+        @property_pane = :color_tone_pane
+        refresh_component(component_sym)
+        refresh_component(@property_pane)
       else
         particle = @anim[:particles][particle_index]
         prop = property
@@ -713,13 +793,13 @@ class AnimationEditor
         end
         @components[:particle_list].change_particle_commands(particle_index)
         @components[:play_controls].duration = @components[:particle_list].duration
-        refresh_component(:commands_pane)
+        refresh_component(component_sym)
         refresh_component(:canvas)
       end
     when :se_pane
       case property
       when :list   # List
-        refresh_component(:se_pane)
+        refresh_component(component_sym)
       when :add   # Button
         new_file, new_volume, new_pitch = choose_audio_file("", 100, 100)
         if new_file != ""
@@ -727,11 +807,11 @@ class AnimationEditor
           AnimationEditor::ParticleDataHelper.add_se_command(particle, keyframe, new_file, new_volume, new_pitch)
           @components[:particle_list].change_particle_commands(particle_index)
           @components[:play_controls].duration = @components[:particle_list].duration
-          refresh_component(:se_pane)
+          refresh_component(component_sym)
         end
       when :edit   # Button
         particle = @anim[:particles][particle_index]
-        list = @components[:se_pane].get_control(:list)
+        list = @components[component_sym].get_control(:list)
         old_file = list.value
         old_volume, old_pitch = AnimationEditor::ParticleDataHelper.get_se_values_from_filename_and_frame(particle, keyframe, old_file)
         if old_file
@@ -741,18 +821,18 @@ class AnimationEditor
             AnimationEditor::ParticleDataHelper.add_se_command(particle, keyframe, new_file, new_volume, new_pitch)
             @components[:particle_list].change_particle_commands(particle_index)
             @components[:play_controls].duration = @components[:particle_list].duration
-            refresh_component(:se_pane)
+            refresh_component(component_sym)
           end
         end
       when :delete   # Button
         particle = @anim[:particles][particle_index]
-        list = @components[:se_pane].get_control(:list)
+        list = @components[component_sym].get_control(:list)
         old_file = list.value
         if old_file
           AnimationEditor::ParticleDataHelper.delete_se_command(particle, keyframe, old_file)
           @components[:particle_list].change_particle_commands(particle_index)
           @components[:play_controls].duration = @components[:particle_list].duration
-          refresh_component(:se_pane)
+          refresh_component(component_sym)
         end
       end
     when :particle_pane
@@ -762,7 +842,7 @@ class AnimationEditor
         new_file = choose_graphic_file(@anim[:particles][p_index][:graphic])
         if @anim[:particles][p_index][:graphic] != new_file
           @anim[:particles][p_index][:graphic] = new_file
-          refresh_component(:particle_pane)
+          refresh_component(component_sym)
           refresh_component(:canvas)
         end
       when :duplicate
@@ -781,7 +861,7 @@ class AnimationEditor
         particle = @anim[:particles][particle_index]
         new_cmds = AnimationEditor::ParticleDataHelper.set_property(particle, property, value)
         @components[:particle_list].change_particle(particle_index)
-        refresh_component(:particle_pane)
+        refresh_component(component_sym)
         refresh_component(:canvas)
       end
     when :keyframe_pane
@@ -837,15 +917,15 @@ class AnimationEditor
       #       panes)? Probably.
       case property
       when :type, :opp_variant
-        type = @components[:animation_properties].get_control(:type).value
-        opp = @components[:animation_properties].get_control(:opp_variant).value
+        type = @components[component_sym].get_control(:type).value
+        opp = @components[component_sym].get_control(:opp_variant).value
         case type
         when :move
           @anim[:type] = (opp) ? :opp_move : :move
         when :common
           @anim[:type] = (opp) ? :opp_common : :common
         end
-        refresh_component(:animation_properties)
+        refresh_component(component_sym)
         refresh_component(:canvas)
       when :pbs_path
         txt = value.gsub!(/\.txt$/, "")
