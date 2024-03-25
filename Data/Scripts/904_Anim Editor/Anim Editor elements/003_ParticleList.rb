@@ -1,6 +1,5 @@
 #===============================================================================
-# TODO: The Add/Up/Down buttons don't get captured, and don't prevent anything
-#       else in this control highlighting when hovered over, and vice versa.
+#
 #===============================================================================
 class AnimationEditor::ParticleList < UIControls::BaseControl
   VIEWPORT_SPACING     = 1
@@ -48,66 +47,11 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     self.x = x
     self.y = y
     draw_control_background
-    # Create viewports
-    @list_viewport = Viewport.new(
-      x + LIST_X, y + LIST_Y, LIST_WIDTH, height - LIST_Y - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING
-    )
-    @list_viewport.z = self.viewport.z + 1
-    @commands_bg_viewport = Viewport.new(
-      x + COMMANDS_X, y + COMMANDS_Y,
-      width - COMMANDS_X - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, @list_viewport.rect.height
-    )
-    @commands_bg_viewport.z = self.viewport.z + 1
-    @position_viewport = Viewport.new(@commands_bg_viewport.rect.x, y, @commands_bg_viewport.rect.width, height)
-    @position_viewport.z = self.viewport.z + 2
-    @commands_viewport = Viewport.new(@commands_bg_viewport.rect.x, @commands_bg_viewport.rect.y,
-                                      @commands_bg_viewport.rect.width, @commands_bg_viewport.rect.height)
-    @commands_viewport.z = self.viewport.z + 3
-    # Create scrollbars
-    @list_scrollbar = UIControls::Scrollbar.new(
-      x + width - UIControls::Scrollbar::SLIDER_WIDTH, @commands_bg_viewport.rect.y,
-      @commands_bg_viewport.rect.height, self.viewport, false, true
-    )
-    @list_scrollbar.set_interactive_rects
-    @time_scrollbar = UIControls::Scrollbar.new(
-      @commands_bg_viewport.rect.x, y + height - UIControls::Scrollbar::SLIDER_WIDTH,
-      @commands_bg_viewport.rect.width, self.viewport, true, true
-    )
-    @time_scrollbar.set_interactive_rects
-    # Time background bitmap sprite
-    @time_bg_sprite = BitmapSprite.new(
-      @commands_viewport.rect.width,
-      TIMELINE_HEIGHT + VIEWPORT_SPACING + @list_viewport.rect.height, self.viewport
-    )
-    @time_bg_sprite.x = @commands_viewport.rect.x
-    @time_bg_sprite.y = self.y
-    # Timeline bitmap sprite
-    @timeline_sprite = BitmapSprite.new(@commands_viewport.rect.width, TIMELINE_HEIGHT, self.viewport)
-    @timeline_sprite.x = @commands_viewport.rect.x
-    @timeline_sprite.y = self.y
-    @timeline_sprite.bitmap.font.color = TEXT_COLOR
-    @timeline_sprite.bitmap.font.size = TIMELINE_TEXT_SIZE
-    # Position line sprite
-    @position_sprite = BitmapSprite.new(3, height - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, @position_viewport)
-    @position_sprite.ox = @position_sprite.width / 2
-    @position_sprite.bitmap.fill_rect(0, 0, @position_sprite.bitmap.width, @position_sprite.bitmap.height, Color.red)
-    # Selected particle line sprite
-    @particle_line_sprite = BitmapSprite.new(@position_viewport.rect.width, 3, @commands_viewport)
-    @particle_line_sprite.z = -10
-    @particle_line_sprite.oy = @particle_line_sprite.height / 2
-    @particle_line_sprite.bitmap.fill_rect(0, 0, @particle_line_sprite.bitmap.width, @particle_line_sprite.bitmap.height, Color.red)
-    # Buttons and button bitmaps
-    initialize_button_bitmaps
-    @controls = []
-    add_particle_button = UIControls::BitmapButton.new(x + 1, y + 1, viewport, @add_button_bitmap)
-    add_particle_button.set_interactive_rects
-    @controls.push([:add_particle, add_particle_button])
-    up_particle_button = UIControls::BitmapButton.new(x + 22, y + 1, viewport, @up_button_bitmap)
-    up_particle_button.set_interactive_rects
-    @controls.push([:move_particle_up, up_particle_button])
-    down_particle_button = UIControls::BitmapButton.new(x + 43, y + 1, viewport, @down_button_bitmap)
-    down_particle_button.set_interactive_rects
-    @controls.push([:move_particle_down, down_particle_button])
+    initialize_viewports
+    initialize_scrollbars
+    initialize_timeline_bitmaps
+    initialize_selection_bitmaps
+    initialize_controls
     # List sprites and commands sprites
     @list_sprites = []
     @commands_bg_sprites = []
@@ -127,7 +71,81 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @commands = {}
   end
 
-  def initialize_button_bitmaps
+  def initialize_viewports
+    @list_viewport = Viewport.new(
+      x + LIST_X, y + LIST_Y, LIST_WIDTH, height - LIST_Y - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING
+    )
+    @list_viewport.z = self.viewport.z + 1
+    @commands_bg_viewport = Viewport.new(
+      x + COMMANDS_X, y + COMMANDS_Y,
+      width - COMMANDS_X - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, @list_viewport.rect.height
+    )
+    @commands_bg_viewport.z = self.viewport.z + 1
+    @position_viewport = Viewport.new(@commands_bg_viewport.rect.x, y, @commands_bg_viewport.rect.width, height)
+    @position_viewport.z = self.viewport.z + 2
+    @commands_viewport = Viewport.new(@commands_bg_viewport.rect.x, @commands_bg_viewport.rect.y,
+                                      @commands_bg_viewport.rect.width, @commands_bg_viewport.rect.height)
+    @commands_viewport.z = self.viewport.z + 3
+  end
+
+  def initialize_scrollbars
+    # Vertical scrollbar
+    @list_scrollbar = UIControls::Scrollbar.new(
+      x + width - UIControls::Scrollbar::SLIDER_WIDTH, @commands_bg_viewport.rect.y,
+      @commands_bg_viewport.rect.height, self.viewport, false, true
+    )
+    @list_scrollbar.set_interactive_rects
+    # Horizontal scrollbar
+    @time_scrollbar = UIControls::Scrollbar.new(
+      @commands_bg_viewport.rect.x, y + height - UIControls::Scrollbar::SLIDER_WIDTH,
+      @commands_bg_viewport.rect.width, self.viewport, true, true
+    )
+    @time_scrollbar.set_interactive_rects
+  end
+
+  def initialize_timeline_bitmaps
+    # Time background bitmap sprite
+    @time_bg_sprite = BitmapSprite.new(
+      @commands_viewport.rect.width,
+      TIMELINE_HEIGHT + VIEWPORT_SPACING + @list_viewport.rect.height, self.viewport
+    )
+    @time_bg_sprite.x = @commands_viewport.rect.x
+    @time_bg_sprite.y = self.y
+    # Timeline bitmap sprite
+    @timeline_sprite = BitmapSprite.new(@commands_viewport.rect.width, TIMELINE_HEIGHT, self.viewport)
+    @timeline_sprite.x = @commands_viewport.rect.x
+    @timeline_sprite.y = self.y
+    @timeline_sprite.bitmap.font.color = TEXT_COLOR
+    @timeline_sprite.bitmap.font.size = TIMELINE_TEXT_SIZE
+  end
+
+  def initialize_selection_bitmaps
+    # Position line sprite
+    @position_sprite = BitmapSprite.new(3, height - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, @position_viewport)
+    @position_sprite.ox = @position_sprite.width / 2
+    @position_sprite.bitmap.fill_rect(0, 0, @position_sprite.bitmap.width, @position_sprite.bitmap.height, Color.red)
+    # Selected particle line sprite
+    @particle_line_sprite = BitmapSprite.new(@position_viewport.rect.width, 3, @commands_viewport)
+    @particle_line_sprite.z = -10
+    @particle_line_sprite.oy = @particle_line_sprite.height / 2
+    @particle_line_sprite.bitmap.fill_rect(0, 0, @particle_line_sprite.bitmap.width, @particle_line_sprite.bitmap.height, Color.red)
+  end
+
+  def initialize_controls
+    generate_button_bitmaps
+    @controls = []
+    add_particle_button = UIControls::BitmapButton.new(x + 1, y + 1, viewport, @add_button_bitmap)
+    add_particle_button.set_interactive_rects
+    @controls.push([:add_particle, add_particle_button])
+    up_particle_button = UIControls::BitmapButton.new(x + 22, y + 1, viewport, @up_button_bitmap)
+    up_particle_button.set_interactive_rects
+    @controls.push([:move_particle_up, up_particle_button])
+    down_particle_button = UIControls::BitmapButton.new(x + 43, y + 1, viewport, @down_button_bitmap)
+    down_particle_button.set_interactive_rects
+    @controls.push([:move_particle_down, down_particle_button])
+  end
+
+  def generate_button_bitmaps
     @add_button_bitmap = Bitmap.new(12, 12)
     @add_button_bitmap.fill_rect(1, 5, 10, 2, TEXT_COLOR)
     @add_button_bitmap.fill_rect(5, 1, 2, 10, TEXT_COLOR)
@@ -141,24 +159,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       @down_button_bitmap.fill_rect(1 + i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, TEXT_COLOR)
       @down_button_bitmap.fill_rect(10 - i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, TEXT_COLOR)
     end
-  end
-
-  def draw_control_background
-    self.bitmap.clear
-    # Separator lines
-    self.bitmap.fill_rect(0, TIMELINE_HEIGHT, width, VIEWPORT_SPACING, Color.black)
-    self.bitmap.fill_rect(LIST_WIDTH, 0, VIEWPORT_SPACING, height, Color.black)
-    self.bitmap.fill_rect(0, height - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, width, VIEWPORT_SPACING, Color.black)
-    self.bitmap.fill_rect(width - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, 0, VIEWPORT_SPACING, height, Color.black)
-  end
-
-  def dispose_listed_sprites
-    @list_sprites.each { |p| p&.dispose }
-    @list_sprites.clear
-    @commands_bg_sprites.each { |p| p&.dispose }
-    @commands_bg_sprites.clear
-    @commands_sprites.each { |p| p&.dispose }
-    @commands_sprites.clear
   end
 
   def dispose
@@ -178,6 +178,17 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @commands_bg_viewport.dispose
     @commands_viewport.dispose
   end
+
+  def dispose_listed_sprites
+    @list_sprites.each { |p| p&.dispose }
+    @list_sprites.clear
+    @commands_bg_sprites.each { |p| p&.dispose }
+    @commands_bg_sprites.clear
+    @commands_sprites.each { |p| p&.dispose }
+    @commands_sprites.clear
+  end
+
+  #-----------------------------------------------------------------------------
 
   def duration
     return [@duration - DURATION_BUFFER, 0].max
@@ -233,6 +244,71 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     if @left_pos != old_val
       refresh_position_line
       invalidate_time
+    end
+  end
+
+  def scroll_to_row(new_row)
+    if new_row * ROW_HEIGHT < @top_pos
+      # Scroll up
+      new_pos = new_row * ROW_HEIGHT
+      loop do
+        @list_scrollbar.slider_top -= 1
+        break if @list_scrollbar.position <= new_pos || @list_scrollbar.minimum?
+      end
+    elsif new_row * ROW_HEIGHT > @top_pos + @list_viewport.rect.height - ROW_HEIGHT
+      # Scroll down
+      new_pos = (new_row * ROW_HEIGHT) - @list_viewport.rect.height + ROW_HEIGHT
+      loop do
+        @list_scrollbar.slider_top += 1
+        break if @list_scrollbar.position >= new_pos || @list_scrollbar.maximum?
+      end
+    end
+  end
+
+  def scroll_to_keyframe(new_keyframe)
+    if TIMELINE_LEFT_BUFFER + (new_keyframe * KEYFRAME_SPACING) - (KEYFRAME_SPACING / 2) < @left_pos
+      # Scroll left
+      new_pos = TIMELINE_LEFT_BUFFER + (new_keyframe * KEYFRAME_SPACING) - (KEYFRAME_SPACING / 2)
+      loop do
+        @time_scrollbar.slider_top -= 1
+        break if @time_scrollbar.position <= new_pos || @time_scrollbar.minimum?
+      end
+    elsif TIMELINE_LEFT_BUFFER + (new_keyframe * KEYFRAME_SPACING) + (KEYFRAME_SPACING / 2) > @left_pos + @commands_bg_viewport.rect.width
+      # Scroll right
+      new_pos = TIMELINE_LEFT_BUFFER + (new_keyframe * KEYFRAME_SPACING) + (KEYFRAME_SPACING / 2) - @commands_bg_viewport.rect.width
+      loop do
+        @time_scrollbar.slider_top += 1
+        break if @time_scrollbar.position >= new_pos || @time_scrollbar.maximum?
+      end
+    end
+  end
+
+  # Ensures that the array of which particle rows have been expanded ends up
+  # with the same particles having expanded rows after adding a particle.
+  def add_particle(index)
+    @expanded_particles.each_with_index do |idx, i|
+      @expanded_particles[i] += 1 if idx >= index
+    end
+  end
+
+  # Ensures that the array of which particle rows have been expanded ends up
+  # with the same particles having expanded rows after deleting a particle.
+  def delete_particle(index)
+    @expanded_particles.delete(index)
+    @expanded_particles.each_with_index do |idx, i|
+      @expanded_particles[i] -= 1 if idx > index
+    end
+  end
+
+  # Ensures that the array of which particle rows have been expanded ends up
+  # with the same particles having expanded rows after the swap.
+  def swap_particles(idx1, idx2)
+    if @expanded_particles.include?(idx1) && !@expanded_particles.include?(idx2)
+      @expanded_particles.delete(idx1)
+      @expanded_particles.push(idx2)
+    elsif @expanded_particles.include?(idx2) && !@expanded_particles.include?(idx1)
+      @expanded_particles.delete(idx2)
+      @expanded_particles.push(idx1)
     end
   end
 
@@ -449,9 +525,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     invalidate_rows
   end
 
-  # TODO: Methods that will show/hide individual property rows for a given
-  #       @particles index.
-
   #-----------------------------------------------------------------------------
 
   def each_visible_keyframe(early_start = false)
@@ -474,6 +547,17 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     else
       (start_row..end_row).each { |i| yield i }
     end
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def draw_control_background
+    self.bitmap.clear
+    # Separator lines
+    self.bitmap.fill_rect(0, TIMELINE_HEIGHT, width, VIEWPORT_SPACING, Color.black)
+    self.bitmap.fill_rect(LIST_WIDTH, 0, VIEWPORT_SPACING, height, Color.black)
+    self.bitmap.fill_rect(0, height - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, width, VIEWPORT_SPACING, Color.black)
+    self.bitmap.fill_rect(width - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, 0, VIEWPORT_SPACING, height, Color.black)
   end
 
   #-----------------------------------------------------------------------------
@@ -850,14 +934,16 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         else
           case @captured_row_button
           when :expand
-            particle_index = @particle_list[@captured_row]
-            particle_index = particle_index[0] if particle_index.is_a?(Array)
-            if @expanded_particles.include?(particle_index)   # Contract
-              @expanded_particles.delete(particle_index)
-            else                                              # Expand
-              @expanded_particles.push(particle_index)
+            old_row_idx_particle = @particle_list[@row_index]
+            idx_particle = @particle_list[@captured_row]
+            idx_particle = idx_particle[0] if idx_particle.is_a?(Array)
+            if @expanded_particles.include?(idx_particle)   # Contract
+              @expanded_particles.delete(idx_particle)
+            else                                            # Expand
+              @expanded_particles.push(idx_particle)
             end
             set_particles(@particles)
+            @row_index = @particle_list.index(old_row_idx_particle)
           else   # :row button or somewhere in the commands area or timeline, just change selection
             if @captured_row && @particle_list[@captured_row].is_a?(Array)
               @captured_row = @particle_list.index(@particle_list[@captured_row][0])
@@ -875,11 +961,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @captured_row = nil
     @captured_row_button = nil
     super   # Make this control not busy again
-  end
-
-  def on_right_mouse_release
-    # TODO: Toggle interpolation line at mouse's position. Should this also have
-    #       a def on_right_mouse_press and @right_captured_whatever?
   end
 
   def update_hover_highlight
@@ -938,6 +1019,59 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     end
   end
 
+  def update_input
+    # Left/right to change current keyframe
+    if Input.repeat?(Input::LEFT)
+      if @keyframe > 0
+        @keyframe -= 1
+        scroll_to_keyframe(@keyframe)
+        set_changed
+      end
+    elsif Input.repeat?(Input::RIGHT)
+      if @keyframe < @duration - 1
+        @keyframe += 1
+        scroll_to_keyframe(@keyframe)
+        set_changed
+      end
+    end
+    # Up/down to change selected particle
+    if Input.repeat?(Input::UP)
+      if @row_index > 0
+        loop do
+          @row_index -= 1
+          break if !@particle_list[@row_index].is_a?(Array)
+        end
+        scroll_to_row(@row_index)
+        set_changed
+      end
+    elsif Input.repeat?(Input::DOWN)
+      if @row_index < @particle_list.length - 1
+        loop do
+          @row_index += 1
+          break if !@particle_list[@row_index].is_a?(Array)
+        end
+        @keyframe = 0 if @row_index >= @particle_list.length - 1 && @keyframe < 0
+        scroll_to_row(@row_index)
+        set_changed
+      end
+    end
+    # Mouse scroll wheel
+    mouse_x, mouse_y = mouse_pos
+    if mouse_x && mouse_y
+      if @interactions[:list].contains?(mouse_x, mouse_y) ||
+        @interactions[:commands].contains?(mouse_x, mouse_y)
+        wheel_v = Input.scroll_v
+        if wheel_v > 0   # Scroll up
+          @list_scrollbar.slider_top -= UIControls::Scrollbar::SCROLL_DISTANCE
+          self.top_pos = @list_scrollbar.position
+        elsif wheel_v < 0   # Scroll down
+          @list_scrollbar.slider_top += UIControls::Scrollbar::SCROLL_DISTANCE
+          self.top_pos = @list_scrollbar.position
+        end
+      end
+    end
+  end
+
   def update
     return if !self.visible
     @list_scrollbar.update
@@ -949,9 +1083,8 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     # Refresh sprites if a scrollbar has been moved
     self.top_pos = @list_scrollbar.position
     self.left_pos = @time_scrollbar.position
-    # Update the current keyframe line's position
+    # Update the positions of the selected particle/keyframe lines
     refresh_position_line
-    # Update the selected particle line's position
     refresh_particle_line
     # Add/move particle buttons
     @controls.each do |c|
@@ -960,55 +1093,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       @values[c[0]] = true
       c[1].clear_changed
     end
-
-    if Input.release?(Input::MOUSERIGHT)
-      on_right_mouse_release
-    end
-
-    # TODO: This is testing code, and should be replaced by clicking on the
-    #       timeline or a command sprite. Maybe keep it after all? If so,
-    #       probably change left/right to <>, and also move the scrollbar(s) to
-    #       keep the "cursor" on-screen.
-    if Input.repeat?(Input::LEFT)
-      if @keyframe > 0
-        @keyframe -= 1
-        set_changed
-      end
-    elsif Input.repeat?(Input::RIGHT)
-      if @keyframe < @duration - 1
-        @keyframe += 1
-        set_changed
-      end
-      # TODO: If this is to be kept, @row_index should be changed by potentially
-      #       more than 1, so that @particle_list[@row_index] is an integer and
-      #       not an array.
-    # elsif Input.repeat?(Input::UP)
-    #   if @row_index > 0
-    #     @row_index -= 1
-    #     set_changed
-    #   end
-    # elsif Input.repeat?(Input::DOWN)
-    #   if @row_index < @particles.length - 1
-    #     @row_index += 1
-    #     set_changed
-    #   end
-    end
-
-    # Mouse scroll wheel
-    mouse_x, mouse_y = mouse_pos
-    if mouse_x && mouse_y
-      if @interactions[:list].contains?(mouse_x, mouse_y) ||
-         @interactions[:commands].contains?(mouse_x, mouse_y)
-        wheel_v = Input.scroll_v
-        if wheel_v > 0   # Scroll up
-          @list_scrollbar.slider_top -= UIControls::Scrollbar::SCROLL_DISTANCE
-          self.top_pos = @list_scrollbar.position
-        elsif wheel_v < 0   # Scroll down
-          @list_scrollbar.slider_top += UIControls::Scrollbar::SCROLL_DISTANCE
-          self.top_pos = @list_scrollbar.position
-        end
-      end
-    end
-
+    # Up/down/left/right navigation, and mouse scroll wheel
+    update_input
   end
 end

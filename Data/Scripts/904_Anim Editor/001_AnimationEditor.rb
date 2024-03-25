@@ -711,7 +711,7 @@ class AnimationEditor
       # Disable the "move particle up/down" buttons if the selected particle
       # can't move that way (or there is no selected particle)
       cur_index = particle_index
-      if cur_index < 1
+      if cur_index < 1 || @anim[:particles][cur_index][:name] == "SE"
         component.get_control(:move_particle_up).disable
       else
         component.get_control(:move_particle_up).enable
@@ -847,12 +847,14 @@ class AnimationEditor
         end
       when :duplicate
         AnimationEditor::ParticleDataHelper.duplicate_particle(@anim[:particles], particle_index)
+        @components[:particle_list].add_particle(particle_index + 1)
         @components[:particle_list].set_particles(@anim[:particles])
         @components[:particle_list].particle_index = particle_index + 1
         refresh
       when :delete
         if confirm_message(_INTL("Are you sure you want to delete this particle?"))
           AnimationEditor::ParticleDataHelper.delete_particle(@anim[:particles], particle_index)
+          @components[:particle_list].delete_particle(particle_index)
           @components[:particle_list].set_particles(@anim[:particles])
           @components[:particle_list].keyframe = 0 if @anim[:particles][particle_index][:name] == "SE"
           refresh
@@ -875,6 +877,7 @@ class AnimationEditor
           new_idx = @anim[:particles].length - 1 if new_idx == 0 || new_idx >= @anim[:particles].length
         end
         AnimationEditor::ParticleDataHelper.add_particle(@anim[:particles], new_idx)
+        @components[:particle_list].add_particle(new_idx)
         @components[:particle_list].set_particles(@anim[:particles])
         @components[:particle_list].particle_index = (new_idx >= 0) ? new_idx : @anim[:particles].length - 2
         @components[:particle_list].keyframe = -1
@@ -883,6 +886,7 @@ class AnimationEditor
         idx1 = particle_index
         idx2 = idx1 - 1
         AnimationEditor::ParticleDataHelper.swap_particles(@anim[:particles], idx1, idx2)
+        @components[:particle_list].swap_particles(idx1, idx2)
         @components[:particle_list].set_particles(@anim[:particles])
         @components[:particle_list].particle_index = idx2
         refresh
@@ -890,6 +894,7 @@ class AnimationEditor
         idx1 = particle_index
         idx2 = idx1 + 1
         AnimationEditor::ParticleDataHelper.swap_particles(@anim[:particles], idx1, idx2)
+        @components[:particle_list].swap_particles(idx1, idx2)
         @components[:particle_list].set_particles(@anim[:particles])
         @components[:particle_list].particle_index = idx2
         refresh
@@ -932,16 +937,48 @@ class AnimationEditor
         @anim[property] = txt
       when :has_user
         @anim[:no_user] = !value
-        # TODO: Add/delete the "User" particle accordingly, and change the foci
-        #       of any other particle involving a user. Then refresh a lot of
-        #       components.
-        refresh_component(:canvas)
+        if @anim[:no_user]
+          @anim[:particles].delete_if { |particle| particle[:name] == "User" }
+          @anim[:particles].each do |particle|
+            if ["USER", "USER_OPP", "USER_FRONT", "USER_BACK"].include?(particle[:graphic])
+              particle[:graphic] = GameData::Animation::PARTICLE_DEFAULT_VALUES[:graphic]
+            end
+            if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+              particle[:focus] = GameData::Animation::PARTICLE_DEFAULT_VALUES[:focus]
+            end
+            particle[:user_cry] = nil if particle[:name] == "SE"
+          end
+          @components[:particle_list].delete_particle(0)
+        elsif @anim[:particles].none? { |particle| particle[:name] == "User" }
+          @anim[:particles].insert(0, {
+            :name => "User", :focus => :user, :graphic => "USER"
+          })
+          @components[:particle_list].add_particle(0)
+        end
+        @components[:particle_list].set_particles(@anim[:particles])
+        refresh
       when :has_target
         @anim[:no_target] = !value
-        # TODO: Add/delete the "Target" particle accordingly, and change the
-        #       foci of any other particle involving a target. Then refresh a
-        #       lot of components.
-        refresh_component(:canvas)
+        if @anim[:no_target]
+          @anim[:particles].delete_if { |particle| particle[:name] == "Target" }
+          @anim[:particles].each do |particle|
+            if ["TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"].include?(particle[:graphic])
+              particle[:graphic] = GameData::Animation::PARTICLE_DEFAULT_VALUES[:graphic]
+            end
+            if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+              particle[:focus] = GameData::Animation::PARTICLE_DEFAULT_VALUES[:focus]
+            end
+            particle[:target_cry] = nil if particle[:name] == "SE"
+          end
+          @components[:particle_list].delete_particle(@anim[:no_user] ? 0 : 1)
+        elsif @anim[:particles].none? { |particle| particle[:name] == "Target" }
+          @anim[:particles].insert((@anim[:no_user] ? 0 : 1), {
+            :name => "Target", :focus => :target, :graphic => "TARGET"
+          })
+          @components[:particle_list].add_particle((@anim[:no_user] ? 0 : 1))
+        end
+        @components[:particle_list].set_particles(@anim[:particles])
+        refresh
       when :usable
         @anim[:ignore] = !value
       else

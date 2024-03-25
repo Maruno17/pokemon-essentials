@@ -166,5 +166,4 @@ Name = MAGICCOAT
     SetVisible = 9,false
 <SE>
     Play = 0,Sword2,80
-    Play = 0,Sword2,80,101
     Play = 4,Sword2,80

@@ -33,6 +33,14 @@ class UIControls::Scrollbar < UIControls::BaseControl
     return (@range - @tray_size) * @slider_top / (@tray_size - @slider_size)
   end
 
+  def minimum?
+    return @slider_top <= 0
+  end
+
+  def maximum?
+    return @slider_top >= @tray_size - @slider_size
+  end
+
   # Range is the total size of the large area that the scrollbar is able to
   # show part of.
   def range=(new_val)

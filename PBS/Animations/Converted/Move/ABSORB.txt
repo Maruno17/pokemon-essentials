@@ -237,7 +237,6 @@ Name = ABSORB
     SetVisible = 13,false
 <SE>
     Play = 0,Absorb2,80
-    Play = 0,Absorb2,80
     Play = 2,Absorb2,80
     Play = 5,Absorb2,80
     Play = 7,Absorb2,80

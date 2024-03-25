@@ -321,25 +321,25 @@ class AnimationEditor::Canvas < Sprite
         spr.bitmap = @user_bitmap_back
       when "TARGET"
         if target_idx < 0
-          raise _INTL("Particle {1} was given a graphic of \"TARGET\" but its focus doesn't include a target.",
+          raise _INTL("Particle \"{1}\" was given a graphic of \"TARGET\" but its focus doesn't include a target.",
                       particle[:name])
         end
         spr.bitmap = (target_idx.even?) ? @target_bitmap_back : @target_bitmap_front
       when "TARGET_OPP"
         if target_idx < 0
-          raise _INTL("Particle {1} was given a graphic of \"TARGET_OPP\" but its focus doesn't include a target.",
+          raise _INTL("Particle \"{1}\" was given a graphic of \"TARGET_OPP\" but its focus doesn't include a target.",
                       particle[:name])
         end
         spr.bitmap = (target_idx.even?) ? @target_bitmap_front : @target_bitmap_back
       when "TARGET_FRONT"
         if target_idx < 0
-          raise _INTL("Particle {1} was given a graphic of \"TARGET_FRONT\" but its focus doesn't include a target.",
+          raise _INTL("Particle \"{1}\" was given a graphic of \"TARGET_FRONT\" but its focus doesn't include a target.",
                       particle[:name])
         end
         spr.bitmap = @target_bitmap_front
       when "TARGET_BACK"
         if target_idx < 0
-          raise _INTL("Particle {1} was given a graphic of \"TARGET_BACK\" but its focus doesn't include a target.",
+          raise _INTL("Particle \"{1}\" was given a graphic of \"TARGET_BACK\" but its focus doesn't include a target.",
                       particle[:name])
         end
         spr.bitmap = @target_bitmap_back

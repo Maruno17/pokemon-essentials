@@ -47,7 +47,7 @@ module Compiler
         elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
           # XXX=YYY lines
           if !data_hash
-            raise _INTL("Expected a section at the beginning of the file.\n{1}", FileLineData.linereport)
+            raise _INTL("Expected a section at the beginning of the file.") + "\n" + FileLineData.linereport
           end
           key = $~[1]
           if schema[key]   # Property of the animation
@@ -62,7 +62,7 @@ module Compiler
             end
           elsif sub_schema[key]   # Property of a particle
             if !current_particle
-              raise _INTL("Particle hasn't been defined yet!\n{1}", FileLineData.linereport)
+              raise _INTL("Particle hasn't been defined yet!") + "\n" + FileLineData.linereport
             end
             value = get_csv_record($~[2], sub_schema[key])
             if sub_schema[key][1][0] == "^"
@@ -154,20 +154,51 @@ module Compiler
         when "Target" then particle[:graphic] = "TARGET"
         end
       end
-      # Ensure that particles don't have a focus involving a user if the
-      # animation itself doesn't involve a user
-      if hash[:no_user] && GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
-        raise _INTL("Particle \"{1}\" can't have a \"Focus\" that involves a user if property \"NoUser\" is set to true.",
-          particle[:name]) + "\n" + FileLineData.linereport
+      # Ensure that particles don't have a focus involving a user, and the
+      # animation doesn't play a user's cry, if the animation itself doesn't
+      # involve a user
+      if hash[:no_user]
+        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+          raise _INTL("Particle \"{1}\" can't have a \"Focus\" that involves a user if property \"NoUser\" is set to true.",
+            particle[:name]) + "\n" + FileLineData.linereport
+        end
+        if particle[:name] == "SE" && particle[:user_cry] && !particle[:user_cry].empty?
+          raise _INTL("Animation can't play the user's cry if property \"NoUser\" is set to true.") + "\n" + FileLineData.linereport
+        end
       end
-      # Ensure that particles don't have a focus involving a target if the
-      # animation itself doesn't involve a target
-      if hash[:no_target] && GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-        raise _INTL("Particle \"{1}\" can't have a \"Focus\" that involves a target if property \"NoTarget\" is set to true.",
-          particle[:name]) + "\n" + FileLineData.linereport
+      # Ensure that particles don't have a focus involving a target, and the
+      # animation doesn't play a target's cry, if the animation itself doesn't
+      # involve a target
+      if hash[:no_target]
+        if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+          raise _INTL("Particle \"{1}\" can't have a \"Focus\" that involves a target if property \"NoTarget\" is set to true.",
+            particle[:name]) + "\n" + FileLineData.linereport
+        end
+        if particle[:name] == "SE" && particle[:target_cry] && !particle[:target_cry].empty?
+          raise _INTL("Animation can't play the target's cry if property \"NoTarget\" is set to true.") + "\n" + FileLineData.linereport
+        end
       end
-      # TODO: For SE particle, ensure that it doesn't play two instances of the
-      #       same file in the same frame.
+      # Ensure that the same SE isn't played twice in the same frame
+      if particle[:name] == "SE"
+        [:se, :user_cry, :target_cry].each do |property|
+          next if !particle[property]
+          files_played = []
+          particle[property].each do |play|
+            files_played[play[0]] ||= []
+            if files_played[play[0]].include?(play[1])
+              case property
+              when :se
+                raise _INTL("SE \"{1}\" should not play twice in the same frame ({2}).", play[1], play[0]) + "\n" + FileLineData.linereport
+              when :user_cry
+                raise _INTL("User's cry should not play twice in the same frame ({1}).", play[0]) + "\n" + FileLineData.linereport
+              when :target_cry
+                raise _INTL("Target's cry should not play twice in the same frame ({1}).", play[0]) + "\n" + FileLineData.linereport
+              end
+            end
+            files_played[play[0]].push(play[1])
+          end
+        end
+      end
       # Convert all "SetXYZ" particle commands to "MoveXYZ" by giving them a
       # duration of 0 (even ones that can't have a "MoveXYZ" command)
       GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.keys.each do |prop|
@@ -293,6 +324,7 @@ module Compiler
       rescue SystemCallError
       end
       raise Reset.new if e.is_a?(Hangup)
+      raise SystemExit.new if e.is_a?(RuntimeError)
       raise "Unknown exception when compiling animations."
     end
   end
