@@ -154,25 +154,33 @@ module Compiler
         when "Target" then particle[:graphic] = "TARGET"
         end
       end
-      # Ensure that particles don't have a focus involving a user, and the
-      # animation doesn't play a user's cry, if the animation itself doesn't
-      # involve a user
+      # If the animation doesn't involve a user, ensure that particles don't
+      # have a focus/graphic that involves a user, and that the animation
+      # doesn't play a user's cry
       if hash[:no_user]
         if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
           raise _INTL("Particle \"{1}\" can't have a \"Focus\" that involves a user if property \"NoUser\" is set to true.",
-            particle[:name]) + "\n" + FileLineData.linereport
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+        if ["USER", "USER_OPP", "USER_FRONT", "USER_BACK"].include?(particle[:graphic])
+          raise _INTL("Particle \"{1}\" can't have a \"Graphic\" that involves a user if property \"NoUser\" is set to true.",
+                      particle[:name]) + "\n" + FileLineData.linereport
         end
         if particle[:name] == "SE" && particle[:user_cry] && !particle[:user_cry].empty?
           raise _INTL("Animation can't play the user's cry if property \"NoUser\" is set to true.") + "\n" + FileLineData.linereport
         end
       end
-      # Ensure that particles don't have a focus involving a target, and the
-      # animation doesn't play a target's cry, if the animation itself doesn't
-      # involve a target
+      # If the animation doesn't involve a target, ensure that particles don't
+      # have a focus/graphic that involves a target, and that the animation
+      # doesn't play a target's cry
       if hash[:no_target]
         if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
           raise _INTL("Particle \"{1}\" can't have a \"Focus\" that involves a target if property \"NoTarget\" is set to true.",
-            particle[:name]) + "\n" + FileLineData.linereport
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+        if ["TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"].include?(particle[:graphic])
+          raise _INTL("Particle \"{1}\" can't have a \"Graphic\" that involves a target if property \"NoTarget\" is set to true.",
+                      particle[:name]) + "\n" + FileLineData.linereport
         end
         if particle[:name] == "SE" && particle[:target_cry] && !particle[:target_cry].empty?
           raise _INTL("Animation can't play the target's cry if property \"NoTarget\" is set to true.") + "\n" + FileLineData.linereport

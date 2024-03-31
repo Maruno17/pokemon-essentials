@@ -146,10 +146,32 @@ class UIControls::List < UIControls::BaseControl
          )
       end
       txt = (val.is_a?(Array)) ? val[1] : val
+      text_color = TEXT_COLOR
+      if txt[/^\\c\[([0-9]+)\]/i]
+        text_colors = [
+          [  0, 112, 248], [120, 184, 232],   # 1  Blue
+          [232,  32,  16], [248, 168, 184],   # 2  Red
+          [ 96, 176,  72], [174, 208, 144],   # 3  Green
+          [ 72, 216, 216], [168, 224, 224],   # 4  Cyan
+          [208,  56, 184], [232, 160, 224],   # 5  Magenta
+          [232, 208,  32], [248, 232, 136],   # 6  Yellow
+          [160, 160, 168], [208, 208, 216],   # 7  Gray
+          [240, 240, 248], [200, 200, 208],   # 8  White
+          [114,  64, 232], [184, 168, 224],   # 9  Purple
+          [248, 152,  24], [248, 200, 152],   # 10 Orange
+          MessageConfig::DARK_TEXT_MAIN_COLOR,
+          MessageConfig::DARK_TEXT_SHADOW_COLOR,   # 11 Dark default
+          MessageConfig::LIGHT_TEXT_MAIN_COLOR,
+          MessageConfig::LIGHT_TEXT_SHADOW_COLOR   # 12 Light default
+        ]
+        self.bitmap.font.color = Color.new(*text_colors[2 * ($1.to_i - 1)])
+        txt = txt.gsub(/^\\c\[[0-9]+\]/i, "")
+      end
       draw_text(self.bitmap,
                 @interactions[i].x + TEXT_PADDING_X,
                 @interactions[i].y + TEXT_OFFSET_Y - (@top_row * ROW_HEIGHT),
                 txt)
+      self.bitmap.font.color = TEXT_COLOR
     end
   end
 

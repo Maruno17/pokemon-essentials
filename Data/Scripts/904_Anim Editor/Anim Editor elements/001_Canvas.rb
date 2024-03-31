@@ -300,6 +300,8 @@ class AnimationEditor::Canvas < Sprite
       else
         @particle_sprites[index].dispose if @particle_sprites[index] && !@particle_sprites[index].disposed?
         @particle_sprites[index] = []
+        @frame_sprites[index].dispose if @frame_sprites[index] && !@frame_sprites[index].disposed?
+        @frame_sprites[index] = []
       end
       @particle_sprites[index][target_idx] = Sprite.new(self.viewport)
       create_frame_sprite(index, target_idx)
@@ -307,6 +309,8 @@ class AnimationEditor::Canvas < Sprite
       if @particle_sprites[index].is_a?(Array)
         @particle_sprites[index].each { |s| s.dispose if s && !s.disposed? }
         @particle_sprites[index] = nil
+        @frame_sprites[index].each { |s| s.dispose if s && !s.disposed? }
+        @frame_sprites[index] = nil
       else
         return if @particle_sprites[index] && !@particle_sprites[index].disposed?
       end
@@ -502,7 +506,13 @@ class AnimationEditor::Canvas < Sprite
   end
 
   def refresh_particle(index)
-    target_indices.each { |target_idx| refresh_sprite(index, target_idx) }
+    one_per_side = [:target_side_foreground, :target_side_background].include?(@anim[:particles][index][:focus])
+    sides_covered = []
+    target_indices.each do |target_idx|
+      next if one_per_side && sides_covered.include?(target_idx % 2)
+      refresh_sprite(index, target_idx)
+      sides_covered.push(target_idx % 2)
+    end
   end
 
   def refresh_particle_frame

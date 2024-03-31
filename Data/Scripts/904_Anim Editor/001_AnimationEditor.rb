@@ -191,6 +191,38 @@ class AnimationEditor
     return @components[:particle_list].particle_index
   end
 
+  def load_settings
+    # TODO: Load these from a saved file.
+    @settings = {
+      :side_sizes         => [1, 1],
+      :user_index         => 0,
+      :target_indices     => [1],
+      :user_opposes       => false,
+      # TODO: Ideally be able to independently choose base graphics, which will
+      #       be a separate setting here.
+      :canvas_bg          => "indoor1",
+      # NOTE: These sprite names are also used in Pokemon.play_cry and so should
+      #       be a species ID (being a string is fine).
+      :user_sprite_name   => "ARCANINE",
+      :target_sprite_name => "CHARIZARD"
+    }
+  end
+
+  def save
+    GameData::Animation.register(@anim, @anim_id)
+    Compiler.write_battle_animation_file(@anim[:pbs_path])
+    if @anim[:pbs_path] != @pbs_path
+      if GameData::Animation::DATA.any? { |_key, anim| anim.pbs_path == @pbs_path }
+        Compiler.write_battle_animation_file(@pbs_path)
+      elsif FileTest.exist?("PBS/Animations/" + @pbs_path + ".txt")
+        File.delete("PBS/Animations/" + @pbs_path + ".txt")
+      end
+      @pbs_path = @anim[:pbs_path]
+    end
+  end
+
+  #-----------------------------------------------------------------------------
+
   #-----------------------------------------------------------------------------
 
   # Returns the animation's name for display in the menu bar and elsewhere.
@@ -470,38 +502,6 @@ class AnimationEditor
     set_animation_properties_contents
     set_graphic_chooser_contents
     set_audio_chooser_contents
-  end
-
-  #-----------------------------------------------------------------------------
-
-  def load_settings
-    # TODO: Load these from a saved file.
-    @settings = {
-      :side_sizes         => [1, 1],
-      :user_index         => 0,
-      :target_indices     => [1],
-      :user_opposes       => false,
-      # TODO: Ideally be able to independently choose base graphics, which will
-      #       be a separate setting here.
-      :canvas_bg          => "indoor1",
-      # NOTE: These sprite names are also used in Pokemon.play_cry and so should
-      #       be a species ID (being a string is fine).
-      :user_sprite_name   => "ARCANINE",
-      :target_sprite_name => "CHARIZARD"
-    }
-  end
-
-  def save
-    GameData::Animation.register(@anim, @anim_id)
-    Compiler.write_battle_animation_file(@anim[:pbs_path])
-    if @anim[:pbs_path] != @pbs_path
-      if GameData::Animation::DATA.any? { |_key, anim| anim.pbs_path == @pbs_path }
-        Compiler.write_battle_animation_file(@pbs_path)
-      elsif FileTest.exist?("PBS/Animations/" + @pbs_path + ".txt")
-        File.delete("PBS/Animations/" + @pbs_path + ".txt")
-      end
-      @pbs_path = @anim[:pbs_path]
-    end
   end
 
   #-----------------------------------------------------------------------------

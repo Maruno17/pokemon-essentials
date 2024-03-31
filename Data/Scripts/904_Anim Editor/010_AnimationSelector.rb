@@ -2,30 +2,37 @@
 #
 #===============================================================================
 class AnimationEditor::AnimationSelector
-  BORDER_THICKNESS       = 4
+  BORDER_THICKNESS          = 4
+  LABEL_OFFSET_X            = -4   # Position of label relative to what they're labelling
+  LABEL_OFFSET_Y            = -32
 
-  QUIT_BUTTON_WIDTH      = 80
-  QUIT_BUTTON_HEIGHT     = 30
+  QUIT_BUTTON_WIDTH         = 80
+  QUIT_BUTTON_HEIGHT        = 30
 
-  TYPE_BUTTONS_X         = 2
-  TYPE_BUTTONS_Y         = 62
-  TYPE_BUTTON_WIDTH      = 100
-  TYPE_BUTTON_HEIGHT     = 48
+  TYPE_BUTTONS_X            = 2
+  TYPE_BUTTONS_Y            = 62
+  TYPE_BUTTON_WIDTH         = 100
+  TYPE_BUTTON_HEIGHT        = 48
 
-  MOVES_LIST_X           = TYPE_BUTTONS_X + TYPE_BUTTON_WIDTH + 4
-  MOVES_LIST_Y           = TYPE_BUTTONS_Y + 4
-  MOVES_LIST_WIDTH       = 200
-  MOVES_LIST_HEIGHT      = 26 * UIControls::List::ROW_HEIGHT
+  MOVES_LIST_X              = TYPE_BUTTONS_X + TYPE_BUTTON_WIDTH + 4
+  MOVES_LIST_Y              = TYPE_BUTTONS_Y + 4
+  MOVES_LIST_WIDTH          = 200
+  MOVES_LIST_HEIGHT         = 26 * UIControls::List::ROW_HEIGHT
 
-  ANIMATIONS_LIST_X      = MOVES_LIST_X + MOVES_LIST_WIDTH + 8
-  ANIMATIONS_LIST_Y      = MOVES_LIST_Y
-  ANIMATIONS_LIST_WIDTH  = 300
-  ANIMATIONS_LIST_HEIGHT = MOVES_LIST_HEIGHT
+  ANIMATIONS_LIST_X         = MOVES_LIST_X + MOVES_LIST_WIDTH + 8
+  ANIMATIONS_LIST_Y         = MOVES_LIST_Y
+  ANIMATIONS_LIST_WIDTH     = 300
+  ANIMATIONS_LIST_HEIGHT    = MOVES_LIST_HEIGHT
 
-  ACTION_BUTTON_WIDTH    = 200
-  ACTION_BUTTON_HEIGHT   = 48
-  ACTION_BUTTON_X        = ANIMATIONS_LIST_X + ANIMATIONS_LIST_WIDTH + 4
-  ACTION_BUTTON_Y        = TYPE_BUTTONS_Y + ((ANIMATIONS_LIST_HEIGHT - (ACTION_BUTTON_HEIGHT * 3)) / 2) + 4
+  ACTION_BUTTON_WIDTH       = 200
+  ACTION_BUTTON_HEIGHT      = 48
+  ACTION_BUTTON_X           = ANIMATIONS_LIST_X + ANIMATIONS_LIST_WIDTH + 4
+  ACTION_BUTTON_Y           = TYPE_BUTTONS_Y + ((ANIMATIONS_LIST_HEIGHT - (ACTION_BUTTON_HEIGHT * 3)) / 2) + 4
+
+  FILTER_BOX_WIDTH          = ACTION_BUTTON_WIDTH
+  FILTER_BOX_HEIGHT         = UIControls::TextBox::TEXT_BOX_HEIGHT
+  FILTER_BOX_X              = ACTION_BUTTON_X
+  FILTER_BOX_Y              = MOVES_LIST_Y
 
   # Pop-up window
   MESSAGE_BOX_WIDTH         = AnimationEditor::WINDOW_WIDTH * 3 / 4
@@ -35,34 +42,35 @@ class AnimationEditor::AnimationSelector
   MESSAGE_BOX_SPACING       = 16
 
   def initialize
-    generate_lists
+    @animation_type = 0   # 0=move, 1=common
+    @filter_text = ""
+    @quit = false
+    generate_full_lists
+    initialize_viewports
+    initialize_bitmaps
+    initialize_controls
+    refresh
+  end
+
+  def initialize_viewports
     @viewport = Viewport.new(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
     @viewport.z = 99999
     @pop_up_viewport = Viewport.new(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
     @pop_up_viewport.z = @viewport.z + 50
+  end
+
+  def initialize_bitmaps
+    # Background
     @screen_bitmap = BitmapSprite.new(AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, @viewport)
+    # Semi-transparent black overlay to dim the screen while a pop-up window is open
     @pop_up_bg_bitmap = BitmapSprite.new(AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, @pop_up_viewport)
     @pop_up_bg_bitmap.z = -100
     @pop_up_bg_bitmap.visible = false
+    # Draw in these bitmaps
     draw_editor_background
-    @animation_type = 0   # 0=move, 1=common
-    @quit = false
-    create_controls
-    refresh
   end
 
-  def dispose
-    @screen_bitmap.dispose
-    @pop_up_bg_bitmap.dispose
-    @components.dispose
-    @viewport.dispose
-    @pop_up_viewport.dispose
-  end
-
-  LABEL_OFFSET_X = -4
-  LABEL_OFFSET_Y = -32
-
-  def create_controls
+  def initialize_controls
     @components = UIControls::ControlsContainer.new(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
     # Quit button
     btn = UIControls::Button.new(QUIT_BUTTON_WIDTH, QUIT_BUTTON_HEIGHT, @viewport, _INTL("Quit"))
@@ -82,11 +90,6 @@ class AnimationEditor::AnimationSelector
       btn.set_fixed_size
       @components.add_control_at(val[0], btn, TYPE_BUTTONS_X, TYPE_BUTTONS_Y + (i * TYPE_BUTTON_HEIGHT))
     end
-    # TODO: Add filter text box for :moves_list's contents. Applies the filter
-    #       upon every change to the text box's value. Perhaps it should only do
-    #       so after 0.5 seconds of non-typing. What exactly should the filter
-    #       be applied to? Animation's name, move's name (if there is one), what
-    #       else? Flags?
     # Moves list label
     label = UIControls::Label.new(MOVES_LIST_WIDTH, TYPE_BUTTON_HEIGHT, @viewport, _INTL("Moves"))
     label.header = true
@@ -107,7 +110,24 @@ class AnimationEditor::AnimationSelector
       btn.set_fixed_size
       @components.add_control_at(val[0], btn, ACTION_BUTTON_X, ACTION_BUTTON_Y + (i * ACTION_BUTTON_HEIGHT))
     end
+    # Filter text box
+    text_box = UIControls::TextBox.new(FILTER_BOX_WIDTH, FILTER_BOX_HEIGHT, @viewport, "")
+    @components.add_control_at(:filter, text_box, FILTER_BOX_X, FILTER_BOX_Y)
+    # Filter text box label
+    label = UIControls::Label.new(FILTER_BOX_WIDTH, TYPE_BUTTON_HEIGHT, @viewport, _INTL("Filter text"))
+    label.header = true
+    @components.add_control_at(:filter_label, label, FILTER_BOX_X + LABEL_OFFSET_X, FILTER_BOX_Y + LABEL_OFFSET_Y)
   end
+
+  def dispose
+    @screen_bitmap.dispose
+    @pop_up_bg_bitmap.dispose
+    @components.dispose
+    @viewport.dispose
+    @pop_up_viewport.dispose
+  end
+
+  #-----------------------------------------------------------------------------
 
   def draw_editor_background
     # Fill the whole screen with white
@@ -120,6 +140,8 @@ class AnimationEditor::AnimationSelector
     areas.each do |area|
       @screen_bitmap.bitmap.outline_rect(area[0] - 2, area[1] - 2, area[2] + 4, area[3] + 4, Color.black)
     end
+    # Make the pop-up background semi-transparent
+    @pop_up_bg_bitmap.bitmap.fill_rect(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, Color.new(0, 0, 0, 128))
   end
 
   #-----------------------------------------------------------------------------
@@ -198,36 +220,72 @@ class AnimationEditor::AnimationSelector
 
   #-----------------------------------------------------------------------------
 
-  def generate_lists
-    @move_list = []
-    @common_list = []
-    @move_animations = {}
-    @common_animations = {}
+  def generate_full_lists
+    @full_move_animations = {}
+    @full_common_animations = {}
     GameData::Animation.keys.each do |id|
       anim = GameData::Animation.get(id)
       name = ""
+      name += "\\c[2]" if anim.ignore
       name += _INTL("[Foe]") + " " if anim.opposing_animation?
       name += "[#{anim.version}]" + " " if anim.version > 0
       name += (anim.name || anim.move)
       if anim.move_animation?
         move_name = GameData::Move.try_get(anim.move)&.name || anim.move
-        @move_list.push([anim.move, move_name]) if !@move_animations[anim.move]
-        @move_animations[anim.move] ||= []
-        @move_animations[anim.move].push([id, name])
+        @full_move_animations[anim.move] ||= []
+        @full_move_animations[anim.move].push([id, name, move_name])
       elsif anim.common_animation?
-        @common_list.push([anim.move, anim.move]) if !@common_animations[anim.move]
-        @common_animations[anim.move] ||= []
-        @common_animations[anim.move].push([id, name])
+        @full_common_animations[anim.move] ||= []
+        @full_common_animations[anim.move].push([id, name])
       end
     end
+    @full_move_animations.values.each do |val|
+      val.sort! { |a, b| a[1] <=> b[1] }
+    end
+    @full_common_animations.values.each do |val|
+      val.sort! { |a, b| a[1] <=> b[1] }
+    end
+    apply_list_filter
+  end
+
+  def apply_list_filter
+    # Apply filter
+    if @filter_text == ""
+      @move_animations = @full_move_animations.clone
+      @common_animations = @full_common_animations.clone
+    else
+      filter = @filter_text.downcase
+      @move_animations.clear
+      @full_move_animations.each_pair do |move, anims|
+        anims.each do |anim|
+          next if !anim[1].downcase.include?(filter) && !anim[2].downcase.include?(filter)
+          @move_animations[move] ||= []
+          @move_animations[move].push(anim)
+        end
+      end
+      @common_animations.clear
+      @full_common_animations.each_pair do |common, anims|
+        anims.each do |anim|
+          next if !anim[1].downcase.include?(filter) && !common.downcase.include?(filter)
+          @common_animations[common] ||= []
+          @common_animations[common].push(anim)
+        end
+      end
+    end
+    # Create move list from the filtered results
+    @move_list = []
+    @move_animations.each_pair do |move_id, anims|
+      @move_list.push([move_id, anims[0][2]])
+    end
+    @move_list.uniq!
     @move_list.sort!
+    # Create common list from the filtered results
+    @common_list = []
+    @common_animations.each_pair do |move_id, anims|
+      @common_list.push([move_id, move_id])
+    end
+    @common_list.uniq!
     @common_list.sort!
-    @move_animations.values.each do |val|
-      val.sort! { |a, b| a[1] <=> b[1] }
-    end
-    @common_animations.values.each do |val|
-      val.sort! { |a, b| a[1] <=> b[1] }
-    end
   end
 
   def selected_move_animations
@@ -284,7 +342,7 @@ class AnimationEditor::AnimationSelector
       new_id = GameData::Animation.keys.max + 1
       screen = AnimationEditor.new(new_id, new_anim)
       screen.run
-      generate_lists
+      generate_full_lists
     when :moves
       @animation_type = 0
       @components.get_control(:moves_list).selected = -1
@@ -298,7 +356,7 @@ class AnimationEditor::AnimationSelector
       if anim_id
         screen = AnimationEditor.new(anim_id, GameData::Animation.get(anim_id).clone_as_hash)
         screen.run
-        generate_lists
+        generate_full_lists
       end
     when :copy
       anim_id = selected_animation_id
@@ -308,7 +366,7 @@ class AnimationEditor::AnimationSelector
         new_id = GameData::Animation.keys.max + 1
         screen = AnimationEditor.new(new_id, new_anim)
         screen.run
-        generate_lists
+        generate_full_lists
       end
     when :delete
       anim_id = selected_animation_id
@@ -320,7 +378,7 @@ class AnimationEditor::AnimationSelector
         elsif FileTest.exist?("PBS/Animations/" + pbs_path + ".txt")
           File.delete("PBS/Animations/" + pbs_path + ".txt")
         end
-        generate_lists
+        generate_full_lists
       end
     end
     refresh
@@ -333,6 +391,13 @@ class AnimationEditor::AnimationSelector
         apply_button_press(property)
       end
       @components.clear_changed
+    end
+    # Detect change to filter text
+    filter_ctrl = @components.get_control(:filter)
+    if filter_ctrl.value != @filter_text
+      @filter_text = filter_ctrl.value
+      apply_list_filter
+      refresh
     end
   end
 
