@@ -9,31 +9,24 @@
 #       1100, 1200, 1300... +/-50 = player battlers.
 #       2000 +/-50 = player side foreground, foreground focus.
 #       9999+ = UI
-
-# TODO: Should the canvas be able to show boxes/faded sprites of particles from
-#       the previous keyframe? I suppose ideally, but don't worry about it.
-# TODO: Show a focus-dependent coloured frame around just the currently selected
-#       particle. Only show one frame even if the focus involves a target and
-#       there are multiple targets.
-# TODO: Ideally refresh the canvas while editing a particle's property in the
-#       :commands_pane component (e.g. moving a number slider but not finalising
-#       it). Refresh a single particle. I don't think any other side pane needs
-#       to refresh the canvas in the middle of changing a value. The new value
-#       of a control in the middle of being changed isn't part of the particle's
-#       data, so it'll need to be input manually somehow.
 #===============================================================================
 class AnimationEditor::Canvas < Sprite
+  attr_reader :values
+
   def initialize(viewport, anim, settings)
     super(viewport)
-    @anim          = anim
-    @settings      = settings
-    @keyframe      = 0
-    @user_coords   = []
-    @target_coords = []
-    @playing       = false   # TODO: What should this affect? Is it needed?
+    @anim              = anim
+    @settings          = settings
+    @keyframe          = 0
+    @selected_particle = -2
+    @captured          = nil
+    @user_coords       = []
+    @target_coords     = []
+    @playing           = false   # TODO: What should this affect? Is it needed?
     initialize_background
     initialize_battlers
     initialize_particle_sprites
+    initialize_particle_frames
     refresh
   end
 
@@ -59,11 +52,29 @@ class AnimationEditor::Canvas < Sprite
     @particle_sprites = []
   end
 
+  def initialize_particle_frames
+    # Frame for selected particle
+    @sel_frame_bitmap = Bitmap.new(64, 64)
+    @sel_frame_bitmap.outline_rect(0, 0, @sel_frame_bitmap.width, @sel_frame_bitmap.height, Color.new(0, 0, 0, 64))
+    @sel_frame_bitmap.outline_rect(2, 2, @sel_frame_bitmap.width - 4, @sel_frame_bitmap.height - 4, Color.new(0, 0, 0, 64))
+    @sel_frame_sprite = Sprite.new(viewport)
+    @sel_frame_sprite.bitmap = @sel_frame_bitmap
+    @sel_frame_sprite.z = 99999
+    @sel_frame_sprite.ox = @sel_frame_bitmap.width / 2
+    @sel_frame_sprite.oy = @sel_frame_bitmap.height / 2
+    # Frame for other particles
+    @frame_bitmap = Bitmap.new(64, 64)
+    @frame_bitmap.outline_rect(1, 1, @frame_bitmap.width - 2, @frame_bitmap.height - 2, Color.new(0, 0, 0, 64))
+    @frame_sprites = []
+  end
+
   def dispose
     @user_bitmap_front&.dispose
     @user_bitmap_back&.dispose
     @target_bitmap_front&.dispose
     @target_bitmap_back&.dispose
+    @sel_frame_bitmap&.dispose
+    @frame_bitmap&.dispose
     @player_base.dispose
     @foe_base.dispose
     @message_bar_sprite.dispose
@@ -77,6 +88,15 @@ class AnimationEditor::Canvas < Sprite
       end
     end
     @particle_sprites.clear
+    @frame_sprites.each do |s|
+      if s.is_a?(Array)
+        s.each { |s2| s2.dispose if s2 && !s2.disposed? }
+      else
+        s.dispose if s && !s.disposed?
+      end
+    end
+    @frame_sprites.clear
+    @sel_frame_sprite&.dispose
     super
   end
 
@@ -110,8 +130,20 @@ class AnimationEditor::Canvas < Sprite
     return ret
   end
 
+  def first_target_index
+    return target_indices.compact[0]
+  end
+
   def position_empty?(index)
-    return user_index != index && !target_indices.include?(index)
+    return false if !@anim[:no_user] && user_index == index
+    return false if !@anim[:no_target] && target_indices.include?(index)
+    return true
+  end
+
+  def selected_particle=(val)
+    return if @selected_particle == val
+    @selected_particle = val
+    refresh_particle_frame
   end
 
   def keyframe=(val)
@@ -120,14 +152,28 @@ class AnimationEditor::Canvas < Sprite
     refresh
   end
 
+  def mouse_pos
+    mouse_coords = Mouse.getMousePos
+    return nil, nil if !mouse_coords
+    ret_x = mouse_coords[0] - self.viewport.rect.x - self.x
+    ret_y = mouse_coords[1] - self.viewport.rect.y - self.y
+    return nil, nil if ret_x < 0 || ret_x >= self.viewport.rect.width ||
+                       ret_y < 0 || ret_y >= self.viewport.rect.height
+    return ret_x, ret_y
+  end
+
   #-----------------------------------------------------------------------------
 
   def busy?
-    return false
+    return !@captured.nil?
   end
 
   def changed?
-    return false
+    return !@values.nil?
+  end
+
+  def clear_changed
+    @values = nil
   end
 
   #-----------------------------------------------------------------------------
@@ -165,25 +211,45 @@ class AnimationEditor::Canvas < Sprite
     @message_bar_sprite.y = Settings::SCREEN_HEIGHT - @message_bar_sprite.height
   end
 
-  # TODO: def refresh_box_display which checks @settings for whether boxes
-  #       should be drawn around sprites.
+  def create_frame_sprite(index, sub_index = -1)
+    if sub_index >= 0
+      return if @frame_sprites[index] && @frame_sprites[index][sub_index] && !@frame_sprites[index][sub_index].disposed?
+    else
+      return if @frame_sprites[index] && !@frame_sprites[index].disposed?
+    end
+    sprite = Sprite.new(viewport)
+    sprite.bitmap = @frame_bitmap
+    sprite.z = 99998
+    sprite.ox = @frame_bitmap.width / 2
+    sprite.oy = @frame_bitmap.height / 2
+    if sub_index >= 0
+      @frame_sprites[index] ||= []
+      @frame_sprites[index][sub_index] = sprite
+    else
+      @frame_sprites[index] = sprite
+    end
+  end
 
   # TODO: Create shadow sprites?
   def ensure_battler_sprites
     if !@side_size0 || @side_size0 != side_size(0)
       @battler_sprites.each_with_index { |s, i| s.dispose if i.even? && s && !s.disposed? }
+      idx_user = @anim[:particles].index { |particle| particle[:name] == "User" }
       @side_size0 = side_size(0)
       @side_size0.times do |i|
         next if position_empty?(i * 2)
         @battler_sprites[i * 2] = Sprite.new(self.viewport)
+        create_frame_sprite(idx_user)
       end
     end
     if !@side_size1 || @side_size1 != side_size(1)
       @battler_sprites.each_with_index { |s, i| s.dispose if i.odd? && s && !s.disposed? }
+      idx_target = @anim[:particles].index { |particle| particle[:name] == "Target" }
       @side_size1 = side_size(1)
       @side_size1.times do |i|
         next if position_empty?((i * 2) + 1)
         @battler_sprites[(i * 2) + 1] = Sprite.new(self.viewport)
+        create_frame_sprite(idx_target, (i * 2) + 1)
       end
     end
   end
@@ -236,6 +302,7 @@ class AnimationEditor::Canvas < Sprite
         @particle_sprites[index] = []
       end
       @particle_sprites[index][target_idx] = Sprite.new(self.viewport)
+      create_frame_sprite(index, target_idx)
     else
       if @particle_sprites[index].is_a?(Array)
         @particle_sprites[index].each { |s| s.dispose if s && !s.disposed? }
@@ -244,13 +311,14 @@ class AnimationEditor::Canvas < Sprite
         return if @particle_sprites[index] && !@particle_sprites[index].disposed?
       end
       @particle_sprites[index] = Sprite.new(self.viewport)
+      create_frame_sprite(index)
     end
   end
 
-  def refresh_sprite(index, target_idx = -1)
+  def get_sprite_and_frame(index, target_idx = -1)
+    spr = nil
+    frame = nil
     particle = @anim[:particles][index]
-    return if !particle
-    # Get sprite
     case particle[:name]
     when "SE"
       return
@@ -258,18 +326,32 @@ class AnimationEditor::Canvas < Sprite
       spr = @battler_sprites[user_index]
       raise _INTL("Sprite for particle {1} not found somehow (battler index {2}).",
                   particle[:name], user_index) if !spr
+      idx_user = @anim[:particles].index { |particle| particle[:name] == "User" }
+      frame = @frame_sprites[idx_user]
     when "Target"
       spr = @battler_sprites[target_idx]
       raise _INTL("Sprite for particle {1} not found somehow (battler index {2}).",
                   particle[:name], target_idx) if !spr
+      idx_target = @anim[:particles].index { |particle| particle[:name] == "Target" }
+      frame = @frame_sprites[idx_target][target_idx]
     else
       create_particle_sprite(index, target_idx)
       if target_idx >= 0
         spr = @particle_sprites[index][target_idx]
+        frame = @frame_sprites[index][target_idx]
       else
         spr = @particle_sprites[index]
+        frame = @frame_sprites[index]
       end
     end
+    return spr, frame
+  end
+
+  def refresh_sprite(index, target_idx = -1)
+    particle = @anim[:particles][index]
+    return if !particle || particle[:name] == "SE"
+    # Get sprite
+    spr, frame = get_sprite_and_frame(index, target_idx)
     # Calculate all values of particle at the current keyframe
     values = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(particle, @keyframe)
     values.each_pair do |property, val|
@@ -277,6 +359,7 @@ class AnimationEditor::Canvas < Sprite
     end
     # Set visibility
     spr.visible = values[:visible]
+    frame.visible = spr.visible
     return if !spr.visible
     # Set opacity
     spr.opacity = values[:opacity]
@@ -408,10 +491,26 @@ class AnimationEditor::Canvas < Sprite
     # Set color and tone
     spr.color.set(values[:color_red], values[:color_green], values[:color_blue], values[:color_alpha])
     spr.tone.set(values[:tone_red], values[:tone_green], values[:tone_blue], values[:tone_gray])
+    # Position frame over spr
+    frame.x = spr.x
+    frame.y = spr.y
+    case @anim[:particles][index][:graphic]
+    when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
+         "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
+      frame.y -= spr.bitmap.height / 2
+    end
   end
 
   def refresh_particle(index)
     target_indices.each { |target_idx| refresh_sprite(index, target_idx) }
+  end
+
+  def refresh_particle_frame
+    return if @selected_particle < 0 || @selected_particle >= @anim[:particles].length - 1
+    focus = @anim[:particles][@selected_particle][:focus]
+    frame_color = AnimationEditor::ParticleList::CONTROL_BG_COLORS[focus] || Color.magenta
+    @sel_frame_bitmap.outline_rect(1, 1, @sel_frame_bitmap.width - 2, @sel_frame_bitmap.height - 2, frame_color)
+    update_selected_particle_frame
   end
 
   def refresh
@@ -434,14 +533,169 @@ class AnimationEditor::Canvas < Sprite
         refresh_sprite(i) if particle[:name] != "SE"
       end
     end
+    refresh_particle_frame   # Intentionally after refreshing particles
   end
 
   #-----------------------------------------------------------------------------
 
-  # TODO: def update_input. Includes def pbSpriteHitTest equivalent.
+  def mouse_in_sprite?(sprite, mouse_x, mouse_y)
+    return false if mouse_x < sprite.x - sprite.ox
+    return false if mouse_x >= sprite.x - sprite.ox + sprite.width
+    return false if mouse_y < sprite.y - sprite.oy
+    return false if mouse_y >= sprite.y - sprite.oy + sprite.height
+    return true
+  end
+
+  def on_mouse_press
+    mouse_x, mouse_y = mouse_pos
+    return if !mouse_x || !mouse_y
+    # Check if mouse is over particle frame
+    if @sel_frame_sprite.visible &&
+       mouse_x >= @sel_frame_sprite.x - @sel_frame_sprite.ox &&
+       mouse_x < @sel_frame_sprite.x - @sel_frame_sprite.ox + @sel_frame_sprite.width &&
+       mouse_y >= @sel_frame_sprite.y - @sel_frame_sprite.oy &&
+       mouse_y < @sel_frame_sprite.y - @sel_frame_sprite.oy + @sel_frame_sprite.height
+      @captured = [@sel_frame_sprite.x, @sel_frame_sprite.y,
+                   @sel_frame_sprite.x - mouse_x, @sel_frame_sprite.y - mouse_y]
+      return
+    end
+    # Find closest particle to mouse
+    nearest_index = -1
+    nearest_distance = -1
+    @frame_sprites.each_with_index do |sprite, index|
+      sprites = (sprite.is_a?(Array)) ? sprite : [sprite]
+      sprites.each do |spr|
+        next if !spr || !spr.visible
+        next if !mouse_in_sprite?(spr, mouse_x, mouse_y)
+        dist = (spr.x - mouse_x) ** 2 + (spr.y - mouse_y) ** 2
+        next if nearest_distance >= 0 && nearest_distance < dist
+        nearest_index = index
+        nearest_distance = dist
+      end
+    end
+    return if nearest_index < 0
+    @values = { :particle_index => nearest_index }
+  end
+
+  def on_mouse_release
+    @captured = nil
+  end
+
+  def update_input
+    if Input.trigger?(Input::MOUSELEFT)
+      on_mouse_press
+    elsif busy? && Input.release?(Input::MOUSELEFT)
+      on_mouse_release
+    end
+  end
+
+  def update_particle_moved
+    return if !busy?
+    mouse_x, mouse_y = mouse_pos
+    return if !mouse_x || !mouse_y
+    new_canvas_x = mouse_x + @captured[2]
+    new_canvas_y = mouse_y + @captured[3]
+    return if @captured[0] == new_canvas_x && @captured[1] == new_canvas_y
+    particle = @anim[:particles][@selected_particle]
+    if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+      sprite, frame = get_sprite_and_frame(@selected_particle, first_target_index)
+    else
+      sprite, frame = get_sprite_and_frame(@selected_particle)
+    end
+    # Check if moved horizontally
+    if @captured[0] != new_canvas_x
+      new_canvas_pos = mouse_x + @captured[2]
+      new_pos = new_canvas_x
+      case particle[:focus]
+      when :foreground, :midground, :background
+      when :user
+        new_pos -= @user_coords[0]
+      when :target
+        new_pos -= @target_coords[first_target_index][0]
+      when :user_and_target
+        user_pos = @user_coords
+        target_pos = @target_coords[first_target_index]
+        distance = GameData::Animation::USER_AND_TARGET_SEPARATION
+        new_pos -= user_pos[0]
+        new_pos *= distance[0]
+        new_pos /= target_pos[0] - user_pos[0]
+      when :user_side_foreground, :user_side_background
+        base_coords = Battle::Scene.pbBattlerPosition(user_index)
+        new_pos -= base_coords[0]
+      when :target_side_foreground, :target_side_background
+        base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
+        new_pos -= base_coords[0]
+      end
+      @values ||= {}
+      @values[:x] = new_pos
+      @captured[0] = new_canvas_x
+      sprite.x = new_canvas_x
+    end
+    # Check if moved vertically
+    if @captured[1] != new_canvas_y
+      new_pos = new_canvas_y
+      case particle[:focus]
+      when :foreground, :midground, :background
+      when :user
+        new_pos -= @user_coords[1]
+      when :target
+        new_pos -= @target_coords[first_target_index][1]
+      when :user_and_target
+        user_pos = @user_coords
+        target_pos = @target_coords[first_target_index]
+        distance = GameData::Animation::USER_AND_TARGET_SEPARATION
+        new_pos -= user_pos[1]
+        new_pos *= distance[1]
+        new_pos /= target_pos[1] - user_pos[1]
+      when :user_side_foreground, :user_side_background
+        base_coords = Battle::Scene.pbBattlerPosition(user_index)
+        new_pos -= base_coords[1]
+      when :target_side_foreground, :target_side_background
+        base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
+        new_pos -= base_coords[1]
+      end
+      @values ||= {}
+      @values[:y] = new_pos
+      @captured[1] = new_canvas_y
+      sprite.y = new_canvas_y
+    end
+  end
+
+  def update_selected_particle_frame
+    if @selected_particle < 0 || @selected_particle >= @anim[:particles].length - 1
+      @sel_frame_sprite.visible = false
+      return
+    end
+    case @anim[:particles][@selected_particle][:name]
+    when "User"
+      target = @battler_sprites[user_index]
+      raise _INTL("Sprite for particle \"{1}\" not found somehow.",
+                  @anim[:particles][@selected_particle][:name]) if !target
+    when "Target"
+      target = @battler_sprites[target_indices[0]]
+      raise _INTL("Sprite for particle \"{1}\" not found somehow.",
+                  @anim[:particles][@selected_particle][:name]) if !target
+    else
+      target = @particle_sprites[@selected_particle]
+      target = target[target_indices[0]] if target&.is_a?(Array)
+    end
+    if !target || !target.visible
+      @sel_frame_sprite.visible = false
+      return
+    end
+    @sel_frame_sprite.visible = true
+    @sel_frame_sprite.x = target.x
+    @sel_frame_sprite.y = target.y
+    case @anim[:particles][@selected_particle][:graphic]
+    when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
+         "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
+      @sel_frame_sprite.y -= target.bitmap.height / 2
+    end
+  end
 
   def update
-    # TODO: Update input (mouse clicks, dragging particles).
-    # TODO: Keyboard shortcuts?
+    update_input
+    update_particle_moved
+    update_selected_particle_frame
   end
 end

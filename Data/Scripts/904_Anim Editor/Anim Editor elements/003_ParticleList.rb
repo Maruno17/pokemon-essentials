@@ -204,12 +204,15 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     old_index = @row_index
     @row_index = @particle_list.index { |row| (row.is_a?(Array) && row[0] == val) ||
                                               (!row.is_a?(Array) && row == val) }
-    invalidate if @row_index != old_index
+    return if @row_index == old_index
+    invalidate
+    scroll_to_row(@row_index)
   end
 
   def keyframe=(val)
     return if @keyframe == val
     @keyframe = val
+    scroll_to_keyframe(@keyframe)
     invalidate
   end
 

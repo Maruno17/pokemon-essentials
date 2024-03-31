@@ -37,6 +37,16 @@ class UIControls::ControlsContainer
     @viewport.dispose
   end
 
+  #-----------------------------------------------------------------------------
+
+  def visible=(value)
+    @visible = value
+    @controls.each { |c| c[1].visible = value }
+    repaint if @visible
+  end
+
+  #-----------------------------------------------------------------------------
+
   def busy?
     return !@captured.nil?
   end
@@ -47,12 +57,6 @@ class UIControls::ControlsContainer
 
   def clear_changed
     @values = nil
-  end
-
-  def visible=(value)
-    @visible = value
-    @controls.each { |c| c[1].visible = value }
-    repaint if @visible
   end
 
   def get_control(id)

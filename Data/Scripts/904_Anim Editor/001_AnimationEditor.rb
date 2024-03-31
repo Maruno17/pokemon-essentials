@@ -568,6 +568,7 @@ class AnimationEditor
     case component_sym
     when :canvas
       component.keyframe = keyframe
+      component.selected_particle = particle_index
     when :commands_pane
       new_vals = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(@anim[:particles][particle_index], keyframe)
       component.controls.each do |ctrl|
@@ -762,8 +763,23 @@ class AnimationEditor
         refresh_component(:particle_list)
       end
     when :canvas
-      # TODO: Detect and apply changes made in canvas, e.g. moving particle,
-      #       double-clicking to add particle, deleting particle.
+      case property
+      when :particle_index
+        @components[:particle_list].particle_index = value
+        refresh
+      when :x, :y
+        particle = @anim[:particles][particle_index]
+        prop = property
+        new_cmds = AnimationEditor::ParticleDataHelper.add_command(particle, property, keyframe, value)
+        if new_cmds
+          particle[prop] = new_cmds
+        else
+          particle.delete(prop)
+        end
+        @components[:particle_list].change_particle_commands(particle_index)
+        @components[:play_controls].duration = @components[:particle_list].duration
+        refresh
+      end
     when :play_controls
       # TODO: Will the play controls ever signal themselves as changed? I don't
       #       think so.

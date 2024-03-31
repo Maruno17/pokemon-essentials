@@ -63,6 +63,7 @@ class UIControls::BaseControl < BitmapSprite
   def disable
     return if disabled?
     @disabled = true
+    @hover_area = nil
     invalidate
   end
 
