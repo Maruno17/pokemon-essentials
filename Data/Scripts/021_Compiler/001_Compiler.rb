@@ -1111,6 +1111,7 @@ module Compiler
         end
       end
       raise Reset.new if e.is_a?(Hangup)
+      raise SystemExit.new if e.is_a?(RuntimeError)
       raise "Unknown exception when compiling."
     end
   end

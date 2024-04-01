@@ -658,7 +658,7 @@ def pbDynamicItemList(*args)
 end
 
 # Common items to find via Pickup. Items from this list are added to the pool in
-# order, starting from a point dependng on the Pokémon's level. The number of
+# order, starting from a point depending on the Pokémon's level. The number of
 # items added is how many probabilities are in the PICKUP_COMMON_ITEM_CHANCES
 # array below.
 # There must be 9 + PICKUP_COMMON_ITEM_CHANCES.length number of items in this
@@ -687,7 +687,7 @@ PICKUP_COMMON_ITEMS = [
 # Chances to get each item added to the pool from the array above.
 PICKUP_COMMON_ITEM_CHANCES = [30, 10, 10, 10, 10, 10, 10, 4, 4]
 # Rare items to find via Pickup. Items from this list are added to the pool in
-# order, starting from a point dependng on the Pokémon's level. The number of
+# order, starting from a point depending on the Pokémon's level. The number of
 # items added is how many probabilities are in the PICKUP_RARE_ITEM_CHANCES
 # array below.
 # There must be 9 + PICKUP_RARE_ITEM_CHANCES.length number of items in this
