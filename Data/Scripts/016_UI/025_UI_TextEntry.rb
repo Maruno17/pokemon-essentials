@@ -10,9 +10,7 @@ class Window_CharacterEntry < Window_DrawableCommand
     @charset = charset
     @othercharset = ""
     super(0, 96, 480, 192)
-    colors = getDefaultTextColors(self.windowskin)
-    self.baseColor = colors[0]
-    self.shadowColor = colors[1]
+    self.baseColor, self.shadowColor = getDefaultTextColors(self.windowskin)
     self.columns = XSIZE
     refresh
   end

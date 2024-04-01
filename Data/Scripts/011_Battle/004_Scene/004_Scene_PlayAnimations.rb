@@ -312,6 +312,7 @@ class Battle::Scene
   #=============================================================================
   def pbFaintBattler(battler)
     @briefMessage = false
+    old_height = @sprites["pokemon_#{battler.index}"].src_rect.height
     # Pokémon plays cry and drops down, data box disappears
     faintAnim   = Animation::BattlerFaint.new(@sprites, @viewport, battler.index, @battle)
     dataBoxAnim = Animation::DataBoxDisappear.new(@sprites, @viewport, battler.index)
@@ -323,6 +324,7 @@ class Battle::Scene
     end
     faintAnim.dispose
     dataBoxAnim.dispose
+    @sprites["pokemon_#{battler.index}"].src_rect.height = old_height
   end
 
   #=============================================================================
