@@ -2,17 +2,19 @@
 #
 #===============================================================================
 class UIControls::List < UIControls::BaseControl
-  LIST_X         = 0
-  LIST_Y         = 0
-  ROW_HEIGHT     = 24
-  TEXT_PADDING_X = 4
-  TEXT_OFFSET_Y  = 3
+  BORDER_THICKNESS = 2
+  ROW_HEIGHT       = 24
+  TEXT_PADDING_X   = 4
+  TEXT_OFFSET_Y    = 3
 
   SELECTED_ROW_COLOR = Color.green
 
   def initialize(width, height, viewport, values = [])
     super(width, height, viewport)
-    @scrollbar = UIControls::Scrollbar.new(LIST_X + width - UIControls::Scrollbar::SLIDER_WIDTH, LIST_Y, height, viewport)
+    @scrollbar = UIControls::Scrollbar.new(
+      width - UIControls::Scrollbar::SLIDER_WIDTH - BORDER_THICKNESS, BORDER_THICKNESS,
+      height - (BORDER_THICKNESS * 2), viewport
+    )
     @scrollbar.set_interactive_rects
     @scrollbar.range = ROW_HEIGHT
     @scrollbar.z = self.z + 1
@@ -30,12 +32,12 @@ class UIControls::List < UIControls::BaseControl
 
   def x=(new_val)
     super(new_val)
-    @scrollbar.x = new_val + LIST_X + width - UIControls::Scrollbar::SLIDER_WIDTH
+    @scrollbar.x = new_val + width - UIControls::Scrollbar::SLIDER_WIDTH - BORDER_THICKNESS
   end
 
   def y=(new_val)
     super(new_val)
-    @scrollbar.y = new_val + LIST_Y
+    @scrollbar.y = new_val + BORDER_THICKNESS
   end
 
   def z=(new_val)
@@ -101,7 +103,10 @@ class UIControls::List < UIControls::BaseControl
   def set_interactive_rects
     @interactions = {}
     @values.length.times do |i|
-      @interactions[i] = Rect.new(LIST_X, LIST_Y + (ROW_HEIGHT * i), width - LIST_X, ROW_HEIGHT)
+      @interactions[i] = Rect.new(
+        BORDER_THICKNESS, BORDER_THICKNESS + (ROW_HEIGHT * i),
+        width - (BORDER_THICKNESS * 2), ROW_HEIGHT
+      )
     end
   end
 
@@ -133,7 +138,11 @@ class UIControls::List < UIControls::BaseControl
   end
 
   def refresh
-    super
+    self.bitmap.clear
+    # Draw control outline and background
+    self.bitmap.outline_rect(0, 0, width, height, Color.black)
+    self.bitmap.fill_rect(1, 1, width - 2, height - 2, Color.white)
+    draw_area_highlight
     # Draw text options
     @values.each_with_index do |val, i|
       next if i < @top_row || i >= @top_row + @rows_count

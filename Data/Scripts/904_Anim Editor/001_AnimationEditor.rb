@@ -50,21 +50,21 @@ class AnimationEditor
 
   CHOOSER_BUTTON_WIDTH     = 150
   CHOOSER_BUTTON_HEIGHT    = MESSAGE_BOX_BUTTON_HEIGHT
-  CHOOSER_FILE_LIST_X      = 8
-  CHOOSER_FILE_LIST_Y      = 32
-  CHOOSER_FILE_LIST_WIDTH  = CHOOSER_BUTTON_WIDTH * 2
-  CHOOSER_FILE_LIST_HEIGHT = UIControls::List::ROW_HEIGHT * 15
+  CHOOSER_FILE_LIST_X      = 6
+  CHOOSER_FILE_LIST_Y      = 30
+  CHOOSER_FILE_LIST_WIDTH  = (CHOOSER_BUTTON_WIDTH * 2) + (UIControls::List::BORDER_THICKNESS * 2)
+  CHOOSER_FILE_LIST_HEIGHT = (UIControls::List::ROW_HEIGHT * 15) + (UIControls::List::BORDER_THICKNESS * 2)
 
   GRAPHIC_CHOOSER_PREVIEW_SIZE  = 320   # Square
-  GRAPHIC_CHOOSER_WINDOW_WIDTH  = CHOOSER_FILE_LIST_X + CHOOSER_FILE_LIST_WIDTH + 10 + GRAPHIC_CHOOSER_PREVIEW_SIZE + 8
-  GRAPHIC_CHOOSER_WINDOW_HEIGHT = CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 10 + CHOOSER_BUTTON_HEIGHT + 8
+  GRAPHIC_CHOOSER_WINDOW_WIDTH  = CHOOSER_FILE_LIST_X + CHOOSER_FILE_LIST_WIDTH + 8 + GRAPHIC_CHOOSER_PREVIEW_SIZE + 8
+  GRAPHIC_CHOOSER_WINDOW_HEIGHT = CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 8 + CHOOSER_BUTTON_HEIGHT + 8
   GRAPHIC_CHOOSER_X             = ((WINDOW_WIDTH - GRAPHIC_CHOOSER_WINDOW_WIDTH) / 2)
   GRAPHIC_CHOOSER_Y             = ((WINDOW_HEIGHT - GRAPHIC_CHOOSER_WINDOW_HEIGHT) / 2)
 
-  AUDIO_CHOOSER_LABEL_WIDTH   = UIControls::ControlsContainer::OFFSET_FROM_LABEL_X
+  AUDIO_CHOOSER_LABEL_WIDTH   = UIControls::ControlsContainer::OFFSET_FROM_LABEL_X - 10
   AUDIO_CHOOSER_SLIDER_WIDTH  = (CHOOSER_BUTTON_WIDTH * 2) - AUDIO_CHOOSER_LABEL_WIDTH
   AUDIO_CHOOSER_WINDOW_WIDTH  = CHOOSER_FILE_LIST_X + CHOOSER_FILE_LIST_WIDTH + 8 + (CHOOSER_BUTTON_WIDTH * 2) + 4
-  AUDIO_CHOOSER_WINDOW_HEIGHT = CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 10 + CHOOSER_BUTTON_HEIGHT + 8
+  AUDIO_CHOOSER_WINDOW_HEIGHT = CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 8 + CHOOSER_BUTTON_HEIGHT + 8
   AUDIO_CHOOSER_X             = ((WINDOW_WIDTH - AUDIO_CHOOSER_WINDOW_WIDTH) / 2)
   AUDIO_CHOOSER_Y             = ((WINDOW_HEIGHT - AUDIO_CHOOSER_WINDOW_HEIGHT) / 2)
 
@@ -124,11 +124,6 @@ class AnimationEditor
     # Background for main editor
     @screen_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
     @screen_bitmap.z = -100
-    # Background in which to draw the outline of the SE list box in the SE side pane
-    # TODO: Get rid of this by drawing a list's box in the control itself.
-    @se_list_box_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
-    @se_list_box_bitmap.z = -90
-    @se_list_box_bitmap.visible = false
     # Semi-transparent black overlay to dim the screen while a pop-up window is open
     @pop_up_bg_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @pop_up_viewport)
     @pop_up_bg_bitmap.z = -100
@@ -193,7 +188,6 @@ class AnimationEditor
 
   def dispose
     @screen_bitmap.dispose
-    @se_list_box_bitmap.dispose
     @pop_up_bg_bitmap.dispose
     @delete_bitmap.dispose
     @delete_disabled_bitmap.dispose
@@ -357,7 +351,7 @@ class AnimationEditor
       btn.set_fixed_size
       graphic_chooser.add_control_at(option[0], btn,
                                      CHOOSER_FILE_LIST_X + (CHOOSER_BUTTON_WIDTH * i),
-                                     CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 4)
+                                     CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 2)
     end
     graphic_chooser.visible = false
   end
@@ -373,14 +367,14 @@ class AnimationEditor
       btn = UIControls::Button.new(CHOOSER_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, audio_chooser.viewport, option[1])
       btn.set_fixed_size
       audio_chooser.add_control_at(option[0], btn,
-                                   CHOOSER_FILE_LIST_X + (CHOOSER_BUTTON_WIDTH * i),
-                                   CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 4)
+                                   CHOOSER_FILE_LIST_X + (CHOOSER_BUTTON_WIDTH * i) + 2,
+                                   CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 2)
     end
     # Volume and pitch sliders
     [[:volume, _INTL("Volume"), 0, 100], [:pitch, _INTL("Pitch"), 0, 200]].each_with_index do |option, i|
       label = UIControls::Label.new(AUDIO_CHOOSER_LABEL_WIDTH, 28, audio_chooser.viewport, option[1])
       audio_chooser.add_control_at((option[0].to_s + "_label").to_sym, label,
-                                   list.x + list.width + 8, list.y + (28 * i))
+                                   list.x + list.width + 6, list.y + (28 * i))
       slider = UIControls::NumberSlider.new(AUDIO_CHOOSER_SLIDER_WIDTH, 28, audio_chooser.viewport, option[2], option[3], 100)
       audio_chooser.add_control_at(option[0], slider, label.x + label.width, label.y)
     end
@@ -389,7 +383,7 @@ class AnimationEditor
       btn = UIControls::Button.new(CHOOSER_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, audio_chooser.viewport, option[1])
       btn.set_fixed_size
       audio_chooser.add_control_at(option[0], btn,
-                                   list.x + list.width + 8 + (CHOOSER_BUTTON_WIDTH * i),
+                                   list.x + list.width + 6 + (CHOOSER_BUTTON_WIDTH * i),
                                    list.y + (28 * 2))
     end
     audio_chooser.visible = false
@@ -420,9 +414,6 @@ class AnimationEditor
                                       BORDER_THICKNESS, Color.white, Color.black)
     @screen_bitmap.bitmap.border_rect(PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT,
                                       BORDER_THICKNESS, Color.white, Color.black)
-    # Draw box around SE list box in side pane
-    @se_list_box_bitmap.bitmap.outline_rect(SIDE_PANE_X + 3, SIDE_PANE_Y + 24 + 4,
-                                            SIDE_PANE_WIDTH - 6, (5 * UIControls::List::ROW_HEIGHT) + 4, Color.black)
     # Make the pop-up background semi-transparent
     @pop_up_bg_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.new(0, 0, 0, 128))
   end
@@ -434,7 +425,6 @@ class AnimationEditor
     side_pane = AnimationEditor::SidePanes.get_pane(component_sym)
     if side_pane && side_pane[:set_visible]
       @components[component_sym].visible = side_pane[:set_visible].call(self, @anim, keyframe, particle_index)
-      @se_list_box_bitmap.visible = @components[component_sym].visible if component_sym == :se_pane
     end
   end
 

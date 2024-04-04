@@ -331,10 +331,10 @@ AnimationEditor::SidePanes.add_property(:se_pane, :header, {
 AnimationEditor::SidePanes.add_property(:se_pane, :list, {
   :new => proc { |pane, editor|
     size = pane.control_size
-    size[0] -= 10
-    size[1] = UIControls::List::ROW_HEIGHT * 5   # 5 rows
+    size[0] -= 6
+    size[1] = (UIControls::List::ROW_HEIGHT * 5) + (UIControls::List::BORDER_THICKNESS * 2)   # 5 rows
     list = UIControls::List.new(*size, pane.viewport, [])
-    pane.add_control_at(:list, list, 5, 30)
+    pane.add_control_at(:list, list, 3, 28)
   },
   :refresh_value => proc { |control, editor|
     se_particle = editor.anim[:particles].select { |ptcl| ptcl[:name] == "SE" }[0]

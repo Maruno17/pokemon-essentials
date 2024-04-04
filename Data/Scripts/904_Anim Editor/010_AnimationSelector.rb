@@ -14,19 +14,19 @@ class AnimationEditor::AnimationSelector
   TYPE_BUTTON_WIDTH         = 100
   TYPE_BUTTON_HEIGHT        = 48
 
-  MOVES_LIST_X              = TYPE_BUTTONS_X + TYPE_BUTTON_WIDTH + 4
-  MOVES_LIST_Y              = TYPE_BUTTONS_Y + 4
-  MOVES_LIST_WIDTH          = 200
-  MOVES_LIST_HEIGHT         = 26 * UIControls::List::ROW_HEIGHT
+  MOVES_LIST_X              = TYPE_BUTTONS_X + TYPE_BUTTON_WIDTH + 2
+  MOVES_LIST_Y              = TYPE_BUTTONS_Y + 2
+  MOVES_LIST_WIDTH          = 200 + (UIControls::List::BORDER_THICKNESS * 2)
+  MOVES_LIST_HEIGHT         = (26 * UIControls::List::ROW_HEIGHT) + (UIControls::List::BORDER_THICKNESS * 2)
 
-  ANIMATIONS_LIST_X         = MOVES_LIST_X + MOVES_LIST_WIDTH + 8
+  ANIMATIONS_LIST_X         = MOVES_LIST_X + MOVES_LIST_WIDTH + 4
   ANIMATIONS_LIST_Y         = MOVES_LIST_Y
-  ANIMATIONS_LIST_WIDTH     = 300
+  ANIMATIONS_LIST_WIDTH     = 300 + (UIControls::List::BORDER_THICKNESS * 2)
   ANIMATIONS_LIST_HEIGHT    = MOVES_LIST_HEIGHT
 
   ACTION_BUTTON_WIDTH       = 200
   ACTION_BUTTON_HEIGHT      = 48
-  ACTION_BUTTON_X           = ANIMATIONS_LIST_X + ANIMATIONS_LIST_WIDTH + 4
+  ACTION_BUTTON_X           = ANIMATIONS_LIST_X + ANIMATIONS_LIST_WIDTH + 2
   ACTION_BUTTON_Y           = TYPE_BUTTONS_Y + ((ANIMATIONS_LIST_HEIGHT - (ACTION_BUTTON_HEIGHT * 3)) / 2) + 4
 
   FILTER_BOX_WIDTH          = ACTION_BUTTON_WIDTH
@@ -132,14 +132,6 @@ class AnimationEditor::AnimationSelector
   def draw_editor_background
     # Fill the whole screen with white
     @screen_bitmap.bitmap.fill_rect(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, Color.white)
-    # Outlines around lists
-    areas = [
-      [MOVES_LIST_X, MOVES_LIST_Y, MOVES_LIST_WIDTH, MOVES_LIST_HEIGHT],
-      [ANIMATIONS_LIST_X, ANIMATIONS_LIST_Y, ANIMATIONS_LIST_WIDTH, ANIMATIONS_LIST_HEIGHT]
-    ]
-    areas.each do |area|
-      @screen_bitmap.bitmap.outline_rect(area[0] - 2, area[1] - 2, area[2] + 4, area[3] + 4, Color.black)
-    end
     # Make the pop-up background semi-transparent
     @pop_up_bg_bitmap.bitmap.fill_rect(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, Color.new(0, 0, 0, 128))
   end

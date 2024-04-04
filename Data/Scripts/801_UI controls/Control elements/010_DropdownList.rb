@@ -55,26 +55,16 @@ class UIControls::DropdownList < UIControls::BaseControl
   #-----------------------------------------------------------------------------
 
   def make_dropdown_menu
-    menu_height = UIControls::List::ROW_HEIGHT * [@options.length, @max_rows].min
-    # Draw menu's background
-    @dropdown_menu_bg = BitmapSprite.new(@button_rect.width, menu_height + 4, self.viewport)
-    @dropdown_menu_bg.x = self.x + @button_rect.x
-    @dropdown_menu_bg.y = self.y + @button_rect.y + @button_rect.height
-    @dropdown_menu_bg.z = self.z + 1
-    @dropdown_menu_bg.bitmap.outline_rect(0, 0, @dropdown_menu_bg.width, @dropdown_menu_bg.height, Color.black)
-    @dropdown_menu_bg.bitmap.fill_rect(1, 1, @dropdown_menu_bg.width - 2, @dropdown_menu_bg.height - 2, Color.white)
-    # Create menu
-    @dropdown_menu = UIControls::List.new(@button_rect.width - 4, menu_height, self.viewport, @options)
-    @dropdown_menu.x = @dropdown_menu_bg.x + 2
-    @dropdown_menu.y = @dropdown_menu_bg.y + 2
+    menu_height = (UIControls::List::ROW_HEIGHT * [@options.length, @max_rows].min) + (UIControls::List::BORDER_THICKNESS * 2)
+    @dropdown_menu = UIControls::List.new(@button_rect.width, menu_height, self.viewport, @options)
+    @dropdown_menu.x = self.x + @button_rect.x
+    @dropdown_menu.y = self.y + @button_rect.y + @button_rect.height
     @dropdown_menu.z = self.z + 2
     @dropdown_menu.set_interactive_rects
     @dropdown_menu.repaint
   end
 
   def remove_dropdown_menu
-    @dropdown_menu_bg&.dispose
-    @dropdown_menu_bg = nil
     @dropdown_menu&.dispose
     @dropdown_menu = nil
     @captured_area = nil

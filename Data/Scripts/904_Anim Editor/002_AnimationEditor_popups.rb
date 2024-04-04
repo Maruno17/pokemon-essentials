@@ -153,8 +153,6 @@ class AnimationEditor
     graphic_chooser.visible = true
     # Draw box around list control
     list = graphic_chooser.get_control(:list)
-    bg_bitmap.bitmap.outline_rect(BORDER_THICKNESS + list.x - 2, BORDER_THICKNESS + list.y - 2,
-                                  list.width + 4, list.height + 4, Color.black)
     # Get a list of files
     files = get_all_files_in_folder_and_prepend(
       sprite_folder, ["*.png", "*.jpg", "*.jpeg"],
@@ -177,13 +175,13 @@ class AnimationEditor
     list.values = files
     list.selected = idx
     # Create sprite preview
-    bg_bitmap.bitmap.outline_rect(BORDER_THICKNESS + list.x + list.width + 10 - 2,
-                                  BORDER_THICKNESS + list.y - 2,
+    bg_bitmap.bitmap.outline_rect(BORDER_THICKNESS + list.x + list.width + 6,
+                                  BORDER_THICKNESS + list.y,
                                   GRAPHIC_CHOOSER_PREVIEW_SIZE + 4, GRAPHIC_CHOOSER_PREVIEW_SIZE + 4,
                                   Color.black)
     preview_sprite = Sprite.new(@pop_up_viewport)
-    preview_sprite.x = graphic_chooser.x + list.x + list.width + 10 + (GRAPHIC_CHOOSER_PREVIEW_SIZE / 2)
-    preview_sprite.y = graphic_chooser.y + list.y + (GRAPHIC_CHOOSER_PREVIEW_SIZE / 2)
+    preview_sprite.x = graphic_chooser.x + list.x + list.width + 8 + (GRAPHIC_CHOOSER_PREVIEW_SIZE / 2)
+    preview_sprite.y = graphic_chooser.y + list.y + 2 + (GRAPHIC_CHOOSER_PREVIEW_SIZE / 2)
     preview_bitmap = nil
     set_preview_graphic = lambda do |sprite, filename|
       preview_bitmap&.dispose
@@ -209,7 +207,7 @@ class AnimationEditor
         end
       end
       preview_bitmap = AnimatedBitmap.new(folder + fname)
-      bg_bitmap.bitmap.fill_rect(BORDER_THICKNESS + list.x + list.width + 10, BORDER_THICKNESS + list.y,
+      bg_bitmap.bitmap.fill_rect(BORDER_THICKNESS + list.x + list.width + 8, BORDER_THICKNESS + list.y + 2,
                                  GRAPHIC_CHOOSER_PREVIEW_SIZE, GRAPHIC_CHOOSER_PREVIEW_SIZE,
                                  Color.white)
       next if !preview_bitmap
@@ -219,8 +217,8 @@ class AnimationEditor
       sprite.zoom_x = sprite.zoom_y = zoom
       sprite.ox = sprite.width / 2
       sprite.oy = sprite.height / 2
-      bg_bitmap.bitmap.fill_rect(BORDER_THICKNESS + sprite.x - graphic_chooser.x - (sprite.width * sprite.zoom_x / 2),
-                                 BORDER_THICKNESS + sprite.y - graphic_chooser.y - (sprite.height * sprite.zoom_y / 2),
+      bg_bitmap.bitmap.fill_rect(BORDER_THICKNESS + sprite.x - graphic_chooser.x - (sprite.width * sprite.zoom_x / 2).round,
+                                 BORDER_THICKNESS + sprite.y - graphic_chooser.y - (sprite.height * sprite.zoom_y / 2).round,
                                  sprite.width * sprite.zoom_x, sprite.height * sprite.zoom_y,
                                  Color.magenta)
     end
@@ -270,8 +268,6 @@ class AnimationEditor
     audio_chooser.visible = true
     # Draw box around list control
     list = audio_chooser.get_control(:list)
-    bg_bitmap.bitmap.outline_rect(BORDER_THICKNESS + list.x - 2, BORDER_THICKNESS + list.y - 2,
-                                  list.width + 4, list.height + 4, Color.black)
     # Get a list of files
     files = get_all_files_in_folder_and_prepend(
       audio_folder, ["*.wav", "*.ogg", "*.mp3", "*.wma"],
