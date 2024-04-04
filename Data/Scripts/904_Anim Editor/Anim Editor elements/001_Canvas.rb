@@ -65,6 +65,7 @@ class AnimationEditor::Canvas < Sprite
     # Frame for other particles
     @frame_bitmap = Bitmap.new(64, 64)
     @frame_bitmap.outline_rect(1, 1, @frame_bitmap.width - 2, @frame_bitmap.height - 2, Color.new(0, 0, 0, 64))
+    @battler_frame_sprites = []
     @frame_sprites = []
   end
 
@@ -88,6 +89,8 @@ class AnimationEditor::Canvas < Sprite
       end
     end
     @particle_sprites.clear
+    @battler_frame_sprites.each { |s| s.dispose if s && !s.disposed? }
+    @battler_frame_sprites.clear
     @frame_sprites.each do |s|
       if s.is_a?(Array)
         s.each { |s2| s2.dispose if s2 && !s2.disposed? }
@@ -213,9 +216,19 @@ class AnimationEditor::Canvas < Sprite
 
   def create_frame_sprite(index, sub_index = -1)
     if sub_index >= 0
-      return if @frame_sprites[index] && @frame_sprites[index][sub_index] && !@frame_sprites[index][sub_index].disposed?
+      if @frame_sprites[index].is_a?(Array)
+        return if @frame_sprites[index][sub_index] && !@frame_sprites[index][sub_index].disposed?
+      else
+        @frame_sprites[index].dispose if @frame_sprites[index] && !@frame_sprites[index].disposed?
+        @frame_sprites[index] = []
+      end
     else
-      return if @frame_sprites[index] && !@frame_sprites[index].disposed?
+      if @frame_sprites[index].is_a?(Array)
+        @frame_sprites[index].each { |s| s.dispose if s && !s.disposed? }
+        @frame_sprites[index] = nil
+      else
+        return if @frame_sprites[index] && !@frame_sprites[index].disposed?
+      end
     end
     sprite = Sprite.new(viewport)
     sprite.bitmap = @frame_bitmap
@@ -231,27 +244,42 @@ class AnimationEditor::Canvas < Sprite
   end
 
   # TODO: Create shadow sprites?
+  # TODO: Make this also refresh if the layout of the battle changes (i.e. which
+  #       battlers are the user/target).
   def ensure_battler_sprites
-    if !@side_size0 || @side_size0 != side_size(0)
+    if @sides_swapped.nil? || @sides_swapped != sides_swapped? ||
+       !@side_size0 || @side_size0 != side_size(0)
       @battler_sprites.each_with_index { |s, i| s.dispose if i.even? && s && !s.disposed? }
-      idx_user = @anim[:particles].index { |particle| particle[:name] == "User" }
+      @battler_frame_sprites.each_with_index { |s, i| s.dispose if i.even? && s && !s.disposed? }
       @side_size0 = side_size(0)
       @side_size0.times do |i|
-        next if position_empty?(i * 2)
+        next if user_index != i * 2 && !target_indices.include?(i * 2)
         @battler_sprites[i * 2] = Sprite.new(self.viewport)
-        create_frame_sprite(idx_user)
+        frame_sprite = Sprite.new(viewport)
+        frame_sprite.bitmap = @frame_bitmap
+        frame_sprite.z = 99998
+        frame_sprite.ox = @frame_bitmap.width / 2
+        frame_sprite.oy = @frame_bitmap.height / 2
+        @battler_frame_sprites[i * 2] = frame_sprite
       end
     end
-    if !@side_size1 || @side_size1 != side_size(1)
+    if @sides_swapped.nil? || @sides_swapped != sides_swapped? ||
+       !@side_size1 || @side_size1 != side_size(1)
       @battler_sprites.each_with_index { |s, i| s.dispose if i.odd? && s && !s.disposed? }
-      idx_target = @anim[:particles].index { |particle| particle[:name] == "Target" }
+      @battler_frame_sprites.each_with_index { |s, i| s.dispose if i.odd? && s && !s.disposed? }
       @side_size1 = side_size(1)
       @side_size1.times do |i|
-        next if position_empty?((i * 2) + 1)
+        next if user_index != (i * 2) + 1 && !target_indices.include?((i * 2) + 1)
         @battler_sprites[(i * 2) + 1] = Sprite.new(self.viewport)
-        create_frame_sprite(idx_target, (i * 2) + 1)
+        frame_sprite = Sprite.new(viewport)
+        frame_sprite.bitmap = @frame_bitmap
+        frame_sprite.z = 99998
+        frame_sprite.ox = @frame_bitmap.width / 2
+        frame_sprite.oy = @frame_bitmap.height / 2
+        @battler_frame_sprites[(i * 2) + 1] = frame_sprite
       end
     end
+    @sides_swapped = sides_swapped?
   end
 
   def refresh_battler_graphics
@@ -300,8 +328,6 @@ class AnimationEditor::Canvas < Sprite
       else
         @particle_sprites[index].dispose if @particle_sprites[index] && !@particle_sprites[index].disposed?
         @particle_sprites[index] = []
-        @frame_sprites[index].dispose if @frame_sprites[index] && !@frame_sprites[index].disposed?
-        @frame_sprites[index] = []
       end
       @particle_sprites[index][target_idx] = Sprite.new(self.viewport)
       create_frame_sprite(index, target_idx)
@@ -309,8 +335,6 @@ class AnimationEditor::Canvas < Sprite
       if @particle_sprites[index].is_a?(Array)
         @particle_sprites[index].each { |s| s.dispose if s && !s.disposed? }
         @particle_sprites[index] = nil
-        @frame_sprites[index].each { |s| s.dispose if s && !s.disposed? }
-        @frame_sprites[index] = nil
       else
         return if @particle_sprites[index] && !@particle_sprites[index].disposed?
       end
@@ -330,14 +354,12 @@ class AnimationEditor::Canvas < Sprite
       spr = @battler_sprites[user_index]
       raise _INTL("Sprite for particle {1} not found somehow (battler index {2}).",
                   particle[:name], user_index) if !spr
-      idx_user = @anim[:particles].index { |particle| particle[:name] == "User" }
-      frame = @frame_sprites[idx_user]
+      frame = @battler_frame_sprites[user_index]
     when "Target"
       spr = @battler_sprites[target_idx]
       raise _INTL("Sprite for particle {1} not found somehow (battler index {2}).",
                   particle[:name], target_idx) if !spr
-      idx_target = @anim[:particles].index { |particle| particle[:name] == "Target" }
-      frame = @frame_sprites[idx_target][target_idx]
+      frame = @battler_frame_sprites[target_idx]
     else
       create_particle_sprite(index, target_idx)
       if target_idx >= 0
@@ -572,6 +594,18 @@ class AnimationEditor::Canvas < Sprite
     # Find closest particle to mouse
     nearest_index = -1
     nearest_distance = -1
+    @battler_frame_sprites.each_with_index do |sprite, index|
+      next if !sprite || !sprite.visible
+      next if !mouse_in_sprite?(sprite, mouse_x, mouse_y)
+      dist = (sprite.x - mouse_x) ** 2 + (sprite.y - mouse_y) ** 2
+      next if nearest_distance >= 0 && nearest_distance < dist
+      if index == user_index
+        nearest_index = @anim[:particles].index { |particle| particle[:name] == "User" }
+      else
+        nearest_index = @anim[:particles].index { |particle| particle[:name] == "Target" }
+      end
+      nearest_distance = dist
+    end
     @frame_sprites.each_with_index do |sprite, index|
       sprites = (sprite.is_a?(Array)) ? sprite : [sprite]
       sprites.each do |spr|

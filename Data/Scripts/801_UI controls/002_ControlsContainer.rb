@@ -221,7 +221,6 @@ class UIControls::ControlsContainer
   end
 
   def add_control(id, control, add_offset = false, rows = 1)
-    i = @controls.length
     ctrl_x, ctrl_y = next_control_position(add_offset)
     ctrl_x += 4 if control.is_a?(UIControls::List)
     add_control_at(id, control, ctrl_x, ctrl_y)

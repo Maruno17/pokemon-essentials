@@ -187,6 +187,19 @@ module AnimationEditor::ParticleDataHelper
     return particle[property]&.any? { |cmd| (cmd[0] == frame) || (cmd[0] + cmd[1] == frame) }
   end
 
+  def has_se_command_at?(particles, frame)
+    ret = false
+    se_particle = particles.select { |ptcl| ptcl[:name] == "SE" }[0]
+    if se_particle
+      se_particle.each_pair do |prop, values|
+        next if !values.is_a?(Array) || values.length == 0
+        ret = values.any? { |value| value[0] == frame }
+        break if ret
+      end
+    end
+    return ret
+  end
+
   def add_command(particle, property, frame, value)
     # Return a new set of commands if there isn't one
     if !particle[property] || particle[property].empty?

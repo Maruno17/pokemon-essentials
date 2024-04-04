@@ -2,6 +2,10 @@
 #
 #===============================================================================
 class AnimationEditor
+  attr_reader :property_pane
+  attr_reader :components
+  attr_reader :anim
+
   BORDER_THICKNESS = 4
   WINDOW_WIDTH     = Settings::SCREEN_WIDTH + 352 + (BORDER_THICKNESS * 4)
   WINDOW_HEIGHT    = Settings::SCREEN_HEIGHT + 352 + (BORDER_THICKNESS * 4)
@@ -121,6 +125,7 @@ class AnimationEditor
     @screen_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
     @screen_bitmap.z = -100
     # Background in which to draw the outline of the SE list box in the SE side pane
+    # TODO: Get rid of this by drawing a list's box in the control itself.
     @se_list_box_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
     @se_list_box_bitmap.z = -90
     @se_list_box_bitmap.visible = false
@@ -128,6 +133,20 @@ class AnimationEditor
     @pop_up_bg_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @pop_up_viewport)
     @pop_up_bg_bitmap.z = -100
     @pop_up_bg_bitmap.visible = false
+    # Bitmaps for "delete this property change" buttons in the side pane
+    @delete_bitmap = Bitmap.new(16, 16)
+    @delete_disabled_bitmap = Bitmap.new(16, 16)
+    14.times do |i|
+      case i
+      when 0, 13 then wid = 3
+      when 1, 12 then wid = 4
+      else            wid = 5
+      end
+      @delete_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.red)
+      @delete_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.red)
+      @delete_disabled_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.new(160, 160, 160))
+      @delete_disabled_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.new(160, 160, 160))
+    end
     # Draw in these bitmaps
     draw_editor_background
   end
@@ -139,9 +158,11 @@ class AnimationEditor
     # Canvas
     @components[:canvas] = AnimationEditor::Canvas.new(@canvas_viewport, @anim, @settings)
     # Side panes
-    [:commands_pane, :color_tone_pane, :se_pane, :particle_pane, :keyframe_pane].each do |pane|
-      @components[pane] = UIControls::ControlsContainer.new(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT,
-                                                            ([:commands_pane, :color_tone_pane].include?(pane)) ? SIDE_PANE_DELETE_MARGIN : 0)
+    AnimationEditor::SidePanes.each_pane do |pane, hash|
+      @components[pane] = UIControls::ControlsContainer.new(
+        SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT,
+        hash[:deletable_properties].nil? ? 0 : SIDE_PANE_DELETE_MARGIN
+      )
     end
     # Timeline/particle list
     @components[:particle_list] = AnimationEditor::ParticleList.new(
@@ -174,6 +195,8 @@ class AnimationEditor
     @screen_bitmap.dispose
     @se_list_box_bitmap.dispose
     @pop_up_bg_bitmap.dispose
+    @delete_bitmap.dispose
+    @delete_disabled_bitmap.dispose
     @components.each_value { |c| c.dispose }
     @components.clear
     @viewport.dispose
@@ -220,8 +243,6 @@ class AnimationEditor
       @pbs_path = @anim[:pbs_path]
     end
   end
-
-  #-----------------------------------------------------------------------------
 
   #-----------------------------------------------------------------------------
 
@@ -277,139 +298,20 @@ class AnimationEditor
     pane.increment_row_count(1)
   end
 
-  def generate_delete_property_button_bitmaps
-    delete_bitmap = Bitmap.new(16, 16)
-    delete_disabled_bitmap = Bitmap.new(16, 16)
-    14.times do |i|
-      case i
-      when 0, 13 then wid = 3
-      when 1, 12 then wid = 4
-      else            wid = 5
-      end
-      delete_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.red)
-      delete_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.red)
-      delete_disabled_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.new(160, 160, 160))
-      delete_disabled_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.new(160, 160, 160))
-    end
-    return delete_bitmap, delete_disabled_bitmap
-  end
-
-  def set_commands_pane_contents
-    pane = @components[:commands_pane]
-    pane.add_header_label(:header, _INTL("Edit particle at keyframe"))
-    # Tab buttons
-    add_side_pane_tab_buttons(:commands_pane, pane)
-    # Properties
-    pane.add_labelled_number_text_box(:x, _INTL("X"), -999, 999, 0)
-    pane.add_labelled_number_text_box(:y, _INTL("Y"), -999, 999, 0)
-    pane.add_labelled_number_slider(:z, _INTL("Priority"), -50, 50, 0)
-    # TODO: If the graphic is user's sprite/target's sprite, make :frame instead
-    #       a choice of front/back/same as the main sprite/opposite of the main
-    #       sprite. Will need two controls in the same space, which is doable.
-    #       Will also need to change the graphic chooser to only have "user"/
-    #       "target" options rather than all the variants that this control
-    #       would manage.
-    pane.add_labelled_number_text_box(:frame, _INTL("Frame"), 0, 99, 0)
-    pane.add_labelled_checkbox(:visible, _INTL("Visible"), true)
-    pane.add_labelled_number_slider(:opacity, _INTL("Opacity"), 0, 255, 255)
-    pane.add_labelled_number_text_box(:zoom_x, _INTL("Zoom X"), 0, 1000, 100)
-    pane.add_labelled_number_text_box(:zoom_y, _INTL("Zoom Y"), 0, 1000, 100)
-    pane.add_labelled_number_text_box(:angle, _INTL("Angle"), -1080, 1080, 0)
-    pane.add_labelled_checkbox(:flip, _INTL("Flip"), false)
-    pane.add_labelled_dropdown_list(:blending, _INTL("Blending"), {
-      0 => _INTL("None"),
-      1 => _INTL("Additive"),
-      2 => _INTL("Subtractive")
-    }, 0)
-    # TODO: Add buttons that shift all commands from the current keyframe and
-    #       later forwards/backwards in time?
-    # Add all "delete" buttons
-    delete_bitmap, delete_disabled_bitmap = generate_delete_property_button_bitmaps
-    DELETABLE_COMMAND_PANE_PROPERTIES.each do |property|
-      parent = pane.get_control(property)
-      btn = UIControls::BitmapButton.new(parent.x + parent.width + 6, parent.y + 2,
-                                         pane.viewport, delete_bitmap, delete_disabled_bitmap)
-      btn.set_interactive_rects
-      pane.controls.push([(property.to_s + "_delete").to_sym, btn])
-    end
-  end
-
-  def set_color_tone_pane_contents
-    pane = @components[:color_tone_pane]
-    pane.add_header_label(:header, _INTL("Edit particle at keyframe"))
-    # Tab buttons
-    add_side_pane_tab_buttons(:color_tone_pane, pane)
-    # Properties
-    pane.add_labelled_number_slider(:color_red, _INTL("Color Red"), 0, 255, 0)
-    pane.add_labelled_number_slider(:color_green, _INTL("Color Green"), 0, 255, 0)
-    pane.add_labelled_number_slider(:color_blue, _INTL("Color Blue"), 0, 255, 0)
-    pane.add_labelled_number_slider(:color_alpha, _INTL("Color Alpha"), 0, 255, 0)
-    pane.add_labelled_number_slider(:tone_red, _INTL("Tone Red"), -255, 255, 0)
-    pane.add_labelled_number_slider(:tone_green, _INTL("Tone Green"), -255, 255, 0)
-    pane.add_labelled_number_slider(:tone_blue, _INTL("Tone Blue"), -255, 255, 0)
-    pane.add_labelled_number_slider(:tone_gray, _INTL("Tone Gray"), 0, 255, 0)
-    # Add all "delete" buttons
-    delete_bitmap, delete_disabled_bitmap = generate_delete_property_button_bitmaps
-    DELETABLE_COLOR_TONE_PANE_PROPERTIES.each do |property|
-      parent = pane.get_control(property)
-      btn = UIControls::BitmapButton.new(parent.x + parent.width + 6, parent.y + 2,
-                                         pane.viewport, delete_bitmap, delete_disabled_bitmap)
-      btn.set_interactive_rects
-      pane.controls.push([(property.to_s + "_delete").to_sym, btn])
-    end
-  end
-
-  def set_se_pane_contents
-    pane = @components[:se_pane]
-    pane.add_header_label(:header, _INTL("Edit sound effects at keyframe"))
-    size = pane.control_size
-    size[0] -= 10
-    size[1] = UIControls::List::ROW_HEIGHT * 5   # 5 rows
-    list = UIControls::List.new(*size, pane.viewport, [])
-    pane.add_control_at(:list, list, 5, 30)
-    button_height = UIControls::ControlsContainer::LINE_SPACING
-    add = UIControls::Button.new(101, button_height, pane.viewport, _INTL("Add"))
-    add.set_fixed_size
-    pane.add_control_at(:add, add, 1, 154)
-    edit = UIControls::Button.new(100, button_height, pane.viewport, _INTL("Edit"))
-    edit.set_fixed_size
-    pane.add_control_at(:edit, edit, 102, 154)
-    delete = UIControls::Button.new(101, button_height, pane.viewport, _INTL("Delete"))
-    delete.set_fixed_size
-    pane.add_control_at(:delete, delete, 202, 154)
-  end
-
-  def set_particle_pane_contents
-    pane = @components[:particle_pane]
-    pane.add_header_label(:header, _INTL("Edit particle properties"))
-    pane.add_labelled_text_box(:name, _INTL("Name"), "")
-    pane.get_control(:name).set_blacklist("User", "Target", "SE")
-    pane.add_labelled_label(:graphic_name, _INTL("Graphic"), "")
-    pane.add_labelled_button(:graphic, "", _INTL("Change"))
-    pane.add_labelled_dropdown_list(:focus, _INTL("Focus"), {}, :undefined)
-    # FlipIfFoe
-    # RotateIfFoe
-    pane.add_button(:duplicate, _INTL("Duplicate this particle"))
-    pane.add_button(:delete, _INTL("Delete this particle"))
-    # Shift all command timings by X keyframes (text box and button)
-    # Move particle up/down the list?
-  end
-
-  # TODO: :keyframe_pane is currently inaccessible (intentionally). If it will
-  #       have its own commands and should be accessible again, change def
-  #       on_mouse_release in ParticleList.
-  def set_keyframe_pane_contents
-    keyframe_pane = @components[:keyframe_pane]
-    keyframe_pane.add_header_label(:header, _INTL("Edit keyframe"))
-    # TODO: Various command-shifting options.
-  end
-
   def set_side_panes_contents
-    set_commands_pane_contents
-    set_color_tone_pane_contents
-    set_se_pane_contents
-    set_particle_pane_contents
-    set_keyframe_pane_contents
+    AnimationEditor::SidePanes.each_pane do |pane, hash|
+      deletable_properties = hash[:deletable_properties]
+      AnimationEditor::SidePanes.each_property(pane) do |property, hash|
+        hash[:new].call(@components[pane], self) if hash[:new]
+        if deletable_properties&.include?(property)
+          parent = @components[pane].get_control(property)
+          btn = UIControls::BitmapButton.new(parent.x + parent.width + 6, parent.y + 2,
+                                             @components[pane].viewport, @delete_bitmap, @delete_disabled_bitmap)
+          btn.set_interactive_rects
+          @components[pane].controls.push([(property.to_s + "_delete").to_sym, btn])
+        end
+      end
+    end
   end
 
   def set_particle_list_contents
@@ -528,23 +430,11 @@ class AnimationEditor
   #-----------------------------------------------------------------------------
 
   def refresh_component_visibility(component_sym)
-    component = @components[component_sym]
     # Panes are all mutually exclusive
-    case component_sym
-    when :commands_pane, :color_tone_pane
-      component.visible = (keyframe >= 0 && particle_index >= 0 &&
-                          @anim[:particles][particle_index] &&
-                          @anim[:particles][particle_index][:name] != "SE") &&
-                          @property_pane == component_sym
-    when :se_pane
-      component.visible = (keyframe >= 0 && particle_index >= 0 &&
-                          @anim[:particles][particle_index] &&
-                          @anim[:particles][particle_index][:name] == "SE")
-      @se_list_box_bitmap.visible = component.visible
-    when :particle_pane
-      component.visible = (keyframe < 0 && particle_index >= 0)
-    when :keyframe_pane
-      component.visible = (keyframe >= 0 && particle_index < 0)
+    side_pane = AnimationEditor::SidePanes.get_pane(component_sym)
+    if side_pane && side_pane[:set_visible]
+      @components[component_sym].visible = side_pane[:set_visible].call(self, @anim, keyframe, particle_index)
+      @se_list_box_bitmap.visible = @components[component_sym].visible if component_sym == :se_pane
     end
   end
 
@@ -569,145 +459,6 @@ class AnimationEditor
     when :canvas
       component.keyframe = keyframe
       component.selected_particle = particle_index
-    when :commands_pane
-      new_vals = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(@anim[:particles][particle_index], keyframe)
-      component.controls.each do |ctrl|
-        next if !new_vals.include?(ctrl[0])
-        ctrl[1].value = new_vals[ctrl[0]][0] if ctrl[1].respond_to?("value=")
-        # TODO: new_vals[ctrl[0]][1] is whether the value is being interpolated,
-        #       which should be indicated somehow in ctrl[1].
-      end
-      # Set an appropriate range for the priority (z) property depending on the
-      # particle's focus
-      case @anim[:particles][particle_index][:focus]
-      when :user_and_target
-        component.get_control(:z).min_value = GameData::Animation::USER_AND_TARGET_SEPARATION[2] - 50
-        component.get_control(:z).max_value = 50
-      else
-        component.get_control(:z).min_value = -50
-        component.get_control(:z).max_value = 50
-      end
-      # Disable the "Frame" control if the particle's graphic is predefined to
-      # be the user's or target's sprite
-      # TODO: Also disable it if the particle's graphic isn't a spritesheet.
-      if ["USER", "USER_OPP", "USER_FRONT", "USER_BACK",
-          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"].include?(@anim[:particles][particle_index][:graphic])
-        component.get_control(:frame).disable
-      else
-        component.get_control(:frame).enable
-      end
-      # Enable/disable property delete buttons
-      DELETABLE_COMMAND_PANE_PROPERTIES.each do |property|
-        if AnimationEditor::ParticleDataHelper.has_command_at?(@anim[:particles][particle_index], property, keyframe)
-          component.get_control((property.to_s + "_delete").to_sym).enable
-        else
-          component.get_control((property.to_s + "_delete").to_sym).disable
-        end
-      end
-    when :color_tone_pane
-      new_vals = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(@anim[:particles][particle_index], keyframe)
-      component.controls.each do |ctrl|
-        next if !new_vals.include?(ctrl[0])
-        ctrl[1].value = new_vals[ctrl[0]][0] if ctrl[1].respond_to?("value=")
-        # TODO: new_vals[ctrl[0]][1] is whether the value is being interpolated,
-        #       which should be indicated somehow in ctrl[1].
-      end
-      # Enable/disable property delete buttons
-      DELETABLE_COLOR_TONE_PANE_PROPERTIES.each do |property|
-        if AnimationEditor::ParticleDataHelper.has_command_at?(@anim[:particles][particle_index], property, keyframe)
-          component.get_control((property.to_s + "_delete").to_sym).enable
-        else
-          component.get_control((property.to_s + "_delete").to_sym).disable
-        end
-      end
-    when :se_pane
-      se_particle = @anim[:particles].select { |p| p[:name] == "SE" }[0]
-      kyfrm = keyframe
-      # Populate list of files
-      list = []
-      se_particle.each_pair do |property, values|
-        next if !values.is_a?(Array)
-        values.each do |val|
-          next if val[0] != kyfrm
-          text = AnimationEditor::ParticleDataHelper.get_se_display_text(property, val)
-          case property
-          when :user_cry   then list.push(["USER", text])
-          when :target_cry then list.push(["TARGET", text])
-          when :se         then list.push([val[2], text])
-          end
-        end
-      end
-      list.sort! { |a, b| a[1].downcase <=> b[1].downcase }
-      component.get_control(:list).values = list
-      # Enable/disable the "Edit" and "Delete" buttons
-      if list.length > 0 && component.get_control(:list).value
-        component.get_control(:edit).enable
-        component.get_control(:delete).enable
-      else
-        component.get_control(:edit).disable
-        component.get_control(:delete).disable
-      end
-    when :particle_pane
-      # Display particle's graphic's name
-      new_vals = AnimationEditor::ParticleDataHelper.get_all_particle_values(@anim[:particles][particle_index])
-      component.controls.each do |ctrl|
-        next if !new_vals.include?(ctrl[0])
-        ctrl[1].value = new_vals[ctrl[0]] if ctrl[1].respond_to?("value=")
-      end
-      graphic_name = @anim[:particles][particle_index][:graphic]
-      graphic_override_names = {
-        "USER"         => _INTL("[[User's sprite]]"),
-        "USER_OPP"     => _INTL("[[User's other side sprite]]"),
-        "USER_FRONT"   => _INTL("[[User's front sprite]]"),
-        "USER_BACK"    => _INTL("[[User's back sprite]]"),
-        "TARGET"       => _INTL("[[Target's sprite]]"),
-        "TARGET_OPP"   => _INTL("[[Target's other side sprite]]"),
-        "TARGET_FRONT" => _INTL("[[Target's front sprite]]"),
-        "TARGET_BACK"  => _INTL("[[Target's back sprite]]"),
-      }
-      graphic_name = graphic_override_names[graphic_name] if graphic_override_names[graphic_name]
-      component.get_control(:graphic_name).text = graphic_name
-      # Enable/disable the Graphic and Focus controls for "User"/"Target"
-      if ["User", "Target"].include?(@anim[:particles][particle_index][:name])
-        component.get_control(:graphic).disable
-        component.get_control(:focus).disable
-      else
-        component.get_control(:graphic).enable
-        component.get_control(:focus).enable
-      end
-      # Enable/disable the Duplicate button
-      if ["SE"].include?(@anim[:particles][particle_index][:name])
-        component.get_control(:duplicate).disable
-      else
-        component.get_control(:duplicate).enable
-      end
-      # Enable/disable the Delete button
-      if ["User", "Target", "SE"].include?(@anim[:particles][particle_index][:name])
-        component.get_control(:delete).disable
-      else
-        component.get_control(:delete).enable
-      end
-      # Set the possible foci depending on whether the animation involves a user
-      # and target
-      focus_values = {
-        :foreground             => _INTL("Foreground"),
-        :midground              => _INTL("Midground"),
-        :background             => _INTL("Background"),
-        :user                   => _INTL("User"),
-        :target                 => _INTL("Target"),
-        :user_and_target        => _INTL("User and target"),
-        :user_side_foreground   => _INTL("In front of user's side"),
-        :user_side_background   => _INTL("Behind user's side"),
-        :target_side_foreground => _INTL("In front of target's side"),
-        :target_side_background => _INTL("Behind target's side")
-      }
-      if @anim[:no_user]
-        GameData::Animation::FOCUS_TYPES_WITH_USER.each { |f| focus_values.delete(f) }
-      end
-      if @anim[:no_target]
-        GameData::Animation::FOCUS_TYPES_WITH_TARGET.each { |f| focus_values.delete(f) }
-      end
-      component.get_control(:focus).values = focus_values
     when :particle_list
       # Disable the "move particle up/down" buttons if the selected particle
       # can't move that way (or there is no selected particle)
@@ -732,6 +483,42 @@ class AnimationEditor
         component.get_control(:move_label).text = _INTL("Common animation")
       end
       # TODO: Maybe other things as well?
+    else
+      # Side panes
+      if AnimationEditor::SidePanes.is_side_pane?(component_sym)
+        # Refresh each control's value
+        if AnimationEditor::SidePanes.get_pane(component_sym)[:unchanging_properties]
+          new_vals = AnimationEditor::ParticleDataHelper.get_all_particle_values(@anim[:particles][particle_index])
+          component.controls.each do |ctrl|
+            next if !new_vals.include?(ctrl[0])
+            ctrl[1].value = new_vals[ctrl[0]] if ctrl[1].respond_to?("value=")
+          end
+        else
+          new_vals = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(@anim[:particles][particle_index], keyframe)
+          component.controls.each do |ctrl|
+            next if !new_vals.include?(ctrl[0])
+            ctrl[1].value = new_vals[ctrl[0]][0] if ctrl[1].respond_to?("value=")
+            # TODO: new_vals[ctrl[0]][1] is whether the value is being interpolated,
+            #       which should be indicated somehow in ctrl[1].
+          end
+        end
+        # Additional refreshing of controls
+        AnimationEditor::SidePanes.each_property(component_sym) do |property, hash|
+          next if !hash[:refresh_value]
+          hash[:refresh_value].call(component.get_control(property), self)
+        end
+        # Enable/disable property delete buttons
+        deletable_properties = AnimationEditor::SidePanes.get_pane(component_sym)[:deletable_properties]
+        if deletable_properties
+          deletable_properties.each do |property|
+            if AnimationEditor::ParticleDataHelper.has_command_at?(@anim[:particles][particle_index], property, keyframe)
+              component.get_control((property.to_s + "_delete").to_sym).enable
+            else
+              component.get_control((property.to_s + "_delete").to_sym).disable
+            end
+          end
+        end
+      end
     end
   end
 
@@ -783,107 +570,6 @@ class AnimationEditor
     when :play_controls
       # TODO: Will the play controls ever signal themselves as changed? I don't
       #       think so.
-    when :commands_pane, :color_tone_pane
-      case property
-      when :general_tab
-        @property_pane = :commands_pane
-        refresh_component(component_sym)
-        refresh_component(@property_pane)
-      when :color_tone_tab
-        @property_pane = :color_tone_pane
-        refresh_component(component_sym)
-        refresh_component(@property_pane)
-      else
-        particle = @anim[:particles][particle_index]
-        prop = property
-        if property.to_s[/_delete$/]
-          prop = property.to_s.sub(/_delete$/, "").to_sym
-          new_cmds = AnimationEditor::ParticleDataHelper.delete_command(particle, prop, keyframe)
-        else
-          new_cmds = AnimationEditor::ParticleDataHelper.add_command(particle, property, keyframe, value)
-        end
-        if new_cmds
-          particle[prop] = new_cmds
-        else
-          particle.delete(prop)
-        end
-        @components[:particle_list].change_particle_commands(particle_index)
-        @components[:play_controls].duration = @components[:particle_list].duration
-        refresh_component(component_sym)
-        refresh_component(:canvas)
-      end
-    when :se_pane
-      case property
-      when :list   # List
-        refresh_component(component_sym)
-      when :add   # Button
-        new_file, new_volume, new_pitch = choose_audio_file("", 100, 100)
-        if new_file != ""
-          particle = @anim[:particles][particle_index]
-          AnimationEditor::ParticleDataHelper.add_se_command(particle, keyframe, new_file, new_volume, new_pitch)
-          @components[:particle_list].change_particle_commands(particle_index)
-          @components[:play_controls].duration = @components[:particle_list].duration
-          refresh_component(component_sym)
-        end
-      when :edit   # Button
-        particle = @anim[:particles][particle_index]
-        list = @components[component_sym].get_control(:list)
-        old_file = list.value
-        old_volume, old_pitch = AnimationEditor::ParticleDataHelper.get_se_values_from_filename_and_frame(particle, keyframe, old_file)
-        if old_file
-          new_file, new_volume, new_pitch = choose_audio_file(old_file, old_volume, old_pitch)
-          if new_file != old_file || new_volume != old_volume || new_pitch != old_pitch
-            AnimationEditor::ParticleDataHelper.delete_se_command(particle, keyframe, old_file)
-            AnimationEditor::ParticleDataHelper.add_se_command(particle, keyframe, new_file, new_volume, new_pitch)
-            @components[:particle_list].change_particle_commands(particle_index)
-            @components[:play_controls].duration = @components[:particle_list].duration
-            refresh_component(component_sym)
-          end
-        end
-      when :delete   # Button
-        particle = @anim[:particles][particle_index]
-        list = @components[component_sym].get_control(:list)
-        old_file = list.value
-        if old_file
-          AnimationEditor::ParticleDataHelper.delete_se_command(particle, keyframe, old_file)
-          @components[:particle_list].change_particle_commands(particle_index)
-          @components[:play_controls].duration = @components[:particle_list].duration
-          refresh_component(component_sym)
-        end
-      end
-    when :particle_pane
-      case property
-      when :graphic   # Button
-        p_index = particle_index
-        new_file = choose_graphic_file(@anim[:particles][p_index][:graphic])
-        if @anim[:particles][p_index][:graphic] != new_file
-          @anim[:particles][p_index][:graphic] = new_file
-          refresh_component(component_sym)
-          refresh_component(:canvas)
-        end
-      when :duplicate
-        AnimationEditor::ParticleDataHelper.duplicate_particle(@anim[:particles], particle_index)
-        @components[:particle_list].add_particle(particle_index + 1)
-        @components[:particle_list].set_particles(@anim[:particles])
-        @components[:particle_list].particle_index = particle_index + 1
-        refresh
-      when :delete
-        if confirm_message(_INTL("Are you sure you want to delete this particle?"))
-          AnimationEditor::ParticleDataHelper.delete_particle(@anim[:particles], particle_index)
-          @components[:particle_list].delete_particle(particle_index)
-          @components[:particle_list].set_particles(@anim[:particles])
-          @components[:particle_list].keyframe = 0 if @anim[:particles][particle_index][:name] == "SE"
-          refresh
-        end
-      else
-        particle = @anim[:particles][particle_index]
-        new_cmds = AnimationEditor::ParticleDataHelper.set_property(particle, property, value)
-        @components[:particle_list].change_particle(particle_index)
-        refresh_component(component_sym)
-        refresh_component(:canvas)
-      end
-    when :keyframe_pane
-      # TODO: Stuff here once I decide what controls to add.
     when :particle_list
       case property
       when :add_particle
@@ -999,6 +685,29 @@ class AnimationEditor
         @anim[:ignore] = !value
       else
         @anim[property] = value
+      end
+    else
+      # Side panes
+      if AnimationEditor::SidePanes.is_side_pane?(component_sym)
+        if [:commands_pane, :color_tone_pane].include?(component_sym) &&
+           [:general_tab, :color_tone_tab].include?(property)
+          @property_pane = {
+            :general_tab    => :commands_pane,
+            :color_tone_tab => :color_tone_pane
+          }[property]
+          refresh_component(component_sym)
+          refresh_component(@property_pane)
+        else
+          hash = AnimationEditor::SidePanes.get_property(component_sym, property)
+          if hash && hash[:apply_value]
+            hash[:apply_value].call(value, self)
+          else
+            hash = AnimationEditor::SidePanes.get_pane(component_sym)
+            if hash && hash[:apply_value]
+              hash[:apply_value].call(property, value, self)
+            end
+          end
+        end
       end
     end
   end
