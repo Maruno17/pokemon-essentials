@@ -138,11 +138,9 @@ class UIControls::List < UIControls::BaseControl
   end
 
   def refresh
-    self.bitmap.clear
-    # Draw control outline and background
+    super
+    # Draw control outline
     self.bitmap.outline_rect(0, 0, width, height, Color.black)
-    self.bitmap.fill_rect(1, 1, width - 2, height - 2, Color.white)
-    draw_area_highlight
     # Draw text options
     @values.each_with_index do |val, i|
       next if i < @top_row || i >= @top_row + @rows_count

@@ -170,6 +170,14 @@ class AnimationEditor::Canvas < Sprite
     return ret_x, ret_y
   end
 
+  def mouse_in_sprite?(sprite, mouse_x, mouse_y)
+    return false if mouse_x < sprite.x - sprite.ox
+    return false if mouse_x >= sprite.x - sprite.ox + sprite.width
+    return false if mouse_y < sprite.y - sprite.oy
+    return false if mouse_y >= sprite.y - sprite.oy + sprite.height
+    return true
+  end
+
   #-----------------------------------------------------------------------------
 
   def busy?
@@ -509,12 +517,10 @@ class AnimationEditor::Canvas < Sprite
     # Position frame over spr
     frame.x = spr.x
     frame.y = spr.y
-    # TODO: Offset frame.x and frame.y for screen-sized sprites with a
-    #       screen-based focus, and for sprites whose graphic has "[bottom]" in
-    #       its name.
     case particle[:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
+      # Offset battler frames because they aren't around the battler's position
       frame.y -= spr.bitmap.height / 2
     end
   end
@@ -543,12 +549,16 @@ class AnimationEditor::Canvas < Sprite
     ensure_battler_sprites
     refresh_battler_graphics
     refresh_battler_positions
-    @battler_sprites.each { |s| s.visible = false if s && !s.disposed? }
-    @particle_sprites.each do |s|
-      if s.is_a?(Array)
-        s.each { |s2| s2.visible = false if s2 && !s2.disposed? }
-      else
-        s.visible = false if s && !s.disposed?
+    [@battler_sprites, @battler_frame_sprites].each do |sprites|
+      sprites.each { |s| s.visible = false if s && !s.disposed? }
+    end
+    [@particle_sprites, @frame_sprites].each do |sprites|
+      sprites.each do |s|
+        if s.is_a?(Array)
+          s.each { |s2| s2.visible = false if s2 && !s2.disposed? }
+        else
+          s.visible = false if s && !s.disposed?
+        end
       end
     end
     @anim[:particles].each_with_index do |particle, i|
@@ -562,14 +572,6 @@ class AnimationEditor::Canvas < Sprite
   end
 
   #-----------------------------------------------------------------------------
-
-  def mouse_in_sprite?(sprite, mouse_x, mouse_y)
-    return false if mouse_x < sprite.x - sprite.ox
-    return false if mouse_x >= sprite.x - sprite.ox + sprite.width
-    return false if mouse_y < sprite.y - sprite.oy
-    return false if mouse_y >= sprite.y - sprite.oy + sprite.height
-    return true
-  end
 
   def on_mouse_press
     mouse_x, mouse_y = mouse_pos
@@ -726,12 +728,10 @@ class AnimationEditor::Canvas < Sprite
     @sel_frame_sprite.visible = true
     @sel_frame_sprite.x = target.x
     @sel_frame_sprite.y = target.y
-    # TODO: Offset sel_frame_sprite.x and sel_frame_sprite.y for screen-sized
-    #       sprites with a screen-based focus, and for sprites whose graphic has
-    #       "[bottom]" in its name.
     case @anim[:particles][@selected_particle][:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
+      # Offset battler frames because they aren't around the battler's position
       @sel_frame_sprite.y -= target.bitmap.height / 2
     end
   end

@@ -52,15 +52,24 @@ class UIControls::TextBoxDropdownList < UIControls::TextBox
 
   def make_dropdown_menu
     menu_height = (UIControls::List::ROW_HEIGHT * [@options.length, @max_rows].min) + (UIControls::List::BORDER_THICKNESS * 2)
+    # Draw menu's background
+    @dropdown_menu_bg = BitmapSprite.new(@text_box_rect.width + @button_rect.width, menu_height, self.viewport)
+    @dropdown_menu_bg.x = self.x + @text_box_rect.x
+    @dropdown_menu_bg.y = self.y + @text_box_rect.y + @text_box_rect.height
+    @dropdown_menu_bg.z = self.z + 1
+    @dropdown_menu_bg.bitmap.fill_rect(0, 0, @dropdown_menu_bg.width, @dropdown_menu_bg.height, Color.white)
+    # Create menu
     @dropdown_menu = UIControls::List.new(@text_box_rect.width + @button_rect.width, menu_height, self.viewport, @options)
-    @dropdown_menu.x = self.x + @text_box_rect.x
-    @dropdown_menu.y = self.y + @text_box_rect.y + @text_box_rect.height
+    @dropdown_menu.x = @dropdown_menu_bg.x
+    @dropdown_menu.y = @dropdown_menu_bg.y
     @dropdown_menu.z = self.z + 2
     @dropdown_menu.set_interactive_rects
     @dropdown_menu.repaint
   end
 
   def remove_dropdown_menu
+    @dropdown_menu_bg&.dispose
+    @dropdown_menu_bg = nil
     @dropdown_menu&.dispose
     @dropdown_menu = nil
     @captured_area = nil
