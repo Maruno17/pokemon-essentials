@@ -6,10 +6,10 @@ module AnimationEditor::ParticleDataHelper
 
   def get_duration(particles)
     ret = 0
-    particles.each do |p|
-      p.each_pair do |cmd, val|
-        next if !val.is_a?(Array) || val.length == 0
-        max = val.last[0] + val.last[1]   # Keyframe + duration
+    particles.each do |particle|
+      particle.each_pair do |property, value|
+        next if !value.is_a?(Array) || value.length == 0
+        max = value.last[0] + value.last[1]   # Keyframe + duration
         ret = max if ret < max
       end
     end
@@ -133,9 +133,9 @@ module AnimationEditor::ParticleDataHelper
   def get_particle_commands_timeline(particle)
     ret = []
     durations = []
-    particle.each_pair do |prop, val|
-      next if !val.is_a?(Array)
-      val.each do |cmd|
+    particle.each_pair do |property, value|
+      next if !value.is_a?(Array)
+      value.each do |cmd|
         ret[cmd[0]] = true
         if cmd[1] > 0
           ret[cmd[0] + cmd[1]] = true
@@ -189,9 +189,9 @@ module AnimationEditor::ParticleDataHelper
 
   def has_se_command_at?(particles, frame)
     ret = false
-    se_particle = particles.select { |ptcl| ptcl[:name] == "SE" }[0]
+    se_particle = particles.select { |particle| particle[:name] == "SE" }[0]
     if se_particle
-      se_particle.each_pair do |prop, values|
+      se_particle.each_pair do |property, values|
         next if !values.is_a?(Array) || values.length == 0
         ret = values.any? { |value| value[0] == frame }
         break if ret
@@ -496,16 +496,15 @@ module AnimationEditor::ParticleDataHelper
       :graphic => GameData::Animation::PARTICLE_DEFAULT_VALUES[:graphic],
       :focus   => GameData::Animation::PARTICLE_DEFAULT_VALUES[:focus]
     }
-    if index > 0 && index <= particles.length - 1
-      old_particle = particles[index - 1]
-      new_particle[:focus] = old_particle[:focus]
+    if index > 0 && index <= particles.length && particles[index - 1][:name] != "SE"
+      new_particle[:focus] = particles[index - 1][:focus]
     end
-    index = particles.length - 1 if index < 0
+    index = particles.length if index < 0
     particles.insert(index, new_particle)
   end
 
   # Copies the particle at index and inserts the copy immediately after that
-  # index.
+  # index. This assumes the original particle can be copied, i.e. isn't "SE".
   def duplicate_particle(particles, index)
     new_particle = {}
     particles[index].each_pair do |key, value|
@@ -524,7 +523,8 @@ module AnimationEditor::ParticleDataHelper
     particles[index1], particles[index2] = particles[index2], particles[index1]
   end
 
-  # Deletes the particle at the given index
+  # Deletes the particle at the given index. This assumes the particle can be
+  # deleted, i.e. isn't "User"/"Target"/"SE".
   def delete_particle(particles, index)
     particles[index] = nil
     particles.compact!

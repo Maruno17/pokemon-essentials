@@ -1,0 +1,42 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DISABLE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetFrame = 4,8
+    SetX = 4,200
+    SetY = 4,-200
+    SetZ = 4,28
+    SetAngle = 4,45
+<Particle 4>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetFrame = 6,7
+    SetX = 6,203
+    SetY = 6,-200
+    SetZ = 6,29
+<Particle 2>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetFrame = 0,10
+    SetX = 0,200
+    SetY = 0,-192
+    SetZ = 0,27
+    SetX = 1,200
+    SetY = 1,-196
+    SetFrame = 2,8
+    SetY = 2,-195
+    SetX = 3,200
+    SetY = 3,-200
+    SetX = 4,202
+    SetY = 4,-196
+<SE>
+    Play = 0,Sword2,80,121

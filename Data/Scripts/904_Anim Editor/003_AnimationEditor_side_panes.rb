@@ -337,7 +337,7 @@ AnimationEditor::SidePanes.add_property(:se_pane, :list, {
     pane.add_control_at(:list, list, 3, 28)
   },
   :refresh_value => proc { |control, editor|
-    se_particle = editor.anim[:particles].select { |ptcl| ptcl[:name] == "SE" }[0]
+    se_particle = editor.anim[:particles].select { |particle| particle[:name] == "SE" }[0]
     keyframe = editor.keyframe
     # Populate list of files
     list = []
@@ -542,7 +542,7 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :duplicate, {
     pane.add_button(:duplicate, _INTL("Duplicate this particle"))
   },
   :refresh_value => proc { |control, editor|
-    if ["SE"].include?(editor.anim[:particles][editor.particle_index][:name])
+    if editor.anim[:particles][editor.particle_index][:name] == "SE"
       control.disable
     else
       control.enable

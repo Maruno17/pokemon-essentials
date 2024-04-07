@@ -1,0 +1,38 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,KARATECHOP]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 0,13
+    SetX = 0,-152
+    SetY = 0,-66
+    SetZ = 0,27
+    SetX = 1,-112
+    SetY = 1,-58
+    SetAngle = 1,350
+    SetX = 2,-72
+    SetAngle = 2,340
+    SetX = 3,-48
+    SetY = 3,-42
+    SetAngle = 3,330
+    SetX = 4,-24
+    SetY = 4,-26
+    SetAngle = 4,320
+    SetX = 5,-8
+    SetY = 5,-10
+    SetFrame = 6,8
+    SetX = 6,0
+    SetY = 6,-2
+    SetAngle = 6,0
+    SetFrame = 7,9
+<SE>
+    Play = 0,Wind1,80
+    Play = 7,Blow3,80

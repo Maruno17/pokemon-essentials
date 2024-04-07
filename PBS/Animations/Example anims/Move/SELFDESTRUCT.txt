@@ -1,0 +1,138 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SELFDESTRUCT]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/030-Explosion01
+    Focus = Target
+    SetX = 0,-88
+    SetY = 0,-18
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetFrame = 3,3
+    SetFrame = 4,5
+    SetFrame = 5,6
+    SetFrame = 6,5
+    SetX = 6,80
+    SetY = 6,46
+    SetFrame = 7,6
+    SetFrame = 8,3
+    SetX = 8,-24
+    SetY = 8,70
+    SetFrame = 9,5
+    SetFrame = 10,6
+    SetFrame = 11,3
+    SetX = 11,-48
+    SetY = 11,-26
+    SetFrame = 12,5
+    SetFrame = 13,6
+    SetFrame = 14,5
+    SetX = 14,64
+    SetY = 14,22
+    SetFrame = 15,6
+    SetX = 16,-24
+    SetY = 16,86
+<Particle 3>
+    Graphic = Examples/030-Explosion01
+    Focus = Target
+    SetX = 2,80
+    SetY = 2,46
+    SetZ = 2,28
+    SetFrame = 3,4
+    SetX = 3,-88
+    SetY = 3,-18
+    SetFrame = 4,2
+    SetX = 4,80
+    SetY = 4,46
+    SetFrame = 5,3
+    SetFrame = 6,1
+    SetX = 6,-24
+    SetY = 6,70
+    SetFrame = 7,2
+    SetFrame = 8,4
+    SetFrame = 9,1
+    SetX = 9,-48
+    SetY = 9,-26
+    SetFrame = 10,2
+    SetFrame = 11,4
+    SetFrame = 12,2
+    SetX = 12,64
+    SetY = 12,22
+    SetFrame = 13,3
+    SetX = 14,-24
+    SetY = 14,86
+    SetFrame = 15,5
+    SetVisible = 16,false
+<Particle 4>
+    Graphic = Examples/030-Explosion01
+    Focus = Target
+    SetFrame = 3,1
+    SetX = 3,80
+    SetY = 3,46
+    SetZ = 3,29
+    SetVisible = 4,false
+<Particle 5>
+    Graphic = Examples/030-Explosion01
+    Focus = Target
+    SetFrame = 5,4
+    SetX = 5,80
+    SetY = 5,46
+    SetZ = 5,29
+    SetVisible = 6,false
+<Particle 6>
+    Graphic = Examples/030-Explosion01
+    Focus = Target
+    SetX = 5,-24
+    SetY = 5,70
+    SetZ = 5,30
+    SetVisible = 6,false
+<Particle 7>
+    Graphic = Examples/030-Explosion01
+    Focus = Target
+    SetX = 8,-48
+    SetY = 8,-26
+    SetZ = 8,29
+    SetVisible = 9,false
+<Particle 8>
+    Graphic = Examples/030-Explosion01
+    Focus = Target
+    SetX = 10,64
+    SetY = 10,22
+    SetZ = 10,29
+    SetFrame = 11,1
+    SetX = 12,-24
+    SetY = 12,86
+    SetFrame = 13,4
+    SetX = 13,64
+    SetY = 13,22
+    SetX = 14,-24
+    SetY = 14,86
+    SetVisible = 15,false
+<Particle 9>
+    Graphic = Examples/030-Explosion01
+    Focus = Target
+    SetX = 11,-24
+    SetY = 11,78
+    SetZ = 11,30
+    SetVisible = 12,false
+<Particle 10>
+    Graphic = Examples/030-Explosion01
+    Focus = Target
+    SetFrame = 13,2
+    SetX = 13,-24
+    SetY = 13,86
+    SetZ = 13,30
+    SetVisible = 14,false
+<SE>
+    Play = 0,Explosion1,80
+    Play = 3,Explosion2,80
+    Play = 6,Explosion3,80
+    Play = 10,Explosion4,80
+    Play = 12,Explosion7,80

@@ -1,0 +1,396 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SPIKECANNON]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 0,14
+    SetY = 0,-20
+    SetZ = 0,27
+    SetX = 1,69
+    SetY = 1,-70
+    SetX = 2,129
+    SetY = 2,-139
+    SetX = 3,179
+    SetY = 3,-178
+    SetY = 4,-187
+    SetX = 5,184
+    SetY = 5,-157
+<Particle 3>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 1,25
+    SetY = 1,-40
+    SetZ = 1,28
+    SetX = 2,64
+    SetY = 2,-79
+    SetX = 3,104
+    SetY = 3,-128
+    SetX = 4,169
+    SetY = 4,-118
+    SetX = 5,150
+    SetY = 5,-187
+<Particle 4>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 2,69
+    SetY = 2,-29
+    SetZ = 2,29
+    SetX = 3,109
+    SetY = 3,-70
+    SetX = 4,119
+    SetY = 4,-148
+    SetFrame = 5,14
+    SetX = 5,189
+    SetY = 5,-178
+    SetOpacity = 5,50
+<Particle 5>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 2,19
+    SetY = 2,-50
+    SetZ = 2,30
+    SetX = 3,54
+    SetY = 3,-89
+    SetFrame = 4,14
+    SetX = 4,189
+    SetY = 4,-217
+    SetOpacity = 4,50
+    SetX = 5,159
+    SetY = 5,-207
+<Particle 6>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 3,14
+    SetX = 3,184
+    SetY = 3,-196
+    SetZ = 3,31
+    SetOpacity = 3,50
+    SetVisible = 4,false
+<SE>
+    Play = 0,Slash10,80
+    Play = 2,Slash10,80
+    Play = 4,Slash10,80
+#-------------------------------
+[Move,SPIKECANNON,1]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 6>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 3,14
+    SetX = 3,184
+    SetY = 3,-196
+    SetZ = 3,31
+    SetOpacity = 3,50
+    SetVisible = 4,false
+<Particle 2>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 0,14
+    SetY = 0,-20
+    SetZ = 0,27
+    SetX = 1,69
+    SetY = 1,-70
+    SetX = 2,129
+    SetY = 2,-139
+    SetX = 3,179
+    SetY = 3,-178
+    SetY = 4,-187
+    SetX = 5,184
+    SetY = 5,-157
+<Particle 3>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 1,25
+    SetY = 1,-40
+    SetZ = 1,28
+    SetX = 2,64
+    SetY = 2,-79
+    SetX = 3,104
+    SetY = 3,-128
+    SetX = 4,169
+    SetY = 4,-118
+    SetX = 5,150
+    SetY = 5,-187
+<Particle 4>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 2,69
+    SetY = 2,-29
+    SetZ = 2,29
+    SetX = 3,109
+    SetY = 3,-70
+    SetX = 4,119
+    SetY = 4,-148
+    SetFrame = 5,14
+    SetX = 5,189
+    SetY = 5,-178
+    SetOpacity = 5,50
+<Particle 5>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 2,19
+    SetY = 2,-50
+    SetZ = 2,30
+    SetX = 3,54
+    SetY = 3,-89
+    SetFrame = 4,14
+    SetX = 4,189
+    SetY = 4,-217
+    SetOpacity = 4,50
+    SetX = 5,159
+    SetY = 5,-207
+<SE>
+    Play = 0,Slash10,80
+    Play = 2,Slash10,80
+    Play = 4,Slash10,80
+#-------------------------------
+[Move,SPIKECANNON,2]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 5>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 2,19
+    SetY = 2,-50
+    SetZ = 2,30
+    SetX = 3,54
+    SetY = 3,-89
+    SetFrame = 4,14
+    SetX = 4,189
+    SetY = 4,-217
+    SetOpacity = 4,50
+    SetX = 5,159
+    SetY = 5,-207
+<Particle 6>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 3,14
+    SetX = 3,184
+    SetY = 3,-196
+    SetZ = 3,31
+    SetOpacity = 3,50
+    SetVisible = 4,false
+<Particle 2>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 0,14
+    SetY = 0,-20
+    SetZ = 0,27
+    SetX = 1,69
+    SetY = 1,-70
+    SetX = 2,129
+    SetY = 2,-139
+    SetX = 3,179
+    SetY = 3,-178
+    SetY = 4,-187
+    SetX = 5,184
+    SetY = 5,-157
+<Particle 3>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 1,25
+    SetY = 1,-40
+    SetZ = 1,28
+    SetX = 2,64
+    SetY = 2,-79
+    SetX = 3,104
+    SetY = 3,-128
+    SetX = 4,169
+    SetY = 4,-118
+    SetX = 5,150
+    SetY = 5,-187
+<Particle 4>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 2,69
+    SetY = 2,-29
+    SetZ = 2,29
+    SetX = 3,109
+    SetY = 3,-70
+    SetX = 4,119
+    SetY = 4,-148
+    SetFrame = 5,14
+    SetX = 5,189
+    SetY = 5,-178
+    SetOpacity = 5,50
+<SE>
+    Play = 0,Slash10,80
+    Play = 2,Slash10,80
+    Play = 4,Slash10,80
+#-------------------------------
+[Move,SPIKECANNON,3]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 4>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 2,69
+    SetY = 2,-29
+    SetZ = 2,29
+    SetX = 3,109
+    SetY = 3,-70
+    SetX = 4,119
+    SetY = 4,-148
+    SetFrame = 5,14
+    SetX = 5,189
+    SetY = 5,-178
+    SetOpacity = 5,50
+<Particle 5>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 2,19
+    SetY = 2,-50
+    SetZ = 2,30
+    SetX = 3,54
+    SetY = 3,-89
+    SetFrame = 4,14
+    SetX = 4,189
+    SetY = 4,-217
+    SetOpacity = 4,50
+    SetX = 5,159
+    SetY = 5,-207
+<Particle 6>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 3,14
+    SetX = 3,184
+    SetY = 3,-196
+    SetZ = 3,31
+    SetOpacity = 3,50
+    SetVisible = 4,false
+<Particle 2>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 0,14
+    SetY = 0,-20
+    SetZ = 0,27
+    SetX = 1,69
+    SetY = 1,-70
+    SetX = 2,129
+    SetY = 2,-139
+    SetX = 3,179
+    SetY = 3,-178
+    SetY = 4,-187
+    SetX = 5,184
+    SetY = 5,-157
+<Particle 3>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 1,25
+    SetY = 1,-40
+    SetZ = 1,28
+    SetX = 2,64
+    SetY = 2,-79
+    SetX = 3,104
+    SetY = 3,-128
+    SetX = 4,169
+    SetY = 4,-118
+    SetX = 5,150
+    SetY = 5,-187
+<SE>
+    Play = 0,Slash10,80
+    Play = 2,Slash10,80
+    Play = 4,Slash10,80
+#-------------------------------
+[Move,SPIKECANNON,4]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 1,25
+    SetY = 1,-40
+    SetZ = 1,28
+    SetX = 2,64
+    SetY = 2,-79
+    SetX = 3,104
+    SetY = 3,-128
+    SetX = 4,169
+    SetY = 4,-118
+    SetX = 5,150
+    SetY = 5,-187
+<Particle 4>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 2,69
+    SetY = 2,-29
+    SetZ = 2,29
+    SetX = 3,109
+    SetY = 3,-70
+    SetX = 4,119
+    SetY = 4,-148
+    SetFrame = 5,14
+    SetX = 5,189
+    SetY = 5,-178
+    SetOpacity = 5,50
+<Particle 5>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 2,19
+    SetY = 2,-50
+    SetZ = 2,30
+    SetX = 3,54
+    SetY = 3,-89
+    SetFrame = 4,14
+    SetX = 4,189
+    SetY = 4,-217
+    SetOpacity = 4,50
+    SetX = 5,159
+    SetY = 5,-207
+<Particle 6>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 3,14
+    SetX = 3,184
+    SetY = 3,-196
+    SetZ = 3,31
+    SetOpacity = 3,50
+    SetVisible = 4,false
+<Particle 2>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 0,14
+    SetY = 0,-20
+    SetZ = 0,27
+    SetX = 1,69
+    SetY = 1,-70
+    SetX = 2,129
+    SetY = 2,-139
+    SetX = 3,179
+    SetY = 3,-178
+    SetY = 4,-187
+    SetX = 5,184
+    SetY = 5,-157
+<SE>
+    Play = 0,Slash10,80
+    Play = 2,Slash10,80
+    Play = 4,Slash10,80

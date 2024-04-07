@@ -1,0 +1,136 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,GROWL]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 4>
+    Graphic = Examples/Growl
+    Focus = User
+    SetFrame = 0,1
+    SetFlip = 0,true
+    SetX = 0,57
+    SetY = 0,6
+    SetZ = 0,29
+    SetX = 1,72
+    SetY = 1,16
+    SetX = 2,88
+    SetY = 2,26
+    SetX = 3,102
+    SetY = 3,37
+    SetX = 4,57
+    SetY = 4,6
+    SetX = 5,72
+    SetY = 5,16
+    SetX = 6,88
+    SetY = 6,26
+    SetX = 7,102
+    SetY = 7,37
+<Particle 2>
+    Graphic = Examples/Growl
+    Focus = User
+    SetX = 0,64
+    SetY = 0,-13
+    SetZ = 0,27
+    SetX = 1,81
+    SetX = 2,98
+    SetX = 3,115
+    SetX = 4,64
+    SetX = 5,81
+    SetX = 6,98
+    SetX = 7,115
+<Particle 3>
+    Graphic = Examples/Growl
+    Focus = User
+    SetFrame = 0,1
+    SetX = 0,57
+    SetY = 0,-19
+    SetZ = 0,28
+    SetX = 1,72
+    SetY = 1,-32
+    SetX = 2,88
+    SetY = 2,-45
+    SetX = 3,102
+    SetY = 3,-57
+    SetX = 4,57
+    SetY = 4,-19
+    SetX = 5,72
+    SetY = 5,-32
+    SetX = 6,88
+    SetY = 6,-45
+    SetX = 7,102
+    SetY = 7,-57
+<SE>
+    PlayUserCry = 0
+#-------------------------------
+[OppMove,GROWL]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Growl
+    Focus = Target
+    SetFrame = 0,1
+    SetFlip = 0,true
+    SetX = 0,-58
+    SetY = 0,2
+    SetZ = 0,28
+    SetX = 1,-71
+    SetY = 1,-11
+    SetX = 2,-84
+    SetY = 2,-24
+    SetX = 3,-96
+    SetY = 3,-36
+    SetX = 4,-58
+    SetY = 4,2
+    SetX = 5,-71
+    SetY = 5,-11
+    SetX = 6,-84
+    SetY = 6,-24
+    SetX = 7,-96
+    SetY = 7,-36
+<Particle 4>
+    Graphic = Examples/Growl
+    Focus = Target
+    SetFrame = 0,1
+    SetX = 0,-58
+    SetY = 0,39
+    SetZ = 0,29
+    SetX = 1,-71
+    SetY = 1,52
+    SetX = 2,-84
+    SetY = 2,65
+    SetX = 3,-96
+    SetY = 3,77
+    SetX = 4,-58
+    SetY = 4,39
+    SetX = 5,-71
+    SetY = 5,52
+    SetX = 6,-84
+    SetY = 6,65
+    SetX = 7,-96
+    SetY = 7,77
+<Particle 2>
+    Graphic = Examples/Growl
+    Focus = Target
+    SetFlip = 0,true
+    SetX = 0,-58
+    SetY = 0,14
+    SetZ = 0,27
+    SetX = 1,-73
+    SetX = 2,-88
+    SetX = 3,-103
+    SetX = 4,-58
+    SetX = 5,-73
+    SetX = 6,-88
+    SetX = 7,-103
+<SE>
+    PlayUserCry = 0

@@ -1,0 +1,74 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ACID]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/poison2
+    Focus = UserAndTarget
+    SetFrame = 1,4
+    SetX = 1,14
+    SetY = 1,-20
+    SetZ = 1,28
+    SetFrame = 2,5
+    SetX = 2,34
+    SetY = 2,-70
+    SetFrame = 3,6
+    SetX = 3,69
+    SetY = 3,-128
+    SetX = 4,114
+    SetY = 4,-187
+    SetX = 5,154
+    SetY = 5,-207
+    SetY = 6,-217
+    SetVisible = 7,false
+<Particle 4>
+    Graphic = Examples/poison2
+    Focus = UserAndTarget
+    SetFrame = 3,4
+    SetX = 3,19
+    SetY = 3,-20
+    SetZ = 3,29
+    SetFrame = 4,5
+    SetX = 4,59
+    SetY = 4,-118
+    SetFrame = 5,6
+    SetX = 5,109
+    SetY = 5,-207
+    SetVisible = 6,false
+<Particle 2>
+    Graphic = Examples/poison2
+    Focus = UserAndTarget
+    SetFrame = 0,3
+    SetX = 0,14
+    SetY = 0,-20
+    SetZ = 0,27
+    SetFrame = 1,4
+    SetX = 1,39
+    SetY = 1,-98
+    SetFrame = 2,5
+    SetX = 2,69
+    SetY = 2,-148
+    SetFrame = 3,6
+    SetX = 3,134
+    SetY = 3,-187
+    SetFrame = 4,7
+    SetX = 4,179
+    SetY = 4,-178
+    SetFrame = 5,8
+    SetFrame = 6,9
+    SetFrame = 7,10
+    SetFrame = 8,11
+    SetFrame = 9,12
+    SetFrame = 10,13
+    SetFrame = 11,14
+    SetOpacity = 12,100
+    SetVisible = 13,false
+<SE>
+    Play = 0,throw,80
+    Play = 3,Poison,80

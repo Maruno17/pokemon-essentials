@@ -1,0 +1,39 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,METALCLAW]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/dragon claw
+    Focus = UserAndTarget
+    SetFrame = 0,1
+    SetX = 0,202
+    SetY = 0,-240
+    SetZ = 0,27
+    SetFrame = 1,2
+    SetX = 1,206
+    SetY = 1,-235
+    SetFrame = 2,3
+    SetX = 2,214
+    SetY = 2,-226
+    SetFrame = 3,4
+    SetX = 3,212
+    SetY = 3,-196
+    SetFrame = 4,5
+    SetX = 4,210
+    SetY = 4,-207
+    SetFrame = 5,6
+    SetY = 5,-200
+    SetFrame = 6,7
+    SetX = 6,206
+    SetFrame = 7,8
+    SetX = 7,200
+    SetVisible = 8,false
+<SE>
+    Play = 0,metal,100,110
+    Play = 4,metal

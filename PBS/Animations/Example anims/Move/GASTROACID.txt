@@ -1,0 +1,124 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,GASTROACID]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/fly copy
+    Focus = Target
+    SetX = 0,-31
+    SetY = 0,14
+    SetZ = 0,27
+    SetZoomX = 0,85
+    SetZoomY = 0,85
+    SetOpacity = 0,200
+    SetX = 1,-32
+    SetY = 1,-11
+    SetX = 2,-69
+    SetY = 2,-38
+    SetX = 3,-42
+    SetY = 3,-58
+    SetX = 4,-26
+    SetY = 4,-19
+    SetX = 5,-20
+    SetY = 5,-24
+    SetX = 6,-4
+    SetY = 6,-21
+    SetX = 7,-3
+    SetY = 7,-51
+    SetX = 8,6
+    SetY = 8,-17
+    SetX = 9,-74
+    SetY = 9,-13
+    SetX = 10,-19
+<Particle 3>
+    Graphic = Examples/fly copy
+    Focus = Target
+    SetX = 1,9
+    SetY = 1,24
+    SetZ = 1,28
+    SetZoomX = 1,85
+    SetZoomY = 1,85
+    SetOpacity = 1,200
+    SetX = 2,-15
+    SetY = 2,-36
+    SetX = 3,-25
+    SetY = 3,12
+    SetX = 4,10
+    SetY = 4,-3
+    SetX = 5,-68
+    SetY = 5,-24
+    SetX = 6,-48
+    SetY = 6,-16
+    SetX = 7,-9
+    SetY = 7,0
+    SetX = 8,-54
+    SetY = 8,-32
+    SetX = 9,-8
+    SetY = 9,-5
+    SetVisible = 10,false
+<Particle 4>
+    Graphic = Examples/fly copy
+    Focus = Target
+    SetX = 2,-21
+    SetY = 2,18
+    SetZ = 2,29
+    SetZoomX = 2,85
+    SetZoomY = 2,85
+    SetOpacity = 2,200
+    SetX = 3,-69
+    SetY = 3,-10
+    SetX = 4,-47
+    SetY = 4,27
+    SetVisible = 5,false
+<Particle 5>
+    Graphic = Examples/fly copy
+    Focus = Target
+    SetX = 3,18
+    SetY = 3,23
+    SetZ = 3,30
+    SetZoomX = 3,85
+    SetZoomY = 3,85
+    SetOpacity = 3,200
+    SetX = 4,-82
+    SetY = 4,-27
+    SetVisible = 5,false
+<Particle 6>
+    Graphic = Examples/fly copy
+    Focus = Target
+    SetX = 4,-40
+    SetY = 4,-73
+    SetZ = 4,31
+    SetZoomX = 4,85
+    SetZoomY = 4,85
+    SetOpacity = 4,200
+    SetVisible = 5,false
+<Particle 7>
+    Graphic = Examples/fly copy
+    Focus = Target
+    SetX = 6,-41
+    SetY = 6,-69
+    SetZ = 6,29
+    SetZoomX = 6,85
+    SetZoomY = 6,85
+    SetOpacity = 6,200
+    SetX = 7,-83
+    SetY = 7,-60
+    SetVisible = 8,false
+<Particle 8>
+    Graphic = Examples/fly copy
+    Focus = Target
+    SetX = 9,-36
+    SetY = 9,-72
+    SetZ = 9,29
+    SetZoomX = 9,85
+    SetZoomY = 9,85
+    SetOpacity = 9,200
+    SetVisible = 10,false
+<SE>
+    Play = 0,Sweet Scent

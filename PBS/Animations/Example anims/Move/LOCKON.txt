@@ -1,0 +1,111 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LOCKON]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/mixed
+    Focus = Target
+    SetFrame = 2,4
+    SetX = 2,11
+    SetY = 2,-1
+    SetZ = 2,28
+    SetZoomX = 2,200
+    SetZoomY = 2,200
+    SetX = 3,10
+    SetY = 3,1
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = Examples/mixed
+    Focus = Target
+    SetFrame = 4,5
+    SetX = 4,20
+    SetY = 4,-8
+    SetZ = 4,27
+    SetZoomX = 4,200
+    SetZoomY = 4,200
+    SetX = 5,22
+    SetY = 5,-4
+    SetY = 6,-9
+    SetVisible = 7,false
+<Particle 5>
+    Graphic = Examples/mixed
+    Focus = Target
+    SetFrame = 7,6
+    SetX = 7,12
+    SetY = 7,-7
+    SetZ = 7,28
+    SetZoomX = 7,200
+    SetZoomY = 7,200
+    SetVisible = 8,false
+<Particle 6>
+    Graphic = Examples/mixed
+    Focus = Target
+    SetFrame = 8,6
+    SetX = 8,11
+    SetY = 8,-7
+    SetZ = 8,27
+    SetZoomX = 8,200
+    SetZoomY = 8,200
+    SetX = 9,10
+    SetY = 9,-8
+    SetX = 10,9
+    SetY = 10,-7
+    SetY = 11,-5
+    SetFrame = 12,7
+    SetX = 12,10
+    SetY = 12,-6
+    SetX = 14,9
+    SetY = 14,-8
+    SetX = 15,13
+    SetX = 16,9
+    SetY = 16,-5
+    SetFrame = 17,8
+    SetX = 17,13
+    SetY = 17,-8
+    SetX = 18,11
+    SetY = 18,-6
+    SetX = 19,15
+    SetY = 19,-4
+    SetX = 20,11
+    SetY = 20,-8
+    SetFrame = 21,9
+    SetX = 21,10
+    SetY = 21,-10
+    SetX = 22,8
+    SetY = 22,-8
+    SetX = 23,7
+    SetY = 23,-6
+    SetX = 24,11
+    SetY = 24,-7
+    SetX = 25,13
+    SetX = 26,10
+    SetY = 26,-8
+    SetX = 27,11
+    SetY = 27,-4
+    SetOpacity = 27,236
+    SetX = 28,9
+    SetY = 28,-6
+    SetOpacity = 28,239
+    SetX = 29,12
+    SetY = 29,-3
+    SetOpacity = 29,168
+<Particle 2>
+    Graphic = Examples/mixed
+    Focus = Target
+    SetFrame = 0,4
+    SetX = 0,11
+    SetY = 0,3
+    SetZ = 0,27
+    SetZoomX = 0,200
+    SetZoomY = 0,200
+    SetX = 1,13
+    SetY = 1,-2
+    SetVisible = 2,false
+<SE>
+    Play = 0,Lock On,88

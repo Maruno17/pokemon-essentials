@@ -1,0 +1,74 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SPIDERWEB]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/ghost2
+    Focus = UserAndTarget
+    SetFrame = 3,12
+    SetFlip = 3,true
+    SetX = 3,179
+    SetY = 3,-196
+    SetZ = 3,28
+    SetOpacity = 3,20
+    SetFrame = 4,13
+    SetFlip = 4,false
+    SetX = 4,119
+    SetY = 4,-128
+    SetZoomX = 4,110
+    SetZoomY = 4,110
+    SetAngle = 4,330
+    SetOpacity = 4,255
+    SetX = 5,125
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+    SetX = 6,139
+    SetY = 6,-148
+    SetZoomX = 6,75
+    SetZoomY = 6,75
+    SetX = 7,150
+    SetY = 7,-157
+    SetZoomX = 7,50
+    SetZoomY = 7,50
+    SetVisible = 8,false
+<Particle 2>
+    Graphic = Examples/ghost2
+    Focus = UserAndTarget
+    SetFrame = 0,13
+    SetX = 0,50
+    SetY = 0,-29
+    SetZ = 0,27
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetAngle = 0,330
+    SetX = 1,59
+    SetY = 1,-50
+    SetZoomX = 1,75
+    SetZoomY = 1,75
+    SetX = 2,69
+    SetY = 2,-70
+    SetZoomX = 2,100
+    SetZoomY = 2,100
+    SetX = 3,94
+    SetY = 3,-98
+    SetZoomX = 3,110
+    SetZoomY = 3,110
+    SetFrame = 4,12
+    SetFlip = 4,true
+    SetX = 4,179
+    SetY = 4,-196
+    SetZoomX = 4,100
+    SetZoomY = 4,100
+    SetAngle = 4,0
+    SetOpacity = 4,50
+    SetOpacity = 5,255
+    SetOpacity = 8,150
+    SetOpacity = 9,50
+<SE>
+    Play = 0,throw,80

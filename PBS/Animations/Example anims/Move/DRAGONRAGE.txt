@@ -1,0 +1,76 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DRAGONRAGE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetX = 1,39
+    SetY = 1,-40
+    SetZ = 1,28
+    SetX = 2,69
+    SetX = 3,125
+    SetY = 3,-70
+    SetFrame = 4,1
+    SetX = 4,134
+    SetY = 4,-79
+    SetZoomX = 4,75
+    SetZoomY = 4,75
+    SetFrame = 5,0
+    SetX = 5,154
+    SetY = 5,-89
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+    SetVisible = 6,false
+<Particle 4>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetFlip = 2,true
+    SetX = 2,69
+    SetY = 2,-59
+    SetZ = 2,29
+    SetFlip = 3,false
+    SetX = 3,109
+    SetY = 3,-50
+    SetX = 4,119
+    SetY = 4,-59
+    SetVisible = 5,false
+<Particle 5>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetFlip = 3,true
+    SetX = 3,79
+    SetY = 3,-40
+    SetZ = 3,30
+    SetVisible = 4,false
+<Particle 2>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetX = 0,19
+    SetY = 0,-29
+    SetZ = 0,27
+    SetX = 1,59
+    SetY = 1,-59
+    SetFrame = 2,1
+    SetX = 2,100
+    SetY = 2,-89
+    SetFrame = 3,2
+    SetX = 3,139
+    SetY = 3,-128
+    SetFrame = 4,3
+    SetX = 4,164
+    SetY = 4,-157
+    SetFrame = 5,4
+    SetX = 5,179
+    SetY = 5,-178
+    SetFrame = 6,5
+    SetFrame = 7,6
+    SetFrame = 8,7
+<SE>
+    Play = 0,Fire6,80

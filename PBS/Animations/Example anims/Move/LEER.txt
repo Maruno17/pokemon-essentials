@@ -1,0 +1,57 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LEER]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/leer
+    Focus = UserAndTarget
+    SetX = 0,14
+    SetY = 0,-29
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetY = 1,-32
+    SetFrame = 2,2
+    SetX = 2,15
+    SetY = 2,-35
+    SetFrame = 3,3
+    SetX = 3,12
+    SetY = 3,-32
+    SetFrame = 4,4
+    SetX = 4,19
+    SetY = 4,-35
+<SE>
+    Play = 0,Saint9
+#-------------------------------
+[OppMove,LEER]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/leer
+    Focus = UserAndTarget
+    SetX = 0,173
+    SetY = 0,-226
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetY = 1,-229
+    SetFrame = 2,2
+    SetX = 2,175
+    SetY = 2,-232
+    SetFrame = 3,3
+    SetX = 3,171
+    SetY = 3,-229
+    SetFrame = 4,4
+    SetX = 4,178
+    SetY = 4,-232
+<SE>
+    Play = 0,Saint9

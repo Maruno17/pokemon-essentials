@@ -1,0 +1,39 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ROCKTHROW]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Earth1
+    Focus = UserAndTarget
+    SetFrame = 3,1
+    SetX = 3,175
+    SetY = 3,-178
+    SetZ = 3,28
+    SetVisible = 4,false
+<Particle 2>
+    Graphic = Examples/Earth1
+    Focus = UserAndTarget
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetX = 1,54
+    SetY = 1,-59
+    SetX = 2,139
+    SetY = 2,-157
+    SetFrame = 3,2
+    SetX = 3,175
+    SetY = 3,-178
+    SetFrame = 4,3
+    SetFrame = 5,4
+    SetFrame = 6,5
+    SetFrame = 7,6
+<SE>
+    Play = 0,throw,80
+    Play = 3,Earth1,80

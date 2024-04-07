@@ -1,0 +1,347 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,INFERNO]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 0,-16
+    SetY = 0,32
+    SetZ = 0,27
+    SetX = 1,-23
+    SetY = 1,26
+    SetX = 2,-24
+    SetY = 2,25
+    SetX = 3,-31
+    SetY = 3,33
+    SetX = 4,-37
+    SetY = 4,38
+    SetX = 5,-25
+    SetY = 5,33
+    SetX = 6,-20
+    SetY = 6,32
+    SetX = 7,-30
+    SetX = 8,-24
+    SetY = 8,34
+    SetX = 9,-8
+    SetY = 9,33
+<Particle 3>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 0,21
+    SetY = 0,27
+    SetZ = 0,28
+    SetX = 1,26
+    SetY = 1,25
+    SetX = 2,-1
+    SetY = 2,34
+    SetX = 3,-8
+    SetY = 3,36
+    SetX = 4,-12
+    SetY = 4,40
+    SetX = 5,-1
+    SetY = 5,37
+    SetY = 6,30
+    SetX = 7,-5
+    SetY = 7,31
+    SetX = 8,2
+    SetY = 8,38
+    SetX = 9,-33
+    SetY = 9,33
+<Particle 4>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 1,3
+    SetY = 1,23
+    SetZ = 1,29
+    SetX = 2,23
+    SetY = 2,27
+    SetX = 3,-15
+    SetY = 3,18
+    SetX = 4,9
+    SetY = 4,39
+    SetX = 5,-6
+    SetY = 5,19
+    SetX = 6,-3
+    SetY = 6,14
+    SetX = 7,-16
+    SetY = 7,11
+    SetX = 8,-7
+    SetY = 8,21
+    SetX = 9,-13
+    SetY = 9,12
+<Particle 5>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 1,-7
+    SetY = 1,9
+    SetZ = 1,30
+    SetX = 2,-4
+    SetY = 2,13
+    SetX = 3,16
+    SetY = 3,38
+    SetX = 4,-22
+    SetY = 4,22
+    SetX = 5,-1
+    SetY = 5,-1
+    SetX = 6,-28
+    SetY = 6,6
+    SetX = 7,-40
+    SetY = 7,12
+    SetX = 8,19
+    SetY = 8,27
+    SetX = 9,-32
+    SetY = 9,4
+<Particle 6>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 1,18
+    SetY = 1,11
+    SetZ = 1,31
+    SetX = 2,13
+    SetY = 2,14
+    SetX = 3,5
+    SetY = 3,21
+    SetX = 4,3
+    SetY = 4,25
+    SetX = 5,18
+    SetY = 5,11
+    SetX = 6,24
+    SetY = 6,22
+    SetX = 7,-29
+    SetY = 7,-4
+    SetX = 8,22
+    SetY = 8,5
+    SetX = 9,-35
+    SetY = 9,-18
+<Particle 7>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 2,-20
+    SetY = 2,7
+    SetZ = 2,32
+    SetX = 3,25
+    SetY = 3,19
+    SetX = 4,-38
+    SetY = 4,13
+    SetX = 5,20
+    SetY = 5,35
+    SetX = 6,2
+    SetY = 6,-1
+    SetX = 7,-1
+    SetY = 7,-6
+    SetX = 8,-2
+    SetY = 8,-3
+    SetX = 9,-14
+    SetY = 9,-8
+<Particle 8>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 2,2
+    SetY = 2,-1
+    SetZ = 2,33
+    SetX = 3,-35
+    SetY = 3,9
+    SetX = 4,-6
+    SetY = 4,8
+    SetX = 5,16
+    SetY = 5,-13
+    SetX = 6,18
+    SetY = 6,4
+    SetX = 7,-16
+    SetY = 7,-20
+    SetX = 8,-25
+    SetY = 8,10
+    SetX = 9,7
+    SetY = 9,9
+<Particle 9>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 2,-35
+    SetY = 2,-4
+    SetZ = 2,34
+    SetX = 3,-11
+    SetY = 3,2
+    SetX = 4,20
+    SetY = 4,36
+    SetX = 5,-27
+    SetY = 5,5
+    SetX = 6,-16
+    SetY = 6,-20
+    SetX = 7,20
+    SetY = 7,29
+    SetX = 8,-33
+    SetY = 8,-9
+    SetX = 9,22
+    SetY = 9,32
+<Particle 10>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 3,9
+    SetY = 3,3
+    SetZ = 3,35
+    SetX = 4,18
+    SetY = 4,17
+    SetX = 5,-41
+    SetY = 5,21
+    SetVisible = 6,false
+<Particle 11>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 3,-27
+    SetY = 3,-7
+    SetZ = 3,36
+    SetX = 4,11
+    SetY = 4,-2
+    SetX = 5,-21
+    SetY = 5,-17
+    SetVisible = 6,false
+<Particle 12>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 3,28
+    SetY = 3,-1
+    SetZ = 3,37
+    SetX = 4,-27
+    SetY = 4,-3
+    SetVisible = 5,false
+<Particle 13>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 3,-4
+    SetY = 3,-15
+    SetZ = 3,38
+    SetX = 4,1
+    SetY = 4,-12
+    SetVisible = 5,false
+<Particle 14>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 4,-17
+    SetY = 4,-22
+    SetZ = 4,39
+    SetVisible = 5,false
+<Particle 15>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 4,-41
+    SetY = 4,-17
+    SetZ = 4,40
+    SetVisible = 5,false
+<Particle 16>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 4,18
+    SetY = 4,-20
+    SetZ = 4,41
+    SetVisible = 5,false
+<Particle 17>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 4,-2
+    SetY = 4,-38
+    SetZ = 4,42
+    SetVisible = 5,false
+<Particle 18>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 7,11
+    SetY = 7,12
+    SetZ = 7,35
+    SetX = 8,-11
+    SetY = 8,-21
+    SetX = 9,33
+    SetY = 9,11
+<Particle 19>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 7,16
+    SetY = 7,-15
+    SetZ = 7,36
+    SetX = 8,0
+    SetY = 8,-18
+    SetX = 9,13
+    SetY = 9,-8
+<Particle 20>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 7,3
+    SetY = 7,-25
+    SetZ = 7,37
+    SetX = 8,30
+    SetY = 8,-13
+    SetVisible = 9,false
+<Particle 21>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 7,-43
+    SetY = 7,-17
+    SetZ = 7,38
+    SetX = 8,-37
+    SetY = 8,-26
+    SetVisible = 9,false
+<Particle 22>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 7,-29
+    SetY = 7,-35
+    SetZ = 7,39
+    SetX = 8,-16
+    SetY = 8,-37
+    SetVisible = 9,false
+<Particle 23>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 7,-1
+    SetY = 7,-44
+    SetZ = 7,40
+    SetX = 8,8
+    SetY = 8,-39
+    SetVisible = 9,false
+<Particle 24>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 7,35
+    SetY = 7,-19
+    SetZ = 7,41
+    SetX = 8,32
+    SetY = 8,-34
+    SetVisible = 9,false
+<Particle 25>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 7,38
+    SetY = 7,7
+    SetZ = 7,42
+    SetX = 8,-42
+    SetY = 8,-48
+    SetVisible = 9,false
+<Particle 26>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 8,39
+    SetY = 8,20
+    SetZ = 8,43
+    SetVisible = 9,false
+<Particle 27>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 8,30
+    SetY = 8,42
+    SetZ = 8,44
+    SetVisible = 9,false
+<Particle 28>
+    Graphic = Examples/Flames
+    Focus = Target
+    SetX = 8,12
+    SetY = 8,-63
+    SetZ = 8,45
+    SetVisible = 9,false
+<SE>
+    Play = 0,Wring Out,100,150

@@ -1,0 +1,84 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SWEETKISS]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/electric2
+    Focus = Target
+    SetFrame = 8,9
+    SetX = 8,-16
+    SetY = 8,-42
+    SetZ = 8,28
+    SetX = 9,-8
+    SetY = 9,-50
+    SetFrame = 10,10
+    SetX = 10,0
+    SetY = 10,-58
+    SetY = 11,-66
+    SetFrame = 12,8
+    SetFlip = 12,true
+    SetX = 12,-88
+    SetY = 12,-50
+    SetZoomX = 12,75
+    SetZoomY = 12,75
+    SetVisible = 18,false
+<Particle 2>
+    Graphic = Examples/electric2
+    Focus = Target
+    SetFrame = 0,8
+    SetX = 0,56
+    SetY = 0,38
+    SetZ = 0,27
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetOpacity = 0,100
+    SetX = 1,32
+    SetY = 1,22
+    SetZoomX = 1,75
+    SetZoomY = 1,75
+    SetOpacity = 1,200
+    SetX = 2,0
+    SetY = 2,14
+    SetOpacity = 2,255
+    SetX = 3,-16
+    SetY = 3,6
+    SetX = 4,-32
+    SetY = 4,-10
+    SetX = 5,-56
+    SetY = 5,-34
+    SetX = 6,-72
+    SetY = 6,-42
+    SetX = 7,-80
+    SetFlip = 8,true
+    SetX = 8,-88
+    SetY = 8,-50
+    SetFrame = 12,11
+    SetFlip = 12,false
+    SetX = 12,-8
+    SetY = 12,-74
+    SetZoomX = 12,100
+    SetZoomY = 12,100
+    SetX = 13,-16
+    SetY = 13,-82
+    SetFrame = 14,12
+    SetY = 14,-90
+    SetX = 15,-8
+    SetY = 15,-98
+    SetFrame = 16,13
+    SetX = 16,0
+    SetY = 16,-106
+    SetY = 17,-114
+    SetFrame = 18,8
+    SetFlip = 18,true
+    SetX = 18,-88
+    SetY = 18,-50
+    SetZoomX = 18,75
+    SetZoomY = 18,75
+<SE>
+    Play = 4,Saint1,80

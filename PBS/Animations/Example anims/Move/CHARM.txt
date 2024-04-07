@@ -1,0 +1,75 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CHARM]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/electric2
+    Focus = Target
+    SetFrame = 2,9
+    SetX = 2,56
+    SetY = 2,46
+    SetZ = 2,28
+    SetFrame = 3,10
+    SetX = 3,48
+    SetY = 3,38
+    SetFrame = 4,11
+    SetX = 4,40
+    SetY = 4,30
+    SetFrame = 5,12
+    SetY = 5,22
+    SetFrame = 6,10
+    SetX = 6,-32
+    SetY = 6,-18
+    SetFrame = 7,11
+    SetY = 7,-26
+    SetVisible = 8,false
+<Particle 4>
+    Graphic = Examples/electric2
+    Focus = Target
+    SetFrame = 5,9
+    SetX = 5,-8
+    SetY = 5,6
+    SetZ = 5,29
+    SetVisible = 6,false
+<Particle 2>
+    Graphic = Examples/electric2
+    Focus = Target
+    SetFrame = 0,9
+    SetX = 0,-48
+    SetY = 0,30
+    SetZ = 0,27
+    SetFrame = 1,10
+    SetX = 1,-40
+    SetY = 1,22
+    SetFrame = 2,11
+    SetX = 2,-32
+    SetY = 2,14
+    SetFrame = 3,12
+    SetY = 3,6
+    SetFrame = 4,13
+    SetY = 4,-2
+    SetX = 5,-40
+    SetY = 5,-10
+    SetOpacity = 5,100
+    SetX = 6,40
+    SetY = 6,14
+    SetOpacity = 6,255
+    SetX = 7,48
+    SetY = 7,6
+    SetOpacity = 7,100
+    SetFrame = 8,12
+    SetX = 8,-32
+    SetY = 8,-34
+    SetOpacity = 8,255
+    SetFrame = 9,13
+    SetX = 9,-40
+    SetY = 9,-42
+    SetX = 10,-48
+    SetY = 10,-50
+    SetOpacity = 10,100

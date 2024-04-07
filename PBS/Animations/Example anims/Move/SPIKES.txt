@@ -1,0 +1,87 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SPIKES]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/normal2
+    Focus = UserAndTarget
+    SetFrame = 3,13
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+    SetX = 4,19
+    SetY = 4,-109
+    SetX = 5,44
+    SetY = 5,-178
+    SetX = 6,0
+    SetY = 6,9
+    SetX = 7,14
+    SetY = 7,-118
+    SetX = 8,189
+    SetY = 8,-246
+    SetX = 9,219
+    SetY = 9,-148
+    SetX = 10,139
+    SetX = 12,179
+    SetY = 12,-178
+    SetX = 13,139
+    SetY = 13,-148
+<Particle 4>
+    Graphic = Examples/normal2
+    Focus = UserAndTarget
+    SetFrame = 6,13
+    SetX = 6,89
+    SetY = 6,-217
+    SetZ = 6,29
+    SetZoomX = 6,50
+    SetZoomY = 6,50
+    SetX = 7,139
+    SetY = 7,-148
+    SetX = 8,59
+    SetY = 8,-217
+    SetX = 9,139
+    SetY = 9,-148
+    SetX = 10,219
+<Particle 2>
+    Graphic = Examples/normal2
+    Focus = UserAndTarget
+    SetFrame = 0,13
+    SetX = 0,0
+    SetY = 0,-20
+    SetZ = 0,27
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetX = 1,9
+    SetY = 1,-98
+    SetX = 2,29
+    SetY = 2,-168
+    SetX = 3,64
+    SetY = 3,-217
+    SetX = 4,109
+    SetY = 4,-207
+    SetX = 5,139
+    SetY = 5,-148
+    SetX = 7,125
+    SetY = 7,-256
+    SetX = 8,139
+    SetY = 8,-148
+    SetY = 9,-276
+    SetX = 10,179
+    SetY = 10,-178
+    SetX = 12,139
+    SetY = 12,-148
+    SetX = 13,179
+    SetY = 13,-178
+<SE>
+    Play = 1,throw,80
+    Play = 5,Sword1,80
+    Play = 8,Sword1,80
+    Play = 10,Sword1,80

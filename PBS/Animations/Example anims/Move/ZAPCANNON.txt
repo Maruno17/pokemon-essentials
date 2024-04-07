@@ -1,0 +1,29 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ZAPCANNON]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Thunder2
+    Focus = Target
+    SetX = 0,0
+    SetY = 0,-10
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetFrame = 3,3
+    SetFrame = 4,4
+    SetFrame = 5,5
+    SetFlip = 6,true
+    SetAngle = 6,180
+    SetFrame = 7,4
+    SetOpacity = 7,100
+    SetFrame = 8,3
+    SetAngle = 8,18
+<SE>
+    Play = 0,Thunder9,80

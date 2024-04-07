@@ -1,0 +1,71 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FLY]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/fly copy
+    Focus = Target
+    SetFrame = 0,3
+    SetX = 0,-103
+    SetY = 0,-118
+    SetZ = 0,27
+    SetAngle = 0,207
+    SetX = 1,-72
+    SetY = 1,-70
+    SetX = 2,-49
+    SetY = 2,-35
+    SetX = 3,-28
+    SetY = 3,-9
+    SetX = 4,-5
+    SetY = 4,22
+    SetX = 5,40
+    SetY = 5,88
+    SetX = 6,17
+    SetY = 6,58
+    SetVisible = 7,false
+<SE>
+    Play = 0,Take Down,80,110
+#-------------------------------
+[Move,FLY,1]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/fly copy
+    Focus = User
+    SetFrame = 0,5
+    SetX = 0,6
+    SetY = 0,36
+    SetZ = 0,27
+    SetX = 1,10
+    SetY = 1,23
+    SetFrame = 2,0
+    SetX = 2,8
+    SetY = 2,34
+    SetFrame = 3,1
+    SetX = 3,4
+    SetY = 3,14
+    SetFrame = 4,2
+    SetX = 4,3
+    SetY = 4,9
+    SetFrame = 5,3
+    SetX = 5,14
+    SetY = 5,1
+    SetFrame = 6,4
+    SetX = 6,8
+    SetY = 6,-30
+    SetX = 7,6
+    SetY = 7,-58
+    SetVisible = 8,false
+<SE>
+    Play = 0,Trump Card

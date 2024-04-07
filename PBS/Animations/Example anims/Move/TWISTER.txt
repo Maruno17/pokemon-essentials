@@ -1,0 +1,40 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,TWISTER]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/water3
+    Focus = Target
+    SetFrame = 0,11
+    SetX = 0,0
+    SetY = 0,-18
+    SetZ = 0,27
+    SetFrame = 1,10
+    SetFrame = 2,9
+    SetFrame = 3,8
+    SetFrame = 4,7
+    SetFrame = 5,6
+    SetFrame = 6,5
+    SetFrame = 7,4
+    SetFrame = 8,3
+    SetFrame = 9,2
+    SetFrame = 10,1
+    SetFrame = 11,2
+    SetFlip = 11,true
+    SetFrame = 12,5
+    SetFrame = 13,6
+    SetFrame = 14,7
+    SetFrame = 15,9
+    SetFrame = 16,10
+<SE>
+    Play = 0,Water3,80
+    Play = 0,Twine,80
+    Play = 2,Water1,80
+    Play = 5,Water2,80
+    Play = 9,Water1,80

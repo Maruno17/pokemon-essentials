@@ -1,0 +1,27 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CLEARSMOG]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/fly copy
+    Focus = UserAndTarget
+    SetFrame = 0,6
+    SetX = 0,200
+    SetY = 0,-196
+    SetZ = 0,27
+    SetX = 2,200
+    SetY = 2,-201
+    SetY = 3,-196
+    SetX = 4,198
+    SetY = 4,-198
+    SetX = 5,199
+    SetY = 5,-192
+    SetX = 6,198
+<SE>
+    Play = 0,Snore,86

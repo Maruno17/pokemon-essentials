@@ -1,0 +1,94 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ERUPTION]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetFrame = 2,8
+    SetX = 2,64
+    SetY = 2,-89
+    SetZ = 2,28
+    SetAngle = 2,30
+    SetX = 3,109
+    SetY = 3,-128
+    SetAngle = 3,15
+    SetFrame = 4,9
+    SetX = 4,129
+    SetY = 4,-157
+    SetFrame = 5,10
+    SetX = 5,159
+    SetY = 5,-178
+    SetAngle = 5,10
+    SetFrame = 6,11
+    SetX = 6,184
+    SetAngle = 6,0
+    SetFrame = 7,10
+    SetX = 7,104
+    SetY = 7,-207
+    SetAngle = 7,10
+    SetVisible = 8,false
+<Particle 4>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetFrame = 4,8
+    SetX = 4,14
+    SetY = 4,-98
+    SetZ = 4,29
+    SetAngle = 4,30
+    SetX = 5,39
+    SetY = 5,-128
+    SetAngle = 5,15
+    SetFrame = 6,9
+    SetX = 6,59
+    SetY = 6,-178
+    SetVisible = 7,false
+<Particle 2>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetFrame = 0,8
+    SetX = 0,25
+    SetY = 0,-89
+    SetZ = 0,27
+    SetAngle = 0,30
+    SetX = 1,54
+    SetY = 1,-118
+    SetAngle = 1,15
+    SetFrame = 2,9
+    SetX = 2,84
+    SetY = 2,-168
+    SetFrame = 3,10
+    SetX = 3,109
+    SetY = 3,-196
+    SetAngle = 3,10
+    SetFrame = 4,11
+    SetX = 4,144
+    SetAngle = 4,0
+    SetFrame = 5,12
+    SetX = 5,179
+    SetY = 5,-178
+    SetFrame = 6,13
+    SetX = 6,184
+    SetFrame = 7,12
+    SetX = 7,194
+    SetY = 7,-168
+    SetFrame = 8,11
+    SetX = 8,154
+    SetY = 8,-207
+    SetFrame = 9,12
+    SetX = 9,179
+    SetY = 9,-187
+    SetFrame = 10,13
+    SetX = 10,189
+    SetY = 10,-157
+<SE>
+    Play = 0,Fire5,80
+    Play = 0,Fire2,80
+    Play = 3,Fire2,80
+    Play = 6,Fire2,80

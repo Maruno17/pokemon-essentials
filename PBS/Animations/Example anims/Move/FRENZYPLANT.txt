@@ -1,0 +1,44 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FRENZYPLANT]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/grass2
+    Focus = UserAndTarget
+    SetX = 0,34
+    SetY = 0,-50
+    SetZ = 0,27
+    SetX = 1,50
+    SetY = 1,-59
+    SetX = 2,69
+    SetY = 2,-79
+    SetX = 3,100
+    SetY = 3,-98
+    SetX = 4,119
+    SetY = 4,-128
+    SetX = 5,144
+    SetY = 5,-157
+    SetX = 6,159
+    SetY = 6,-168
+    SetX = 7,200
+    SetFrame = 8,1
+    SetFrame = 9,2
+    SetFrame = 10,3
+    SetFrame = 11,4
+    SetY = 11,-178
+    SetFrame = 12,5
+    SetY = 12,-187
+    SetFrame = 13,6
+    SetY = 13,-196
+    SetFrame = 14,7
+    SetFrame = 15,8
+    SetOpacity = 16,100
+<SE>
+    Play = 0,Earth4,80
+    Play = 8,Earth5,80

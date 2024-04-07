@@ -1,0 +1,296 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DIZZYPUNCH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 0,1
+    SetX = 0,0
+    SetY = 0,1
+    SetZ = 0,27
+    SetFrame = 1,7
+    SetY = 1,0
+    SetY = 2,-5
+    SetFrame = 4,1
+    SetX = 4,3
+    SetY = 4,0
+    SetX = 6,-1
+    SetY = 6,1
+    SetX = 7,4
+    SetY = 7,-5
+    SetX = 8,0
+    SetY = 8,0
+    SetY = 9,1
+    SetFrame = 10,7
+    SetY = 10,0
+    SetY = 11,-5
+    SetFrame = 13,1
+    SetX = 13,3
+    SetY = 13,0
+    SetX = 15,-1
+    SetY = 15,1
+    SetX = 16,4
+    SetY = 16,-5
+    SetX = 17,0
+    SetY = 17,0
+<Particle 3>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 1,1
+    SetX = 1,4
+    SetY = 1,6
+    SetZ = 1,28
+    SetX = 2,6
+    SetY = 2,2
+    SetFrame = 4,11
+    SetX = 4,61
+    SetY = 4,-8
+    SetX = 5,31
+    SetY = 5,28
+    SetX = 6,-6
+    SetY = 6,32
+    SetY = 7,22
+    SetX = 8,23
+    SetY = 8,15
+    SetVisible = 9,false
+<Particle 4>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 2,11
+    SetX = 2,63
+    SetY = 2,-16
+    SetZ = 2,29
+    SetX = 4,85
+    SetY = 4,9
+    SetX = 5,44
+    SetY = 5,46
+    SetX = 6,-28
+    SetY = 6,60
+    SetX = 7,-20
+    SetY = 7,50
+    SetX = 8,38
+    SetY = 8,43
+    SetVisible = 9,false
+<Particle 5>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 2,11
+    SetX = 2,87
+    SetY = 2,-8
+    SetZ = 2,30
+    SetX = 4,-28
+    SetY = 4,-28
+    SetX = 5,-33
+    SetY = 5,-58
+    SetX = 6,27
+    SetY = 6,-42
+    SetX = 7,38
+    SetY = 7,-46
+    SetX = 8,-27
+    SetY = 8,16
+    SetVisible = 9,false
+<Particle 6>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 3,11
+    SetX = 3,-38
+    SetY = 3,-14
+    SetZ = 3,31
+    SetX = 4,-55
+    SetY = 4,-36
+    SetVisible = 5,false
+<Particle 7>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 3,11
+    SetX = 3,-68
+    SetY = 3,-5
+    SetZ = 3,32
+    SetVisible = 4,false
+<Particle 8>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 5,11
+    SetX = 5,-7
+    SetY = 5,-38
+    SetZ = 5,32
+    SetVisible = 6,false
+<Particle 9>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 6,11
+    SetX = 6,48
+    SetY = 6,-66
+    SetZ = 6,31
+    SetX = 7,58
+    SetY = 7,-68
+    SetX = 8,-48
+    SetY = 8,33
+    SetVisible = 9,false
+<Particle 10>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 7,11
+    SetX = 7,-28
+    SetY = 7,-29
+    SetZ = 7,32
+    SetX = 8,-7
+    SetY = 8,-38
+    SetVisible = 9,false
+<Particle 11>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 7,11
+    SetX = 7,42
+    SetY = 7,7
+    SetZ = 7,33
+    SetX = 8,-23
+    SetY = 8,-60
+    SetVisible = 9,false
+<Particle 12>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 8,11
+    SetX = 8,43
+    SetY = 8,-22
+    SetZ = 8,34
+    SetVisible = 9,false
+<Particle 13>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 8,11
+    SetX = 8,63
+    SetY = 8,-32
+    SetZ = 8,35
+    SetVisible = 9,false
+<Particle 14>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 10,1
+    SetX = 10,4
+    SetY = 10,6
+    SetZ = 10,28
+    SetX = 11,6
+    SetY = 11,2
+    SetFrame = 13,11
+    SetX = 13,61
+    SetY = 13,-8
+    SetX = 14,31
+    SetY = 14,28
+    SetX = 15,-6
+    SetY = 15,32
+    SetY = 16,22
+    SetX = 17,23
+    SetY = 17,15
+<Particle 15>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 11,11
+    SetX = 11,63
+    SetY = 11,-16
+    SetZ = 11,29
+    SetX = 13,85
+    SetY = 13,9
+    SetX = 14,44
+    SetY = 14,46
+    SetX = 15,-28
+    SetY = 15,60
+    SetX = 16,-20
+    SetY = 16,50
+    SetX = 17,38
+    SetY = 17,43
+<Particle 16>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 11,11
+    SetX = 11,87
+    SetY = 11,-8
+    SetZ = 11,30
+    SetX = 13,-28
+    SetY = 13,-28
+    SetX = 14,-33
+    SetY = 14,-58
+    SetX = 15,27
+    SetY = 15,-42
+    SetX = 16,38
+    SetY = 16,-46
+    SetX = 17,-27
+    SetY = 17,16
+<Particle 17>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 12,11
+    SetX = 12,-38
+    SetY = 12,-14
+    SetZ = 12,31
+    SetX = 13,-55
+    SetY = 13,-36
+    SetVisible = 14,false
+<Particle 18>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 12,11
+    SetX = 12,-68
+    SetY = 12,-5
+    SetZ = 12,32
+    SetVisible = 13,false
+<Particle 19>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 14,11
+    SetX = 14,-7
+    SetY = 14,-38
+    SetZ = 14,32
+    SetVisible = 15,false
+<Particle 20>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 15,11
+    SetX = 15,48
+    SetY = 15,-66
+    SetZ = 15,31
+    SetX = 16,58
+    SetY = 16,-68
+    SetX = 17,-48
+    SetY = 17,33
+<Particle 21>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 16,11
+    SetX = 16,-28
+    SetY = 16,-29
+    SetZ = 16,32
+    SetX = 17,-7
+    SetY = 17,-38
+<Particle 22>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 16,11
+    SetX = 16,42
+    SetY = 16,7
+    SetZ = 16,33
+    SetX = 17,-23
+    SetY = 17,-60
+<Particle 23>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 17,11
+    SetX = 17,43
+    SetY = 17,-22
+    SetZ = 17,34
+<Particle 24>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 17,11
+    SetX = 17,63
+    SetY = 17,-32
+    SetZ = 17,35
+<SE>
+    Play = 0,Dizzy Punch

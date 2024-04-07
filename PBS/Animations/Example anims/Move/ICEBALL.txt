@@ -1,0 +1,37 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ICEBALL]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/icewater
+    Focus = UserAndTarget
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetX = 1,9
+    SetY = 1,-40
+    SetX = 2,34
+    SetY = 2,-79
+    SetX = 3,59
+    SetY = 3,-109
+    SetX = 4,104
+    SetY = 4,-148
+    SetX = 5,139
+    SetY = 5,-168
+    SetX = 6,179
+    SetY = 6,-178
+    SetFrame = 7,1
+    SetFrame = 8,2
+    SetFrame = 9,3
+    SetFrame = 10,4
+    SetFrame = 11,5
+    SetFrame = 12,6
+<SE>
+    Play = 0,throw,80
+    Play = 7,Earth3,80

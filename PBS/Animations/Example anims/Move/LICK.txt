@@ -1,0 +1,25 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LICK]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/ghost1
+    Focus = Target
+    SetFrame = 0,11
+    SetX = 0,16
+    SetY = 0,46
+    SetZ = 0,27
+    SetY = 1,22
+    SetFrame = 2,12
+    SetY = 2,-2
+    SetY = 3,-26
+    SetFrame = 4,13
+    SetY = 4,-42
+    SetY = 5,-50
+    SetOpacity = 6,100

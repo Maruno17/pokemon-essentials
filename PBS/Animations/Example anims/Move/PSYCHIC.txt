@@ -1,0 +1,107 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,PSYCHIC]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/efftest4
+    Focus = Target
+    SetX = 0,0
+    SetY = 0,-2
+    SetZ = 0,28
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetVisible = 3,false
+<Particle 4>
+    Graphic = Examples/efftest4
+    Focus = Target
+    SetFrame = 5,2
+    SetX = 5,0
+    SetY = 5,-2
+    SetZ = 5,28
+    SetZoomX = 5,160
+    SetZoomY = 5,160
+    SetOpacity = 5,180
+    SetZoomX = 6,190
+    SetZoomY = 6,190
+    SetZoomX = 7,250
+    SetZoomY = 7,250
+    SetZoomX = 8,300
+    SetZoomY = 8,300
+    SetFrame = 9,8
+    SetZoomX = 9,100
+    SetZoomY = 9,100
+    SetOpacity = 9,255
+    SetFrame = 10,7
+    SetFrame = 11,6
+    SetFrame = 12,2
+    SetZoomX = 12,300
+    SetZoomY = 12,300
+    SetOpacity = 12,180
+    SetX = 14,-8
+    SetY = 14,-10
+    SetY = 15,-2
+    SetX = 17,0
+    SetZoomX = 17,100
+    SetZoomY = 17,100
+    SetOpacity = 17,75
+<Particle 5>
+    Graphic = Examples/efftest4
+    Focus = Target
+    SetFrame = 9,2
+    SetX = 9,0
+    SetY = 9,-2
+    SetZ = 9,29
+    SetZoomX = 9,300
+    SetZoomY = 9,300
+    SetOpacity = 9,180
+    SetVisible = 12,false
+<Particle 2>
+    Graphic = Examples/efftest4
+    Focus = Target
+    SetFrame = 0,14
+    SetX = 0,0
+    SetY = 0,-10
+    SetZ = 0,27
+    SetFrame = 1,13
+    SetFrame = 2,0
+    SetFrame = 3,2
+    SetY = 3,-2
+    SetZoomX = 3,120
+    SetZoomY = 3,120
+    SetZoomX = 4,140
+    SetZoomY = 4,140
+    SetOpacity = 4,220
+    SetFrame = 5,3
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+    SetOpacity = 5,150
+    SetFrame = 6,4
+    SetFrame = 7,3
+    SetOpacity = 7,100
+    SetFrame = 8,4
+    SetFrame = 9,3
+    SetOpacity = 9,50
+    SetFrame = 10,4
+    SetFrame = 11,3
+    SetFrame = 12,5
+    SetOpacity = 12,255
+    SetFrame = 13,11
+    SetOpacity = 13,150
+    SetFrame = 14,12
+    SetOpacity = 14,255
+    SetFrame = 15,11
+    SetZoomX = 15,80
+    SetZoomY = 15,80
+    SetFrame = 16,12
+    SetZoomX = 16,70
+    SetZoomY = 16,70
+    SetOpacity = 16,150
+    SetVisible = 17,false
+<SE>
+    Play = 2,Darkness2,80

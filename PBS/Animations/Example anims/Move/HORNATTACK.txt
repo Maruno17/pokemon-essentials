@@ -1,0 +1,40 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,HORNATTACK]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Cosmo-01
+    Focus = UserAndTarget
+    SetFrame = 4,9
+    SetX = 4,204
+    SetY = 4,-217
+    SetZ = 4,28
+    SetZoomX = 4,50
+    SetZoomY = 4,50
+    SetOpacity = 4,100
+    SetVisible = 5,false
+<Particle 2>
+    Graphic = Examples/Cosmo-01
+    Focus = UserAndTarget
+    SetFrame = 0,7
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetX = 1,39
+    SetY = 1,-50
+    SetX = 2,84
+    SetY = 2,-109
+    SetX = 3,129
+    SetY = 3,-139
+    SetX = 4,179
+    SetY = 4,-178
+    SetFrame = 5,9
+    SetOpacity = 5,25
+<SE>
+    Play = 3,normaldamage,80

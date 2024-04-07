@@ -1,0 +1,57 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,WRINGOUT]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Fakeout
+    Focus = Target
+    SetFrame = 0,5
+    SetX = 0,-111
+    SetY = 0,-12
+    SetZ = 0,27
+    SetX = 1,-101
+    SetY = 1,43
+    SetX = 2,-61
+    SetY = 2,81
+    SetX = 3,-23
+    SetY = 3,87
+    SetX = 4,7
+    SetY = 4,72
+    SetX = 5,15
+    SetY = 5,31
+    SetX = 6,24
+    SetY = 6,8
+    SetX = 7,-9
+    SetY = 7,-21
+    SetX = 8,-70
+    SetY = 8,-30
+    SetX = 9,-96
+    SetY = 9,22
+    SetX = 10,-85
+    SetY = 10,70
+    SetX = 11,-26
+    SetY = 11,82
+    SetX = 12,16
+    SetY = 12,57
+    SetX = 13,17
+    SetY = 13,12
+    SetX = 14,-8
+    SetY = 14,-17
+    SetX = 15,-64
+    SetY = 15,-23
+    SetX = 16,-94
+    SetY = 16,19
+    SetX = 17,-79
+    SetY = 17,62
+    SetX = 18,-18
+    SetY = 18,89
+    SetX = 19,46
+    SetY = 19,65
+<SE>
+    Play = 0,Wring Out

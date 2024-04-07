@@ -1,0 +1,32 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LOWKICK]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/normal1
+    Focus = Target
+    SetFrame = 0,7
+    SetX = 0,96
+    SetY = 0,62
+    SetZ = 0,27
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetOpacity = 0,100
+    SetX = 1,40
+    SetY = 1,38
+    SetOpacity = 1,255
+    SetX = 2,16
+    SetY = 2,22
+    SetX = 3,8
+    SetY = 3,14
+    SetZoomX = 4,100
+    SetZoomY = 4,100
+    SetOpacity = 5,100
+<SE>
+    Play = 2,Blow1,80

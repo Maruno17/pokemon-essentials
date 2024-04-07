@@ -1,0 +1,32 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,POISONPOWDER]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Special5
+    Focus = Target
+    SetX = 0,0
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetFrame = 3,3
+    SetFrame = 4,4
+    SetFrame = 5,5
+    SetFrame = 6,6
+    SetFrame = 7,7
+    SetFrame = 8,8
+    SetFrame = 9,9
+    SetFrame = 10,10
+    SetFrame = 11,11
+    SetFrame = 12,12
+    SetFrame = 13,13
+    SetVisible = 14,false
+<SE>
+    Play = 0,Sand,80

@@ -1,0 +1,58 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SKETCH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/normal2
+    Focus = Target
+    SetFrame = 0,14
+    SetX = 0,-232
+    SetY = 0,-66
+    SetZ = 0,27
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetX = 1,-200
+    SetY = 1,-42
+    SetX = 2,-160
+    SetY = 2,-10
+    SetX = 3,-96
+    SetY = 3,38
+    SetX = 4,-16
+    SetY = 4,78
+    SetX = 5,80
+    SetY = 5,70
+    SetX = 6,40
+    SetY = 6,38
+    SetX = 7,-64
+    SetY = 7,6
+    SetX = 8,-160
+    SetY = 8,-42
+    SetX = 9,-168
+    SetY = 9,-90
+    SetX = 10,-112
+    SetY = 10,-58
+    SetX = 11,-64
+    SetY = 11,-26
+    SetX = 12,16
+    SetY = 12,14
+    SetX = 13,96
+    SetY = 13,54
+    SetX = 14,120
+    SetY = 14,62
+    SetX = 15,104
+    SetY = 15,14
+    SetX = 16,40
+    SetY = 16,-42
+    SetX = 17,-40
+    SetY = 17,-114
+<SE>
+    Play = 0,Slash6,80
+    Play = 6,Slash6,80
+    Play = 10,Slash6,80
+    Play = 15,Slash6,80

@@ -1,0 +1,51 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,GLARE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/face and eye
+    Focus = UserAndTarget
+    SetFrame = 0,10
+    SetX = 0,241
+    SetY = 0,-212
+    SetZ = 0,28
+    SetFrame = 1,11
+    SetX = 1,228
+    SetY = 1,-215
+    SetFrame = 2,12
+    SetX = 2,224
+    SetY = 2,-223
+    SetFrame = 3,13
+    SetX = 3,235
+    SetY = 3,-209
+    SetFrame = 4,14
+    SetX = 4,169
+    SetY = 4,-210
+    SetVisible = 6,false
+<Particle 2>
+    Graphic = Examples/face and eye
+    Focus = UserAndTarget
+    SetFrame = 0,10
+    SetX = 0,177
+    SetY = 0,-217
+    SetZ = 0,27
+    SetFrame = 1,11
+    SetX = 1,170
+    SetY = 1,-218
+    SetFrame = 2,12
+    SetX = 2,160
+    SetY = 2,-220
+    SetFrame = 3,13
+    SetX = 3,177
+    SetY = 3,-209
+    SetFrame = 4,14
+    SetX = 4,228
+    SetVisible = 6,false
+<SE>
+    Play = 0,Scary Face,80

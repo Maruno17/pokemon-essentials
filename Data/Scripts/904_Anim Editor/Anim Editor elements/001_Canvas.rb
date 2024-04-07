@@ -13,11 +13,14 @@
 class AnimationEditor::Canvas < Sprite
   attr_reader :values
 
+  FRAME_SIZE = 48
+
   def initialize(viewport, anim, settings)
     super(viewport)
     @anim              = anim
     @settings          = settings
     @keyframe          = 0
+    @display_keyframe  = 0
     @selected_particle = -2
     @captured          = nil
     @user_coords       = []
@@ -54,7 +57,7 @@ class AnimationEditor::Canvas < Sprite
 
   def initialize_particle_frames
     # Frame for selected particle
-    @sel_frame_bitmap = Bitmap.new(64, 64)
+    @sel_frame_bitmap = Bitmap.new(FRAME_SIZE, FRAME_SIZE)
     @sel_frame_bitmap.outline_rect(0, 0, @sel_frame_bitmap.width, @sel_frame_bitmap.height, Color.new(0, 0, 0, 64))
     @sel_frame_bitmap.outline_rect(2, 2, @sel_frame_bitmap.width - 4, @sel_frame_bitmap.height - 4, Color.new(0, 0, 0, 64))
     @sel_frame_sprite = Sprite.new(viewport)
@@ -63,7 +66,7 @@ class AnimationEditor::Canvas < Sprite
     @sel_frame_sprite.ox = @sel_frame_bitmap.width / 2
     @sel_frame_sprite.oy = @sel_frame_bitmap.height / 2
     # Frame for other particles
-    @frame_bitmap = Bitmap.new(64, 64)
+    @frame_bitmap = Bitmap.new(FRAME_SIZE, FRAME_SIZE)
     @frame_bitmap.outline_rect(1, 1, @frame_bitmap.width - 2, @frame_bitmap.height - 2, Color.new(0, 0, 0, 64))
     @battler_frame_sprites = []
     @frame_sprites = []
@@ -150,8 +153,10 @@ class AnimationEditor::Canvas < Sprite
   end
 
   def keyframe=(val)
-    return if @keyframe == val || val < 0
+    return if @keyframe == val
     @keyframe = val
+    return if val < 0
+    @display_keyframe = val
     refresh
   end
 
@@ -379,7 +384,7 @@ class AnimationEditor::Canvas < Sprite
     # Get sprite
     spr, frame = get_sprite_and_frame(index, target_idx)
     # Calculate all values of particle at the current keyframe
-    values = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(particle, @keyframe)
+    values = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(particle, @display_keyframe)
     values.each_pair do |property, val|
       values[property] = val[0]
     end
@@ -429,28 +434,12 @@ class AnimationEditor::Canvas < Sprite
       when "USER_BACK"
         spr.bitmap = @user_bitmap_back
       when "TARGET"
-        if target_idx < 0
-          raise _INTL("Particle \"{1}\" was given a graphic of \"TARGET\" but its focus doesn't include a target.",
-                      particle[:name])
-        end
         spr.bitmap = (target_idx.even?) ? @target_bitmap_back : @target_bitmap_front
       when "TARGET_OPP"
-        if target_idx < 0
-          raise _INTL("Particle \"{1}\" was given a graphic of \"TARGET_OPP\" but its focus doesn't include a target.",
-                      particle[:name])
-        end
         spr.bitmap = (target_idx.even?) ? @target_bitmap_front : @target_bitmap_back
       when "TARGET_FRONT"
-        if target_idx < 0
-          raise _INTL("Particle \"{1}\" was given a graphic of \"TARGET_FRONT\" but its focus doesn't include a target.",
-                      particle[:name])
-        end
         spr.bitmap = @target_bitmap_front
       when "TARGET_BACK"
-        if target_idx < 0
-          raise _INTL("Particle \"{1}\" was given a graphic of \"TARGET_BACK\" but its focus doesn't include a target.",
-                      particle[:name])
-        end
         spr.bitmap = @target_bitmap_back
       end
       spr.ox = spr.bitmap.width / 2
@@ -520,7 +509,10 @@ class AnimationEditor::Canvas < Sprite
     # Position frame over spr
     frame.x = spr.x
     frame.y = spr.y
-    case @anim[:particles][index][:graphic]
+    # TODO: Offset frame.x and frame.y for screen-sized sprites with a
+    #       screen-based focus, and for sprites whose graphic has "[bottom]" in
+    #       its name.
+    case particle[:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
       frame.y -= spr.bitmap.height / 2
@@ -538,7 +530,8 @@ class AnimationEditor::Canvas < Sprite
   end
 
   def refresh_particle_frame
-    return if @selected_particle < 0 || @selected_particle >= @anim[:particles].length - 1
+    return if @selected_particle < 0 || @selected_particle >= @anim[:particles].length ||
+              @anim[:particles][@selected_particle][:name] == "SE"
     focus = @anim[:particles][@selected_particle][:focus]
     frame_color = AnimationEditor::ParticleList::CONTROL_BG_COLORS[focus] || Color.magenta
     @sel_frame_bitmap.outline_rect(1, 1, @sel_frame_bitmap.width - 2, @sel_frame_bitmap.height - 2, frame_color)
@@ -587,8 +580,10 @@ class AnimationEditor::Canvas < Sprite
        mouse_x < @sel_frame_sprite.x - @sel_frame_sprite.ox + @sel_frame_sprite.width &&
        mouse_y >= @sel_frame_sprite.y - @sel_frame_sprite.oy &&
        mouse_y < @sel_frame_sprite.y - @sel_frame_sprite.oy + @sel_frame_sprite.height
-      @captured = [@sel_frame_sprite.x, @sel_frame_sprite.y,
-                   @sel_frame_sprite.x - mouse_x, @sel_frame_sprite.y - mouse_y]
+      if @keyframe >= 0
+        @captured = [@sel_frame_sprite.x, @sel_frame_sprite.y,
+                     @sel_frame_sprite.x - mouse_x, @sel_frame_sprite.y - mouse_y]
+      end
       return
     end
     # Find closest particle to mouse
@@ -706,7 +701,8 @@ class AnimationEditor::Canvas < Sprite
   end
 
   def update_selected_particle_frame
-    if @selected_particle < 0 || @selected_particle >= @anim[:particles].length - 1
+    if @selected_particle < 0 || @selected_particle >= @anim[:particles].length ||
+       @anim[:particles][@selected_particle][:name] == "SE"
       @sel_frame_sprite.visible = false
       return
     end
@@ -721,7 +717,7 @@ class AnimationEditor::Canvas < Sprite
                   @anim[:particles][@selected_particle][:name]) if !target
     else
       target = @particle_sprites[@selected_particle]
-      target = target[target_indices[0]] if target&.is_a?(Array)
+      target = target[first_target_index] if target&.is_a?(Array)
     end
     if !target || !target.visible
       @sel_frame_sprite.visible = false
@@ -730,6 +726,9 @@ class AnimationEditor::Canvas < Sprite
     @sel_frame_sprite.visible = true
     @sel_frame_sprite.x = target.x
     @sel_frame_sprite.y = target.y
+    # TODO: Offset sel_frame_sprite.x and sel_frame_sprite.y for screen-sized
+    #       sprites with a screen-based focus, and for sprites whose graphic has
+    #       "[bottom]" in its name.
     case @anim[:particles][@selected_particle][:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"

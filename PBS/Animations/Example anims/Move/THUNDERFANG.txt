@@ -1,0 +1,92 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,THUNDERFANG]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 6,14
+    SetX = 6,-57
+    SetY = 6,-23
+    SetZ = 6,28
+    SetX = 7,-58
+    SetX = 8,-57
+    SetY = 8,-26
+    SetVisible = 9,false
+<Particle 4>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 7,17
+    SetX = 7,87
+    SetY = 7,-29
+    SetZ = 7,29
+    SetX = 8,-70
+    SetY = 8,28
+    SetVisible = 9,false
+<Particle 5>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 8,14
+    SetX = 8,97
+    SetY = 8,28
+    SetZ = 8,30
+    SetVisible = 9,false
+<Particle 6>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 8,17
+    SetX = 8,87
+    SetY = 8,-36
+    SetZ = 8,31
+    SetVisible = 9,false
+<Particle 2>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetX = 0,7
+    SetY = 0,0
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetY = 1,-6
+    SetFrame = 2,2
+    SetX = 2,2
+    SetY = 2,-4
+    SetFrame = 3,3
+    SetX = 3,6
+    SetY = 3,2
+    SetFrame = 4,4
+    SetX = 4,2
+    SetY = 4,-1
+    SetFrame = 5,5
+    SetX = 5,8
+    SetY = 5,5
+    SetFrame = 6,6
+    SetX = 6,2
+    SetY = 6,4
+    SetFrame = 7,7
+    SetX = 7,5
+    SetY = 7,3
+    SetFrame = 8,8
+    SetX = 8,4
+    SetY = 8,-4
+    SetFrame = 9,9
+    SetX = 9,2
+    SetY = 9,4
+    SetFrame = 10,10
+    SetX = 10,10
+    SetY = 10,-1
+    SetFrame = 11,11
+    SetX = 11,3
+    SetY = 11,-2
+    SetFrame = 12,12
+    SetX = 12,0
+    SetY = 12,1
+    SetVisible = 13,false
+<SE>
+    Play = 6,Super Fang
+    Play = 7,Uproar,83,137

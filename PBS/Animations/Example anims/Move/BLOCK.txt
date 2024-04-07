@@ -1,0 +1,19 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BLOCK]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/block
+    Focus = Target
+    SetX = 0,1
+    SetY = 0,0
+    SetZ = 0,27
+    SetVisible = 10,false
+<SE>
+    Play = 0,buzzer,80

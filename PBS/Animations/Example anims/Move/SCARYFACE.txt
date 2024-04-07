@@ -1,0 +1,36 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SCARYFACE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/normal2
+    Focus = Target
+    SetFrame = 0,10
+    SetX = 0,0
+    SetY = 0,6
+    SetZ = 0,27
+    SetOpacity = 0,150
+    SetZoomX = 1,125
+    SetZoomY = 1,125
+    SetOpacity = 1,200
+    SetZoomX = 2,150
+    SetZoomY = 2,150
+    SetOpacity = 2,255
+    SetZoomX = 3,175
+    SetZoomY = 3,175
+    SetZoomX = 4,200
+    SetZoomY = 4,200
+    SetZoomX = 5,225
+    SetZoomY = 5,225
+    SetOpacity = 6,150
+    SetZoomX = 7,200
+    SetZoomY = 7,200
+    SetOpacity = 7,100
+<SE>
+    Play = 2,Stare,80

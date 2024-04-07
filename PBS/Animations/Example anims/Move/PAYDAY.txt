@@ -1,0 +1,74 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,PAYDAY]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/008-Weapon03
+    Focus = UserAndTarget
+    SetFrame = 2,12
+    SetX = 2,0
+    SetY = 2,18
+    SetZ = 2,28
+    SetX = 3,34
+    SetY = 3,-118
+    SetX = 4,59
+    SetY = 4,-226
+    SetX = 5,134
+    SetY = 5,-267
+    SetX = 6,54
+    SetY = 6,-256
+    SetX = 7,75
+    SetY = 7,-267
+    SetX = 8,144
+    SetY = 8,-226
+    SetVisible = 9,false
+<Particle 4>
+    Graphic = Examples/008-Weapon03
+    Focus = UserAndTarget
+    SetFrame = 4,12
+    SetX = 4,0
+    SetY = 4,18
+    SetZ = 4,29
+    SetX = 5,19
+    SetY = 5,-139
+    SetVisible = 7,false
+<Particle 5>
+    Graphic = Examples/008-Weapon03
+    Focus = UserAndTarget
+    SetFrame = 5,12
+    SetX = 5,0
+    SetY = 5,18
+    SetZ = 5,30
+    SetVisible = 6,false
+<Particle 2>
+    Graphic = Examples/008-Weapon03
+    Focus = UserAndTarget
+    SetFrame = 0,12
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetX = 1,34
+    SetY = 1,-128
+    SetX = 2,75
+    SetY = 2,-207
+    SetX = 3,104
+    SetY = 3,-246
+    SetX = 4,154
+    SetY = 4,-226
+    SetX = 5,179
+    SetY = 5,-178
+    SetX = 7,144
+    SetY = 7,-226
+    SetX = 8,179
+    SetY = 8,-178
+<SE>
+    Play = 0,Select,80
+    Play = 2,Select,80
+    Play = 5,Select,80
+    Play = 7,Select,80

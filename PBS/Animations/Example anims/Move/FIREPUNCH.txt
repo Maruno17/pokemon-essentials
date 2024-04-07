@@ -1,0 +1,138 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FIREPUNCH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/punches
+    Focus = Target
+    SetX = 0,3
+    SetY = 0,1
+    SetZ = 0,27
+    SetFrame = 1,10
+    SetX = 1,18
+    SetY = 1,-8
+    SetFrame = 2,9
+    SetX = 2,19
+    SetY = 2,0
+    SetX = 3,20
+    SetY = 3,8
+    SetX = 4,22
+    SetY = 4,11
+    SetX = 5,26
+    SetY = 5,5
+    SetX = 6,11
+    SetY = 6,-22
+    SetVisible = 12,false
+<Particle 3>
+    Graphic = Examples/punches
+    Focus = Target
+    SetX = 1,6
+    SetY = 1,-1
+    SetZ = 1,28
+    SetX = 2,0
+    SetY = 2,2
+    SetFrame = 3,10
+    SetX = 3,-18
+    SetY = 3,-24
+    SetFrame = 4,9
+    SetX = 4,-21
+    SetY = 4,-6
+    SetX = 5,11
+    SetY = 5,-20
+    SetX = 6,29
+    SetY = 6,0
+    SetVisible = 12,false
+<Particle 4>
+    Graphic = Examples/punches
+    Focus = Target
+    SetX = 3,1
+    SetY = 3,5
+    SetZ = 3,29
+    SetFrame = 4,10
+    SetX = 4,11
+    SetY = 4,-27
+    SetFrame = 5,9
+    SetX = 5,-20
+    SetY = 5,-5
+    SetX = 6,9
+    SetY = 6,17
+    SetVisible = 12,false
+<Particle 5>
+    Graphic = Examples/punches
+    Focus = Target
+    SetX = 4,0
+    SetY = 4,7
+    SetZ = 4,30
+    SetFrame = 5,10
+    SetX = 5,-3
+    SetY = 5,13
+    SetFrame = 6,9
+    SetX = 6,-14
+    SetY = 6,2
+    SetVisible = 12,false
+<Particle 6>
+    Graphic = Examples/punches
+    Focus = Target
+    SetX = 5,3
+    SetY = 5,8
+    SetZ = 5,31
+    SetX = 6,8
+    SetY = 6,10
+    SetVisible = 12,false
+<Particle 7>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 7,9
+    SetX = 7,19
+    SetY = 7,-14
+    SetZ = 7,32
+    SetVisible = 12,false
+<Particle 8>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 8,9
+    SetX = 8,-10
+    SetY = 8,-15
+    SetZ = 8,33
+    SetVisible = 12,false
+<Particle 9>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 9,9
+    SetX = 9,14
+    SetY = 9,-32
+    SetZ = 9,34
+    SetVisible = 12,false
+<Particle 10>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 10,9
+    SetX = 10,4
+    SetY = 10,6
+    SetZ = 10,35
+    SetVisible = 12,false
+<Particle 11>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 11,9
+    SetX = 11,19
+    SetY = 11,14
+    SetZ = 11,36
+    SetVisible = 12,false
+<Particle 12>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 11,9
+    SetX = 11,-7
+    SetY = 11,19
+    SetZ = 11,37
+    SetVisible = 12,false
+<SE>
+    Play = 0,Slam,100,115
+    Play = 1,Explosion

@@ -1,0 +1,48 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SLUDGE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/State1
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-26
+    SetY = 5,14
+    SetZ = 5,27
+    SetFrame = 6,6
+    SetFrame = 7,7
+    SetFrame = 8,8
+    SetFrame = 9,9
+    SetFrame = 10,10
+    SetFrame = 11,11
+    SetFrame = 12,12
+    SetFrame = 13,13
+<Particle 2>
+    Graphic = Examples/State1
+    Focus = UserAndTarget
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetX = 1,34
+    SetY = 1,-59
+    SetAngle = 1,325
+    SetFrame = 2,2
+    SetX = 2,94
+    SetY = 2,-118
+    SetFrame = 3,3
+    SetX = 3,144
+    SetY = 3,-148
+    SetFrame = 4,4
+    SetX = 4,179
+    SetY = 4,-207
+    SetVisible = 5,false
+<SE>
+    Play = 0,throw,80
+    Play = 7,Poison,80

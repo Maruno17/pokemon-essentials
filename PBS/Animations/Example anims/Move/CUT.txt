@@ -1,0 +1,28 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CUT]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/004-Attack02
+    Focus = Target
+    SetX = 0,0
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetFrame = 3,3
+    SetFrame = 4,4
+    SetFrame = 5,5
+    SetFrame = 6,6
+    SetFrame = 7,7
+    SetFrame = 8,8
+<SE>
+    Play = 0,Slash10,80
+    Play = 3,Slash2,80
+    Play = 6,Slash11,80

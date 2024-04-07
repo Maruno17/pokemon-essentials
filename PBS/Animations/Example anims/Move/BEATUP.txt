@@ -1,0 +1,247 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BEATUP]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 0,17
+    SetX = 0,0
+    SetY = 0,-10
+    SetZ = 0,27
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<Particle 3>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 1,20
+    SetX = 1,8
+    SetY = 1,-10
+    SetZ = 1,28
+    SetOpacity = 1,100
+    SetFrame = 2,19
+    SetX = 2,0
+    SetY = 2,-2
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<SE>
+    Play = 0,Blow4,80
+#-------------------------------
+[Move,BEATUP,1]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 1,20
+    SetX = 1,8
+    SetY = 1,-10
+    SetZ = 1,28
+    SetOpacity = 1,100
+    SetFrame = 2,19
+    SetX = 2,0
+    SetY = 2,-2
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<Particle 2>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 0,17
+    SetX = 0,0
+    SetY = 0,-10
+    SetZ = 0,27
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<SE>
+    Play = 0,Blow4,80
+#-------------------------------
+[Move,BEATUP,2]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 0,17
+    SetX = 0,0
+    SetY = 0,-10
+    SetZ = 0,27
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<Particle 3>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 1,20
+    SetX = 1,8
+    SetY = 1,-10
+    SetZ = 1,28
+    SetOpacity = 1,100
+    SetFrame = 2,19
+    SetX = 2,0
+    SetY = 2,-2
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<SE>
+    Play = 0,Blow4,80
+#-------------------------------
+[Move,BEATUP,3]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 1,20
+    SetX = 1,8
+    SetY = 1,-10
+    SetZ = 1,28
+    SetOpacity = 1,100
+    SetFrame = 2,19
+    SetX = 2,0
+    SetY = 2,-2
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<Particle 2>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 0,17
+    SetX = 0,0
+    SetY = 0,-10
+    SetZ = 0,27
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<SE>
+    Play = 0,Blow4,80
+#-------------------------------
+[Move,BEATUP,4]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 0,17
+    SetX = 0,0
+    SetY = 0,-10
+    SetZ = 0,27
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<Particle 3>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 1,20
+    SetX = 1,8
+    SetY = 1,-10
+    SetZ = 1,28
+    SetOpacity = 1,100
+    SetFrame = 2,19
+    SetX = 2,0
+    SetY = 2,-2
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<SE>
+    Play = 0,Blow4,80
+#-------------------------------
+[Move,BEATUP,5]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 1,20
+    SetX = 1,8
+    SetY = 1,-10
+    SetZ = 1,28
+    SetOpacity = 1,100
+    SetFrame = 2,19
+    SetX = 2,0
+    SetY = 2,-2
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,50
+<Particle 2>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 0,17
+    SetX = 0,0
+    SetY = 0,-10
+    SetZ = 0,27
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetOpacity = 0,150
+    SetZoomX = 1,100
+    SetZoomY = 1,100
+    SetOpacity = 1,255
+    SetZoomX = 3,125
+    SetZoomY = 3,125
+    SetOpacity = 3,100
+<SE>
+    Play = 0,Blow4,80

@@ -1,0 +1,45 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,VINEWHIP]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 2,-16
+    SetY = 2,22
+    SetZ = 2,28
+    SetOpacity = 2,150
+    SetFrame = 3,6
+    SetX = 3,-48
+    SetOpacity = 3,255
+    SetFrame = 4,5
+    SetX = 4,-80
+    SetY = 4,46
+    SetVisible = 5,false
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetFrame = 0,5
+    SetX = 0,64
+    SetY = 0,-82
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,24
+    SetY = 1,-50
+    SetFrame = 2,7
+    SetX = 2,-16
+    SetY = 2,-2
+    SetFrame = 3,1
+    SetY = 3,22
+    SetFrame = 4,2
+    SetFrame = 5,3
+    SetFrame = 6,4
+    SetVisible = 7,false
+<SE>
+    Play = 2,Slash1,80

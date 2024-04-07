@@ -1,0 +1,65 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FUTURESIGHT]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/face and eye
+    Focus = User
+    SetFrame = 0,10
+    SetX = 0,17
+    SetY = 0,0
+    SetZ = 0,27
+    SetFrame = 2,11
+    SetX = 2,13
+    SetY = 2,-2
+    SetFrame = 3,12
+    SetX = 3,3
+    SetY = 3,-3
+    SetFrame = 4,13
+    SetX = 4,15
+    SetY = 4,-5
+    SetFrame = 5,14
+    SetX = 5,3
+    SetY = 5,-4
+    SetOpacity = 8,192
+    SetOpacity = 9,96
+<SE>
+    Play = 0,Flash2,80,78
+#-------------------------------
+[Move,FUTURESIGHT,1]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/face and eye
+    Focus = Target
+    SetFrame = 0,10
+    SetX = 0,17
+    SetY = 0,0
+    SetZ = 0,27
+    SetFrame = 2,11
+    SetX = 2,13
+    SetY = 2,-2
+    SetFrame = 3,12
+    SetX = 3,3
+    SetY = 3,-3
+    SetFrame = 4,13
+    SetX = 4,15
+    SetY = 4,-5
+    SetFrame = 5,14
+    SetX = 5,3
+    SetY = 5,-4
+    SetOpacity = 8,192
+    SetOpacity = 9,96
+<SE>
+    Play = 0,Flash2,80,78

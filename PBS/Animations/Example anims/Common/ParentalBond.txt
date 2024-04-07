@@ -1,0 +1,22 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,ParentalBond]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Tackle_B
+    Focus = Target
+    SetX = 2,0
+    SetY = 2,3
+    SetZ = 2,27
+    SetOpacity = 2,150
+    SetOpacity = 3,255
+    SetOpacity = 8,150
+    SetOpacity = 9,100
+<SE>
+    Play = 0,Blow1,80

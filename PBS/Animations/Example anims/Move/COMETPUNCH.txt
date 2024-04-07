@@ -1,0 +1,221 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,COMETPUNCH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 2,48
+    SetY = 2,-18
+    SetZ = 2,28
+    SetX = 3,-16
+    SetY = 3,-66
+    SetFrame = 4,1
+    SetFrame = 5,0
+    SetX = 5,48
+    SetY = 5,14
+    SetVisible = 6,false
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 0,-32
+    SetY = 0,6
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetFrame = 3,1
+    SetX = 3,48
+    SetY = 3,-18
+    SetFrame = 4,2
+    SetX = 5,-16
+    SetY = 5,-66
+    SetFrame = 6,1
+    SetX = 6,48
+    SetY = 6,14
+    SetFrame = 7,2
+<SE>
+    Play = 0,Blow1,80
+    Play = 2,Blow1,80
+    Play = 5,Blow1,80
+#-------------------------------
+[Move,COMETPUNCH,1]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 0,-32
+    SetY = 0,6
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetFrame = 3,1
+    SetX = 3,48
+    SetY = 3,-18
+    SetFrame = 4,2
+    SetX = 5,-16
+    SetY = 5,-66
+    SetFrame = 6,1
+    SetX = 6,48
+    SetY = 6,14
+    SetFrame = 7,2
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 2,48
+    SetY = 2,-18
+    SetZ = 2,28
+    SetX = 3,-16
+    SetY = 3,-66
+    SetFrame = 4,1
+    SetFrame = 5,0
+    SetX = 5,48
+    SetY = 5,14
+    SetVisible = 6,false
+<SE>
+    Play = 0,Blow1,80
+    Play = 2,Blow1,80
+    Play = 5,Blow1,80
+#-------------------------------
+[Move,COMETPUNCH,2]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 2,48
+    SetY = 2,-18
+    SetZ = 2,28
+    SetX = 3,-16
+    SetY = 3,-66
+    SetFrame = 4,1
+    SetFrame = 5,0
+    SetX = 5,48
+    SetY = 5,14
+    SetVisible = 6,false
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 0,-32
+    SetY = 0,6
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetFrame = 3,1
+    SetX = 3,48
+    SetY = 3,-18
+    SetFrame = 4,2
+    SetX = 5,-16
+    SetY = 5,-66
+    SetFrame = 6,1
+    SetX = 6,48
+    SetY = 6,14
+    SetFrame = 7,2
+<SE>
+    Play = 0,Blow1,80
+    Play = 2,Blow1,80
+    Play = 5,Blow1,80
+#-------------------------------
+[Move,COMETPUNCH,3]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 0,-32
+    SetY = 0,6
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetFrame = 3,1
+    SetX = 3,48
+    SetY = 3,-18
+    SetFrame = 4,2
+    SetX = 5,-16
+    SetY = 5,-66
+    SetFrame = 6,1
+    SetX = 6,48
+    SetY = 6,14
+    SetFrame = 7,2
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 2,48
+    SetY = 2,-18
+    SetZ = 2,28
+    SetX = 3,-16
+    SetY = 3,-66
+    SetFrame = 4,1
+    SetFrame = 5,0
+    SetX = 5,48
+    SetY = 5,14
+    SetVisible = 6,false
+<SE>
+    Play = 0,Blow1,80
+    Play = 2,Blow1,80
+    Play = 5,Blow1,80
+#-------------------------------
+[Move,COMETPUNCH,4]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 2,48
+    SetY = 2,-18
+    SetZ = 2,28
+    SetX = 3,-16
+    SetY = 3,-66
+    SetFrame = 4,1
+    SetFrame = 5,0
+    SetX = 5,48
+    SetY = 5,14
+    SetVisible = 6,false
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 0,-32
+    SetY = 0,6
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetFrame = 3,1
+    SetX = 3,48
+    SetY = 3,-18
+    SetFrame = 4,2
+    SetX = 5,-16
+    SetY = 5,-66
+    SetFrame = 6,1
+    SetX = 6,48
+    SetY = 6,14
+    SetFrame = 7,2
+<SE>
+    Play = 0,Blow1,80
+    Play = 2,Blow1,80
+    Play = 5,Blow1,80

@@ -1,0 +1,32 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,POISONTAIL]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/firepoison
+    Focus = Target
+    SetFrame = 0,8
+    SetX = 0,8
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,9
+    SetX = 1,0
+    SetFrame = 2,10
+    SetY = 2,-10
+    SetFrame = 3,11
+    SetFrame = 4,12
+    SetX = 4,-8
+    SetFrame = 5,13
+    SetFrame = 6,14
+    SetZoomX = 7,110
+    SetZoomY = 7,110
+    SetOpacity = 7,100
+<SE>
+    Play = 0,Blow3,80
+    Play = 0,Poison,80

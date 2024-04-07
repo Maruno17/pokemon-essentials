@@ -1,0 +1,48 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BIND]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Struggle
+    Focus = Target
+    SetFrame = 0,1
+    SetX = 0,56
+    SetY = 0,6
+    SetZ = 0,28
+    SetX = 1,96
+    SetY = 1,-2
+    SetX = 2,104
+    SetY = 2,6
+    SetX = 3,80
+    SetY = 3,-2
+    SetX = 4,48
+    SetX = 5,80
+    SetX = 6,112
+    SetY = 6,6
+    SetX = 7,96
+<Particle 2>
+    Graphic = Examples/Struggle
+    Focus = Target
+    SetX = 0,-64
+    SetY = 0,6
+    SetZ = 0,27
+    SetX = 1,-96
+    SetY = 1,-2
+    SetX = 2,-144
+    SetY = 2,6
+    SetX = 3,-120
+    SetY = 3,-2
+    SetX = 4,-88
+    SetX = 5,-128
+    SetX = 6,-168
+    SetX = 7,-120
+<SE>
+    Play = 0,Slash10,80
+    Play = 3,Slash10,80
+    Play = 6,Slash10,80

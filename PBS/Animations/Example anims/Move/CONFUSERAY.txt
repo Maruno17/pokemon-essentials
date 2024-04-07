@@ -1,0 +1,70 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CONFUSERAY]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/estranho
+    Focus = UserAndTarget
+    SetFrame = 0,1
+    SetX = 0,19
+    SetY = 0,-20
+    SetZ = 0,27
+    SetFrame = 1,2
+    SetX = 1,29
+    SetY = 1,-29
+    SetFrame = 2,3
+    SetX = 2,34
+    SetY = 2,-40
+    SetFrame = 3,4
+    SetX = 3,44
+    SetY = 3,-50
+    SetFrame = 4,5
+    SetX = 4,54
+    SetY = 4,-59
+    SetFrame = 5,6
+    SetX = 5,64
+    SetY = 5,-70
+    SetFrame = 6,7
+    SetX = 6,75
+    SetY = 6,-79
+    SetFrame = 7,8
+    SetX = 7,84
+    SetY = 7,-89
+    SetFrame = 8,9
+    SetX = 8,94
+    SetY = 8,-98
+    SetFrame = 9,10
+    SetX = 9,104
+    SetY = 9,-109
+    SetFrame = 10,11
+    SetX = 10,114
+    SetY = 10,-118
+    SetFrame = 11,12
+    SetX = 11,125
+    SetY = 11,-128
+    SetFrame = 12,13
+    SetX = 12,134
+    SetY = 12,-139
+    SetFrame = 13,14
+    SetX = 13,144
+    SetY = 13,-148
+    SetFrame = 14,11
+    SetX = 14,154
+    SetY = 14,-157
+    SetFrame = 15,12
+    SetX = 15,164
+    SetY = 15,-168
+    SetFrame = 16,13
+    SetX = 16,179
+    SetY = 16,-178
+    SetFrame = 17,14
+    SetOpacity = 17,100
+<SE>
+    Play = 1,Twine,80
+    Play = 12,Confuse,80

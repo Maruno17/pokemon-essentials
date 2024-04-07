@@ -1,0 +1,64 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MISTBALL]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/fly copy
+    Focus = UserAndTarget
+    SetX = 3,201
+    SetY = 3,-181
+    SetZ = 3,28
+    SetOpacity = 3,200
+    SetX = 4,203
+    SetY = 4,-178
+    SetY = 5,-179
+    SetOpacity = 5,143
+    SetX = 6,205
+    SetY = 6,-178
+    SetOpacity = 6,69
+    SetFrame = 7,5
+    SetX = 7,203
+    SetY = 7,-192
+    SetOpacity = 7,144
+    SetVisible = 8,false
+<Particle 2>
+    Graphic = Examples/fly copy
+    Focus = UserAndTarget
+    SetX = 0,200
+    SetY = 0,-196
+    SetZ = 0,27
+    SetOpacity = 0,200
+    SetX = 1,199
+    SetY = 1,-195
+    SetX = 2,198
+    SetY = 2,-193
+    SetFrame = 3,5
+    SetX = 3,200
+    SetY = 3,-198
+    SetOpacity = 3,255
+    SetX = 4,201
+    SetY = 4,-200
+    SetZoomX = 4,110
+    SetZoomY = 4,110
+    SetX = 5,200
+    SetY = 5,-198
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+    SetX = 6,202
+    SetY = 6,-195
+    SetFrame = 7,6
+    SetX = 7,200
+    SetY = 7,-196
+    SetX = 8,195
+    SetY = 8,-206
+    SetX = 9,194
+    SetY = 9,-192
+    SetVisible = 12,false
+<SE>
+    Play = 5,Wring Out,80

@@ -1,0 +1,39 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FIREBLAST]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/fire blast
+    Focus = Target
+    SetX = 0,0
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetY = 2,-1
+    SetFrame = 3,3
+    SetY = 3,-4
+    SetFrame = 4,4
+    SetX = 4,-1
+    SetY = 4,-5
+    SetFrame = 5,5
+    SetX = 5,0
+    SetY = 5,2
+    SetFrame = 6,6
+    SetY = 6,-2
+    SetFrame = 7,7
+    SetY = 7,0
+    SetFrame = 8,8
+    SetX = 8,-2
+    SetY = 8,-4
+    SetFrame = 9,9
+    SetX = 9,1
+    SetY = 9,-7
+<SE>
+    Play = 0,Voltorb Flip Explosion,95,101

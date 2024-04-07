@@ -1,0 +1,163 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BULLETPUNCH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 0,15
+    SetX = 0,14
+    SetY = 0,4
+    SetZ = 0,27
+    SetFrame = 1,14
+    SetX = 1,22
+    SetY = 1,-1
+    SetFrame = 2,2
+    SetX = 2,0
+    SetY = 2,-2
+    SetOpacity = 2,84
+    SetFrame = 3,14
+    SetX = 3,36
+    SetY = 3,-29
+    SetOpacity = 3,255
+    SetFrame = 4,2
+    SetX = 4,22
+    SetY = 4,-18
+    SetOpacity = 4,44
+    SetFrame = 5,14
+    SetX = 5,-16
+    SetY = 5,39
+    SetOpacity = 5,255
+    SetFrame = 6,2
+    SetX = 6,-33
+    SetY = 6,37
+    SetOpacity = 6,64
+    SetFrame = 7,14
+    SetX = 7,48
+    SetOpacity = 7,255
+    SetX = 8,51
+    SetOpacity = 8,36
+    SetX = 9,3
+    SetY = 9,7
+    SetOpacity = 9,255
+    SetFrame = 10,2
+    SetX = 10,12
+    SetY = 10,-8
+    SetOpacity = 10,44
+    SetVisible = 11,false
+<Particle 3>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 0,2
+    SetX = 0,2
+    SetY = 0,3
+    SetZ = 0,28
+    SetX = 1,7
+    SetY = 1,-1
+    SetFrame = 2,14
+    SetX = 2,19
+    SetY = 2,2
+    SetOpacity = 2,64
+    SetFrame = 3,2
+    SetX = 3,21
+    SetY = 3,-24
+    SetOpacity = 3,255
+    SetFrame = 4,14
+    SetX = 4,39
+    SetY = 4,-23
+    SetOpacity = 4,64
+    SetFrame = 5,2
+    SetX = 5,-29
+    SetY = 5,35
+    SetOpacity = 5,255
+    SetFrame = 6,14
+    SetX = 6,-20
+    SetY = 6,32
+    SetOpacity = 6,107
+    SetFrame = 7,2
+    SetX = 7,34
+    SetY = 7,39
+    SetOpacity = 7,255
+    SetX = 8,41
+    SetY = 8,35
+    SetOpacity = 8,108
+    SetX = 9,-14
+    SetY = 9,11
+    SetOpacity = 9,255
+    SetFrame = 10,14
+    SetX = 10,31
+    SetY = 10,-8
+    SetOpacity = 10,84
+    SetVisible = 11,false
+<Particle 4>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 2,15
+    SetX = 2,42
+    SetY = 2,-27
+    SetZ = 2,29
+    SetVisible = 3,false
+<Particle 5>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 2,2
+    SetX = 2,21
+    SetY = 2,-29
+    SetZ = 2,30
+    SetVisible = 3,false
+<Particle 6>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 4,15
+    SetX = 4,-12
+    SetY = 4,46
+    SetZ = 4,29
+    SetVisible = 5,false
+<Particle 7>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 4,2
+    SetX = 4,-32
+    SetY = 4,37
+    SetZ = 4,30
+    SetVisible = 5,false
+<Particle 8>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 6,15
+    SetX = 6,62
+    SetY = 6,45
+    SetZ = 6,29
+    SetVisible = 7,false
+<Particle 9>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 6,2
+    SetX = 6,43
+    SetY = 6,39
+    SetZ = 6,30
+    SetVisible = 7,false
+<Particle 10>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 8,15
+    SetX = 8,11
+    SetY = 8,19
+    SetZ = 8,29
+    SetVisible = 9,false
+<Particle 11>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 8,2
+    SetX = 8,-5
+    SetY = 8,13
+    SetZ = 8,30
+    SetVisible = 9,false
+<SE>
+    Play = 0,Comet Punch,100,59

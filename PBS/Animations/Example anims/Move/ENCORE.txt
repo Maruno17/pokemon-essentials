@@ -1,0 +1,84 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ENCORE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/BABACOMETRO
+    Focus = UserAndTarget
+    SetFrame = 0,16
+    SetX = 0,-25
+    SetY = 0,-59
+    SetZ = 0,28
+    SetX = 1,-15
+    SetX = 2,-5
+    SetFrame = 3,15
+    SetX = 3,25
+    SetFrame = 4,16
+    SetX = 4,-25
+    SetX = 5,-15
+    SetFrame = 6,15
+    SetX = 6,9
+    SetFrame = 7,16
+    SetX = 7,-15
+    SetFrame = 8,15
+    SetX = 8,29
+    SetFrame = 9,16
+    SetX = 9,-15
+    SetX = 10,-5
+    SetFrame = 11,15
+    SetX = 11,25
+    SetFrame = 12,16
+    SetX = 12,-25
+    SetX = 13,-15
+    SetFrame = 14,15
+    SetX = 14,9
+    SetFrame = 15,16
+    SetX = 15,-15
+    SetX = 16,-30
+    SetX = 17,-10
+    SetFrame = 18,15
+    SetX = 18,14
+<Particle 2>
+    Graphic = Examples/BABACOMETRO
+    Focus = UserAndTarget
+    SetFrame = 0,15
+    SetX = 0,34
+    SetY = 0,-59
+    SetZ = 0,27
+    SetX = 1,25
+    SetX = 2,9
+    SetFrame = 3,16
+    SetX = 3,-15
+    SetFrame = 4,15
+    SetX = 4,34
+    SetX = 5,25
+    SetFrame = 6,16
+    SetX = 6,-5
+    SetFrame = 7,15
+    SetX = 7,25
+    SetFrame = 8,16
+    SetX = 8,-25
+    SetFrame = 9,15
+    SetX = 9,19
+    SetX = 10,9
+    SetFrame = 11,16
+    SetX = 11,-15
+    SetFrame = 12,15
+    SetX = 12,34
+    SetX = 13,25
+    SetFrame = 14,16
+    SetX = 14,-5
+    SetFrame = 15,15
+    SetX = 15,25
+    SetX = 16,39
+    SetX = 17,25
+    SetFrame = 18,16
+    SetX = 18,0
+<SE>
+    Play = 0,Applause,80

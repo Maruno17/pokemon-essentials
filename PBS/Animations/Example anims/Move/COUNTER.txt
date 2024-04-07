@@ -1,0 +1,155 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,COUNTER]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/punches
+    Focus = UserAndTarget
+    SetX = 0,200
+    SetY = 0,-196
+    SetZ = 0,27
+    SetFrame = 1,15
+    SetX = 1,218
+    SetY = 1,-225
+    SetZoomX = 1,50
+    SetZoomY = 1,50
+    SetFrame = 2,0
+    SetX = 2,200
+    SetY = 2,-195
+    SetZoomX = 2,100
+    SetZoomY = 2,100
+    SetFrame = 3,15
+    SetX = 3,206
+    SetY = 3,-176
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+    SetX = 4,175
+    SetY = 4,-312
+    SetX = 5,225
+    SetY = 5,-187
+    SetVisible = 6,false
+<Particle 3>
+    Graphic = Examples/punches
+    Focus = UserAndTarget
+    SetX = 1,202
+    SetY = 1,-195
+    SetZ = 1,28
+    SetFrame = 2,15
+    SetX = 2,218
+    SetY = 2,-240
+    SetZoomX = 2,50
+    SetZoomY = 2,50
+    SetX = 3,181
+    SetY = 3,-170
+    SetX = 4,164
+    SetY = 4,-315
+    SetX = 5,212
+    SetY = 5,-206
+    SetVisible = 6,false
+<Particle 4>
+    Graphic = Examples/punches
+    Focus = UserAndTarget
+    SetFrame = 1,15
+    SetX = 1,175
+    SetY = 1,-195
+    SetZ = 1,29
+    SetZoomX = 1,50
+    SetZoomY = 1,50
+    SetX = 2,181
+    SetY = 2,-228
+    SetX = 3,187
+    SetY = 3,-198
+    SetX = 4,193
+    SetY = 4,-337
+    SetX = 5,225
+    SetY = 5,-267
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/punches
+    Focus = UserAndTarget
+    SetFrame = 2,15
+    SetX = 2,212
+    SetY = 2,-192
+    SetZ = 2,30
+    SetZoomX = 2,50
+    SetZoomY = 2,50
+    SetX = 3,175
+    SetY = 3,-251
+    SetY = 4,-160
+    SetX = 5,194
+    SetY = 5,-175
+    SetVisible = 6,false
+<Particle 6>
+    Graphic = Examples/punches
+    Focus = UserAndTarget
+    SetFrame = 3,15
+    SetX = 3,218
+    SetY = 3,-217
+    SetZ = 3,31
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+    SetX = 4,206
+    SetY = 4,-254
+    SetX = 5,187
+    SetY = 5,-265
+    SetVisible = 6,false
+<Particle 7>
+    Graphic = Examples/punches
+    Focus = UserAndTarget
+    SetX = 3,201
+    SetY = 3,-196
+    SetZ = 3,32
+    SetFrame = 4,15
+    SetX = 4,200
+    SetZoomX = 4,50
+    SetZoomY = 4,50
+    SetX = 5,162
+    SetY = 5,-334
+    SetVisible = 6,false
+<Particle 8>
+    Graphic = Examples/punches
+    Focus = UserAndTarget
+    SetX = 4,200
+    SetY = 4,-200
+    SetZ = 4,33
+    SetFrame = 5,15
+    SetX = 5,212
+    SetY = 5,-289
+    SetZoomX = 5,50
+    SetZoomY = 5,50
+    SetVisible = 6,false
+<Particle 9>
+    Graphic = Examples/punches
+    Focus = UserAndTarget
+    SetFrame = 5,15
+    SetX = 5,175
+    SetY = 5,-145
+    SetZ = 5,34
+    SetZoomX = 5,50
+    SetZoomY = 5,50
+    SetVisible = 6,false
+<Particle 10>
+    Graphic = Examples/punches
+    Focus = UserAndTarget
+    SetFrame = 5,15
+    SetX = 5,193
+    SetY = 5,-309
+    SetZ = 5,35
+    SetZoomX = 5,50
+    SetZoomY = 5,50
+    SetVisible = 6,false
+<Particle 11>
+    Graphic = Examples/punches
+    Focus = UserAndTarget
+    SetX = 5,211
+    SetY = 5,-206
+    SetZ = 5,36
+    SetVisible = 6,false
+<SE>
+    Play = 0,MiningCollapse,80

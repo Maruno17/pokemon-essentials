@@ -1,0 +1,51 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,THUNDERBOLT]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/017-Thunder01
+    Focus = Target
+    SetX = 5,0
+    SetY = 5,-2
+    SetZ = 5,28
+    SetFrame = 6,2
+    SetY = 6,-42
+    SetOpacity = 6,100
+    SetVisible = 7,false
+<Particle 2>
+    Graphic = Examples/017-Thunder01
+    Focus = Target
+    SetFrame = 0,2
+    SetX = 0,0
+    SetY = 0,-42
+    SetZ = 0,27
+    SetFrame = 1,3
+    SetFrame = 2,4
+    SetFrame = 3,5
+    SetFrame = 4,4
+    SetFlip = 4,true
+    SetOpacity = 4,200
+    SetFrame = 5,3
+    SetOpacity = 5,100
+    SetFrame = 6,1
+    SetFlip = 6,false
+    SetY = 6,-2
+    SetOpacity = 6,255
+    SetFlip = 7,true
+    SetFrame = 8,0
+    SetFlip = 9,false
+    SetZoomX = 9,120
+    SetZoomY = 9,120
+    SetOpacity = 9,100
+    SetFrame = 10,1
+    SetOpacity = 10,50
+    SetFlip = 11,true
+    SetOpacity = 11,20
+<SE>
+    Play = 0,Thunder9,80

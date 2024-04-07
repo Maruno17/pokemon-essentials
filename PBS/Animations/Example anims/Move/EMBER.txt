@@ -1,0 +1,53 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,EMBER]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Flames
+    Focus = UserAndTarget
+    SetX = 9,142
+    SetY = 9,-153
+    SetZ = 9,27
+    SetFlip = 10,true
+    SetX = 10,158
+    SetY = 10,-168
+    SetFrame = 11,1
+    SetFlip = 11,false
+    SetFrame = 12,2
+<Particle 2>
+    Graphic = Examples/Flames
+    Focus = UserAndTarget
+    SetFrame = 1,2
+    SetX = 1,12
+    SetY = 1,-31
+    SetZ = 1,28
+    SetFlip = 2,true
+    SetX = 2,28
+    SetY = 2,-43
+    SetFlip = 3,false
+    SetX = 3,44
+    SetY = 3,-68
+    SetFlip = 4,true
+    SetX = 4,60
+    SetY = 4,-81
+    SetFlip = 5,false
+    SetX = 5,77
+    SetY = 5,-93
+    SetFlip = 6,true
+    SetX = 6,93
+    SetY = 6,-106
+    SetFlip = 7,false
+    SetX = 7,109
+    SetY = 7,-118
+    SetFrame = 8,1
+    SetX = 8,125
+    SetY = 8,-143
+    SetVisible = 9,false
+<SE>
+    Play = 1,Fire2,80

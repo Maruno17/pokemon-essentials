@@ -16,7 +16,7 @@ module AnimationConverter
       next if !anim.name || anim.name == "" || anim.length <= 1
 
       # Get folder and filename for new PBS file
-      folder = "Converted/"
+      folder = "Example anims/"
       folder += (anim.name[/^Common:/]) ? "Common/" :  "Move/"
       filename = anim.name.gsub(/^Common:/, "")
       filename.gsub!(/^Move:/, "")
@@ -47,7 +47,7 @@ module AnimationConverter
         :type      => type,
         :move      => last_move,
         :version   => last_version,
-        :name      => filename,
+        :name      => "Example anim",
         :particles => [],
         :pbs_path  => pbs_path
       }
@@ -92,7 +92,7 @@ module AnimationConverter
 
     default_frame[AnimFrame::FOCUS]      = 4   # 1=target, 2=user, 3=user and target, 4=screen
 
-    default_frame[99]                    = anim.graphic
+    default_frame[99]                    = "Examples/" + anim.graphic
 
     last_frame_values = []
     # Go through each frame
@@ -106,7 +106,7 @@ module AnimationConverter
         # focus, start a new particle.
         if i > 1 && frame_num > 0 && index_lookup[i] && index_lookup[i] >= 0 &&
            last_frame_values[index_lookup[i]]
-          this_graphic = (cel[AnimFrame::PATTERN] == -1) ? "USER" : (cel[AnimFrame::PATTERN] == -2) ? "TARGET" : anim.graphic
+          this_graphic = (cel[AnimFrame::PATTERN] == -1) ? "USER" : (cel[AnimFrame::PATTERN] == -2) ? "TARGET" : "Examples/" + anim.graphic
           if last_frame_values[index_lookup[i]][AnimFrame::FOCUS] != cel[AnimFrame::FOCUS] ||
              last_frame_values[index_lookup[i]][99] != this_graphic   # Graphic
             index_lookup[i] = -1
@@ -138,8 +138,8 @@ module AnimationConverter
             particle[:graphic] = "TARGET"
             last_frame[99] = "TARGET"
           else
-            particle[:graphic] = anim.graphic
-            last_frame[99] = anim.graphic
+            particle[:graphic] = "Examples/" + anim.graphic
+            last_frame[99] = "Examples/" + anim.graphic
           end
         end
         # Set focus for non-User/non-Target

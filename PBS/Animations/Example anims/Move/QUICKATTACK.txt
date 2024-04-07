@@ -1,0 +1,73 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,QUICKATTACK]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+    SetOpacity = 1,170
+    SetOpacity = 2,85
+    SetOpacity = 6,255
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = USER
+    Focus = User
+    SetX = 1,-52
+    SetY = 1,6
+    SetZ = 1,27
+    SetOpacity = 2,170
+    SetOpacity = 3,85
+    SetVisible = 4,false
+<Particle 3>
+    Graphic = USER
+    Focus = User
+    SetX = 2,-69
+    SetY = 2,34
+    SetZ = 2,28
+    SetOpacity = 3,170
+    SetOpacity = 4,85
+    SetVisible = 5,false
+<Particle 4>
+    Graphic = USER
+    Focus = User
+    SetX = 3,-28
+    SetY = 3,48
+    SetZ = 3,29
+    SetZ = 4,4
+    SetOpacity = 4,170
+    SetOpacity = 5,85
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = USER
+    Focus = User
+    SetX = 4,35
+    SetY = 4,35
+    SetZ = 4,30
+    SetZ = 5,5
+    SetOpacity = 5,170
+    SetOpacity = 6,85
+    SetVisible = 7,false
+<Particle 6>
+    Graphic = USER
+    Focus = User
+    SetX = 5,12
+    SetY = 5,6
+    SetZ = 5,31
+    SetZ = 6,6
+    SetOpacity = 6,170
+    SetOpacity = 7,85
+    SetVisible = 8,false
+<Particle 7>
+    Graphic = Examples/Tackle_B
+    Focus = Target
+    SetX = 7,0
+    SetY = 7,0
+    SetZ = 7,27
+    SetOpacity = 7,128
+    SetOpacity = 8,255
+    SetOpacity = 11,128
+    SetVisible = 12,false
+<SE>
+    Play = 7,Blow4

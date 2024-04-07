@@ -1,0 +1,37 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BRICKBREAK]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/many
+    Focus = Target
+    SetFrame = 0,13
+    SetX = 0,-88
+    SetY = 0,-58
+    SetZ = 0,27
+    SetX = 1,-64
+    SetAngle = 1,345
+    SetX = 2,-32
+    SetY = 2,-34
+    SetAngle = 2,330
+    SetX = 3,0
+    SetY = 3,-10
+    SetAngle = 3,315
+    SetX = 4,16
+    SetY = 4,22
+    SetAngle = 4,300
+    SetX = 5,32
+    SetY = 5,46
+    SetAngle = 5,285
+    SetX = 6,48
+    SetY = 6,62
+    SetX = 7,56
+    SetY = 7,70
+<SE>
+    Play = 4,Blow7,80

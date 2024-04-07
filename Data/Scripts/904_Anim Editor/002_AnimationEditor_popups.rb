@@ -126,26 +126,24 @@ class AnimationEditor
 
   #-----------------------------------------------------------------------------
 
-  # Generates a list of all files in the given folder which have a file
-  # extension that matches one in exts. Removes any files from the list whose
-  # filename is the same as one in prepends (case insensitive), and then adds
-  # all the files in prepends to the start of the list.
-  def get_all_files_in_folder_and_prepend(folder, exts, prepends)
+  # Generates a list of all files in the given folder and its subfolders which
+  # have a file extension that matches one in exts. Removes any files from the
+  # list whose filename is the same as one in blacklist (case insensitive).
+  def get_all_files_in_folder(folder, exts, blacklist)
     ret = []
-    Dir.chdir(folder) do
-      exts.each do |type|
-        Dir.glob(type) { |f| ret.push([File.basename(f, ".*"), f]) }
-      end
+    Dir.all(folder).each do |f|
+      next if !exts.include?(File.extname(f))
+      file = f.sub(folder + "/", "")
+      ret.push([file.sub(File.extname(file), ""), file])
     end
-    ret.delete_if { |f| prepends.any? { |add| add[0] == f[0].upcase } }
+    ret.delete_if { |f| blacklist.any? { |add| add.upcase == f[0].upcase } }
     ret.sort! { |a, b| a[0].downcase <=> b[0].downcase }
-    ret.prepend(*prepends)
     return ret
   end
 
   def choose_graphic_file(selected)
     selected ||= ""
-    sprite_folder = "Graphics/Battle animations/"
+    sprite_folder = "Graphics/Battle animations"
     # Show pop-up window
     @pop_up_bg_bitmap.visible = true
     bg_bitmap = create_pop_up_window(GRAPHIC_CHOOSER_WINDOW_WIDTH, GRAPHIC_CHOOSER_WINDOW_HEIGHT)
@@ -154,17 +152,26 @@ class AnimationEditor
     # Draw box around list control
     list = graphic_chooser.get_control(:list)
     # Get a list of files
-    files = get_all_files_in_folder_and_prepend(
-      sprite_folder, ["*.png", "*.jpg", "*.jpeg"],
-      [["USER",         _INTL("[[User's sprite]]")],
-      ["USER_OPP",     _INTL("[[User's other side sprite]]")],
-      ["USER_FRONT",   _INTL("[[User's front sprite]]")],
-      ["USER_BACK",    _INTL("[[User's back sprite]]")],
-      ["TARGET",       _INTL("[[Target's sprite]]")],
-      ["TARGET_OPP",   _INTL("[[Target's other side sprite]]")],
-      ["TARGET_FRONT", _INTL("[[Target's front sprite]]")],
-      ["TARGET_BACK",  _INTL("[[Target's back sprite]]")]]
+    files = get_all_files_in_folder(
+      sprite_folder, [".png", ".jpg", ".jpeg"],
+      ["USER", "USER_OPP", "USER_FRONT", "USER_BACK", "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"]
     )
+    if !@anim[:no_target]
+      files.prepend(
+        ["TARGET",       _INTL("[[Target's sprite]]")],
+        ["TARGET_OPP",   _INTL("[[Target's other side sprite]]")],
+        ["TARGET_FRONT", _INTL("[[Target's front sprite]]")],
+        ["TARGET_BACK",  _INTL("[[Target's back sprite]]")]
+      )
+    end
+    if !@anim[:no_user]
+      files.prepend(
+        ["USER",         _INTL("[[User's sprite]]")],
+        ["USER_OPP",     _INTL("[[User's other side sprite]]")],
+        ["USER_FRONT",   _INTL("[[User's front sprite]]")],
+        ["USER_BACK",    _INTL("[[User's back sprite]]")]
+      )
+    end
     idx = 0
     files.each_with_index do |f, i|
       next if f[0] != selected
@@ -185,7 +192,7 @@ class AnimationEditor
     preview_bitmap = nil
     set_preview_graphic = lambda do |sprite, filename|
       preview_bitmap&.dispose
-      folder = sprite_folder
+      folder = sprite_folder + "/"
       fname = filename
       if ["USER", "USER_BACK", "USER_FRONT", "USER_OPP",
           "TARGET", "TARGET_FRONT", "TARGET_BACK", "TARGET_OPP"].include?(filename)
@@ -260,7 +267,7 @@ class AnimationEditor
 
   def choose_audio_file(selected, volume = 100, pitch = 100)
     selected ||= ""
-    audio_folder = "Audio/SE/Anim/"
+    audio_folder = "Audio/SE/Anim"
     # Show pop-up window
     @pop_up_bg_bitmap.visible = true
     bg_bitmap = create_pop_up_window(AUDIO_CHOOSER_WINDOW_WIDTH, AUDIO_CHOOSER_WINDOW_HEIGHT)
@@ -269,11 +276,9 @@ class AnimationEditor
     # Draw box around list control
     list = audio_chooser.get_control(:list)
     # Get a list of files
-    files = get_all_files_in_folder_and_prepend(
-      audio_folder, ["*.wav", "*.ogg", "*.mp3", "*.wma"],
-      [["USER",  _INTL("[[User's cry]]")],
-      ["TARGET", _INTL("[[Target's cry]]")]]
-    )
+    files = get_all_files_in_folder(audio_folder, [".wav", ".ogg", ".mp3", ".wma"], ["USER", "TARGET"])
+    files.prepend(["TARGET", _INTL("[[Target's cry]]")]) if !@anim[:no_target]
+    files.prepend(["USER",  _INTL("[[User's cry]]")]) if !@anim[:no_user]
     idx = 0
     files.each_with_index do |f, i|
       next if f[0] != selected

@@ -1,0 +1,59 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DYNAMICPUNCH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/punches
+    Focus = Target
+    SetX = 1,5
+    SetY = 1,3
+    SetZ = 1,28
+    SetX = 2,2
+    SetX = 3,-1
+    SetY = 3,11
+    SetX = 4,2
+    SetY = 4,3
+    SetX = 5,0
+    SetY = 5,12
+    SetVisible = 7,false
+<Particle 2>
+    Graphic = Examples/punches
+    Focus = Target
+    SetX = 0,5
+    SetY = 0,2
+    SetZ = 0,27
+    SetFrame = 1,15
+    SetX = 1,2
+    SetY = 1,0
+    SetFrame = 2,14
+    SetX = 2,5
+    SetY = 2,-2
+    SetX = 3,0
+    SetY = 3,3
+    SetZoomX = 3,150
+    SetZoomY = 3,150
+    SetOpacity = 3,250
+    SetX = 4,2
+    SetY = 4,-6
+    SetZoomX = 4,180
+    SetZoomY = 4,180
+    SetOpacity = 4,194
+    SetX = 5,4
+    SetY = 5,0
+    SetZoomX = 5,250
+    SetZoomY = 5,250
+    SetOpacity = 5,120
+    SetFrame = 7,0
+    SetX = 7,6
+    SetY = 7,3
+    SetZoomX = 7,150
+    SetZoomY = 7,150
+    SetOpacity = 7,255
+<SE>
+    Play = 0,Take Down,100,104

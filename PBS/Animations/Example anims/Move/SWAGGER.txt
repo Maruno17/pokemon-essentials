@@ -1,0 +1,44 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SWAGGER]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/mixed status
+    Focus = Target
+    SetFrame = 4,4
+    SetX = 4,21
+    SetY = 4,-56
+    SetZ = 4,27
+    SetX = 5,18
+    SetY = 5,-58
+    SetX = 6,-12
+    SetY = 6,-28
+    SetX = 7,-10
+    SetY = 7,-24
+    SetX = 8,49
+    SetY = 8,-30
+    SetX = 9,43
+    SetY = 9,-33
+    SetX = 10,-23
+    SetY = 10,-50
+    SetX = 11,-22
+    SetX = 12,23
+    SetY = 12,-37
+    SetX = 13,21
+    SetY = 13,-41
+    SetX = 14,-17
+    SetY = 14,-27
+    SetX = 15,-10
+    SetY = 15,-24
+    SetX = 16,25
+    SetY = 16,-31
+    SetX = 17,27
+    SetY = 17,-35
+<SE>
+    Play = 0,Swagger

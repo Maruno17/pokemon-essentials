@@ -1,0 +1,66 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SHADOWBALL]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/009-Weapon04
+    Focus = UserAndTarget
+    SetFrame = 7,12
+    SetX = 7,105
+    SetY = 7,-234
+    SetZ = 7,28
+    SetZoomX = 7,25
+    SetZoomY = 7,25
+    SetVisible = 8,false
+<Particle 4>
+    Graphic = Examples/009-Weapon04
+    Focus = UserAndTarget
+    SetFrame = 8,11
+    SetX = 8,129
+    SetY = 8,-215
+    SetZ = 8,27
+    SetZoomX = 8,50
+    SetZoomY = 8,50
+    SetOpacity = 8,100
+    SetFrame = 9,10
+    SetX = 9,146
+    SetY = 9,-190
+    SetZoomX = 9,100
+    SetZoomY = 9,100
+    SetOpacity = 9,255
+    SetFrame = 10,11
+    SetX = 10,150
+    SetY = 10,-175
+    SetFrame = 11,12
+    SetX = 11,158
+    SetY = 11,-168
+    SetFrame = 12,11
+    SetOpacity = 12,100
+    SetFrame = 13,10
+    SetOpacity = 13,50
+<Particle 2>
+    Graphic = Examples/009-Weapon04
+    Focus = UserAndTarget
+    SetFrame = 1,13
+    SetX = 1,12
+    SetY = 1,-31
+    SetZ = 1,27
+    SetX = 2,20
+    SetY = 2,-75
+    SetX = 3,36
+    SetY = 3,-112
+    SetX = 4,57
+    SetY = 4,-146
+    SetX = 5,77
+    SetY = 5,-181
+    SetX = 6,93
+    SetY = 6,-193
+    SetVisible = 7,false
+<SE>
+    Play = 0,Collapse1,80

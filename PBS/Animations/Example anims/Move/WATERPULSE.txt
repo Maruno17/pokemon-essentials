@@ -1,0 +1,52 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,WATERPULSE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+    SetToneBlue = 15,255
+    SetToneBlue = 18,0
+<Particle 2>
+    Graphic = Examples/Water pulse
+    Focus = UserAndTarget
+    SetX = 0,2
+    SetY = 0,7
+    SetZ = 0,27
+    SetX = 1,62
+    SetY = 1,-50
+    SetX = 2,81
+    SetY = 2,-62
+    SetX = 3,87
+    SetY = 3,-75
+    SetX = 4,106
+    SetY = 4,-100
+    SetX = 5,118
+    SetY = 5,-125
+    SetX = 6,137
+    SetY = 6,-150
+    SetX = 7,163
+    SetY = 7,-171
+    SetX = 8,182
+    SetY = 8,-178
+    SetFrame = 9,1
+    SetX = 9,178
+    SetY = 9,-187
+    SetFrame = 10,2
+    SetX = 10,173
+    SetY = 10,-182
+    SetFrame = 11,3
+    SetX = 11,176
+    SetY = 11,-185
+    SetFrame = 12,4
+    SetX = 12,172
+    SetY = 12,-193
+    SetFrame = 13,5
+    SetX = 13,173
+    SetY = 13,-159
+    SetFrame = 14,6
+    SetX = 14,168
+    SetVisible = 15,false

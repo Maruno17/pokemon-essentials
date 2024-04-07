@@ -1,0 +1,128 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MEGAHORN]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetX = 0,44
+    SetY = 0,-59
+    SetZ = 0,27
+    SetZoomX = 0,150
+    SetZoomY = 0,150
+    SetFrame = 5,14
+    SetX = 5,-10
+    SetY = 5,-40
+    SetZoomX = 5,25
+    SetZoomY = 5,25
+    SetFrame = 6,0
+    SetX = 6,44
+    SetY = 6,-59
+    SetZoomX = 6,150
+    SetZoomY = 6,150
+    SetX = 7,94
+    SetY = 7,-109
+    SetX = 8,144
+    SetY = 8,-148
+    SetX = 9,164
+    SetY = 9,-178
+    SetVisible = 11,false
+<Particle 3>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 0,14
+    SetX = 0,-60
+    SetY = 0,-168
+    SetZ = 0,28
+    SetZoomX = 0,25
+    SetZoomY = 0,25
+    SetX = 1,-30
+    SetY = 1,-109
+    SetX = 2,9
+    SetY = 2,-50
+    SetX = 3,19
+    SetY = 3,-89
+    SetX = 4,64
+    SetY = 4,-109
+    SetX = 5,50
+    SetY = 5,18
+    SetVisible = 6,false
+<Particle 4>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 0,14
+    SetX = 0,114
+    SetY = 0,28
+    SetZ = 0,29
+    SetZoomX = 0,25
+    SetZoomY = 0,25
+    SetX = 1,44
+    SetY = 1,-118
+    SetX = 2,39
+    SetY = 2,-70
+    SetX = 3,84
+    SetY = 3,-168
+    SetX = 4,-30
+    SetY = 4,-79
+    SetFrame = 5,0
+    SetX = 5,44
+    SetY = 5,-59
+    SetZoomX = 5,150
+    SetZoomY = 5,150
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 0,14
+    SetX = 0,59
+    SetY = 0,-187
+    SetZ = 0,30
+    SetZoomX = 0,25
+    SetZoomY = 0,25
+    SetX = 1,75
+    SetY = 1,0
+    SetX = 2,44
+    SetY = 2,-29
+    SetVisible = 3,false
+<Particle 6>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 2,14
+    SetX = 2,-5
+    SetY = 2,-178
+    SetZ = 2,31
+    SetZoomX = 2,25
+    SetZoomY = 2,25
+    SetVisible = 3,false
+<Particle 7>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 4,14
+    SetX = 4,64
+    SetY = 4,39
+    SetZ = 4,30
+    SetZoomX = 4,25
+    SetZoomY = 4,25
+    SetVisible = 5,false
+<Particle 8>
+    Graphic = Examples/poison3
+    Focus = UserAndTarget
+    SetFrame = 9,14
+    SetX = 9,169
+    SetY = 9,-196
+    SetZ = 9,28
+    SetOpacity = 9,100
+    SetZoomX = 10,125
+    SetZoomY = 10,125
+    SetOpacity = 10,50
+    SetVisible = 11,false
+<SE>
+    Play = 0,Up,80
+    Play = 4,throw,80
+    Play = 7,Slash10,80

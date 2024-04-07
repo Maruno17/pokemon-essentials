@@ -1,0 +1,125 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,PETALDANCE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Anima (1)
+    Focus = Target
+    SetX = 2,192
+    SetY = 2,-138
+    SetZ = 2,28
+    SetX = 3,160
+    SetY = 3,-90
+    SetFrame = 4,1
+    SetFlip = 4,true
+    SetX = 4,120
+    SetY = 4,-34
+    SetX = 5,64
+    SetY = 5,30
+    SetFrame = 6,2
+    SetX = 6,24
+    SetY = 6,70
+    SetX = 7,8
+    SetY = 7,126
+    SetFrame = 8,1
+    SetFlip = 8,false
+    SetX = 8,168
+    SetY = 8,70
+    SetFrame = 9,2
+    SetX = 9,16
+    SetY = 9,-26
+    SetZoomX = 9,120
+    SetZoomY = 9,120
+    SetVisible = 10,false
+<Particle 4>
+    Graphic = Examples/Anima (1)
+    Focus = Target
+    SetFrame = 3,2
+    SetX = 3,-40
+    SetY = 3,-146
+    SetZ = 3,29
+    SetX = 4,0
+    SetY = 4,-98
+    SetFrame = 5,3
+    SetX = 5,32
+    SetY = 5,-58
+    SetX = 6,80
+    SetY = 6,-10
+    SetFrame = 7,1
+    SetX = 7,128
+    SetY = 7,46
+    SetFrame = 8,2
+    SetFlip = 8,true
+    SetX = 8,-288
+    SetY = 8,-34
+    SetVisible = 9,false
+<Particle 5>
+    Graphic = Examples/Anima (1)
+    Focus = Target
+    SetX = 5,-64
+    SetY = 5,-138
+    SetZ = 5,30
+    SetX = 6,-104
+    SetY = 6,-90
+    SetX = 7,-192
+    SetY = 7,-66
+    SetFrame = 8,1
+    SetX = 8,-24
+    SetY = 8,-74
+    SetVisible = 9,false
+<Particle 6>
+    Graphic = Examples/Anima (1)
+    Focus = Target
+    SetFrame = 7,1
+    SetX = 7,-64
+    SetY = 7,-154
+    SetZ = 7,31
+    SetVisible = 8,false
+<Particle 2>
+    Graphic = Examples/Anima (1)
+    Focus = Target
+    SetFrame = 0,3
+    SetX = 0,-160
+    SetY = 0,-130
+    SetZ = 0,27
+    SetX = 1,-144
+    SetY = 1,-90
+    SetFrame = 2,2
+    SetX = 2,-112
+    SetY = 2,-58
+    SetX = 3,-64
+    SetY = 3,-2
+    SetFlip = 4,true
+    SetX = 4,-8
+    SetX = 5,-24
+    SetY = 5,6
+    SetFrame = 6,3
+    SetX = 6,-64
+    SetY = 6,30
+    SetX = 7,-120
+    SetY = 7,78
+    SetFrame = 8,1
+    SetX = 8,-184
+    SetY = 8,126
+    SetFrame = 9,2
+    SetX = 9,-312
+    SetY = 9,-10
+    SetFlip = 10,false
+    SetX = 10,80
+    SetY = 10,22
+    SetZoomX = 10,120
+    SetZoomY = 10,120
+    SetFrame = 11,0
+    SetFlip = 11,true
+    SetX = 11,184
+    SetY = 11,86
+    SetZoomX = 11,100
+    SetZoomY = 11,100
+<SE>
+    Play = 0,Saint6,80

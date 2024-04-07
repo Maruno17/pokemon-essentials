@@ -1,0 +1,39 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ENERGYBALL]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/fly copy
+    Focus = Target
+    SetX = 0,9
+    SetY = 0,21
+    SetZ = 0,27
+    SetZoomX = 0,80
+    SetZoomY = 0,80
+    SetZoomX = 1,90
+    SetZoomY = 1,90
+    SetZoomX = 2,100
+    SetZoomY = 2,100
+    SetZoomX = 3,110
+    SetZoomY = 3,110
+    SetZoomX = 4,120
+    SetZoomY = 4,120
+    SetZoomX = 5,130
+    SetZoomY = 5,130
+    SetZoomX = 6,140
+    SetZoomY = 6,140
+    SetZoomX = 7,150
+    SetZoomY = 7,150
+    SetZoomX = 8,160
+    SetZoomY = 8,160
+    SetZoomX = 9,170
+    SetZoomY = 9,170
+    SetVisible = 10,false
+<SE>
+    Play = 0,Uproar,100,85

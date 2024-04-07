@@ -1,0 +1,57 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SLASH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/zan03
+    Focus = Target
+    SetX = 0,-104
+    SetY = 0,-90
+    SetZ = 0,28
+    SetFrame = 1,1
+    SetX = 1,-40
+    SetY = 1,-42
+    SetFrame = 2,2
+    SetX = 2,-8
+    SetY = 2,-26
+    SetX = 3,0
+    SetY = 3,-2
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = Examples/zan03
+    Focus = Target
+    SetX = 0,-80
+    SetY = 0,-122
+    SetZ = 0,29
+    SetFrame = 1,1
+    SetX = 1,-64
+    SetY = 1,-10
+    SetFrame = 2,2
+    SetX = 2,-48
+    SetX = 3,-32
+    SetY = 3,22
+    SetVisible = 4,false
+<Particle 2>
+    Graphic = Examples/zan03
+    Focus = Target
+    SetX = 0,-128
+    SetY = 0,-58
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetX = 1,-16
+    SetY = 1,-66
+    SetFrame = 2,2
+    SetX = 2,24
+    SetY = 2,-42
+    SetFrame = 3,3
+    SetX = 3,32
+    SetY = 3,-18
+    SetVisible = 4,false
+<SE>
+    Play = 0,Slash3,80

@@ -1,0 +1,526 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FURYATTACK]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,69
+    SetY = 1,-70
+    SetFrame = 2,7
+    SetX = 2,129
+    SetY = 2,-148
+    SetFrame = 3,0
+    SetX = 3,179
+    SetY = 3,-178
+    SetFrame = 4,1
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetFrame = 4,6
+    SetX = 4,55
+    SetY = 4,-37
+    SetFrame = 5,7
+    SetX = 5,106
+    SetY = 5,-121
+    SetVisible = 6,false
+<SE>
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
+#-------------------------------
+[Move,FURYATTACK,1]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetFrame = 4,6
+    SetX = 4,55
+    SetY = 4,-37
+    SetFrame = 5,7
+    SetX = 5,106
+    SetY = 5,-121
+    SetVisible = 6,false
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,69
+    SetY = 1,-70
+    SetFrame = 2,7
+    SetX = 2,129
+    SetY = 2,-148
+    SetFrame = 3,0
+    SetX = 3,179
+    SetY = 3,-178
+    SetFrame = 4,1
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
+<SE>
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
+#-------------------------------
+[Move,FURYATTACK,2]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,69
+    SetY = 1,-70
+    SetFrame = 2,7
+    SetX = 2,129
+    SetY = 2,-148
+    SetFrame = 3,0
+    SetX = 3,179
+    SetY = 3,-178
+    SetFrame = 4,1
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetFrame = 4,6
+    SetX = 4,55
+    SetY = 4,-37
+    SetFrame = 5,7
+    SetX = 5,106
+    SetY = 5,-121
+    SetVisible = 6,false
+<SE>
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
+#-------------------------------
+[Move,FURYATTACK,3]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetFrame = 4,6
+    SetX = 4,55
+    SetY = 4,-37
+    SetFrame = 5,7
+    SetX = 5,106
+    SetY = 5,-121
+    SetVisible = 6,false
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,69
+    SetY = 1,-70
+    SetFrame = 2,7
+    SetX = 2,129
+    SetY = 2,-148
+    SetFrame = 3,0
+    SetX = 3,179
+    SetY = 3,-178
+    SetFrame = 4,1
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
+<SE>
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
+#-------------------------------
+[Move,FURYATTACK,4]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetX = 0,0
+    SetY = 0,18
+    SetZ = 0,27
+    SetFrame = 1,6
+    SetX = 1,69
+    SetY = 1,-70
+    SetFrame = 2,7
+    SetX = 2,129
+    SetY = 2,-148
+    SetFrame = 3,0
+    SetX = 3,179
+    SetY = 3,-178
+    SetFrame = 4,1
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,0
+    SetY = 3,18
+    SetZ = 3,28
+    SetFrame = 4,6
+    SetX = 4,55
+    SetY = 4,-37
+    SetFrame = 5,7
+    SetX = 5,106
+    SetY = 5,-121
+    SetVisible = 6,false
+<SE>
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
+#-------------------------------
+[OppMove,FURYATTACK]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = User
+    SetX = 3,1
+    SetY = 3,18
+    SetZ = 3,27
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,159
+    SetY = 3,-151
+    SetZ = 3,28
+    SetAngle = 3,180
+    SetFrame = 4,6
+    SetX = 4,121
+    SetY = 4,-103
+    SetFrame = 5,7
+    SetX = 5,71
+    SetY = 5,-42
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 4,1
+    SetX = 4,0
+    SetY = 4,28
+    SetZ = 4,27
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetX = 0,164
+    SetY = 0,-150
+    SetZ = 0,27
+    SetAngle = 0,180
+    SetFrame = 1,6
+    SetX = 1,125
+    SetY = 1,-107
+    SetFrame = 2,7
+    SetX = 2,66
+    SetY = 2,-32
+    SetVisible = 3,false
+<SE>
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
+#-------------------------------
+[OppMove,FURYATTACK,1]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetX = 0,164
+    SetY = 0,-150
+    SetZ = 0,27
+    SetAngle = 0,180
+    SetFrame = 1,6
+    SetX = 1,125
+    SetY = 1,-107
+    SetFrame = 2,7
+    SetX = 2,66
+    SetY = 2,-32
+    SetVisible = 3,false
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = User
+    SetX = 3,1
+    SetY = 3,18
+    SetZ = 3,27
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,159
+    SetY = 3,-151
+    SetZ = 3,28
+    SetAngle = 3,180
+    SetFrame = 4,6
+    SetX = 4,121
+    SetY = 4,-103
+    SetFrame = 5,7
+    SetX = 5,71
+    SetY = 5,-42
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 4,1
+    SetX = 4,0
+    SetY = 4,28
+    SetZ = 4,27
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
+<SE>
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
+#-------------------------------
+[OppMove,FURYATTACK,2]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 5>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 4,1
+    SetX = 4,0
+    SetY = 4,28
+    SetZ = 4,27
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetX = 0,164
+    SetY = 0,-150
+    SetZ = 0,27
+    SetAngle = 0,180
+    SetFrame = 1,6
+    SetX = 1,125
+    SetY = 1,-107
+    SetFrame = 2,7
+    SetX = 2,66
+    SetY = 2,-32
+    SetVisible = 3,false
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = User
+    SetX = 3,1
+    SetY = 3,18
+    SetZ = 3,27
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,159
+    SetY = 3,-151
+    SetZ = 3,28
+    SetAngle = 3,180
+    SetFrame = 4,6
+    SetX = 4,121
+    SetY = 4,-103
+    SetFrame = 5,7
+    SetX = 5,71
+    SetY = 5,-42
+    SetVisible = 6,false
+<SE>
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
+#-------------------------------
+[OppMove,FURYATTACK,3]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 4>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,159
+    SetY = 3,-151
+    SetZ = 3,28
+    SetAngle = 3,180
+    SetFrame = 4,6
+    SetX = 4,121
+    SetY = 4,-103
+    SetFrame = 5,7
+    SetX = 5,71
+    SetY = 5,-42
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 4,1
+    SetX = 4,0
+    SetY = 4,28
+    SetZ = 4,27
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetX = 0,164
+    SetY = 0,-150
+    SetZ = 0,27
+    SetAngle = 0,180
+    SetFrame = 1,6
+    SetX = 1,125
+    SetY = 1,-107
+    SetFrame = 2,7
+    SetX = 2,66
+    SetY = 2,-32
+    SetVisible = 3,false
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = User
+    SetX = 3,1
+    SetY = 3,18
+    SetZ = 3,27
+    SetVisible = 4,false
+<SE>
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80
+#-------------------------------
+[OppMove,FURYATTACK,4]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = User
+    SetX = 3,1
+    SetY = 3,18
+    SetZ = 3,27
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 3,5
+    SetX = 3,159
+    SetY = 3,-151
+    SetZ = 3,28
+    SetAngle = 3,180
+    SetFrame = 4,6
+    SetX = 4,121
+    SetY = 4,-103
+    SetFrame = 5,7
+    SetX = 5,71
+    SetY = 5,-42
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 4,1
+    SetX = 4,0
+    SetY = 4,28
+    SetZ = 4,27
+    SetFrame = 5,2
+    SetFrame = 6,1
+    SetFrame = 7,2
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetX = 0,164
+    SetY = 0,-150
+    SetZ = 0,27
+    SetAngle = 0,180
+    SetFrame = 1,6
+    SetX = 1,125
+    SetY = 1,-107
+    SetFrame = 2,7
+    SetX = 2,66
+    SetY = 2,-32
+    SetVisible = 3,false
+<SE>
+    Play = 3,normaldamage,80
+    Play = 5,normaldamage,80

@@ -1,0 +1,85 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,WILLOWISP]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/015-Fire01
+    Focus = UserAndTarget
+    SetFrame = 1,5
+    SetFlip = 1,true
+    SetX = 1,4
+    SetY = 1,-70
+    SetZ = 1,28
+    SetAngle = 1,90
+    SetFrame = 2,6
+    SetX = 2,34
+    SetY = 2,-98
+    SetFrame = 3,7
+    SetX = 3,89
+    SetY = 3,-148
+    SetX = 4,159
+    SetY = 4,-118
+    SetFrame = 5,2
+    SetFlip = 5,false
+    SetX = 5,179
+    SetY = 5,-178
+    SetAngle = 5,0
+    SetVisible = 6,false
+<Particle 4>
+    Graphic = Examples/015-Fire01
+    Focus = UserAndTarget
+    SetFrame = 2,5
+    SetFlip = 2,true
+    SetX = 2,75
+    SetY = 2,-59
+    SetZ = 2,29
+    SetAngle = 2,90
+    SetFrame = 3,6
+    SetX = 3,125
+    SetY = 3,-89
+    SetFrame = 4,1
+    SetFlip = 4,false
+    SetX = 4,179
+    SetY = 4,-178
+    SetAngle = 4,0
+    SetVisible = 5,false
+<Particle 5>
+    Graphic = Examples/015-Fire01
+    Focus = UserAndTarget
+    SetX = 3,179
+    SetY = 3,-178
+    SetZ = 3,30
+    SetVisible = 4,false
+<Particle 2>
+    Graphic = Examples/015-Fire01
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetFlip = 0,true
+    SetX = 0,25
+    SetY = 0,-59
+    SetZ = 0,27
+    SetAngle = 0,90
+    SetFrame = 1,6
+    SetX = 1,54
+    SetY = 1,-89
+    SetFrame = 2,7
+    SetX = 2,104
+    SetY = 2,-148
+    SetFrame = 3,5
+    SetX = 3,150
+    SetY = 3,-187
+    SetX = 4,134
+    SetX = 5,175
+    SetY = 5,-178
+    SetFrame = 6,3
+    SetFlip = 6,false
+    SetX = 6,179
+    SetAngle = 6,0
+<SE>
+    Play = 0,Fire2,80

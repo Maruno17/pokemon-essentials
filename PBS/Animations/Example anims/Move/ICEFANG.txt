@@ -1,0 +1,128 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ICEFANG]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetX = 0,11
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetX = 1,6
+    SetY = 1,-4
+    SetFrame = 2,2
+    SetX = 2,5
+    SetY = 2,1
+    SetFrame = 3,3
+    SetX = 3,4
+    SetY = 3,-2
+    SetFrame = 4,4
+    SetX = 4,5
+    SetY = 4,-8
+    SetFrame = 5,5
+    SetX = 5,8
+    SetY = 5,5
+    SetFrame = 6,6
+    SetX = 6,2
+    SetY = 6,-2
+    SetFrame = 7,7
+    SetX = 7,6
+    SetY = 7,-1
+    SetFrame = 8,8
+    SetX = 8,5
+    SetY = 8,-6
+    SetFrame = 9,9
+    SetX = 9,-2
+    SetY = 9,-4
+    SetFrame = 10,10
+    SetX = 10,13
+    SetY = 10,3
+    SetFrame = 11,11
+    SetX = 11,4
+    SetY = 11,-2
+    SetFrame = 12,12
+    SetX = 12,7
+    SetY = 12,-1
+<Particle 3>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 7,16
+    SetX = 7,-54
+    SetY = 7,15
+    SetZ = 7,28
+    SetOpacity = 7,208
+    SetX = 8,-56
+    SetY = 8,-49
+    SetOpacity = 8,164
+    SetX = 9,-31
+    SetY = 9,-53
+    SetOpacity = 9,154
+    SetX = 10,-30
+    SetY = 10,50
+    SetOpacity = 10,255
+    SetX = 11,59
+    SetY = 11,71
+    SetOpacity = 11,204
+    SetVisible = 12,false
+<Particle 4>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 8,16
+    SetX = 8,-52
+    SetY = 8,15
+    SetZ = 8,29
+    SetOpacity = 8,133
+    SetX = 9,-42
+    SetY = 9,41
+    SetOpacity = 9,159
+    SetX = 10,78
+    SetY = 10,-48
+    SetOpacity = 10,234
+    SetX = 11,94
+    SetY = 11,10
+    SetOpacity = 11,224
+    SetVisible = 12,false
+<Particle 5>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 8,16
+    SetX = 8,89
+    SetY = 8,-31
+    SetZ = 8,30
+    SetOpacity = 8,213
+    SetX = 9,26
+    SetY = 9,70
+    SetOpacity = 9,212
+    SetX = 10,18
+    SetY = 10,78
+    SetOpacity = 10,174
+    SetVisible = 11,false
+<Particle 6>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 9,16
+    SetX = 9,15
+    SetY = 9,-66
+    SetZ = 9,31
+    SetOpacity = 9,144
+    SetX = 10,-64
+    SetOpacity = 10,224
+    SetVisible = 11,false
+<Particle 7>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 10,16
+    SetX = 10,66
+    SetY = 10,-6
+    SetZ = 10,32
+    SetOpacity = 10,154
+    SetVisible = 11,false
+<SE>
+    Play = 6,Super Fang,80

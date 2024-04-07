@@ -458,7 +458,7 @@ class AnimationEditor
       else
         component.get_control(:move_particle_up).enable
       end
-      if cur_index < 0 || cur_index >= @anim[:particles].length - 2
+      if cur_index < 0 || cur_index >= @anim[:particles].length - 1 || @anim[:particles][cur_index][:name] == "SE"
         component.get_control(:move_particle_down).disable
       else
         component.get_control(:move_particle_down).enable
@@ -563,15 +563,11 @@ class AnimationEditor
     when :particle_list
       case property
       when :add_particle
-        new_idx = particle_index
-        if new_idx >= 0
-          new_idx += 1
-          new_idx = @anim[:particles].length - 1 if new_idx == 0 || new_idx >= @anim[:particles].length
-        end
+        new_idx = particle_index + 1
         AnimationEditor::ParticleDataHelper.add_particle(@anim[:particles], new_idx)
         @components[:particle_list].add_particle(new_idx)
         @components[:particle_list].set_particles(@anim[:particles])
-        @components[:particle_list].particle_index = (new_idx >= 0) ? new_idx : @anim[:particles].length - 2
+        @components[:particle_list].particle_index = new_idx
         @components[:particle_list].keyframe = -1
         refresh
       when :move_particle_up
@@ -630,6 +626,7 @@ class AnimationEditor
       when :has_user
         @anim[:no_user] = !value
         if @anim[:no_user]
+          user_idx = @anim[:particles].index { |particle| particle[:name] == "User" }
           @anim[:particles].delete_if { |particle| particle[:name] == "User" }
           @anim[:particles].each do |particle|
             if ["USER", "USER_OPP", "USER_FRONT", "USER_BACK"].include?(particle[:graphic])
@@ -640,7 +637,7 @@ class AnimationEditor
             end
             particle[:user_cry] = nil if particle[:name] == "SE"
           end
-          @components[:particle_list].delete_particle(0)
+          @components[:particle_list].delete_particle(user_idx)
         elsif @anim[:particles].none? { |particle| particle[:name] == "User" }
           @anim[:particles].insert(0, {
             :name => "User", :focus => :user, :graphic => "USER"
@@ -652,6 +649,7 @@ class AnimationEditor
       when :has_target
         @anim[:no_target] = !value
         if @anim[:no_target]
+          target_idx = @anim[:particles].index { |particle| particle[:name] == "Target" }
           @anim[:particles].delete_if { |particle| particle[:name] == "Target" }
           @anim[:particles].each do |particle|
             if ["TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"].include?(particle[:graphic])
@@ -662,12 +660,12 @@ class AnimationEditor
             end
             particle[:target_cry] = nil if particle[:name] == "SE"
           end
-          @components[:particle_list].delete_particle(@anim[:no_user] ? 0 : 1)
+          @components[:particle_list].delete_particle(target_idx)
         elsif @anim[:particles].none? { |particle| particle[:name] == "Target" }
-          @anim[:particles].insert((@anim[:no_user] ? 0 : 1), {
+          @anim[:particles].insert(0, {
             :name => "Target", :focus => :target, :graphic => "TARGET"
           })
-          @components[:particle_list].add_particle((@anim[:no_user] ? 0 : 1))
+          @components[:particle_list].add_particle(0)
         end
         @components[:particle_list].set_particles(@anim[:particles])
         refresh

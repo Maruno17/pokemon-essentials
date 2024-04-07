@@ -1,0 +1,104 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FAKETEARS]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/poison2
+    Focus = User
+    SetX = 0,56
+    SetY = 0,14
+    SetZ = 0,27
+    SetX = 1,64
+    SetY = 1,6
+    SetFlip = 2,true
+    SetX = 2,-80
+    SetY = 2,-2
+    SetFrame = 3,1
+    SetFlip = 3,false
+    SetX = 3,83
+    SetY = 3,-6
+    SetFrame = 4,2
+    SetX = 4,96
+    SetY = 4,6
+    SetX = 5,104
+    SetY = 5,14
+    SetFlip = 6,true
+    SetX = 6,-124
+    SetY = 6,9
+    SetFlip = 7,false
+    SetX = 7,120
+    SetY = 7,2
+    SetX = 8,130
+    SetY = 8,10
+    SetX = 9,142
+    SetY = 9,24
+<Particle 3>
+    Graphic = Examples/poison2
+    Focus = User
+    SetFlip = 1,true
+    SetX = 1,-72
+    SetY = 1,6
+    SetZ = 1,28
+    SetVisible = 2,false
+<Particle 4>
+    Graphic = Examples/poison2
+    Focus = User
+    SetFrame = 2,1
+    SetX = 2,72
+    SetY = 2,-2
+    SetZ = 2,29
+    SetVisible = 3,false
+<Particle 5>
+    Graphic = Examples/poison2
+    Focus = User
+    SetFrame = 3,1
+    SetFlip = 3,true
+    SetX = 3,-88
+    SetY = 3,-10
+    SetZ = 3,28
+    SetX = 4,-99
+    SetY = 4,-15
+    SetFrame = 5,2
+    SetX = 5,-113
+    SetY = 5,1
+    SetFlip = 6,false
+    SetX = 6,112
+    SetY = 6,-2
+    SetX = 7,-121
+    SetY = 7,-16
+    SetX = 8,-135
+    SetY = 8,-10
+    SetX = 9,-144
+    SetY = 9,3
+<Particle 6>
+    Graphic = Examples/poison2
+    Focus = User
+    SetFrame = 4,1
+    SetX = 4,93
+    SetY = 4,-7
+    SetZ = 4,29
+    SetX = 5,106
+    SetY = 5,-8
+    SetFlip = 6,true
+    SetX = 6,-131
+    SetY = 6,-21
+    SetVisible = 7,false
+<Particle 7>
+    Graphic = Examples/poison2
+    Focus = User
+    SetFrame = 5,1
+    SetFlip = 5,true
+    SetX = 5,-118
+    SetY = 5,-20
+    SetZ = 5,30
+    SetVisible = 6,false
+<SE>
+    Play = 0,Water1,40,70
+    Play = 2,Water1,40,70
+    Play = 4,Water1,40,70

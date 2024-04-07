@@ -1,0 +1,72 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ICYWIND]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Ice1
+    Focus = UserAndTarget
+    SetX = 1,4
+    SetY = 1,-50
+    SetZ = 1,28
+    SetFrame = 2,1
+    SetX = 2,39
+    SetY = 2,-70
+    SetFrame = 3,2
+    SetX = 3,69
+    SetY = 3,-89
+    SetFrame = 4,3
+    SetX = 4,94
+    SetY = 4,-118
+    SetFlip = 5,true
+    SetX = 5,134
+    SetY = 5,-139
+    SetVisible = 6,false
+<Particle 4>
+    Graphic = Examples/Ice1
+    Focus = UserAndTarget
+    SetX = 3,34
+    SetY = 3,-70
+    SetZ = 3,29
+    SetFrame = 4,1
+    SetX = 4,59
+    SetY = 4,-89
+    SetZoomX = 4,75
+    SetZoomY = 4,75
+    SetVisible = 5,false
+<Particle 2>
+    Graphic = Examples/Ice1
+    Focus = UserAndTarget
+    SetX = 0,9
+    SetY = 0,-50
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetX = 1,29
+    SetY = 1,-59
+    SetFrame = 2,2
+    SetX = 2,84
+    SetY = 2,-109
+    SetFrame = 3,3
+    SetX = 3,114
+    SetY = 3,-139
+    SetFrame = 4,4
+    SetX = 4,144
+    SetY = 4,-157
+    SetFlip = 5,true
+    SetX = 5,179
+    SetY = 5,-168
+    SetFlip = 6,false
+    SetY = 6,-178
+    SetFrame = 7,3
+    SetFrame = 8,2
+    SetFrame = 9,1
+    SetFrame = 10,0
+    SetOpacity = 10,100
+<SE>
+    Play = 0,throw,80
+    Play = 1,Ice8,80

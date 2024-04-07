@@ -1,0 +1,45 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LEAFBLADE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Sword5
+    Focus = Target
+    SetX = 0,0
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetFrame = 3,3
+    SetFrame = 4,4
+    SetFrame = 5,5
+    SetFrame = 6,6
+    SetFrame = 7,7
+    SetFrame = 8,8
+    SetFrame = 9,9
+    SetFrame = 10,10
+    SetFrame = 11,11
+    SetFrame = 12,12
+    SetFrame = 13,13
+    SetFrame = 14,14
+    SetFrame = 15,15
+    SetFrame = 16,16
+    SetFrame = 17,17
+    SetFrame = 18,18
+    SetFrame = 19,19
+    SetFrame = 20,20
+    SetFrame = 21,21
+    SetFrame = 22,22
+    SetFrame = 23,23
+<SE>
+    Play = 0,Sword1,80
+    Play = 3,Slash3,80
+    Play = 7,Slash3,80
+    Play = 11,Slash3,80
+    Play = 15,Slash3,80

@@ -1,0 +1,126 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,THUNDERPUNCH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 0,1
+    SetX = 0,1
+    SetY = 0,1
+    SetZ = 0,27
+    SetX = 1,0
+    SetY = 1,-3
+    SetFrame = 2,3
+    SetX = 2,11
+    SetY = 2,-20
+    SetX = 3,45
+    SetY = 3,-42
+    SetX = 4,-3
+    SetY = 4,6
+    SetX = 5,-21
+    SetY = 5,8
+    SetX = 6,90
+    SetY = 6,-50
+    SetX = 7,26
+    SetY = 7,-85
+    SetX = 8,-41
+    SetY = 8,46
+    SetX = 9,103
+    SetY = 9,-95
+<Particle 3>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 2,3
+    SetX = 2,28
+    SetY = 2,-14
+    SetZ = 2,28
+    SetX = 3,-6
+    SetY = 3,12
+    SetX = 4,26
+    SetY = 4,9
+    SetX = 5,6
+    SetY = 5,30
+    SetX = 6,56
+    SetY = 6,-80
+    SetX = 7,94
+    SetY = 7,-41
+    SetX = 8,66
+    SetY = 8,-49
+    SetX = 9,-79
+    SetY = 9,88
+<Particle 4>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 2,1
+    SetX = 2,1
+    SetY = 2,-4
+    SetZ = 2,29
+    SetX = 3,2
+    SetY = 3,2
+    SetFrame = 4,3
+    SetX = 4,45
+    SetY = 4,-29
+    SetX = 5,7
+    SetY = 5,-38
+    SetX = 6,-73
+    SetY = 6,48
+    SetX = 7,-67
+    SetY = 7,42
+    SetFrame = 8,1
+    SetX = 8,2
+    SetY = 8,-2
+    SetX = 9,-1
+<Particle 5>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 4,3
+    SetX = 4,3
+    SetY = 4,-26
+    SetZ = 4,30
+    SetX = 5,59
+    SetY = 5,-41
+    SetX = 6,-27
+    SetY = 6,75
+    SetX = 7,-26
+    SetY = 7,67
+    SetVisible = 8,false
+<Particle 6>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 4,1
+    SetX = 4,5
+    SetY = 4,3
+    SetZ = 4,31
+    SetX = 5,1
+    SetY = 5,-3
+    SetY = 6,1
+    SetFrame = 7,3
+    SetX = 7,40
+    SetY = 7,-36
+    SetVisible = 8,false
+<Particle 7>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 7,3
+    SetX = 7,-33
+    SetY = 7,39
+    SetZ = 7,32
+    SetVisible = 8,false
+<Particle 8>
+    Graphic = Examples/punches
+    Focus = Target
+    SetFrame = 7,1
+    SetX = 7,0
+    SetY = 7,1
+    SetZ = 7,33
+    SetVisible = 8,false
+<SE>
+    Play = 0,Mega Punch,100,89
+    Play = 0,Work Up,100,111

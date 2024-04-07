@@ -1,0 +1,142 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,OVERHEAT]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/fire4
+    Focus = UserAndTarget
+    SetX = 0,4
+    SetY = 0,-70
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetY = 1,-79
+    SetFrame = 2,2
+    SetY = 2,-89
+    SetFrame = 3,3
+    SetY = 3,-98
+    SetFrame = 4,4
+    SetY = 4,-109
+    SetFrame = 5,5
+    SetY = 5,-118
+    SetFrame = 6,6
+    SetY = 6,-128
+    SetFrame = 7,7
+    SetY = 7,-139
+    SetFrame = 8,8
+    SetY = 8,-148
+    SetFrame = 9,9
+    SetY = 9,-157
+    SetFrame = 10,10
+    SetY = 10,-168
+    SetFrame = 11,11
+    SetY = 11,-178
+<Particle 3>
+    Graphic = Examples/fire4
+    Focus = UserAndTarget
+    SetX = 1,34
+    SetY = 1,-70
+    SetZ = 1,28
+    SetX = 2,39
+    SetY = 2,-40
+    SetVisible = 3,false
+<Particle 4>
+    Graphic = Examples/fire4
+    Focus = UserAndTarget
+    SetX = 2,64
+    SetY = 2,-157
+    SetZ = 2,29
+    SetX = 3,89
+    SetY = 3,-89
+    SetX = 4,-60
+    SetY = 4,-217
+    SetFrame = 5,1
+    SetX = 5,-75
+    SetY = 5,-256
+    SetX = 6,194
+    SetY = 6,-20
+    SetVisible = 7,false
+<Particle 5>
+    Graphic = Examples/fire4
+    Focus = UserAndTarget
+    SetX = 2,19
+    SetY = 2,0
+    SetZ = 2,30
+    SetFrame = 3,1
+    SetX = 3,89
+    SetY = 3,-226
+    SetX = 4,169
+    SetY = 4,0
+    SetFrame = 5,2
+    SetX = 5,239
+    SetY = 5,9
+    SetOpacity = 5,100
+    SetFrame = 6,1
+    SetFlip = 6,true
+    SetX = 6,125
+    SetY = 6,-267
+    SetOpacity = 6,255
+    SetVisible = 7,false
+<Particle 6>
+    Graphic = Examples/fire4
+    Focus = UserAndTarget
+    SetX = 3,-25
+    SetY = 3,-89
+    SetZ = 3,31
+    SetX = 4,9
+    SetY = 4,-148
+    SetY = 5,-237
+    SetVisible = 6,false
+<Particle 7>
+    Graphic = Examples/fire4
+    Focus = UserAndTarget
+    SetX = 3,100
+    SetY = 3,-10
+    SetZ = 3,32
+    SetX = 4,50
+    SetY = 4,-40
+    SetX = 5,109
+    SetY = 5,-29
+    SetVisible = 6,false
+<Particle 8>
+    Graphic = Examples/fire4
+    Focus = UserAndTarget
+    SetX = 4,144
+    SetY = 4,-157
+    SetZ = 4,28
+    SetFrame = 5,1
+    SetX = 5,184
+    SetY = 5,-178
+    SetX = 6,9
+    SetY = 6,-285
+    SetFrame = 7,2
+    SetFlip = 7,true
+    SetX = 7,264
+    SetY = 7,-20
+    SetOpacity = 7,100
+    SetVisible = 8,false
+<Particle 9>
+    Graphic = Examples/fire4
+    Focus = UserAndTarget
+    SetX = 4,-35
+    SetY = 4,-59
+    SetZ = 4,33
+    SetX = 5,-75
+    SetY = 5,-50
+    SetVisible = 6,false
+<Particle 10>
+    Graphic = Examples/fire4
+    Focus = UserAndTarget
+    SetX = 4,39
+    SetY = 4,-139
+    SetZ = 4,34
+    SetX = 5,84
+    SetY = 5,-226
+    SetVisible = 6,false
+<SE>
+    Play = 0,Fire3,80

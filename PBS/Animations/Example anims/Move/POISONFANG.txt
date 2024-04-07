@@ -1,0 +1,72 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,POISONFANG]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 7,13
+    SetX = 7,-30
+    SetY = 7,11
+    SetZ = 7,28
+    SetX = 8,-25
+    SetY = 8,4
+    SetVisible = 9,false
+<Particle 4>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 7,13
+    SetX = 7,66
+    SetY = 7,10
+    SetZ = 7,29
+    SetX = 8,60
+    SetY = 8,5
+    SetVisible = 9,false
+<Particle 2>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetX = 0,6
+    SetY = 0,8
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetY = 1,7
+    SetFrame = 2,2
+    SetX = 2,5
+    SetY = 2,-3
+    SetFrame = 3,3
+    SetX = 3,2
+    SetY = 3,6
+    SetFrame = 4,4
+    SetX = 4,1
+    SetY = 4,5
+    SetFrame = 5,5
+    SetX = 5,8
+    SetY = 5,-1
+    SetFrame = 6,6
+    SetX = 6,6
+    SetY = 6,2
+    SetFrame = 7,7
+    SetX = 7,8
+    SetY = 7,7
+    SetFrame = 8,8
+    SetY = 8,-3
+    SetFrame = 9,9
+    SetX = 9,3
+    SetY = 9,1
+    SetFrame = 10,10
+    SetX = 10,8
+    SetFrame = 11,11
+    SetX = 11,5
+    SetY = 11,0
+    SetFrame = 12,12
+    SetX = 12,7
+    SetY = 12,2
+    SetVisible = 13,false
+<SE>
+    Play = 6,Voltorb Flip Mark,100,161

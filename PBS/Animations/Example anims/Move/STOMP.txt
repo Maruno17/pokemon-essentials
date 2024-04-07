@@ -1,0 +1,24 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,STOMP]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/normal1
+    Focus = Target
+    SetFrame = 0,6
+    SetX = 0,0
+    SetY = 0,-114
+    SetZ = 0,27
+    SetY = 1,-74
+    SetY = 2,-42
+    SetY = 3,-26
+    SetY = 4,-18
+    SetVisible = 6,false
+<SE>
+    Play = 2,Blow6,80

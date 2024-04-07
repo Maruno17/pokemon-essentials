@@ -1,0 +1,67 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DOUBLEEDGE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Divine_Smash
+    Focus = User
+    SetFrame = 1,11
+    SetX = 1,70
+    SetY = 1,12
+    SetZ = 1,28
+    SetY = 2,-45
+    SetX = 3,-32
+    SetY = 3,-57
+    SetVisible = 4,false
+<Particle 4>
+    Graphic = Examples/Divine_Smash
+    Focus = User
+    SetFrame = 2,11
+    SetX = 2,-32
+    SetY = 2,6
+    SetZ = 2,29
+    SetVisible = 3,false
+<Particle 5>
+    Graphic = Examples/Divine_Smash
+    Focus = Target
+    SetFrame = 5,14
+    SetX = 5,-26
+    SetY = 5,14
+    SetZ = 5,27
+    SetOpacity = 5,50
+    SetFrame = 7,3
+    SetOpacity = 7,255
+    SetFrame = 9,4
+    SetX = 10,-32
+    SetAngle = 10,90
+<Particle 6>
+    Graphic = Examples/Divine_Smash
+    Focus = Target
+    SetFrame = 8,4
+    SetX = 8,-26
+    SetY = 8,14
+    SetZ = 8,28
+    SetVisible = 9,false
+<Particle 2>
+    Graphic = Examples/Divine_Smash
+    Focus = User
+    SetFrame = 0,11
+    SetX = 0,0
+    SetY = 0,12
+    SetZ = 0,27
+    SetY = 1,-32
+    SetY = 2,-95
+    SetX = 3,70
+    SetY = 3,-108
+    SetX = 4,-32
+    SetY = 4,-95
+    SetVisible = 5,false
+<SE>
+    Play = 0,throw,80
+    Play = 6,Damage1,80

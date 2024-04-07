@@ -1,0 +1,1076 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FURYSWIPES]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 0,6
+    SetX = 0,53
+    SetY = 0,-31
+    SetZ = 0,27
+    SetOpacity = 0,128
+    SetX = 1,40
+    SetY = 1,-15
+    SetOpacity = 1,255
+    SetX = 2,32
+    SetY = 2,1
+    SetX = 3,24
+    SetY = 3,17
+    SetToneRed = 4,-128
+    SetToneGreen = 4,-128
+    SetToneBlue = 4,-128
+    SetX = 5,25
+    SetOpacity = 5,128
+    SetVisible = 6,false
+<Particle 3>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 2,7
+    SetX = 2,13
+    SetY = 2,29
+    SetZ = 2,28
+    SetFrame = 3,8
+    SetX = 3,-13
+    SetY = 3,41
+    SetFrame = 4,10
+    SetX = 4,48
+    SetY = 4,62
+    SetFrame = 5,6
+    SetFlip = 5,true
+    SetX = 5,-64
+    SetY = 5,-24
+    SetOpacity = 5,128
+    SetX = 6,-48
+    SetY = 6,-8
+    SetOpacity = 6,255
+    SetX = 7,-32
+    SetY = 7,8
+    SetX = 8,-24
+    SetY = 8,16
+    SetToneRed = 9,-128
+    SetToneGreen = 9,-128
+    SetToneBlue = 9,-128
+    SetOpacity = 10,128
+    SetVisible = 11,false
+<Particle 4>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 3,8
+    SetX = 3,19
+    SetY = 3,42
+    SetZ = 3,29
+    SetFrame = 4,10
+    SetX = 4,-18
+    SetY = 4,61
+    SetFrame = 5,5
+    SetX = 5,-22
+    SetY = 5,131
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 4,10
+    SetX = 4,-52
+    SetY = 4,31
+    SetZ = 4,30
+    SetFrame = 5,5
+    SetX = 5,90
+    SetY = 5,132
+    SetVisible = 6,false
+<Particle 6>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 4,10
+    SetX = 4,55
+    SetY = 4,38
+    SetZ = 4,31
+    SetFrame = 5,5
+    SetX = 5,123
+    SetY = 5,0
+    SetVisible = 6,false
+<Particle 7>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-117
+    SetY = 5,84
+    SetZ = 5,32
+    SetVisible = 6,false
+<Particle 8>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-47
+    SetY = 5,95
+    SetZ = 5,33
+    SetVisible = 6,false
+<Particle 9>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,15
+    SetY = 5,81
+    SetZ = 5,34
+    SetVisible = 6,false
+<Particle 10>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,73
+    SetY = 5,84
+    SetZ = 5,35
+    SetVisible = 6,false
+<Particle 11>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,99
+    SetY = 5,47
+    SetZ = 5,36
+    SetVisible = 6,false
+<Particle 12>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 7,7
+    SetX = 7,-14
+    SetY = 7,32
+    SetZ = 7,29
+    SetFrame = 8,8
+    SetX = 8,9
+    SetY = 8,37
+    SetFrame = 9,10
+    SetX = 9,-17
+    SetY = 9,88
+    SetFrame = 10,11
+    SetX = 10,-10
+    SetY = 10,119
+    SetVisible = 11,false
+<Particle 13>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 8,7
+    SetX = 8,-22
+    SetY = 8,42
+    SetZ = 8,27
+    SetFrame = 9,10
+    SetX = 9,-76
+    SetY = 9,48
+    SetFrame = 10,11
+    SetX = 10,-109
+    SetY = 10,82
+    SetVisible = 11,false
+<Particle 14>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 9,10
+    SetX = 9,37
+    SetY = 9,88
+    SetZ = 9,30
+    SetFrame = 10,11
+    SetX = 10,-92
+    SetY = 10,119
+    SetVisible = 11,false
+<Particle 15>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 9,10
+    SetX = 9,61
+    SetY = 9,13
+    SetZ = 9,31
+    SetFrame = 10,11
+    SetX = 10,46
+    SetY = 10,110
+    SetVisible = 11,false
+<Particle 16>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,75
+    SetY = 10,68
+    SetZ = 10,32
+    SetVisible = 11,false
+<Particle 17>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,96
+    SetY = 10,-7
+    SetZ = 10,33
+    SetVisible = 11,false
+<Particle 18>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,-53
+    SetY = 10,92
+    SetZ = 10,34
+    SetVisible = 11,false
+<SE>
+    Play = 0,Fury Swipes
+#-------------------------------
+[Move,FURYSWIPES,1]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 0,6
+    SetX = 0,53
+    SetY = 0,-31
+    SetZ = 0,27
+    SetOpacity = 0,128
+    SetX = 1,40
+    SetY = 1,-15
+    SetOpacity = 1,255
+    SetX = 2,32
+    SetY = 2,1
+    SetX = 3,24
+    SetY = 3,17
+    SetToneRed = 4,-128
+    SetToneGreen = 4,-128
+    SetToneBlue = 4,-128
+    SetX = 5,25
+    SetOpacity = 5,128
+    SetVisible = 6,false
+<Particle 3>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 2,7
+    SetX = 2,13
+    SetY = 2,29
+    SetZ = 2,28
+    SetFrame = 3,8
+    SetX = 3,-13
+    SetY = 3,41
+    SetFrame = 4,10
+    SetX = 4,48
+    SetY = 4,62
+    SetFrame = 5,6
+    SetFlip = 5,true
+    SetX = 5,-64
+    SetY = 5,-24
+    SetOpacity = 5,128
+    SetX = 6,-48
+    SetY = 6,-8
+    SetOpacity = 6,255
+    SetX = 7,-32
+    SetY = 7,8
+    SetX = 8,-24
+    SetY = 8,16
+    SetToneRed = 9,-128
+    SetToneGreen = 9,-128
+    SetToneBlue = 9,-128
+    SetOpacity = 10,128
+    SetVisible = 11,false
+<Particle 4>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 3,8
+    SetX = 3,19
+    SetY = 3,42
+    SetZ = 3,29
+    SetFrame = 4,10
+    SetX = 4,-18
+    SetY = 4,61
+    SetFrame = 5,5
+    SetX = 5,-22
+    SetY = 5,131
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 4,10
+    SetX = 4,-52
+    SetY = 4,31
+    SetZ = 4,30
+    SetFrame = 5,5
+    SetX = 5,90
+    SetY = 5,132
+    SetVisible = 6,false
+<Particle 6>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 4,10
+    SetX = 4,55
+    SetY = 4,38
+    SetZ = 4,31
+    SetFrame = 5,5
+    SetX = 5,123
+    SetY = 5,0
+    SetVisible = 6,false
+<Particle 7>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-117
+    SetY = 5,84
+    SetZ = 5,32
+    SetVisible = 6,false
+<Particle 8>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-47
+    SetY = 5,95
+    SetZ = 5,33
+    SetVisible = 6,false
+<Particle 9>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,15
+    SetY = 5,81
+    SetZ = 5,34
+    SetVisible = 6,false
+<Particle 10>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,73
+    SetY = 5,84
+    SetZ = 5,35
+    SetVisible = 6,false
+<Particle 11>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,99
+    SetY = 5,47
+    SetZ = 5,36
+    SetVisible = 6,false
+<Particle 12>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 7,7
+    SetX = 7,-14
+    SetY = 7,32
+    SetZ = 7,29
+    SetFrame = 8,8
+    SetX = 8,9
+    SetY = 8,37
+    SetFrame = 9,10
+    SetX = 9,-17
+    SetY = 9,88
+    SetFrame = 10,11
+    SetX = 10,-10
+    SetY = 10,119
+    SetVisible = 11,false
+<Particle 13>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 8,7
+    SetX = 8,-22
+    SetY = 8,42
+    SetZ = 8,27
+    SetFrame = 9,10
+    SetX = 9,-76
+    SetY = 9,48
+    SetFrame = 10,11
+    SetX = 10,-109
+    SetY = 10,82
+    SetVisible = 11,false
+<Particle 14>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 9,10
+    SetX = 9,37
+    SetY = 9,88
+    SetZ = 9,30
+    SetFrame = 10,11
+    SetX = 10,-92
+    SetY = 10,119
+    SetVisible = 11,false
+<Particle 15>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 9,10
+    SetX = 9,61
+    SetY = 9,13
+    SetZ = 9,31
+    SetFrame = 10,11
+    SetX = 10,46
+    SetY = 10,110
+    SetVisible = 11,false
+<Particle 16>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,75
+    SetY = 10,68
+    SetZ = 10,32
+    SetVisible = 11,false
+<Particle 17>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,96
+    SetY = 10,-7
+    SetZ = 10,33
+    SetVisible = 11,false
+<Particle 18>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,-53
+    SetY = 10,92
+    SetZ = 10,34
+    SetVisible = 11,false
+<SE>
+    Play = 0,Fury Swipes
+#-------------------------------
+[Move,FURYSWIPES,2]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 0,6
+    SetX = 0,53
+    SetY = 0,-31
+    SetZ = 0,27
+    SetOpacity = 0,128
+    SetX = 1,40
+    SetY = 1,-15
+    SetOpacity = 1,255
+    SetX = 2,32
+    SetY = 2,1
+    SetX = 3,24
+    SetY = 3,17
+    SetToneRed = 4,-128
+    SetToneGreen = 4,-128
+    SetToneBlue = 4,-128
+    SetX = 5,25
+    SetOpacity = 5,128
+    SetVisible = 6,false
+<Particle 3>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 2,7
+    SetX = 2,13
+    SetY = 2,29
+    SetZ = 2,28
+    SetFrame = 3,8
+    SetX = 3,-13
+    SetY = 3,41
+    SetFrame = 4,10
+    SetX = 4,48
+    SetY = 4,62
+    SetFrame = 5,6
+    SetFlip = 5,true
+    SetX = 5,-64
+    SetY = 5,-24
+    SetOpacity = 5,128
+    SetX = 6,-48
+    SetY = 6,-8
+    SetOpacity = 6,255
+    SetX = 7,-32
+    SetY = 7,8
+    SetX = 8,-24
+    SetY = 8,16
+    SetToneRed = 9,-128
+    SetToneGreen = 9,-128
+    SetToneBlue = 9,-128
+    SetOpacity = 10,128
+    SetVisible = 11,false
+<Particle 4>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 3,8
+    SetX = 3,19
+    SetY = 3,42
+    SetZ = 3,29
+    SetFrame = 4,10
+    SetX = 4,-18
+    SetY = 4,61
+    SetFrame = 5,5
+    SetX = 5,-22
+    SetY = 5,131
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 4,10
+    SetX = 4,-52
+    SetY = 4,31
+    SetZ = 4,30
+    SetFrame = 5,5
+    SetX = 5,90
+    SetY = 5,132
+    SetVisible = 6,false
+<Particle 6>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 4,10
+    SetX = 4,55
+    SetY = 4,38
+    SetZ = 4,31
+    SetFrame = 5,5
+    SetX = 5,123
+    SetY = 5,0
+    SetVisible = 6,false
+<Particle 7>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-117
+    SetY = 5,84
+    SetZ = 5,32
+    SetVisible = 6,false
+<Particle 8>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-47
+    SetY = 5,95
+    SetZ = 5,33
+    SetVisible = 6,false
+<Particle 9>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,15
+    SetY = 5,81
+    SetZ = 5,34
+    SetVisible = 6,false
+<Particle 10>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,73
+    SetY = 5,84
+    SetZ = 5,35
+    SetVisible = 6,false
+<Particle 11>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,99
+    SetY = 5,47
+    SetZ = 5,36
+    SetVisible = 6,false
+<Particle 12>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 7,7
+    SetX = 7,-14
+    SetY = 7,32
+    SetZ = 7,29
+    SetFrame = 8,8
+    SetX = 8,9
+    SetY = 8,37
+    SetFrame = 9,10
+    SetX = 9,-17
+    SetY = 9,88
+    SetFrame = 10,11
+    SetX = 10,-10
+    SetY = 10,119
+    SetVisible = 11,false
+<Particle 13>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 8,7
+    SetX = 8,-22
+    SetY = 8,42
+    SetZ = 8,27
+    SetFrame = 9,10
+    SetX = 9,-76
+    SetY = 9,48
+    SetFrame = 10,11
+    SetX = 10,-109
+    SetY = 10,82
+    SetVisible = 11,false
+<Particle 14>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 9,10
+    SetX = 9,37
+    SetY = 9,88
+    SetZ = 9,30
+    SetFrame = 10,11
+    SetX = 10,-92
+    SetY = 10,119
+    SetVisible = 11,false
+<Particle 15>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 9,10
+    SetX = 9,61
+    SetY = 9,13
+    SetZ = 9,31
+    SetFrame = 10,11
+    SetX = 10,46
+    SetY = 10,110
+    SetVisible = 11,false
+<Particle 16>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,75
+    SetY = 10,68
+    SetZ = 10,32
+    SetVisible = 11,false
+<Particle 17>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,96
+    SetY = 10,-7
+    SetZ = 10,33
+    SetVisible = 11,false
+<Particle 18>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,-53
+    SetY = 10,92
+    SetZ = 10,34
+    SetVisible = 11,false
+<SE>
+    Play = 0,Fury Swipes
+#-------------------------------
+[Move,FURYSWIPES,3]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 0,6
+    SetX = 0,53
+    SetY = 0,-31
+    SetZ = 0,27
+    SetOpacity = 0,128
+    SetX = 1,40
+    SetY = 1,-15
+    SetOpacity = 1,255
+    SetX = 2,32
+    SetY = 2,1
+    SetX = 3,24
+    SetY = 3,17
+    SetToneRed = 4,-128
+    SetToneGreen = 4,-128
+    SetToneBlue = 4,-128
+    SetX = 5,25
+    SetOpacity = 5,128
+    SetVisible = 6,false
+<Particle 3>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 2,7
+    SetX = 2,13
+    SetY = 2,29
+    SetZ = 2,28
+    SetFrame = 3,8
+    SetX = 3,-13
+    SetY = 3,41
+    SetFrame = 4,10
+    SetX = 4,48
+    SetY = 4,62
+    SetFrame = 5,6
+    SetFlip = 5,true
+    SetX = 5,-64
+    SetY = 5,-24
+    SetOpacity = 5,128
+    SetX = 6,-48
+    SetY = 6,-8
+    SetOpacity = 6,255
+    SetX = 7,-32
+    SetY = 7,8
+    SetX = 8,-24
+    SetY = 8,16
+    SetToneRed = 9,-128
+    SetToneGreen = 9,-128
+    SetToneBlue = 9,-128
+    SetOpacity = 10,128
+    SetVisible = 11,false
+<Particle 4>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 3,8
+    SetX = 3,19
+    SetY = 3,42
+    SetZ = 3,29
+    SetFrame = 4,10
+    SetX = 4,-18
+    SetY = 4,61
+    SetFrame = 5,5
+    SetX = 5,-22
+    SetY = 5,131
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 4,10
+    SetX = 4,-52
+    SetY = 4,31
+    SetZ = 4,30
+    SetFrame = 5,5
+    SetX = 5,90
+    SetY = 5,132
+    SetVisible = 6,false
+<Particle 6>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 4,10
+    SetX = 4,55
+    SetY = 4,38
+    SetZ = 4,31
+    SetFrame = 5,5
+    SetX = 5,123
+    SetY = 5,0
+    SetVisible = 6,false
+<Particle 7>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-117
+    SetY = 5,84
+    SetZ = 5,32
+    SetVisible = 6,false
+<Particle 8>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-47
+    SetY = 5,95
+    SetZ = 5,33
+    SetVisible = 6,false
+<Particle 9>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,15
+    SetY = 5,81
+    SetZ = 5,34
+    SetVisible = 6,false
+<Particle 10>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,73
+    SetY = 5,84
+    SetZ = 5,35
+    SetVisible = 6,false
+<Particle 11>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,99
+    SetY = 5,47
+    SetZ = 5,36
+    SetVisible = 6,false
+<Particle 12>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 7,7
+    SetX = 7,-14
+    SetY = 7,32
+    SetZ = 7,29
+    SetFrame = 8,8
+    SetX = 8,9
+    SetY = 8,37
+    SetFrame = 9,10
+    SetX = 9,-17
+    SetY = 9,88
+    SetFrame = 10,11
+    SetX = 10,-10
+    SetY = 10,119
+    SetVisible = 11,false
+<Particle 13>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 8,7
+    SetX = 8,-22
+    SetY = 8,42
+    SetZ = 8,27
+    SetFrame = 9,10
+    SetX = 9,-76
+    SetY = 9,48
+    SetFrame = 10,11
+    SetX = 10,-109
+    SetY = 10,82
+    SetVisible = 11,false
+<Particle 14>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 9,10
+    SetX = 9,37
+    SetY = 9,88
+    SetZ = 9,30
+    SetFrame = 10,11
+    SetX = 10,-92
+    SetY = 10,119
+    SetVisible = 11,false
+<Particle 15>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 9,10
+    SetX = 9,61
+    SetY = 9,13
+    SetZ = 9,31
+    SetFrame = 10,11
+    SetX = 10,46
+    SetY = 10,110
+    SetVisible = 11,false
+<Particle 16>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,75
+    SetY = 10,68
+    SetZ = 10,32
+    SetVisible = 11,false
+<Particle 17>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,96
+    SetY = 10,-7
+    SetZ = 10,33
+    SetVisible = 11,false
+<Particle 18>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,-53
+    SetY = 10,92
+    SetZ = 10,34
+    SetVisible = 11,false
+<SE>
+    Play = 0,Fury Swipes
+#-------------------------------
+[Move,FURYSWIPES,4]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 0,6
+    SetX = 0,53
+    SetY = 0,-31
+    SetZ = 0,27
+    SetOpacity = 0,128
+    SetX = 1,40
+    SetY = 1,-15
+    SetOpacity = 1,255
+    SetX = 2,32
+    SetY = 2,1
+    SetX = 3,24
+    SetY = 3,17
+    SetToneRed = 4,-128
+    SetToneGreen = 4,-128
+    SetToneBlue = 4,-128
+    SetX = 5,25
+    SetOpacity = 5,128
+    SetVisible = 6,false
+<Particle 3>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 2,7
+    SetX = 2,13
+    SetY = 2,29
+    SetZ = 2,28
+    SetFrame = 3,8
+    SetX = 3,-13
+    SetY = 3,41
+    SetFrame = 4,10
+    SetX = 4,48
+    SetY = 4,62
+    SetFrame = 5,6
+    SetFlip = 5,true
+    SetX = 5,-64
+    SetY = 5,-24
+    SetOpacity = 5,128
+    SetX = 6,-48
+    SetY = 6,-8
+    SetOpacity = 6,255
+    SetX = 7,-32
+    SetY = 7,8
+    SetX = 8,-24
+    SetY = 8,16
+    SetToneRed = 9,-128
+    SetToneGreen = 9,-128
+    SetToneBlue = 9,-128
+    SetOpacity = 10,128
+    SetVisible = 11,false
+<Particle 4>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 3,8
+    SetX = 3,19
+    SetY = 3,42
+    SetZ = 3,29
+    SetFrame = 4,10
+    SetX = 4,-18
+    SetY = 4,61
+    SetFrame = 5,5
+    SetX = 5,-22
+    SetY = 5,131
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 4,10
+    SetX = 4,-52
+    SetY = 4,31
+    SetZ = 4,30
+    SetFrame = 5,5
+    SetX = 5,90
+    SetY = 5,132
+    SetVisible = 6,false
+<Particle 6>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 4,10
+    SetX = 4,55
+    SetY = 4,38
+    SetZ = 4,31
+    SetFrame = 5,5
+    SetX = 5,123
+    SetY = 5,0
+    SetVisible = 6,false
+<Particle 7>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-117
+    SetY = 5,84
+    SetZ = 5,32
+    SetVisible = 6,false
+<Particle 8>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,-47
+    SetY = 5,95
+    SetZ = 5,33
+    SetVisible = 6,false
+<Particle 9>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,15
+    SetY = 5,81
+    SetZ = 5,34
+    SetVisible = 6,false
+<Particle 10>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,73
+    SetY = 5,84
+    SetZ = 5,35
+    SetVisible = 6,false
+<Particle 11>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 5,5
+    SetX = 5,99
+    SetY = 5,47
+    SetZ = 5,36
+    SetVisible = 6,false
+<Particle 12>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 7,7
+    SetX = 7,-14
+    SetY = 7,32
+    SetZ = 7,29
+    SetFrame = 8,8
+    SetX = 8,9
+    SetY = 8,37
+    SetFrame = 9,10
+    SetX = 9,-17
+    SetY = 9,88
+    SetFrame = 10,11
+    SetX = 10,-10
+    SetY = 10,119
+    SetVisible = 11,false
+<Particle 13>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 8,7
+    SetX = 8,-22
+    SetY = 8,42
+    SetZ = 8,27
+    SetFrame = 9,10
+    SetX = 9,-76
+    SetY = 9,48
+    SetFrame = 10,11
+    SetX = 10,-109
+    SetY = 10,82
+    SetVisible = 11,false
+<Particle 14>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 9,10
+    SetX = 9,37
+    SetY = 9,88
+    SetZ = 9,30
+    SetFrame = 10,11
+    SetX = 10,-92
+    SetY = 10,119
+    SetVisible = 11,false
+<Particle 15>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 9,10
+    SetX = 9,61
+    SetY = 9,13
+    SetZ = 9,31
+    SetFrame = 10,11
+    SetX = 10,46
+    SetY = 10,110
+    SetVisible = 11,false
+<Particle 16>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,75
+    SetY = 10,68
+    SetZ = 10,32
+    SetVisible = 11,false
+<Particle 17>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,96
+    SetY = 10,-7
+    SetZ = 10,33
+    SetVisible = 11,false
+<Particle 18>
+    Graphic = Examples/Scratch + Shadow Claw
+    Focus = Target
+    SetFrame = 10,11
+    SetX = 10,-53
+    SetY = 10,92
+    SetZ = 10,34
+    SetVisible = 11,false
+<SE>
+    Play = 0,Fury Swipes

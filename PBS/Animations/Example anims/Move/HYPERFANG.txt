@@ -1,0 +1,28 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,HYPERFANG]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/normal2
+    Focus = Target
+    SetX = 0,-8
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetFrame = 2,2
+    SetX = 2,0
+    SetY = 2,6
+    SetFrame = 3,3
+    SetFrame = 4,4
+    SetX = 4,-8
+    SetY = 4,14
+    SetOpacity = 6,150
+    SetOpacity = 7,100
+<SE>
+    Play = 0,Slash9,80

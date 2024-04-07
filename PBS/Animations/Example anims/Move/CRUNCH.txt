@@ -1,0 +1,119 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CRUNCH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/teeth
+    Focus = Target
+    SetX = 0,12
+    SetY = 0,1
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetX = 1,7
+    SetY = 1,2
+    SetFrame = 2,2
+    SetX = 2,3
+    SetY = 2,3
+    SetFrame = 3,3
+    SetY = 3,1
+    SetFrame = 4,4
+    SetX = 4,-3
+    SetY = 4,-4
+    SetFrame = 5,5
+    SetX = 5,5
+    SetFrame = 6,6
+    SetX = 6,4
+    SetY = 6,0
+    SetFrame = 7,7
+    SetX = 7,5
+    SetY = 7,3
+    SetFrame = 8,8
+    SetX = 8,4
+    SetY = 8,-3
+    SetFrame = 9,9
+    SetX = 9,0
+    SetY = 9,-2
+    SetFrame = 10,10
+    SetX = 10,11
+    SetY = 10,2
+    SetFrame = 11,11
+    SetX = 11,7
+    SetY = 11,-3
+    SetFrame = 12,12
+    SetX = 12,0
+    SetY = 12,1
+    SetVisible = 13,false
+<Particle 3>
+    Graphic = Examples/teeth
+    Focus = Target
+    SetFrame = 7,13
+    SetX = 7,60
+    SetY = 7,19
+    SetZ = 7,28
+    SetFrame = 8,14
+    SetX = 8,34
+    SetY = 8,-1
+    SetX = 9,-5
+    SetY = 9,16
+    SetX = 10,-53
+    SetY = 10,32
+    SetVisible = 11,false
+<Particle 4>
+    Graphic = Examples/teeth
+    Focus = Target
+    SetFrame = 7,13
+    SetX = 7,-41
+    SetY = 7,-2
+    SetZ = 7,29
+    SetFrame = 8,14
+    SetX = 8,-55
+    SetY = 8,8
+    SetX = 9,41
+    SetY = 9,23
+    SetFrame = 10,13
+    SetX = 10,53
+    SetY = 10,20
+    SetVisible = 11,false
+<Particle 5>
+    Graphic = Examples/teeth
+    Focus = Target
+    SetFrame = 8,13
+    SetX = 8,-41
+    SetY = 8,-1
+    SetZ = 8,30
+    SetFrame = 9,14
+    SetX = 9,-57
+    SetY = 9,19
+    SetFrame = 10,13
+    SetX = 10,3
+    SetY = 10,45
+    SetVisible = 11,false
+<Particle 6>
+    Graphic = Examples/teeth
+    Focus = Target
+    SetFrame = 8,13
+    SetX = 8,58
+    SetY = 8,3
+    SetZ = 8,31
+    SetX = 9,7
+    SetY = 9,56
+    SetFrame = 10,14
+    SetX = 10,20
+    SetY = 10,18
+    SetVisible = 11,false
+<Particle 7>
+    Graphic = Examples/teeth
+    Focus = Target
+    SetFrame = 10,14
+    SetX = 10,-59
+    SetY = 10,0
+    SetZ = 10,32
+    SetVisible = 11,false
+<SE>
+    Play = 7,Super Fang,100,111

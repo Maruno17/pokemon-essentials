@@ -1,0 +1,34 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BITE]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Crunch
+    Focus = Target
+    SetX = 0,2
+    SetY = 0,0
+    SetZ = 0,27
+    SetOpacity = 0,128
+    SetOpacity = 2,192
+    SetFrame = 3,1
+    SetX = 3,1
+    SetY = 3,1
+    SetOpacity = 3,255
+    SetFrame = 4,2
+    SetFrame = 5,3
+    SetFrame = 6,5
+    SetFrame = 7,6
+    SetFrame = 8,7
+    SetFrame = 9,10
+    SetFrame = 10,11
+    SetFrame = 11,12
+    SetFrame = 12,13
+    SetOpacity = 13,128
+<SE>
+    Play = 9,Sword2,80

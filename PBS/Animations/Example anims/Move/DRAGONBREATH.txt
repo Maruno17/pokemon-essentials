@@ -1,0 +1,130 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DRAGONBREATH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetX = 0,19
+    SetY = 0,-29
+    SetZ = 0,27
+    SetX = 1,59
+    SetY = 1,-59
+    SetFrame = 2,1
+    SetX = 2,100
+    SetY = 2,-89
+    SetFrame = 3,2
+    SetX = 3,139
+    SetY = 3,-128
+    SetFrame = 4,3
+    SetX = 4,164
+    SetY = 4,-157
+    SetFrame = 5,4
+    SetX = 5,179
+    SetY = 5,-178
+    SetFrame = 6,5
+    SetFrame = 7,6
+    SetFrame = 8,7
+<Particle 3>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetX = 1,39
+    SetY = 1,-40
+    SetZ = 1,28
+    SetX = 2,69
+    SetX = 3,125
+    SetY = 3,-70
+    SetFrame = 4,1
+    SetX = 4,134
+    SetY = 4,-79
+    SetZoomX = 4,75
+    SetZoomY = 4,75
+    SetFrame = 5,0
+    SetX = 5,154
+    SetY = 5,-89
+    SetZoomX = 5,100
+    SetZoomY = 5,100
+    SetVisible = 6,false
+<Particle 4>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetFlip = 2,true
+    SetX = 2,69
+    SetY = 2,-59
+    SetZ = 2,29
+    SetFlip = 3,false
+    SetX = 3,109
+    SetY = 3,-50
+    SetX = 4,119
+    SetY = 4,-59
+    SetX = 5,139
+    SetY = 5,-70
+    SetZoomX = 5,75
+    SetZoomY = 5,75
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetFlip = 2,true
+    SetX = 2,39
+    SetY = 2,-29
+    SetZ = 2,30
+    SetX = 3,79
+    SetY = 3,-40
+    SetX = 4,94
+    SetY = 4,-50
+    SetZoomX = 4,75
+    SetZoomY = 4,75
+    SetVisible = 5,false
+<Particle 6>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetX = 2,84
+    SetY = 2,-109
+    SetZ = 2,31
+    SetZoomX = 2,50
+    SetZoomY = 2,50
+    SetX = 3,79
+    SetY = 3,-29
+    SetZoomX = 3,100
+    SetZoomY = 3,100
+    SetVisible = 4,false
+<Particle 7>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetFrame = 3,1
+    SetFlip = 3,true
+    SetX = 3,169
+    SetY = 3,-109
+    SetZ = 3,32
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+    SetVisible = 4,false
+<Particle 8>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetFrame = 3,1
+    SetFlip = 3,true
+    SetX = 3,129
+    SetY = 3,-128
+    SetZ = 3,33
+    SetZoomX = 3,40
+    SetZoomY = 3,40
+    SetVisible = 4,false
+<Particle 9>
+    Graphic = Examples/fire5
+    Focus = UserAndTarget
+    SetX = 3,64
+    SetY = 3,-20
+    SetZ = 3,34
+    SetZoomX = 3,75
+    SetZoomY = 3,75
+    SetVisible = 4,false
+<SE>
+    Play = 0,Fire4,80

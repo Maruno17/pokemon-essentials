@@ -1,0 +1,49 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FAKEOUT]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Fakeout
+    Focus = Target
+    SetFrame = 0,5
+    SetFlip = 0,true
+    SetX = 0,96
+    SetY = 0,6
+    SetZ = 0,28
+    SetX = 6,80
+    SetX = 7,64
+    SetFrame = 8,6
+    SetX = 8,16
+    SetX = 9,0
+    SetX = 12,16
+    SetFrame = 13,5
+    SetX = 13,64
+    SetX = 14,80
+    SetX = 15,96
+    SetVisible = 20,false
+<Particle 2>
+    Graphic = Examples/Fakeout
+    Focus = Target
+    SetFrame = 0,5
+    SetX = 0,-96
+    SetY = 0,6
+    SetZ = 0,27
+    SetX = 6,-80
+    SetX = 7,-64
+    SetFrame = 8,6
+    SetX = 8,-16
+    SetX = 9,0
+    SetX = 12,-16
+    SetFrame = 13,5
+    SetX = 13,-64
+    SetX = 14,-80
+    SetX = 15,-96
+    SetVisible = 20,false
+<SE>
+    Play = 9,punch5,80,150

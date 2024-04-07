@@ -1,0 +1,91 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Sleep]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/028-State01
+    Focus = Target
+    SetFrame = 3,8
+    SetX = 3,40
+    SetY = 3,-42
+    SetZ = 3,28
+    SetZoomX = 3,50
+    SetZoomY = 3,50
+    SetX = 4,-8
+    SetY = 4,-18
+    SetX = 5,-32
+    SetY = 5,-2
+    SetX = 6,-18
+    SetY = 6,-48
+    SetX = 7,-23
+    SetY = 7,-62
+    SetX = 8,48
+    SetY = 8,-26
+    SetX = 9,57
+    SetY = 9,-42
+    SetX = 10,68
+    SetY = 10,-58
+    SetX = 11,79
+    SetY = 11,-76
+<Particle 4>
+    Graphic = Examples/028-State01
+    Focus = Target
+    SetFrame = 4,8
+    SetX = 4,47
+    SetY = 4,-55
+    SetZ = 4,27
+    SetZoomX = 4,50
+    SetZoomY = 4,50
+    SetX = 5,52
+    SetY = 5,-67
+    SetX = 6,-41
+    SetY = 6,-17
+    SetX = 7,-50
+    SetY = 7,-30
+    SetX = 8,-59
+    SetY = 8,-43
+    SetX = 9,-67
+    SetY = 9,-57
+    SetX = 10,-75
+    SetY = 10,-71
+    SetVisible = 11,false
+<Particle 5>
+    Graphic = Examples/028-State01
+    Focus = Target
+    SetFrame = 5,8
+    SetX = 5,-14
+    SetY = 5,-32
+    SetZ = 5,29
+    SetZoomX = 5,50
+    SetZoomY = 5,50
+    SetVisible = 6,false
+<Particle 6>
+    Graphic = Examples/028-State01
+    Focus = Target
+    SetFrame = 7,8
+    SetX = 7,40
+    SetY = 7,-10
+    SetZ = 7,29
+    SetZoomX = 7,50
+    SetZoomY = 7,50
+    SetVisible = 8,false
+<Particle 2>
+    Graphic = Examples/028-State01
+    Focus = Target
+    SetFrame = 1,8
+    SetX = 1,24
+    SetY = 1,-18
+    SetZ = 1,27
+    SetZoomX = 1,50
+    SetZoomY = 1,50
+    SetX = 2,32
+    SetY = 2,-29
+    SetVisible = 3,false
+<SE>
+    Play = 0,Sleep,80

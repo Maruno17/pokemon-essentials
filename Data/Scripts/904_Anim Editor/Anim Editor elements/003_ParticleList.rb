@@ -202,8 +202,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
 
   def particle_index=(val)
     old_index = @row_index
-    @row_index = @particle_list.index { |row| (row.is_a?(Array) && row[0] == val) ||
-                                              (!row.is_a?(Array) && row == val) }
+    @row_index = @particle_list.index { |row| !row.is_a?(Array) && row == val }
     return if @row_index == old_index
     invalidate
     scroll_to_row(@row_index)
@@ -690,6 +689,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         spr.bitmap.fill_rect(10 + (i * 2), 12, 1, 1, Color.black)
       end
     elsif @expanded_particles.include?(p_index)
+      # Draw down-pointing arrow
       11.times do |i|
         j = (i == 0 || i == 10) ? 1 : 0
         h = [2, 4, 5, 6, 7, 8, 7, 6, 5, 4, 2][i]
@@ -697,6 +697,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         spr.bitmap.fill_rect(5 + i, 9 + j, 1, h, Color.black)
       end
     elsif particle_data[:name] != "SE"
+      # Draw right-pointing arrow
       11.times do |j|
         i = (j == 0 || j == 10) ? 1 : 0
         w = [2, 4, 5, 6, 7, 8, 7, 6, 5, 4, 2][j]
@@ -1049,13 +1050,19 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       end
     elsif Input.repeat?(Input::DOWN)
       if @row_index < @particle_list.length - 1
+        old_row_index = @row_index
         loop do
           @row_index += 1
-          break if !@particle_list[@row_index].is_a?(Array)
+          break if !@particle_list[@row_index].is_a?(Array) || @row_index >= @particle_list.length
         end
-        @keyframe = 0 if @row_index >= @particle_list.length - 1 && @keyframe < 0
-        scroll_to_row(@row_index)
-        set_changed
+        if @row_index < @particle_list.length
+          @keyframe = 0 if @keyframe < 0 && !@particle_list[@row_index].is_a?(Array) &&
+                           @particles[@particle_list[@row_index]][:name] == "SE"
+          scroll_to_row(@row_index)
+          set_changed
+        else
+          @row_index = old_row_index
+        end
       end
     end
     # Mouse scroll wheel

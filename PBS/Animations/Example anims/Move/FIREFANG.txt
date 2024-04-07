@@ -1,0 +1,129 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FIREFANG]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetX = 0,7
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetX = 1,10
+    SetY = 1,0
+    SetFrame = 2,2
+    SetX = 2,2
+    SetY = 2,-3
+    SetFrame = 3,3
+    SetX = 3,8
+    SetY = 3,3
+    SetFrame = 4,4
+    SetX = 4,-3
+    SetY = 4,2
+    SetFrame = 5,5
+    SetX = 5,0
+    SetY = 5,-2
+    SetFrame = 6,6
+    SetX = 6,2
+    SetY = 6,0
+    SetFrame = 7,7
+    SetFrame = 8,8
+    SetX = 8,7
+    SetY = 8,-1
+    SetFrame = 9,9
+    SetX = 9,-2
+    SetY = 9,-9
+    SetFrame = 10,10
+    SetX = 10,11
+    SetY = 10,0
+    SetFrame = 11,11
+    SetX = 11,9
+    SetY = 11,2
+    SetFrame = 12,12
+    SetY = 12,-3
+<Particle 3>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 7,15
+    SetX = 7,27
+    SetY = 7,-8
+    SetZ = 7,28
+    SetY = 8,-7
+    SetY = 9,-14
+    SetX = 10,31
+    SetY = 10,-7
+    SetVisible = 11,false
+<Particle 4>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 8,15
+    SetX = 8,34
+    SetY = 8,-26
+    SetZ = 8,29
+    SetX = 9,30
+    SetY = 9,-35
+    SetX = 10,36
+    SetY = 10,-27
+    SetVisible = 11,false
+<Particle 5>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 8,15
+    SetX = 8,-31
+    SetY = 8,-23
+    SetZ = 8,30
+    SetX = 9,-35
+    SetY = 9,-56
+    SetX = 10,21
+    SetY = 10,-43
+    SetVisible = 11,false
+<Particle 6>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 9,15
+    SetX = 9,-25
+    SetY = 9,-63
+    SetZ = 9,31
+    SetX = 10,-36
+    SetY = 10,-48
+    SetVisible = 11,false
+<Particle 7>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 10,15
+    SetX = 10,-26
+    SetY = 10,-52
+    SetZ = 10,32
+    SetVisible = 11,false
+<Particle 8>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 10,15
+    SetX = 10,-9
+    SetY = 10,-56
+    SetZ = 10,33
+    SetVisible = 11,false
+<Particle 9>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 10,15
+    SetX = 10,-28
+    SetY = 10,8
+    SetZ = 10,34
+    SetVisible = 11,false
+<Particle 10>
+    Graphic = Examples/element fangs
+    Focus = Target
+    SetFrame = 10,15
+    SetX = 10,-19
+    SetY = 10,-64
+    SetZ = 10,35
+    SetVisible = 11,false
+<SE>
+    Play = 6,Vice Grip,100,114

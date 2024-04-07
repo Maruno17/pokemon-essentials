@@ -1,0 +1,206 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LEECHSEED]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 4>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetX = 4,14
+    SetY = 4,-29
+    SetZ = 4,29
+    SetX = 5,39
+    SetY = 5,-118
+    SetX = 6,69
+    SetY = 6,-168
+    SetVisible = 7,false
+<Particle 5>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetX = 8,175
+    SetY = 8,-207
+    SetZ = 8,29
+    SetVisible = 9,false
+<Particle 6>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetX = 10,229
+    SetY = 10,-148
+    SetZ = 10,29
+    SetVisible = 11,false
+<Particle 7>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetFrame = 12,3
+    SetX = 12,229
+    SetY = 12,-148
+    SetZ = 12,29
+    SetFrame = 14,1
+    SetFrame = 16,2
+    SetFrame = 18,1
+    SetFrame = 20,2
+    SetVisible = 24,false
+<Particle 2>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetX = 0,14
+    SetY = 0,-29
+    SetZ = 0,27
+    SetX = 1,54
+    SetY = 1,-128
+    SetX = 2,94
+    SetY = 2,-187
+    SetX = 3,134
+    SetY = 3,-217
+    SetX = 4,164
+    SetX = 5,189
+    SetY = 5,-187
+    SetX = 6,200
+    SetY = 6,-148
+    SetX = 7,119
+    SetY = 7,-207
+    SetFrame = 8,3
+    SetX = 8,200
+    SetY = 8,-148
+    SetFrame = 10,1
+    SetFrame = 12,2
+    SetFrame = 14,1
+    SetFrame = 16,2
+    SetFrame = 20,1
+    SetVisible = 24,false
+<Particle 3>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetX = 2,14
+    SetY = 2,-29
+    SetZ = 2,28
+    SetX = 3,44
+    SetY = 3,-139
+    SetX = 4,79
+    SetY = 4,-217
+    SetX = 5,109
+    SetY = 5,-237
+    SetX = 6,134
+    SetY = 6,-226
+    SetX = 7,159
+    SetY = 7,-178
+    SetX = 8,169
+    SetY = 8,-148
+    SetX = 9,204
+    SetY = 9,-187
+    SetFrame = 10,3
+    SetX = 10,169
+    SetY = 10,-148
+    SetFrame = 12,1
+    SetFrame = 14,2
+    SetFrame = 16,1
+    SetFrame = 18,2
+    SetFrame = 20,1
+    SetVisible = 24,false
+#-------------------------------
+[OppMove,LEECHSEED]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetX = 2,200
+    SetY = 2,-196
+    SetZ = 2,28
+    SetX = 3,175
+    SetY = 3,-237
+    SetX = 4,139
+    SetY = 4,-256
+    SetX = 5,100
+    SetY = 5,-237
+    SetX = 6,44
+    SetY = 6,-178
+    SetX = 7,-5
+    SetY = 7,-79
+    SetFrame = 8,3
+    SetX = 8,0
+    SetY = 8,39
+    SetFrame = 10,1
+    SetFrame = 12,2
+    SetFrame = 14,1
+    SetFrame = 16,2
+    SetVisible = 24,false
+<Particle 4>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetX = 4,200
+    SetY = 4,-196
+    SetZ = 4,29
+    SetX = 5,175
+    SetY = 5,-226
+    SetX = 6,139
+    SetY = 6,-237
+    SetVisible = 7,false
+<Particle 5>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetX = 8,64
+    SetY = 8,-128
+    SetZ = 8,29
+    SetVisible = 9,false
+<Particle 6>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetX = 10,25
+    SetY = 10,39
+    SetZ = 10,29
+    SetVisible = 11,false
+<Particle 7>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetFrame = 12,3
+    SetX = 12,25
+    SetY = 12,39
+    SetZ = 12,29
+    SetFrame = 14,1
+    SetFrame = 16,2
+    SetFrame = 18,1
+    SetFrame = 20,2
+    SetVisible = 24,false
+<Particle 2>
+    Graphic = Examples/leech-seed
+    Focus = UserAndTarget
+    SetX = 0,200
+    SetY = 0,-196
+    SetZ = 0,27
+    SetX = 1,175
+    SetY = 1,-226
+    SetX = 2,144
+    SetY = 2,-237
+    SetX = 3,100
+    SetY = 3,-217
+    SetX = 4,64
+    SetY = 4,-157
+    SetX = 5,25
+    SetY = 5,-59
+    SetX = 6,0
+    SetY = 6,39
+    SetX = 7,94
+    SetY = 7,-207
+    SetX = 8,-30
+    SetY = 8,39
+    SetX = 9,39
+    SetY = 9,-40
+    SetFrame = 10,3
+    SetX = 10,-25
+    SetY = 10,39
+    SetFrame = 12,1
+    SetFrame = 14,2
+    SetFrame = 16,1
+    SetFrame = 18,2
+    SetVisible = 24,false

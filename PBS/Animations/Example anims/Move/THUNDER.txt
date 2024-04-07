@@ -1,0 +1,94 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,THUNDER]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Trovao
+    Focus = Target
+    SetFrame = 1,12
+    SetFlip = 1,true
+    SetX = 1,-8
+    SetY = 1,-10
+    SetZ = 1,28
+    SetFrame = 2,8
+    SetFlip = 2,false
+    SetY = 2,-50
+    SetFrame = 3,12
+    SetY = 3,-18
+    SetFrame = 4,8
+    SetX = 4,8
+    SetY = 4,-42
+    SetFrame = 5,12
+    SetX = 5,-16
+    SetY = 5,-10
+    SetVisible = 6,false
+<Particle 4>
+    Graphic = Examples/Trovao
+    Focus = Target
+    SetFrame = 2,9
+    SetX = 2,16
+    SetY = 2,54
+    SetZ = 2,29
+    SetFrame = 3,14
+    SetX = 3,-8
+    SetFrame = 4,11
+    SetX = 4,0
+    SetY = 4,14
+    SetFrame = 5,10
+    SetX = 5,-8
+    SetY = 5,22
+    SetVisible = 6,false
+<Particle 5>
+    Graphic = Examples/Trovao
+    Focus = Target
+    SetFrame = 9,1
+    SetX = 9,-8
+    SetY = 9,6
+    SetZ = 9,28
+    SetOpacity = 9,100
+    SetVisible = 10,false
+<Particle 2>
+    Graphic = Examples/Trovao
+    Focus = Target
+    SetFrame = 0,12
+    SetFlip = 0,true
+    SetX = 0,8
+    SetY = 0,-154
+    SetZ = 0,27
+    SetFrame = 1,13
+    SetX = 1,-32
+    SetFrame = 2,7
+    SetFlip = 2,false
+    SetX = 2,-8
+    SetY = 2,-162
+    SetFrame = 3,13
+    SetX = 3,16
+    SetY = 3,-130
+    SetFrame = 4,7
+    SetX = 4,0
+    SetY = 4,-138
+    SetFrame = 5,13
+    SetX = 5,8
+    SetY = 5,-130
+    SetFrame = 6,3
+    SetX = 6,-8
+    SetY = 6,6
+    SetFrame = 7,4
+    SetFrame = 8,2
+    SetFlip = 9,true
+    SetFrame = 10,0
+    SetFlip = 10,false
+    SetOpacity = 10,100
+    SetFlip = 11,true
+    SetZoomX = 11,150
+    SetZoomY = 11,150
+    SetOpacity = 11,20
+    SetVisible = 12,false
+<SE>
+    Play = 0,Thunder1,80

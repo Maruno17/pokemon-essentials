@@ -1,0 +1,25 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,HEADBUTT]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetX = 0,0
+    SetY = 0,-2
+    SetZ = 0,27
+    SetFrame = 1,1
+    SetAngle = 2,90
+    SetFrame = 3,2
+    SetAngle = 3,0
+    SetZoomX = 4,120
+    SetZoomY = 4,120
+    SetOpacity = 5,100
+<SE>
+    Play = 0,Blow3,80

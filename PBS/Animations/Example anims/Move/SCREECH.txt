@@ -1,0 +1,59 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SCREECH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 3>
+    Graphic = Examples/Growl
+    Focus = UserAndTarget
+    SetFrame = 0,1
+    SetX = 0,39
+    SetY = 0,-128
+    SetZ = 0,28
+    SetY = 1,-139
+    SetFrame = 2,2
+    SetY = 2,18
+    SetFrame = 3,1
+    SetY = 3,-139
+    SetY = 5,-148
+    SetY = 6,-139
+    SetY = 7,-157
+    SetY = 8,-148
+    SetY = 9,-139
+<Particle 4>
+    Graphic = Examples/Growl
+    Focus = UserAndTarget
+    SetFrame = 0,2
+    SetX = 0,39
+    SetY = 0,9
+    SetZ = 0,29
+    SetY = 1,0
+    SetFrame = 2,1
+    SetY = 2,-148
+    SetFrame = 3,2
+    SetY = 3,-10
+    SetY = 4,18
+    SetY = 5,0
+    SetY = 6,9
+    SetY = 7,0
+    SetY = 9,9
+<Particle 2>
+    Graphic = Examples/Growl
+    Focus = UserAndTarget
+    SetX = 0,39
+    SetY = 0,-59
+    SetZ = 0,27
+    SetY = 1,-70
+    SetY = 2,-50
+    SetY = 3,-70
+    SetY = 4,-50
+    SetY = 6,-70
+    SetY = 7,-79
+    SetY = 9,-70
+<SE>
+    PlayUserCry = 0

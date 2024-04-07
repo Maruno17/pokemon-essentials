@@ -1,0 +1,77 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,IRONHEAD]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/Iron Head
+    Focus = Target
+    SetFrame = 1,2
+    SetX = 1,0
+    SetY = 1,1
+    SetZ = 1,27
+    SetFrame = 2,1
+    SetFrame = 5,3
+    SetFrame = 6,0
+    SetOpacity = 7,128
+<Particle 3>
+    Graphic = Examples/Iron Head
+    Focus = Target
+    SetFrame = 2,5
+    SetX = 2,-53
+    SetY = 2,18
+    SetZ = 2,28
+    SetX = 3,-106
+    SetY = 3,32
+    SetX = 4,-100
+    SetY = 4,82
+    SetOpacity = 4,128
+    SetVisible = 5,false
+<Particle 4>
+    Graphic = Examples/Iron Head
+    Focus = Target
+    SetFrame = 2,6
+    SetX = 2,53
+    SetY = 2,22
+    SetZ = 2,29
+    SetX = 3,101
+    SetY = 3,36
+    SetX = 4,123
+    SetY = 4,86
+    SetOpacity = 4,128
+    SetVisible = 5,false
+<Particle 5>
+    Graphic = Examples/Iron Head
+    Focus = Target
+    SetFrame = 3,7
+    SetX = 3,-105
+    SetY = 3,-14
+    SetZ = 3,30
+    SetX = 4,-118
+    SetY = 4,-69
+    SetVisible = 5,false
+<Particle 6>
+    Graphic = Examples/Iron Head
+    Focus = Target
+    SetFrame = 3,8
+    SetX = 3,77
+    SetY = 3,-27
+    SetZ = 3,31
+    SetX = 4,129
+    SetY = 4,-42
+    SetVisible = 5,false
+<Particle 7>
+    Graphic = Examples/Iron Head
+    Focus = Target
+    SetFrame = 3,8
+    SetX = 3,-109
+    SetY = 3,-63
+    SetZ = 3,32
+    SetVisible = 4,false
+<SE>
+    Play = 0,Damage1

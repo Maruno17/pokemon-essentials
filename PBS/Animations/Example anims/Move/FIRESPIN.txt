@@ -1,0 +1,50 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FIRESPIN]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/grass2
+    Focus = Target
+    SetFrame = 0,9
+    SetX = 0,0
+    SetY = 0,-2
+    SetZ = 0,27
+    SetZoomX = 0,25
+    SetZoomY = 0,25
+    SetOpacity = 0,100
+    SetFrame = 1,10
+    SetZoomX = 1,50
+    SetZoomY = 1,50
+    SetOpacity = 1,150
+    SetFrame = 2,11
+    SetY = 2,-10
+    SetZoomX = 2,75
+    SetZoomY = 2,75
+    SetOpacity = 2,200
+    SetFrame = 3,12
+    SetY = 3,-18
+    SetZoomX = 3,100
+    SetZoomY = 3,100
+    SetOpacity = 3,255
+    SetFrame = 4,9
+    SetFrame = 5,10
+    SetFrame = 6,11
+    SetFrame = 7,12
+    SetFrame = 8,9
+    SetFrame = 9,10
+    SetFrame = 10,11
+    SetZoomX = 10,75
+    SetZoomY = 10,75
+    SetOpacity = 10,150
+    SetFrame = 11,12
+    SetZoomX = 11,50
+    SetZoomY = 11,50
+    SetOpacity = 11,100
+<SE>
+    Play = 0,Fire5,80

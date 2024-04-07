@@ -1,0 +1,23 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ROCKSMASH]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/rockice
+    Focus = Target
+    SetX = 0,8
+    SetY = 0,-10
+    SetZ = 0,27
+    SetFrame = 3,1
+    SetFrame = 4,2
+    SetFrame = 5,3
+    SetFrame = 6,4
+<SE>
+    Play = 2,Earth1,80
+    Play = 2,Blow6,80

@@ -1,0 +1,171 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ICICLESPEAR]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/rockice
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetFlip = 0,true
+    SetX = 0,50
+    SetY = 0,-50
+    SetZ = 0,27
+    SetAngle = 0,135
+    SetX = 1,100
+    SetY = 1,-79
+    SetX = 2,129
+    SetY = 2,-128
+    SetX = 3,159
+    SetY = 3,-139
+    SetFrame = 4,6
+    SetX = 4,169
+    SetY = 4,-148
+    SetFrame = 5,7
+    SetX = 5,175
+    SetY = 5,-157
+<SE>
+    Play = 0,throw,80
+    Play = 2,Crash,50,115
+    Play = 2,Ice2,80
+#-------------------------------
+[Move,ICICLESPEAR,1]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/rockice
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetFlip = 0,true
+    SetX = 0,50
+    SetY = 0,-50
+    SetZ = 0,27
+    SetAngle = 0,135
+    SetX = 1,100
+    SetY = 1,-79
+    SetX = 2,129
+    SetY = 2,-128
+    SetX = 3,159
+    SetY = 3,-139
+    SetFrame = 4,6
+    SetX = 4,169
+    SetY = 4,-148
+    SetFrame = 5,7
+    SetX = 5,175
+    SetY = 5,-157
+<SE>
+    Play = 0,throw,80
+    Play = 2,Crash,50,115
+    Play = 2,Ice2,80
+#-------------------------------
+[Move,ICICLESPEAR,2]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/rockice
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetFlip = 0,true
+    SetX = 0,50
+    SetY = 0,-50
+    SetZ = 0,27
+    SetAngle = 0,135
+    SetX = 1,100
+    SetY = 1,-79
+    SetX = 2,129
+    SetY = 2,-128
+    SetX = 3,159
+    SetY = 3,-139
+    SetFrame = 4,6
+    SetX = 4,169
+    SetY = 4,-148
+    SetFrame = 5,7
+    SetX = 5,175
+    SetY = 5,-157
+<SE>
+    Play = 0,throw,80
+    Play = 2,Crash,50,115
+    Play = 2,Ice2,80
+#-------------------------------
+[Move,ICICLESPEAR,3]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/rockice
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetFlip = 0,true
+    SetX = 0,50
+    SetY = 0,-50
+    SetZ = 0,27
+    SetAngle = 0,135
+    SetX = 1,100
+    SetY = 1,-79
+    SetX = 2,129
+    SetY = 2,-128
+    SetX = 3,159
+    SetY = 3,-139
+    SetFrame = 4,6
+    SetX = 4,169
+    SetY = 4,-148
+    SetFrame = 5,7
+    SetX = 5,175
+    SetY = 5,-157
+<SE>
+    Play = 0,throw,80
+    Play = 2,Crash,50,115
+    Play = 2,Ice2,80
+#-------------------------------
+[Move,ICICLESPEAR,4]
+Name = Example anim
+<User>
+    SetX = 0,0
+    SetY = 0,0
+<Target>
+    SetX = 0,0
+    SetY = 0,0
+<Particle 2>
+    Graphic = Examples/rockice
+    Focus = UserAndTarget
+    SetFrame = 0,5
+    SetFlip = 0,true
+    SetX = 0,50
+    SetY = 0,-50
+    SetZ = 0,27
+    SetAngle = 0,135
+    SetX = 1,100
+    SetY = 1,-79
+    SetX = 2,129
+    SetY = 2,-128
+    SetX = 3,159
+    SetY = 3,-139
+    SetFrame = 4,6
+    SetX = 4,169
+    SetY = 4,-148
+    SetFrame = 5,7
+    SetX = 5,175
+    SetY = 5,-157
+<SE>
+    Play = 0,throw,80
+    Play = 2,Crash,50,115
+    Play = 2,Ice2,80
