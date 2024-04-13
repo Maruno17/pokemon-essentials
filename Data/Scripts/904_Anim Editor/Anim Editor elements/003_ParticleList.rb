@@ -28,16 +28,17 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     :foreground             => Color.new(128, 160, 248),   # Blue
     :midground              => Color.new(128, 160, 248),   # Blue
     :background             => Color.new(128, 160, 248),   # Blue
-    :user                   => Color.new(96, 248, 96),     # Green
-    :target                 => Color.new(248, 96, 96),     # Red
-    :user_and_target        => Color.new(248, 248, 96),    # Yellow
-    :user_side_foreground   => Color.new(128, 248, 248),   # Cyan
-    :user_side_background   => Color.new(128, 248, 248),   # Cyan
-    :target_side_foreground => Color.new(128, 248, 248),   # Cyan
-    :target_side_background => Color.new(128, 248, 248)    # Cyan
+    :user                   => Color.new(64, 224, 64),     # Green
+    :target                 => Color.new(224, 64, 64),     # Red
+    :user_and_target        => Color.new(224, 224, 64),    # Yellow
+    :user_side_foreground   => Color.new(128, 224, 224),   # Cyan
+    :user_side_background   => Color.new(128, 224, 224),   # Cyan
+    :target_side_foreground => Color.new(128, 224, 224),   # Cyan
+    :target_side_background => Color.new(128, 224, 224)    # Cyan
   }
   SE_CONTROL_BG_COLOR        = Color.gray
   TIME_AFTER_ANIMATION_COLOR = Color.new(160, 160, 160)
+  POSITION_LINE_COLOR        = Color.new(248, 96, 96)
 
   attr_reader :keyframe   # The selected keyframe
   attr_reader :values
@@ -123,12 +124,12 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     # Position line sprite
     @position_sprite = BitmapSprite.new(3, height - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, @position_viewport)
     @position_sprite.ox = @position_sprite.width / 2
-    @position_sprite.bitmap.fill_rect(0, 0, @position_sprite.bitmap.width, @position_sprite.bitmap.height, Color.red)
+    @position_sprite.bitmap.fill_rect(0, 0, @position_sprite.bitmap.width, @position_sprite.bitmap.height, POSITION_LINE_COLOR)
     # Selected particle line sprite
     @particle_line_sprite = BitmapSprite.new(@position_viewport.rect.width, 3, @commands_viewport)
     @particle_line_sprite.z = -10
     @particle_line_sprite.oy = @particle_line_sprite.height / 2
-    @particle_line_sprite.bitmap.fill_rect(0, 0, @particle_line_sprite.bitmap.width, @particle_line_sprite.bitmap.height, Color.red)
+    @particle_line_sprite.bitmap.fill_rect(0, 0, @particle_line_sprite.bitmap.width, @particle_line_sprite.bitmap.height, POSITION_LINE_COLOR)
   end
 
   def initialize_controls

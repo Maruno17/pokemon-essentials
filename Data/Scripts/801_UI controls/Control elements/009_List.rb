@@ -7,7 +7,7 @@ class UIControls::List < UIControls::BaseControl
   TEXT_PADDING_X   = 4
   TEXT_OFFSET_Y    = 3
 
-  SELECTED_ROW_COLOR = Color.green
+  SELECTED_ROW_COLOR = Color.new(216, 192, 32)   # Dark yellow
 
   def initialize(width, height, viewport, values = [])
     super(width, height, viewport)

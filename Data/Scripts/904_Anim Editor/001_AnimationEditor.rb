@@ -137,8 +137,8 @@ class AnimationEditor
       when 1, 12 then wid = 4
       else            wid = 5
       end
-      @delete_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.red)
-      @delete_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.red)
+      @delete_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.new(248, 96, 96))
+      @delete_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.new(248, 96, 96))
       @delete_disabled_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.new(160, 160, 160))
       @delete_disabled_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.new(160, 160, 160))
     end

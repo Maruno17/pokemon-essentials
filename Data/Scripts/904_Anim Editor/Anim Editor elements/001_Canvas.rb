@@ -15,6 +15,7 @@ class AnimationEditor::Canvas < Sprite
   attr_reader :values
 
   FRAME_SIZE = 48
+  PARTICLE_FRAME_COLOR = Color.new(0, 0, 0, 64)
 
   def initialize(viewport, anim, settings)
     super(viewport)
@@ -58,8 +59,8 @@ class AnimationEditor::Canvas < Sprite
   def initialize_particle_frames
     # Frame for selected particle
     @sel_frame_bitmap = Bitmap.new(FRAME_SIZE, FRAME_SIZE)
-    @sel_frame_bitmap.outline_rect(0, 0, @sel_frame_bitmap.width, @sel_frame_bitmap.height, Color.new(0, 0, 0, 64))
-    @sel_frame_bitmap.outline_rect(2, 2, @sel_frame_bitmap.width - 4, @sel_frame_bitmap.height - 4, Color.new(0, 0, 0, 64))
+    @sel_frame_bitmap.outline_rect(0, 0, @sel_frame_bitmap.width, @sel_frame_bitmap.height, PARTICLE_FRAME_COLOR)
+    @sel_frame_bitmap.outline_rect(2, 2, @sel_frame_bitmap.width - 4, @sel_frame_bitmap.height - 4, PARTICLE_FRAME_COLOR)
     @sel_frame_sprite = Sprite.new(viewport)
     @sel_frame_sprite.bitmap = @sel_frame_bitmap
     @sel_frame_sprite.z = 99999
@@ -67,7 +68,7 @@ class AnimationEditor::Canvas < Sprite
     @sel_frame_sprite.oy = @sel_frame_bitmap.height / 2
     # Frame for other particles
     @frame_bitmap = Bitmap.new(FRAME_SIZE, FRAME_SIZE)
-    @frame_bitmap.outline_rect(1, 1, @frame_bitmap.width - 2, @frame_bitmap.height - 2, Color.new(0, 0, 0, 64))
+    @frame_bitmap.outline_rect(1, 1, @frame_bitmap.width - 2, @frame_bitmap.height - 2, PARTICLE_FRAME_COLOR)
     @battler_frame_sprites = []
     @frame_sprites = []
   end

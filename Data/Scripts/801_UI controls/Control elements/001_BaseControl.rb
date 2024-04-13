@@ -11,8 +11,8 @@ class UIControls::BaseControl < BitmapSprite
   TEXT_COLOR          = Color.black
   TEXT_SIZE           = 18           # Default is 22 if size isn't explicitly set
   TEXT_OFFSET_Y       = 5
-  HOVER_COLOR         = Color.cyan   # For clickable area when hovering over it
-  CAPTURE_COLOR       = Color.pink   # For area you clicked in but aren't hovering over
+  HOVER_COLOR         = Color.new(224, 255, 255) # For clickable area when hovering over it; light blue
+  CAPTURE_COLOR       = Color.new(255, 64, 128)   # For area you clicked in but aren't hovering over; hot pink
   DISABLED_COLOR      = Color.gray
   DISABLED_COLOR_DARK = Color.new(128, 128, 128)
 

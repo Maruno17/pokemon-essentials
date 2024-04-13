@@ -8,7 +8,7 @@ class UIControls::Checkbox < UIControls::BaseControl
   CHECKBOX_FILL_SIZE = CHECKBOX_HEIGHT - 4
 
   UNCHECKED_COLOR = Color.gray
-  CHECKED_COLOR   = Color.new(64, 255, 64)   # Green
+  CHECKED_COLOR   = Color.new(48, 192, 48)   # Darkish green
 
   def initialize(width, height, viewport, value = false)
     super(width, height, viewport)
