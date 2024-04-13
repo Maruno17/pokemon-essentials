@@ -2,13 +2,11 @@
 #-------------------------------
 [Move,CHARGE]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
+<Particle 1>
     Graphic = Examples/electric2
     Focus = User
     SetX = 0,200
@@ -40,7 +38,7 @@ Name = Example anim
     SetY = 10,70
     SetFrame = 11,6
     SetOpacity = 11,100
-<Particle 3>
+<Particle 2>
     Graphic = Examples/electric2
     Focus = User
     SetFrame = 1,3
@@ -72,7 +70,7 @@ Name = Example anim
     SetFrame = 11,3
     SetX = 11,104
     SetY = 11,-2
-<Particle 4>
+<Particle 3>
     Graphic = Examples/electric2
     Focus = User
     SetFrame = 3,4
@@ -94,7 +92,7 @@ Name = Example anim
     SetX = 8,48
     SetY = 8,-2
     SetVisible = 9,false
-<Particle 5>
+<Particle 4>
     Graphic = Examples/electric2
     Focus = User
     SetX = 4,-200
@@ -111,7 +109,7 @@ Name = Example anim
     SetX = 8,64
     SetY = 8,-50
     SetVisible = 9,false
-<Particle 6>
+<Particle 5>
     Graphic = Examples/electric2
     Focus = User
     SetX = 5,216
@@ -126,7 +124,7 @@ Name = Example anim
     SetX = 8,48
     SetY = 8,54
     SetVisible = 9,false
-<Particle 7>
+<Particle 6>
     Graphic = Examples/electric2
     Focus = User
     SetFrame = 7,1
@@ -134,7 +132,7 @@ Name = Example anim
     SetY = 7,62
     SetZ = 7,32
     SetVisible = 8,false
-<Particle 8>
+<Particle 7>
     Graphic = Examples/electric2
     Focus = User
     SetFrame = 10,4

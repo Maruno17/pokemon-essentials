@@ -2,13 +2,11 @@
 #-------------------------------
 [Move,SPLASH]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/poison2
     Focus = User
     SetFlip = 1,true
@@ -16,7 +14,7 @@ Name = Example anim
     SetY = 1,6
     SetZ = 1,28
     SetVisible = 2,false
-<Particle 4>
+<Particle 3>
     Graphic = Examples/poison2
     Focus = User
     SetFrame = 2,1
@@ -24,7 +22,7 @@ Name = Example anim
     SetY = 2,-2
     SetZ = 2,29
     SetVisible = 3,false
-<Particle 5>
+<Particle 4>
     Graphic = Examples/poison2
     Focus = User
     SetFrame = 3,1
@@ -49,7 +47,7 @@ Name = Example anim
     SetY = 8,-26
     SetFrame = 9,2
     SetX = 9,-120
-<Particle 6>
+<Particle 5>
     Graphic = Examples/poison2
     Focus = User
     SetX = 4,80
@@ -60,7 +58,7 @@ Name = Example anim
     SetFlip = 6,true
     SetX = 6,-64
     SetVisible = 7,false
-<Particle 2>
+<Particle 1>
     Graphic = Examples/poison2
     Focus = User
     SetX = 0,56

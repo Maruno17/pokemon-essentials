@@ -9,7 +9,7 @@ Name = Example anim
     SetX = 0,0
     SetY = 0,0
 <Particle 2>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 1,7
     SetX = 1,-23
@@ -53,7 +53,7 @@ Name = Example anim
     SetX = 13,18
     SetY = 13,1
 <Particle 3>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 1,9
     SetX = 1,-52
@@ -91,7 +91,7 @@ Name = Example anim
     SetX = 13,4
     SetY = 13,7
 <Particle 4>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 1,11
     SetX = 1,-31
@@ -121,7 +121,7 @@ Name = Example anim
     SetY = 8,27
     SetVisible = 9,false
 <Particle 5>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 2,9
     SetX = 2,33
@@ -148,7 +148,7 @@ Name = Example anim
     SetY = 7,-9
     SetVisible = 8,false
 <Particle 6>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 2,9
     SetX = 2,-5
@@ -172,7 +172,7 @@ Name = Example anim
     SetY = 7,-2
     SetVisible = 8,false
 <Particle 7>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 2,11
     SetX = 2,16
@@ -190,7 +190,7 @@ Name = Example anim
     SetY = 5,14
     SetVisible = 6,false
 <Particle 8>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 3,7
     SetX = 3,29
@@ -203,7 +203,7 @@ Name = Example anim
     SetY = 5,-1
     SetVisible = 6,false
 <Particle 9>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 3,7
     SetX = 3,-7
@@ -216,7 +216,7 @@ Name = Example anim
     SetY = 5,7
     SetVisible = 6,false
 <Particle 10>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 3,11
     SetX = 3,15
@@ -224,7 +224,7 @@ Name = Example anim
     SetZ = 3,36
     SetVisible = 4,false
 <Particle 11>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 4,10
     SetX = 4,-1
@@ -257,7 +257,7 @@ Name = Example anim
     SetX = 13,-12
     SetY = 13,20
 <Particle 12>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 11,7
     SetX = 11,-11
@@ -265,7 +265,7 @@ Name = Example anim
     SetZ = 11,30
     SetVisible = 12,false
 <Particle 13>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 11,9
     SetX = 11,18
@@ -273,7 +273,7 @@ Name = Example anim
     SetZ = 11,31
     SetVisible = 12,false
 <Particle 14>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 11,11
     SetX = 11,9
@@ -281,21 +281,21 @@ Name = Example anim
     SetZ = 11,32
     SetVisible = 12,false
 <Particle 15>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 13,9
     SetX = 13,-30
     SetY = 13,-27
     SetZ = 13,30
 <Particle 16>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 13,7
     SetX = 13,0
     SetY = 13,-33
     SetZ = 13,31
 <Particle 17>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 13,11
     SetX = 13,-10

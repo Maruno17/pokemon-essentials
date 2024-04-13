@@ -2,15 +2,13 @@
 #-------------------------------
 [Move,GRUDGE]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
+<Particle 1>
     Graphic = Examples/ghost1
-    Focus = Target
+    Focus = User
     SetX = 0,128
     SetY = 0,6
     SetZ = 0,27
@@ -45,9 +43,9 @@ Name = Example anim
     SetFrame = 11,3
     SetX = 11,80
     SetY = 11,22
-<Particle 3>
+<Particle 2>
     Graphic = Examples/ghost1
-    Focus = Target
+    Focus = User
     SetFrame = 1,3
     SetX = 1,128
     SetY = 1,6
@@ -78,9 +76,9 @@ Name = Example anim
     SetFrame = 11,0
     SetX = 11,112
     SetY = 11,14
-<Particle 4>
+<Particle 3>
     Graphic = Examples/ghost1
-    Focus = Target
+    Focus = User
     SetFrame = 2,2
     SetX = 2,128
     SetY = 2,6
@@ -109,9 +107,9 @@ Name = Example anim
     SetY = 10,-34
     SetFrame = 11,3
     SetX = 11,80
-<Particle 5>
+<Particle 4>
     Graphic = Examples/ghost1
-    Focus = Target
+    Focus = User
     SetX = 3,128
     SetY = 3,6
     SetZ = 3,30
@@ -139,9 +137,9 @@ Name = Example anim
     SetFrame = 11,1
     SetX = 11,40
     SetY = 11,-50
-<Particle 6>
+<Particle 5>
     Graphic = Examples/ghost1
-    Focus = Target
+    Focus = User
     SetFrame = 4,3
     SetX = 4,128
     SetY = 4,-18
@@ -166,9 +164,9 @@ Name = Example anim
     SetFrame = 11,2
     SetX = 11,-24
     SetY = 11,-50
-<Particle 7>
+<Particle 6>
     Graphic = Examples/ghost1
-    Focus = Target
+    Focus = User
     SetX = 6,120
     SetY = 6,6
     SetZ = 6,32
@@ -187,9 +185,9 @@ Name = Example anim
     SetFrame = 11,5
     SetX = 11,-72
     SetY = 11,-42
-<Particle 8>
+<Particle 7>
     Graphic = Examples/ghost1
-    Focus = Target
+    Focus = User
     SetFrame = 7,5
     SetX = 7,120
     SetY = 7,-10
@@ -206,9 +204,9 @@ Name = Example anim
     SetFrame = 11,1
     SetX = 11,-112
     SetY = 11,-2
-<Particle 9>
+<Particle 8>
     Graphic = Examples/ghost1
-    Focus = Target
+    Focus = User
     SetFrame = 8,2
     SetX = 8,112
     SetY = 8,6
@@ -221,9 +219,9 @@ Name = Example anim
     SetFrame = 11,5
     SetX = 11,-56
     SetY = 11,22
-<Particle 10>
+<Particle 9>
     Graphic = Examples/ghost1
-    Focus = Target
+    Focus = User
     SetFrame = 10,7
     SetX = 10,48
     SetY = 10,30

@@ -2,18 +2,18 @@
 #-------------------------------
 [Common,Poison]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
+<Particle 1>
     Graphic = Examples/State1
-    Focus = Target
+    Focus = User
     SetX = 1,0
     SetY = 1,-10
     SetZ = 1,27
+    SetZoomX = 1,200
+    SetZoomY = 1,200
     SetFrame = 2,1
     SetFrame = 3,2
     SetFrame = 4,3

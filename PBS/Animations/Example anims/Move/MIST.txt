@@ -2,15 +2,13 @@
 #-------------------------------
 [Move,MIST]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/fly copy
-    Focus = Target
+    Focus = User
     SetFrame = 4,6
     SetX = 4,30
     SetY = 4,5
@@ -20,9 +18,9 @@ Name = Example anim
     SetX = 6,38
     SetY = 6,17
     SetVisible = 7,false
-<Particle 4>
+<Particle 3>
     Graphic = Examples/fly copy
-    Focus = Target
+    Focus = User
     SetFrame = 5,6
     SetX = 5,42
     SetY = 5,20
@@ -30,9 +28,9 @@ Name = Example anim
     SetX = 6,-3
     SetY = 6,-32
     SetVisible = 7,false
-<Particle 2>
+<Particle 1>
     Graphic = Examples/fly copy
-    Focus = Target
+    Focus = User
     SetFrame = 0,6
     SetX = 0,1
     SetY = 0,3

@@ -2,13 +2,11 @@
 #-------------------------------
 [Move,FOCUSENERGY]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/Fire3
     Focus = User
     SetFrame = 4,29
@@ -17,7 +15,7 @@ Name = Example anim
     SetZ = 4,28
     SetFrame = 5,28
     SetVisible = 6,false
-<Particle 2>
+<Particle 1>
     Graphic = Examples/Fire3
     Focus = User
     SetFrame = 0,29

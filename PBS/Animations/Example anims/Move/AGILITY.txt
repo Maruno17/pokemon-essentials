@@ -2,13 +2,11 @@
 #-------------------------------
 [Move,AGILITY]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/!
     Focus = User
     SetFrame = 0,5
@@ -25,7 +23,7 @@ Name = Example anim
     SetX = 7,82
     SetX = 8,107
     SetX = 9,132
-<Particle 4>
+<Particle 3>
     Graphic = Examples/!
     Focus = User
     SetFrame = 0,5
@@ -41,7 +39,7 @@ Name = Example anim
     SetX = 6,152
     SetX = 7,187
     SetVisible = 8,false
-<Particle 5>
+<Particle 4>
     Graphic = Examples/!
     Focus = User
     SetFrame = 1,5
@@ -57,7 +55,7 @@ Name = Example anim
     SetX = 7,62
     SetX = 8,87
     SetX = 9,112
-<Particle 6>
+<Particle 5>
     Graphic = Examples/!
     Focus = User
     SetFrame = 2,5
@@ -72,7 +70,7 @@ Name = Example anim
     SetX = 7,77
     SetX = 8,112
     SetX = 9,147
-<Particle 2>
+<Particle 1>
     Graphic = Examples/!
     Focus = User
     SetFrame = 0,5

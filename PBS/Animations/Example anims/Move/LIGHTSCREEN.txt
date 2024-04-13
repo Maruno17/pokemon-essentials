@@ -2,15 +2,13 @@
 #-------------------------------
 [Move,LIGHTSCREEN]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/anim sheet
-    Focus = Target
+    Focus = User
     SetFrame = 1,10
     SetX = 1,58
     SetY = 1,-39
@@ -38,9 +36,9 @@ Name = Example anim
     SetFrame = 10,6
     SetX = 10,46
     SetY = 10,-39
-<Particle 4>
+<Particle 3>
     Graphic = Examples/anim sheet
-    Focus = Target
+    Focus = User
     SetFrame = 4,10
     SetX = 4,-16
     SetY = 4,15
@@ -58,9 +56,9 @@ Name = Example anim
     SetY = 9,48
     SetX = 10,-7
     SetY = 10,-38
-<Particle 5>
+<Particle 4>
     Graphic = Examples/anim sheet
-    Focus = Target
+    Focus = User
     SetFrame = 7,6
     SetX = 7,56
     SetY = 7,64
@@ -71,9 +69,9 @@ Name = Example anim
     SetY = 9,66
     SetX = 10,-37
     SetY = 10,39
-<Particle 6>
+<Particle 5>
     Graphic = Examples/anim sheet
-    Focus = Target
+    Focus = User
     SetFrame = 8,10
     SetX = 8,0
     SetY = 8,-54
@@ -83,9 +81,9 @@ Name = Example anim
     SetY = 9,-31
     SetX = 10,64
     SetY = 10,66
-<Particle 2>
+<Particle 1>
     Graphic = Examples/anim sheet
-    Focus = Target
+    Focus = User
     SetFrame = 1,15
     SetBlending = 1,1
     SetX = 1,6

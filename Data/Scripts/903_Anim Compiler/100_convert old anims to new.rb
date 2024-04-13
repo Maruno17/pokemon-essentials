@@ -2,6 +2,12 @@
 #       them swapping back.
 
 module AnimationConverter
+  NO_USER_COMMON_ANIMATIONS = [
+    "Hail", "HarshSun", "HeavyRain", "Rain", "Sandstorm", "Sun", "ShadowSky",
+    "Rainbow", "RainbowOpp", "SeaOfFire", "SeaOfFireOpp", "Swamp", "SwampOpp"
+  ]
+  HAS_TARGET_COMMON_ANIMATIONS = ["LeechSeed", "ParentalBond"]
+
   module_function
 
   def convert_old_animations_to_new
@@ -52,6 +58,26 @@ module AnimationConverter
         :pbs_path  => pbs_path
       }
 
+      # Decide whether the animation involves a user or target
+      has_user = true
+      has_target = true
+      if new_anim[:type] == :common
+        if NO_USER_COMMON_ANIMATIONS.include?(new_anim[:move])
+          has_user = false
+          has_target = false
+        elsif !HAS_TARGET_COMMON_ANIMATIONS.include?(new_anim[:move])
+          has_target = false
+        end
+      else
+        move_data = GameData::Move.try_get(new_anim[:move])
+        if move_data
+          target_data = GameData::Target.get(move_data.target)
+          has_target = false if target_data.num_targets == 0 && target_data.id != :None
+        end
+      end
+      new_anim[:no_user] = true if !has_user
+      new_anim[:no_target] = true if !has_target
+
       add_frames_to_new_anim_hash(anim, new_anim)
       add_bg_fg_commands_to_new_anim_hash(anim, new_anim)
       add_se_commands_to_new_anim_hash(anim, new_anim)
@@ -62,6 +88,8 @@ module AnimationConverter
     end
 
   end
+
+  #-----------------------------------------------------------------------------
 
   def add_frames_to_new_anim_hash(anim, hash)
     # Lookup array for particle index using cel index
@@ -95,6 +123,10 @@ module AnimationConverter
     default_frame[99]                    = "Examples/" + anim.graphic
 
     last_frame_values = []
+
+    anim_graphic = anim.graphic
+    anim_graphic.gsub!(".", " ")
+    anim_graphic.gsub!("  ", " ")
     # Go through each frame
     anim.length.times do |frame_num|
       frame = anim[frame_num]
@@ -102,12 +134,19 @@ module AnimationConverter
       changed_particles = []
       frame.each_with_index do |cel, i|
         next if !cel
+        next if i == 0 && hash[:no_user]
+        next if i == 1 && hash[:no_target]
         # If the particle from the previous frame for this cel had a different
         # focus, start a new particle.
         if i > 1 && frame_num > 0 && index_lookup[i] && index_lookup[i] >= 0 &&
            last_frame_values[index_lookup[i]]
-          this_graphic = (cel[AnimFrame::PATTERN] == -1) ? "USER" : (cel[AnimFrame::PATTERN] == -2) ? "TARGET" : "Examples/" + anim.graphic
-          if last_frame_values[index_lookup[i]][AnimFrame::FOCUS] != cel[AnimFrame::FOCUS] ||
+          this_graphic = (cel[AnimFrame::PATTERN] == -1) ? "USER" : (cel[AnimFrame::PATTERN] == -2) ? "TARGET" : "Examples/" + anim_graphic
+          this_graphic.gsub!(".", " ")
+          this_graphic.gsub!("  ", "")
+          focus = cel[AnimFrame::FOCUS]
+          focus = 2 if (focus == 1 || focus == 3) && hash[:no_target]
+          focus = 0 if (focus == 2 || focus == 3) && hash[:no_user]
+          if last_frame_values[index_lookup[i]][AnimFrame::FOCUS] != focus ||
              last_frame_values[index_lookup[i]][99] != this_graphic   # Graphic
             index_lookup[i] = -1
           end
@@ -124,9 +163,9 @@ module AnimationConverter
         particle = hash[:particles][idx]
         last_frame = last_frame_values[idx] || default_frame.clone
         # User and target particles have specific names
-        if idx == 0
+        if i == 0
           particle[:name] = "User"
-        elsif idx == 1
+        elsif i == 1
           particle[:name] = "Target"
         else
           # Set graphic
@@ -138,14 +177,17 @@ module AnimationConverter
             particle[:graphic] = "TARGET"
             last_frame[99] = "TARGET"
           else
-            particle[:graphic] = "Examples/" + anim.graphic
-            last_frame[99] = "Examples/" + anim.graphic
+            particle[:graphic] = "Examples/" + anim_graphic
+            last_frame[99] = "Examples/" + anim_graphic
           end
         end
         # Set focus for non-User/non-Target
-        if idx > 1
-          particle[:focus] = [:foreground, :target, :user, :user_and_target, :foreground][cel[AnimFrame::FOCUS]]
-          last_frame[AnimFrame::FOCUS] = cel[AnimFrame::FOCUS]
+        if i > 1
+          focus = cel[AnimFrame::FOCUS]
+          focus = 2 if (focus == 1 || focus == 3) && hash[:no_target]
+          focus = 0 if (focus == 2 || focus == 3) && hash[:no_user]
+          particle[:focus] = [:foreground, :target, :user, :user_and_target, :foreground][focus]
+          last_frame[AnimFrame::FOCUS] = focus
         end
 
         # Copy commands across
@@ -175,23 +217,59 @@ module AnimationConverter
           val = cel[property[0]].to_i
           case property[1]
           when :x
-            # TODO: What if the animation is an OppMove one? I think this should
-            #       be the other way around.
-            if particle[:focus] == :user_and_target
-              fraction = (val - Battle::Scene::FOCUSUSER_X).to_f / (Battle::Scene::FOCUSTARGET_X - Battle::Scene::FOCUSUSER_X)
+            case cel[AnimFrame::FOCUS]
+            when 1   # :target
+              val -= Battle::Scene::FOCUSTARGET_X
+            when 2   # :user
+              val -= Battle::Scene::FOCUSUSER_X
+            when 3   # :user_and_target
+              # TODO: What if the animation is an OppMove one? I think this should
+              #       be the other way around.
+              user_x = Battle::Scene::FOCUSUSER_X
+              target_x = Battle::Scene::FOCUSTARGET_X
+              if hash[:type] == :opp_move
+                user_x = Battle::Scene::FOCUSTARGET_X
+                target_x = Battle::Scene::FOCUSUSER_X
+              end
+              fraction = (val - user_x).to_f / (target_x - user_x)
               val = (fraction * GameData::Animation::USER_AND_TARGET_SEPARATION[0]).to_i
             end
+            if cel[AnimFrame::FOCUS] != particle[:focus]
+              pseudo_focus = cel[AnimFrame::FOCUS]
+              # Was focused on target, now focused on user
+              pseudo_focus = 2 if [1, 3].include?(pseudo_focus) && hash[:no_target]
+              # Was focused on user, now focused on screen
+              val += Battle::Scene::FOCUSUSER_X if [2, 3].include?(pseudo_focus) && hash[:no_user]
+            end
           when :y
-            # TODO: What if the animation is an OppMove one? I think this should
-            #       be the other way around.
-            if particle[:focus] == :user_and_target
-              fraction = (val - Battle::Scene::FOCUSUSER_Y).to_f / (Battle::Scene::FOCUSTARGET_Y - Battle::Scene::FOCUSUSER_Y)
+            case cel[AnimFrame::FOCUS]
+            when 1   # :target
+              val -= Battle::Scene::FOCUSTARGET_Y
+            when 2   # :user
+              val -= Battle::Scene::FOCUSUSER_Y
+            when 3   # :user_and_target
+              # TODO: What if the animation is an OppMove one? I think this should
+              #       be the other way around.
+              user_y = Battle::Scene::FOCUSUSER_Y
+              target_y = Battle::Scene::FOCUSTARGET_Y
+              if hash[:type] == :opp_move
+                user_y = Battle::Scene::FOCUSTARGET_Y
+                target_y = Battle::Scene::FOCUSUSER_Y
+              end
+              fraction = (val - user_y).to_f / (target_y - user_y)
               val = (fraction * GameData::Animation::USER_AND_TARGET_SEPARATION[1]).to_i
+            end
+            if cel[AnimFrame::FOCUS] != particle[:focus]
+              pseudo_focus = cel[AnimFrame::FOCUS]
+              # Was focused on target, now focused on user
+              pseudo_focus = 2 if [1, 3].include?(pseudo_focus) && hash[:no_target]
+              # Was focused on user, now focused on screen
+              val += Battle::Scene::FOCUSUSER_Y if [2, 3].include?(pseudo_focus) && hash[:no_user]
             end
           when :visible, :flip
             val = (val == 1)   # Boolean
           when :z
-            next if idx <= 1   # User or target
+            next if i <= 1   # User or target
             case val
             when 0 then val = -50 + i   # Back
             when 1 then val = 25 + i    # Front
@@ -231,7 +309,7 @@ module AnimationConverter
       # doesn't have any commands
       if frame_num == anim.length - 1 && changed_particles.empty?
         hash[:particles].each_with_index do |particle, idx|
-          next if !particle || idx <= 1   # User or target
+          next if !particle || ["User", "Target"].include?(particle[:name])
           # TODO: Making all non-user non-target particles invisible in the last
           #       frame isn't a perfect solution, but it's good enough to get
           #       example animation data.
@@ -242,29 +320,17 @@ module AnimationConverter
       end
     end
 
-    hash[:particles][0][:focus] = :user
-    hash[:particles][1][:focus] = :target
-
-    # Adjust all x/y positions based on particle[:focus]
-    hash[:particles].each do |particle|
-      next if !particle
-      offset_x = 0
-      offset_y = 0
-      case particle[:focus]
-      when :user
-        offset_x = -Battle::Scene::FOCUSUSER_X
-        offset_y = -Battle::Scene::FOCUSUSER_Y
-      when :target
-        offset_x = -Battle::Scene::FOCUSTARGET_X
-        offset_y = -Battle::Scene::FOCUSTARGET_Y
-      when :user_and_target
-        # NOTE: No change, done above.
-      end
-      next if offset_x == 0 && offset_y == 0
-      particle[:x].each { |cmd| cmd[2] += offset_x }
-      particle[:y].each { |cmd| cmd[2] += offset_y }
+    if hash[:particles].any? { |particle| particle[:name] == "User" }
+      user_particle = hash[:particles].select { |particle| particle[:name] == "User" }[0]
+      user_particle[:focus] = :user
+    end
+    if hash[:particles].any? { |particle| particle[:name] == "Target" }
+      target_particle = hash[:particles].select { |particle| particle[:name] == "Target" }[0]
+      target_particle[:focus] = :target
     end
   end
+
+  #-----------------------------------------------------------------------------
 
   # TODO: Haven't tested this as no Essentials animations use them.
   def add_bg_fg_commands_to_new_anim_hash(anim, new_anim)

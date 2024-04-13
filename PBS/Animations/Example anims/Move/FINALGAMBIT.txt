@@ -9,7 +9,7 @@ Name = Example anim
     SetX = 0,0
     SetY = 0,0
 <Particle 2>
-    Graphic = Examples/finger.spoon
+    Graphic = Examples/finger spoon
     Focus = Target
     SetFrame = 0,7
     SetX = 0,-20

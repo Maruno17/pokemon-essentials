@@ -2,15 +2,13 @@
 #-------------------------------
 [Common,Shiny]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/leech-seed
-    Focus = Target
+    Focus = User
     SetFrame = 2,5
     SetX = 2,56
     SetY = 2,30
@@ -28,9 +26,9 @@ Name = Example anim
     SetX = 9,32
     SetY = 9,22
     SetVisible = 10,false
-<Particle 4>
+<Particle 3>
     Graphic = Examples/leech-seed
-    Focus = Target
+    Focus = User
     SetFrame = 3,5
     SetX = 3,-57
     SetY = 3,-18
@@ -45,9 +43,9 @@ Name = Example anim
     SetX = 8,32
     SetY = 8,22
     SetVisible = 9,false
-<Particle 5>
+<Particle 4>
     Graphic = Examples/leech-seed
-    Focus = Target
+    Focus = User
     SetFrame = 5,5
     SetX = 5,32
     SetY = 5,-42
@@ -57,9 +55,9 @@ Name = Example anim
     SetX = 7,32
     SetY = 7,22
     SetVisible = 8,false
-<Particle 2>
+<Particle 1>
     Graphic = Examples/leech-seed
-    Focus = Target
+    Focus = User
     SetFrame = 0,5
     SetX = 0,-24
     SetY = 0,14

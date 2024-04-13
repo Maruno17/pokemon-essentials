@@ -2,13 +2,11 @@
 #-------------------------------
 [Move,SANDSTORM]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
+<Particle 1>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -33,7 +31,7 @@ Name = Example anim
     SetY = 8,62
     SetX = 9,32
     SetY = 9,252
-<Particle 3>
+<Particle 2>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -58,7 +56,7 @@ Name = Example anim
     SetY = 8,85
     SetX = 9,119
     SetY = 9,175
-<Particle 4>
+<Particle 3>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -83,7 +81,7 @@ Name = Example anim
     SetY = 8,223
     SetX = 9,143
     SetY = 9,267
-<Particle 5>
+<Particle 4>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -108,7 +106,7 @@ Name = Example anim
     SetY = 8,207
     SetX = 9,222
     SetY = 9,197
-<Particle 6>
+<Particle 5>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -133,7 +131,7 @@ Name = Example anim
     SetY = 8,253
     SetX = 9,162
     SetY = 9,82
-<Particle 7>
+<Particle 6>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -158,7 +156,7 @@ Name = Example anim
     SetY = 8,227
     SetX = 9,49
     SetY = 9,61
-<Particle 8>
+<Particle 7>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -183,7 +181,7 @@ Name = Example anim
     SetY = 8,76
     SetX = 9,21
     SetY = 9,158
-<Particle 9>
+<Particle 8>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -208,7 +206,7 @@ Name = Example anim
     SetY = 8,130
     SetX = 9,350
     SetY = 9,240
-<Particle 10>
+<Particle 9>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -233,7 +231,7 @@ Name = Example anim
     SetY = 8,142
     SetX = 9,481
     SetY = 9,206
-<Particle 11>
+<Particle 10>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -258,7 +256,7 @@ Name = Example anim
     SetY = 8,22
     SetX = 9,456
     SetY = 9,64
-<Particle 12>
+<Particle 11>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -266,7 +264,7 @@ Name = Example anim
     SetY = 0,32
     SetZ = 0,37
     SetVisible = 1,false
-<Particle 13>
+<Particle 12>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -274,7 +272,7 @@ Name = Example anim
     SetY = 0,135
     SetZ = 0,38
     SetVisible = 1,false
-<Particle 14>
+<Particle 13>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -282,7 +280,7 @@ Name = Example anim
     SetY = 0,18
     SetZ = 0,39
     SetVisible = 1,false
-<Particle 15>
+<Particle 14>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 0,3
@@ -290,7 +288,7 @@ Name = Example anim
     SetY = 0,9
     SetZ = 0,40
     SetVisible = 1,false
-<Particle 16>
+<Particle 15>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 2,3
@@ -298,7 +296,7 @@ Name = Example anim
     SetY = 2,32
     SetZ = 2,37
     SetVisible = 3,false
-<Particle 17>
+<Particle 16>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 2,3
@@ -306,7 +304,7 @@ Name = Example anim
     SetY = 2,135
     SetZ = 2,38
     SetVisible = 3,false
-<Particle 18>
+<Particle 17>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 2,3
@@ -314,7 +312,7 @@ Name = Example anim
     SetY = 2,18
     SetZ = 2,39
     SetVisible = 3,false
-<Particle 19>
+<Particle 18>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 2,3
@@ -322,7 +320,7 @@ Name = Example anim
     SetY = 2,9
     SetZ = 2,40
     SetVisible = 3,false
-<Particle 20>
+<Particle 19>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 4,3
@@ -332,7 +330,7 @@ Name = Example anim
     SetX = 5,487
     SetY = 5,32
     SetVisible = 6,false
-<Particle 21>
+<Particle 20>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 4,3
@@ -342,7 +340,7 @@ Name = Example anim
     SetX = 5,492
     SetY = 5,135
     SetVisible = 6,false
-<Particle 22>
+<Particle 21>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 5,3
@@ -350,7 +348,7 @@ Name = Example anim
     SetY = 5,18
     SetZ = 5,39
     SetVisible = 6,false
-<Particle 23>
+<Particle 22>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 5,3
@@ -358,7 +356,7 @@ Name = Example anim
     SetY = 5,9
     SetZ = 5,40
     SetVisible = 6,false
-<Particle 24>
+<Particle 23>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 7,3
@@ -366,7 +364,7 @@ Name = Example anim
     SetY = 7,32
     SetZ = 7,37
     SetVisible = 8,false
-<Particle 25>
+<Particle 24>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 7,3
@@ -374,7 +372,7 @@ Name = Example anim
     SetY = 7,135
     SetZ = 7,38
     SetVisible = 8,false
-<Particle 26>
+<Particle 25>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 7,3
@@ -382,7 +380,7 @@ Name = Example anim
     SetY = 7,18
     SetZ = 7,39
     SetVisible = 8,false
-<Particle 27>
+<Particle 26>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 7,3
@@ -390,21 +388,21 @@ Name = Example anim
     SetY = 7,9
     SetZ = 7,40
     SetVisible = 8,false
-<Particle 28>
+<Particle 27>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 9,3
     SetX = 9,311
     SetY = 9,55
     SetZ = 9,37
-<Particle 29>
+<Particle 28>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 9,3
     SetX = 9,328
     SetY = 9,146
     SetZ = 9,38
-<Particle 30>
+<Particle 29>
     Graphic = Examples/weather
     Focus = Foreground
     SetFrame = 9,3

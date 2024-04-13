@@ -273,11 +273,7 @@ Name = Example anim
 [OppMove,AERIALACE]
 Name = Example anim
 <User>
-    SetX = 0,0
-    SetY = 0,0
 <Target>
-    SetX = 0,0
-    SetY = 0,0
     SetOpacity = 1,170
     SetOpacity = 2,85
     SetOpacity = 3,0

@@ -2,13 +2,11 @@
 #-------------------------------
 [Move,DEFENSECURL]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
+<Particle 1>
     Graphic = Examples/fly copy
     Focus = User
     SetFrame = 0,5

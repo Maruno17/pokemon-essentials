@@ -2,31 +2,29 @@
 #-------------------------------
 [Move,DETECT]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
+<Particle 1>
     Graphic = Examples/anim sheet
-    Focus = UserAndTarget
+    Focus = User
     SetFrame = 0,8
-    SetX = 0,229
-    SetY = 0,-246
+    SetX = 0,38
+    SetY = 0,-30
     SetZ = 0,27
-    SetX = 1,230
-    SetY = 1,-243
+    SetX = 1,39
+    SetY = 1,-28
     SetFrame = 2,7
-    SetX = 2,225
-    SetY = 2,-235
-    SetX = 3,228
-    SetY = 3,-237
+    SetX = 2,32
+    SetY = 2,-23
+    SetX = 3,36
+    SetY = 3,-24
     SetFrame = 4,6
-    SetX = 4,218
-    SetY = 4,-234
-    SetX = 5,219
-    SetY = 5,-228
+    SetX = 4,24
+    SetY = 4,-22
+    SetX = 5,25
+    SetY = 5,-18
     SetVisible = 6,false
 <SE>
     Play = 0,Flash2,80,85

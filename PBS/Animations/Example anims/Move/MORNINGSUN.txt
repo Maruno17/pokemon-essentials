@@ -2,24 +2,22 @@
 #-------------------------------
 [Move,MORNINGSUN]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/Heal3
-    Focus = Target
+    Focus = User
     SetFrame = 10,15
     SetX = 10,0
     SetY = 10,-26
     SetZ = 10,28
     SetOpacity = 10,100
     SetVisible = 11,false
-<Particle 2>
+<Particle 1>
     Graphic = Examples/Heal3
-    Focus = Target
+    Focus = User
     SetX = 0,0
     SetY = 0,-26
     SetZ = 0,27

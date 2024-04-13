@@ -2,15 +2,13 @@
 #-------------------------------
 [Common,Frozen]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/016-Ice01
-    Focus = Target
+    Focus = User
     SetFrame = 0,6
     SetX = 0,-56
     SetY = 0,-82
@@ -33,17 +31,17 @@ Name = Example anim
     SetX = 13,80
     SetY = 13,-2
     SetVisible = 14,false
-<Particle 4>
+<Particle 3>
     Graphic = Examples/016-Ice01
-    Focus = Target
+    Focus = User
     SetFrame = 1,9
     SetX = 1,0
     SetY = 1,-2
     SetZ = 1,29
     SetVisible = 2,false
-<Particle 5>
+<Particle 4>
     Graphic = Examples/016-Ice01
-    Focus = Target
+    Focus = User
     SetFrame = 6,11
     SetX = 6,0
     SetY = 6,-2
@@ -51,9 +49,9 @@ Name = Example anim
     SetOpacity = 6,192
     SetOpacity = 7,255
     SetVisible = 8,false
-<Particle 6>
+<Particle 5>
     Graphic = Examples/016-Ice01
-    Focus = Target
+    Focus = User
     SetFrame = 9,8
     SetX = 9,48
     SetY = 9,-82
@@ -69,9 +67,9 @@ Name = Example anim
     SetX = 13,-32
     SetY = 13,46
     SetVisible = 14,false
-<Particle 2>
+<Particle 1>
     Graphic = Examples/016-Ice01
-    Focus = Target
+    Focus = User
     SetFrame = 0,9
     SetX = 0,0
     SetY = 0,-2

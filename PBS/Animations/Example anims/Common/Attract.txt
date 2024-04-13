@@ -2,15 +2,13 @@
 #-------------------------------
 [Common,Attract]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
-    Graphic = Examples/poi.hear.mus
-    Focus = Target
+<Particle 2>
+    Graphic = Examples/poi hear mus
+    Focus = User
     SetFrame = 7,2
     SetX = 7,-29
     SetY = 7,-46
@@ -38,9 +36,9 @@ Name = Example anim
     SetOpacity = 16,128
     SetY = 17,-93
     SetOpacity = 17,64
-<Particle 4>
-    Graphic = Examples/poi.hear.mus
-    Focus = Target
+<Particle 3>
+    Graphic = Examples/poi hear mus
+    Focus = User
     SetFrame = 8,2
     SetX = 8,-35
     SetY = 8,-46
@@ -66,9 +64,9 @@ Name = Example anim
     SetOpacity = 16,128
     SetY = 17,-70
     SetOpacity = 17,64
-<Particle 5>
-    Graphic = Examples/poi.hear.mus
-    Focus = Target
+<Particle 4>
+    Graphic = Examples/poi hear mus
+    Focus = User
     SetFrame = 12,2
     SetX = 12,13
     SetY = 12,-3
@@ -86,9 +84,9 @@ Name = Example anim
     SetOpacity = 16,128
     SetY = 17,-72
     SetOpacity = 17,64
-<Particle 2>
-    Graphic = Examples/poi.hear.mus
-    Focus = Target
+<Particle 1>
+    Graphic = Examples/poi hear mus
+    Focus = User
     SetFrame = 0,2
     SetX = 0,-10
     SetY = 0,-29

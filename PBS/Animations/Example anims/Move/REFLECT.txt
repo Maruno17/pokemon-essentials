@@ -2,28 +2,13 @@
 #-------------------------------
 [Move,REFLECT]
 Name = Example anim
+NoTarget = true
 <User>
-    SetX = 0,0
-    SetY = 0,0
-<Target>
     SetX = 0,0
     SetY = 0,0
 <Particle 2>
     Graphic = Examples/normal2
-    Focus = Target
-    SetFrame = 0,11
-    SetX = 0,-8
-    SetY = 0,-10
-    SetZ = 0,27
-    SetOpacity = 0,75
-    SetOpacity = 1,100
-    SetOpacity = 2,150
-    SetOpacity = 3,255
-    SetOpacity = 6,150
-    SetOpacity = 7,100
-<Particle 3>
-    Graphic = Examples/normal2
-    Focus = Target
+    Focus = User
     SetX = 1,-56
     SetY = 1,-114
     SetZ = 1,28
@@ -41,9 +26,9 @@ Name = Example anim
     SetY = 6,142
     SetX = 7,-72
     SetY = 7,126
-<Particle 4>
+<Particle 3>
     Graphic = Examples/normal2
-    Focus = Target
+    Focus = User
     SetX = 1,80
     SetY = 1,-106
     SetZ = 1,29
@@ -59,9 +44,9 @@ Name = Example anim
     SetY = 6,54
     SetX = 7,48
     SetY = 7,134
-<Particle 5>
+<Particle 4>
     Graphic = Examples/normal2
-    Focus = Target
+    Focus = User
     SetX = 2,8
     SetY = 2,-114
     SetZ = 2,30
@@ -73,9 +58,9 @@ Name = Example anim
     SetX = 6,80
     SetY = 6,30
     SetVisible = 7,false
-<Particle 6>
+<Particle 5>
     Graphic = Examples/normal2
-    Focus = Target
+    Focus = User
     SetX = 3,-56
     SetY = 3,-114
     SetZ = 3,31
@@ -84,14 +69,27 @@ Name = Example anim
     SetX = 5,-64
     SetY = 5,-18
     SetVisible = 6,false
-<Particle 7>
+<Particle 6>
     Graphic = Examples/normal2
-    Focus = Target
+    Focus = User
     SetX = 4,48
     SetY = 4,-106
     SetZ = 4,32
     SetX = 5,16
     SetY = 5,-42
     SetVisible = 6,false
+<Particle 1>
+    Graphic = Examples/normal2
+    Focus = User
+    SetFrame = 0,11
+    SetX = 0,-8
+    SetY = 0,-10
+    SetZ = 0,27
+    SetOpacity = 0,75
+    SetOpacity = 1,100
+    SetOpacity = 2,150
+    SetOpacity = 3,255
+    SetOpacity = 6,150
+    SetOpacity = 7,100
 <SE>
     Play = 0,Saint7,80

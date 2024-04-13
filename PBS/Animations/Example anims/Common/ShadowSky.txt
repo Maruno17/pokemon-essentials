@@ -2,23 +2,15 @@
 #-------------------------------
 [Common,ShadowSky]
 Name = Example anim
-<User>
-    SetX = 0,0
-    SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
-    Graphic = Examples/weather
+NoUser = true
+NoTarget = true
+<Particle 0>
+    Graphic = Examples/shadow sky
     Focus = Foreground
-    SetFrame = 0,10
-    SetX = 0,258
-    SetY = 0,132
-    SetZ = 0,27
-    SetZoomX = 0,327
-    SetZoomY = 0,242
-    SetOpacity = 0,128
-    SetOpacity = 1,192
-    SetOpacity = 2,249
-    SetOpacity = 8,192
-    SetOpacity = 9,128
+    SetOpacity = 0,0
+    MoveOpacity = 0,5,255,
+    SetOpacity = 5,255
+    SetOpacity = 15,255
+    MoveOpacity = 15,5,0,
+    SetOpacity = 20,0
+<SE>

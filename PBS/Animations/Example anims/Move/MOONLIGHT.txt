@@ -2,15 +2,13 @@
 #-------------------------------
 [Move,MOONLIGHT]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
+<Particle 1>
     Graphic = Examples/normal2
-    Focus = Target
+    Focus = User
     SetFrame = 0,12
     SetX = 0,0
     SetY = 0,110

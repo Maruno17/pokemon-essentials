@@ -9,7 +9,7 @@ Name = Example anim
     SetX = 0,0
     SetY = 0,0
 <Particle 2>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 0,7
     SetX = 0,-184
@@ -152,7 +152,7 @@ Name = Example anim
     SetY = 51,-85
     SetVisible = 52,false
 <Particle 3>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 1,7
     SetX = 1,-173
@@ -291,7 +291,7 @@ Name = Example anim
     SetY = 50,-89
     SetVisible = 51,false
 <Particle 4>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 2,8
     SetX = 2,-148
@@ -299,7 +299,7 @@ Name = Example anim
     SetZ = 2,29
     SetVisible = 3,false
 <Particle 5>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 4,10
     SetX = 4,-127
@@ -433,7 +433,7 @@ Name = Example anim
     SetY = 50,-76
     SetVisible = 51,false
 <Particle 6>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 8,7
     SetX = 8,-162
@@ -522,7 +522,7 @@ Name = Example anim
     SetY = 38,17
     SetVisible = 39,false
 <Particle 7>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 13,8
     SetX = 13,-102
@@ -598,7 +598,7 @@ Name = Example anim
     SetY = 38,-6
     SetVisible = 39,false
 <Particle 8>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 15,8
     SetX = 15,45
@@ -608,7 +608,7 @@ Name = Example anim
     SetY = 16,61
     SetVisible = 17,false
 <Particle 9>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 15,9
     SetX = 15,53
@@ -619,7 +619,7 @@ Name = Example anim
     SetY = 16,-12
     SetVisible = 17,false
 <Particle 10>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 16,8
     SetX = 16,33
@@ -627,7 +627,7 @@ Name = Example anim
     SetZ = 16,34
     SetVisible = 17,false
 <Particle 11>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 16,10
     SetX = 16,33
@@ -635,7 +635,7 @@ Name = Example anim
     SetZ = 16,35
     SetVisible = 17,false
 <Particle 12>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 18,8
     SetX = 18,42
@@ -653,7 +653,7 @@ Name = Example anim
     SetY = 22,9
     SetVisible = 23,false
 <Particle 13>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 24,9
     SetX = 24,-129
@@ -661,7 +661,7 @@ Name = Example anim
     SetZ = 24,32
     SetVisible = 25,false
 <Particle 14>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 25,10
     SetX = 25,29
@@ -669,7 +669,7 @@ Name = Example anim
     SetZ = 25,33
     SetVisible = 26,false
 <Particle 15>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 27,9
     SetX = 27,-152
@@ -679,7 +679,7 @@ Name = Example anim
     SetY = 28,-8
     SetVisible = 29,false
 <Particle 16>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 27,11
     SetX = 27,-175
@@ -687,7 +687,7 @@ Name = Example anim
     SetZ = 27,33
     SetVisible = 28,false
 <Particle 17>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 31,9
     SetX = 31,18
@@ -706,7 +706,7 @@ Name = Example anim
     SetY = 35,16
     SetVisible = 36,false
 <Particle 18>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 31,11
     SetX = 31,16
@@ -725,7 +725,7 @@ Name = Example anim
     SetX = 0,0
     SetY = 0,0
 <Particle 2>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 0,7
     SetX = 0,-20
@@ -837,7 +837,7 @@ Name = Example anim
     SetY = 40,23
     SetOpacity = 40,255
 <Particle 3>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 0,8
     SetX = 0,-19
@@ -948,7 +948,7 @@ Name = Example anim
     SetX = 40,-201
     SetY = 40,4
 <Particle 4>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 4,9
     SetX = 4,-84
@@ -1052,7 +1052,7 @@ Name = Example anim
     SetX = 40,-215
     SetY = 40,43
 <Particle 5>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 4,10
     SetX = 4,-79
@@ -1065,7 +1065,7 @@ Name = Example anim
     SetY = 6,25
     SetVisible = 7,false
 <Particle 6>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 9,11
     SetX = 9,-3
@@ -1084,7 +1084,7 @@ Name = Example anim
     SetY = 13,45
     SetVisible = 14,false
 <Particle 7>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 10,9
     SetX = 10,-4
@@ -1099,7 +1099,7 @@ Name = Example anim
     SetY = 13,44
     SetVisible = 14,false
 <Particle 8>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 11,11
     SetX = 11,-65
@@ -1107,7 +1107,7 @@ Name = Example anim
     SetZ = 11,32
     SetVisible = 12,false
 <Particle 9>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 13,10
     SetX = 13,-23
@@ -1115,7 +1115,7 @@ Name = Example anim
     SetZ = 13,32
     SetVisible = 14,false
 <Particle 10>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 16,11
     SetX = 16,-97
@@ -1126,7 +1126,7 @@ Name = Example anim
     SetY = 17,155
     SetVisible = 18,false
 <Particle 11>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 16,10
     SetX = 16,-102
@@ -1137,7 +1137,7 @@ Name = Example anim
     SetY = 17,149
     SetVisible = 18,false
 <Particle 12>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 19,11
     SetX = 19,-6
@@ -1155,7 +1155,7 @@ Name = Example anim
     SetY = 23,55
     SetVisible = 24,false
 <Particle 13>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 20,8
     SetX = 20,-17
@@ -1166,7 +1166,7 @@ Name = Example anim
     SetY = 21,108
     SetVisible = 22,false
 <Particle 14>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 23,10
     SetX = 23,-15
@@ -1174,7 +1174,7 @@ Name = Example anim
     SetZ = 23,31
     SetVisible = 24,false
 <Particle 15>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 23,11
     SetX = 23,-49
@@ -1182,7 +1182,7 @@ Name = Example anim
     SetZ = 23,32
     SetVisible = 24,false
 <Particle 16>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 26,9
     SetX = 26,-112
@@ -1208,7 +1208,7 @@ Name = Example anim
     SetY = 33,164
     SetVisible = 34,false
 <Particle 17>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 26,8
     SetX = 26,-134
@@ -1235,7 +1235,7 @@ Name = Example anim
     SetY = 33,147
     SetVisible = 34,false
 <Particle 18>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 27,10
     SetX = 27,-143
@@ -1245,7 +1245,7 @@ Name = Example anim
     SetY = 28,126
     SetVisible = 29,false
 <Particle 19>
-    Graphic = Examples/poi.hear.mus
+    Graphic = Examples/poi hear mus
     Focus = Target
     SetFrame = 30,11
     SetX = 30,-122

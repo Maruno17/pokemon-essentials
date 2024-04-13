@@ -2,15 +2,13 @@
 #-------------------------------
 [Common,Paralysis]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/Struggle
-    Focus = Target
+    Focus = User
     SetFrame = 1,1
     SetX = 1,40
     SetY = 1,6
@@ -36,9 +34,9 @@ Name = Example anim
     SetFrame = 11,1
     SetX = 11,24
     SetY = 11,14
-<Particle 2>
+<Particle 1>
     Graphic = Examples/Struggle
-    Focus = Target
+    Focus = User
     SetX = 1,-48
     SetY = 1,-2
     SetZ = 1,27

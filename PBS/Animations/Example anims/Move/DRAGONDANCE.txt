@@ -2,15 +2,13 @@
 #-------------------------------
 [Move,DRAGONDANCE]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/electric1
-    Focus = Target
+    Focus = User
     SetFrame = 3,9
     SetX = 3,8
     SetY = 3,-50
@@ -22,9 +20,9 @@ Name = Example anim
     SetY = 7,-2
     SetFrame = 8,10
     SetVisible = 9,false
-<Particle 2>
+<Particle 1>
     Graphic = Examples/electric1
-    Focus = Target
+    Focus = User
     SetFrame = 1,9
     SetX = 1,8
     SetY = 1,-2

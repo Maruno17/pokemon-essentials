@@ -2,15 +2,13 @@
 #-------------------------------
 [Common,Confusion]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
+<Particle 1>
     Graphic = Examples/confused
-    Focus = Target
+    Focus = User
     SetX = 0,0
     SetY = 0,-33
     SetZ = 0,27

@@ -2,15 +2,13 @@
 #-------------------------------
 [Move,CURSE]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
+<Particle 1>
     Graphic = Examples/ghost1
-    Focus = Target
+    Focus = User
     SetFrame = 0,8
     SetX = 0,8
     SetY = 0,-82

@@ -2,15 +2,13 @@
 #-------------------------------
 [Move,FOLLOWME]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 2>
-    Graphic = Examples/finger.spoon
-    Focus = Target
+<Particle 1>
+    Graphic = Examples/finger spoon
+    Focus = User
     SetX = 0,2
     SetY = 0,1
     SetZ = 0,27
@@ -35,9 +33,9 @@ Name = Example anim
     SetX = 9,-205
     SetY = 9,139
     SetVisible = 10,false
-<Particle 3>
-    Graphic = Examples/finger.spoon
-    Focus = Target
+<Particle 2>
+    Graphic = Examples/finger spoon
+    Focus = User
     SetFrame = 6,1
     SetX = 6,-117
     SetY = 6,120
@@ -48,22 +46,20 @@ Name = Example anim
 #-------------------------------
 [OppMove,FOLLOWME]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
-    Graphic = Examples/finger.spoon
-    Focus = Target
+<Particle 2>
+    Graphic = Examples/finger spoon
+    Focus = User
     SetX = 5,-102
     SetY = 5,110
     SetZ = 5,28
     SetVisible = 6,false
-<Particle 2>
-    Graphic = Examples/finger.spoon
-    Focus = Target
+<Particle 1>
+    Graphic = Examples/finger spoon
+    Focus = User
     SetFrame = 0,1
     SetX = 0,-193
     SetY = 0,125

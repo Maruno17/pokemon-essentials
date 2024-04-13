@@ -2,15 +2,13 @@
 #-------------------------------
 [Move,BARRIER]
 Name = Example anim
+NoTarget = true
 <User>
     SetX = 0,0
     SetY = 0,0
-<Target>
-    SetX = 0,0
-    SetY = 0,0
-<Particle 3>
+<Particle 2>
     Graphic = Examples/anim sheet
-    Focus = Target
+    Focus = User
     SetFrame = 1,7
     SetX = 1,-28
     SetY = 1,-31
@@ -37,9 +35,9 @@ Name = Example anim
     SetY = 8,-7
     SetFrame = 9,7
     SetX = 9,-17
-<Particle 2>
+<Particle 1>
     Graphic = Examples/anim sheet
-    Focus = Target
+    Focus = User
     SetFrame = 0,15
     SetX = 0,8
     SetY = 0,-1
