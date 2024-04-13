@@ -298,13 +298,13 @@ class AnimationEditor::AnimationSelector
     # Put the correct list into the moves list
     case @animation_type
     when 0
-      @components.get_control(:moves).disable
-      @components.get_control(:commons).enable
+      @components.get_control(:moves).set_highlighted
+      @components.get_control(:commons).set_not_highlighted
       @components.get_control(:moves_list).values = @move_list
       @components.get_control(:moves_label).text = _INTL("Moves")
     when 1
-      @components.get_control(:moves).enable
-      @components.get_control(:commons).disable
+      @components.get_control(:moves).set_not_highlighted
+      @components.get_control(:commons).set_highlighted
       @components.get_control(:moves_list).values = @common_list
       @components.get_control(:moves_label).text = _INTL("Common animations")
     end

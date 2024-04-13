@@ -4,18 +4,6 @@
 module AnimationEditor::ParticleDataHelper
   module_function
 
-  def get_duration(particles)
-    ret = 0
-    particles.each do |particle|
-      particle.each_pair do |property, value|
-        next if !value.is_a?(Array) || value.length == 0
-        max = value.last[0] + value.last[1]   # Keyframe + duration
-        ret = max if ret < max
-      end
-    end
-    return ret
-  end
-
   def get_keyframe_particle_value(particle, property, frame)
     if !GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.include?(property)
       raise _INTL("Couldn't get default value for property {1} for particle {2}.",
@@ -34,28 +22,9 @@ module AnimationEditor::ParticleDataHelper
           next
         end
         # In a "MoveXYZ" command; need to interpolate
-        case (cmd[3] || :linear)
-        when :linear
-          ret[0] = lerp(ret[0], cmd[2], cmd[1], cmd[0], frame).to_i
-        when :ease_in   # Quadratic
-          x = (frame - cmd[0]) / cmd[1].to_f
-          ret[0] += (cmd[2] - ret[0]) * x * x
-          ret[0] = ret[0].round
-        when :ease_out   # Quadratic
-          x = (frame - cmd[0]) / cmd[1].to_f
-          ret[0] += (cmd[2] - ret[0]) * (1 - ((1 - x) * (1 - x)))
-          ret[0] = ret[0].round
-        when :ease_both   # Quadratic
-          x = (frame - cmd[0]) / cmd[1].to_f
-          if x < 0.5
-            ret[0] += (cmd[2] - ret[0]) * x * x * 2
-          else
-            ret[0] += (cmd[2] - ret[0]) * (1 - (((-2 * x) + 2) * ((-2 * x) + 2) / 2))
-          end
-          ret[0] = ret[0].round
-        else
-          raise _INTL("Unknown interpolation method {1}.", cmd[3])
-        end
+        ret[0] = AnimationPlayer::Helper.interpolate(
+          (cmd[3] || :linear), ret[0], cmd[2], cmd[1], cmd[0], frame
+        )
         ret[1] = true   # Interpolating
         break
       end
@@ -68,7 +37,7 @@ module AnimationEditor::ParticleDataHelper
       first_cmd = (["User", "Target"].include?(particle[:name])) ? 0 : -1
       first_visible_cmd = -1
       particle.each_pair do |prop, value|
-        next if !value.is_a?(Array) || value.length == 0
+        next if !value.is_a?(Array) || value.empty?
         first_cmd = value[0][0] if first_cmd < 0 || first_cmd > value[0][0]
         first_visible_cmd = value[0][0] if prop == :visible && (first_visible_cmd < 0 || first_visible_cmd > value[0][0])
       end
@@ -111,7 +80,7 @@ module AnimationEditor::ParticleDataHelper
     if !["User", "Target", "SE"].include?(particle[:name])
       earliest = duration
       particle.each_pair do |prop, value|
-        next if !value.is_a?(Array) || value.length == 0
+        next if !value.is_a?(Array) || value.empty?
         earliest = value[0][0] if earliest > value[0][0]
       end
       ret[earliest] = true
@@ -152,7 +121,7 @@ module AnimationEditor::ParticleDataHelper
   #   [+/- duration, interpolation type] --- MoveXYZ (duration's sign is whether
   #                                          it makes the value higher or lower)
   def get_particle_property_commands_timeline(particle, property, commands)
-    return nil if !commands || commands.length == 0
+    return nil if !commands || commands.empty?
     if particle[:name] == "SE"
       ret = []
       commands.each { |cmd| ret[cmd[0]] = 0 }
@@ -192,7 +161,7 @@ module AnimationEditor::ParticleDataHelper
     se_particle = particles.select { |particle| particle[:name] == "SE" }[0]
     if se_particle
       se_particle.each_pair do |property, values|
-        next if !values.is_a?(Array) || values.length == 0
+        next if !values.is_a?(Array) || values.empty?
         ret = values.any? { |value| value[0] == frame }
         break if ret
       end
@@ -310,7 +279,7 @@ module AnimationEditor::ParticleDataHelper
       first_cmd = (["User", "Target", "SE"].include?(particle[:name])) ? 0 : -1
       first_non_visible_cmd = -1
       particle.each_pair do |prop, value|
-        next if !value.is_a?(Array) || value.length == 0
+        next if !value.is_a?(Array) || value.empty?
         next if prop == property && value[0][0] == frame
         first_cmd = value[0][0] if first_cmd < 0 || first_cmd > value[0][0]
         next if prop == :visible

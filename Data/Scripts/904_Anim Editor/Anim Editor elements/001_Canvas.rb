@@ -11,6 +11,7 @@
 #       9999+ = UI
 #===============================================================================
 class AnimationEditor::Canvas < Sprite
+  attr_reader :sprites    # Only used while playing the animation
   attr_reader :values
 
   FRAME_SIZE = 48
@@ -25,7 +26,6 @@ class AnimationEditor::Canvas < Sprite
     @captured          = nil
     @user_coords       = []
     @target_coords     = []
-    @playing           = false   # TODO: What should this affect? Is it needed?
     initialize_background
     initialize_battlers
     initialize_particle_sprites
@@ -195,15 +195,40 @@ class AnimationEditor::Canvas < Sprite
   #-----------------------------------------------------------------------------
 
   def prepare_to_play_animation
-    # TODO: Hide particle sprites, set battler sprites to starting positions so
-    #       that the animation can play properly. Also need a way to end this
-    #       override after the animation finishes playing. This method does not
-    #       literally play the animation; the main editor screen or playback
-    #       control does that.
+    @sprites = {}
+    # Populate @sprites with sprites that are present during battle, and reset
+    # their x/y/z values so the animation player knows where they start
+    idx = user_index
+    particle_idx = @anim[:particles].index { |particle| particle[:name] == "User" }
+    @sprites["pokemon_#{idx}"] = @battler_sprites[idx]
+    @battler_sprites[idx].x = @user_coords[0]
+    @battler_sprites[idx].y = @user_coords[1]
+    offset_xy = AnimationPlayer::Helper.get_xy_offset(@anim[:particles][particle_idx], @battler_sprites[idx])
+    @battler_sprites[idx].x += offset_xy[0]
+    @battler_sprites[idx].y += offset_xy[1]
+    focus_z = AnimationPlayer::Helper.get_z_focus(@anim[:particles][particle_idx], idx, idx)
+    AnimationPlayer::Helper.apply_z_focus_to_sprite(@battler_sprites[idx], 0, focus_z)
+    @battler_sprites[idx].z = 0
+    particle_idx = @anim[:particles].index { |particle| particle[:name] == "Target" }
+    target_indices.each do |idx|
+      @sprites["pokemon_#{idx}"] = @battler_sprites[idx]
+      @battler_sprites[idx].x = @target_coords[idx][0]
+      @battler_sprites[idx].y = @target_coords[idx][1]
+      offset_xy = AnimationPlayer::Helper.get_xy_offset(@anim[:particles][particle_idx], @battler_sprites[idx])
+      @battler_sprites[idx].x += offset_xy[0]
+      @battler_sprites[idx].y += offset_xy[1]
+      focus_z = AnimationPlayer::Helper.get_z_focus(@anim[:particles][particle_idx], idx, idx)
+      AnimationPlayer::Helper.apply_z_focus_to_sprite(@battler_sprites[idx], 0, focus_z)
+    end
+    # TODO: Also add background/bases and so on.
+    hide_all_sprites
+    @sel_frame_sprite.visible = false
     @playing = true
   end
 
   def end_playing_animation
+    @sprites.clear
+    @sprites = nil
     @playing = false
     refresh
   end
@@ -298,17 +323,21 @@ class AnimationEditor::Canvas < Sprite
   def refresh_battler_graphics
     if !@user_sprite_name || !@user_sprite_name || @user_sprite_name != @settings[:user_sprite_name]
       @user_sprite_name = @settings[:user_sprite_name]
+      @user_bitmap_front_name = GameData::Species.front_sprite_filename(@user_sprite_name)
+      @user_bitmap_back_name = GameData::Species.back_sprite_filename(@user_sprite_name)
       @user_bitmap_front&.dispose
       @user_bitmap_back&.dispose
-      @user_bitmap_front = RPG::Cache.load_bitmap("Graphics/Pokemon/Front/", @user_sprite_name)
-      @user_bitmap_back = RPG::Cache.load_bitmap("Graphics/Pokemon/Back/", @user_sprite_name)
+      @user_bitmap_front = RPG::Cache.load_bitmap("", @user_bitmap_front_name)
+      @user_bitmap_back = RPG::Cache.load_bitmap("", @user_bitmap_back_name)
     end
     if !@target_bitmap_front || !@target_sprite_name || @target_sprite_name != @settings[:target_sprite_name]
       @target_sprite_name = @settings[:target_sprite_name]
+      @target_bitmap_front_name = GameData::Species.front_sprite_filename(@target_sprite_name)
+      @target_bitmap_back_name = GameData::Species.back_sprite_filename(@target_sprite_name)
       @target_bitmap_front&.dispose
       @target_bitmap_back&.dispose
-      @target_bitmap_front = RPG::Cache.load_bitmap("Graphics/Pokemon/Front/", @target_sprite_name)
-      @target_bitmap_back = RPG::Cache.load_bitmap("Graphics/Pokemon/Back/", @target_sprite_name)
+      @target_bitmap_front = RPG::Cache.load_bitmap("", @target_bitmap_front_name)
+      @target_bitmap_back = RPG::Cache.load_bitmap("", @target_bitmap_back_name)
     end
   end
 
@@ -403,108 +432,24 @@ class AnimationEditor::Canvas < Sprite
     # Set opacity
     spr.opacity = values[:opacity]
     # Set coordinates
-    spr.x = values[:x]
-    spr.y = values[:y]
-    case particle[:focus]
-    when :foreground, :midground, :background
-    when :user
-      spr.x += @user_coords[0]
-      spr.y += @user_coords[1]
-    when :target
-      spr.x += @target_coords[target_idx][0]
-      spr.y += @target_coords[target_idx][1]
-    when :user_and_target
-      user_pos = @user_coords
-      target_pos = @target_coords[target_idx]
-      distance = GameData::Animation::USER_AND_TARGET_SEPARATION
-      spr.x = user_pos[0] + ((values[:x].to_f / distance[0]) * (target_pos[0] - user_pos[0])).to_i
-      spr.y = user_pos[1] + ((values[:y].to_f / distance[1]) * (target_pos[1] - user_pos[1])).to_i
-    when :user_side_foreground, :user_side_background
-      base_coords = Battle::Scene.pbBattlerPosition(user_index)
-      spr.x += base_coords[0]
-      spr.y += base_coords[1]
-    when :target_side_foreground, :target_side_background
-      base_coords = Battle::Scene.pbBattlerPosition(target_idx)
-      spr.x += base_coords[0]
-      spr.y += base_coords[1]
-    end
+    focus_xy = AnimationPlayer::Helper.get_xy_focus(particle, user_index, target_idx,
+                                                    @user_coords, @target_coords[target_idx])
+    AnimationPlayer::Helper.apply_xy_focus_to_sprite(spr, :x, values[:x], focus_xy)
+    AnimationPlayer::Helper.apply_xy_focus_to_sprite(spr, :y, values[:y], focus_xy)
     # Set graphic and ox/oy (may also alter y coordinate)
-    case particle[:graphic]
-    when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
-         "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
-      case particle[:graphic]
-      when "USER"
-        spr.bitmap = (user_index.even?) ? @user_bitmap_back : @user_bitmap_front
-      when "USER_OPP"
-        spr.bitmap = (user_index.even?) ? @user_bitmap_front : @user_bitmap_back
-      when "USER_FRONT"
-        spr.bitmap = @user_bitmap_front
-      when "USER_BACK"
-        spr.bitmap = @user_bitmap_back
-      when "TARGET"
-        spr.bitmap = (target_idx.even?) ? @target_bitmap_back : @target_bitmap_front
-      when "TARGET_OPP"
-        spr.bitmap = (target_idx.even?) ? @target_bitmap_front : @target_bitmap_back
-      when "TARGET_FRONT"
-        spr.bitmap = @target_bitmap_front
-      when "TARGET_BACK"
-        spr.bitmap = @target_bitmap_back
-      end
-      spr.ox = spr.bitmap.width / 2
-      spr.oy = spr.bitmap.height
-      spr.y += spr.bitmap.height / 2
-    else
-      spr.bitmap = RPG::Cache.load_bitmap("Graphics/Battle animations/", particle[:graphic])
-      if [:foreground, :midground, :background].include?(particle[:focus]) &&
-         spr.bitmap.width == AnimationEditor::CANVAS_WIDTH &&
-         spr.bitmap.height >= AnimationEditor::CANVAS_HEIGHT - @message_bar_sprite.y
-        spr.ox = 0
-        spr.oy = 0
-      elsif spr.bitmap.width > spr.bitmap.height * 2
-        spr.src_rect.set(values[:frame] * spr.bitmap.height, 0, spr.bitmap.height, spr.bitmap.height)
-        spr.ox = spr.bitmap.height / 2
-        spr.oy = spr.bitmap.height / 2
-      else
-        spr.src_rect.set(0, 0, spr.bitmap.width, spr.bitmap.height)
-        spr.ox = spr.bitmap.width / 2
-        spr.oy = spr.bitmap.height / 2
-      end
-      if particle[:graphic][/\[\s*bottom\s*\]\s*$/i]   # [bottom] at end of filename
-        spr.oy = spr.bitmap.height
-      end
-    end
+    AnimationPlayer::Helper.set_bitmap_and_origin(particle, spr, user_index, target_idx,
+                                                  [@user_bitmap_front_name, @user_bitmap_back_name],
+                                                  [@target_bitmap_front_name, @target_bitmap_back_name])
+    offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, spr)
+    spr.x += offset_xy[0]
+    spr.y += offset_xy[1]
+    # Set frame
+    # TODO: Should this always happens or only if the graphic is a spritesheet?
+    #       I don't think there's harm in it always being set.
+    spr.src_rect.x = values[:frame].floor * spr.src_rect.width
     # Set z (priority)
-    spr.z = values[:z]
-    case particle[:focus]
-    when :foreground
-      spr.z += 2000
-    when :midground
-      spr.z += 1000
-    when :background
-      # NOTE: No change.
-    when :user
-      spr.z += 1000 + ((100 * ((user_index / 2) + 1)) * (user_index.even? ? 1 : -1))
-    when :target
-      spr.z += 1000 + ((100 * ((target_idx / 2) + 1)) * (target_idx.even? ? 1 : -1))
-    when :user_and_target
-      user_pos = 1000 + ((100 * ((user_index / 2) + 1)) * (user_index.even? ? 1 : -1))
-      target_pos = 1000 + ((100 * ((target_idx / 2) + 1)) * (target_idx.even? ? 1 : -1))
-      distance = GameData::Animation::USER_AND_TARGET_SEPARATION[2]
-      if values[:z] >= 0
-        spr.z += user_pos
-      elsif values[:z] <= distance
-        spr.z += target_pos
-      else
-        spr.z = user_pos + ((values[:z].to_f / distance) * (target_pos - user_pos)).to_i
-      end
-    when :user_side_foreground, :target_side_foreground
-      this_idx = (particle[:focus] == :user_side_foreground) ? user_index : target_idx
-      spr.z += 1000
-      spr.z += 1000 if this_idx.even?   # On player's side
-    when :user_side_background, :target_side_background
-      this_idx = (particle[:focus] == :user_side_background) ? user_index : target_idx
-      spr.z += 1000 if this_idx.even?   # On player's side
-    end
+    focus_z = AnimationPlayer::Helper.get_z_focus(particle, user_index, target_idx)
+    AnimationPlayer::Helper.apply_z_focus_to_sprite(spr, values[:z], focus_z)
     # Set various other properties
     spr.zoom_x = values[:zoom_x] / 100.0
     spr.zoom_y = values[:zoom_y] / 100.0
@@ -544,11 +489,7 @@ class AnimationEditor::Canvas < Sprite
     update_selected_particle_frame
   end
 
-  def refresh
-    refresh_bg_graphics
-    ensure_battler_sprites
-    refresh_battler_graphics
-    refresh_battler_positions
+  def hide_all_sprites
     [@battler_sprites, @battler_frame_sprites].each do |sprites|
       sprites.each { |s| s.visible = false if s && !s.disposed? }
     end
@@ -561,6 +502,14 @@ class AnimationEditor::Canvas < Sprite
         end
       end
     end
+  end
+
+  def refresh
+    refresh_bg_graphics
+    ensure_battler_sprites
+    refresh_battler_graphics
+    refresh_battler_positions
+    hide_all_sprites
     @anim[:particles].each_with_index do |particle, i|
       if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
         refresh_particle(i)   # Because there can be multiple targets

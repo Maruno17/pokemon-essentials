@@ -8,11 +8,13 @@ class UIControls::Button < UIControls::BaseControl
   BUTTON_HEIGHT      = 28   # Used when @fixed_size is false
   # TODO: This will also depend on the font size.
   TEXT_BASE_OFFSET_Y = 18   # Text is centred vertically in the button
+  HIGHLIGHT_COLOR    = Color.green
 
   def initialize(width, height, viewport, text = "")
     super(width, height, viewport)
     @text = text
     @fixed_size = false
+    @highlight = false
   end
 
   def set_fixed_size
@@ -37,6 +39,10 @@ class UIControls::Button < UIControls::BaseControl
     invalidate
   end
 
+  def disabled?
+    return highlighted? || super
+  end
+
   def set_changed
     @value = true
     super
@@ -47,12 +53,33 @@ class UIControls::Button < UIControls::BaseControl
     super
   end
 
+  def highlighted?
+    return @highlight
+  end
+
+  def set_highlighted
+    return if highlighted?
+    @highlight = true
+    invalidate
+  end
+
+  def set_not_highlighted
+    return if !highlighted?
+    @highlight = false
+    invalidate
+  end
+
   #-----------------------------------------------------------------------------
 
   def refresh
     super
-    # Draw disabled colour
-    if disabled?
+    if highlighted?
+      # Draw highligted colour
+      self.bitmap.fill_rect(@button_rect.x, @button_rect.y,
+                            @button_rect.width, @button_rect.height,
+                            HIGHLIGHT_COLOR)
+    elsif disabled?
+      # Draw disabled colour
       self.bitmap.fill_rect(@button_rect.x, @button_rect.y,
                             @button_rect.width, @button_rect.height,
                             DISABLED_COLOR)

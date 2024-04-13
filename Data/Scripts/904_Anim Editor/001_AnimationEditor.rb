@@ -220,7 +220,7 @@ class AnimationEditor
       :canvas_bg          => "indoor1",
       # NOTE: These sprite names are also used in Pokemon.play_cry and so should
       #       be a species ID (being a string is fine).
-      :user_sprite_name   => "ARCANINE",
+      :user_sprite_name   => "DRAGONITE",
       :target_sprite_name => "CHARIZARD"
     }
   end
@@ -285,7 +285,7 @@ class AnimationEditor
     ].each_with_index do |tab, i|
       btn = UIControls::Button.new(100, 28, pane.viewport, tab[2])
       btn.set_fixed_size
-      btn.disable if tab[0] == component
+      btn.set_highlighted if tab[0] == component
       pane.add_control_at(tab[1], btn, next_pos_x, next_pos_y)
       next_pos_x += btn.width
     end
@@ -313,6 +313,7 @@ class AnimationEditor
   end
 
   def set_play_controls_contents
+    @components[:play_controls].add_play_controls
     @components[:play_controls].duration = @components[:particle_list].duration
   end
 
@@ -330,7 +331,6 @@ class AnimationEditor
     move_ctrl.max_rows = 16
     anim_properties.add_labelled_number_text_box(:version, _INTL("Version"), 0, 99, 0)
     anim_properties.add_labelled_text_box(:name, _INTL("Name"), "")
-    # TODO: Have two TextBoxes, one for folder and one for filename?
     anim_properties.add_labelled_text_box(:pbs_path, _INTL("PBS filepath"), "")
     anim_properties.add_labelled_checkbox(:has_user, _INTL("Involves a user?"), true)
     anim_properties.add_labelled_checkbox(:has_target, _INTL("Involves a target?"), true)
@@ -416,6 +416,53 @@ class AnimationEditor
                                       BORDER_THICKNESS, Color.white, Color.black)
     # Make the pop-up background semi-transparent
     @pop_up_bg_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.new(0, 0, 0, 128))
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def play_animation
+    # TODO: Grey out the rest of the screen.
+    play_controls = @components[:play_controls]
+    # Set up canvas as a pseudo-battle screen
+    @components[:canvas].prepare_to_play_animation
+    play_controls.prepare_to_play_animation
+    # Set up fake battlers for the animation player
+    user_battler = nil
+    if !@anim[:no_user]
+      user_battler = AnimationPlayer::FakeBattler.new(@settings[:user_index], @settings[:user_sprite_name])
+    end
+    target_battlers = nil
+    if !@anim[:no_target]
+      target_battlers = []
+      @settings[:target_indices].each do |idx|
+        target_battlers.push(AnimationPlayer::FakeBattler.new(idx, @settings[:target_sprite_name]))
+      end
+    end
+    # Create animation player
+    anim_player = AnimationPlayer.new(@anim, user_battler, target_battlers, @components[:canvas])
+    anim_player.looping = @components[:play_controls].looping
+    anim_player.slowdown = @components[:play_controls].slowdown
+    anim_player.set_up
+    # Play animation
+    anim_player.start
+    loop do
+      Graphics.update
+      Input.update
+      anim_player.update
+      # TODO: Maybe get elapsed time from anim_player and pass it to
+      #       play_controls to be drawn?
+      play_controls.update
+      if play_controls.changed?
+        if play_controls.values.keys.include?(:stop)
+          play_controls.clear_changed
+          break
+        end
+      end
+      break if anim_player.finished?
+    end
+    anim_player.dispose
+    @components[:canvas].end_playing_animation
+    play_controls.end_playing_animation
   end
 
   #-----------------------------------------------------------------------------
@@ -558,8 +605,10 @@ class AnimationEditor
         refresh
       end
     when :play_controls
-      # TODO: Will the play controls ever signal themselves as changed? I don't
-      #       think so.
+      case property
+      when :play
+        @ready_to_play = true
+      end
     when :particle_list
       case property
       when :add_particle
@@ -739,7 +788,10 @@ class AnimationEditor
       Graphics.update
       Input.update
       update
-      if @captured.nil? && @quit
+      if @ready_to_play
+        play_animation
+        @ready_to_play = false
+      elsif @captured.nil? && @quit
         case message(_INTL("Do you want to save changes to the animation?"),
                      [:yes, _INTL("Yes")], [:no, _INTL("No")], [:cancel, _INTL("Cancel")])
         when :yes

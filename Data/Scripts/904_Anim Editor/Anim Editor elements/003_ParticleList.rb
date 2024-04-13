@@ -177,6 +177,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @list_viewport.dispose
     @commands_bg_viewport.dispose
     @commands_viewport.dispose
+    super
   end
 
   def dispose_listed_sprites
@@ -430,7 +431,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   #-----------------------------------------------------------------------------
 
   def calculate_duration
-    @duration = AnimationEditor::ParticleDataHelper.get_duration(@particles)
+    @duration = AnimationPlayer::Helper.get_duration(@particles)
     @duration += DURATION_BUFFER
   end
 

@@ -275,6 +275,29 @@ module GameData
       return ret
     end
 
+    def inspect
+      ret = super.chop + ": "
+      case @type
+      when :move       then ret += _INTL("[Move]")
+      when :opp_move   then ret += _INTL("[Foe Move]")
+      when :common     then ret += _INTL("[Common]")
+      when :opp_common then ret += _INTL("[Foe Common]")
+      else
+        raise _INTL("Unknown animation type.")
+      end
+      case @type
+      when :move, :opp_move
+        move_data = GameData::Move.try_get(@move)
+        move_name = (move_data) ? move_data.name : @move
+        ret += " " + move_name
+      when :common, :opp_common
+        ret += " " + @move
+      end
+      ret += " (" + @version.to_s + ")" if @version > 0
+      ret += " - " + @name if @name
+      return ret
+    end
+
     def move_animation?
       return [:move, :opp_move].include?(@type)
     end

@@ -20,6 +20,10 @@ class UIControls::Label < UIControls::BaseControl
     refresh
   end
 
+  def text_width
+    return self.bitmap.text_size(@text).width
+  end
+
   def refresh
     super
     if @header
