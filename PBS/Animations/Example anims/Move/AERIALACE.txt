@@ -273,14 +273,14 @@ Name = Example anim
 [OppMove,AERIALACE]
 Name = Example anim
 <User>
-<Target>
     SetOpacity = 1,170
     SetOpacity = 2,85
     SetOpacity = 3,0
     SetOpacity = 5,255
+<Target>
 <Particle 2>
     Graphic = Examples/Aerial Ace
-    Focus = User
+    Focus = Target
     SetX = 0,101
     SetY = 0,-56
     SetZ = 0,27
@@ -295,8 +295,8 @@ Name = Example anim
     SetY = 3,24
     SetVisible = 4,false
 <Particle 3>
-    Graphic = TARGET
-    Focus = Target
+    Graphic = USER
+    Focus = User
     SetX = 1,-51
     SetY = 1,18
     SetZ = 1,28
@@ -309,8 +309,8 @@ Name = Example anim
     SetOpacity = 6,85
     SetVisible = 7,false
 <Particle 4>
-    Graphic = TARGET
-    Focus = Target
+    Graphic = USER
+    Focus = User
     SetX = 2,-16
     SetY = 2,44
     SetZ = 2,29
@@ -319,8 +319,8 @@ Name = Example anim
     SetOpacity = 4,170
     SetVisible = 5,false
 <Particle 5>
-    Graphic = TARGET
-    Focus = Target
+    Graphic = USER
+    Focus = User
     SetX = 3,-16
     SetY = 3,44
     SetZ = 3,30
@@ -331,7 +331,7 @@ Name = Example anim
     SetVisible = 6,false
 <Particle 6>
     Graphic = Examples/Aerial Ace
-    Focus = User
+    Focus = Target
     SetFrame = 5,7
     SetX = 5,54
     SetY = 5,27
@@ -354,7 +354,7 @@ Name = Example anim
     SetOpacity = 11,85
 <Particle 7>
     Graphic = Examples/Aerial Ace
-    Focus = User
+    Focus = Target
     SetFrame = 5,7
     SetX = 5,30
     SetY = 5,13
@@ -375,7 +375,7 @@ Name = Example anim
     SetVisible = 11,false
 <Particle 8>
     Graphic = Examples/Aerial Ace
-    Focus = User
+    Focus = Target
     SetFrame = 5,7
     SetX = 5,-3
     SetY = 5,3
@@ -397,7 +397,7 @@ Name = Example anim
     SetVisible = 11,false
 <Particle 9>
     Graphic = Examples/Aerial Ace
-    Focus = User
+    Focus = Target
     SetFrame = 5,7
     SetX = 5,-27
     SetY = 5,26
@@ -420,7 +420,7 @@ Name = Example anim
     SetOpacity = 11,85
 <Particle 10>
     Graphic = Examples/Aerial Ace
-    Focus = User
+    Focus = Target
     SetFrame = 5,7
     SetX = 5,19
     SetY = 5,50

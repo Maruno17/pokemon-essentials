@@ -19,6 +19,7 @@ module GameData
     #       :user_and_target, plus there's :foreground in PARTICLE_DEFAULT_VALUES
     #       below.
     # TODO: Add :user_ground, :target_ground?
+    # TODO: Add :opposing_side_foreground and :opposing_side_background?
     FOCUS_TYPES = {
       "Foreground"           => :foreground,
       "Midground"            => :midground,

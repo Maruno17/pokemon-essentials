@@ -101,15 +101,15 @@ class AnimationPlayer
     particle_sprite.sprite = sprite if sprite
     # Set sprite's graphic and ox/oy
     if sprite
-      AnimationPlayer::Helper.set_bitmap_and_origin(particle, sprite, @user.index, target_idx,
-        @battler_sprites[@user.index], @battler_sprites[target_idx])
+      AnimationPlayer::Helper.set_bitmap_and_origin(particle, sprite, @user&.index, target_idx,
+        @battler_sprites[@user&.index || -1], @battler_sprites[target_idx])
       end
     # Calculate x/y/z focus values and additional x/y modifier and pass them all
     # to particle_sprite
-    focus_xy = AnimationPlayer::Helper.get_xy_focus(particle, @user.index, target_idx,
+    focus_xy = AnimationPlayer::Helper.get_xy_focus(particle, @user&.index, target_idx,
                                                     @user_coords, @target_coords[target_idx])
     offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, sprite)
-    focus_z = AnimationPlayer::Helper.get_z_focus(particle, @user.index, target_idx)
+    focus_z = AnimationPlayer::Helper.get_z_focus(particle, @user&.index, target_idx)
     particle_sprite.focus_xy = focus_xy
     particle_sprite.offset_xy = offset_xy
     particle_sprite.focus_z = focus_z

@@ -4,9 +4,11 @@
 #       -199 = side bases
 #       -198 = battler shadows.
 #       0 +/-50 = background focus, foe side background.
+#       500, 400, 300... = foe trainers.
 #       900, 800, 700... +/-50 = foe battlers.
 #       1000 +/-50 = foe side foreground, player side background.
 #       1100, 1200, 1300... +/-50 = player battlers.
+#       1500, 1600, 1700... = player trainers.
 #       2000 +/-50 = player side foreground, foreground focus.
 #       9999+ = UI
 #===============================================================================
@@ -201,25 +203,33 @@ class AnimationEditor::Canvas < Sprite
     # their x/y/z values so the animation player knows where they start
     idx = user_index
     particle_idx = @anim[:particles].index { |particle| particle[:name] == "User" }
-    @sprites["pokemon_#{idx}"] = @battler_sprites[idx]
-    @battler_sprites[idx].x = @user_coords[0]
-    @battler_sprites[idx].y = @user_coords[1]
-    offset_xy = AnimationPlayer::Helper.get_xy_offset(@anim[:particles][particle_idx], @battler_sprites[idx])
-    @battler_sprites[idx].x += offset_xy[0]
-    @battler_sprites[idx].y += offset_xy[1]
-    focus_z = AnimationPlayer::Helper.get_z_focus(@anim[:particles][particle_idx], idx, idx)
-    AnimationPlayer::Helper.apply_z_focus_to_sprite(@battler_sprites[idx], 0, focus_z)
-    @battler_sprites[idx].z = 0
-    particle_idx = @anim[:particles].index { |particle| particle[:name] == "Target" }
-    target_indices.each do |idx|
+    if particle_idx
       @sprites["pokemon_#{idx}"] = @battler_sprites[idx]
-      @battler_sprites[idx].x = @target_coords[idx][0]
-      @battler_sprites[idx].y = @target_coords[idx][1]
+      @battler_sprites[idx].x = @user_coords[0]
+      @battler_sprites[idx].y = @user_coords[1]
       offset_xy = AnimationPlayer::Helper.get_xy_offset(@anim[:particles][particle_idx], @battler_sprites[idx])
+      focus_z = AnimationPlayer::Helper.get_z_focus(@anim[:particles][particle_idx], idx, idx)
       @battler_sprites[idx].x += offset_xy[0]
       @battler_sprites[idx].y += offset_xy[1]
-      focus_z = AnimationPlayer::Helper.get_z_focus(@anim[:particles][particle_idx], idx, idx)
       AnimationPlayer::Helper.apply_z_focus_to_sprite(@battler_sprites[idx], 0, focus_z)
+    end
+    particle_idx = @anim[:particles].index { |particle| particle[:name] == "Target" }
+    if particle_idx
+      target_indices.each do |idx|
+        @sprites["pokemon_#{idx}"] = @battler_sprites[idx]
+        @battler_sprites[idx].x = @target_coords[idx][0]
+        @battler_sprites[idx].y = @target_coords[idx][1]
+        if particle_idx
+          offset_xy = AnimationPlayer::Helper.get_xy_offset(@anim[:particles][particle_idx], @battler_sprites[idx])
+          focus_z = AnimationPlayer::Helper.get_z_focus(@anim[:particles][particle_idx], idx, idx)
+        else
+          offset_xy = [0, @battler_sprites[idx].bitmap.height / 2]
+          focus_z = 1000 + ((100 * ((idx / 2) + 1)) * (idx.even? ? 1 : -1))
+        end
+        @battler_sprites[idx].x += offset_xy[0]
+        @battler_sprites[idx].y += offset_xy[1]
+        AnimationPlayer::Helper.apply_z_focus_to_sprite(@battler_sprites[idx], 0, focus_z)
+      end
     end
     # TODO: Also add background/bases and so on.
     hide_all_sprites

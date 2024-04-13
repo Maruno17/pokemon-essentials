@@ -57,7 +57,7 @@ class AnimationEditor::PlayControls < UIControls::ControlsContainer
     @controls.push([:unloop, unloop_button])
     # Slowdown label
     duration_label = UIControls::Label.new(200, ROW_HEIGHT, self.viewport, _INTL("Slowdown factor"))
-    duration_label.x = SLOWDOWN_BUTTON_X + (SLOWDOWN_FACTORS.length * (SLOWDOWN_BUTTON_WIDTH - SLOWDOWN_BUTTON_SPACING) / 2)
+    duration_label.x = SLOWDOWN_BUTTON_X + (SLOWDOWN_FACTORS.length * (SLOWDOWN_BUTTON_WIDTH + SLOWDOWN_BUTTON_SPACING) / 2)
     duration_label.x -= (duration_label.text_width / 2) + 5
     duration_label.y = SLOWDOWN_LABEL_Y
     @controls.push([:slowdown_label, duration_label])
@@ -65,7 +65,7 @@ class AnimationEditor::PlayControls < UIControls::ControlsContainer
     SLOWDOWN_FACTORS.each_with_index do |value, i|
       button = UIControls::Button.new(SLOWDOWN_BUTTON_WIDTH, ROW_HEIGHT, self.viewport, value.to_s)
       button.set_fixed_size
-      button.x = SLOWDOWN_BUTTON_X + ((SLOWDOWN_BUTTON_WIDTH - SLOWDOWN_BUTTON_SPACING) * i)
+      button.x = SLOWDOWN_BUTTON_X + ((SLOWDOWN_BUTTON_WIDTH + SLOWDOWN_BUTTON_SPACING) * i)
       button.y = SLOWDOWN_BUTTON_Y
       button.set_interactive_rects
       button.set_highlighted if value == @slowdown
