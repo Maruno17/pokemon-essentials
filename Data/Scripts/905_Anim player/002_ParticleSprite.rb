@@ -5,6 +5,7 @@
 class AnimationPlayer::ParticleSprite
   attr_accessor :sprite
   attr_accessor :focus_xy, :offset_xy, :focus_z
+  attr_accessor :foe_invert_x, :foe_invert_y
 
   FRAMES_PER_SECOND = 20.0
 
@@ -98,10 +99,14 @@ class AnimationPlayer::ParticleSprite
     when :blending    then @sprite.blend_type = value
     when :flip        then @sprite.mirror = value
     when :x
-      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite, :x, value.round, @focus_xy)
+      value = value.round
+      value *= -1 if @foe_invert_x
+      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite, :x, value, @focus_xy)
       @sprite.x += @offset_xy[0]
     when :y
-      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite, :y, value.round, @focus_xy)
+      value = value.round
+      value *= -1 if @foe_invert_y
+      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite, :y, value, @focus_xy)
       @sprite.y += @offset_xy[1]
     when :z
       AnimationPlayer::Helper.apply_z_focus_to_sprite(@sprite, value, @focus_z)

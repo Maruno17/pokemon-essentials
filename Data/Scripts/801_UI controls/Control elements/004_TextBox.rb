@@ -25,8 +25,8 @@ class UIControls::TextBox < UIControls::BaseControl
   end
 
   def value=(new_value)
-    return if @value == new_value
-    @value = new_value.dup
+    return if @value.to_s == new_value.to_s
+    @value = new_value.to_s.dup
     invalidate
   end
 
@@ -39,6 +39,7 @@ class UIControls::TextBox < UIControls::BaseControl
   end
 
   def delete_at(index)
+    @value = @value.to_s
     @value.slice!(index)
     @cursor_pos -= 1 if @cursor_pos > index
     @cursor_timer = System.uptime

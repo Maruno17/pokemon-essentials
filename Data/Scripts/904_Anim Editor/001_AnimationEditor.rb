@@ -209,14 +209,11 @@ class AnimationEditor
   end
 
   def load_settings
-    # TODO: Load these from a saved file.
     @settings = {
-      :side_sizes         => [1, 1],
-      :user_index         => 0,
-      :target_indices     => [1],
+      :side_sizes         => [1, 1],   # Player's side, opposing side
+      :user_index         => 0,        # 0, 2, 4
+      :target_indices     => [1],      # There must be at least one valid target
       :user_opposes       => false,
-      # TODO: Ideally be able to independently choose base graphics, which will
-      #       be a separate setting here.
       :canvas_bg          => "indoor1",
       # NOTE: These sprite names are also used in Pokemon.play_cry and so should
       #       be a species ID (being a string is fine).
@@ -277,11 +274,9 @@ class AnimationEditor
 
   def add_side_pane_tab_buttons(component, pane)
     next_pos_x, next_pos_y = pane.next_control_position
-    # TODO: Add masking tab and properties.
     [
       [:commands_pane, :general_tab, _INTL("General")],
-      [:color_tone_pane, :color_tone_tab, _INTL("Color/Tone")],
-#      [:masking_pane, :masking_tab, _INTL("Masking")]
+      [:color_tone_pane, :color_tone_tab, _INTL("Color/Tone")]
     ].each_with_index do |tab, i|
       btn = UIControls::Button.new(100, 28, pane.viewport, tab[2])
       btn.set_fixed_size
@@ -334,7 +329,6 @@ class AnimationEditor
     anim_properties.add_labelled_text_box(:pbs_path, _INTL("PBS filepath"), "")
     anim_properties.add_labelled_checkbox(:has_user, _INTL("Involves a user?"), true)
     anim_properties.add_labelled_checkbox(:has_target, _INTL("Involves a target?"), true)
-    # TODO: Flags control. Includes a List, TextBox and some add/delete Buttons.
     anim_properties.add_button(:close, _INTL("Close"))
     anim_properties.visible = false
   end
@@ -421,7 +415,6 @@ class AnimationEditor
   #-----------------------------------------------------------------------------
 
   def play_animation
-    # TODO: Grey out the rest of the screen.
     play_controls = @components[:play_controls]
     # Set up canvas as a pseudo-battle screen
     @components[:canvas].prepare_to_play_animation
@@ -457,8 +450,6 @@ class AnimationEditor
       Graphics.update
       Input.update
       anim_player.update
-      # TODO: Maybe get elapsed time from anim_player and pass it to
-      #       play_controls to be drawn?
       play_controls.update
       if play_controls.changed?
         if play_controls.values.keys.include?(:stop)
@@ -487,7 +478,6 @@ class AnimationEditor
     ctrl = @components[:animation_properties].get_control(:move)
     case @anim[:type]
     when :move, :opp_move
-      # TODO: Cache this list?
       move_list = []
       GameData::Move.each { |m| move_list.push([m.id.to_s, m.name]) }
       move_list.push(["STRUGGLE", _INTL("Struggle")]) if move_list.none? { |val| val[0] == "STRUGGLE" }
@@ -527,7 +517,6 @@ class AnimationEditor
       when :common, :opp_common
         component.get_control(:move_label).text = _INTL("Common animation")
       end
-      # TODO: Maybe other things as well?
     else
       # Side panes
       if AnimationEditor::SidePanes.is_side_pane?(component_sym)
@@ -543,8 +532,6 @@ class AnimationEditor
           component.controls.each do |ctrl|
             next if !new_vals.include?(ctrl[0])
             ctrl[1].value = new_vals[ctrl[0]][0] if ctrl[1].respond_to?("value=")
-            # TODO: new_vals[ctrl[0]][1] is whether the value is being interpolated,
-            #       which should be indicated somehow in ctrl[1].
           end
         end
         # Additional refreshing of controls
@@ -591,7 +578,6 @@ class AnimationEditor
       when :name
         edit_animation_properties
         @components[:menu_bar].anim_name = get_animation_display_name
-        # TODO: May need to refresh other things.
         refresh_component(:particle_list)
       end
     when :canvas
@@ -663,8 +649,6 @@ class AnimationEditor
         refresh_component(:canvas)
       end
     when :animation_properties
-      # TODO: Will changes here need to refresh any other components (e.g. side
-      #       panes)? Probably.
       case property
       when :type, :opp_variant
         type = @components[component_sym].get_control(:type).value
@@ -770,7 +754,6 @@ class AnimationEditor
           refresh if keyframe != old_keyframe || particle_index != old_particle_index
         end
         if component.respond_to?("values")
-          # TODO: Make undo/redo snapshot.
           values = component.values
           if values
             values.each_pair do |property, value|

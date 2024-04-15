@@ -2,7 +2,8 @@
 #
 #===============================================================================
 class Battle::Scene
-  BETTER_ANIMATION_DEFAULTS = {
+  ANIMATION_DEFAULTS = [:TACKLE, :DEFENSECURL]   # With target, without target
+  ANIMATION_DEFAULTS_FOR_TYPE_CATEGORY = {
     :NORMAL   => [:TACKLE,       :SONICBOOM,    :DEFENSECURL, :EXPLOSION,  :SWIFT,         :TAILWHIP],
     :FIGHTING => [:MACHPUNCH,    :AURASPHERE,   :BULKUP,      nil,         nil,            nil],
     :FLYING   => [:WINGATTACK,   :GUST,         :ROOST,       nil,         :AIRCUTTER,     :FEATHERDANCE],
@@ -73,20 +74,24 @@ class Battle::Scene
     target_data = GameData::Target.get(move_data.target)
     move_type = move_data.type
     default_idx = move_data.category
-    default_idx += 3 if target_data.num_targets > 1 || target_data.affects_foe_side
-    default_idx += 3 if move_data.status? && target_data.num_targets > 0
+    default_idx += 3 if target_data.num_targets > 1 ||
+                        (target_data.num_targets > 0 && move_data.status?) ||
+                        target_data.affects_foe_side
     # Check for a default animation
-    wanted_move = BETTER_ANIMATION_DEFAULTS[move_type][default_idx]
+    wanted_move = ANIMATION_DEFAULTS_FOR_TYPE_CATEGORY[move_type][default_idx]
     anims = find_move_animation_for_move(wanted_move, 0, user_index)
     return anims if anims
     if default_idx >= 3
-      wanted_move = BETTER_ANIMATION_DEFAULTS[move_type][default_idx - 3]
+      wanted_move = ANIMATION_DEFAULTS_FOR_TYPE_CATEGORY[move_type][default_idx - 3]
       anims = find_move_animation_for_move(wanted_move, 0, user_index)
       return anims if anims
-      return nil if wanted_move == :TACKLE   # No need to check for Tackle's animation twice
+      return nil if ANIMATION_DEFAULTS.include?(wanted_move)   # No need to check for these animations twice
     end
-    # Use Tackle's animation
-    return find_move_animation_for_move(:TACKLE, 0, user_index)
+    # Use Tackle or Defense Curl's animation
+    if target_data.num_targets == 0 && target.data.id != :None
+      return find_move_animation_for_move(ANIMATION_DEFAULTS[1], 0, user_index)
+    end
+    return find_move_animation_for_move(ANIMATION_DEFAULTS[0], 0, user_index)
   end
 
   # Find an animation(s) for the given move_id.

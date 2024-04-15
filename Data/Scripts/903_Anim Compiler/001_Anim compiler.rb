@@ -186,6 +186,19 @@ module Compiler
           raise _INTL("Animation can't play the target's cry if property \"NoTarget\" is set to true.") + "\n" + FileLineData.linereport
         end
       end
+      # Ensure that none of the particle's "alter something if focus is a
+      # battler on the foe's side" properties are set if the particle doesn't
+      # have such a focus
+      if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus]) == GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+        if particle[:foe_invert_x]
+          raise _INTL("Particle \"{1}\" can't set \"FoeInvertX\" if its focus isn't exactly 1 thing.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+        if particle[:foe_invert_y]
+          raise _INTL("Particle \"{1}\" can't set \"FoeInvertY\" if its focus isn't exactly 1 thing.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+      end
       # Ensure that the same SE isn't played twice in the same frame
       if particle[:name] == "SE"
         [:se, :user_cry, :target_cry].each do |property|

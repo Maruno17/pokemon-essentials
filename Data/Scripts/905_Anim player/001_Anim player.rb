@@ -113,6 +113,18 @@ class AnimationPlayer
     particle_sprite.focus_xy = focus_xy
     particle_sprite.offset_xy = offset_xy
     particle_sprite.focus_z = focus_z
+    # Set whether properties should be modified if the particle's target is on
+    # the opposing side
+    relative_to_index = -1
+    if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+      relative_to_index = @user.index
+    elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+      relative_to_index = target_idx
+    end
+    if relative_to_index >= 0 && relative_to_index.odd? && particle[:focus] != :user_and_target
+      particle_sprite.foe_invert_x = particle[:foe_invert_x]
+      particle_sprite.foe_invert_y = particle[:foe_invert_y]
+    end
     # Find earliest command and add a "make visible" command then
     if sprite && !particle_sprite.battler_sprite?
       first_cmd = -1

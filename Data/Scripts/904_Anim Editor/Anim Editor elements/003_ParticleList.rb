@@ -135,31 +135,35 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   def initialize_controls
     generate_button_bitmaps
     @controls = []
-    add_particle_button = UIControls::BitmapButton.new(x + 1, y + 1, viewport, @add_button_bitmap)
+    add_particle_button = UIControls::BitmapButton.new(x + 1, y + 1, viewport, @bitmaps[:add_button])
     add_particle_button.set_interactive_rects
     @controls.push([:add_particle, add_particle_button])
-    up_particle_button = UIControls::BitmapButton.new(x + 22, y + 1, viewport, @up_button_bitmap)
+    up_particle_button = UIControls::BitmapButton.new(x + 22, y + 1, viewport, @bitmaps[:up_button])
     up_particle_button.set_interactive_rects
     @controls.push([:move_particle_up, up_particle_button])
-    down_particle_button = UIControls::BitmapButton.new(x + 43, y + 1, viewport, @down_button_bitmap)
+    down_particle_button = UIControls::BitmapButton.new(x + 43, y + 1, viewport, @bitmaps[:down_button])
     down_particle_button.set_interactive_rects
     @controls.push([:move_particle_down, down_particle_button])
   end
 
   def generate_button_bitmaps
-    @add_button_bitmap = Bitmap.new(12, 12)
-    @add_button_bitmap.fill_rect(1, 5, 10, 2, TEXT_COLOR)
-    @add_button_bitmap.fill_rect(5, 1, 2, 10, TEXT_COLOR)
-    @up_button_bitmap = Bitmap.new(12, 12)
+    @bitmaps = {}
+    add_button = Bitmap.new(12, 12)
+    add_button.fill_rect(1, 5, 10, 2, TEXT_COLOR)
+    add_button.fill_rect(5, 1, 2, 10, TEXT_COLOR)
+    @bitmaps[:add_button] = add_button
+    up_button = Bitmap.new(12, 12)
     5.times do |i|
-      @up_button_bitmap.fill_rect(1 + i, 7 - i, 1, (i == 0) ? 2 : 3, TEXT_COLOR)
-      @up_button_bitmap.fill_rect(10 - i, 7 - i, 1, (i == 0) ? 2 : 3, TEXT_COLOR)
+      up_button.fill_rect(1 + i, 7 - i, 1, (i == 0) ? 2 : 3, TEXT_COLOR)
+      up_button.fill_rect(10 - i, 7 - i, 1, (i == 0) ? 2 : 3, TEXT_COLOR)
     end
-    @down_button_bitmap = Bitmap.new(12, 12)
+    @bitmaps[:up_button] = up_button
+    down_button = Bitmap.new(12, 12)
     5.times do |i|
-      @down_button_bitmap.fill_rect(1 + i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, TEXT_COLOR)
-      @down_button_bitmap.fill_rect(10 - i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, TEXT_COLOR)
+      down_button.fill_rect(1 + i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, TEXT_COLOR)
+      down_button.fill_rect(10 - i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, TEXT_COLOR)
     end
+    @bitmaps[:down_button] = down_button
   end
 
   def dispose
@@ -171,9 +175,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @particle_line_sprite.dispose
     @controls.each { |c| c[1].dispose }
     @controls.clear
-    @add_button_bitmap.dispose
-    @up_button_bitmap.dispose
-    @down_button_bitmap.dispose
+    @bitmaps.each { |b| b&.dispose }
     dispose_listed_sprites
     @list_viewport.dispose
     @commands_bg_viewport.dispose
@@ -436,9 +438,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @duration += DURATION_BUFFER
   end
 
-  # TODO: Call this only from set_particles and when changes are made to
-  #       @particles by the main editor scene. If we can be specific about which
-  #       particle was changed, recalculate only that particle's commands.
   def calculate_all_commands_and_durations
     calculate_duration
     calculate_all_commands
@@ -956,8 +955,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
             end
             set_changed if @keyframe != @captured_keyframe || @row_index != @captured_row
             @keyframe = @captured_keyframe || -1
-            # TODO: If :keyframe_pane should be accessible by clicking on the
-            #       timeline, change the below line to = @captured_row || -1.
             @row_index = @captured_row if @captured_row
           end
         end

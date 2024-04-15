@@ -6,7 +6,6 @@ class UIControls::Button < UIControls::BaseControl
   BUTTON_Y           = 2
   BUTTON_PADDING     = 10   # Used when @fixed_size is false
   BUTTON_HEIGHT      = 28   # Used when @fixed_size is false
-  # TODO: This will also depend on the font size.
   TEXT_BASE_OFFSET_Y = 18   # Text is centred vertically in the button
   HIGHLIGHT_COLOR    = Color.new(224, 192, 32)   # Dark yellow
 

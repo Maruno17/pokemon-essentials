@@ -132,12 +132,6 @@ AnimationEditor::SidePanes.add_pane(:particle_pane, {
   }
 })
 
-# AnimationEditor::SidePanes.add_pane(:keyframe_pane, {
-#   :set_visible => proc { |editor, anim, keyframe, particle_index|
-#     next keyframe >= 0 && particle_index < 0
-#   }
-# })
-
 #===============================================================================
 #
 #===============================================================================
@@ -183,12 +177,6 @@ AnimationEditor::SidePanes.add_property(:commands_pane, :z, {
   }
 })
 
-# TODO: If the graphic is user's sprite/target's sprite, make :frame instead
-#       a choice of front/back/same as the main sprite/opposite of the main
-#       sprite. Will need two controls in the same space, which is doable.
-#       Will also need to change the graphic chooser to only have "user"/
-#       "target" options rather than all the variants that this control
-#       would manage.
 AnimationEditor::SidePanes.add_property(:commands_pane, :frame, {
   :new => proc { |pane, editor|
     pane.add_labelled_number_text_box(:frame, _INTL("Frame"), 0, 99, 0)
@@ -196,7 +184,6 @@ AnimationEditor::SidePanes.add_property(:commands_pane, :frame, {
   :refresh_value => proc { |control, editor|
     # Disable the "Frame" control if the particle's graphic is predefined to be
     # the user's or target's sprite
-    # TODO: Also disable it if the particle's graphic isn't a spritesheet.
     graphic = editor.anim[:particles][editor.particle_index][:graphic]
     if ["USER", "USER_OPP", "USER_FRONT", "USER_BACK",
         "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"].include?(graphic)
@@ -252,9 +239,6 @@ AnimationEditor::SidePanes.add_property(:commands_pane, :blending, {
     }, 0)
   }
 })
-
-# TODO: Add buttons that shift all commands from the current keyframe and later
-#       forwards/backwards in time?
 
 #===============================================================================
 #
@@ -534,8 +518,39 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :focus, {
   }
 })
 
-# TODO: FlipIfFoe.
-# TODO: RotateIfFoe.
+AnimationEditor::SidePanes.add_property(:particle_pane, :opposing_label, {
+  :new => proc { |pane, editor|
+    pane.add_label(:opposing_label, _INTL("If on opposing side..."))
+  }
+})
+
+AnimationEditor::SidePanes.add_property(:particle_pane, :foe_invert_x, {
+  :new => proc { |pane, editor|
+    pane.add_labelled_checkbox(:foe_invert_x, _INTL("Invert X"), false)
+  },
+  :refresh_value => proc { |control, editor|
+    focus = editor.anim[:particles][editor.particle_index][:focus]
+    if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(focus) == GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(focus)
+      control.disable
+    else
+      control.enable
+    end
+  }
+})
+
+AnimationEditor::SidePanes.add_property(:particle_pane, :foe_invert_y, {
+  :new => proc { |pane, editor|
+    pane.add_labelled_checkbox(:foe_invert_y, _INTL("Invert Y"), false)
+  },
+  :refresh_value => proc { |control, editor|
+    focus = editor.anim[:particles][editor.particle_index][:focus]
+    if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(focus) == GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(focus)
+      control.disable
+    else
+      control.enable
+    end
+  }
+})
 
 AnimationEditor::SidePanes.add_property(:particle_pane, :duplicate, {
   :new => proc { |pane, editor|
@@ -580,18 +595,3 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :delete, {
     end
   }
 })
-
-# TODO: Various ways to bulk shift this particle's commands earlier/later.
-
-#===============================================================================
-# NOTE: keyframe_pane is currently inaccessible (intentionally). If it will have
-#       its own commands and should be accessible again, change def
-#       on_mouse_release in ParticleList.
-#===============================================================================
-# AnimationEditor::SidePanes.add_property(:keyframe_pane, :header, {
-#   :new => proc { |pane, editor|
-#     pane.add_header_label(:header, _INTL("Edit keyframe"))
-#   }
-# })
-
-# TODO: Various command-shifting options (insert/delete keyframe).

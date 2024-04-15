@@ -1,6 +1,3 @@
-# TODO: Hardcoded animations have incorrect z values because of the change to
-#       other sprites' z values.
-
 #===============================================================================
 #
 #===============================================================================

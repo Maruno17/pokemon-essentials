@@ -80,9 +80,6 @@ class AnimationEditor
     # Show pop-up window
     @pop_up_bg_bitmap.visible = true
     bg_bitmap = create_pop_up_window(ANIM_PROPERTIES_WIDTH, ANIM_PROPERTIES_HEIGHT)
-    # TODO: Draw box around list control(s), i.e. flags. Note that an extra +4
-    #       should be added to its x coordinate because of padding created when
-    #       defining @components[:animation_properties].
     anim_properties = @components[:animation_properties]
     anim_properties.visible = true
     # Set control values
@@ -99,7 +96,6 @@ class AnimationEditor
     anim_properties.get_control(:has_user).value = !@anim[:no_user]
     anim_properties.get_control(:has_target).value = !@anim[:no_target]
     anim_properties.get_control(:usable).value = !(@anim[:ignore] || false)
-    # TODO: Populate flags.
     refresh_component(:animation_properties)   # This sets the :move control's value
     # Interaction loop
     ret = nil
@@ -200,8 +196,6 @@ class AnimationEditor
         fname = (chunks[0] == "USER") ? @settings[:user_sprite_name].to_s : @settings[:target_sprite_name].to_s
         case chunks[1] || ""
         when "", "OPP"
-          # TODO: "TARGET" and "TARGET_OPP" will not be accurate in cases where
-          #       the target is on the same side as the user.
           if (chunks[0] == "USER") ^ (chunks[1] == "OPP")   # xor
             folder = (@settings[:user_opposes]) ? "Graphics/Pokemon/Front/" : "Graphics/Pokemon/Back/"
           else

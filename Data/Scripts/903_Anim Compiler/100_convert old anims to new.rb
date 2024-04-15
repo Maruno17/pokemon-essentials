@@ -1,6 +1,3 @@
-# TODO: OppMove animations have their user and target swapped, and will need
-#       them swapping back.
-
 module AnimationConverter
   NO_USER_COMMON_ANIMATIONS = [
     "Hail", "HarshSun", "HeavyRain", "Rain", "Sandstorm", "Sun", "ShadowSky",
@@ -223,8 +220,6 @@ module AnimationConverter
             when 2   # :user
               val -= Battle::Scene::FOCUSUSER_X
             when 3   # :user_and_target
-              # TODO: What if the animation is an OppMove one? I think this should
-              #       be the other way around.
               user_x = Battle::Scene::FOCUSUSER_X
               target_x = Battle::Scene::FOCUSTARGET_X
               if hash[:type] == :opp_move
@@ -248,8 +243,6 @@ module AnimationConverter
             when 2   # :user
               val -= Battle::Scene::FOCUSUSER_Y
             when 3   # :user_and_target
-              # TODO: What if the animation is an OppMove one? I think this should
-              #       be the other way around.
               user_y = Battle::Scene::FOCUSUSER_Y
               target_y = Battle::Scene::FOCUSTARGET_Y
               if hash[:type] == :opp_move
@@ -279,10 +272,6 @@ module AnimationConverter
           when :frame
             next if val < 0   # -1 is user, -2 is target
           end
-          # TODO: Come up with a better way to set a particle's graphic being
-          #       the user or target. Probably can't, due to overlapping cel
-          #       numbers and user/target being the :graphic property which
-          #       doesn't change.
           particle[property[1]].push([frame_num, 0, val])
           last_frame[property[0]] = cel[property[0]]
           changed_particles.push(idx) if !changed_particles.include?(idx)
@@ -305,14 +294,11 @@ module AnimationConverter
         lookup_idx = index_lookup.index(idx)
         index_lookup[lookup_idx] = -1
       end
-      # Add a dummy command to the user particle in the last frame if that frame
-      # doesn't have any commands
+      # Add a dummy command in the last frame if that frame doesn't have any
+      # commands (this makes all visible particles invisible)
       if frame_num == anim.length - 1 && changed_particles.empty?
         hash[:particles].each_with_index do |particle, idx|
           next if !particle || ["User", "Target"].include?(particle[:name])
-          # TODO: Making all non-user non-target particles invisible in the last
-          #       frame isn't a perfect solution, but it's good enough to get
-          #       example animation data.
           next if last_frame_values[idx][AnimFrame::VISIBLE] == 0
           particle[:visible] ||= []
           particle[:visible].push([frame_num + 1, 0, false])
@@ -332,7 +318,6 @@ module AnimationConverter
 
   #-----------------------------------------------------------------------------
 
-  # TODO: Haven't tested this as no Essentials animations use them.
   def add_bg_fg_commands_to_new_anim_hash(anim, new_anim)
     bg_particle = { :name => "Background", :focus => :background }
     fg_particle = { :name => "Foreground", :focus => :foreground }

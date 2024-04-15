@@ -39,7 +39,6 @@ class AnimationEditor::Canvas < Sprite
   def initialize_background
     self.z = -200
     # NOTE: The background graphic is self.bitmap.
-    # TODO: Add second (flipped) background graphic, for screen shake commands.
     player_base_pos = Battle::Scene.pbBattlerPosition(0)
     @player_base = IconSprite.new(*player_base_pos, viewport)
     @player_base.z = -199
@@ -231,7 +230,6 @@ class AnimationEditor::Canvas < Sprite
         AnimationPlayer::Helper.apply_z_focus_to_sprite(@battler_sprites[idx], 0, focus_z)
       end
     end
-    # TODO: Also add background/bases and so on.
     hide_all_sprites
     @sel_frame_sprite.visible = false
     @playing = true
@@ -249,9 +247,6 @@ class AnimationEditor::Canvas < Sprite
   def refresh_bg_graphics
     return if @bg_name && @bg_name == @settings[:canvas_bg]
     @bg_name = @settings[:canvas_bg]
-    # TODO: Make the choice of background graphics match the in-battle one in
-    #       def pbCreateBackdropSprites. Ideally make that method a class method
-    #       so the canvas can use it rather than duplicate it.
     self.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", @bg_name + "_bg")
     @player_base.setBitmap("Graphics/Battlebacks/" + @bg_name + "_base0")
     @player_base.ox = @player_base.bitmap.width / 2
@@ -292,12 +287,11 @@ class AnimationEditor::Canvas < Sprite
     end
   end
 
-  # TODO: Create shadow sprites?
-  # TODO: Make this also refresh if the layout of the battle changes (i.e. which
-  #       battlers are the user/target).
   def ensure_battler_sprites
-    if @sides_swapped.nil? || @sides_swapped != sides_swapped? ||
-       !@side_size0 || @side_size0 != side_size(0)
+    should_ensure = @sides_swapped.nil? || @sides_swapped != sides_swapped? ||
+                    @settings_user_index.nil? || @settings_user_index != @settings[:user_index] ||
+                    @settings_target_indices.nil? || @settings_target_indices != @settings[:target_indices]
+    if should_ensure || !@side_size0 || @side_size0 != side_size(0)
       @battler_sprites.each_with_index { |s, i| s.dispose if i.even? && s && !s.disposed? }
       @battler_frame_sprites.each_with_index { |s, i| s.dispose if i.even? && s && !s.disposed? }
       @side_size0 = side_size(0)
@@ -312,8 +306,7 @@ class AnimationEditor::Canvas < Sprite
         @battler_frame_sprites[i * 2] = frame_sprite
       end
     end
-    if @sides_swapped.nil? || @sides_swapped != sides_swapped? ||
-       !@side_size1 || @side_size1 != side_size(1)
+    if should_ensure || !@side_size1 || @side_size1 != side_size(1)
       @battler_sprites.each_with_index { |s, i| s.dispose if i.odd? && s && !s.disposed? }
       @battler_frame_sprites.each_with_index { |s, i| s.dispose if i.odd? && s && !s.disposed? }
       @side_size1 = side_size(1)
@@ -328,7 +321,11 @@ class AnimationEditor::Canvas < Sprite
         @battler_frame_sprites[(i * 2) + 1] = frame_sprite
       end
     end
-    @sides_swapped = sides_swapped?
+    if should_ensure
+      @sides_swapped = sides_swapped?
+      @settings_user_index = @settings[:user_index]
+      @settings_target_indices = @settings[:target_indices].clone
+    end
   end
 
   def refresh_battler_graphics
@@ -429,6 +426,14 @@ class AnimationEditor::Canvas < Sprite
   def refresh_sprite(index, target_idx = -1)
     particle = @anim[:particles][index]
     return if !particle || particle[:name] == "SE"
+    relative_to_index = -1
+    if particle[:focus] != :user_and_target
+      if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+        relative_to_index = user_index
+      elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+        relative_to_index = target_idx
+      end
+    end
     # Get sprite
     spr, frame = get_sprite_and_frame(index, target_idx)
     # Calculate all values of particle at the current keyframe
@@ -443,10 +448,16 @@ class AnimationEditor::Canvas < Sprite
     # Set opacity
     spr.opacity = values[:opacity]
     # Set coordinates
+    base_x = values[:x]
+    base_y = values[:y]
+    if relative_to_index >= 0 && relative_to_index.odd?
+      base_x *= -1 if particle[:foe_invert_x]
+      base_y *= -1 if particle[:foe_invert_y]
+    end
     focus_xy = AnimationPlayer::Helper.get_xy_focus(particle, user_index, target_idx,
                                                     @user_coords, @target_coords[target_idx])
-    AnimationPlayer::Helper.apply_xy_focus_to_sprite(spr, :x, values[:x], focus_xy)
-    AnimationPlayer::Helper.apply_xy_focus_to_sprite(spr, :y, values[:y], focus_xy)
+    AnimationPlayer::Helper.apply_xy_focus_to_sprite(spr, :x, base_x, focus_xy)
+    AnimationPlayer::Helper.apply_xy_focus_to_sprite(spr, :y, base_y, focus_xy)
     # Set graphic and ox/oy (may also alter y coordinate)
     AnimationPlayer::Helper.set_bitmap_and_origin(particle, spr, user_index, target_idx,
                                                   [@user_bitmap_front_name, @user_bitmap_back_name],
@@ -455,8 +466,6 @@ class AnimationEditor::Canvas < Sprite
     spr.x += offset_xy[0]
     spr.y += offset_xy[1]
     # Set frame
-    # TODO: Should this always happens or only if the graphic is a spritesheet?
-    #       I don't think there's harm in it always being set.
     spr.src_rect.x = values[:frame].floor * spr.src_rect.width
     # Set z (priority)
     focus_z = AnimationPlayer::Helper.get_z_focus(particle, user_index, target_idx)
@@ -627,6 +636,15 @@ class AnimationEditor::Canvas < Sprite
         base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
         new_pos -= base_coords[0]
       end
+      relative_to_index = -1
+      if particle[:focus] != :user_and_target
+        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+          relative_to_index = user_index
+        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+          relative_to_index = target_idx
+        end
+      end
+      new_pos *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_x]
       @values ||= {}
       @values[:x] = new_pos
       @captured[0] = new_canvas_x
@@ -655,6 +673,15 @@ class AnimationEditor::Canvas < Sprite
         base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
         new_pos -= base_coords[1]
       end
+      relative_to_index = -1
+      if particle[:focus] != :user_and_target
+        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+          relative_to_index = user_index
+        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+          relative_to_index = target_idx
+        end
+      end
+      new_pos *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_y]
       @values ||= {}
       @values[:y] = new_pos
       @captured[1] = new_canvas_y

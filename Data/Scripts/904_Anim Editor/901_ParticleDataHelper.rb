@@ -63,7 +63,8 @@ module AnimationEditor::ParticleDataHelper
     return ret
   end
 
-  # TODO: Generalise this to any property?
+  # Used to determine which keyframes the particle is visible in, which is
+  # indicated in the timeline by a coloured bar.
   # NOTE: Particles are assumed to be not visible at the start of the
   #       animation, and automatically become visible when the particle has
   #       its first command. This does not apply to the "User" and "Target"
@@ -460,11 +461,8 @@ module AnimationEditor::ParticleDataHelper
   # the new one, the new particle will inherit its focus; otherwise it gets a
   # default focus of :foreground.
   def add_particle(particles, index)
-    new_particle = {
-      :name    => _INTL("New particle"),
-      :graphic => GameData::Animation::PARTICLE_DEFAULT_VALUES[:graphic],
-      :focus   => GameData::Animation::PARTICLE_DEFAULT_VALUES[:focus]
-    }
+    new_particle = GameData::Animation::PARTICLE_DEFAULT_VALUES.clone
+    new_particle[:name] = _INTL("New particle")
     if index > 0 && index <= particles.length && particles[index - 1][:name] != "SE"
       new_particle[:focus] = particles[index - 1][:focus]
     end

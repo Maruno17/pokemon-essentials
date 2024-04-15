@@ -33,25 +33,68 @@ class AnimationEditor::PlayControls < UIControls::ControlsContainer
     @looping = false
   end
 
+  def dispose
+    @bitmaps.each { |b| b&.dispose }
+    super
+  end
+
   #-----------------------------------------------------------------------------
+
+  def generate_button_bitmaps
+    @bitmaps = {}
+    play_button = Bitmap.new(PLAY_BUTTON_SIZE, PLAY_BUTTON_SIZE)
+    (PLAY_BUTTON_SIZE - 2).times do |j|
+      play_button.fill_rect(PLAY_BUTTON_SIZE / 4, j + 1, (j >= (PLAY_BUTTON_SIZE - 2) / 2) ? PLAY_BUTTON_SIZE - j : j + 3, 1, ICON_COLOR)
+    end
+    @bitmaps[:play_button] = play_button
+    stop_button = Bitmap.new(PLAY_BUTTON_SIZE, PLAY_BUTTON_SIZE)
+    stop_button.fill_rect(4, 4, PLAY_BUTTON_SIZE - 8, PLAY_BUTTON_SIZE - 8, ICON_COLOR)
+    @bitmaps[:stop_button] = stop_button
+    # Loop button
+    play_once_button = Bitmap.new(LOOP_BUTTON_SIZE, LOOP_BUTTON_SIZE)
+    play_once_button.fill_rect(1, 7, 11, 2, ICON_COLOR)
+    play_once_button.fill_rect(8, 5, 2, 6, ICON_COLOR)
+    play_once_button.fill_rect(10, 6, 1, 4, ICON_COLOR)
+    play_once_button.fill_rect(13, 1, 2, 14, ICON_COLOR)
+    @bitmaps[:play_once_button] = play_once_button
+    looping_button = Bitmap.new(LOOP_BUTTON_SIZE, LOOP_BUTTON_SIZE)
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,
+     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+     1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1,
+     1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1,
+     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+     1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1,
+     1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,
+     0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+     0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+     0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0].each_with_index do |val, i|
+      next if val == 0
+      looping_button.fill_rect(1 + (i % 14), 1 + (i / 14), 1, 1, ICON_COLOR)
+    end
+    @bitmaps[:looping_button] = looping_button
+  end
 
   def add_play_controls
     # Play button
-    play_button = UIControls::BitmapButton.new(PLAY_BUTTON_X, PLAY_BUTTON_Y, self.viewport, @play_button_bitmap)
+    play_button = UIControls::BitmapButton.new(PLAY_BUTTON_X, PLAY_BUTTON_Y, self.viewport, @bitmaps[:play_button])
     play_button.set_interactive_rects
     play_button.disable
     @controls.push([:play, play_button])
     # Stop button
-    stop_button = UIControls::BitmapButton.new(PLAY_BUTTON_X, PLAY_BUTTON_Y, self.viewport, @stop_button_bitmap)
+    stop_button = UIControls::BitmapButton.new(PLAY_BUTTON_X, PLAY_BUTTON_Y, self.viewport, @bitmaps[:stop_button])
     stop_button.set_interactive_rects
     stop_button.visible = false
     @controls.push([:stop, stop_button])
     # Loop buttons
-    loop_button = UIControls::BitmapButton.new(LOOP_BUTTON_X, LOOP_BUTTON_Y, self.viewport, @play_once_button_bitmap)
+    loop_button = UIControls::BitmapButton.new(LOOP_BUTTON_X, LOOP_BUTTON_Y, self.viewport, @bitmaps[:play_once_button])
     loop_button.set_interactive_rects
     loop_button.visible = false if @looping
     @controls.push([:loop, loop_button])
-    unloop_button = UIControls::BitmapButton.new(LOOP_BUTTON_X, LOOP_BUTTON_Y, self.viewport, @looping_button_bitmap)
+    unloop_button = UIControls::BitmapButton.new(LOOP_BUTTON_X, LOOP_BUTTON_Y, self.viewport, @bitmaps[:looping_button])
     unloop_button.set_interactive_rects
     unloop_button.visible = false if !@looping
     @controls.push([:unloop, unloop_button])
@@ -81,47 +124,6 @@ class AnimationEditor::PlayControls < UIControls::ControlsContainer
     duration_value.x = DURATION_TEXT_X - (duration_value.text_width / 2)
     duration_value.y = DURATION_VALUE_Y
     @controls.push([:duration_value, duration_value])
-  end
-
-  def generate_button_bitmaps
-    @play_button_bitmap = Bitmap.new(PLAY_BUTTON_SIZE, PLAY_BUTTON_SIZE)
-    (PLAY_BUTTON_SIZE - 2).times do |j|
-      @play_button_bitmap.fill_rect(PLAY_BUTTON_SIZE / 4, j + 1, (j >= (PLAY_BUTTON_SIZE - 2) / 2) ? PLAY_BUTTON_SIZE - j : j + 3, 1, ICON_COLOR)
-    end
-    @stop_button_bitmap = Bitmap.new(PLAY_BUTTON_SIZE, PLAY_BUTTON_SIZE)
-    @stop_button_bitmap.fill_rect(4, 4, PLAY_BUTTON_SIZE - 8, PLAY_BUTTON_SIZE - 8, ICON_COLOR)
-    # Loop button
-    @play_once_button_bitmap = Bitmap.new(LOOP_BUTTON_SIZE, LOOP_BUTTON_SIZE)
-    @play_once_button_bitmap.fill_rect(1, 7, 11, 2, ICON_COLOR)
-    @play_once_button_bitmap.fill_rect(8, 5, 2, 6, ICON_COLOR)
-    @play_once_button_bitmap.fill_rect(10, 6, 1, 4, ICON_COLOR)
-    @play_once_button_bitmap.fill_rect(13, 1, 2, 14, ICON_COLOR)
-    @looping_button_bitmap = Bitmap.new(LOOP_BUTTON_SIZE, LOOP_BUTTON_SIZE)
-    [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
-     0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,
-     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-     1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1,
-     1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1,
-     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-     1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1,
-     1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,
-     0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-     0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-     0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0].each_with_index do |val, i|
-      next if val == 0
-      @looping_button_bitmap.fill_rect(1 + (i % 14), 1 + (i / 14), 1, 1, ICON_COLOR)
-    end
-  end
-
-  def dispose
-    @play_button_bitmap.dispose
-    @stop_button_bitmap.dispose
-    @play_once_button_bitmap.dispose
-    @looping_button_bitmap.dispose
-    super
   end
 
   #-----------------------------------------------------------------------------

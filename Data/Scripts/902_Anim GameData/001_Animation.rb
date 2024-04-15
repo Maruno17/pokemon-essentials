@@ -18,8 +18,6 @@ module GameData
     # NOTE: All mentions of focus types can be found by searching for
     #       :user_and_target, plus there's :foreground in PARTICLE_DEFAULT_VALUES
     #       below.
-    # TODO: Add :user_ground, :target_ground?
-    # TODO: Add :opposing_side_foreground and :opposing_side_background?
     FOCUS_TYPES = {
       "Foreground"           => :foreground,
       "Midground"            => :midground,
@@ -29,8 +27,8 @@ module GameData
       "UserAndTarget"        => :user_and_target,
       "UserSideForeground"   => :user_side_foreground,
       "UserSideBackground"   => :user_side_background,
-      "TargetSide"           => :target_side_foreground,
-      "TargetSideBackground" => :target_side_background,
+      "TargetSideForeground" => :target_side_foreground,
+      "TargetSideBackground" => :target_side_background
     }
     FOCUS_TYPES_WITH_USER = [
       :user, :user_and_target, :user_side_foreground, :user_side_background
@@ -56,84 +54,68 @@ module GameData
       "NoUser"      => [:no_user,   "b"],
       "NoTarget"    => [:no_target, "b"],
       "Ignore"      => [:ignore,    "b"],
-      # TODO: Boolean for whether the animation will be played if the target is
-      #       on the same side as the user.
-      # TODO: DamageFrame (keyframe at which the battle continues, i.e. damage
-      #       animations start playing).
-      "Flags"       => [:flags,     "*s"],
       "Particle"    => [:particles, "s"]   # Is a subheader line like <text>
     }
     # For individual particles. Any property whose schema begins with "^" can
     # change during the animation.
-    # TODO: If more "SetXYZ"/"MoveXYZ" properties are added, ensure the "SetXYZ"
-    #       ones are given a duration of 0 in def validate_compiled_animation.
-    #       Also add display names to def self.property_display_name.
     SUB_SCHEMA = {
       # These properties cannot be changed partway through the animation.
       # NOTE: "Name" isn't a property here, because the particle's name comes
       #       from the "Particle" property above.
-      "Graphic"        => [:graphic,     "s"],
-      "Focus"          => [:focus,       "e", FOCUS_TYPES],
-      # TODO: FlipIfFoe, RotateIfFoe kinds of thing.
-
+      "Graphic"        => [:graphic,      "s"],
+      "Focus"          => [:focus,        "e", FOCUS_TYPES],
+      "FoeInvertX"     => [:foe_invert_x, "b"],
+      "FoeInvertY"     => [:foe_invert_y, "b"],
       # All properties below are "SetXYZ" or "MoveXYZ". "SetXYZ" has the
       # keyframe and the value, and "MoveXYZ" has the keyframe, duration and the
       # value. All have "^" in their schema. "SetXYZ" is turned into "MoveXYZ"
       # when compiling by inserting a duration (second value) of 0.
-      "SetFrame"       => [:frame,       "^uu"],   # Frame within the graphic if it's a spritesheet
-      "MoveFrame"      => [:frame,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetBlending"    => [:blending,    "^uu"],   # 0, 1 or 2
-      "SetFlip"        => [:flip,        "^ub"],
-      "SetX"           => [:x,           "^ui"],
-      "MoveX"          => [:x,           "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetY"           => [:y,           "^ui"],
-      "MoveY"          => [:y,           "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetZ"           => [:z,           "^ui"],
-      "MoveZ"          => [:z,           "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetZoomX"       => [:zoom_x,      "^uu"],
-      "MoveZoomX"      => [:zoom_x,      "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetZoomY"       => [:zoom_y,      "^uu"],
-      "MoveZoomY"      => [:zoom_y,      "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetAngle"       => [:angle,       "^ui"],
-      "MoveAngle"      => [:angle,       "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetVisible"     => [:visible,     "^ub"],
-      "SetOpacity"     => [:opacity,     "^uu"],
-      "MoveOpacity"    => [:opacity,     "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetColorRed"    => [:color_red,   "^ui"],
-      "MoveColorRed"   => [:color_red,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetColorGreen"  => [:color_green, "^ui"],
-      "MoveColorGreen" => [:color_green, "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetColorBlue"   => [:color_blue,  "^ui"],
-      "MoveColorBlue"  => [:color_blue,  "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetColorAlpha"  => [:color_alpha, "^ui"],
-      "MoveColorAlpha" => [:color_alpha, "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetToneRed"     => [:tone_red,    "^ui"],
-      "MoveToneRed"    => [:tone_red,    "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetToneGreen"   => [:tone_green,  "^ui"],
-      "MoveToneGreen"  => [:tone_green,  "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetToneBlue"    => [:tone_blue,   "^ui"],
-      "MoveToneBlue"   => [:tone_blue,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetToneGray"    => [:tone_gray,   "^ui"],
-      "MoveToneGray"   => [:tone_gray,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      # TODO: Add "SetColor"/"SetTone" as shorthand for the above? They'd be
-      #       converted in the Compiler.
-      # TODO: Bitmap masking.
-      # TODO: Sprite cropping.
-      # TODO: Hue? I don't think so; color/tone do the same job.
-
+      "SetFrame"       => [:frame,        "^uu"],   # Frame within the graphic if it's a spritesheet
+      "MoveFrame"      => [:frame,        "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetBlending"    => [:blending,     "^uu"],   # 0, 1 or 2
+      "SetFlip"        => [:flip,         "^ub"],
+      "SetX"           => [:x,            "^ui"],
+      "MoveX"          => [:x,            "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetY"           => [:y,            "^ui"],
+      "MoveY"          => [:y,            "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetZ"           => [:z,            "^ui"],
+      "MoveZ"          => [:z,            "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetZoomX"       => [:zoom_x,       "^uu"],
+      "MoveZoomX"      => [:zoom_x,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetZoomY"       => [:zoom_y,       "^uu"],
+      "MoveZoomY"      => [:zoom_y,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetAngle"       => [:angle,        "^ui"],
+      "MoveAngle"      => [:angle,        "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetVisible"     => [:visible,      "^ub"],
+      "SetOpacity"     => [:opacity,      "^uu"],
+      "MoveOpacity"    => [:opacity,      "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorRed"    => [:color_red,    "^ui"],
+      "MoveColorRed"   => [:color_red,    "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorGreen"  => [:color_green,  "^ui"],
+      "MoveColorGreen" => [:color_green,  "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorBlue"   => [:color_blue,   "^ui"],
+      "MoveColorBlue"  => [:color_blue,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorAlpha"  => [:color_alpha,  "^ui"],
+      "MoveColorAlpha" => [:color_alpha,  "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneRed"     => [:tone_red,     "^ui"],
+      "MoveToneRed"    => [:tone_red,     "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneGreen"   => [:tone_green,   "^ui"],
+      "MoveToneGreen"  => [:tone_green,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneBlue"    => [:tone_blue,    "^ui"],
+      "MoveToneBlue"   => [:tone_blue,    "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneGray"    => [:tone_gray,    "^ui"],
+      "MoveToneGray"   => [:tone_gray,    "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
       # These properties are specifically for the "SE" particle.
       "Play"           => [:se,          "^usUU"],   # Filename, volume, pitch
       "PlayUserCry"    => [:user_cry,    "^uUU"],   # Volume, pitch
       "PlayTargetCry"  => [:target_cry,  "^uUU"]   # Volume, pitch
-
-      # TODO: ScreenShake? Not sure how to work this yet. Edit def
-      #       validate_compiled_animation like the "SE" particle does with the
-      #       "Play"-type commands.
     }
     PARTICLE_DEFAULT_VALUES = {
-      :name    => "",
-      :graphic => "",
-      :focus   => :foreground
+      :name         => "",
+      :graphic      => "",
+      :focus        => :foreground,
+      :foe_invert_x => false,
+      :foe_invert_y => false
     }
     # NOTE: Particles are invisible until their first command, and automatically
     #       become visible then. "User" and "Target" are visible from the start,

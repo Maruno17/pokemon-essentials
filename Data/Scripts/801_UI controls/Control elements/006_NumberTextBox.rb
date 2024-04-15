@@ -22,46 +22,28 @@ class UIControls::NumberTextBox < UIControls::TextBox
   end
 
   def value=(new_value)
-    old_val = @value
+    old_val = @value.to_i
     @value = new_value.to_i.clamp(self.min_value, self.max_value)
-    self.invalidate if @value != old_val
+    invalidate if @value != old_val
   end
 
   def min_value=(new_min)
     return if new_min == @min_value
     @min_value = new_min
-    @value = @value.clamp(self.min_value, self.max_value)
-    self.invalidate
+    @value = @value.to_i.clamp(self.min_value, self.max_value)
+    invalidate
   end
 
   def max_value=(new_max)
     return if new_max == @max_value
     @max_value = new_max
-    @value = @value.clamp(self.min_value, self.max_value)
-    self.invalidate
-  end
-
-  def insert_char(ch, index = -1)
-    old_val = @value
-    if @value == 0
-      @value = ch.to_i
-    else
-      self.value = @value.to_s.insert((index >= 0) ? index : @cursor_pos, ch).to_i
-    end
-    return if @value == old_val
-    @cursor_pos += 1
-    @cursor_pos = @cursor_pos.clamp(0, @value.to_s.length)
-    @cursor_timer = System.uptime
-    @cursor_shown = true
+    @value = @value.to_i.clamp(self.min_value, self.max_value)
     invalidate
   end
 
-  def delete_at(index)
-    new_val = @value.to_s
-    new_val.slice!(index)
-    self.value = new_val.to_i
-    @cursor_pos -= 1 if @cursor_pos > index
-    @cursor_pos = @cursor_pos.clamp(0, @value.to_s.length)
+  def insert_char(ch, index = -1)
+    @value = @value.to_s.insert((index >= 0) ? index : @cursor_pos, ch)
+    @cursor_pos += 1
     @cursor_timer = System.uptime
     @cursor_shown = true
     invalidate
@@ -77,6 +59,13 @@ class UIControls::NumberTextBox < UIControls::TextBox
       :minus    => @minus_rect,
       :plus     => @plus_rect
     }
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def reset_interaction
+    super
+    self.value = @value   # Turn value back into a number and clamp it
   end
 
   #-----------------------------------------------------------------------------
@@ -104,8 +93,8 @@ class UIControls::NumberTextBox < UIControls::TextBox
     elsif @captured_area
       @initial_value = @value
     else
-      set_changed if @initial_value && @value != @initial_value
       reset_interaction
+      set_changed if @initial_value && @value != @initial_value
     end
   end
 
@@ -114,14 +103,20 @@ class UIControls::NumberTextBox < UIControls::TextBox
     Input.gets.each_char do |ch|
       case ch
       when "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+        if (@value.to_s == "-0" && @cursor_pos > 1) ||
+           (@value.to_s == "0" && @cursor_pos > 0)
+          @value = @value.to_s.chop
+          @cursor_pos -= 1
+        end
         insert_char(ch)
         ret = true
       when "-", "+"
-        if @value > 0 && @min_value < 0 && ch == "-"
-          insert_char(ch, 0)   # Add a negative sign at the start
-          ret = true
-        elsif @value < 0
+        @value = @value.to_s
+        if @value[0] == "-"
           delete_at(0)   # Remove the negative sign
+          ret = true
+        elsif ch == "-"
+          insert_char(ch, 0)   # Add a negative sign at the start
           ret = true
         end
         next
