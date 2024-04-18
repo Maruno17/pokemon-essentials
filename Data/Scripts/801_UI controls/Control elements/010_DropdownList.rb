@@ -26,23 +26,17 @@ class UIControls::DropdownList < UIControls::BaseControl
     super
   end
 
-  def value=(new_value)
-    return if @value == new_value
-    @value = new_value
-    invalidate
-  end
+  #-----------------------------------------------------------------------------
 
   def values=(new_vals)
     @options = new_vals
     @dropdown_menu.values = @options if @dropdown_menu
   end
 
-  def set_interactive_rects
-    @button_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
-                            [@box_width, width - (TEXT_BOX_X * 2)].min, TEXT_BOX_HEIGHT)
-    @interactions = {
-      :button => @button_rect
-    }
+  def value=(new_value)
+    return if @value == new_value
+    @value = new_value
+    invalidate
   end
 
   #-----------------------------------------------------------------------------
@@ -53,6 +47,14 @@ class UIControls::DropdownList < UIControls::BaseControl
   end
 
   #-----------------------------------------------------------------------------
+
+  def set_interactive_rects
+    @button_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
+                            [@box_width, width - (TEXT_BOX_X * 2)].min, TEXT_BOX_HEIGHT)
+    @interactions = {
+      :button => @button_rect
+    }
+  end
 
   def make_dropdown_menu
     menu_height = (UIControls::List::ROW_HEIGHT * [@options.length, @max_rows].min) + (UIControls::List::BORDER_THICKNESS * 2)

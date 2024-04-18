@@ -194,7 +194,7 @@ class AnimationEditor::AnimationSelector
         ret = btn[0]
         break
       end
-      ret = :cancel if Input.trigger?(Input::BACK)
+      ret = :cancel if Input.triggerex?(:ESCAPE)
       break if ret
       buttons.each { |btn| btn[1].repaint }
     end

@@ -10,6 +10,8 @@ class UIControls::Label < UIControls::BaseControl
     @header = false
   end
 
+  #-----------------------------------------------------------------------------
+
   def text=(value)
     @text = value
     refresh
@@ -23,6 +25,8 @@ class UIControls::Label < UIControls::BaseControl
   def text_width
     return self.bitmap.text_size(@text).width
   end
+
+  #-----------------------------------------------------------------------------
 
   def refresh
     super

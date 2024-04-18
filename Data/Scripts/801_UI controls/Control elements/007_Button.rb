@@ -16,19 +16,10 @@ class UIControls::Button < UIControls::BaseControl
     @highlight = false
   end
 
+  #-----------------------------------------------------------------------------
+
   def set_fixed_size
     @fixed_size = true
-  end
-
-  def set_interactive_rects
-    @interactions&.clear
-    button_width = (@fixed_size) ? width - (BUTTON_X * 2) : self.bitmap.text_size(@text).width + (BUTTON_PADDING * 2)
-    button_height = (@fixed_size) ? height - (2 * BUTTON_Y) : BUTTON_HEIGHT
-    button_height = [button_height, height - (2 * BUTTON_Y)].min
-    @button_rect = Rect.new(BUTTON_X, (height - button_height) / 2, button_width, button_height)
-    @interactions = {
-      :button => @button_rect
-    }
   end
 
   def set_text(val)
@@ -37,6 +28,8 @@ class UIControls::Button < UIControls::BaseControl
     set_interactive_rects if !@fixed_size
     invalidate
   end
+
+  #-----------------------------------------------------------------------------
 
   def disabled?
     return highlighted? || super
@@ -66,6 +59,19 @@ class UIControls::Button < UIControls::BaseControl
     return if !highlighted?
     @highlight = false
     invalidate
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def set_interactive_rects
+    @interactions&.clear
+    button_width = (@fixed_size) ? width - (BUTTON_X * 2) : self.bitmap.text_size(@text).width + (BUTTON_PADDING * 2)
+    button_height = (@fixed_size) ? height - (2 * BUTTON_Y) : BUTTON_HEIGHT
+    button_height = [button_height, height - (2 * BUTTON_Y)].min
+    @button_rect = Rect.new(BUTTON_X, (height - button_height) / 2, button_width, button_height)
+    @interactions = {
+      :button => @button_rect
+    }
   end
 
   #-----------------------------------------------------------------------------

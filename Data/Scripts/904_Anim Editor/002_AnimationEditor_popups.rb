@@ -58,7 +58,7 @@ class AnimationEditor
         ret = btn[0]
         break
       end
-      ret = :cancel if Input.trigger?(Input::BACK)
+      ret = :cancel if Input.triggerex?(:ESCAPE)
       break if ret
       buttons.each { |btn| btn[1].repaint }
     end
@@ -110,7 +110,7 @@ class AnimationEditor
         end
         anim_properties.clear_changed
       end
-      break if !anim_properties.busy? && Input.trigger?(Input::BACK)
+      break if !anim_properties.busy? && Input.triggerex?(:ESCAPE)
       anim_properties.repaint
     end
     # Dispose and return
@@ -242,9 +242,12 @@ class AnimationEditor
           end
           graphic_chooser.clear_changed
         end
-        ret = selected if !graphic_chooser.busy? && Input.trigger?(Input::BACK)
         break if ret
         graphic_chooser.repaint
+      end
+      if !graphic_chooser.busy? && Input.triggerex?(:ESCAPE)
+        ret = selected
+        break
       end
     end
     # Dispose and return
@@ -315,12 +318,13 @@ class AnimationEditor
           end
           audio_chooser.clear_changed
         end
-        if !audio_chooser.busy? && Input.trigger?(Input::BACK)
-          ret = selected
-          cance = true
-        end
         break if ret
         audio_chooser.repaint
+      end
+      if !audio_chooser.busy? && Input.triggerex?(:ESCAPE)
+        ret = selected
+        cancel = true
+        break
       end
     end
     vol = (cancel) ? volume : audio_chooser.get_control(:volume).value
@@ -332,5 +336,4 @@ class AnimationEditor
     audio_chooser.visible = false
     return [ret, vol, ptch]
   end
-
 end

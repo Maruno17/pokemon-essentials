@@ -20,6 +20,8 @@ class UIControls::TextBox < UIControls::BaseControl
     @blacklist    = []
   end
 
+  #-----------------------------------------------------------------------------
+
   def value
     return @value.dup
   end
@@ -60,36 +62,6 @@ class UIControls::TextBox < UIControls::BaseControl
     invalidate
   end
 
-  def set_interactive_rects
-    @text_box_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
-                              [@box_width, width - (TEXT_BOX_X * 2)].min, TEXT_BOX_HEIGHT)
-    @interactions = {
-      :text_box => @text_box_rect
-    }
-  end
-
-  #-----------------------------------------------------------------------------
-
-  def disabled?
-    val = (@value.respond_to?("strip!")) ? @value.strip : @value
-    return true if @blacklist.include?(val)
-    return super
-  end
-
-  def busy?
-    return @cursor_pos >= 0 if @captured_area == :text_box
-    return super
-  end
-
-  def reset_interaction
-    @cursor_pos = -1
-    @display_pos = 0
-    @cursor_timer = nil
-    @initial_value = nil
-    Input.text_input = false
-    invalidate
-  end
-
   #-----------------------------------------------------------------------------
 
   def get_cursor_index_from_mouse_position
@@ -105,6 +77,36 @@ class UIControls::TextBox < UIControls::BaseControl
       end
     end
     return @value.to_s.length
+  end
+
+  def disabled?
+    val = (@value.respond_to?("strip!")) ? @value.strip : @value
+    return true if @blacklist.include?(val)
+    return super
+  end
+
+  def busy?
+    return @cursor_pos >= 0 if @captured_area == :text_box
+    return super
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def set_interactive_rects
+    @text_box_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
+                              [@box_width, width - (TEXT_BOX_X * 2)].min, TEXT_BOX_HEIGHT)
+    @interactions = {
+      :text_box => @text_box_rect
+    }
+  end
+
+  def reset_interaction
+    @cursor_pos = -1
+    @display_pos = 0
+    @cursor_timer = nil
+    @initial_value = nil
+    Input.text_input = false
+    invalidate
   end
 
   def reset_display_pos

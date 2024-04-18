@@ -124,6 +124,7 @@ class AnimationPlayer
     if relative_to_index >= 0 && relative_to_index.odd? && particle[:focus] != :user_and_target
       particle_sprite.foe_invert_x = particle[:foe_invert_x]
       particle_sprite.foe_invert_y = particle[:foe_invert_y]
+      particle_sprite.foe_flip = particle[:foe_flip]
     end
     # Find earliest command and add a "make visible" command then
     if sprite && !particle_sprite.battler_sprite?
@@ -231,7 +232,7 @@ class AnimationPlayer
     # Update all particles/sprites
     @anim_sprites.each { |particle| particle.update(elapsed) }
     # Finish or loop the animation
-    if elapsed >= @duration
+    if elapsed >= @duration * @slowdown
       if looping
         @need_reset = true
       else

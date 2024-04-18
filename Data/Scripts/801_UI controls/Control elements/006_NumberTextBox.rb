@@ -7,7 +7,6 @@ class UIControls::NumberTextBox < UIControls::TextBox
 
   PLUS_MINUS_SIZE = 16
   CONTROL_PADDING = 2   # Gap between buttons and text box
-
   MINUS_X         = 0
   TEXT_BOX_X      = MINUS_X + PLUS_MINUS_SIZE + CONTROL_PADDING
   TEXT_BOX_WIDTH  = 64
@@ -20,6 +19,8 @@ class UIControls::NumberTextBox < UIControls::TextBox
     @max_value = max_value
     self.value = value
   end
+
+  #-----------------------------------------------------------------------------
 
   def value=(new_value)
     old_val = @value.to_i
@@ -49,6 +50,8 @@ class UIControls::NumberTextBox < UIControls::TextBox
     invalidate
   end
 
+  #-----------------------------------------------------------------------------
+
   def set_interactive_rects
     @text_box_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
                               TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT)
@@ -60,8 +63,6 @@ class UIControls::NumberTextBox < UIControls::TextBox
       :plus     => @plus_rect
     }
   end
-
-  #-----------------------------------------------------------------------------
 
   def reset_interaction
     super

@@ -5,9 +5,9 @@ class AnimationEditor::PlayControls < UIControls::ControlsContainer
   attr_reader :slowdown, :looping
 
   ROW_HEIGHT              = 28
-  PLAY_BUTTON_X           = 241
-  PLAY_BUTTON_Y           = 13
-  PLAY_BUTTON_SIZE        = 22
+  PLAY_BUTTON_X           = 231
+  PLAY_BUTTON_Y           = 3
+  PLAY_BUTTON_SIZE        = 42
   LOOP_BUTTON_X           = PLAY_BUTTON_X + PLAY_BUTTON_SIZE + 12
   LOOP_BUTTON_Y           = 16
   LOOP_BUTTON_SIZE        = 16
@@ -34,7 +34,8 @@ class AnimationEditor::PlayControls < UIControls::ControlsContainer
   end
 
   def dispose
-    @bitmaps.each { |b| b&.dispose }
+    @bitmaps.each_value { |b| b&.dispose }
+    @bitmaps.clear
     super
   end
 
@@ -43,12 +44,12 @@ class AnimationEditor::PlayControls < UIControls::ControlsContainer
   def generate_button_bitmaps
     @bitmaps = {}
     play_button = Bitmap.new(PLAY_BUTTON_SIZE, PLAY_BUTTON_SIZE)
-    (PLAY_BUTTON_SIZE - 2).times do |j|
-      play_button.fill_rect(PLAY_BUTTON_SIZE / 4, j + 1, (j >= (PLAY_BUTTON_SIZE - 2) / 2) ? PLAY_BUTTON_SIZE - j : j + 3, 1, ICON_COLOR)
+    (PLAY_BUTTON_SIZE - 10).times do |j|
+      play_button.fill_rect(11, j + 5, (j >= (PLAY_BUTTON_SIZE - 10) / 2) ? PLAY_BUTTON_SIZE - j - 4 : j + 7, 1, ICON_COLOR)
     end
     @bitmaps[:play_button] = play_button
     stop_button = Bitmap.new(PLAY_BUTTON_SIZE, PLAY_BUTTON_SIZE)
-    stop_button.fill_rect(4, 4, PLAY_BUTTON_SIZE - 8, PLAY_BUTTON_SIZE - 8, ICON_COLOR)
+    stop_button.fill_rect(8, 8, PLAY_BUTTON_SIZE - 16, PLAY_BUTTON_SIZE - 16, ICON_COLOR)
     @bitmaps[:stop_button] = stop_button
     # Loop button
     play_once_button = Bitmap.new(LOOP_BUTTON_SIZE, LOOP_BUTTON_SIZE)
@@ -79,6 +80,22 @@ class AnimationEditor::PlayControls < UIControls::ControlsContainer
   end
 
   def add_play_controls
+    # Slowdown label
+    duration_label = UIControls::Label.new(200, ROW_HEIGHT, self.viewport, _INTL("Slowdown factor"))
+    duration_label.x = SLOWDOWN_BUTTON_X + (SLOWDOWN_FACTORS.length * (SLOWDOWN_BUTTON_WIDTH + SLOWDOWN_BUTTON_SPACING) / 2)
+    duration_label.x -= (duration_label.text_width / 2) + 5
+    duration_label.y = SLOWDOWN_LABEL_Y
+    @controls.push([:slowdown_label, duration_label])
+    # Slowdown factor buttons
+    SLOWDOWN_FACTORS.each_with_index do |value, i|
+      button = UIControls::Button.new(SLOWDOWN_BUTTON_WIDTH, ROW_HEIGHT, self.viewport, value.to_s)
+      button.set_fixed_size
+      button.x = SLOWDOWN_BUTTON_X + ((SLOWDOWN_BUTTON_WIDTH + SLOWDOWN_BUTTON_SPACING) * i)
+      button.y = SLOWDOWN_BUTTON_Y
+      button.set_interactive_rects
+      button.set_highlighted if value == @slowdown
+      @controls.push([("slowdown" + value.to_s).to_sym, button])
+    end
     # Play button
     play_button = UIControls::BitmapButton.new(PLAY_BUTTON_X, PLAY_BUTTON_Y, self.viewport, @bitmaps[:play_button])
     play_button.set_interactive_rects
@@ -98,22 +115,6 @@ class AnimationEditor::PlayControls < UIControls::ControlsContainer
     unloop_button.set_interactive_rects
     unloop_button.visible = false if !@looping
     @controls.push([:unloop, unloop_button])
-    # Slowdown label
-    duration_label = UIControls::Label.new(200, ROW_HEIGHT, self.viewport, _INTL("Slowdown factor"))
-    duration_label.x = SLOWDOWN_BUTTON_X + (SLOWDOWN_FACTORS.length * (SLOWDOWN_BUTTON_WIDTH + SLOWDOWN_BUTTON_SPACING) / 2)
-    duration_label.x -= (duration_label.text_width / 2) + 5
-    duration_label.y = SLOWDOWN_LABEL_Y
-    @controls.push([:slowdown_label, duration_label])
-    # Slowdown factor buttons
-    SLOWDOWN_FACTORS.each_with_index do |value, i|
-      button = UIControls::Button.new(SLOWDOWN_BUTTON_WIDTH, ROW_HEIGHT, self.viewport, value.to_s)
-      button.set_fixed_size
-      button.x = SLOWDOWN_BUTTON_X + ((SLOWDOWN_BUTTON_WIDTH + SLOWDOWN_BUTTON_SPACING) * i)
-      button.y = SLOWDOWN_BUTTON_Y
-      button.set_interactive_rects
-      button.set_highlighted if value == @slowdown
-      @controls.push([("slowdown" + value.to_s).to_sym, button])
-    end
     # Duration label
     duration_label = UIControls::Label.new(200, ROW_HEIGHT, self.viewport, _INTL("Duration"))
     duration_label.x = DURATION_TEXT_X - (duration_label.text_width / 2)

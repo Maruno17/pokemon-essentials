@@ -12,6 +12,8 @@ class UIControls::BitmapButton < UIControls::Button
     @disabled_bitmap = disabled_bitmap
   end
 
+  #-----------------------------------------------------------------------------
+
   def set_interactive_rects
     @interactions&.clear
     @button_rect = Rect.new(0, 0, width, height)

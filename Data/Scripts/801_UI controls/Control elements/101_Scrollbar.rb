@@ -2,14 +2,14 @@
 #
 #===============================================================================
 class UIControls::Scrollbar < UIControls::BaseControl
+  attr_reader :slider_top
+
   SLIDER_WIDTH    = 16
   WIDTH_PADDING   = 0
   SCROLL_DISTANCE = 16
   TRAY_COLOR      = Color.white
   SLIDER_COLOR    = Color.black
   GRAB_COLOR      = HOVER_COLOR   # Cyan
-
-  attr_reader :slider_top
 
   def initialize(x, y, size, viewport, horizontal = false, always_visible = false)
     if horizontal
@@ -28,18 +28,7 @@ class UIControls::Scrollbar < UIControls::BaseControl
     self.visible    = @always_visible
   end
 
-  def position
-    return 0 if @range <= @tray_size
-    return (@range - @tray_size) * @slider_top / (@tray_size - @slider_size)
-  end
-
-  def minimum?
-    return @slider_top <= 0
-  end
-
-  def maximum?
-    return @slider_top >= @tray_size - @slider_size
-  end
+  #-----------------------------------------------------------------------------
 
   # Range is the total size of the large area that the scrollbar is able to
   # show part of.
@@ -67,6 +56,21 @@ class UIControls::Scrollbar < UIControls::BaseControl
     end
     invalidate if @slider_top != old_val
   end
+
+  def position
+    return 0 if @range <= @tray_size
+    return (@range - @tray_size) * @slider_top / (@tray_size - @slider_size)
+  end
+
+  def minimum?
+    return @slider_top <= 0
+  end
+
+  def maximum?
+    return @slider_top >= @tray_size - @slider_size
+  end
+
+  #-----------------------------------------------------------------------------
 
   def set_interactive_rects
     @interactions = {}

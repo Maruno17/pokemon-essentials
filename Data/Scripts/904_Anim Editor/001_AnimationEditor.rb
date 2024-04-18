@@ -457,6 +457,7 @@ class AnimationEditor
           break
         end
       end
+      break if Input.triggerex?(:SPACE)
       break if anim_player.finished?
     end
     anim_player.dispose
@@ -741,6 +742,15 @@ class AnimationEditor
     end
   end
 
+  def update_input
+    if Input.triggerex?(:S)
+      @settings[:user_opposes] = !@settings[:user_opposes]
+      refresh
+    elsif Input.triggerex?(:SPACE)
+      @ready_to_play = true
+    end
+  end
+
   def update
     old_keyframe = keyframe
     old_particle_index = particle_index
@@ -769,6 +779,7 @@ class AnimationEditor
         break
       end
     end
+    update_input
   end
 
   #-----------------------------------------------------------------------------

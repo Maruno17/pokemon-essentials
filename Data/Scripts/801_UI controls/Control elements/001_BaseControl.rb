@@ -24,6 +24,8 @@ class UIControls::BaseControl < BitmapSprite
     invalidate
   end
 
+  #-----------------------------------------------------------------------------
+
   def width
     return self.bitmap.width
   end
@@ -31,6 +33,8 @@ class UIControls::BaseControl < BitmapSprite
   def height
     return self.bitmap.height
   end
+
+  #-----------------------------------------------------------------------------
 
   def mouse_pos
     mouse_coords = Mouse.getMousePos
@@ -40,18 +44,12 @@ class UIControls::BaseControl < BitmapSprite
     return ret_x, ret_y
   end
 
-  def set_interactive_rects
-    @interactions = {}
-  end
-
   def mouse_in_control?
     return false if !@interactions || @interactions.empty?
     mouse_x, mouse_y = mouse_pos
     return false if !mouse_x || !mouse_y
     return @interactions.any? { |area, rect| rect.contains?(mouse_x, mouse_y) }
   end
-
-  #-----------------------------------------------------------------------------
 
   def disabled?
     return @disabled
@@ -98,6 +96,12 @@ class UIControls::BaseControl < BitmapSprite
 
   def clear_changed
     @changed = false
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def set_interactive_rects
+    @interactions = {}
   end
 
   #-----------------------------------------------------------------------------

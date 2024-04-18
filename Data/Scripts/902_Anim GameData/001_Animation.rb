@@ -66,6 +66,7 @@ module GameData
       "Focus"          => [:focus,        "e", FOCUS_TYPES],
       "FoeInvertX"     => [:foe_invert_x, "b"],
       "FoeInvertY"     => [:foe_invert_y, "b"],
+      "FoeFlip"        => [:foe_flip,     "b"],
       # All properties below are "SetXYZ" or "MoveXYZ". "SetXYZ" has the
       # keyframe and the value, and "MoveXYZ" has the keyframe, duration and the
       # value. All have "^" in their schema. "SetXYZ" is turned into "MoveXYZ"
@@ -115,7 +116,8 @@ module GameData
       :graphic      => "",
       :focus        => :foreground,
       :foe_invert_x => false,
-      :foe_invert_y => false
+      :foe_invert_y => false,
+      :foe_flip     => false
     }
     # NOTE: Particles are invisible until their first command, and automatically
     #       become visible then. "User" and "Target" are visible from the start,

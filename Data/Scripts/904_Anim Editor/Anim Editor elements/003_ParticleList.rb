@@ -175,7 +175,8 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @particle_line_sprite.dispose
     @controls.each { |c| c[1].dispose }
     @controls.clear
-    @bitmaps.each { |b| b&.dispose }
+    @bitmaps.each_value { |b| b&.dispose }
+    @bitmaps.clear
     dispose_listed_sprites
     @list_viewport.dispose
     @commands_bg_viewport.dispose
@@ -433,14 +434,14 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
 
   #-----------------------------------------------------------------------------
 
-  def calculate_duration
-    @duration = AnimationPlayer::Helper.get_duration(@particles)
-    @duration += DURATION_BUFFER
-  end
-
   def calculate_all_commands_and_durations
     calculate_duration
     calculate_all_commands
+  end
+
+  def calculate_duration
+    @duration = AnimationPlayer::Helper.get_duration(@particles)
+    @duration += DURATION_BUFFER
   end
 
   def calculate_all_commands
@@ -1024,13 +1025,13 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
 
   def update_input
     # Left/right to change current keyframe
-    if Input.repeat?(Input::LEFT)
+    if Input.triggerex?(:LEFT) || Input.repeatex?(:LEFT)
       if @keyframe > 0
         @keyframe -= 1
         scroll_to_keyframe(@keyframe)
         set_changed
       end
-    elsif Input.repeat?(Input::RIGHT)
+    elsif Input.triggerex?(:RIGHT) || Input.repeatex?(:RIGHT)
       if @keyframe < @duration - 1
         @keyframe += 1
         scroll_to_keyframe(@keyframe)
@@ -1038,7 +1039,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       end
     end
     # Up/down to change selected particle
-    if Input.repeat?(Input::UP)
+    if Input.triggerex?(:UP) || Input.repeatex?(:UP)
       if @row_index > 0
         loop do
           @row_index -= 1
@@ -1047,7 +1048,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         scroll_to_row(@row_index)
         set_changed
       end
-    elsif Input.repeat?(Input::DOWN)
+    elsif Input.triggerex?(:DOWN) || Input.repeatex?(:DOWN)
       if @row_index < @particle_list.length - 1
         old_row_index = @row_index
         loop do
@@ -1062,6 +1063,18 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         else
           @row_index = old_row_index
         end
+      end
+    end
+    if Input.triggerex?(:P)
+      idx_particle = @particle_list[@row_index]
+      idx_particle = idx_particle[0] if idx_particle.is_a?(Array)
+      if @row_index >= 0 && @particles[idx_particle][:name] != "SE"
+        if @expanded_particles.include?(idx_particle)   # Contract
+          @expanded_particles.delete(idx_particle)
+        else                                            # Expand
+          @expanded_particles.push(idx_particle)
+        end
+        set_particles(@particles)
       end
     end
     # Mouse scroll wheel

@@ -7,12 +7,11 @@ class UIControls::NumberSlider < UIControls::BaseControl
 
   PLUS_MINUS_SIZE = 16
   SLIDER_PADDING  = 6   # Gap between sides of interactive area for slider and drawn slider bar
-
-  MINUS_X       = 0
-  SLIDER_X      = MINUS_X + PLUS_MINUS_SIZE + SLIDER_PADDING
-  SLIDER_LENGTH = 128
-  PLUS_X        = SLIDER_X + SLIDER_LENGTH + SLIDER_PADDING
-  VALUE_X       = PLUS_X + PLUS_MINUS_SIZE + 5
+  MINUS_X         = 0
+  SLIDER_X        = MINUS_X + PLUS_MINUS_SIZE + SLIDER_PADDING
+  SLIDER_LENGTH   = 128
+  PLUS_X          = SLIDER_X + SLIDER_LENGTH + SLIDER_PADDING
+  VALUE_X         = PLUS_X + PLUS_MINUS_SIZE + 5
 
   def initialize(width, height, viewport, min_value, max_value, value)
     super(width, height, viewport)
@@ -20,6 +19,8 @@ class UIControls::NumberSlider < UIControls::BaseControl
     @max_value = max_value
     self.value = value
   end
+
+  #-----------------------------------------------------------------------------
 
   def value=(new_value)
     old_val = @value
@@ -40,6 +41,8 @@ class UIControls::NumberSlider < UIControls::BaseControl
     @value = @value.clamp(self.min_value, self.max_value)
     self.invalidate
   end
+
+  #-----------------------------------------------------------------------------
 
   def set_interactive_rects
     @slider_rect = Rect.new(SLIDER_X - SLIDER_PADDING, (self.height - PLUS_MINUS_SIZE) / 2, SLIDER_LENGTH + (SLIDER_PADDING * 2), PLUS_MINUS_SIZE)

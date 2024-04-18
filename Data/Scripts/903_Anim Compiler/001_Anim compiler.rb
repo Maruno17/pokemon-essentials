@@ -198,6 +198,19 @@ module Compiler
           raise _INTL("Particle \"{1}\" can't set \"FoeInvertY\" if its focus isn't exactly 1 thing.",
                       particle[:name]) + "\n" + FileLineData.linereport
         end
+        if particle[:foe_flip]
+          raise _INTL("Particle \"{1}\" can't set \"FoeFlip\" if its focus isn't exactly 1 thing.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+      end
+      # Ensure that a particle with a user's/target's graphic doesn't have any
+      # :frame commands
+      if !["User", "Target", "SE"].include?(particle[:name]) &&
+         ["USER", "USER_OPP", "USER_FRONT", "USER_BACK",
+          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"].include?(particle[:graphic]) &&
+         particle[:frame] && !particle[:frame].empty?
+        raise _INTL("Particle \"{1}\" can't have any \"Frame\" commands if its graphic is a Pokémon's sprite.",
+                    particle[:name]) + "\n" + FileLineData.linereport
       end
       # Ensure that the same SE isn't played twice in the same frame
       if particle[:name] == "SE"

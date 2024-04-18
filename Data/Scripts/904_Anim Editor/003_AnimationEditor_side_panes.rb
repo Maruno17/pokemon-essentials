@@ -480,6 +480,12 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :graphic, {
     new_file = editor.choose_graphic_file(editor.anim[:particles][p_index][:graphic])
     if editor.anim[:particles][p_index][:graphic] != new_file
       editor.anim[:particles][p_index][:graphic] = new_file
+      if ["USER", "USER_BACK", "USER_FRONT", "USER_OPP",
+          "TARGET", "TARGET_FRONT", "TARGET_BACK", "TARGET_OPP"].include?(new_file)
+        editor.anim[:particles][p_index].delete(:frame)
+        editor.components[:particle_list].set_particles(editor.anim[:particles])
+        editor.refresh_component(:particle_list)
+      end
       editor.refresh_component(:particle_pane)
       editor.refresh_component(:canvas)
     end
@@ -541,6 +547,20 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :foe_invert_x, {
 AnimationEditor::SidePanes.add_property(:particle_pane, :foe_invert_y, {
   :new => proc { |pane, editor|
     pane.add_labelled_checkbox(:foe_invert_y, _INTL("Invert Y"), false)
+  },
+  :refresh_value => proc { |control, editor|
+    focus = editor.anim[:particles][editor.particle_index][:focus]
+    if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(focus) == GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(focus)
+      control.disable
+    else
+      control.enable
+    end
+  }
+})
+
+AnimationEditor::SidePanes.add_property(:particle_pane, :foe_flip, {
+  :new => proc { |pane, editor|
+    pane.add_labelled_checkbox(:foe_flip, _INTL("Flip Sprite"), false)
   },
   :refresh_value => proc { |control, editor|
     focus = editor.anim[:particles][editor.particle_index][:focus]

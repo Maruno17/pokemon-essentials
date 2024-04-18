@@ -26,19 +26,11 @@ class UIControls::TextBoxDropdownList < UIControls::TextBox
     super
   end
 
+  #-----------------------------------------------------------------------------
+
   def values=(new_vals)
     @options = new_vals
     @dropdown_menu.values = @options if @dropdown_menu
-  end
-
-  def set_interactive_rects
-    @text_box_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
-                              [@box_width, width - (TEXT_BOX_X * 2) - BUTTON_WIDTH].min, TEXT_BOX_HEIGHT)
-    @button_rect = Rect.new(BUTTON_X, @text_box_rect.y, BUTTON_WIDTH, BUTTON_HEIGHT)
-    @interactions = {
-      :text_box => @text_box_rect,
-      :button => @button_rect
-    }
   end
 
   #-----------------------------------------------------------------------------
@@ -49,6 +41,16 @@ class UIControls::TextBoxDropdownList < UIControls::TextBox
   end
 
   #-----------------------------------------------------------------------------
+
+  def set_interactive_rects
+    @text_box_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
+                              [@box_width, width - (TEXT_BOX_X * 2) - BUTTON_WIDTH].min, TEXT_BOX_HEIGHT)
+    @button_rect = Rect.new(BUTTON_X, @text_box_rect.y, BUTTON_WIDTH, BUTTON_HEIGHT)
+    @interactions = {
+      :text_box => @text_box_rect,
+      :button => @button_rect
+    }
+  end
 
   def make_dropdown_menu
     menu_height = (UIControls::List::ROW_HEIGHT * [@options.length, @max_rows].min) + (UIControls::List::BORDER_THICKNESS * 2)

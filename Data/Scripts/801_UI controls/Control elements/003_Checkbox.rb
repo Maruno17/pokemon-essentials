@@ -6,20 +6,23 @@ class UIControls::Checkbox < UIControls::BaseControl
   CHECKBOX_WIDTH     = 40
   CHECKBOX_HEIGHT    = 24
   CHECKBOX_FILL_SIZE = CHECKBOX_HEIGHT - 4
-
-  UNCHECKED_COLOR = Color.gray
-  CHECKED_COLOR   = Color.new(48, 192, 48)   # Darkish green
+  UNCHECKED_COLOR    = Color.gray
+  CHECKED_COLOR      = Color.new(48, 192, 48)   # Darkish green
 
   def initialize(width, height, viewport, value = false)
     super(width, height, viewport)
     @value = value
   end
 
+  #-----------------------------------------------------------------------------
+
   def value=(new_value)
     return if @value == new_value
     @value = new_value
     invalidate
   end
+
+  #-----------------------------------------------------------------------------
 
   def set_interactive_rects
     @checkbox_rect = Rect.new(CHECKBOX_X, (height - CHECKBOX_HEIGHT) / 2,

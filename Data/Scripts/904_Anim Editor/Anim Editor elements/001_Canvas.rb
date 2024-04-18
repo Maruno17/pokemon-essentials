@@ -475,6 +475,7 @@ class AnimationEditor::Canvas < Sprite
     spr.zoom_y = values[:zoom_y] / 100.0
     spr.angle = values[:angle]
     spr.mirror = values[:flip]
+    spr.mirror = !spr.mirror if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_flip]
     spr.blend_type = values[:blending]
     # Set color and tone
     spr.color.set(values[:color_red], values[:color_green], values[:color_blue], values[:color_alpha])

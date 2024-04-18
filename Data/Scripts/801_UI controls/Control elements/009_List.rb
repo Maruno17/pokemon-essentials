@@ -2,11 +2,10 @@
 #
 #===============================================================================
 class UIControls::List < UIControls::BaseControl
-  BORDER_THICKNESS = 2
-  ROW_HEIGHT       = 24
-  TEXT_PADDING_X   = 4
-  TEXT_OFFSET_Y    = 3
-
+  BORDER_THICKNESS   = 2
+  ROW_HEIGHT         = 24
+  TEXT_PADDING_X     = 4
+  TEXT_OFFSET_Y      = 3
   SELECTED_ROW_COLOR = Color.new(216, 192, 32)   # Dark yellow
 
   def initialize(width, height, viewport, values = [])
@@ -29,6 +28,8 @@ class UIControls::List < UIControls::BaseControl
     @scrollbar = nil
     super
   end
+
+  #-----------------------------------------------------------------------------
 
   def x=(new_val)
     super(new_val)
@@ -64,6 +65,17 @@ class UIControls::List < UIControls::BaseControl
     invalidate
   end
 
+  # Returns the ID of the selected row.
+  def value
+    return nil if @selected < 0
+    if @values.is_a?(Array)
+      return (@values[@selected].is_a?(Array)) ? @values[@selected][0] : @selected
+    elsif @values.is_a?(Hash)
+      return @values.keys[@selected]
+    end
+    return nil
+  end
+
   def top_row=(val)
     old_val = @top_row
     @top_row = val
@@ -81,16 +93,7 @@ class UIControls::List < UIControls::BaseControl
     invalidate
   end
 
-  # Returns the ID of the selected row.
-  def value
-    return nil if @selected < 0
-    if @values.is_a?(Array)
-      return (@values[@selected].is_a?(Array)) ? @values[@selected][0] : @selected
-    elsif @values.is_a?(Hash)
-      return @values.keys[@selected]
-    end
-    return nil
-  end
+  #-----------------------------------------------------------------------------
 
   def mouse_in_control?
     mouse_x, mouse_y = mouse_pos
@@ -100,6 +103,12 @@ class UIControls::List < UIControls::BaseControl
     return false
   end
 
+  def busy?
+    return !@captured_area.nil?
+  end
+
+  #-----------------------------------------------------------------------------
+
   def set_interactive_rects
     @interactions = {}
     @values.length.times do |i|
@@ -108,12 +117,6 @@ class UIControls::List < UIControls::BaseControl
         width - (BORDER_THICKNESS * 2), ROW_HEIGHT
       )
     end
-  end
-
-  #-----------------------------------------------------------------------------
-
-  def busy?
-    return !@captured_area.nil?
   end
 
   #-----------------------------------------------------------------------------

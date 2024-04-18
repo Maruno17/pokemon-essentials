@@ -5,7 +5,7 @@
 class AnimationPlayer::ParticleSprite
   attr_accessor :sprite
   attr_accessor :focus_xy, :offset_xy, :focus_z
-  attr_accessor :foe_invert_x, :foe_invert_y
+  attr_accessor :foe_invert_x, :foe_invert_y, :foe_flip
 
   FRAMES_PER_SECOND = 20.0
 
@@ -97,7 +97,9 @@ class AnimationPlayer::ParticleSprite
     case property
     when :frame       then @sprite.src_rect.x = value.floor * @sprite.src_rect.width
     when :blending    then @sprite.blend_type = value
-    when :flip        then @sprite.mirror = value
+    when :flip
+      @sprite.mirror = value
+      @sprite.mirror = !@sprite.mirror if @foe_flip
     when :x
       value = value.round
       value *= -1 if @foe_invert_x
