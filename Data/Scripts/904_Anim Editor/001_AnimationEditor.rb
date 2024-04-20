@@ -94,6 +94,12 @@ class AnimationEditor
     :tone_red, :tone_green, :tone_blue, :tone_gray
   ]
 
+  DEBUG_SETTINGS_FILE_PATH = if File.directory?(System.data_directory)
+                               System.data_directory + "debug_settings.rxdata"
+                             else
+                               "./debug_settings.rxdata"
+                             end
+
   #-----------------------------------------------------------------------------
 
   def initialize(anim_id, anim)
@@ -142,6 +148,26 @@ class AnimationEditor
       @delete_disabled_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.new(160, 160, 160))
       @delete_disabled_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.new(160, 160, 160))
     end
+    # Editor settings button bitmap
+    @editor_settings_bitmap = Bitmap.new(18, 18)
+    settings_array = [
+      0, 0, 0, 0, 0, 0, 0, 0, 1,
+      0, 0, 0, 0, 0, 0, 0, 1, 1,
+      0, 0, 1, 1, 1, 0, 0, 1, 1,
+      0, 0, 1, 1, 1, 1, 0, 1, 1,
+      0, 0, 1, 1, 1, 1, 1, 1, 1,
+      0, 0, 0, 1, 1, 1, 1, 1, 1,
+      0, 0, 0, 0, 1, 1, 1, 1, 0,
+      0, 1, 1, 1, 1, 1, 1, 0, 0,
+      1, 1, 1, 1, 1, 1, 0, 0, 0
+    ]
+    settings_array.length.times do |i|
+      next if settings_array[i] == 0
+      @editor_settings_bitmap.fill_rect(i % 9, i / 9, 1, 1, Color.black)
+      @editor_settings_bitmap.fill_rect(17 - (i % 9), i / 9, 1, 1, Color.black)
+      @editor_settings_bitmap.fill_rect(i % 9, 17 - (i / 9), 1, 1, Color.black)
+      @editor_settings_bitmap.fill_rect(17 - (i % 9), 17 - (i / 9), 1, 1, Color.black)
+    end
     # Draw in these bitmaps
     draw_editor_background
   end
@@ -174,6 +200,12 @@ class AnimationEditor
     )
     @components[:animation_properties].viewport.z = @pop_up_viewport.z + 1
     @components[:animation_properties].label_offset_x = 170
+    # Editor settings pop-up window
+    @components[:editor_settings] = UIControls::ControlsContainer.new(
+      ANIM_PROPERTIES_X + 4, ANIM_PROPERTIES_Y, ANIM_PROPERTIES_WIDTH - 8, ANIM_PROPERTIES_HEIGHT
+    )
+    @components[:editor_settings].viewport.z = @pop_up_viewport.z + 1
+    @components[:editor_settings].label_offset_x = 170
     # Graphic chooser pop-up window
     @components[:graphic_chooser] = UIControls::ControlsContainer.new(
       GRAPHIC_CHOOSER_X, GRAPHIC_CHOOSER_Y, GRAPHIC_CHOOSER_WINDOW_WIDTH, GRAPHIC_CHOOSER_WINDOW_HEIGHT
@@ -191,6 +223,7 @@ class AnimationEditor
     @pop_up_bg_bitmap.dispose
     @delete_bitmap.dispose
     @delete_disabled_bitmap.dispose
+    @editor_settings_bitmap.dispose
     @components.each_value { |c| c.dispose }
     @components.clear
     @viewport.dispose
@@ -209,17 +242,26 @@ class AnimationEditor
   end
 
   def load_settings
-    @settings = {
-      :side_sizes         => [1, 1],   # Player's side, opposing side
-      :user_index         => 0,        # 0, 2, 4
-      :target_indices     => [1],      # There must be at least one valid target
-      :user_opposes       => false,
-      :canvas_bg          => "indoor1",
-      # NOTE: These sprite names are also used in Pokemon.play_cry and so should
-      #       be a species ID (being a string is fine).
-      :user_sprite_name   => "DRAGONITE",
-      :target_sprite_name => "CHARIZARD"
-    }
+    if File.file?(DEBUG_SETTINGS_FILE_PATH)
+      @settings = SaveData.get_data_from_file(DEBUG_SETTINGS_FILE_PATH)[:anim_editor]
+    else
+      @settings = {
+        :side_sizes         => [1, 1],   # Player's side, opposing side
+        :user_index         => 0,        # 0, 2, 4
+        :target_indices     => [1],      # There must be at least one valid target
+        :user_opposes       => false,
+        :canvas_bg          => "indoor1",
+        # NOTE: These sprite names are also used in Pokemon.play_cry and so
+        #       should be a species ID (being a string is fine).
+        :user_sprite_name   => "DRAGONITE",
+        :target_sprite_name => "CHARIZARD"
+      }
+    end
+  end
+
+  def save_settings
+    data = { :anim_editor => @settings }
+    File.open(DEBUG_SETTINGS_FILE_PATH, "wb") { |file| Marshal.dump(data, file) }
   end
 
   def save
@@ -233,6 +275,7 @@ class AnimationEditor
       end
       @pbs_path = @anim[:pbs_path]
     end
+    save_settings
   end
 
   #-----------------------------------------------------------------------------
@@ -266,6 +309,7 @@ class AnimationEditor
   def set_menu_bar_contents
     @components[:menu_bar].add_button(:quit, _INTL("Quit"))
     @components[:menu_bar].add_button(:save, _INTL("Save"))
+    @components[:menu_bar].add_settings_button(:settings, @editor_settings_bitmap)
     @components[:menu_bar].add_name_button(:name, get_animation_display_name)
   end
 
@@ -333,6 +377,51 @@ class AnimationEditor
     anim_properties.visible = false
   end
 
+  def set_editor_settings_contents
+    editor_settings = @components[:editor_settings]
+    editor_settings.add_header_label(:header, _INTL("Editor settings"))
+    editor_settings.add_labelled_dropdown_list(:side_size_1, _INTL("Side sizes"), {
+      1 => "1",
+      2 => "2",
+      3 => "3"
+    }, 1)
+    size_ctrl = editor_settings.get_control(:side_size_1)
+    size_ctrl.box_width = 50
+    size_ctrl.set_interactive_rects
+    size_ctrl.invalidate
+    ctrl = UIControls::Label.new(50, UIControls::ControlsContainer::LINE_SPACING, editor_settings.viewport, _INTL("vs."))
+    editor_settings.add_control_at(:side_size_vs_label, ctrl, size_ctrl.x + 60, size_ctrl.y)
+    ctrl = UIControls::DropdownList.new(54, UIControls::ControlsContainer::LINE_SPACING, editor_settings.viewport, {
+      1 => "1",
+      2 => "2",
+      3 => "3"
+    }, 1)
+    ctrl.box_width = 50
+    ctrl.invalidate
+    editor_settings.add_control_at(:side_size_2, ctrl, size_ctrl.x + 93, size_ctrl.y)
+    editor_settings.add_labelled_dropdown_list(:user_index, _INTL("User index"), {
+      0 => "0",
+      2 => "2",
+      4 => "4"
+    }, 0)
+    ctrl = editor_settings.get_control(:user_index)
+    ctrl.box_width = 50
+    ctrl.set_interactive_rects
+    ctrl.invalidate
+    # TODO: I want a better control than this for choosing the target indices.
+    editor_settings.add_labelled_text_box(:target_indices, _INTL("Target indices"), "")
+    editor_settings.add_labelled_checkbox(:user_opposes, _INTL("User is opposing?"), false)
+    editor_settings.add_labelled_dropdown_list(:canvas_bg, _INTL("Background graphic"), {}, "")
+    editor_settings.add_labelled_dropdown_list(:user_sprite_name, _INTL("User graphic"), {}, "")
+    ctrl = editor_settings.get_control(:user_sprite_name)
+    ctrl.max_rows = 14
+    editor_settings.add_labelled_dropdown_list(:target_sprite_name, _INTL("Target graphic"), {}, "")
+    ctrl = editor_settings.get_control(:target_sprite_name)
+    ctrl.max_rows = 14
+    editor_settings.add_button(:close, _INTL("Close"))
+    editor_settings.visible = false
+  end
+
   def set_graphic_chooser_contents
     graphic_chooser = @components[:graphic_chooser]
     graphic_chooser.add_header_label(:header, _INTL("Choose a file"))
@@ -390,6 +479,7 @@ class AnimationEditor
     set_particle_list_contents
     set_play_controls_contents   # Intentionally after set_particle_list_contents
     set_animation_properties_contents
+    set_editor_settings_contents
     set_graphic_chooser_contents
     set_audio_chooser_contents
   end
@@ -475,6 +565,28 @@ class AnimationEditor
     end
   end
 
+  def refresh_editor_settings_options
+    user_indices = { 0 => "0" }
+    user_indices[2] = "2" if @settings[:side_sizes][0] >= 2
+    user_indices[4] = "4" if @settings[:side_sizes][0] >= 3
+    @components[:editor_settings].get_control(:user_index).values = user_indices
+    # Canvas background graphic
+    files = get_all_files_in_folder("Graphics/Battlebacks", [".png", ".jpg", ".jpeg"])
+    files.map! { |file| file[0] }
+    files.delete_if { |file| !file[/_bg$/] }
+    files.map! { |file| file.gsub(/_bg$/, "") }
+    files.delete_if { |file| !pbResolveBitmap("Graphics/Battlebacks/" + file.sub(/_eve$/, "").sub(/_night$/, "") + "_message") }
+    files.map! { |file| [file, file] }
+    @components[:editor_settings].get_control(:canvas_bg).values = files.to_h
+    # User and target sprite graphics
+    files = get_all_files_in_folder("Graphics/Pokemon/Front", [".png", ".jpg", ".jpeg"])
+    files.map! { |file| file[0] }
+    files.delete_if { |file| !GameData::Species.exists?(file) }
+    files.map! { |file| [file, file] }
+    @components[:editor_settings].get_control(:user_sprite_name).values = files.to_h
+    @components[:editor_settings].get_control(:target_sprite_name).values = files.to_h
+  end
+
   def refresh_move_property_options
     ctrl = @components[:animation_properties].get_control(:move)
     case @anim[:type]
@@ -492,6 +604,8 @@ class AnimationEditor
   def refresh_component_values(component_sym)
     component = @components[component_sym]
     case component_sym
+    when :editor_settings
+      refresh_editor_settings_options
     when :canvas
       component.keyframe = keyframe
       component.selected_particle = particle_index
@@ -580,7 +694,51 @@ class AnimationEditor
         edit_animation_properties
         @components[:menu_bar].anim_name = get_animation_display_name
         refresh_component(:particle_list)
+      when :settings
+        edit_editor_settings
       end
+    when :editor_settings
+      case property
+      when :side_size_1
+        old_val = @settings[:side_sizes][0]
+        @settings[:side_sizes][0] = value
+        if @settings[:user_index] >= value * 2
+          @settings[:user_index] = (value - 1) * 2
+          @components[:editor_settings].get_control(:user_index).value = @settings[:user_index]
+          @settings[:target_indices].delete_if { |val| val == @settings[:user_index] }
+        end
+        @settings[:target_indices].delete_if { |val| val.even? && val >= value * 2 }
+        @settings[:target_indices].push(1) if @settings[:target_indices].empty?
+        @components[:editor_settings].get_control(:target_indices).value = @settings[:target_indices].join(",")
+        refresh_editor_settings_options if value != old_val
+      when :side_size_2
+        old_val = @settings[:side_sizes][1]
+        @settings[:side_sizes][1] = value
+        @settings[:target_indices].delete_if { |val| val == @settings[:user_index] }
+        @settings[:target_indices].delete_if { |val| val.odd? && val >= value * 2 }
+        @settings[:target_indices].push(1) if @settings[:target_indices].empty?
+        @components[:editor_settings].get_control(:target_indices).value = @settings[:target_indices].join(",")
+        refresh_editor_settings_options if value != old_val
+      when :user_index
+        @settings[:user_index] = value
+        @settings[:target_indices].delete_if { |val| val == @settings[:user_index] }
+        @settings[:target_indices].push(1) if @settings[:target_indices].empty?
+        @components[:editor_settings].get_control(:target_indices).value = @settings[:target_indices].join(",")
+      when :target_indices
+        @settings[:target_indices] = value.split(",")
+        @settings[:target_indices].map! { |val| val.to_i }
+        @settings[:target_indices].sort!
+        @settings[:target_indices].uniq!
+        @settings[:target_indices].delete_if { |val| val == @settings[:user_index] }
+        @settings[:target_indices].delete_if { |val| val.even? && val >= @settings[:side_sizes][0] * 2 }
+        @settings[:target_indices].delete_if { |val| val.odd? && val >= @settings[:side_sizes][1] * 2 }
+        @settings[:target_indices].push(1) if @settings[:target_indices].empty?
+        @components[:editor_settings].get_control(:target_indices).value = @settings[:target_indices].join(",")
+      else
+        @settings[property] = value
+      end
+      save_settings
+      refresh_component(:canvas)
     when :canvas
       case property
       when :particle_index

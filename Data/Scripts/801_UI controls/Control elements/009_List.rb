@@ -155,7 +155,7 @@ class UIControls::List < UIControls::BaseControl
            SELECTED_ROW_COLOR
          )
       end
-      txt = (val.is_a?(Array)) ? val[1] : val
+      txt = (val.is_a?(Array)) ? val[1] : val.to_s
       text_color = TEXT_COLOR
       if txt[/^\\c\[([0-9]+)\]/i]
         text_colors = [

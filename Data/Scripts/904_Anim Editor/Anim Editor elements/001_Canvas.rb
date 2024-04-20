@@ -247,14 +247,31 @@ class AnimationEditor::Canvas < Sprite
   def refresh_bg_graphics
     return if @bg_name && @bg_name == @settings[:canvas_bg]
     @bg_name = @settings[:canvas_bg]
-    self.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", @bg_name + "_bg")
-    @player_base.setBitmap("Graphics/Battlebacks/" + @bg_name + "_base0")
+    core_name = @bg_name.sub(/_eve$/, "").sub(/_night$/, "")
+    if pbResolveBitmap("Graphics/Battlebacks/" + @bg_name + "_bg")
+      self.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", @bg_name + "_bg")
+    else
+      self.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", core_name + "_bg")
+    end
+    if pbResolveBitmap("Graphics/Battlebacks/" + @bg_name + "_base0")
+      @player_base.setBitmap("Graphics/Battlebacks/" + @bg_name + "_base0")
+    else
+      @player_base.setBitmap("Graphics/Battlebacks/" + core_name + "_base0")
+    end
     @player_base.ox = @player_base.bitmap.width / 2
     @player_base.oy = @player_base.bitmap.height
-    @foe_base.setBitmap("Graphics/Battlebacks/" + @bg_name + "_base1")
+    if pbResolveBitmap("Graphics/Battlebacks/" + @bg_name + "_base1")
+      @foe_base.setBitmap("Graphics/Battlebacks/" + @bg_name + "_base1")
+    else
+      @foe_base.setBitmap("Graphics/Battlebacks/" + core_name + "_base1")
+    end
     @foe_base.ox = @foe_base.bitmap.width / 2
     @foe_base.oy = @foe_base.bitmap.height / 2
-    @message_bar_sprite.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", @bg_name + "_message")
+    if pbResolveBitmap("Graphics/Battlebacks/" + @bg_name + "_message")
+      @message_bar_sprite.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", @bg_name + "_message")
+    else
+      @message_bar_sprite.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", core_name + "_message")
+    end
     @message_bar_sprite.y = Settings::SCREEN_HEIGHT - @message_bar_sprite.height
   end
 

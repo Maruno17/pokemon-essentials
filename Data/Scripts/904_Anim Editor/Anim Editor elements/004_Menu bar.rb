@@ -2,8 +2,9 @@
 #
 #===============================================================================
 class AnimationEditor::MenuBar < UIControls::ControlsContainer
-  MENU_BUTTON_WIDTH = 80
-  NAME_BUTTON_WIDTH = 400   # The animation's name
+  MENU_BUTTON_WIDTH     = 80
+  SETTINGS_BUTTON_WIDTH = 30
+  NAME_BUTTON_WIDTH     = 400   # The animation's name
 
   def initialize(x, y, width, height, viewport)
     super(x, y, width, height)
@@ -18,10 +19,15 @@ class AnimationEditor::MenuBar < UIControls::ControlsContainer
     add_control(id, ctrl)
   end
 
+  def add_settings_button(id, bitmap)
+    ctrl = UIControls::BitmapButton.new(0, 0, @viewport, bitmap)
+    add_control_at(id, ctrl, @width - SETTINGS_BUTTON_WIDTH + 2, 2)
+  end
+
   def add_name_button(id, button_text)
     ctrl = UIControls::Button.new(NAME_BUTTON_WIDTH, @height, @viewport, button_text)
     ctrl.set_fixed_size
-    add_control(id, ctrl)
+    add_control_at(id, ctrl, @width - ctrl.width - SETTINGS_BUTTON_WIDTH, 0)
   end
 
   def anim_name=(val)
@@ -33,16 +39,9 @@ class AnimationEditor::MenuBar < UIControls::ControlsContainer
 
   private
 
-  def add_control(id, control, add_offset = false)
-    i = @controls.length
-    control_x = (add_offset ? @row_count - 1 : @row_count) * MENU_BUTTON_WIDTH
-    control_x = @width - control.width if control.width == NAME_BUTTON_WIDTH
-    control_y = 0
-    control.x = control_x + (add_offset ? OFFSET_FROM_LABEL_X : 0)
-    control.y = control_y + (add_offset ? OFFSET_FROM_LABEL_Y : 0)
-    control.set_interactive_rects
-    @controls[i] = [id, control]
-    @row_count += 1 if !add_offset
-    repaint
+  def next_control_position(add_offset = false)
+    row_x = @row_count * MENU_BUTTON_WIDTH
+    row_y = 0
+    return row_x, row_y
   end
 end

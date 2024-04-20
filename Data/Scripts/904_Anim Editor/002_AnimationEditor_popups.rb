@@ -122,10 +122,51 @@ class AnimationEditor
 
   #-----------------------------------------------------------------------------
 
+  def edit_editor_settings
+    # Show pop-up window
+    @pop_up_bg_bitmap.visible = true
+    bg_bitmap = create_pop_up_window(ANIM_PROPERTIES_WIDTH, ANIM_PROPERTIES_HEIGHT)
+    editor_settings = @components[:editor_settings]
+    editor_settings.visible = true
+    # Set control values
+    refresh_component(:editor_settings)
+    editor_settings.get_control(:side_size_1).value = @settings[:side_sizes][0]
+    editor_settings.get_control(:side_size_2).value = @settings[:side_sizes][1]
+    editor_settings.get_control(:user_index).value = @settings[:user_index]
+    editor_settings.get_control(:target_indices).value = @settings[:target_indices].join(",")
+    editor_settings.get_control(:user_opposes).value = @settings[:user_opposes]
+    editor_settings.get_control(:canvas_bg).value = @settings[:canvas_bg]
+    editor_settings.get_control(:user_sprite_name).value = @settings[:user_sprite_name]
+    editor_settings.get_control(:target_sprite_name).value = @settings[:target_sprite_name]
+    # Interaction loop
+    ret = nil
+    loop do
+      Graphics.update
+      Input.update
+      editor_settings.update
+      if editor_settings.changed?
+        break if editor_settings.values.keys.include?(:close)
+        editor_settings.values.each_pair do |property, value|
+          apply_changed_value(:editor_settings, property, value)
+        end
+        editor_settings.clear_changed
+      end
+      break if !editor_settings.busy? && Input.triggerex?(:ESCAPE)
+      editor_settings.repaint
+    end
+    # Dispose and return
+    bg_bitmap.dispose
+    @pop_up_bg_bitmap.visible = false
+    editor_settings.clear_changed
+    editor_settings.visible = false
+  end
+
+  #-----------------------------------------------------------------------------
+
   # Generates a list of all files in the given folder and its subfolders which
   # have a file extension that matches one in exts. Removes any files from the
   # list whose filename is the same as one in blacklist (case insensitive).
-  def get_all_files_in_folder(folder, exts, blacklist)
+  def get_all_files_in_folder(folder, exts, blacklist = [])
     ret = []
     Dir.all(folder).each do |f|
       next if !exts.include?(File.extname(f))
