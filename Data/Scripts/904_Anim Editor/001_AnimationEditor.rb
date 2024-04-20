@@ -744,10 +744,40 @@ class AnimationEditor
 
   def update_input
     if Input.triggerex?(:S)
+      # Swap battler sides
       @settings[:user_opposes] = !@settings[:user_opposes]
       refresh
     elsif Input.triggerex?(:SPACE)
+      # Play animation
       @ready_to_play = true
+    elsif Input.triggerex?(:INSERT)
+      # Insert empty keyframe for selected particle or all particles
+      this_frame = keyframe
+      if this_frame >= 0 && this_frame < @components[:particle_list].duration
+        if Input.pressex?(:LSHIFT) || Input.pressex?(:RSHIFT)
+          @anim[:particles].each do |particle|
+            AnimationEditor::ParticleDataHelper.insert_frame(particle, this_frame)
+          end
+        else
+          AnimationEditor::ParticleDataHelper.insert_frame(@anim[:particles][particle_index], this_frame)
+        end
+        @components[:particle_list].set_particles(@anim[:particles])
+        refresh
+      end
+    elsif Input.triggerex?(:DELETE)
+      # Delete keyframe for selected particle or all particles
+      this_frame = keyframe
+      if this_frame >= 0 && this_frame < @components[:particle_list].duration
+        if Input.pressex?(:LSHIFT) || Input.pressex?(:RSHIFT)
+          @anim[:particles].each do |particle|
+            AnimationEditor::ParticleDataHelper.remove_frame(particle, this_frame)
+          end
+        else
+          AnimationEditor::ParticleDataHelper.remove_frame(@anim[:particles][particle_index], this_frame)
+        end
+        @components[:particle_list].set_particles(@anim[:particles])
+        refresh
+      end
     end
   end
 

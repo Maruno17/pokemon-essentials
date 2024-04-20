@@ -54,17 +54,6 @@ module Compiler
           f.write("\r\n")
         end
         # Write each particle in turn
-        element.particles.sort! do |a, b|
-          a_val = 0
-          a_val = -2 if a[:name] == "User"
-          a_val = -1 if a[:name] == "Target"
-          a_val = 1 if a[:name] == "SE"
-          b_val = 0
-          b_val = -2 if b[:name] == "User"
-          b_val = -1 if b[:name] == "Target"
-          b_val = 1 if b[:name] == "SE"
-          next a_val <=> b_val
-        end
         element.particles.each_with_index do |particle, i|
           # Write header
           f.write("<" + particle[:name] + ">")

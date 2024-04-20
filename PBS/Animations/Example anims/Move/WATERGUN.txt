@@ -225,7 +225,7 @@ Name = Example anim
     SetVisible = 9,false
 <Particle 10>
     Graphic = Examples/fly copy
-    Focus = User
+    Focus = Target
     SetFrame = 8,6
     SetX = 8,0
     SetY = 8,-4
@@ -234,7 +234,7 @@ Name = Example anim
     SetVisible = 9,false
 <Particle 11>
     Graphic = Examples/fly copy
-    Focus = User
+    Focus = Target
     SetFrame = 9,6
     SetX = 9,1
     SetY = 9,-4

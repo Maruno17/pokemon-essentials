@@ -40,18 +40,13 @@ Name = Example anim
 [OppMove,POISONSTING]
 Name = Example anim
 <User>
-    SetX = 0,0
-    SetY = 0,0
 <Target>
-    SetX = 0,0
-    SetY = 0,0
 <Particle 2>
     Graphic = Examples/003-Attack01
     Focus = UserAndTarget
     SetFrame = 0,5
     SetX = 0,25
     SetY = 0,-67
-    SetZ = 0,27
     SetAngle = 0,180
     SetX = 1,50
     SetY = 1,-90
@@ -67,14 +62,15 @@ Name = Example anim
     SetY = 5,-179
     SetX = 6,175
     SetY = 6,-203
-    SetFrame = 7,9
-    SetX = 7,204
-    SetY = 7,-195
-    SetAngle = 7,0
-    SetFrame = 8,3
-    SetX = 8,200
-    SetY = 8,-218
-    SetFrame = 9,4
+    SetVisible = 6,false
+<Particle 3>
+    Graphic = Examples/003-Attack01
+    Focus = Target
+    SetFrame = 6,3
+    SetVisible = 6,true
+    SetFrame = 7,4
+    SetFrame = 8,2
+    SetFrame = 9,2
 <SE>
     Play = 0,throw,80
     Play = 6,Slash10,80

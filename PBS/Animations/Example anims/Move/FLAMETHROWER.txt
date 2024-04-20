@@ -81,14 +81,10 @@ Name = Example anim
 [OppMove,FLAMETHROWER]
 Name = Example anim
 <User>
-    SetX = 0,0
-    SetY = 0,0
 <Target>
-    SetX = 0,0
-    SetY = 0,0
 <Particle 2>
     Graphic = Examples/Flames
-    Focus = Target
+    Focus = User
     SetFrame = 0,2
     SetX = 0,-3
     SetY = 0,2
@@ -132,7 +128,7 @@ Name = Example anim
     SetVisible = 19,false
 <Particle 3>
     Graphic = Examples/Flames
-    Focus = Target
+    Focus = User
     SetFrame = 1,2
     SetX = 1,-23
     SetY = 1,9
@@ -169,7 +165,7 @@ Name = Example anim
     SetVisible = 18,false
 <Particle 4>
     Graphic = Examples/Flames
-    Focus = Target
+    Focus = User
     SetFrame = 2,2
     SetX = 2,-42
     SetY = 2,16
@@ -207,7 +203,7 @@ Name = Example anim
     SetVisible = 17,false
 <Particle 5>
     Graphic = Examples/Flames
-    Focus = Target
+    Focus = User
     SetFrame = 3,1
     SetX = 3,-71
     SetY = 3,24
@@ -242,7 +238,7 @@ Name = Example anim
     SetVisible = 16,false
 <Particle 6>
     Graphic = Examples/Flames
-    Focus = Target
+    Focus = User
     SetFrame = 4,1
     SetX = 4,-85
     SetY = 4,41
@@ -269,7 +265,7 @@ Name = Example anim
     SetVisible = 15,false
 <Particle 7>
     Graphic = Examples/Flames
-    Focus = Target
+    Focus = User
     SetFrame = 5,1
     SetX = 5,-117
     SetY = 5,38
@@ -291,7 +287,7 @@ Name = Example anim
     SetVisible = 14,false
 <Particle 8>
     Graphic = Examples/Flames
-    Focus = Target
+    Focus = User
     SetFrame = 6,1
     SetX = 6,-146
     SetY = 6,56
@@ -313,7 +309,7 @@ Name = Example anim
     SetVisible = 13,false
 <Particle 9>
     Graphic = Examples/Flames
-    Focus = Target
+    Focus = User
     SetFrame = 8,1
     SetX = 8,-195
     SetY = 8,68
@@ -330,7 +326,7 @@ Name = Example anim
     SetVisible = 13,false
 <Particle 10>
     Graphic = Examples/Flames
-    Focus = Target
+    Focus = User
     SetX = 9,-248
     SetY = 9,98
     SetZ = 9,35
@@ -339,7 +335,7 @@ Name = Example anim
     SetVisible = 11,false
 <Particle 11>
     Graphic = Examples/Flames
-    Focus = Target
+    Focus = User
     SetX = 10,-262
     SetY = 10,131
     SetZ = 10,36

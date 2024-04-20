@@ -70,14 +70,10 @@ Name = Example anim
 [OppMove,GROWL]
 Name = Example anim
 <User>
-    SetX = 0,0
-    SetY = 0,0
 <Target>
-    SetX = 0,0
-    SetY = 0,0
 <Particle 3>
     Graphic = Examples/Growl
-    Focus = Target
+    Focus = User
     SetFrame = 0,1
     SetFlip = 0,true
     SetX = 0,-58
@@ -99,7 +95,7 @@ Name = Example anim
     SetY = 7,-36
 <Particle 4>
     Graphic = Examples/Growl
-    Focus = Target
+    Focus = User
     SetFrame = 0,1
     SetX = 0,-58
     SetY = 0,39
@@ -120,7 +116,7 @@ Name = Example anim
     SetY = 7,77
 <Particle 2>
     Graphic = Examples/Growl
-    Focus = Target
+    Focus = User
     SetFlip = 0,true
     SetX = 0,-58
     SetY = 0,14

@@ -642,7 +642,7 @@ class AnimationEditor::Canvas < Sprite
         if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
           relative_to_index = user_index
         elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-          relative_to_index = target_idx
+          relative_to_index = first_target_index
         end
       end
       new_pos *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_x]
@@ -679,7 +679,7 @@ class AnimationEditor::Canvas < Sprite
         if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
           relative_to_index = user_index
         elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-          relative_to_index = target_idx
+          relative_to_index = first_target_index
         end
       end
       new_pos *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_y]

@@ -237,7 +237,7 @@ Name = Example anim
     SetVisible = 8,false
 <Particle 8>
     Graphic = Examples/leech-seed
-    Focus = UserAndTarget
+    Focus = User
     SetFrame = 9,10
     SetX = 9,-8
     SetY = 9,-1
@@ -267,7 +267,7 @@ Name = Example anim
     SetY = 19,25
 <Particle 9>
     Graphic = Examples/leech-seed
-    Focus = UserAndTarget
+    Focus = User
     SetFrame = 10,10
     SetX = 10,11
     SetY = 10,26
@@ -295,7 +295,7 @@ Name = Example anim
     SetVisible = 19,false
 <Particle 10>
     Graphic = Examples/leech-seed
-    Focus = UserAndTarget
+    Focus = User
     SetFrame = 11,10
     SetX = 11,-11
     SetY = 11,37
@@ -319,7 +319,7 @@ Name = Example anim
     SetVisible = 18,false
 <Particle 11>
     Graphic = Examples/leech-seed
-    Focus = UserAndTarget
+    Focus = User
     SetFrame = 12,10
     SetX = 12,14
     SetY = 12,-48
@@ -338,7 +338,7 @@ Name = Example anim
     SetVisible = 17,false
 <Particle 12>
     Graphic = Examples/leech-seed
-    Focus = UserAndTarget
+    Focus = User
     SetFrame = 13,10
     SetX = 13,-11
     SetY = 13,14

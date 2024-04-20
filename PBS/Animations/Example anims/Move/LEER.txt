@@ -38,20 +38,13 @@ Name = Example anim
     SetY = 0,0
 <Particle 2>
     Graphic = Examples/leer
-    Focus = UserAndTarget
-    SetX = 0,26
-    SetY = 0,26
+    Focus = User
+    SetX = 0,-39
+    SetY = 0,-26
     SetZ = 0,27
     SetFrame = 1,1
-    SetY = 1,29
     SetFrame = 2,2
-    SetX = 2,25
-    SetY = 2,32
     SetFrame = 3,3
-    SetX = 3,28
-    SetY = 3,29
     SetFrame = 4,4
-    SetX = 4,21
-    SetY = 4,32
 <SE>
     Play = 0,Saint9

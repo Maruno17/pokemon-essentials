@@ -119,7 +119,7 @@ module Compiler
         next if value.nil?
         case schema[1][i, 1]
         when "e", "E"   # Enumerable
-          enumer = schema[2 + i]
+          enumer = schema[2 + i - start]
           case enumer
           when Array
             file.write(enumer[value])
@@ -136,7 +136,7 @@ module Compiler
             end
           end
         when "y", "Y"   # Enumerable or integer
-          enumer = schema[2 + i]
+          enumer = schema[2 + i - start]
           case enumer
           when Array
             file.write((enumer[value].nil?) ? value : enumer[value])
@@ -146,14 +146,14 @@ module Compiler
           when Module
             file.write(getConstantNameOrValue(enumer, value))
           when Hash
-            hasenum = false
+            has_enum = false
             enumer.each_key do |key|
               next if enumer[key] != value
               file.write(key)
-              hasenum = true
+              has_enum = true
               break
             end
-            file.write(value) unless hasenum
+            file.write(value) if !has_enum
           end
         else
           if value.is_a?(String)

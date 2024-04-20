@@ -8,9 +8,9 @@ NoTarget = true
     Graphic = Examples/shadow sky
     Focus = Foreground
     SetOpacity = 0,0
-    MoveOpacity = 0,5,255,
+    MoveOpacity = 0,5,255
     SetOpacity = 5,255
     SetOpacity = 15,255
-    MoveOpacity = 15,5,0,
+    MoveOpacity = 15,5,0
     SetOpacity = 20,0
 <SE>

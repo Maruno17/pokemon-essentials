@@ -103,9 +103,9 @@ module AnimationEditor::ParticleDataHelper
   def get_particle_commands_timeline(particle)
     ret = []
     durations = []
-    particle.each_pair do |property, value|
-      next if !value.is_a?(Array)
-      value.each do |cmd|
+    particle.each_pair do |property, values|
+      next if !values.is_a?(Array) || values.empty?
+      values.each do |cmd|
         ret[cmd[0]] = true
         if cmd[1] > 0
           ret[cmd[0] + cmd[1]] = true
@@ -224,7 +224,7 @@ module AnimationEditor::ParticleDataHelper
   # * SetXYZ and MoveXYZ start - delete SetXYZ (leave MoveXYZ alone)
   # * SetXYZ and MoveXYZ end - (unlikely) delete both
   # * SetXYZ and MoveXYZ start and end - (unlikely) delete SetXYZ, merge Moves together
-  def delete_command(particle, property, frame)
+  def delete_command(particle, property, frame, full_delete = false)
     # Find all relevant commands
     set_now = nil
     move_ending_now = nil
@@ -246,7 +246,7 @@ module AnimationEditor::ParticleDataHelper
       particle[property].delete(move_starting_now)
     elsif move_ending_now   # Delete MoveXYZ ending now
       particle[property].delete(move_ending_now)
-    elsif move_starting_now && !set_now   # Turn into SetXYZ at its end point
+    elsif move_starting_now && (full_delete || !set_now)   # Turn into SetXYZ at its end point
       move_starting_now[0] += move_starting_now[1]
       move_starting_now[1] = 0
       move_starting_now[3] = nil
@@ -452,6 +452,45 @@ module AnimationEditor::ParticleDataHelper
       return if !particle[:se] || particle[:se].empty?
       particle[:se].delete_if { |s| s[0] == frame && s[2] == filename }
       particle.delete(:se) if particle[:se].empty?
+    end
+  end
+
+  #-----------------------------------------------------------------------------
+
+  # Inserts an empty frame at the given frame. Delays all commands at or after
+  # the given frame by 1, and increases the duration of all commands that
+  # overlap the given frame.
+  def insert_frame(particle, frame)
+    particle.each_pair do |property, values|
+      next if !values.is_a?(Array) || values.empty?
+      values.each do |cmd|
+        if cmd[0] >= frame
+          cmd[0] += 1
+        elsif cmd[0] < frame && cmd[0] + cmd[1] > frame
+          cmd[1] += 1
+        end
+      end
+    end
+  end
+
+  # Removes a frame at the given frame. Deletes all commands in that frame, then
+  # brings all commands after the given frame earlier by 1, and reduces the
+  # duration of all commands that overlap the given frame.
+  def remove_frame(particle, frame)
+    particle.keys.each do |property|
+      next if !particle[property].is_a?(Array) || particle[property].empty?
+      delete_command(particle, property, frame, true)
+    end
+    particle.delete_if { |property, values| values.is_a?(Array) && values.empty? }
+    particle.each_pair do |key, values|
+      next if !values.is_a?(Array) || values.empty?
+      values.each do |cmd|
+        if cmd[0] > frame
+          cmd[0] -= 1
+        elsif cmd[0] < frame && cmd[0] + cmd[1] > frame
+          cmd[1] -= 1
+        end
+      end
     end
   end
 

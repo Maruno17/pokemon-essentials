@@ -338,7 +338,7 @@ module GameData
             new_cmd = cmd.clone
             if @particles[index][:name] != "SE" && new_cmd[1] > 0
               new_cmd.pop if new_cmd.last == :linear   # This is the default
-              ret.push([@@cmd_to_pbs_name[key][1]] + new_cmd)   # ["MoveXYZ", keyframe, duration, value]
+              ret.push([@@cmd_to_pbs_name[key][1]] + new_cmd)   # ["MoveXYZ", keyframe, duration, value, interpolation]
             else
               case key
               when :se
