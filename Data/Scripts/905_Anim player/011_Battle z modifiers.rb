@@ -2,15 +2,19 @@
 #
 #===============================================================================
 class Battle::Scene
-  alias __newanims__pbInitSprites pbInitSprites unless method_defined?(:__newanims__pbInitSprites)
-  def pbInitSprites
-    __newanims__pbInitSprites
+  alias __newanims__pbCreateBackdropSprites pbCreateBackdropSprites unless method_defined?(:__newanims__pbCreateBackdropSprites)
+  def pbCreateBackdropSprites
+    __newanims__pbCreateBackdropSprites
     ["battle_bg", "battle_bg2"].each { |spr| @sprites[spr].z = -200 }
     2.times do |side|
       @sprites["base_#{side}"].z = -199
     end
     @sprites["cmdBar_bg"].z += 9999
+  end
 
+  alias __newanims__pbInitSprites pbInitSprites unless method_defined?(:__newanims__pbInitSprites)
+  def pbInitSprites
+    __newanims__pbInitSprites
     @sprites["messageBox"].z += 9999
     @sprites["messageWindow"].z += 9999
     @sprites["commandWindow"].z += 9999
@@ -27,7 +31,6 @@ class Battle::Scene
     @battle.battlers.each_with_index do |b, i|
       @sprites["dataBox_#{i}"].z += 9999 if b
     end
-
     @battle.player.each_with_index do |p, i|
       @sprites["player_#{i + 1}"].z = 1500 + (i * 100)
     end
@@ -36,7 +39,6 @@ class Battle::Scene
         @sprites["trainer_#{i + 1}"].z = 500 - (i * 100)
       end
     end
-
   end
 end
 

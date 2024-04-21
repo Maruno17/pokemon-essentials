@@ -229,12 +229,18 @@ module AnimationEditor::ParticleDataHelper
     set_now = nil
     move_ending_now = nil
     move_starting_now = nil
+    set_at_end_of_move_starting_now = nil
     particle[property].each do |cmd|
       if cmd[1] == 0
         set_now = cmd if cmd[0] == frame
       else
         move_starting_now = cmd if cmd[0] == frame
         move_ending_now = cmd if cmd[0] + cmd[1] == frame
+      end
+    end
+    if move_starting_now
+      particle[property].each do |cmd|
+        set_at_end_of_move_starting_now = cmd if cmd[1] == 0 && cmd[0] == move_starting_now[0] + move_starting_now[1]
       end
     end
     # Delete SetXYZ if it is at frame
@@ -247,12 +253,25 @@ module AnimationEditor::ParticleDataHelper
     elsif move_ending_now   # Delete MoveXYZ ending now
       particle[property].delete(move_ending_now)
     elsif move_starting_now && (full_delete || !set_now)   # Turn into SetXYZ at its end point
-      move_starting_now[0] += move_starting_now[1]
-      move_starting_now[1] = 0
-      move_starting_now[3] = nil
-      move_starting_now.compact!
+      if set_at_end_of_move_starting_now
+        particle[property].delete(move_starting_now)
+      else
+        move_starting_now[0] += move_starting_now[1]
+        move_starting_now[1] = 0
+        move_starting_now[3] = nil
+        move_starting_now.compact!
+      end
     end
     return (particle[property].empty?) ? nil : particle[property]
+  end
+
+  def optimize_all_particles(particles)
+    particles.each do |particle|
+      particle.each_pair do |key, cmds|
+        next if !cmds.is_a?(Array) || cmds.empty?
+        particle[key] = optimize_commands(particle, key)
+      end
+    end
   end
 
   # Removes commands for the particle's given property if they don't make a
@@ -281,7 +300,6 @@ module AnimationEditor::ParticleDataHelper
       first_non_visible_cmd = -1
       particle.each_pair do |prop, value|
         next if !value.is_a?(Array) || value.empty?
-        next if prop == property && value[0][0] == frame
         first_cmd = value[0][0] if first_cmd < 0 || first_cmd > value[0][0]
         next if prop == :visible
         first_non_visible_cmd = value[0][0] if first_non_visible_cmd < 0 || first_non_visible_cmd > value[0][0]
