@@ -102,9 +102,17 @@ module AnimationPlayer::Helper
     if focus.is_a?(Array)
       distance = GameData::Animation::USER_AND_TARGET_SEPARATION[2]
       if z >= 0
-        sprite.z = z + focus[0]
+        if focus[0] > focus[1]
+          sprite.z = focus[0] + z
+        else
+          sprite.z = focus[0] - z
+        end
       elsif z <= distance
-        sprite.z = z + focus[1]
+        if focus[0] > focus[1]
+          sprite.z = focus[1] + z + distance
+        else
+          sprite.z = focus[1] - z + distance
+        end
       else
         sprite.z = focus[0] + ((z.to_f / distance) * (focus[1] - focus[0])).to_i
       end
@@ -149,7 +157,7 @@ module AnimationPlayer::Helper
       sprite.bitmap = RPG::Cache.load_bitmap("Graphics/Battle animations/", particle[:graphic])
       sprite.src_rect.set(0, 0, sprite.bitmap.width, sprite.bitmap.height)
       if [:foreground, :midground, :background].include?(particle[:focus]) &&
-         sprite.bitmap.width == Settings::SCREEN_WIDTH &&
+         sprite.bitmap.width >= Settings::SCREEN_WIDTH &&
          sprite.bitmap.height >= Settings::SCREEN_HEIGHT - BATTLE_MESSAGE_BAR_HEIGHT
         sprite.ox = 0
         sprite.oy = 0
