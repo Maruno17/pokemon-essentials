@@ -560,7 +560,7 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :foe_invert_y, {
 
 AnimationEditor::SidePanes.add_property(:particle_pane, :foe_flip, {
   :new => proc { |pane, editor|
-    pane.add_labelled_checkbox(:foe_flip, _INTL("Flip Sprite"), false)
+    pane.add_labelled_checkbox(:foe_flip, _INTL("Flip sprite"), false)
   },
   :refresh_value => proc { |control, editor|
     focus = editor.anim[:particles][editor.particle_index][:focus]
@@ -610,6 +610,7 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :delete, {
       AnimationEditor::ParticleDataHelper.delete_particle(editor.anim[:particles], p_index)
       editor.components[:particle_list].delete_particle(p_index)
       editor.components[:particle_list].set_particles(editor.anim[:particles])
+      p_index = editor.particle_index
       editor.components[:particle_list].keyframe = 0 if editor.anim[:particles][p_index][:name] == "SE"
       editor.refresh
     end

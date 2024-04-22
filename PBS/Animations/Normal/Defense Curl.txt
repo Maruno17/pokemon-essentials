@@ -1,0 +1,40 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DEFENSECURL]
+Name = Essentials
+NoTarget = true
+<User>
+<Ball>
+    Graphic = Normal/Defense Curl ball
+    Focus = User
+    SetY = 0,32
+    SetZ = 0,10
+    SetZoomX = 0,250
+    SetZoomY = 0,250
+    SetOpacity = 0,128
+    MoveZoomX = 0,3,150
+    MoveZoomY = 0,3,150
+    SetOpacity = 5,255
+    MoveZoomX = 9,4,300
+    MoveZoomY = 9,4,300
+    MoveOpacity = 9,4,0
+    SetVisible = 13,false
+<Swish>
+    Graphic = Normal/Defense Curl swish
+    Focus = User
+    SetY = 7,32
+    SetZ = 7,5
+    SetZoomX = 7,90
+    SetZoomY = 7,90
+    SetAngle = 7,90
+    SetOpacity = 7,160
+    MoveAngle = 7,10,810
+    SetColorRed = 12,160
+    SetColorGreen = 12,160
+    SetColorBlue = 12,248
+    SetColorAlpha = 12,255
+    MoveZoomX = 12,5,130
+    MoveZoomY = 12,5,130
+    MoveOpacity = 16,1,0
+<SE>
+    Play = 0,Normal/Defense Curl

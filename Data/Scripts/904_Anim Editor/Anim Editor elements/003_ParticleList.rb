@@ -200,7 +200,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   end
 
   def particle_index
-    return -1 if @row_index < 0
+    return -1 if @row_index < 0 || @row_index >= @particle_list.length
     ret = @particle_list[@row_index]
     return (ret.is_a?(Array)) ? ret[0] : ret
   end
@@ -335,6 +335,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         @particle_list.push([i, property]) if value.is_a?(Array)
       end
     end
+    @row_index = @particle_list.length - 1 if @row_index >= @particle_list.length
     # Dispose of and clear all existing list/commands sprites
     dispose_listed_sprites
     # Create new sprites for each particle (1x list and 2x commands)

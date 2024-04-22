@@ -190,3 +190,4 @@ Name = Essentials
     MoveColorGreen = 9,9,96,EaseOut
     MoveColorBlue = 9,9,32,EaseOut
 <SE>
+    Play = 4,Normal/Tackle

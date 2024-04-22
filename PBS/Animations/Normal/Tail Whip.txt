@@ -1,0 +1,24 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,TAILWHIP]
+Name = Essentials
+NoTarget = true
+<User>
+    MoveX = 0,2,32,EaseOut
+    MoveY = 0,2,16,EaseIn
+    MoveX = 2,2,0,EaseIn
+    MoveY = 2,2,24,EaseOut
+    MoveX = 4,2,-32,EaseOut
+    MoveY = 4,2,16,EaseIn
+    MoveX = 6,2,0,EaseIn
+    MoveY = 6,2,0,EaseOut
+    MoveX = 10,2,32,EaseOut
+    MoveY = 10,2,16,EaseIn
+    MoveX = 12,2,0,EaseIn
+    MoveY = 12,2,24,EaseOut
+    MoveX = 14,2,-32,EaseOut
+    MoveY = 14,2,16,EaseIn
+    MoveX = 16,2,0,EaseIn
+    MoveY = 16,2,0,EaseOut
+<SE>
+    Play = 0,Normal/Tail Whip

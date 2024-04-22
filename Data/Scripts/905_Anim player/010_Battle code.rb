@@ -75,8 +75,7 @@ class Battle::Scene
     move_type = move_data.type
     default_idx = move_data.category
     default_idx += 3 if target_data.num_targets > 1 ||
-                        (target_data.num_targets > 0 && move_data.status?) ||
-                        target_data.affects_foe_side
+                        (target_data.num_targets > 0 && move_data.status?)
     # Check for a default animation
     wanted_move = ANIMATION_DEFAULTS_FOR_TYPE_CATEGORY[move_type][default_idx]
     anims = find_move_animation_for_move(wanted_move, 0, user_index)
