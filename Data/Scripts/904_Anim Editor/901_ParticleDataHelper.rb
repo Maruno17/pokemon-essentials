@@ -267,6 +267,7 @@ module AnimationEditor::ParticleDataHelper
 
   def optimize_all_particles(particles)
     particles.each do |particle|
+      next if particle[:name] == "SE"
       particle.each_pair do |key, cmds|
         next if !cmds.is_a?(Array) || cmds.empty?
         particle[key] = optimize_commands(particle, key)

@@ -1,0 +1,23 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,GROWTH]
+Name = Essentials
+NoTarget = true
+<User>
+    SetColorRed = 0,248
+    SetColorGreen = 0,248
+    SetColorBlue = 0,248
+    MoveZoomX = 0,4,115
+    MoveZoomY = 0,4,115
+    MoveColorAlpha = 0,4,96
+    MoveZoomX = 5,4,100
+    MoveZoomY = 5,4,100
+    MoveColorAlpha = 5,4,0
+    MoveZoomX = 12,4,115
+    MoveZoomY = 12,4,115
+    MoveColorAlpha = 12,4,96
+    MoveZoomX = 17,4,100
+    MoveZoomY = 17,4,100
+    MoveColorAlpha = 17,4,0
+<SE>
+    Play = 0,Normal/Growth

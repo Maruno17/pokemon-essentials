@@ -8,7 +8,7 @@ class AnimationEditor
 
   BORDER_THICKNESS = 4
   WINDOW_WIDTH     = Settings::SCREEN_WIDTH + 352 + (BORDER_THICKNESS * 4)
-  WINDOW_HEIGHT    = Settings::SCREEN_HEIGHT + 352 + (BORDER_THICKNESS * 4)
+  WINDOW_HEIGHT    = Settings::SCREEN_HEIGHT + 424 + (BORDER_THICKNESS * 4)
 
   # Components
   MENU_BAR_WIDTH  = WINDOW_WIDTH
@@ -548,7 +548,10 @@ class AnimationEditor
           break
         end
       end
-      break if Input.triggerex?(:SPACE)
+      if Input.triggerex?(:SPACE)
+        pbSEStop
+        break
+      end
       break if anim_player.finished?
     end
     anim_player.dispose

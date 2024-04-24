@@ -1,0 +1,161 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,ASTONISH]
+Name = Essentials
+<User>
+    FoeInvertX = true
+    FoeInvertY = true
+    MoveX = 0,2,48
+    MoveX = 6,2,0
+<Target>
+    FoeInvertX = true
+    MoveZoomY = 4,3,125
+    MoveZoomY = 8,3,100
+<Hit>
+    Graphic = Ghost/Astonish hit
+    Focus = Target
+    SetY = 7,-32
+    SetZ = 7,10
+    SetZoomX = 7,0
+    SetZoomY = 7,0
+    SetOpacity = 7,0
+    SetColorRed = 7,248
+    SetColorGreen = 7,248
+    SetColorBlue = 7,32
+    MoveOpacity = 7,3,255
+    MoveColorAlpha = 7,3,255
+    MoveZoomX = 7,5,160
+    MoveZoomY = 7,5,160
+    MoveOpacity = 10,2,0
+    SetVisible = 12,false
+<Spark 1>
+    Graphic = Ghost/Astonish spark
+    Focus = Target
+    SetX = 7,-28
+    SetY = 7,-36
+    SetZ = 7,5
+    SetZoomX = 7,15
+    SetZoomY = 7,15
+    SetOpacity = 7,0
+    MoveOpacity = 7,1,255
+    MoveZoomX = 7,4,30
+    MoveZoomY = 7,4,30
+    MoveY = 7,6,-69,EaseOut
+    MoveX = 7,9,-102
+    MoveY = 13,3,-54,EaseIn
+    MoveOpacity = 13,3,0
+<Spark 2>
+    Graphic = Ghost/Astonish spark
+    Focus = Target
+    SetX = 7,-12
+    SetY = 7,-29
+    SetZ = 7,5
+    SetZoomX = 7,15
+    SetZoomY = 7,15
+    SetOpacity = 7,0
+    MoveOpacity = 7,1,255
+    MoveZoomX = 7,4,30
+    MoveZoomY = 7,4,30
+    MoveY = 7,6,-124,EaseOut
+    MoveX = 7,9,-52
+    MoveY = 13,3,-101,EaseIn
+    MoveOpacity = 13,3,0
+<Spark 3>
+    Graphic = Ghost/Astonish spark
+    Focus = Target
+    SetX = 7,-5
+    SetY = 7,-31
+    SetZ = 7,5
+    SetZoomX = 7,15
+    SetZoomY = 7,15
+    SetOpacity = 7,0
+    MoveOpacity = 7,1,255
+    MoveZoomX = 7,4,30
+    MoveZoomY = 7,4,30
+    MoveY = 7,6,-108,EaseOut
+    MoveX = 7,9,21
+    MoveY = 13,3,-90,EaseIn
+    MoveOpacity = 13,3,0
+<Spark 4>
+    Graphic = Ghost/Astonish spark
+    Focus = Target
+    SetX = 7,-5
+    SetY = 7,-31
+    SetZ = 7,5
+    SetZoomX = 7,15
+    SetZoomY = 7,15
+    SetOpacity = 7,0
+    MoveOpacity = 7,1,255
+    MoveZoomX = 7,4,30
+    MoveZoomY = 7,4,30
+    MoveY = 7,7,-97,EaseOut
+    MoveX = 7,10,81
+    MoveY = 14,3,-85,EaseIn
+    MoveOpacity = 14,3,0
+<Spark 5>
+    Graphic = Ghost/Astonish spark
+    Focus = Target
+    SetX = 7,-5
+    SetY = 7,-31
+    SetZ = 7,5
+    SetZoomX = 7,15
+    SetZoomY = 7,15
+    SetOpacity = 7,0
+    MoveOpacity = 7,1,255
+    MoveZoomX = 7,4,30
+    MoveZoomY = 7,4,30
+    MoveY = 7,7,-142,EaseOut
+    MoveX = 7,10,-18
+    MoveY = 14,3,-122,EaseIn
+    MoveOpacity = 14,3,0
+<Spark 6>
+    Graphic = Ghost/Astonish spark
+    Focus = Target
+    SetX = 7,-4
+    SetY = 7,-24
+    SetZ = 7,5
+    SetZoomX = 7,15
+    SetZoomY = 7,15
+    SetOpacity = 7,0
+    MoveOpacity = 7,1,255
+    MoveZoomX = 7,4,30
+    MoveZoomY = 7,4,30
+    MoveY = 7,6,-130,EaseOut
+    MoveX = 7,9,85
+    MoveY = 13,3,-104,EaseIn
+    MoveOpacity = 13,3,0
+<Spark 7>
+    Graphic = Ghost/Astonish spark
+    Focus = Target
+    SetX = 7,-5
+    SetY = 7,-31
+    SetZ = 7,5
+    SetZoomX = 7,15
+    SetZoomY = 7,15
+    SetOpacity = 7,0
+    MoveOpacity = 7,1,255
+    MoveZoomX = 7,4,30
+    MoveZoomY = 7,4,30
+    MoveY = 7,6,-95,EaseOut
+    MoveX = 7,10,-124
+    MoveY = 13,4,-79,EaseIn
+    MoveOpacity = 14,3,0
+<Spark 8>
+    Graphic = Ghost/Astonish spark
+    Focus = Target
+    SetX = 7,3
+    SetY = 7,-33
+    SetZ = 7,5
+    SetZoomX = 7,15
+    SetZoomY = 7,15
+    SetOpacity = 7,0
+    MoveOpacity = 7,1,255
+    MoveZoomX = 7,4,30
+    MoveZoomY = 7,4,30
+    MoveX = 7,6,68
+    MoveY = 7,6,-63,EaseOut
+    MoveX = 13,3,105
+    MoveY = 13,3,-56,EaseIn
+    MoveOpacity = 13,3,0
+<SE>
+    Play = 2,Ghost/Astonish

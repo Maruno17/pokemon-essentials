@@ -1,0 +1,118 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BITE]
+Name = Essentials
+NoUser = true
+<Target>
+    FoeInvertX = true
+    MoveX = 7,1,-2
+    MoveX = 8,2,2
+    MoveX = 10,2,-2
+    MoveX = 12,2,2
+    MoveX = 14,1,0
+<Teeth upper>
+    Graphic = Dark/Bite teeth
+    Focus = Target
+    SetY = 0,-18
+    SetZ = 0,10
+    SetZoomX = 0,125
+    SetZoomY = 0,125
+    SetAngle = 0,180
+    SetOpacity = 0,0
+    MoveOpacity = 0,1,255
+    MoveY = 0,3,-72
+    MoveZoomY = 0,3,200
+    MoveY = 4,3,-10,EaseOut
+    MoveZoomY = 4,3,100
+    MoveY = 7,8,-48
+    MoveZoomY = 7,8,150
+    MoveOpacity = 11,4,0
+<Teeth lower>
+    Graphic = Dark/Bite teeth
+    Focus = Target
+    SetY = 0,18
+    SetZ = 0,5
+    SetZoomX = 0,125
+    SetZoomY = 0,125
+    SetOpacity = 0,0
+    MoveOpacity = 0,1,255
+    MoveY = 0,3,72
+    MoveZoomY = 0,3,200
+    MoveY = 4,3,10,EaseOut
+    MoveZoomY = 4,3,100
+    MoveY = 7,8,48
+    MoveZoomY = 7,8,150
+    MoveOpacity = 11,4,0
+<Teeth upper afterimage>
+    Graphic = Dark/Bite teeth
+    Focus = Target
+    SetY = 4,-72
+    SetZ = 4,20
+    SetZoomX = 4,125
+    SetZoomY = 4,200
+    SetAngle = 4,180
+    MoveOpacity = 4,2,0
+    SetVisible = 6,false
+<Teeth lower afterimage>
+    Graphic = Dark/Bite teeth
+    Focus = Target
+    SetY = 4,72
+    SetZ = 4,15
+    SetZoomX = 4,125
+    SetZoomY = 4,200
+    MoveOpacity = 4,2,0
+    SetVisible = 6,false
+<Hit left yellow>
+    Graphic = Dark/Bite hit
+    Focus = Target
+    SetX = 4,-64
+    SetZ = 4,30
+    SetZoomX = 4,0
+    SetZoomY = 4,0
+    SetAngle = 4,-20
+    SetColorRed = 4,248
+    SetColorGreen = 4,248
+    SetColorAlpha = 4,255
+    MoveZoomX = 4,5,150
+    MoveZoomY = 4,5,150
+    MoveOpacity = 7,2,0
+    SetVisible = 9,false
+<Hit left white>
+    Graphic = Dark/Bite hit
+    Focus = Target
+    SetX = 4,-64
+    SetZ = 4,35
+    SetZoomX = 4,0
+    SetZoomY = 4,0
+    SetAngle = 4,-20
+    MoveZoomX = 4,5,130
+    MoveZoomY = 4,5,130
+    MoveOpacity = 7,2,0
+    SetVisible = 9,false
+<Hit right yellow>
+    Graphic = Dark/Bite hit
+    Focus = Target
+    SetX = 4,64
+    SetZ = 4,30
+    SetZoomX = 4,0
+    SetZoomY = 4,0
+    SetColorRed = 4,248
+    SetColorGreen = 4,248
+    SetColorAlpha = 4,255
+    MoveZoomX = 4,5,150
+    MoveZoomY = 4,5,150
+    MoveOpacity = 7,2,0
+    SetVisible = 9,false
+<Hit right white>
+    Graphic = Dark/Bite hit
+    Focus = Target
+    SetX = 4,64
+    SetZ = 4,35
+    SetZoomX = 4,0
+    SetZoomY = 4,0
+    MoveZoomX = 4,5,130
+    MoveZoomY = 4,5,130
+    MoveOpacity = 7,2,0
+    SetVisible = 9,false
+<SE>
+    Play = 4,Dark/Bite

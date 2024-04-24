@@ -1,0 +1,19 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BULKUP]
+Name = Essentials
+NoTarget = true
+<User>
+    MoveZoomX = 0,7,150
+    MoveZoomY = 0,7,50
+    SetZoomX = 8,175
+    MoveZoomX = 8,7,50
+    MoveZoomY = 8,7,150
+    MoveZoomX = 16,3,100
+    MoveZoomY = 16,3,100
+    MoveZoomX = 20,3,150
+    MoveZoomY = 20,3,150
+    MoveZoomX = 24,3,100
+    MoveZoomY = 24,3,100
+<SE>
+    Play = 0,Fighting/Bulk Up
