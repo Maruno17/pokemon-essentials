@@ -146,6 +146,7 @@ EventHandlers.add(:on_step_taken, :pick_up_soot,
 EventHandlers.add(:on_step_taken, :grass_rustling,
   proc { |event|
     next if !$scene.is_a?(Scene_Map)
+    next if event.respond_to?("name") && event.name[/airborne/i]
     event.each_occupied_tile do |x, y|
       next if !$map_factory.getTerrainTagFromCoords(event.map.map_id, x, y, true).shows_grass_rustle
       spriteset = $scene.spriteset(event.map_id)
@@ -158,6 +159,7 @@ EventHandlers.add(:on_step_taken, :grass_rustling,
 EventHandlers.add(:on_step_taken, :still_water_ripple,
   proc { |event|
     next if !$scene.is_a?(Scene_Map)
+    next if event.respond_to?("name") && event.name[/airborne/i]
     event.each_occupied_tile do |x, y|
       next if !$map_factory.getTerrainTagFromCoords(event.map.map_id, x, y, true).shows_water_ripple
       spriteset = $scene.spriteset(event.map_id)
@@ -207,7 +209,7 @@ EventHandlers.add(:on_player_change_direction, :trigger_encounter,
 )
 
 def pbBattleOnStepTaken(repel_active)
-  return if $player.able_pokemon_count == 0
+  return if $player.able_pokemon_count == 0 && !pbInSafari?
   return if !$PokemonEncounters.encounter_possible_here?
   encounter_type = $PokemonEncounters.encounter_type
   return if !encounter_type

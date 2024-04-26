@@ -171,6 +171,7 @@ class Battle
     priority.each do |battler|
       next if !battler.effects[PBEffects::AquaRing]
       next if !battler.canHeal?
+      pbCommonAnimation("AquaRing", battler)
       hpGain = battler.totalhp / 16
       hpGain = (hpGain * 1.3).floor if battler.hasActiveItem?(:BIGROOT)
       battler.pbRecoverHP(hpGain)
@@ -180,6 +181,7 @@ class Battle
     priority.each do |battler|
       next if !battler.effects[PBEffects::Ingrain]
       next if !battler.canHeal?
+      pbCommonAnimation("Ingrain", battler)
       hpGain = battler.totalhp / 16
       hpGain = (hpGain * 1.3).floor if battler.hasActiveItem?(:BIGROOT)
       battler.pbRecoverHP(hpGain)
@@ -259,6 +261,7 @@ class Battle
     priority.each do |battler|
       battler.effects[PBEffects::Nightmare] = false if !battler.asleep?
       next if !battler.effects[PBEffects::Nightmare] || !battler.takesIndirectDamage?
+      pbCommonAnimation("Nightmare", battler)
       battler.pbTakeEffectDamage(battler.totalhp / 4) do |hp_lost|
         pbDisplay(_INTL("{1} is locked in a nightmare!", battler.pbThis))
       end
@@ -266,6 +269,7 @@ class Battle
     # Curse
     priority.each do |battler|
       next if !battler.effects[PBEffects::Curse] || !battler.takesIndirectDamage?
+      pbCommonAnimation("Curse", battler)
       battler.pbTakeEffectDamage(battler.totalhp / 4) do |hp_lost|
         pbDisplay(_INTL("{1} is afflicted by the curse!", battler.pbThis))
       end

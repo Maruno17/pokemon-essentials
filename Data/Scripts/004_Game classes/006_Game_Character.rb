@@ -206,11 +206,12 @@ class Game_Character
   end
 
   def bush_depth
+    return 0 if respond_to?("name") && name[/airborne/i]
     return @bush_depth || 0
   end
 
   def calculate_bush_depth
-    if @tile_id > 0 || @always_on_top || jumping?
+    if @tile_id > 0 || @always_on_top || jumping? || (respond_to?("name") && name[/airborne/i])
       @bush_depth = 0
       return
     end

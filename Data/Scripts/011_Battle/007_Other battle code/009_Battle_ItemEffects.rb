@@ -346,7 +346,7 @@ Battle::ItemEffects::HPHeal.add(:MAGOBERRY,
 Battle::ItemEffects::HPHeal.add(:MICLEBERRY,
   proc { |item, battler, battle, forced|
     next false if !forced && !battler.canConsumePinchBerry?
-    next false if !battler.effects[PBEffects::MicleBerry]
+    next false if battler.effects[PBEffects::MicleBerry]
     battle.pbCommonAnimation("EatBerry", battler) if !forced
     battler.effects[PBEffects::MicleBerry] = true
     itemName = GameData::Item.get(item).name

@@ -499,7 +499,7 @@ class Battle::AI::AIBattler
     when :ASPEARBERRY, :CHERIBERRY, :CHESTOBERRY, :PECHABERRY, :RAWSTBERRY
       # Status cure
       cured_status = {
-        :ASPEAR      => :FROZEN,
+        :ASPEARBERRY => :FROZEN,
         :CHERIBERRY  => :PARALYSIS,
         :CHESTOBERRY => :SLEEP,
         :PECHABERRY  => :POISON,
