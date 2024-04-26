@@ -4,7 +4,7 @@
 class Battle::Scene
   ANIMATION_DEFAULTS = [:TACKLE, :DEFENSECURL]   # With target, without target
   ANIMATION_DEFAULTS_FOR_TYPE_CATEGORY = {
-    :NORMAL   => [:TACKLE,       :SONICBOOM,    :DEFENSECURL, :EXPLOSION,  :SWIFT,         :TAILWHIP],
+    :NORMAL   => [:TACKLE,       :SONICBOOM,    :DEFENSECURL, :BODYSLAM,   nil,            :TAILWHIP],
     :FIGHTING => [:MACHPUNCH,    :AURASPHERE,   :BULKUP,      nil,         nil,            nil],
     :FLYING   => [:WINGATTACK,   :GUST,         :ROOST,       nil,         :AIRCUTTER,     :FEATHERDANCE],
     :POISON   => [:POISONSTING,  :SLUDGE,       :ACIDARMOR,   nil,         :ACID,          :POISONPOWDER],
@@ -15,10 +15,10 @@ class Battle::Scene
     :STEEL    => [:IRONHEAD,     :MIRRORSHOT,   :IRONDEFENSE, nil,         nil,            :METALSOUND],
     :FIRE     => [:FIREPUNCH,    :EMBER,        :SUNNYDAY,    nil,         :INCINERATE,    :WILLOWISP],
     :WATER    => [:CRABHAMMER,   :WATERGUN,     :AQUARING,    nil,         :SURF,          :WATERSPORT],
-    :GRASS    => [:VINEWHIP,     :MAGICALLEAF,  :COTTONGUARD, :RAZORLEAF,  nil,            :SPORE],
+    :GRASS    => [:VINEWHIP,     :RAZORLEAF,    :COTTONGUARD, nil,         nil,            :SPORE],
     :ELECTRIC => [:THUNDERPUNCH, :THUNDERSHOCK, :CHARGE,      nil,         :DISCHARGE,     :THUNDERWAVE],
     :PSYCHIC  => [:ZENHEADBUTT,  :CONFUSION,    :CALMMIND,    nil,         :SYNCHRONOISE,  :MIRACLEEYE],
-    :ICE      => [:ICEPUNCH,     :ICEBEAM,      :MIST,        nil,         :POWDERSNOW,    :HAIL],
+    :ICE      => [:ICEPUNCH,     :ICEBEAM,      :MIST,        :AVALANCHE,  :POWDERSNOW,    :HAIL],
     :DRAGON   => [:DRAGONCLAW,   :DRAGONRAGE,   :DRAGONDANCE, nil,         :TWISTER,       nil],
     :DARK     => [:KNOCKOFF,     :DARKPULSE,    :HONECLAWS,   nil,         :SNARL,         :EMBARGO],
     :FAIRY    => [:TACKLE,       :FAIRYWIND,    :MOONLIGHT,   nil,         :DAZZLINGGLEAM, :SWEETKISS]

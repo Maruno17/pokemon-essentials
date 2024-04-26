@@ -71,20 +71,20 @@ class AnimationEditor
   # This list of animations was gathered manually by looking at all instances of
   # pbCommonAnimation.
   COMMON_ANIMATIONS = [
-    "Attract", "BanefulBunker", "BeakBlast", "Bind", "Burn",
-    "Clamp", "Confusion", "CraftyShield", "EatBerry", "ElectricTerrain",
-    "FireSpin", "FocusPunch", "Frozen", "GrassyTerrain", "Hail",
-    "HarshSun", "HealingWish", "HealthDown", "HealthUp", "HeavyRain",
-    "Infestation", "KingsShield", "LeechSeed", "LevelUp", "LunarDance",
-    "MagmaStorm", "MegaEvolution", "MegaEvolution2", "MistyTerrain", "Obstruct",
-    "Octolock", "Paralysis", "ParentalBond", "Poison", "Powder",
-    "PrimalGroudon", "PrimalGroudon2", "PrimalKyogre", "PrimalKyogre2", "Protect",
-    "PsychicTerrain", "QuickGuard", "Rain", "Rainbow", "RainbowOpp",
-    "Sandstorm", "SandTomb", "SeaOfFire", "SeaOfFireOpp", "Shadow",
-    "ShadowSky", "ShellTrap", "Shiny", "Sleep", "SpikyShield",
-    "StatDown", "StatUp", "StrongWinds", "Sun", "SuperShiny",
-    "Swamp", "SwampOpp", "Toxic", "UseItem", "WideGuard",
-    "Wrap"
+    "AquaRing", "Attract", "BanefulBunker", "BeakBlast", "Bind",
+    "Burn", "Clamp", "Confusion", "CraftyShield", "Curse",
+    "EatBerry", "ElectricTerrain", "FireSpin", "FocusPunch", "Frozen",
+    "GrassyTerrain", "Hail", "HarshSun", "HealingWish", "HealthDown",
+    "HealthUp", "HeavyRain", "Infestation", "Ingrain", "KingsShield",
+    "LeechSeed", "LevelUp", "LunarDance", "MagmaStorm", "MegaEvolution",
+    "MegaEvolution2", "MistyTerrain", "Nightmare", "Obstruct", "Octolock",
+    "Paralysis", "ParentalBond", "Poison", "Powder", "PrimalGroudon",
+    "PrimalGroudon2", "PrimalKyogre", "PrimalKyogre2", "Protect", "PsychicTerrain",
+    "QuickGuard", "Rain", "Rainbow", "RainbowOpp", "Sandstorm",
+    "SandTomb", "SeaOfFire", "SeaOfFireOpp", "Shadow", "ShadowSky",
+    "ShellTrap", "Shiny", "Sleep", "SpikyShield", "StatDown",
+    "StatUp", "StrongWinds", "Sun", "SuperShiny", "Swamp",
+    "SwampOpp", "Toxic", "UseItem", "WideGuard", "Wrap"
   ]
   DELETABLE_COMMAND_PANE_PROPERTIES = [
     :x, :y, :z, :frame, :visible, :opacity, :zoom_x, :zoom_y, :angle, :flip, :blending
@@ -368,7 +368,7 @@ class AnimationEditor
     anim_properties.add_labelled_checkbox(:opp_variant, _INTL("User is opposing?"), false)
     anim_properties.add_labelled_text_box_dropdown_list(:move, "", [], "")
     move_ctrl = anim_properties.get_control(:move)
-    move_ctrl.max_rows = 16
+    move_ctrl.max_rows = 18
     anim_properties.add_labelled_number_text_box(:version, _INTL("Version"), 0, 99, 0)
     anim_properties.add_labelled_text_box(:name, _INTL("Name"), "")
     anim_properties.add_labelled_text_box(:pbs_path, _INTL("PBS filepath"), "")
@@ -415,10 +415,10 @@ class AnimationEditor
     editor_settings.add_labelled_dropdown_list(:canvas_bg, _INTL("Background graphic"), {}, "")
     editor_settings.add_labelled_dropdown_list(:user_sprite_name, _INTL("User graphic"), {}, "")
     ctrl = editor_settings.get_control(:user_sprite_name)
-    ctrl.max_rows = 14
+    ctrl.max_rows = 16
     editor_settings.add_labelled_dropdown_list(:target_sprite_name, _INTL("Target graphic"), {}, "")
     ctrl = editor_settings.get_control(:target_sprite_name)
-    ctrl.max_rows = 14
+    ctrl.max_rows = 16
     editor_settings.add_button(:close, _INTL("Close"))
     editor_settings.visible = false
   end
@@ -658,6 +658,7 @@ class AnimationEditor
           next if !hash[:refresh_value]
           hash[:refresh_value].call(component.get_control(property), self)
         end
+        component.repaint
         # Enable/disable property delete buttons
         deletable_properties = AnimationEditor::SidePanes.get_pane(component_sym)[:deletable_properties]
         if deletable_properties

@@ -17,7 +17,7 @@ class AnimationEditor::AnimationSelector
   MOVES_LIST_X              = TYPE_BUTTONS_X + TYPE_BUTTON_WIDTH + 2
   MOVES_LIST_Y              = TYPE_BUTTONS_Y + 2
   MOVES_LIST_WIDTH          = 200 + (UIControls::List::BORDER_THICKNESS * 2)
-  MOVES_LIST_HEIGHT         = (26 * UIControls::List::ROW_HEIGHT) + (UIControls::List::BORDER_THICKNESS * 2)
+  MOVES_LIST_HEIGHT         = (29 * UIControls::List::ROW_HEIGHT) + (UIControls::List::BORDER_THICKNESS * 2)
 
   ANIMATIONS_LIST_X         = MOVES_LIST_X + MOVES_LIST_WIDTH + 4
   ANIMATIONS_LIST_Y         = MOVES_LIST_Y
