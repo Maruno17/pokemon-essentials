@@ -34,6 +34,11 @@ class UIControls::BaseControl < BitmapSprite
     return self.bitmap.height
   end
 
+  def visible=(value)
+    super
+    @captured_area = nil if !self.visible
+  end
+
   #-----------------------------------------------------------------------------
 
   def mouse_pos
@@ -83,7 +88,7 @@ class UIControls::BaseControl < BitmapSprite
   end
 
   def busy?
-    return !@captured_area.nil?
+    return self.visible && !@captured_area.nil?
   end
 
   def changed?

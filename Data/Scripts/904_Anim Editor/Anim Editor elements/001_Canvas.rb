@@ -148,6 +148,14 @@ class AnimationEditor::Canvas < Sprite
     return true
   end
 
+  def show_particle_sprite?(index)
+    return false if index < 0 || index >= @anim[:particles].length
+    particle = @anim[:particles][index]
+    return false if !particle || particle[:name] == "SE"
+    return false if particle[:spawner] && particle[:spawner] != :none
+    return true
+  end
+
   def selected_particle=(val)
     return if @selected_particle == val
     @selected_particle = val
@@ -411,12 +419,11 @@ class AnimationEditor::Canvas < Sprite
   end
 
   def get_sprite_and_frame(index, target_idx = -1)
+    return if !show_particle_sprite?(index)
     spr = nil
     frame = nil
     particle = @anim[:particles][index]
     case particle[:name]
-    when "SE"
-      return
     when "User"
       spr = @battler_sprites[user_index]
       raise _INTL("Sprite for particle {1} not found somehow (battler index {2}).",
@@ -442,7 +449,7 @@ class AnimationEditor::Canvas < Sprite
 
   def refresh_sprite(index, target_idx = -1)
     particle = @anim[:particles][index]
-    return if !particle || particle[:name] == "SE"
+    return if !show_particle_sprite?(index)
     relative_to_index = -1
     if particle[:focus] != :user_and_target
       if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
@@ -519,8 +526,7 @@ class AnimationEditor::Canvas < Sprite
   end
 
   def refresh_particle_frame
-    return if @selected_particle < 0 || @selected_particle >= @anim[:particles].length ||
-              @anim[:particles][@selected_particle][:name] == "SE"
+    return if !show_particle_sprite?(@selected_particle)
     focus = @anim[:particles][@selected_particle][:focus]
     frame_color = AnimationEditor::ParticleList::CONTROL_BG_COLORS[focus] || Color.magenta
     @sel_frame_bitmap.outline_rect(1, 1, @sel_frame_bitmap.width - 2, @sel_frame_bitmap.height - 2, frame_color)
@@ -552,7 +558,7 @@ class AnimationEditor::Canvas < Sprite
       if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
         refresh_particle(i)   # Because there can be multiple targets
       else
-        refresh_sprite(i) if particle[:name] != "SE"
+        refresh_sprite(i) if show_particle_sprite?(i)
       end
     end
     refresh_particle_frame   # Intentionally after refreshing particles
@@ -708,8 +714,7 @@ class AnimationEditor::Canvas < Sprite
   end
 
   def update_selected_particle_frame
-    if @selected_particle < 0 || @selected_particle >= @anim[:particles].length ||
-       @anim[:particles][@selected_particle][:name] == "SE"
+    if !show_particle_sprite?(@selected_particle)
       @sel_frame_sprite.visible = false
       return
     end

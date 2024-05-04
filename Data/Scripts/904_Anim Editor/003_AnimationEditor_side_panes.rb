@@ -524,6 +524,37 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :focus, {
   }
 })
 
+AnimationEditor::SidePanes.add_property(:particle_pane, :random_frame_max, {
+  :new => proc { |pane, editor|
+    pane.add_labelled_number_text_box(:random_frame_max, _INTL("Rand. frame"), 0, 99, 0)
+  }
+})
+
+AnimationEditor::SidePanes.add_property(:particle_pane, :spawner, {
+  :new => proc { |pane, editor|
+    values = {
+      :none                     => _INTL("None"),
+      :random_direction         => _INTL("Random direction"),
+      :random_direction_gravity => _INTL("Random direction gravity")
+    }
+    pane.add_labelled_dropdown_list(:spawner, _INTL("Spawner"), values, :none)
+  }
+})
+
+AnimationEditor::SidePanes.add_property(:particle_pane, :spawn_quantity, {
+  :new => proc { |pane, editor|
+    pane.add_labelled_number_text_box(:spawn_quantity, _INTL("Spawn qty"), 1, 99, 1)
+  },
+  :refresh_value => proc { |control, editor|
+    spawner = editor.anim[:particles][editor.particle_index][:spawner]
+    if !spawner || spawner == :none
+      control.disable
+    else
+      control.enable
+    end
+  }
+})
+
 AnimationEditor::SidePanes.add_property(:particle_pane, :opposing_label, {
   :new => proc { |pane, editor|
     pane.add_label(:opposing_label, _INTL("If on opposing side..."))

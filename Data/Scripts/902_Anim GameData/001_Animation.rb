@@ -44,6 +44,11 @@ module GameData
       "EaseOut"  => :ease_out
     }
     USER_AND_TARGET_SEPARATION = [200, -200, -100]   # x, y, z (from user to target)
+    SPAWNER_TYPES = {
+      "None"                   => :none,
+      "RandomDirection"        => :random_direction,
+      "RandomDirectionGravity" => :random_direction_gravity
+    }
 
     # Properties that apply to the animation in general, not to individual
     # particles. They don't change during the animation.
@@ -62,62 +67,69 @@ module GameData
       # These properties cannot be changed partway through the animation.
       # NOTE: "Name" isn't a property here, because the particle's name comes
       #       from the "Particle" property above.
-      "Graphic"        => [:graphic,      "s"],
-      "Focus"          => [:focus,        "e", FOCUS_TYPES],
-      "FoeInvertX"     => [:foe_invert_x, "b"],
-      "FoeInvertY"     => [:foe_invert_y, "b"],
-      "FoeFlip"        => [:foe_flip,     "b"],
+      "Graphic"        => [:graphic,          "s"],
+      "Focus"          => [:focus,            "e", FOCUS_TYPES],
+      "FoeInvertX"     => [:foe_invert_x,     "b"],
+      "FoeInvertY"     => [:foe_invert_y,     "b"],
+      "FoeFlip"        => [:foe_flip,         "b"],
+      "Spawner"        => [:spawner,          "e", SPAWNER_TYPES],
+      "SpawnQuantity"  => [:spawn_quantity,   "v"],
+      "RandomFrameMax" => [:random_frame_max, "u"],
       # All properties below are "SetXYZ" or "MoveXYZ". "SetXYZ" has the
       # keyframe and the value, and "MoveXYZ" has the keyframe, duration and the
       # value. All have "^" in their schema. "SetXYZ" is turned into "MoveXYZ"
       # when compiling by inserting a duration (second value) of 0.
-      "SetFrame"       => [:frame,        "^uu"],   # Frame within the graphic if it's a spritesheet
-      "MoveFrame"      => [:frame,        "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetBlending"    => [:blending,     "^uu"],   # 0, 1 or 2
-      "SetFlip"        => [:flip,         "^ub"],
-      "SetX"           => [:x,            "^ui"],
-      "MoveX"          => [:x,            "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetY"           => [:y,            "^ui"],
-      "MoveY"          => [:y,            "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetZ"           => [:z,            "^ui"],
-      "MoveZ"          => [:z,            "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetZoomX"       => [:zoom_x,       "^uu"],
-      "MoveZoomX"      => [:zoom_x,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetZoomY"       => [:zoom_y,       "^uu"],
-      "MoveZoomY"      => [:zoom_y,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetAngle"       => [:angle,        "^ui"],
-      "MoveAngle"      => [:angle,        "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetVisible"     => [:visible,      "^ub"],
-      "SetOpacity"     => [:opacity,      "^uu"],
-      "MoveOpacity"    => [:opacity,      "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetColorRed"    => [:color_red,    "^ui"],
-      "MoveColorRed"   => [:color_red,    "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetColorGreen"  => [:color_green,  "^ui"],
-      "MoveColorGreen" => [:color_green,  "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetColorBlue"   => [:color_blue,   "^ui"],
-      "MoveColorBlue"  => [:color_blue,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetColorAlpha"  => [:color_alpha,  "^ui"],
-      "MoveColorAlpha" => [:color_alpha,  "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetToneRed"     => [:tone_red,     "^ui"],
-      "MoveToneRed"    => [:tone_red,     "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetToneGreen"   => [:tone_green,   "^ui"],
-      "MoveToneGreen"  => [:tone_green,   "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetToneBlue"    => [:tone_blue,    "^ui"],
-      "MoveToneBlue"   => [:tone_blue,    "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetToneGray"    => [:tone_gray,    "^ui"],
-      "MoveToneGray"   => [:tone_gray,    "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetFrame"       => [:frame,            "^uu"],   # Frame within the graphic if it's a spritesheet
+      "MoveFrame"      => [:frame,            "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetBlending"    => [:blending,         "^uu"],   # 0, 1 or 2
+      "SetFlip"        => [:flip,             "^ub"],
+      "SetX"           => [:x,                "^ui"],
+      "MoveX"          => [:x,                "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetY"           => [:y,                "^ui"],
+      "MoveY"          => [:y,                "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetZ"           => [:z,                "^ui"],
+      "MoveZ"          => [:z,                "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetZoomX"       => [:zoom_x,           "^uu"],
+      "MoveZoomX"      => [:zoom_x,           "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetZoomY"       => [:zoom_y,           "^uu"],
+      "MoveZoomY"      => [:zoom_y,           "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetAngle"       => [:angle,            "^ui"],
+      "MoveAngle"      => [:angle,            "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetVisible"     => [:visible,          "^ub"],
+      "SetOpacity"     => [:opacity,          "^uu"],
+      "MoveOpacity"    => [:opacity,          "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorRed"    => [:color_red,        "^ui"],
+      "MoveColorRed"   => [:color_red,        "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorGreen"  => [:color_green,      "^ui"],
+      "MoveColorGreen" => [:color_green,      "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorBlue"   => [:color_blue,       "^ui"],
+      "MoveColorBlue"  => [:color_blue,       "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetColorAlpha"  => [:color_alpha,      "^ui"],
+      "MoveColorAlpha" => [:color_alpha,      "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneRed"     => [:tone_red,         "^ui"],
+      "MoveToneRed"    => [:tone_red,         "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneGreen"   => [:tone_green,       "^ui"],
+      "MoveToneGreen"  => [:tone_green,       "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneBlue"    => [:tone_blue,        "^ui"],
+      "MoveToneBlue"   => [:tone_blue,        "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetToneGray"    => [:tone_gray,        "^ui"],
+      "MoveToneGray"   => [:tone_gray,        "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
       # These properties are specifically for the "SE" particle.
-      "Play"           => [:se,          "^usUU"],   # Filename, volume, pitch
-      "PlayUserCry"    => [:user_cry,    "^uUU"],   # Volume, pitch
-      "PlayTargetCry"  => [:target_cry,  "^uUU"]   # Volume, pitch
+      "Play"           => [:se,               "^usUU"],   # Filename, volume, pitch
+      "PlayUserCry"    => [:user_cry,         "^uUU"],   # Volume, pitch
+      "PlayTargetCry"  => [:target_cry,       "^uUU"]   # Volume, pitch
     }
     PARTICLE_DEFAULT_VALUES = {
-      :name         => "",
-      :graphic      => "",
-      :focus        => :foreground,
-      :foe_invert_x => false,
-      :foe_invert_y => false,
-      :foe_flip     => false
+      :name             => "",
+      :graphic          => "",
+      :focus            => :foreground,
+      :foe_invert_x     => false,
+      :foe_invert_y     => false,
+      :foe_flip         => false,
+      :spawner          => :none,
+      :spawn_quantity   => 1,
+      :random_frame_max => 0
+
     }
     # NOTE: Particles are invisible until their first command, and automatically
     #       become visible then. "User" and "Target" are visible from the start,
@@ -315,6 +327,13 @@ module GameData
         # The User and Target particles have hardcoded graphics/foci, so they
         # don't need writing to PBS
         ret = nil if ["User", "Target"].include?(@particles[index][:name])
+      when "Spawner"
+        ret = nil if ret == :none
+      when "SpawnQuantity"
+        ret = nil if @particles[index][:spawner].nil? || @particles[index][:spawner] == :none
+        ret = nil if ret && ret <= 1
+      when "RandomFrameMax"
+        ret = nil if ret == 0
       when "AllCommands"
         # Get translations of all properties to their names as seen in PBS
         # animation files

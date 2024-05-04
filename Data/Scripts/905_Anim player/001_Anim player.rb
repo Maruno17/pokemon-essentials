@@ -82,7 +82,7 @@ class AnimationPlayer
 
   #-----------------------------------------------------------------------------
 
-  def set_up_particle(particle, target_idx = -1)
+  def set_up_particle(particle, target_idx = -1, instance = 0)
     particle_sprite = AnimationPlayer::ParticleSprite.new
     # Get/create a sprite
     sprite = nil
@@ -127,23 +127,25 @@ class AnimationPlayer
       particle_sprite.foe_flip = particle[:foe_flip]
     end
     # Find earliest command and add a "make visible" command then
+    delay = AnimationPlayer::Helper.get_particle_delay(particle, instance)
     if sprite && !particle_sprite.battler_sprite?
-      first_cmd = -1
-      particle.each_pair do |property, cmds|
-        next if !cmds.is_a?(Array) || cmds.empty?
-        cmds.each do |cmd|
-          first_cmd = cmd[0] if first_cmd < 0 || first_cmd > cmd[0]
-        end
+      first_cmd = AnimationPlayer::Helper.get_first_command_frame(particle)
+      particle_sprite.add_set_process(:visible, (first_cmd + delay) * slowdown, true) if first_cmd >= 0
+      # Apply random frame
+      if particle[:random_frame_max] && particle[:random_frame_max] > 0
+        particle_sprite.add_set_process(:frame, (first_cmd + delay) * slowdown, rand(particle[:random_frame_max] + 1))
       end
-      particle_sprite.add_set_process(:visible, first_cmd * slowdown, true) if first_cmd >= 0
     end
     # Add all commands
+    spawner_type = particle[:spawner] || :none
+    regular_properties_skipped = AnimationPlayer::Helper::PROPERTIES_SET_BY_SPAWNER[spawner_type] || []
     particle.each_pair do |property, cmds|
       next if !cmds.is_a?(Array) || cmds.empty?
+      next if regular_properties_skipped.include?(property)
       cmds.each do |cmd|
         if cmd[1] == 0
           if sprite
-            particle_sprite.add_set_process(property, cmd[0] * slowdown, cmd[2])
+            particle_sprite.add_set_process(property, (cmd[0] + delay) * slowdown, cmd[2])
           else
             # SE particle
             filename = nil
@@ -159,31 +161,77 @@ class AnimationPlayer
             else
               filename = "Anim/" + cmd[2]
             end
-            particle_sprite.add_set_process(property, cmd[0] * slowdown, [filename, cmd[3], cmd[4]]) if filename
+            particle_sprite.add_set_process(property, (cmd[0] + delay) * slowdown, [filename, cmd[3], cmd[4]]) if filename
           end
         else
-          particle_sprite.add_move_process(property, cmd[0] * slowdown, cmd[1] * slowdown, cmd[2], cmd[3] || :linear)
+          particle_sprite.add_move_process(property, (cmd[0] + delay) * slowdown, cmd[1] * slowdown, cmd[2], cmd[3] || :linear)
         end
       end
     end
+    # Add spawner commands
+    add_spawner_commands(particle_sprite, particle, instance, delay)
     # Finish up
     @anim_sprites.push(particle_sprite)
+  end
+
+  def add_spawner_commands(particle_sprite, particle, instance, delay)
+    life_start = AnimationPlayer::Helper.get_first_command_frame(particle)
+    life_end = AnimationPlayer::Helper.get_last_command_frame(particle)
+    life_end = AnimationPlayer::Helper.get_duration(particles) if life_end < 0
+    lifetime = life_end - life_start
+    spawner_type = particle[:spawner] || :none
+    case spawner_type
+    when :random_direction, :random_direction_gravity
+      angle = rand(360)
+      angle = rand(360) if angle >= 180 && spawner_type == :random_direction_gravity   # Prefer upwards angles
+      speed = rand(150, 250)
+      start_x_speed = speed * Math.cos(angle * Math::PI / 180)
+      start_y_speed = -speed * Math.sin(angle * Math::PI / 180)
+      start_x = (start_x_speed * 0.05) + rand(-8, 8)
+      start_y = (start_y_speed * 0.05) + rand(-8, 8)
+      # Set initial positions
+      [:x, :y].each do |property|
+        offset = (property == :x) ? start_x : start_y
+        particle[property].each do |cmd|
+          next if cmd[1] > 0
+          particle_sprite.add_set_process(property, (cmd[0] + delay) * slowdown, cmd[2] + offset)
+          break
+        end
+      end
+      # Set movements
+      particle_sprite.add_move_process(:x,
+        (life_start + delay) * slowdown, lifetime * slowdown,
+        start_x + (start_x_speed * lifetime / 20.0), :linear)
+      if spawner_type == :random_direction_gravity
+        particle_sprite.add_move_process(:y,
+          (life_start + delay) * slowdown, lifetime * slowdown,
+          [start_y_speed / slowdown, AnimationPlayer::Helper::GRAVITY_STRENGTH.to_f / (slowdown * slowdown)], :gravity)
+      else
+        particle_sprite.add_move_process(:y,
+          (life_start + delay) * slowdown, lifetime * slowdown,
+          start_y + (start_y_speed * lifetime / 20.0), :linear)
+      end
+    end
   end
 
   # Creates sprites and ParticleSprites, and sets sprite properties that won't
   # change during the animation.
   def set_up
     particles.each do |particle|
-      if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus]) && @targets
-        one_per_side = [:target_side_foreground, :target_side_background].include?(particle[:focus])
-        sides_covered = []
-        @targets.each do |target|
-          next if one_per_side && sides_covered.include?(target.index % 2)
-          set_up_particle(particle, target.index)
-          sides_covered.push(target.index % 2)
+      qty = 1
+      qty = particle[:spawn_quantity] || 1 if particle[:spawner] && particle[:spawner] != :none
+      qty.times do |i|
+        if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus]) && @targets
+          one_per_side = [:target_side_foreground, :target_side_background].include?(particle[:focus])
+          sides_covered = []
+          @targets.each do |target|
+            next if one_per_side && sides_covered.include?(target.index % 2)
+            set_up_particle(particle, target.index, i)
+            sides_covered.push(target.index % 2)
+          end
+        else
+          set_up_particle(particle, -1, i)
         end
-      else
-        set_up_particle(particle)
       end
     end
     reset_anim_sprites

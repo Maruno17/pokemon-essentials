@@ -2,6 +2,11 @@
 # Methods used by both AnimationPlayer and AnimationEditor::Canvas.
 #===============================================================================
 module AnimationPlayer::Helper
+  PROPERTIES_SET_BY_SPAWNER = {
+      :random_direction         => [:x, :y],
+      :random_direction_gravity => [:x, :y]
+  }
+  GRAVITY_STRENGTH = 300
   BATTLE_MESSAGE_BAR_HEIGHT = 96   # NOTE: You shouldn't need to change this.
 
   module_function
@@ -17,6 +22,39 @@ module AnimationPlayer::Helper
       end
     end
     return ret
+  end
+
+  # Returns the frame that the particle has its earliest command.
+  def get_first_command_frame(particle)
+    ret = -1
+    particle.each_pair do |property, cmds|
+      next if !cmds.is_a?(Array) || cmds.empty?
+      cmds.each do |cmd|
+        ret = cmd[0] if ret < 0 || ret > cmd[0]
+      end
+    end
+    return (ret >= 0) ? ret : 0
+  end
+
+  # Returns the frame that the particle has (the end of) its latest command.
+  def get_last_command_frame(particle)
+    ret = -1
+    particle.each_pair do |property, cmds|
+      next if !cmds.is_a?(Array) || cmds.empty?
+      cmds.each do |cmd|
+        ret = cmd[0] + cmd[1] if ret < cmd[0] + cmd[1]
+      end
+    end
+    return ret
+  end
+
+  # For spawner particles
+  def get_particle_delay(particle, instance)
+    case particle[:spawner] || :none
+    when :random_direction, :random_direction_gravity
+      return instance / 4
+    end
+    return 0
   end
 
   #-----------------------------------------------------------------------------
@@ -199,6 +237,12 @@ module AnimationPlayer::Helper
       else
         ret += (end_val - start_val) * (1 - (((-2 * x) + 2) * ((-2 * x) + 2) / 2))
       end
+      return ret.round
+    when :gravity   # Used by particle spawner
+      # end_val is [initial speed, gravity]
+      # s = ut + 1/2 at^2
+      t = now - start_time
+      ret = start_val + (end_val[0] * t) + (end_val[1] * t * t / 2)
       return ret.round
     end
     raise _INTL("Unknown interpolation method {1}.", interpolation)
