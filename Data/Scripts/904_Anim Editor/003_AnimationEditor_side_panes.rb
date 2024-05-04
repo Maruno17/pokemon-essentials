@@ -533,9 +533,10 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :random_frame_max, {
 AnimationEditor::SidePanes.add_property(:particle_pane, :spawner, {
   :new => proc { |pane, editor|
     values = {
-      :none                     => _INTL("None"),
-      :random_direction         => _INTL("Random direction"),
-      :random_direction_gravity => _INTL("Random direction gravity")
+      :none                        => _INTL("None"),
+      :random_direction            => _INTL("Random direction"),
+      :random_direction_gravity    => _INTL("Random dir. with gravity"),
+      :random_up_direction_gravity => _INTL("Random up dir. gravity")
     }
     pane.add_labelled_dropdown_list(:spawner, _INTL("Spawner"), values, :none)
   }
@@ -552,6 +553,12 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :spawn_quantity, {
     else
       control.enable
     end
+  },
+  :apply_value => proc { |value, editor|
+    AnimationEditor::SidePanes.get_pane(:particle_pane)[:apply_value].call(:spawn_quantity, value, editor)
+    editor.components[:particle_list].change_particle_commands(editor.particle_index)
+    editor.components[:play_controls].duration = editor.components[:particle_list].duration
+    editor.refresh
   }
 })
 

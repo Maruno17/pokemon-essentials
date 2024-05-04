@@ -45,9 +45,10 @@ module GameData
     }
     USER_AND_TARGET_SEPARATION = [200, -200, -100]   # x, y, z (from user to target)
     SPAWNER_TYPES = {
-      "None"                   => :none,
-      "RandomDirection"        => :random_direction,
-      "RandomDirectionGravity" => :random_direction_gravity
+      "None"                     => :none,
+      "RandomDirection"          => :random_direction,
+      "RandomDirectionGravity"   => :random_direction_gravity,
+      "RandomUpDirectionGravity" => :random_up_direction_gravity
     }
 
     # Properties that apply to the animation in general, not to individual

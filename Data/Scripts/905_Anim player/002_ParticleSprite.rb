@@ -49,6 +49,10 @@ class AnimationPlayer::ParticleSprite
     @processes.push([property, start_frame, duration, value, interpolation, nil, nil])
   end
 
+  def delete_processes(property)
+    @processes.delete_if { |process| process[0] == property }
+  end
+
   # Sets sprite's initial For looping purposes.
   def reset_processes
     initialize_values

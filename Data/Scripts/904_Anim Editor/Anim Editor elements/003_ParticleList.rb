@@ -518,7 +518,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     end
     sprites_need_changing = ensure_sprites
     if @duration != old_duration || sprites_need_changing
-      @keyframe = @keyframe.clamp(0, @duration - 1)
+      @keyframe = @keyframe.clamp(-1, @duration - 1)
       @row_index = @row_index.clamp(0, @particle_list.length - 1)
       create_sprites
     end
@@ -737,7 +737,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     each_visible_keyframe do |i|
       draw_x = TIMELINE_LEFT_BUFFER + (i * KEYFRAME_SPACING) - @left_pos
       # Draw bg
-      if i < @duration - DURATION_BUFFER && visible_cmds[i]
+      if i < @duration - DURATION_BUFFER && visible_cmds[i] == 1
         bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING, KEYFRAME_SPACING, ROW_HEIGHT - ROW_SPACING, bg_color)
       end
       # Draw hover highlight
@@ -772,19 +772,39 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         end
       end
       next if i >= @duration - DURATION_BUFFER
-      next if !visible_cmds[i]
-      # Draw outline
       outline_color = Color.black
-      if is_property
-        outline_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
-      end
-      bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING, KEYFRAME_SPACING, 1, outline_color)   # Top
-      bg_spr.bitmap.fill_rect(draw_x, ROW_HEIGHT - 1, KEYFRAME_SPACING, 1, outline_color)   # Bottom
-      if i <= 0 || !visible_cmds[i - 1]
-        bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING, 1, ROW_HEIGHT - ROW_SPACING, outline_color)   # Left
-      end
-      if i == @duration - DURATION_BUFFER - 1 || (i < @duration - 1 && !visible_cmds[i + 1])
-        bg_spr.bitmap.fill_rect(draw_x + KEYFRAME_SPACING, ROW_SPACING, 1, ROW_HEIGHT - ROW_SPACING, outline_color)   # Right
+      case visible_cmds[i]
+      when 1   # Particle is visible
+        # Draw outline
+        if is_property
+          outline_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
+        end
+        bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING, KEYFRAME_SPACING, 1, outline_color)   # Top
+        bg_spr.bitmap.fill_rect(draw_x, ROW_HEIGHT - 1, KEYFRAME_SPACING, 1, outline_color)   # Bottom
+        if i <= 0 || visible_cmds[i - 1] != 1
+          bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING, 1, ROW_HEIGHT - ROW_SPACING, outline_color)   # Left
+        end
+        if i == @duration - DURATION_BUFFER - 1 || (i < @duration - 1 && visible_cmds[i + 1] != 1)
+          bg_spr.bitmap.fill_rect(draw_x + KEYFRAME_SPACING, ROW_SPACING, 1, ROW_HEIGHT - ROW_SPACING, outline_color)   # Right
+        end
+      when 2   # Particle is a spawner and delays its particles into this frame
+        if !is_property
+          # Draw dotted outline
+          KEYFRAME_SPACING.times do |j|
+            next if j.odd?
+            bg_spr.bitmap.fill_rect(draw_x + j, ROW_SPACING, 1, 1, outline_color)   # Top
+            bg_spr.bitmap.fill_rect(draw_x + j, ROW_HEIGHT - 1, 1, 1, outline_color)   # Bottom
+          end
+          (ROW_HEIGHT - ROW_SPACING).times do |j|
+            next if j.odd?
+            if i <= 0 || visible_cmds[i - 1] != 2
+              bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING + j, 1, 1, outline_color)   # Left
+            end
+            if i == @duration - DURATION_BUFFER - 1 || (i < @duration - 1 && visible_cmds[i + 1] != 2)
+              bg_spr.bitmap.fill_rect(draw_x + KEYFRAME_SPACING, ROW_SPACING + j, 1, 1, outline_color)   # Right
+            end
+          end
+        end
       end
     end
   end
@@ -1027,7 +1047,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   def update_input
     # Left/right to change current keyframe
     if Input.triggerex?(:LEFT) || Input.repeatex?(:LEFT)
-      if @keyframe > 0
+      if @keyframe >= 0
         @keyframe -= 1
         scroll_to_keyframe(@keyframe)
         set_changed

@@ -21,6 +21,7 @@ class AnimationPlayer
     @slowdown = 1
     @timer_start = nil
     @anim_sprites = []   # Each is a ParticleSprite
+    @spawner_sprites = []
     @duration = total_duration
   end
 
@@ -168,41 +169,49 @@ class AnimationPlayer
         end
       end
     end
-    # Add spawner commands
-    add_spawner_commands(particle_sprite, particle, instance, delay)
     # Finish up
     @anim_sprites.push(particle_sprite)
+    @spawner_sprites.push([particle_sprite, particle, target_idx, instance, delay]) if spawner_type != :none
   end
 
-  def add_spawner_commands(particle_sprite, particle, instance, delay)
+  def add_spawner_commands(particle_sprite, particle, target_idx, instance, delay, add_as_spawner = true)
+    spawner_type = particle[:spawner] || :none
+    return if spawner_type == :none
+    @spawner_sprites.push([particle_sprite, particle, target_idx, instance, delay]) if add_as_spawner
     life_start = AnimationPlayer::Helper.get_first_command_frame(particle)
     life_end = AnimationPlayer::Helper.get_last_command_frame(particle)
     life_end = AnimationPlayer::Helper.get_duration(particles) if life_end < 0
     lifetime = life_end - life_start
-    spawner_type = particle[:spawner] || :none
     case spawner_type
-    when :random_direction, :random_direction_gravity
-      angle = rand(360)
-      angle = rand(360) if angle >= 180 && spawner_type == :random_direction_gravity   # Prefer upwards angles
-      speed = rand(150, 250)
+    when :random_direction, :random_direction_gravity, :random_up_direction_gravity
+      if spawner_type == :random_up_direction_gravity
+        angle = 30 + rand(120)
+      else
+        angle = rand(360)
+        angle = rand(360) if angle >= 180 && spawner_type == :random_direction_gravity   # Prefer upwards angles
+      end
+      speed = rand(200, 400)
       start_x_speed = speed * Math.cos(angle * Math::PI / 180)
       start_y_speed = -speed * Math.sin(angle * Math::PI / 180)
       start_x = (start_x_speed * 0.05) + rand(-8, 8)
       start_y = (start_y_speed * 0.05) + rand(-8, 8)
       # Set initial positions
       [:x, :y].each do |property|
-        offset = (property == :x) ? start_x : start_y
-        particle[property].each do |cmd|
-          next if cmd[1] > 0
-          particle_sprite.add_set_process(property, (cmd[0] + delay) * slowdown, cmd[2] + offset)
-          break
+        particle_sprite.delete_processes(property)
+        if particle[property] && !particle[property].empty?
+          offset = (property == :x) ? start_x : start_y
+          particle[property].each do |cmd|
+            next if cmd[1] > 0
+            particle_sprite.add_set_process(property, (cmd[0] + delay) * slowdown, cmd[2] + offset)
+            break
+          end
         end
       end
       # Set movements
       particle_sprite.add_move_process(:x,
         (life_start + delay) * slowdown, lifetime * slowdown,
         start_x + (start_x_speed * lifetime / 20.0), :linear)
-      if spawner_type == :random_direction_gravity
+      if [:random_direction_gravity, :random_up_direction_gravity].include?(spawner_type)
         particle_sprite.add_move_process(:y,
           (life_start + delay) * slowdown, lifetime * slowdown,
           [start_y_speed / slowdown, AnimationPlayer::Helper::GRAVITY_STRENGTH.to_f / (slowdown * slowdown)], :gravity)
@@ -241,6 +250,8 @@ class AnimationPlayer
   # yet started.
   def reset_anim_sprites
     @anim_sprites.each { |particle| particle.reset_processes }
+    # Randomise spawner particle properties
+    @spawner_sprites.each { |spawner| add_spawner_commands(*spawner, false) }
   end
 
   #-----------------------------------------------------------------------------

@@ -64,7 +64,8 @@ module AnimationEditor::ParticleDataHelper
   end
 
   # Used to determine which keyframes the particle is visible in, which is
-  # indicated in the timeline by a coloured bar.
+  # indicated in the timeline by a coloured bar. 0=not visible, 1=visible,
+  # 2=visible because of spawner delay.
   # NOTE: Particles are assumed to be not visible at the start of the
   #       animation, and automatically become visible when the particle has
   #       its first command. This does not apply to the "User" and "Target"
@@ -75,8 +76,8 @@ module AnimationEditor::ParticleDataHelper
       raise _INTL("Couldn't get default value for property {1} for particle {2}.",
                   property, particle[:name])
     end
-    value = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[:visible]
-    value = true if ["User", "Target", "SE"].include?(particle[:name])
+    value = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[:visible] ? 1 : 0
+    value = 1 if ["User", "Target", "SE"].include?(particle[:name])
     ret = []
     if !["User", "Target", "SE"].include?(particle[:name])
       earliest = duration
@@ -84,14 +85,30 @@ module AnimationEditor::ParticleDataHelper
         next if !value.is_a?(Array) || value.empty?
         earliest = value[0][0] if earliest > value[0][0]
       end
-      ret[earliest] = true
+      ret[earliest] = 1
     end
     if particle[:visible]
-      particle[:visible].each { |cmd| ret[cmd[0]] = cmd[2] }
+      particle[:visible].each { |cmd| ret[cmd[0]] = (cmd[2]) ? 1 : 0 }
     end
     duration.times do |i|
       value = ret[i] if !ret[i].nil?
       ret[i] = value
+    end
+    qty = particle[:spawn_quantity] || 1 if particle[:spawner] && particle[:spawner] != :none
+    if (particle[:spawner] || :none) != :none
+      qty = particle[:spawn_quantity] || 1
+      delay = AnimationPlayer::Helper.get_particle_delay(particle, qty - 1)
+      if delay > 0
+        count = -1
+        duration.times do |i|
+          if ret[i] == 1   # Visible
+            count = 0
+          elsif ret[i] == 0 && count >= 0 && count < delay   # Not visible and within delay
+            ret[i] = 2
+            count += 1
+          end
+        end
+      end
     end
     return ret
   end

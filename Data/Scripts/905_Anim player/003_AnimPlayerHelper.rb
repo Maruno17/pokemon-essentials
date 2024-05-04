@@ -3,10 +3,11 @@
 #===============================================================================
 module AnimationPlayer::Helper
   PROPERTIES_SET_BY_SPAWNER = {
-      :random_direction         => [:x, :y],
-      :random_direction_gravity => [:x, :y]
+    :random_direction            => [:x, :y],
+    :random_direction_gravity    => [:x, :y],
+    :random_up_direction_gravity => [:x, :y]
   }
-  GRAVITY_STRENGTH = 300
+  GRAVITY_STRENGTH = 500
   BATTLE_MESSAGE_BAR_HEIGHT = 96   # NOTE: You shouldn't need to change this.
 
   module_function
@@ -18,6 +19,10 @@ module AnimationPlayer::Helper
       particle.each_pair do |property, value|
         next if !value.is_a?(Array) || value.empty?
         max = value.last[0] + value.last[1]   # Keyframe + duration
+        # Particle spawners can delay their particles; account for this
+        if (particle[:spawner] || :none) != :none
+          max += get_particle_delay(particle, (particle[:spawn_quantity] || 1) - 1)
+        end
         ret = max if ret < max
       end
     end
@@ -51,7 +56,7 @@ module AnimationPlayer::Helper
   # For spawner particles
   def get_particle_delay(particle, instance)
     case particle[:spawner] || :none
-    when :random_direction, :random_direction_gravity
+    when :random_direction, :random_direction_gravity, :random_up_direction_gravity
       return instance / 4
     end
     return 0
