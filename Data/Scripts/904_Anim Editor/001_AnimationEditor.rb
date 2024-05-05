@@ -9,6 +9,8 @@ class AnimationEditor
   BORDER_THICKNESS = 4
   WINDOW_WIDTH     = Settings::SCREEN_WIDTH + 352 + (BORDER_THICKNESS * 4)
   WINDOW_HEIGHT    = Settings::SCREEN_HEIGHT + 424 + (BORDER_THICKNESS * 4)
+  WINDOW_HEIGHT    = [WINDOW_HEIGHT, Graphics.display_height - 100].min
+  WINDOW_HEIGHT    = [WINDOW_HEIGHT, Settings::SCREEN_HEIGHT + 266 + (BORDER_THICKNESS * 4)].max
 
   # Components
   MENU_BAR_WIDTH  = WINDOW_WIDTH
