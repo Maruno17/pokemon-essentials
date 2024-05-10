@@ -50,6 +50,11 @@ module GameData
       "RandomDirectionGravity"   => :random_direction_gravity,
       "RandomUpDirectionGravity" => :random_up_direction_gravity
     }
+    ANGLE_OVERRIDES = {
+      "None"                => :none,
+      "InitialAngleToFocus" => :initial_angle_to_focus,
+      "AlwaysPointAtFocus"  => :always_point_at_focus
+    }
 
     # Properties that apply to the animation in general, not to individual
     # particles. They don't change during the animation.
@@ -76,6 +81,7 @@ module GameData
       "Spawner"        => [:spawner,          "e", SPAWNER_TYPES],
       "SpawnQuantity"  => [:spawn_quantity,   "v"],
       "RandomFrameMax" => [:random_frame_max, "u"],
+      "AngleOverride"  => [:angle_override,   "e", ANGLE_OVERRIDES],
       # All properties below are "SetXYZ" or "MoveXYZ". "SetXYZ" has the
       # keyframe and the value, and "MoveXYZ" has the keyframe, duration and the
       # value. All have "^" in their schema. "SetXYZ" is turned into "MoveXYZ"
@@ -129,7 +135,8 @@ module GameData
       :foe_flip         => false,
       :spawner          => :none,
       :spawn_quantity   => 1,
-      :random_frame_max => 0
+      :random_frame_max => 0,
+      :angle_override   => :none
 
     }
     # NOTE: Particles are invisible until their first command, and automatically
@@ -335,6 +342,10 @@ module GameData
         ret = nil if ret && ret <= 1
       when "RandomFrameMax"
         ret = nil if ret == 0
+      when "AngleOverride"
+        ret = nil if ret == :none
+        ret = nil if !FOCUS_TYPES_WITH_USER.include?(@particles[index][:focus]) &&
+                     !FOCUS_TYPES_WITH_TARGET.include?(@particles[index][:focus])
       when "AllCommands"
         # Get translations of all properties to their names as seen in PBS
         # animation files

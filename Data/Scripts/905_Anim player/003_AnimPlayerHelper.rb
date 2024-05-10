@@ -77,7 +77,7 @@ module AnimationPlayer::Helper
     when :user_side_foreground, :user_side_background
       ret = [Battle::Scene.pbBattlerPosition(user_index)]
     when :target_side_foreground, :target_side_background
-      ret = [Battle::Scene.pbBattlerPosition(target_idx)]
+      ret = [Battle::Scene.pbBattlerPosition(target_index)]
     end
     return ret
   end
@@ -164,6 +164,48 @@ module AnimationPlayer::Helper
     else
       sprite.z = z
     end
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def angle_between(x1, y1, x2, y2)
+    diff_x = x1 - x2
+    diff_y = y1 - y2
+    ret = Math.atan(diff_x.to_f / diff_y) * 180 / Math::PI
+    ret += 180 if diff_y < 0
+    return ret
+  end
+
+  def initial_angle_between(particle, focus, offset)
+    x1 = 0
+    y1 = 0
+    x2 = (focus.length == 2) ? focus[1][0] : focus[0][0]
+    y2 = (focus.length == 2) ? focus[1][1] : focus[0][1]
+    [:x, :y].each do |property|
+      next if !particle[property]
+      particle[property].each do |cmd|
+        break if cmd[1] > 0
+        if property == :x
+          x1 = cmd[2]
+        else
+          y1 = cmd[2]
+        end
+        break
+      end
+    end
+    if focus
+      if focus.length == 2
+        distance = GameData::Animation::USER_AND_TARGET_SEPARATION
+        x1 = focus[0][0] + ((x1.to_f / distance[0]) * (focus[1][0] - focus[0][0])).to_i
+        y1 = focus[0][1] + ((y1.to_f / distance[1]) * (focus[1][1] - focus[0][1])).to_i
+      else
+        x1 += focus[0][0]
+        y1 += focus[0][1]
+      end
+    end
+    x1 += offset[0]
+    y1 += offset[1]
+    return angle_between(x1, y1, x2, y2)
   end
 
   #-----------------------------------------------------------------------------

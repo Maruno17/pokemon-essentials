@@ -5,6 +5,7 @@
 class AnimationPlayer::ParticleSprite
   attr_accessor :sprite
   attr_accessor :focus_xy, :offset_xy, :focus_z
+  attr_accessor :base_angle, :angle_override
   attr_accessor :foe_invert_x, :foe_invert_y, :foe_flip
 
   FRAMES_PER_SECOND = 20.0
@@ -109,16 +110,24 @@ class AnimationPlayer::ParticleSprite
       value *= -1 if @foe_invert_x
       AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite, :x, value, @focus_xy)
       @sprite.x += @offset_xy[0]
+      update_angle_pointing_at_focus
     when :y
       value = value.round
       value *= -1 if @foe_invert_y
       AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite, :y, value, @focus_xy)
       @sprite.y += @offset_xy[1]
+      update_angle_pointing_at_focus
     when :z
       AnimationPlayer::Helper.apply_z_focus_to_sprite(@sprite, value, @focus_z)
     when :zoom_x      then @sprite.zoom_x = value / 100.0
     when :zoom_y      then @sprite.zoom_y = value / 100.0
-    when :angle       then @sprite.angle = value
+    when :angle
+      if @angle_override == :always_point_at_focus
+        update_angle_pointing_at_focus
+        @sprite.angle += value
+      else
+        @sprite.angle = value + (@base_angle || 0)
+      end
     when :visible     then @sprite.visible = value
     when :opacity     then @sprite.opacity = value
     when :color_red   then @sprite.color.red = value
@@ -130,6 +139,21 @@ class AnimationPlayer::ParticleSprite
     when :tone_blue   then @sprite.tone.blue = value
     when :tone_gray   then @sprite.tone.gray = value
     end
+  end
+
+  # This assumes vertically up is an angle of 0, and the angle increases
+  # anticlockwise.
+  def update_angle_pointing_at_focus
+    return if @angle_override != :always_point_at_focus
+    # Get coordinates
+    sprite_x = @sprite.x
+    sprite_y = @sprite.y
+    target_x = (@focus_xy.length == 2) ? @focus_xy[1][0] : @focus_xy[0][0]
+    target_x += @offset_xy[0]
+    target_y = (@focus_xy.length == 2) ? @focus_xy[1][1] : @focus_xy[0][1]
+    target_y += @offset_xy[1]
+    @sprite.angle = AnimationPlayer::Helper.angle_between(sprite_x, sprite_y, target_x, target_y)
+    @sprite.angle += (@base_angle || 0)
   end
 
   def update(elapsed_time)

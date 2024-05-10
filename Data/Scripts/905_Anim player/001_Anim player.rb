@@ -127,6 +127,17 @@ class AnimationPlayer
       particle_sprite.foe_invert_y = particle[:foe_invert_y]
       particle_sprite.foe_flip = particle[:foe_flip]
     end
+    particle_sprite.base_angle = 0
+    case particle[:angle_override]
+    when :initial_angle_to_focus
+      target_x = (focus_xy.length == 2) ? focus_xy[1][0] : focus_xy[0][0]
+      target_x += offset_xy[0]
+      target_y = (focus_xy.length == 2) ? focus_xy[1][1] : focus_xy[0][1]
+      target_y += offset_xy[1]
+      particle_sprite.base_angle = AnimationPlayer::Helper.initial_angle_between(particle, focus_xy, offset_xy)
+    when :always_point_at_focus
+      particle_sprite.angle_override = particle[:angle_override] if relative_to_index >= 0
+    end
     # Find earliest command and add a "make visible" command then
     delay = AnimationPlayer::Helper.get_particle_delay(particle, instance)
     if sprite && !particle_sprite.battler_sprite?

@@ -497,7 +497,23 @@ class AnimationEditor::Canvas < Sprite
     # Set various other properties
     spr.zoom_x = values[:zoom_x] / 100.0
     spr.zoom_y = values[:zoom_y] / 100.0
-    spr.angle = values[:angle]
+    case particle[:angle_override]
+    when :initial_angle_to_focus
+      target_x = (focus_xy.length == 2) ? focus_xy[1][0] : focus_xy[0][0]
+      target_x += offset_xy[0]
+      target_y = (focus_xy.length == 2) ? focus_xy[1][1] : focus_xy[0][1]
+      target_y += offset_xy[1]
+      spr.angle = AnimationPlayer::Helper.initial_angle_between(particle, focus_xy, offset_xy)
+    when :always_point_at_focus
+      target_x = (focus_xy.length == 2) ? focus_xy[1][0] : focus_xy[0][0]
+      target_x += offset_xy[0]
+      target_y = (focus_xy.length == 2) ? focus_xy[1][1] : focus_xy[0][1]
+      target_y += offset_xy[1]
+      spr.angle = AnimationPlayer::Helper.angle_between(spr.x, spr.y, target_x, target_y)
+    else
+      spr.angle = 0
+    end
+    spr.angle += values[:angle]
     spr.mirror = values[:flip]
     spr.mirror = !spr.mirror if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_flip]
     spr.blend_type = values[:blending]

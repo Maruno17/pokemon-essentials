@@ -562,6 +562,28 @@ AnimationEditor::SidePanes.add_property(:particle_pane, :spawn_quantity, {
   }
 })
 
+AnimationEditor::SidePanes.add_property(:particle_pane, :angle_override, {
+  :new => proc { |pane, editor|
+    values = {
+      :none                   => _INTL("None"),
+      :initial_angle_to_focus => _INTL("Initial angle to focus"),
+      :always_point_at_focus  => _INTL("Always point at focus")
+    }
+    pane.add_labelled_dropdown_list(:angle_override, _INTL("Smart angle"), values, :none)
+  },
+  :refresh_value => proc { |control, editor|
+    focus = editor.anim[:particles][editor.particle_index][:focus]
+    if !GameData::Animation::FOCUS_TYPES_WITH_USER.include?(focus) &&
+       !GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(focus)
+      editor.anim[:particles][editor.particle_index][:angle_override] = :none
+      control.value = :none
+      control.disable
+    else
+      control.enable
+    end
+  }
+})
+
 AnimationEditor::SidePanes.add_property(:particle_pane, :opposing_label, {
   :new => proc { |pane, editor|
     pane.add_label(:opposing_label, _INTL("If on opposing side..."))

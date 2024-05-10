@@ -1,0 +1,84 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,TWINEEDLE]
+Name = Essentials
+<User>
+    FoeInvertX = true
+    FoeInvertY = true
+    MoveX = 0,1,28
+    MoveY = 0,1,-16
+    MoveX = 3,1,0
+    MoveY = 3,1,0
+<Target>
+    FoeInvertX = true
+    MoveX = 9,1,-2
+    MoveColorRed = 9,8,160
+    MoveColorGreen = 9,8,32
+    MoveColorBlue = 9,8,248
+    MoveColorAlpha = 9,8,160
+    MoveX = 10,2,2
+    MoveX = 12,2,-2
+    MoveX = 14,2,2
+    MoveX = 16,1,0
+    MoveColorRed = 19,6,0
+    MoveColorGreen = 19,6,0
+    MoveColorBlue = 19,6,0
+    MoveColorAlpha = 19,6,0
+<Needle 1>
+    Graphic = Bug/Twineedle needle
+    Focus = UserAndTarget
+    AngleOverride = InitialAngleToFocus
+    SetZ = 4,-50
+    SetZoomX = 4,50
+    SetZoomY = 4,80
+    SetColorRed = 4,160
+    SetColorGreen = 4,32
+    SetColorBlue = 4,192
+    SetColorAlpha = 4,128
+    MoveX = 4,7,200
+    MoveY = 4,7,-180
+    SetVisible = 11,false
+<Hit 1>
+    Graphic = Bug/Twineedle hit
+    Focus = Target
+    SetY = 11,16
+    SetZ = 11,10
+    SetZoomX = 11,0
+    SetZoomY = 11,0
+    MoveZoomX = 11,3,50
+    MoveZoomY = 11,3,50
+    SetColorRed = 13,248
+    SetColorBlue = 13,248
+    SetColorAlpha = 13,255
+    MoveOpacity = 13,3,0
+    SetVisible = 16,false
+<Needle 2>
+    Graphic = Bug/Twineedle needle
+    Focus = UserAndTarget
+    AngleOverride = InitialAngleToFocus
+    SetZ = 7,-50
+    SetZoomX = 7,50
+    SetZoomY = 7,80
+    SetColorRed = 7,160
+    SetColorGreen = 7,32
+    SetColorBlue = 7,192
+    SetColorAlpha = 7,128
+    MoveX = 7,6,200
+    MoveY = 7,6,-200
+    SetVisible = 13,false
+<Hit 2>
+    Graphic = Bug/Twineedle hit
+    Focus = Target
+    SetX = 13,-8
+    SetZ = 13,10
+    SetZoomX = 13,0
+    SetZoomY = 13,0
+    MoveZoomX = 13,3,50
+    MoveZoomY = 13,3,50
+    SetColorRed = 15,248
+    SetColorBlue = 15,248
+    SetColorAlpha = 15,255
+    MoveOpacity = 15,3,0
+    SetVisible = 18,false
+<SE>
+    Play = 0,Bug/Twineedle

@@ -1,0 +1,107 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MACHPUNCH]
+Name = Essentials
+NoUser = true
+<Target>
+    FoeInvertX = true
+    MoveX = 14,1,-2
+    MoveX = 15,2,2
+    MoveX = 17,2,-2
+    MoveX = 19,2,2
+    MoveX = 21,1,0
+<Fist>
+    Graphic = Fighting/Mach Punch fist
+    Focus = Target
+    SetZ = 0,30
+    SetZoomX = 0,600
+    SetZoomY = 0,600
+    MoveZoomX = 0,4,150
+    MoveZoomY = 0,4,150
+    MoveAngle = 0,4,30
+    SetVisible = 4,false
+<Fist afterimage 1>
+    Graphic = Fighting/Mach Punch fist
+    Focus = Target
+    SetZ = 0,15
+    SetZoomX = 0,600
+    SetZoomY = 0,600
+    SetColorRed = 0,192
+    SetColorBlue = 0,128
+    SetColorAlpha = 0,128
+    MoveZoomX = 0,5,500
+    MoveZoomY = 0,5,500
+    MoveOpacity = 0,5,0
+    MoveColorRed = 0,5,0
+    MoveColorBlue = 0,5,0
+    SetVisible = 5,false
+<Fist afterimage 2>
+    Graphic = Fighting/Mach Punch fist
+    Focus = Target
+    SetZ = 0,20
+    SetZoomX = 0,450
+    SetZoomY = 0,450
+    SetColorRed = 0,144
+    SetColorBlue = 0,96
+    SetColorAlpha = 0,128
+    MoveZoomX = 0,7,325
+    MoveZoomY = 0,7,325
+    MoveOpacity = 0,7,0
+    MoveColorRed = 1,6,0
+    MoveColorBlue = 1,6,0
+    SetVisible = 7,false
+<Fist afterimage 3>
+    Graphic = Fighting/Mach Punch fist
+    Focus = Target
+    SetZ = 0,25
+    SetZoomX = 0,300
+    SetZoomY = 0,300
+    SetColorRed = 0,96
+    SetColorBlue = 0,64
+    SetColorAlpha = 0,128
+    MoveZoomX = 0,8,150
+    MoveZoomY = 0,8,150
+    MoveOpacity = 0,8,0
+    MoveColorRed = 2,6,0
+    MoveColorBlue = 2,6,0
+    SetVisible = 8,false
+<Hit flash blue>
+    Graphic = Fighting/Mach Punch hit
+    Focus = Target
+    SetZ = 4,5
+    SetZoomX = 4,60
+    SetZoomY = 4,60
+    SetColorRed = 4,128
+    SetColorGreen = 4,128
+    SetColorBlue = 4,248
+    SetColorAlpha = 4,128
+    MoveZoomX = 4,4,150
+    MoveZoomY = 4,4,150
+    MoveOpacity = 6,2,0
+    SetVisible = 8,false
+<Hit flash white>
+    Graphic = Fighting/Mach Punch hit
+    Focus = Target
+    SetZ = 4,10
+    SetZoomX = 4,50
+    SetZoomY = 4,50
+    MoveZoomX = 4,4,130
+    MoveZoomY = 4,4,130
+    MoveOpacity = 6,2,0
+    SetVisible = 8,false
+<Spark spawner>
+    Graphic = Fighting/Mach Punch spark
+    Focus = Target
+    Spawner = RandomDirection
+    SpawnQuantity = 12
+    SetZ = 5,4
+    SetZoomX = 5,50
+    SetZoomY = 5,50
+    SetOpacity = 5,0
+    MoveOpacity = 5,1,255
+    SetFrame = 7,1
+    MoveZoomX = 9,6,0
+    MoveZoomY = 9,6,0
+    SetVisible = 15,false
+<SE>
+    Play = 0,Fighting/Mach Punch
