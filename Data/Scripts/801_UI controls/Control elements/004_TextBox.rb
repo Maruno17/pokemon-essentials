@@ -167,7 +167,7 @@ class UIControls::TextBox < UIControls::BaseControl
     return if !@cursor_shown || @cursor_pos < 0
     cursor_y_offset = ((height - TEXT_BOX_HEIGHT) / 2) + 2
     cursor_height = height - (cursor_y_offset * 2)
-    bitmap.fill_rect(cursor_x, cursor_y_offset, 2, cursor_height, self.bitmap.font.color)
+    bitmap.fill_rect(cursor_x, cursor_y_offset, 2, cursor_height, text_color)
   end
 
   def refresh
@@ -176,12 +176,12 @@ class UIControls::TextBox < UIControls::BaseControl
     if disabled?
       self.bitmap.fill_rect(@text_box_rect.x, @text_box_rect.y,
                             @text_box_rect.width, @text_box_rect.height,
-                            DISABLED_COLOR)
+                            disabled_fill_color)
     end
     # Draw text box outline
     self.bitmap.outline_rect(@text_box_rect.x, @text_box_rect.y,
                              @text_box_rect.width, @text_box_rect.height,
-                             self.bitmap.font.color)
+                             line_color)
     # Draw value
     char_x = @text_box_rect.x + TEXT_BOX_PADDING
     last_char_index = @display_pos
@@ -199,16 +199,17 @@ class UIControls::TextBox < UIControls::BaseControl
     # Draw cursor at end
     draw_cursor(char_x - 1) if @cursor_pos == @value.to_s.length
     # Draw left/right arrows to indicate more text beyond the text box sides
+    arrow_color = (disabled?) ? disabled_text_color : text_color
     if @display_pos > 0
-      bitmap.fill_rect(@text_box_rect.x, (height / 2) - 4, 1, 8, Color.white)
+      bitmap.fill_rect(@text_box_rect.x, (height / 2) - 4, 1, 8, background_color)
       5.times do |i|
-        bitmap.fill_rect(@text_box_rect.x - 2 + i, (height / 2) - (i + 1), 1, 2 * (i + 1), self.bitmap.font.color)
+        bitmap.fill_rect(@text_box_rect.x - 2 + i, (height / 2) - (i + 1), 1, 2 * (i + 1), arrow_color)
       end
     end
     if last_char_index < @value.to_s.length - 1
-      bitmap.fill_rect(@text_box_rect.x + @text_box_rect.width - 1, (height / 2) - 4, 1, 8, Color.white)
+      bitmap.fill_rect(@text_box_rect.x + @text_box_rect.width - 1, (height / 2) - 4, 1, 8, background_color)
       5.times do |i|
-        bitmap.fill_rect(@text_box_rect.x + @text_box_rect.width + 1 - i, (height / 2) - (i + 1), 1, 2 * (i + 1), self.bitmap.font.color)
+        bitmap.fill_rect(@text_box_rect.x + @text_box_rect.width + 1 - i, (height / 2) - (i + 1), 1, 2 * (i + 1), arrow_color)
       end
     end
   end

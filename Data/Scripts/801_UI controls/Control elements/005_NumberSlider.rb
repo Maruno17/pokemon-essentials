@@ -62,7 +62,7 @@ class UIControls::NumberSlider < UIControls::BaseControl
     # the mouse doesn't need to be on the slider to change this control's value
     if @captured_area == :slider
       rect = @interactions[@captured_area]
-      self.bitmap.fill_rect(rect.x, rect.y, rect.width, rect.height, HOVER_COLOR) if rect
+      self.bitmap.fill_rect(rect.x, rect.y, rect.width, rect.height, hover_color) if rect
     else
       super
     end
@@ -70,14 +70,14 @@ class UIControls::NumberSlider < UIControls::BaseControl
 
   def refresh
     super
-    button_color = (disabled?) ? DISABLED_COLOR : self.bitmap.font.color
+    button_color = (disabled?) ? disabled_text_color : text_color
     # Draw minus button
     self.bitmap.fill_rect(@minus_rect.x + 2, @minus_rect.y + (@minus_rect.height / 2) - 2, @minus_rect.width - 4, 4, button_color)
     # Draw slider bar
-    self.bitmap.fill_rect(SLIDER_X, (self.height / 2) - 1, SLIDER_LENGTH, 2, self.bitmap.font.color)
+    self.bitmap.fill_rect(SLIDER_X, (self.height / 2) - 1, SLIDER_LENGTH, 2, text_color)
     # Draw notches on slider bar
     5.times do |i|
-      self.bitmap.fill_rect(SLIDER_X - 1 + (i * SLIDER_LENGTH / 4), (self.height / 2) - 2, 2, 4, self.bitmap.font.color)
+      self.bitmap.fill_rect(SLIDER_X - 1 + (i * SLIDER_LENGTH / 4), (self.height / 2) - 2, 2, 4, text_color)
     end
     # Draw slider knob
     fraction = (self.value - self.min_value) / (self.max_value.to_f - self.min_value)

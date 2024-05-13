@@ -19,6 +19,8 @@ class AnimationEditor::Canvas < Sprite
   FRAME_SIZE = 48
   PARTICLE_FRAME_COLOR = Color.new(0, 0, 0, 64)
 
+  include UIControls::StyleMixin
+
   def initialize(viewport, anim, settings)
     super(viewport)
     @anim              = anim
@@ -154,6 +156,14 @@ class AnimationEditor::Canvas < Sprite
     return false if !particle || particle[:name] == "SE"
     return false if particle[:spawner] && particle[:spawner] != :none
     return true
+  end
+
+  def color_scheme=(value)
+    return if @color_scheme == value
+    @color_scheme = value
+    self.bitmap.font.color = text_color
+    self.bitmap.font.size = text_size
+    refresh
   end
 
   def selected_particle=(val)
@@ -543,8 +553,7 @@ class AnimationEditor::Canvas < Sprite
 
   def refresh_particle_frame
     return if !show_particle_sprite?(@selected_particle)
-    focus = @anim[:particles][@selected_particle][:focus]
-    frame_color = AnimationEditor::ParticleList::CONTROL_BG_COLORS[focus] || Color.magenta
+    frame_color = focus_color(@anim[:particles][@selected_particle][:focus])
     @sel_frame_bitmap.outline_rect(1, 1, @sel_frame_bitmap.width - 2, @sel_frame_bitmap.height - 2, frame_color)
     update_selected_particle_frame
   end

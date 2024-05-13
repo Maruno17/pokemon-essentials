@@ -44,7 +44,11 @@ class AnimationEditor::AnimationSelector
   MESSAGE_BOX_BUTTON_HEIGHT = 32
   MESSAGE_BOX_SPACING       = 16
 
+  include AnimationEditor::SettingsMixin
+  include UIControls::StyleMixin
+
   def initialize
+    load_settings
     @animation_type = 0   # 0=move, 1=common
     @filter_text = ""
     @quit = false
@@ -52,6 +56,7 @@ class AnimationEditor::AnimationSelector
     initialize_viewports
     initialize_bitmaps
     initialize_controls
+    self.color_scheme = @settings[:color_scheme]
     refresh
   end
 
@@ -132,11 +137,21 @@ class AnimationEditor::AnimationSelector
 
   #-----------------------------------------------------------------------------
 
+  def color_scheme=(value)
+    return if @color_scheme == value
+    @color_scheme = value
+    draw_editor_background
+    @components.color_scheme = value
+    refresh
+  end
+
+  #-----------------------------------------------------------------------------
+
   def draw_editor_background
     # Fill the whole screen with white
-    @screen_bitmap.bitmap.fill_rect(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, Color.white)
+    @screen_bitmap.bitmap.fill_rect(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, background_color)
     # Make the pop-up background semi-transparent
-    @pop_up_bg_bitmap.bitmap.fill_rect(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, Color.new(0, 0, 0, 128))
+    @pop_up_bg_bitmap.bitmap.fill_rect(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT, semi_transparent_color)
   end
 
   #-----------------------------------------------------------------------------
@@ -147,13 +162,13 @@ class AnimationEditor::AnimationSelector
     ret.x = (AnimationEditor::WINDOW_WIDTH - ret.width) / 2
     ret.y = (AnimationEditor::WINDOW_HEIGHT - ret.height) / 2
     ret.z = -1
-    ret.bitmap.font.color = Color.black
-    ret.bitmap.font.size = 18
+    ret.bitmap.font.color = text_color
+    ret.bitmap.font.size = text_size
     # Draw pop-up box border
     ret.bitmap.border_rect(BORDER_THICKNESS, BORDER_THICKNESS, width, height,
-                           BORDER_THICKNESS, Color.white, Color.black)
+                           BORDER_THICKNESS, background_color, line_color)
     # Fill pop-up box with white
-    ret.bitmap.fill_rect(BORDER_THICKNESS, BORDER_THICKNESS, width, height, Color.white)
+    ret.bitmap.fill_rect(BORDER_THICKNESS, BORDER_THICKNESS, width, height, background_color)
     return ret
   end
 
@@ -174,6 +189,7 @@ class AnimationEditor::AnimationSelector
       btn.x += MESSAGE_BOX_BUTTON_WIDTH * i
       btn.y = msg_bitmap.y + msg_bitmap.height - MESSAGE_BOX_BUTTON_HEIGHT - MESSAGE_BOX_SPACING
       btn.set_fixed_size
+      btn.color_scheme = @color_scheme
       btn.set_interactive_rects
       buttons.push([option[0], btn])
     end
@@ -351,6 +367,8 @@ class AnimationEditor::AnimationSelector
       if anim_id
         screen = AnimationEditor.new(anim_id, GameData::Animation.get(anim_id).clone_as_hash)
         screen.run
+        load_settings
+        self.color_scheme = @settings[:color_scheme]
         generate_full_lists
       end
     when :copy
@@ -379,6 +397,17 @@ class AnimationEditor::AnimationSelector
     refresh
   end
 
+  def update_input
+    if Input.triggerex?(:C)
+      options = color_scheme_options.keys
+      this_index = options.index(@color_scheme || :light) || 0
+      new_index = (this_index + 1) % options.length
+      @settings[:color_scheme] = options[new_index]
+      self.color_scheme = @settings[:color_scheme]
+      save_settings
+    end
+  end
+
   def update
     @components.update
     if @components.changed?
@@ -394,6 +423,7 @@ class AnimationEditor::AnimationSelector
       apply_list_filter
       refresh
     end
+    update_input if !@components.busy?
   end
 
   def run

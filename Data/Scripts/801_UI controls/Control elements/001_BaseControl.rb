@@ -5,18 +5,13 @@ class UIControls::BaseControl < BitmapSprite
   attr_reader   :value
   attr_accessor :disabled
 
-  TEXT_COLOR          = Color.black
-  TEXT_SIZE           = 18           # Default is 22 if size isn't explicitly set
-  TEXT_OFFSET_Y       = 5
-  HOVER_COLOR         = Color.new(224, 255, 255) # For clickable area when hovering over it; light blue
-  CAPTURE_COLOR       = Color.new(255, 64, 128)   # For area you clicked in but aren't hovering over; hot pink
-  DISABLED_COLOR      = Color.gray
-  DISABLED_COLOR_DARK = Color.new(128, 128, 128)
+  TEXT_OFFSET_Y = 5
+
+  include UIControls::StyleMixin
 
   def initialize(width, height, viewport)
     super(width, height, viewport)
-    self.bitmap.font.color = TEXT_COLOR
-    self.bitmap.font.size = TEXT_SIZE
+    self.color_scheme = :light
     @disabled = false
     @hover_area = nil   # Is a symbol from the keys for @interactions if the mouse is hovering over that interaction
     @captured_area = nil   # Is a symbol from the keys for @interactions (or :none) if this control is clicked in
@@ -138,11 +133,11 @@ class UIControls::BaseControl < BitmapSprite
     if !@captured_area || @hover_area == @captured_area
       # Draw mouse hover over area highlight
       rect = @interactions[@hover_area]
-      self.bitmap.fill_rect(rect.x, rect.y, rect.width, rect.height, HOVER_COLOR) if rect
+      self.bitmap.fill_rect(rect.x, rect.y, rect.width, rect.height, hover_color) if rect
     elsif @captured_area
       # Draw captured area highlight
       rect = @interactions[@captured_area]
-      self.bitmap.fill_rect(rect.x, rect.y, rect.width, rect.height, CAPTURE_COLOR) if rect
+      self.bitmap.fill_rect(rect.x, rect.y, rect.width, rect.height, capture_color) if rect
     end
   end
 

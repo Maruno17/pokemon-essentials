@@ -73,7 +73,7 @@ class UIControls::NumberTextBox < UIControls::TextBox
 
   def refresh
     super
-    button_color = (disabled?) ? DISABLED_COLOR : self.bitmap.font.color
+    button_color = (disabled?) ? disabled_text_color : text_color
     # Draw minus button
     self.bitmap.fill_rect(@minus_rect.x + 2, @minus_rect.y + (@minus_rect.height / 2) - 2, @minus_rect.width - 4, 4, button_color)
     # Draw plus button

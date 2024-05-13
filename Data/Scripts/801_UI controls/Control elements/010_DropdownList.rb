@@ -63,12 +63,15 @@ class UIControls::DropdownList < UIControls::BaseControl
     @dropdown_menu_bg.x = self.x + @button_rect.x
     @dropdown_menu_bg.y = self.y + @button_rect.y + @button_rect.height
     @dropdown_menu_bg.z = self.z + 1
-    @dropdown_menu_bg.bitmap.fill_rect(0, 0, @dropdown_menu_bg.width, @dropdown_menu_bg.height, Color.white)
+    @dropdown_menu_bg.bitmap.font.color = text_color
+    @dropdown_menu_bg.bitmap.font.size = text_size
+    @dropdown_menu_bg.bitmap.fill_rect(0, 0, @dropdown_menu_bg.width, @dropdown_menu_bg.height, background_color)
     # Create menu
     @dropdown_menu = UIControls::List.new(@button_rect.width, menu_height, self.viewport, @options)
     @dropdown_menu.x = @dropdown_menu_bg.x
     @dropdown_menu.y = @dropdown_menu_bg.y
     @dropdown_menu.z = self.z + 2
+    @dropdown_menu.color_scheme = @color_scheme
     @dropdown_menu.set_interactive_rects
     @dropdown_menu.repaint
   end
@@ -95,23 +98,24 @@ class UIControls::DropdownList < UIControls::BaseControl
     if disabled?
       self.bitmap.fill_rect(@button_rect.x, @button_rect.y,
                             @button_rect.width, @button_rect.height,
-                            DISABLED_COLOR)
+                            disabled_fill_color)
     end
     # Draw button outline
     self.bitmap.outline_rect(@button_rect.x, @button_rect.y,
                              @button_rect.width, @button_rect.height,
-                             self.bitmap.font.color)
+                             line_color)
     # Draw value
     draw_text(self.bitmap, @button_rect.x + TEXT_BOX_PADDING, TEXT_OFFSET_Y, @options[@value] || "???")
     # Draw down arrow
     arrow_area_x = @button_rect.x + @button_rect.width - @button_rect.height + 1
     arrow_area_width = @button_rect.height - 2
+    arrow_color = (disabled?) ? disabled_text_color : text_color
     self.bitmap.fill_rect(arrow_area_x, @button_rect.y + 1, arrow_area_width, arrow_area_width,
-                          (@hover_area && @captured_area != :button) ? HOVER_COLOR : Color.white)
+                          (@hover_area && @captured_area != :button) ? hover_color : background_color)
     6.times do |i|
       self.bitmap.fill_rect(arrow_area_x + (arrow_area_width / 2) - 5 + i,
                             @button_rect.y + (arrow_area_width / 2) - 1 + i,
-                            11 - (2 * i), 1, (disabled?) ? DISABLED_COLOR_DARK : self.bitmap.font.color)
+                            11 - (2 * i), 1, arrow_color)
     end
   end
 

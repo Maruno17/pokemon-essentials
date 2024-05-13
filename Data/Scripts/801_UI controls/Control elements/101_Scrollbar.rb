@@ -7,9 +7,6 @@ class UIControls::Scrollbar < UIControls::BaseControl
   SLIDER_WIDTH    = 16
   WIDTH_PADDING   = 0
   SCROLL_DISTANCE = 16
-  TRAY_COLOR      = Color.white
-  SLIDER_COLOR    = Color.black
-  GRAB_COLOR      = HOVER_COLOR   # Cyan
 
   def initialize(x, y, size, viewport, horizontal = false, always_visible = false)
     if horizontal
@@ -90,14 +87,14 @@ class UIControls::Scrollbar < UIControls::BaseControl
     super
     return if !self.visible
     # Draw the tray
-    self.bitmap.fill_rect(@slider_tray.x, @slider_tray.y, @slider_tray.width, @slider_tray.height, TRAY_COLOR)
+    self.bitmap.fill_rect(@slider_tray.x, @slider_tray.y, @slider_tray.width, @slider_tray.height, background_color)
     # Draw the slider
-    if @slider_size < @tray_size
-      bar_color = SLIDER_COLOR
+    if @slider_size < @tray_size && !disabled?
       if @captured_area == :slider || (!@captured_area && @hover_area == :slider)
-        bar_color = GRAB_COLOR
+        bar_color = hover_color
+      else
+        bar_color = text_color
       end
-      bar_color = DISABLED_COLOR if disabled?
       self.bitmap.fill_rect(@slider.x, @slider.y, @slider.width, @slider.height, bar_color)
     end
   end

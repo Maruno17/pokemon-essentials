@@ -6,7 +6,6 @@ class UIControls::List < UIControls::BaseControl
   ROW_HEIGHT         = 24
   TEXT_PADDING_X     = 4
   TEXT_OFFSET_Y      = 3
-  SELECTED_ROW_COLOR = Color.new(216, 192, 32)   # Dark yellow
 
   def initialize(width, height, viewport, values = [])
     super(width, height, viewport)
@@ -14,6 +13,7 @@ class UIControls::List < UIControls::BaseControl
       width - UIControls::Scrollbar::SLIDER_WIDTH - BORDER_THICKNESS, BORDER_THICKNESS,
       height - (BORDER_THICKNESS * 2), viewport
     )
+    @scrollbar.color_scheme = @color_scheme
     @scrollbar.set_interactive_rects
     @scrollbar.range = ROW_HEIGHT
     @scrollbar.z = self.z + 1
@@ -49,6 +49,15 @@ class UIControls::List < UIControls::BaseControl
   def visible=(new_val)
     super
     @scrollbar.visible = new_val
+  end
+
+  def color_scheme=(value)
+    return if @color_scheme == value
+    @color_scheme = value
+    self.bitmap.font.color = text_color
+    self.bitmap.font.size = text_size
+    @scrollbar&.color_scheme = value
+    invalidate if self.respond_to?(:invalidate)
   end
 
   # Each value in @values is an array: [id, text].
@@ -131,7 +140,7 @@ class UIControls::List < UIControls::BaseControl
     if rect
       rect_y = rect.y
       rect_y -= @top_row * ROW_HEIGHT if @hover_area.is_a?(Integer)
-      self.bitmap.fill_rect(rect.x, rect_y, rect.width, rect.height, HOVER_COLOR)
+      self.bitmap.fill_rect(rect.x, rect_y, rect.width, rect.height, hover_color)
     end
   end
 
@@ -143,7 +152,7 @@ class UIControls::List < UIControls::BaseControl
   def refresh
     super
     # Draw control outline
-    self.bitmap.outline_rect(0, 0, width, height, Color.black)
+    self.bitmap.outline_rect(0, 0, width, height, line_color)
     # Draw text options
     @values.each_with_index do |val, i|
       next if i < @top_row || i >= @top_row + @rows_count
@@ -152,11 +161,11 @@ class UIControls::List < UIControls::BaseControl
            @interactions[i].x,
            @interactions[i].y - (@top_row * ROW_HEIGHT),
            @interactions[i].width, @interactions[i].height,
-           SELECTED_ROW_COLOR
+           highlight_color
          )
       end
       txt = (val.is_a?(Array)) ? val[1] : val.to_s
-      text_color = TEXT_COLOR
+      old_text_color = self.bitmap.font.color
       if txt[/^\\c\[([0-9]+)\]/i]
         text_colors = [
           [  0, 112, 248], [120, 184, 232],   # 1  Blue
@@ -181,7 +190,7 @@ class UIControls::List < UIControls::BaseControl
                 @interactions[i].x + TEXT_PADDING_X,
                 @interactions[i].y + TEXT_OFFSET_Y - (@top_row * ROW_HEIGHT),
                 txt)
-      self.bitmap.font.color = TEXT_COLOR
+      self.bitmap.font.color = old_text_color
     end
   end
 

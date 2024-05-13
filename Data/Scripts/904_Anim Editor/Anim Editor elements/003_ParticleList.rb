@@ -23,22 +23,6 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   INTERP_LINE_HEIGHT   = KEYFRAME_SPACING - ((DIAMOND_SIZE * 2) + 3)
   INTERP_LINE_Y        = (ROW_HEIGHT / 2) - (INTERP_LINE_HEIGHT / 2)
   DURATION_BUFFER      = 20   # Extra keyframes shown after the animation's end
-  PROPERTY_BG_COLOR    = Color.new(224, 224, 224)
-  CONTROL_BG_COLORS    = {
-    :foreground             => Color.new(128, 160, 248),   # Blue
-    :midground              => Color.new(128, 160, 248),   # Blue
-    :background             => Color.new(128, 160, 248),   # Blue
-    :user                   => Color.new(64, 224, 64),     # Green
-    :target                 => Color.new(224, 64, 64),     # Red
-    :user_and_target        => Color.new(224, 224, 64),    # Yellow
-    :user_side_foreground   => Color.new(128, 224, 224),   # Cyan
-    :user_side_background   => Color.new(128, 224, 224),   # Cyan
-    :target_side_foreground => Color.new(128, 224, 224),   # Cyan
-    :target_side_background => Color.new(128, 224, 224)    # Cyan
-  }
-  SE_CONTROL_BG_COLOR        = Color.gray
-  TIME_AFTER_ANIMATION_COLOR = Color.new(160, 160, 160)
-  POSITION_LINE_COLOR        = Color.new(248, 96, 96)
 
   attr_reader :keyframe   # The selected keyframe
   attr_reader :values
@@ -116,20 +100,26 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @timeline_sprite = BitmapSprite.new(@commands_viewport.rect.width, TIMELINE_HEIGHT, self.viewport)
     @timeline_sprite.x = @commands_viewport.rect.x
     @timeline_sprite.y = self.y
-    @timeline_sprite.bitmap.font.color = TEXT_COLOR
+    @timeline_sprite.bitmap.font.color = text_color
     @timeline_sprite.bitmap.font.size = TIMELINE_TEXT_SIZE
   end
 
   def initialize_selection_bitmaps
     # Position line sprite
-    @position_sprite = BitmapSprite.new(3, height - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, @position_viewport)
-    @position_sprite.ox = @position_sprite.width / 2
-    @position_sprite.bitmap.fill_rect(0, 0, @position_sprite.bitmap.width, @position_sprite.bitmap.height, POSITION_LINE_COLOR)
+    if !@position_sprite
+      @position_sprite = BitmapSprite.new(3, height - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, @position_viewport)
+      @position_sprite.ox = @position_sprite.width / 2
+    end
+    @position_sprite.bitmap.clear
+    @position_sprite.bitmap.fill_rect(0, 0, @position_sprite.bitmap.width, @position_sprite.bitmap.height, position_line_color)
     # Selected particle line sprite
-    @particle_line_sprite = BitmapSprite.new(@position_viewport.rect.width, 3, @commands_viewport)
-    @particle_line_sprite.z = -10
-    @particle_line_sprite.oy = @particle_line_sprite.height / 2
-    @particle_line_sprite.bitmap.fill_rect(0, 0, @particle_line_sprite.bitmap.width, @particle_line_sprite.bitmap.height, POSITION_LINE_COLOR)
+    if !@particle_line_sprite
+      @particle_line_sprite = BitmapSprite.new(@position_viewport.rect.width, 3, @commands_viewport)
+      @particle_line_sprite.z = -10
+      @particle_line_sprite.oy = @particle_line_sprite.height / 2
+    end
+    @particle_line_sprite.bitmap.clear
+    @particle_line_sprite.bitmap.fill_rect(0, 0, @particle_line_sprite.bitmap.width, @particle_line_sprite.bitmap.height, position_line_color)
   end
 
   def initialize_controls
@@ -147,23 +137,22 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   end
 
   def generate_button_bitmaps
-    @bitmaps = {}
-    add_button = Bitmap.new(12, 12)
-    add_button.fill_rect(1, 5, 10, 2, TEXT_COLOR)
-    add_button.fill_rect(5, 1, 2, 10, TEXT_COLOR)
-    @bitmaps[:add_button] = add_button
-    up_button = Bitmap.new(12, 12)
+    @bitmaps = {} if !@bitmaps
+    @bitmaps[:add_button] = Bitmap.new(12, 12) if !@bitmaps[:add_button]
+    @bitmaps[:add_button].clear
+    @bitmaps[:add_button].fill_rect(1, 5, 10, 2, text_color)
+    @bitmaps[:add_button].fill_rect(5, 1, 2, 10, text_color)
+    @bitmaps[:up_button] = Bitmap.new(12, 12) if !@bitmaps[:up_button]
+    @bitmaps[:up_button].clear
     5.times do |i|
-      up_button.fill_rect(1 + i, 7 - i, 1, (i == 0) ? 2 : 3, TEXT_COLOR)
-      up_button.fill_rect(10 - i, 7 - i, 1, (i == 0) ? 2 : 3, TEXT_COLOR)
+      @bitmaps[:up_button].fill_rect(1 + i, 7 - i, 1, (i == 0) ? 2 : 3, text_color)
+      @bitmaps[:up_button].fill_rect(10 - i, 7 - i, 1, (i == 0) ? 2 : 3, text_color)
     end
-    @bitmaps[:up_button] = up_button
-    down_button = Bitmap.new(12, 12)
+    @bitmaps[:down_button] = Bitmap.new(12, 12) if !@bitmaps[:down_button]
     5.times do |i|
-      down_button.fill_rect(1 + i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, TEXT_COLOR)
-      down_button.fill_rect(10 - i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, TEXT_COLOR)
+      @bitmaps[:down_button].fill_rect(1 + i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, text_color)
+      @bitmaps[:down_button].fill_rect(10 - i, 2 + i + (i == 0 ? 1 : 0), 1, (i == 0) ? 2 : 3, text_color)
     end
-    @bitmaps[:down_button] = down_button
   end
 
   def dispose
@@ -194,6 +183,39 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   end
 
   #-----------------------------------------------------------------------------
+
+  def position_line_color
+    return get_color_scheme_color_for_element(:position_line_color, Color.new(248, 96, 96))
+  end
+
+  def after_end_bg_color
+    return get_color_scheme_color_for_element(:after_end_bg_color, Color.new(160, 160, 160))
+  end
+
+  def se_background_color
+    return get_color_scheme_color_for_element(:se_background_color, Color.gray)
+  end
+
+  def property_background_color
+    return get_color_scheme_color_for_element(:property_background_color, Color.new(224, 224, 224))
+  end
+
+  def color_scheme=(value)
+    return if @color_scheme == value
+    @color_scheme = value
+    return if !@bitmaps
+    draw_control_background
+    initialize_selection_bitmaps
+    generate_button_bitmaps
+    self.bitmap.font.color = text_color
+    self.bitmap.font.size = text_size
+    @list_scrollbar.color_scheme = value
+    @time_scrollbar.color_scheme = value
+    @timeline_sprite.bitmap.font.color = text_color
+    @controls.each { |c| c[1].color_scheme = value }
+    @list_sprites.each { |spr| spr.bitmap.font.color = text_color }
+    invalidate
+  end
 
   def duration
     return [@duration - DURATION_BUFFER, 0].max
@@ -342,18 +364,18 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     @particle_list.length.times do
       list_sprite = BitmapSprite.new(@list_viewport.rect.width, ROW_HEIGHT, @list_viewport)
       list_sprite.y = @list_sprites.length * ROW_HEIGHT
-      list_sprite.bitmap.font.color = TEXT_COLOR
-      list_sprite.bitmap.font.size = TEXT_SIZE
+      list_sprite.bitmap.font.color = text_color
+      list_sprite.bitmap.font.size = text_size
       @list_sprites.push(list_sprite)
       commands_bg_sprite = BitmapSprite.new(@commands_viewport.rect.width, ROW_HEIGHT, @commands_bg_viewport)
       commands_bg_sprite.y = @commands_bg_sprites.length * ROW_HEIGHT
-      commands_bg_sprite.bitmap.font.color = TEXT_COLOR
-      commands_bg_sprite.bitmap.font.size = TEXT_SIZE
+      commands_bg_sprite.bitmap.font.color = text_color
+      commands_bg_sprite.bitmap.font.size = text_size
       @commands_bg_sprites.push(commands_bg_sprite)
       commands_sprite = BitmapSprite.new(@commands_viewport.rect.width, ROW_HEIGHT, @commands_viewport)
       commands_sprite.y = @commands_sprites.length * ROW_HEIGHT
-      commands_sprite.bitmap.font.color = TEXT_COLOR
-      commands_sprite.bitmap.font.size = TEXT_SIZE
+      commands_sprite.bitmap.font.color = text_color
+      commands_sprite.bitmap.font.size = text_size
       @commands_sprites.push(commands_sprite)
     end
     # Set scrollbars to the correct lengths
@@ -559,10 +581,10 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
   def draw_control_background
     self.bitmap.clear
     # Separator lines
-    self.bitmap.fill_rect(0, TIMELINE_HEIGHT, width, VIEWPORT_SPACING, Color.black)
-    self.bitmap.fill_rect(LIST_WIDTH, 0, VIEWPORT_SPACING, height, Color.black)
-    self.bitmap.fill_rect(0, height - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, width, VIEWPORT_SPACING, Color.black)
-    self.bitmap.fill_rect(width - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, 0, VIEWPORT_SPACING, height, Color.black)
+    self.bitmap.fill_rect(0, TIMELINE_HEIGHT, width, VIEWPORT_SPACING, line_color)
+    self.bitmap.fill_rect(LIST_WIDTH, 0, VIEWPORT_SPACING, height, line_color)
+    self.bitmap.fill_rect(0, height - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, width, VIEWPORT_SPACING, line_color)
+    self.bitmap.fill_rect(width - UIControls::Scrollbar::SLIDER_WIDTH - VIEWPORT_SPACING, 0, VIEWPORT_SPACING, height, line_color)
   end
 
   #-----------------------------------------------------------------------------
@@ -582,26 +604,26 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     draw_x = TIMELINE_LEFT_BUFFER + (dur * KEYFRAME_SPACING) - @left_pos
     greyed_width = @time_bg_sprite.width - draw_x
     if greyed_width > 0
-      @time_bg_sprite.bitmap.fill_rect(draw_x, 0, greyed_width, @time_bg_sprite.height, TIME_AFTER_ANIMATION_COLOR)
-      @time_bg_sprite.bitmap.fill_rect(draw_x, TIMELINE_HEIGHT, greyed_width, VIEWPORT_SPACING, Color.black)
+      @time_bg_sprite.bitmap.fill_rect(draw_x, 0, greyed_width, @time_bg_sprite.height, after_end_bg_color)
+      @time_bg_sprite.bitmap.fill_rect(draw_x, TIMELINE_HEIGHT, greyed_width, VIEWPORT_SPACING, line_color)
     end
     # Draw hover highlight
     if !controls_busy?
-      hover_color = nil
+      this_hover_color = nil
       if @captured_keyframe && !@captured_row
         if @hover_keyframe && @hover_keyframe == @captured_keyframe && !@hover_row
-          hover_color = HOVER_COLOR
+          this_hover_color = hover_color
         else
-          hover_color = CAPTURE_COLOR
+          this_hover_color = capture_color
         end
         draw_x = TIMELINE_LEFT_BUFFER + (@captured_keyframe * KEYFRAME_SPACING) - @left_pos
         @timeline_sprite.bitmap.fill_rect(draw_x - (KEYFRAME_SPACING / 2), 0,
-                                          KEYFRAME_SPACING, TIMELINE_HEIGHT - 1, hover_color)
+                                          KEYFRAME_SPACING, TIMELINE_HEIGHT - 1, this_hover_color)
       elsif !@captured_keyframe && !@captured_row && @hover_keyframe && !@hover_row
-        hover_color = HOVER_COLOR
+        this_hover_color = hover_color
         draw_x = TIMELINE_LEFT_BUFFER + (@hover_keyframe * KEYFRAME_SPACING) - @left_pos
         @timeline_sprite.bitmap.fill_rect(draw_x - (KEYFRAME_SPACING / 2), 0,
-                                          KEYFRAME_SPACING, TIMELINE_HEIGHT - 1, hover_color)
+                                          KEYFRAME_SPACING, TIMELINE_HEIGHT - 1, this_hover_color)
       end
     end
     # Draw timeline markings
@@ -613,7 +635,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       elsif (i % 5) == 0
         line_height = TIMELINE_HEIGHT / 2
       end
-      @timeline_sprite.bitmap.fill_rect(draw_x, TIMELINE_HEIGHT - line_height, 1, line_height, TEXT_COLOR)
+      @timeline_sprite.bitmap.fill_rect(draw_x, TIMELINE_HEIGHT - line_height, 1, line_height, text_color)
       draw_text(@timeline_sprite.bitmap, draw_x + 1, 0, (i / 20.0).to_s) if (i % 5) == 0
     end
   end
@@ -644,11 +666,11 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     box_x += LIST_INDENT if is_property
     # Get the background color
     if particle_data[:name] == "SE"
-      bg_color = SE_CONTROL_BG_COLOR
+      bg_color = se_background_color
     elsif is_property
-      bg_color = PROPERTY_BG_COLOR
+      bg_color = property_background_color
     else
-      bg_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
+      bg_color = focus_color(@particles[p_index][:focus])
     end
     # Draw hover highlight
     if !controls_busy? && !@captured_keyframe
@@ -657,21 +679,21 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         if @captured_row == index
           if !@hover_keyframe && @hover_row && @hover_row == index &&
              @captured_row_button && @hover_row_button == @captured_row_button
-            hover_color = HOVER_COLOR
+            this_hover_color = hover_color
           else
-            hover_color = CAPTURE_COLOR
+            this_hover_color = capture_color
           end
         end
       elsif @hover_row && @hover_row == index && !@hover_keyframe
-        hover_color = HOVER_COLOR
+        this_hover_color = hover_color
       end
-      if hover_color
+      if this_hover_color
         case @captured_row_button || @hover_row_button
         when :expand
           spr.bitmap.fill_rect(EXPAND_BUTTON_X, (ROW_HEIGHT - EXPAND_BUTTON_WIDTH + 1) / 2,
-                               EXPAND_BUTTON_WIDTH, EXPAND_BUTTON_WIDTH, hover_color)
+                               EXPAND_BUTTON_WIDTH, EXPAND_BUTTON_WIDTH, this_hover_color)
         when :row
-          spr.bitmap.fill_rect(box_x, ROW_SPACING, spr.width - box_x, spr.height - ROW_SPACING, hover_color)
+          spr.bitmap.fill_rect(box_x, ROW_SPACING, spr.width - box_x, spr.height - ROW_SPACING, this_hover_color)
         end
       end
     end
@@ -684,12 +706,14 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       draw_text(spr.bitmap, box_x + 4, 3, @particles[p_index][:name] || "Unnamed")
     end
     # Draw expand/collapse arrow or dotted lines
+    icon_color = text_color
+    dotted_color = line_color
     if is_property
       6.times do |j|
-        spr.bitmap.fill_rect(10, j * 2, 1, 1, Color.black)
+        spr.bitmap.fill_rect(10, j * 2, 1, 1, dotted_color)
       end
       9.times do |i|
-        spr.bitmap.fill_rect(10 + (i * 2), 12, 1, 1, Color.black)
+        spr.bitmap.fill_rect(10 + (i * 2), 12, 1, 1, dotted_color)
       end
     elsif @expanded_particles.include?(p_index)
       # Draw down-pointing arrow
@@ -697,7 +721,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         j = (i == 0 || i == 10) ? 1 : 0
         h = [2, 4, 5, 6, 7, 8, 7, 6, 5, 4, 2][i]
         h = ((i > 5) ? 10 - i : i) + 3 - j
-        spr.bitmap.fill_rect(5 + i, 9 + j, 1, h, Color.black)
+        spr.bitmap.fill_rect(5 + i, 9 + j, 1, h, icon_color)
       end
     elsif particle_data[:name] != "SE"
       # Draw right-pointing arrow
@@ -705,13 +729,13 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         i = (j == 0 || j == 10) ? 1 : 0
         w = [2, 4, 5, 6, 7, 8, 7, 6, 5, 4, 2][j]
         w = ((j > 5) ? 10 - j : j) + 3 - i
-        spr.bitmap.fill_rect(7 + i, 7 + j, w, 1, Color.black)
+        spr.bitmap.fill_rect(7 + i, 7 + j, w, 1, icon_color)
       end
     end
     # Draw dotted line leading to the next property line
     if @particle_list[index + 1]&.is_a?(Array)
       5.times do |j|
-        spr.bitmap.fill_rect(10, 14 + (j * 2), 1, 1, Color.black)
+        spr.bitmap.fill_rect(10, 14 + (j * 2), 1, 1, dotted_color)
       end
     end
   end
@@ -725,11 +749,11 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
     particle_data = @particles[p_index]
     # Get the background color
     if particle_data[:name] == "SE"
-      bg_color = SE_CONTROL_BG_COLOR
+      bg_color = se_background_color
     elsif is_property
-      bg_color = PROPERTY_BG_COLOR
+      bg_color = property_background_color
     else
-      bg_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
+      bg_color = focus_color(@particles[p_index][:focus])
     end
     # Get visibilities of particle for each keyframe
     visible_cmds = @visibilities[p_index]
@@ -741,7 +765,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING, KEYFRAME_SPACING, ROW_HEIGHT - ROW_SPACING, bg_color)
       end
       # Draw hover highlight
-      hover_color = nil
+      this_hover_color = nil
       if !controls_busy?
         earlier_captured_keyframe = @captured_keyframe
         later_captured_keyframe = (earlier_captured_keyframe || -1) + 1
@@ -754,30 +778,30 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
         if @captured_row && @captured_keyframe
           if @captured_row == index && i >= earlier_captured_keyframe && i < later_captured_keyframe
             if @hover_row && @hover_row == index && @hover_keyframe && i >= earlier_hovered_keyframe && i < later_hovered_keyframe
-              hover_color = HOVER_COLOR
+              this_hover_color = hover_color
             else
-              hover_color = CAPTURE_COLOR
+              this_hover_color = capture_color
             end
           end
         elsif !@captured_row && !@captured_keyframe && @hover_row && @hover_keyframe &&
               @hover_row == index && i >= earlier_hovered_keyframe && i < later_hovered_keyframe
-          hover_color = HOVER_COLOR
+          this_hover_color = hover_color
         end
       end
-      if hover_color
+      if this_hover_color
         if is_property
-          bg_spr.bitmap.fill_rect(draw_x, 2, KEYFRAME_SPACING, ROW_HEIGHT - 3, hover_color)
+          bg_spr.bitmap.fill_rect(draw_x, 2, KEYFRAME_SPACING, ROW_HEIGHT - 3, this_hover_color)
         else
-          bg_spr.bitmap.fill_rect(draw_x - (KEYFRAME_SPACING / 2), 2, KEYFRAME_SPACING, ROW_HEIGHT - 3, hover_color)
+          bg_spr.bitmap.fill_rect(draw_x - (KEYFRAME_SPACING / 2), 2, KEYFRAME_SPACING, ROW_HEIGHT - 3, this_hover_color)
         end
       end
       next if i >= @duration - DURATION_BUFFER
-      outline_color = Color.black
+      outline_color = line_color
       case visible_cmds[i]
       when 1   # Particle is visible
         # Draw outline
         if is_property
-          outline_color = CONTROL_BG_COLORS[@particles[p_index][:focus]] || Color.magenta
+          outline_color = focus_color(@particles[p_index][:focus])
         end
         bg_spr.bitmap.fill_rect(draw_x, ROW_SPACING, KEYFRAME_SPACING, 1, outline_color)   # Top
         bg_spr.bitmap.fill_rect(draw_x, ROW_HEIGHT - 1, KEYFRAME_SPACING, 1, outline_color)   # Bottom
@@ -822,7 +846,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
       next if !cmds[i]
       draw_x = TIMELINE_LEFT_BUFFER + (i * KEYFRAME_SPACING) - @left_pos
       # Draw command diamond
-      spr.bitmap.fill_diamond(draw_x, ROW_HEIGHT / 2, DIAMOND_SIZE, TEXT_COLOR)
+      spr.bitmap.fill_diamond(draw_x, ROW_HEIGHT / 2, DIAMOND_SIZE, text_color)
       # Draw interpolation line
       if cmds[i].is_a?(Array)
         spr.bitmap.draw_interpolation_line(
@@ -832,7 +856,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
           INTERP_LINE_HEIGHT,
           cmds[i][0] > 0,   # Increases or decreases
           cmds[i][1],       # Interpolation type
-          TEXT_COLOR
+          text_color
         )
       end
     end
@@ -849,7 +873,7 @@ class AnimationEditor::ParticleList < UIControls::BaseControl
           INTERP_LINE_HEIGHT,
           cmds[i][0] > 0,   # Increases or decreases
           cmds[i][1],       # Interpolation type
-          TEXT_COLOR
+          text_color
         )
       end
     end

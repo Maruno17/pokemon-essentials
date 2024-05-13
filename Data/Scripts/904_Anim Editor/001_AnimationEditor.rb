@@ -2,6 +2,37 @@
 #
 #===============================================================================
 class AnimationEditor
+  module AnimationEditor::SettingsMixin
+    def load_settings
+      if File.file?(DEBUG_SETTINGS_FILE_PATH)
+        @settings = SaveData.get_data_from_file(DEBUG_SETTINGS_FILE_PATH)[:anim_editor]
+      else
+        @settings = {
+          :color_scheme       => :light,
+          :side_sizes         => [1, 1],   # Player's side, opposing side
+          :user_index         => 0,        # 0, 2, 4
+          :target_indices     => [1],      # There must be at least one valid target
+          :user_opposes       => false,
+          :canvas_bg          => "indoor1",
+          # NOTE: These sprite names are also used in Pokemon.play_cry and so
+          #       should be a species ID (being a string is fine).
+          :user_sprite_name   => "DRAGONITE",
+          :target_sprite_name => "CHARIZARD"
+        }
+      end
+    end
+
+    def save_settings
+      data = { :anim_editor => @settings }
+      File.open(DEBUG_SETTINGS_FILE_PATH, "wb") { |file| Marshal.dump(data, file) }
+    end
+  end
+end
+
+#===============================================================================
+#
+#===============================================================================
+class AnimationEditor
   attr_reader :property_pane
   attr_reader :components
   attr_reader :anim
@@ -102,6 +133,9 @@ class AnimationEditor
                                "./debug_settings.rxdata"
                              end
 
+  include AnimationEditor::SettingsMixin
+  include UIControls::StyleMixin
+
   #-----------------------------------------------------------------------------
 
   def initialize(anim_id, anim)
@@ -116,6 +150,7 @@ class AnimationEditor
     initialize_components
     @captured = nil
     set_components_contents
+    self.color_scheme = @settings[:color_scheme]
     refresh
   end
 
@@ -130,28 +165,39 @@ class AnimationEditor
 
   def initialize_bitmaps
     # Background for main editor
-    @screen_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
-    @screen_bitmap.z = -100
+    if !@screen_bitmap
+      @screen_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @viewport)
+      @screen_bitmap.z = -100
+    end
     # Semi-transparent black overlay to dim the screen while a pop-up window is open
-    @pop_up_bg_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @pop_up_viewport)
-    @pop_up_bg_bitmap.z = -100
-    @pop_up_bg_bitmap.visible = false
+    if !@pop_up_bg_bitmap
+      @pop_up_bg_bitmap = BitmapSprite.new(WINDOW_WIDTH, WINDOW_HEIGHT, @pop_up_viewport)
+      @pop_up_bg_bitmap.z = -100
+      @pop_up_bg_bitmap.visible = false
+    end
     # Bitmaps for "delete this property change" buttons in the side pane
-    @delete_bitmap = Bitmap.new(16, 16)
-    @delete_disabled_bitmap = Bitmap.new(16, 16)
+    if !@delete_bitmap
+      @delete_bitmap = Bitmap.new(16, 16)
+      @delete_disabled_bitmap = Bitmap.new(16, 16)
+    end
+    @delete_bitmap.clear
+    @delete_disabled_bitmap.clear
+    icon_color = delete_icon_color
+    disabled_icon_color = disabled_text_color
     14.times do |i|
       case i
       when 0, 13 then wid = 3
       when 1, 12 then wid = 4
       else            wid = 5
       end
-      @delete_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.new(248, 96, 96))
-      @delete_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.new(248, 96, 96))
-      @delete_disabled_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, Color.new(160, 160, 160))
-      @delete_disabled_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, Color.new(160, 160, 160))
+      @delete_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, icon_color)
+      @delete_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, icon_color)
+      @delete_disabled_bitmap.fill_rect([i - 1, 1].max, i + 1, wid, 1, disabled_icon_color)
+      @delete_disabled_bitmap.fill_rect([i - 1, 1].max, 14 - i, wid, 1, disabled_icon_color)
     end
     # Editor settings button bitmap
-    @editor_settings_bitmap = Bitmap.new(18, 18)
+    @editor_settings_bitmap = Bitmap.new(18, 18) if !@editor_settings_bitmap
+    @editor_settings_bitmap.clear
     settings_array = [
       0, 0, 0, 0, 0, 0, 0, 0, 1,
       0, 0, 0, 0, 0, 0, 0, 1, 1,
@@ -163,12 +209,13 @@ class AnimationEditor
       0, 1, 1, 1, 1, 1, 1, 0, 0,
       1, 1, 1, 1, 1, 1, 0, 0, 0
     ]
+    icon_color = text_color
     settings_array.length.times do |i|
       next if settings_array[i] == 0
-      @editor_settings_bitmap.fill_rect(i % 9, i / 9, 1, 1, Color.black)
-      @editor_settings_bitmap.fill_rect(17 - (i % 9), i / 9, 1, 1, Color.black)
-      @editor_settings_bitmap.fill_rect(i % 9, 17 - (i / 9), 1, 1, Color.black)
-      @editor_settings_bitmap.fill_rect(17 - (i % 9), 17 - (i / 9), 1, 1, Color.black)
+      @editor_settings_bitmap.fill_rect(i % 9, i / 9, 1, 1, icon_color)
+      @editor_settings_bitmap.fill_rect(17 - (i % 9), i / 9, 1, 1, icon_color)
+      @editor_settings_bitmap.fill_rect(i % 9, 17 - (i / 9), 1, 1, icon_color)
+      @editor_settings_bitmap.fill_rect(17 - (i % 9), 17 - (i / 9), 1, 1, icon_color)
     end
     # Draw in these bitmaps
     draw_editor_background
@@ -243,29 +290,6 @@ class AnimationEditor
     return @components[:particle_list].particle_index
   end
 
-  def load_settings
-    if File.file?(DEBUG_SETTINGS_FILE_PATH)
-      @settings = SaveData.get_data_from_file(DEBUG_SETTINGS_FILE_PATH)[:anim_editor]
-    else
-      @settings = {
-        :side_sizes         => [1, 1],   # Player's side, opposing side
-        :user_index         => 0,        # 0, 2, 4
-        :target_indices     => [1],      # There must be at least one valid target
-        :user_opposes       => false,
-        :canvas_bg          => "indoor1",
-        # NOTE: These sprite names are also used in Pokemon.play_cry and so
-        #       should be a species ID (being a string is fine).
-        :user_sprite_name   => "DRAGONITE",
-        :target_sprite_name => "CHARIZARD"
-      }
-    end
-  end
-
-  def save_settings
-    data = { :anim_editor => @settings }
-    File.open(DEBUG_SETTINGS_FILE_PATH, "wb") { |file| Marshal.dump(data, file) }
-  end
-
   def save
     AnimationEditor::ParticleDataHelper.optimize_all_particles(@anim[:particles])
     GameData::Animation.register(@anim, @anim_id)
@@ -279,6 +303,17 @@ class AnimationEditor
       @pbs_path = @anim[:pbs_path]
     end
     save_settings
+  end
+
+  def color_scheme=(value)
+    return if @color_scheme == value
+    @color_scheme = value
+    return if !@components
+    initialize_bitmaps
+    @components.each do |component|
+      component[1].color_scheme = value if component[1].respond_to?("color_scheme=")
+    end
+    refresh
   end
 
   #-----------------------------------------------------------------------------
@@ -383,6 +418,7 @@ class AnimationEditor
   def set_editor_settings_contents
     editor_settings = @components[:editor_settings]
     editor_settings.add_header_label(:header, _INTL("Editor settings"))
+    editor_settings.add_labelled_dropdown_list(:color_scheme, _INTL("Color scheme"), color_scheme_options, :light)
     editor_settings.add_labelled_dropdown_list(:side_size_1, _INTL("Side sizes"), {
       1 => "1",
       2 => "2",
@@ -490,19 +526,21 @@ class AnimationEditor
   #-----------------------------------------------------------------------------
 
   def draw_editor_background
+    bg_color = background_color
+    contrast_color = line_color
     # Fill the whole screen with white
-    @screen_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.white)
+    @screen_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, bg_color)
     # Outline around elements
     @screen_bitmap.bitmap.border_rect(CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT,
-                                      BORDER_THICKNESS, Color.white, Color.black)
+                                      BORDER_THICKNESS, bg_color, contrast_color)
     @screen_bitmap.bitmap.border_rect(PLAY_CONTROLS_X, PLAY_CONTROLS_Y, PLAY_CONTROLS_WIDTH, PLAY_CONTROLS_HEIGHT,
-                                      BORDER_THICKNESS, Color.white, Color.black)
+                                      BORDER_THICKNESS, bg_color, contrast_color)
     @screen_bitmap.bitmap.border_rect(SIDE_PANE_X, SIDE_PANE_Y, SIDE_PANE_WIDTH, SIDE_PANE_HEIGHT,
-                                      BORDER_THICKNESS, Color.white, Color.black)
+                                      BORDER_THICKNESS, bg_color, contrast_color)
     @screen_bitmap.bitmap.border_rect(PARTICLE_LIST_X, PARTICLE_LIST_Y, PARTICLE_LIST_WIDTH, PARTICLE_LIST_HEIGHT,
-                                      BORDER_THICKNESS, Color.white, Color.black)
+                                      BORDER_THICKNESS, bg_color, contrast_color)
     # Make the pop-up background semi-transparent
-    @pop_up_bg_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color.new(0, 0, 0, 128))
+    @pop_up_bg_bitmap.bitmap.fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, semi_transparent_color)
   end
 
   #-----------------------------------------------------------------------------
@@ -706,6 +744,9 @@ class AnimationEditor
       end
     when :editor_settings
       case property
+      when :color_scheme
+        @settings[:color_scheme] = value
+        self.color_scheme = value
       when :side_size_1
         old_val = @settings[:side_sizes][0]
         @settings[:side_sizes][0] = value
@@ -943,6 +984,13 @@ class AnimationEditor
         @components[:particle_list].set_particles(@anim[:particles])
         refresh
       end
+    elsif Input.triggerex?(:C)
+      options = color_scheme_options.keys
+      this_index = options.index(@color_scheme || :light) || 0
+      new_index = (this_index + 1) % options.length
+      @settings[:color_scheme] = options[new_index]
+      self.color_scheme = @settings[:color_scheme]
+      save_settings
     end
   end
 

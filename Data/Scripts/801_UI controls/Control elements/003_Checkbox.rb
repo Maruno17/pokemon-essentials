@@ -6,8 +6,6 @@ class UIControls::Checkbox < UIControls::BaseControl
   CHECKBOX_WIDTH     = 40
   CHECKBOX_HEIGHT    = 24
   CHECKBOX_FILL_SIZE = CHECKBOX_HEIGHT - 4
-  UNCHECKED_COLOR    = Color.gray
-  CHECKED_COLOR      = Color.new(48, 192, 48)   # Darkish green
 
   def initialize(width, height, viewport, value = false)
     super(width, height, viewport)
@@ -20,6 +18,14 @@ class UIControls::Checkbox < UIControls::BaseControl
     return if @value == new_value
     @value = new_value
     invalidate
+  end
+
+  def checked_color
+    return get_color_scheme_color_for_element(:checked_color, Color.new(48, 192, 48))
+  end
+
+  def unchecked_color
+    return get_color_scheme_color_for_element(:unchecked_color, Color.gray)
   end
 
   #-----------------------------------------------------------------------------
@@ -40,24 +46,23 @@ class UIControls::Checkbox < UIControls::BaseControl
     if disabled?
       self.bitmap.fill_rect(@checkbox_rect.x, @checkbox_rect.y,
                             @checkbox_rect.width, @checkbox_rect.height,
-                            DISABLED_COLOR)
+                            disabled_fill_color)
     end
     # Draw checkbox outline
     self.bitmap.outline_rect(@checkbox_rect.x, @checkbox_rect.y,
                              @checkbox_rect.width, @checkbox_rect.height,
-                             self.bitmap.font.color)
+                             line_color)
     # Draw checkbox fill
-    if @value   # If checked
-      self.bitmap.fill_rect(@checkbox_rect.x + @checkbox_rect.width - CHECKBOX_FILL_SIZE - 2, @checkbox_rect.y + 2,
-                            CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, (disabled?) ? DISABLED_COLOR_DARK : CHECKED_COLOR)
-      self.bitmap.outline_rect(@checkbox_rect.x + @checkbox_rect.width - CHECKBOX_FILL_SIZE - 2, @checkbox_rect.y + 2,
-                               CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, self.bitmap.font.color)
+    box_x = (@value) ? @checkbox_rect.width - CHECKBOX_FILL_SIZE - 2 : 2
+    if disabled?
+      box_color = disabled_text_color
     else
-      self.bitmap.fill_rect(@checkbox_rect.x + 2, @checkbox_rect.y + 2,
-                            CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, (disabled?) ? DISABLED_COLOR_DARK : UNCHECKED_COLOR)
-      self.bitmap.outline_rect(@checkbox_rect.x + 2, @checkbox_rect.y + 2,
-                               CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, self.bitmap.font.color)
+      box_color = (@value) ? checked_color : unchecked_color
     end
+    self.bitmap.fill_rect(@checkbox_rect.x + box_x, @checkbox_rect.y + 2,
+                          CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, box_color)
+    self.bitmap.outline_rect(@checkbox_rect.x + box_x, @checkbox_rect.y + 2,
+                             CHECKBOX_FILL_SIZE, CHECKBOX_FILL_SIZE, line_color)
   end
 
   #-----------------------------------------------------------------------------

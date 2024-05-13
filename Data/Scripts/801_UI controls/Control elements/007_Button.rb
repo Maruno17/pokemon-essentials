@@ -7,7 +7,6 @@ class UIControls::Button < UIControls::BaseControl
   BUTTON_PADDING     = 10   # Used when @fixed_size is false
   BUTTON_HEIGHT      = 28   # Used when @fixed_size is false
   TEXT_BASE_OFFSET_Y = 18   # Text is centred vertically in the button
-  HIGHLIGHT_COLOR    = Color.new(224, 192, 32)   # Dark yellow
 
   def initialize(width, height, viewport, text = "")
     super(width, height, viewport)
@@ -82,21 +81,21 @@ class UIControls::Button < UIControls::BaseControl
       # Draw highligted colour
       self.bitmap.fill_rect(@button_rect.x, @button_rect.y,
                             @button_rect.width, @button_rect.height,
-                            HIGHLIGHT_COLOR)
+                            highlight_color)
     elsif disabled?
       # Draw disabled colour
       self.bitmap.fill_rect(@button_rect.x, @button_rect.y,
                             @button_rect.width, @button_rect.height,
-                            DISABLED_COLOR)
+                            disabled_fill_color)
     end
     # Draw button outline
     self.bitmap.outline_rect(@button_rect.x, @button_rect.y,
                              @button_rect.width, @button_rect.height,
-                             self.bitmap.font.color)
+                             line_color)
     # Draw inner grey ring that shows this is a button rather than a text box
     if !disabled?
-      shade = self.bitmap.font.color.clone
-      shade.alpha = 64
+      shade = line_color.clone
+      shade.alpha = (shade.red > 128) ? 160 : 64
       self.bitmap.outline_rect(@button_rect.x + 2, @button_rect.y + 2,
                                @button_rect.width - 4, @button_rect.height - 4,
                                shade, 1)

@@ -2,19 +2,22 @@
 #
 #===============================================================================
 class AnimationEditor
-  def create_pop_up_window(width, height)
-    ret = BitmapSprite.new(width + (BORDER_THICKNESS * 2),
-                           height + (BORDER_THICKNESS * 2), @pop_up_viewport)
-    ret.x = (WINDOW_WIDTH - ret.width) / 2
-    ret.y = (WINDOW_HEIGHT - ret.height) / 2
-    ret.z = -1
-    ret.bitmap.font.color = Color.black
-    ret.bitmap.font.size = 18
+  def create_pop_up_window(width, height, ret = nil)
+    if !ret
+      ret = BitmapSprite.new(width + (BORDER_THICKNESS * 2),
+                             height + (BORDER_THICKNESS * 2), @pop_up_viewport)
+      ret.x = (WINDOW_WIDTH - ret.width) / 2
+      ret.y = (WINDOW_HEIGHT - ret.height) / 2
+      ret.z = -1
+    end
+    ret.bitmap.clear
+    ret.bitmap.font.color = text_color
+    ret.bitmap.font.size = text_size
     # Draw pop-up box border
     ret.bitmap.border_rect(BORDER_THICKNESS, BORDER_THICKNESS, width, height,
-                           BORDER_THICKNESS, Color.white, Color.black)
+                           BORDER_THICKNESS, background_color, line_color)
     # Fill pop-up box with white
-    ret.bitmap.fill_rect(BORDER_THICKNESS, BORDER_THICKNESS, width, height, Color.white)
+    ret.bitmap.fill_rect(BORDER_THICKNESS, BORDER_THICKNESS, width, height, background_color)
     return ret
   end
 
@@ -35,6 +38,7 @@ class AnimationEditor
       btn.x += MESSAGE_BOX_BUTTON_WIDTH * i
       btn.y = msg_bitmap.y + msg_bitmap.height - MESSAGE_BOX_BUTTON_HEIGHT - MESSAGE_BOX_SPACING
       btn.set_fixed_size
+      btn.color_scheme = @color_scheme
       btn.set_interactive_rects
       buttons.push([option[0], btn])
     end
@@ -130,6 +134,7 @@ class AnimationEditor
     editor_settings.visible = true
     # Set control values
     refresh_component(:editor_settings)
+    editor_settings.get_control(:color_scheme).value = @settings[:color_scheme] || :light
     editor_settings.get_control(:side_size_1).value = @settings[:side_sizes][0]
     editor_settings.get_control(:side_size_2).value = @settings[:side_sizes][1]
     editor_settings.get_control(:user_index).value = @settings[:user_index]
@@ -148,6 +153,7 @@ class AnimationEditor
         break if editor_settings.values.keys.include?(:close)
         editor_settings.values.each_pair do |property, value|
           apply_changed_value(:editor_settings, property, value)
+          create_pop_up_window(ANIM_PROPERTIES_WIDTH, ANIM_PROPERTIES_HEIGHT, bg_bitmap)
         end
         editor_settings.clear_changed
       end
@@ -222,7 +228,7 @@ class AnimationEditor
     bg_bitmap.bitmap.outline_rect(BORDER_THICKNESS + list.x + list.width + 6,
                                   BORDER_THICKNESS + list.y,
                                   GRAPHIC_CHOOSER_PREVIEW_SIZE + 4, GRAPHIC_CHOOSER_PREVIEW_SIZE + 4,
-                                  Color.black)
+                                  line_color)
     preview_sprite = Sprite.new(@pop_up_viewport)
     preview_sprite.x = graphic_chooser.x + list.x + list.width + 8 + (GRAPHIC_CHOOSER_PREVIEW_SIZE / 2)
     preview_sprite.y = graphic_chooser.y + list.y + 2 + (GRAPHIC_CHOOSER_PREVIEW_SIZE / 2)
@@ -251,7 +257,7 @@ class AnimationEditor
       preview_bitmap = AnimatedBitmap.new(folder + fname)
       bg_bitmap.bitmap.fill_rect(BORDER_THICKNESS + list.x + list.width + 8, BORDER_THICKNESS + list.y + 2,
                                  GRAPHIC_CHOOSER_PREVIEW_SIZE, GRAPHIC_CHOOSER_PREVIEW_SIZE,
-                                 Color.white)
+                                 background_color)
       next if !preview_bitmap
       sprite.bitmap = preview_bitmap.bitmap
       zoom = [[GRAPHIC_CHOOSER_PREVIEW_SIZE.to_f / preview_bitmap.width,

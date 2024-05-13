@@ -14,7 +14,10 @@ class UIControls::ControlsContainer
   OFFSET_FROM_LABEL_X = 100
   OFFSET_FROM_LABEL_Y = 0
 
+  include UIControls::StyleMixin
+
   def initialize(x, y, width, height, right_margin = 0)
+    self.color_scheme = :light
     @viewport = Viewport.new(x, y, width, height)
     @viewport.z = 99999
     @x = x
@@ -43,6 +46,15 @@ class UIControls::ControlsContainer
     @visible = value
     @controls.each { |c| c[1].visible = value }
     repaint if @visible
+  end
+
+  def color_scheme=(value)
+    return if @color_scheme == value
+    @color_scheme = value
+    if @controls
+      @controls.each { |c| c[1].color_scheme = value }
+      repaint
+    end
   end
 
   #-----------------------------------------------------------------------------
@@ -215,6 +227,7 @@ class UIControls::ControlsContainer
   def add_control_at(id, control, x, y)
     control.x = x
     control.y = y
+    control.color_scheme = @color_scheme
     control.set_interactive_rects
     @controls.push([id, control])
     repaint
