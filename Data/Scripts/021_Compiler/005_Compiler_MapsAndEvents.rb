@@ -38,14 +38,14 @@ module Compiler
   ]
 
   @@categories[:map_data] = {
-    :should_compile => proc { next import_new_maps },
+    :should_compile => proc { |compiling| next import_new_maps },
     :header_text    => proc { next _INTL("Modifying map data") },
     :skipped_text   => proc { next _INTL("Not modified") },
     :compile        => proc { compile_trainer_events }
   }
 
   @@categories[:messages] = {
-    :should_compile => proc { next false },
+    :should_compile => proc { |compiling| next compiling.include?(:pbs_files) || compiling.include?(:map_data) },
     :header_text    => proc { next _INTL("Gathering messages for translations") },
     :skipped_text   => proc { next _INTL("Not gathered") },
     :compile        => proc {

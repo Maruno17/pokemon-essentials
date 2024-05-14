@@ -1,6 +1,6 @@
 module Compiler
   @@categories[:animations] = {
-    :should_compile => proc { next false },
+    :should_compile => proc { |compiling| next false },
     :header_text    => proc { next _INTL("Compiling animations") },
     :skipped_text   => proc { next _INTL("Not compiled") },
     :compile        => proc { compile_animations }

@@ -1,6 +1,6 @@
 module Compiler
   @@categories[:pbs_files] = {
-    :should_compile => proc { next should_compile_pbs_files? },
+    :should_compile => proc { |compiling| next should_compile_pbs_files? },
     :header_text    => proc { next _INTL("Compiling PBS files") },
     :skipped_text   => proc { next _INTL("Not compiled") },
     :compile        => proc {

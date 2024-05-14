@@ -959,7 +959,7 @@ module Compiler
       return ret
     end
     @@categories.each_pair do |category, procs|
-      ret.push(category) if procs[:should_compile]&.call
+      ret.push(category) if procs[:should_compile]&.call(ret)
     end
     return ret
   end
