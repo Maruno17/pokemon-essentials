@@ -37,6 +37,28 @@ module Compiler
     ["calcStats",                    "calc_stats"]
   ]
 
+  @@categories[:map_data] = {
+    :should_compile => proc { next import_new_maps },
+    :header_text    => proc { next _INTL("Modifying map data") },
+    :skipped_text   => proc { next _INTL("Not modified") },
+    :compile        => proc { compile_trainer_events }
+  }
+
+  @@categories[:messages] = {
+    :should_compile => proc { next false },
+    :header_text    => proc { next _INTL("Gathering messages for translations") },
+    :skipped_text   => proc { next _INTL("Not gathered") },
+    :compile        => proc {
+      Console.echo_li(_INTL("Finding messages..."))
+      Translator.gather_script_and_event_texts
+      Console.echo_done(true)
+      Console.echo_li(_INTL("Saving messages..."))
+      MessageTypes.save_default_messages
+      MessageTypes.load_default_messages if FileTest.exist?("Data/messages_core.dat")
+      Console.echo_done(true)
+    }
+  }
+
   module_function
 
   #=============================================================================
@@ -1680,7 +1702,7 @@ module Compiler
   #=============================================================================
   # Main compiler method for events
   #=============================================================================
-  def compile_trainer_events(_mustcompile)
+  def compile_trainer_events
     mapData = MapData.new
     t = System.uptime
     Graphics.update

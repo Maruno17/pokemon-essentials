@@ -1378,7 +1378,7 @@ MenuHandlers.add(:debug_menu, :create_pbs_files, {
     loop do
       cmd = pbShowCommands(nil, cmds, -1, cmd)
       case cmd
-      when 0  then Compiler.write_all
+      when 0  then Compiler.write_all_pbs_files
       when 1  then Compiler.write_abilities
       when 2  then Compiler.write_trainer_lists
       when 3  then Compiler.write_berry_plants
