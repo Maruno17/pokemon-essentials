@@ -117,6 +117,7 @@ class PokemonLoad_Scene
     @sprites["cmdwindow"] = Window_CommandPokemon.new([])
     @sprites["cmdwindow"].viewport = @viewport
     @sprites["cmdwindow"].visible  = false
+    @max_party_index = 0
   end
 
   def pbStartScene2
@@ -143,7 +144,7 @@ class PokemonLoad_Scene
         @commands.length.times do |i|
           @sprites["panel#{i}"].y -= 48
         end
-        6.times do |i|
+        (@max_party_index + 1).times do |i|
           break if !@sprites["party#{i}"]
           @sprites["party#{i}"].y -= 48
         end
@@ -153,7 +154,7 @@ class PokemonLoad_Scene
         @commands.length.times do |i|
           @sprites["panel#{i}"].y += 48
         end
-        6.times do |i|
+        (@max_party_index + 1).times do |i|
           break if !@sprites["party#{i}"]
           @sprites["party#{i}"].y += 48
         end
@@ -183,6 +184,7 @@ class PokemonLoad_Scene
       @sprites["party#{i}"].x = 334 + (66 * (i % 2))
       @sprites["party#{i}"].y = 112 + (50 * (i / 2))
       @sprites["party#{i}"].z = 99999
+      @max_party_index = i
     end
   end
 

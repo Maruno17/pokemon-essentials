@@ -306,6 +306,12 @@ class Battle::Battler
     target.damageState.typeMod = typeMod
     # Two-turn attacks can't fail here in the charging turn
     return true if user.effects[PBEffects::TwoTurnAttack]
+    # Semi-invulnerable target
+    if !pbSuccessCheckSemiInvulnerable(move, user, target)
+      PBDebug.log("[Move failed] Target is semi-invulnerable")
+      target.damageState.invulnerable = true
+      return true   # Succeeds here but fails in def pbSuccessCheckPerHit
+    end
     # Move-specific failures
     if move.pbFailsAgainstTarget?(user, target, show_message)
       PBDebug.log(sprintf("[Move failed] In function code %s's def pbFailsAgainstTarget?", move.function_code))
@@ -525,6 +531,42 @@ class Battle::Battler
     return true
   end
 
+  # Returns true if the target is not semi-invulnerable, or if the user can hit
+  # the target even though the target is semi-invulnerable.
+  def pbSuccessCheckSemiInvulnerable(move, user, target)
+    # Lock-On
+    return true if user.effects[PBEffects::LockOn] > 0 &&
+                   user.effects[PBEffects::LockOnPos] == target.index
+    # Toxic
+    return true if move.pbOverrideSuccessCheckPerHit(user, target)
+    # No Guard
+    return true if user.hasActiveAbility?(:NOGUARD) ||
+                   target.hasActiveAbility?(:NOGUARD)
+    # Future Sight
+    return true if @battle.futureSight
+    # Helping Hand
+    return true if move.function_code == "PowerUpAllyMove"
+    # Semi-invulnerable moves
+    if target.effects[PBEffects::TwoTurnAttack]
+      if target.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+                                 "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
+                                 "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
+        return move.hitsFlyingTargets?
+      elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground")
+        return move.hitsDiggingTargets?
+      elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderwater")
+        return move.hitsDivingTargets?
+      elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableRemoveProtections")
+        return false
+      end
+    end
+    if target.effects[PBEffects::SkyDrop] >= 0 &&
+       target.effects[PBEffects::SkyDrop] != user.index && !move.hitsFlyingTargets?
+      return false
+    end
+    return true
+  end
+
   #=============================================================================
   # Per-hit success check against the target.
   # Includes semi-invulnerable move use and accuracy calculation.
@@ -537,46 +579,13 @@ class Battle::Battler
                    user.effects[PBEffects::LockOnPos] == target.index
     # Toxic
     return true if move.pbOverrideSuccessCheckPerHit(user, target)
-    miss = false
-    hitsInvul = false
-    # No Guard
-    hitsInvul = true if user.hasActiveAbility?(:NOGUARD) ||
-                        target.hasActiveAbility?(:NOGUARD)
-    # Future Sight
-    hitsInvul = true if @battle.futureSight
-    # Helping Hand
-    hitsInvul = true if move.function_code == "PowerUpAllyMove"
-    if !hitsInvul
-      # Semi-invulnerable moves
-      if target.effects[PBEffects::TwoTurnAttack]
-        if target.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
-                                   "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
-                                   "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
-          miss = true if !move.hitsFlyingTargets?
-        elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground")
-          miss = true if !move.hitsDiggingTargets?
-        elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderwater")
-          miss = true if !move.hitsDivingTargets?
-        elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableRemoveProtections")
-          miss = true
-        end
-      end
-      if target.effects[PBEffects::SkyDrop] >= 0 &&
-         target.effects[PBEffects::SkyDrop] != user.index && !move.hitsFlyingTargets?
-        miss = true
-      end
-    end
-    if miss
-      target.damageState.invulnerable = true
-      PBDebug.log("[Move failed] Target is semi-invulnerable")
-    else
-      # Called by another move
-      return true if skipAccuracyCheck
-      # Accuracy check
-      return true if move.pbAccuracyCheck(user, target)   # Includes Counter/Mirror Coat
-      PBDebug.log("[Move failed] Failed pbAccuracyCheck")
-    end
-    # Missed
+    # Semi-invulnerable target
+    return false if target.damageState.invulnerable
+    # Called by another move
+    return true if skipAccuracyCheck
+    # Accuracy check
+    return true if move.pbAccuracyCheck(user, target)   # Includes Counter/Mirror Coat
+    PBDebug.log("[Move failed] Failed pbAccuracyCheck")
     return false
   end
 

@@ -342,7 +342,7 @@ class SafariBattle
   def pbGetOwnerFromBattlerIndex(idxBattler); return pbPlayer; end
 
   def pbSetSeen(battler)
-    return if !battler || !@internalBattle
+    return if !battler
     if battler.is_a?(Battle::Battler)
       pbPlayer.pokedex.register(battler.displaySpecies, battler.displayGender,
                                 battler.displayForm, battler.shiny?)
@@ -352,7 +352,7 @@ class SafariBattle
   end
 
   def pbSetCaught(battler)
-    return if !battler || !@internalBattle
+    return if !battler
     if battler.is_a?(Battle::Battler)
       pbPlayer.pokedex.register_caught(battler.displaySpecies)
     else

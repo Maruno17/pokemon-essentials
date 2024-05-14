@@ -616,5 +616,5 @@ def pbScreenCapture
     capturefile = RTP.getSaveFileName(sprintf("%s.png", filestart))
     Graphics.screenshot(capturefile)
   end
-  pbSEPlay("Pkmn exp full") if FileTest.audio_exist?("Audio/SE/Pkmn exp full")
+  pbSEPlay("Screenshot") if FileTest.audio_exist?("Audio/SE/Screenshot")
 end
