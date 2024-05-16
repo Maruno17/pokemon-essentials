@@ -382,6 +382,10 @@ class Battle::Move
         target.effects[PBEffects::MirrorCoat]       = damage
         target.effects[PBEffects::MirrorCoatTarget] = user.index
       end
+      if target.opposes?(user)
+        target.lastHPLostFromFoe = damage                # For Metal Burst
+        target.lastFoeAttacker.push(user.pokemonIndex)   # For Metal Burst
+      end
     end
     if target.effects[PBEffects::Bide] > 0
       target.effects[PBEffects::BideDamage] += damage
@@ -392,10 +396,6 @@ class Battle::Move
     target.tookMoveDamageThisRound = true if damage > 0 && !target.damageState.substitute   # For Focus Punch
     target.tookDamageThisRound = true if damage > 0   # For Assurance
     target.lastAttacker.push(user.index)              # For Revenge
-    if target.opposes?(user)
-      target.lastHPLostFromFoe = damage               # For Metal Burst
-      target.lastFoeAttacker.push(user.index)         # For Metal Burst
-    end
     if $game_temp.party_direct_damage_taken &&
        $game_temp.party_direct_damage_taken[target.pokemonIndex] &&
        target.pbOwnedByPlayer?

@@ -420,7 +420,7 @@ class TilemapRenderer
 
   def refresh_tile_z(tile, map, y, layer, tile_id)
     if tile.shows_reflection
-      tile.z = -100
+      tile.z = -2000
     elsif tile.bridge && $PokemonGlobal.bridge > 0
       tile.z = 0
     else
