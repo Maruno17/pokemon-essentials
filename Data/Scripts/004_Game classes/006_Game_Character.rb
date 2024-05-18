@@ -399,6 +399,7 @@ class Game_Character
     if @oldX && @oldY && @oldMap &&
        (@oldX != self.x || @oldY != self.y || @oldMap != self.map.map_id)
       EventHandlers.trigger(:on_leave_tile, self, @oldMap, @oldX, @oldY)
+      EventHandlers.trigger(:on_player_leave_tile,self, @oldMap, @oldX, @oldY) if self == $game_player
     end
     @oldX = self.x
     @oldY = self.y

@@ -183,6 +183,40 @@ EventHandlers.add(:on_step_taken, :auto_move_player,
   }
 )
 
+# Turn a "spinner" towards the player if running or on the bike.
+# An event's name must contain "spinner" and "trainer()" or "sight()".
+# A spinner's can be blocked from spinning in a any number of directions if the event name contains noleft, noright, noup, or nodown.
+# I recommend making spinners stationary, as the interaction with move routes is untested.
+# NOTE: The player cannot open a submenu to pause spinning momentarily, as can be done in official games.
+EventHandlers.add(:on_player_leave_tile, :turn_spinner_toward_player,
+  proc {
+    if ($game_player.can_run? || $PokemonGlobal.bicycle) && true
+      $game_map.events.each_value do |event|
+        next if !event.name[/spinner/] # Event must be a spinner
+        next if !event.name[/(?:sight|trainer)\((\d+)\)/i] # Event must have sight
+        distance = $~[1].to_i
+        sx = event.x + (event.width / 2.0) - ($game_player.x + ($game_player.width / 2.0))
+        sy = event.y - (event.height / 2.0) - ($game_player.y - ($game_player.height / 2.0))
+        next if sx.abs > distance || sy.abs > distance # Don't spin if the player isn't in the range sight
+        next if sx == 0 && sy == 0
+        if sx.abs > sy.abs
+          if sx > 0 && !event.name[/(?:\(|\,)noleft(?:\)|\,)/] #left
+            pbMoveRoute(event, [PBMoveRoute::TURN_LEFT])
+          elsif sx <= 0 && !event.name[/(?:\(|\,)noright(?:\)|\,)/] #right
+            pbMoveRoute(event, [PBMoveRoute::TURN_RIGHT])
+          end
+        else
+          if sy > 0 && !event.name[/(?:\(|\,)noup(?:\)|\,)/] #up
+            pbMoveRoute(event, [PBMoveRoute::TURN_UP])
+          elsif sy <= 0 && !event.name[/(?:\(|\,)nodown(?:\)|\,)/] #down
+            pbMoveRoute(event, [PBMoveRoute::TURN_DOWN])
+          end
+        end
+      end
+    end
+  }
+)
+
 def pbOnStepTaken(eventTriggered)
   if $game_player.move_route_forcing || pbMapInterpreterRunning?
     EventHandlers.trigger(:on_step_taken, $game_player)
