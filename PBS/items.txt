@@ -242,6 +242,16 @@ FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_30
 Description = A cuff made from woven-together Galarica Twigs. Giving it to a Galarian Slowpoke would make it very happy.
 #-------------------------------
+[GALARICAWREATH]
+Name = Galarica Wreath
+NamePlural = Galarica Wreaths
+Pocket = 1
+Price = 6000
+BPPrice = 5
+FieldUse = OnPokemon
+Flags = EvolutionStone,Fling_30
+Description = A wreath made from woven-together Galarica Twigs. A Galarian Slowpoke wearing this would be very happy.
+#-------------------------------
 [BLACKAUGURITE]
 Name = Black Augurite
 NamePlural = Black Augurites
@@ -266,15 +276,70 @@ FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_60
 Description = A block of muddy material that can be used as fuel for burning when it is dried. It's loved by a certain Pokémon.
 #-------------------------------
-[GALARICAWREATH]
-Name = Galarica Wreath
-NamePlural = Galarica Wreaths
+[SYRUPYAPPLE]
+Name = Syrupy Apple
+NamePlural = Syrupy Apples
+Pocket = 1
+Price = 500
+SellPrice = 550
+BPPrice = 5
+FieldUse = OnPokemon
+Flags = EvolutionStone,Fling_30
+Description = A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally syrupy.
+#-------------------------------
+[UNREMARKABLETEACUP]
+Name = Unremarkable Teacup
+NamePlural = Unremarkable Teacups
+Pocket = 1
+Price = 1600
+BPPrice = 5
+FieldUse = OnPokemon
+Flags = EvolutionStone,Fling_80
+Description = A peculiar teacup that can make a certain species of Pokémon evolve. It may be cracked, but tea drunk from it is delicious.
+#-------------------------------
+[MASTERPIECETEACUP]
+Name = Masterpiece Teacup
+NamePlural = Masterpiece Teacups
+Pocket = 1
+Price = 38000
+BPPrice = 5
+FieldUse = OnPokemon
+Flags = EvolutionStone,Fling_80
+Description = A peculiar teacup that can make a certain species of Pokémon evolve. It may be chipped, but tea drunk from it is delicious.
+#-------------------------------
+[METALALLOY]
+Name = Metal Alloy
+NamePlural = Metal Alloys
+PortionName = hunk of Metal Alloy
+PortionNamePlural = hunks of Metal Alloy
 Pocket = 1
 Price = 6000
 BPPrice = 5
 FieldUse = OnPokemon
+Flags = EvolutionStone,Fling_80
+Description = A peculiar metal that can make certain species of Pokémon evolve. It is composed of many layers.
+#-------------------------------
+[MALICIOUSARMOR]
+Name = Malicious Armor
+NamePlural = Malicious Armors
+PortionName = set of Malicious Armor
+PortionNamePlural = sets of Malicious Armor
+Pocket = 1
+Price = 3000
+FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_30
-Description = A wreath made from woven-together Galarica Twigs. A Galarian Slowpoke wearing this would be very happy.
+Description = A peculiar set of armor that can make a certain species of Pokémon evolve. Malicious will lurks within it.
+#-------------------------------
+[AUSPICIOUSARMOR]
+Name = Auspicious Armor
+NamePlural = Auspicious Armors
+PortionName = set of Auspicious Armor
+PortionNamePlural = sets of Auspicious Armor
+Pocket = 1
+Price = 3000
+FieldUse = OnPokemon
+Flags = EvolutionStone,Fling_30
+Description = A peculiar set of armor that can make a certain species of Pokémon evolve. Auspicious wishes live within it.
 #-------------------------------
 [REDAPRICORN]
 Name = Red Apricorn
@@ -634,6 +699,22 @@ Pocket = 1
 Price = 0
 Flags = Fling_30
 Description = A crown made in a civilization about 3,000 years ago. A maniac will buy it for a high price.
+#-------------------------------
+[TINYBAMBOOSHOOT]
+Name = Tiny Bamboo Shoot
+NamePlural = Tiny Bamboo Shoots
+Pocket = 1
+Price = 1500
+Flags = Fling_30
+Description = A small and rare bamboo shoot. It's quite popular with a certain class of gourmands.
+#-------------------------------
+[BIGBAMBOOSHOOT]
+Name = Big Bamboo Shoot
+NamePlural = Big Bamboo Shoots
+Pocket = 1
+Price = 6000
+Flags = Fling_30
+Description = A large and rare bamboo shoot. It's extremely popular with a certain class of gourmands.
 #-------------------------------
 [GROWTHMULCH]
 Name = Growth Mulch
@@ -1741,6 +1822,14 @@ Price = 3000
 SellPrice = 1000
 Flags = Fling_30
 Description = An item to be held by a Pokémon. It is a special metallic film that ups the power of Steel-type moves.
+#-------------------------------
+[FAIRYFEATHER]
+Name = Fairy Feather
+NamePlural = Fairy Feathers
+Pocket = 1
+Price = 3000
+Flags = Fling_10
+Description = An item to be held by a Pokémon. This feather, which gleams faintly when hit by light, boosts the power of the holder's Fairy-type moves.
 #-------------------------------
 [SILKSCARF]
 Name = Silk Scarf
@@ -3525,6 +3614,69 @@ Price = 300
 FieldUse = OnPokemon
 Flags = Fling_20
 Description = An item for use on a Pokémon. It slightly increases the base Speed stat of a single Pokémon.
+#-------------------------------
+[HEALTHMOCHI]
+Name = Health Mochi
+NamePlural = Health Mochis
+Pocket = 2
+Price = 500
+FieldUse = OnPokemon
+Flags = Fling_20
+Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's HP stat.
+#-------------------------------
+[MUSCLEMOCHI]
+Name = Muscle Mochi
+NamePlural = Muscle Mochis
+Pocket = 2
+Price = 500
+FieldUse = OnPokemon
+Flags = Fling_20
+Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Attack stat.
+#-------------------------------
+[RESISTMOCHI]
+Name = Resist Mochi
+NamePlural = Resist Mochis
+Pocket = 2
+Price = 500
+FieldUse = OnPokemon
+Flags = Fling_20
+Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Defense stat.
+#-------------------------------
+[GENIUSMOCHI]
+Name = Genius Mochi
+NamePlural = Genius Mochis
+Pocket = 2
+Price = 500
+FieldUse = OnPokemon
+Flags = Fling_20
+Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Atk stat.
+#-------------------------------
+[CLEVERMOCHI]
+Name = Clever Mochi
+NamePlural = Clever Mochis
+Pocket = 2
+Price = 500
+FieldUse = OnPokemon
+Flags = Fling_20
+Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Def stat.
+#-------------------------------
+[SWIFTMOCHI]
+Name = Swift Mochi
+NamePlural = Swift Mochis
+Pocket = 2
+Price = 500
+FieldUse = OnPokemon
+Flags = Fling_20
+Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Speed stat.
+#-------------------------------
+[FRESHSTARTMOCHI]
+Name = Fresh-Start Mochi
+NamePlural = Fresh-Start Mochis
+Pocket = 2
+Price = 300
+FieldUse = OnPokemon
+Flags = Fling_20
+Description = A mochi cake with Berries kneaded into its dough. It causes a Pokémon to lose all its base points.
 #-------------------------------
 [LONELYMINT]
 Name = Lonely Mint
@@ -6614,71 +6766,12 @@ Pocket = 8
 Price = 0
 Flags = KeyItem
 Description = A faded sea chart that shows the way to a certain island.
-#-------------------------------
-[SYRUPYAPPLE]
-Name = Syrupy Apple
-NamePlural = Syrupy Apples
-Pocket = 1
-Price = 500
-SellPrice = 550
-BPPrice = 5
-FieldUse = OnPokemon
-Flags = EvolutionStone,Fling_30
-Description = A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally syrupy.
-#-------------------------------
-[UNREMARKABLETEACUP]
-Name = Unremarkable Teacup
-NamePlural = Unremarkable Teacups
-Pocket = 1
-Price = 1600
-BPPrice = 5
-FieldUse = OnPokemon
-Flags = EvolutionStone,Fling_80
-Description = A peculiar teacup that can make a certain species of Pokémon evolve. It may be cracked, but tea drunk from it is delicious.
-#-------------------------------
-[MASTERPIECETEACUP]
-Name = Masterpiece Teacup
-NamePlural = Masterpiece Teacups
-Pocket = 1
-Price = 38000
-BPPrice = 5
-FieldUse = OnPokemon
-Flags = EvolutionStone,Fling_80
-Description = A peculiar teacup that can make a certain species of Pokémon evolve. It may be chipped, but tea drunk from it is delicious.
-#-------------------------------
-[METALALLOY]
-Name = Metal Alloy
-NamePlural = Metal Alloys
-PortionName = hunk of Metal Alloy
-PortionNamePlural = hunks of Metal Alloy
-Pocket = 1
-Price = 6000
-BPPrice = 5
-FieldUse = OnPokemon
-Flags = EvolutionStone,Fling_80
-Description = A peculiar metal that can make certain species of Pokémon evolve. It is composed of many layers.
-#-------------------------------
-[MALICIOUSARMOR]
-Name = Malicious Armor
-NamePlural = Malicious Armors
-PortionName = set of Malicious Armor
-PortionNamePlural = sets of Malicious Armor
-Pocket = 1
-Price = 3000
-FieldUse = OnPokemon
-Flags = EvolutionStone,Fling_30
-Description = A peculiar set of armor that can make a certain species of Pokémon evolve. Malicious will lurks within it.
-#-------------------------------
-[AUSPICIOUSARMOR]
-Name = Auspicious Armor
-NamePlural = Auspicious Armors
-PortionName = set of Auspicious Armor
-PortionNamePlural = sets of Auspicious Armor
-Pocket = 1
-Price = 3000
-FieldUse = OnPokemon
-Flags = EvolutionStone,Fling_30
-Description = A peculiar set of armor that can make a certain species of Pokémon evolve. Auspicious wishes live within it.
+
+
+
+
+
+
 #-------------------------------
 [WELLSPRINGMASK]
 Name = Wellspring Mask
@@ -6702,22 +6795,6 @@ Pocket = 1
 Price = 0
 Flags = Fling_60
 Description = An item to be held by Ogerpon. This carved wooden mask is adorned with crystals and allows Ogerpon to wield the Rock type during battle.
-#-------------------------------
-[TINYBAMBOOSHOOT]
-Name = Tiny Bamboo Shoot
-NamePlural = Tiny Bamboo Shoots
-Pocket = 1
-Price = 1500
-Flags = Fling_30
-Description = A small and rare bamboo shoot. It's quite popular with a certain class of gourmands.
-#-------------------------------
-[BIGBAMBOOSHOOT]
-Name = Big Bamboo Shoot
-NamePlural = Big Bamboo Shoots
-Pocket = 1
-Price = 6000
-Flags = Fling_30
-Description = A large and rare bamboo shoot. It's extremely popular with a certain class of gourmands.
 #-------------------------------
 [LEADERSCREST]
 Name = Leader's Crest
@@ -6816,77 +6893,6 @@ Price = 20000
 SellPrice = 5000
 Flags = Fling_30
 Description = An item to be held by a Pokémon. This loaded dice always rolls a good number, and holding one can ensure that the holder's multistrike moves hit more times.
-#-------------------------------
-[FAIRYFEATHER]
-Name = Fairy Feather
-NamePlural = Fairy Feathers
-Pocket = 1
-Price = 3000
-Flags = Fling_10
-Description = An item to be held by a Pokémon. This feather, which gleams faintly when hit by light, boosts the power of the holder's Fairy-type moves.
-#-------------------------------
-[HEALTHMOCHI]
-Name = Health Mochi
-NamePlural = Health Mochis
-Pocket = 2
-Price = 500
-FieldUse = OnPokemon
-Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's HP stat.
-#-------------------------------
-[MUSCLEMOCHI]
-Name = Muscle Mochi
-NamePlural = Muscle Mochis
-Pocket = 2
-Price = 500
-FieldUse = OnPokemon
-Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Attack stat.
-#-------------------------------
-[RESISTMOCHI]
-Name = Resist Mochi
-NamePlural = Resist Mochis
-Pocket = 2
-Price = 500
-FieldUse = OnPokemon
-Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Defense stat.
-#-------------------------------
-[GENIUSMOCHI]
-Name = Genius Mochi
-NamePlural = Genius Mochis
-Pocket = 2
-Price = 500
-FieldUse = OnPokemon
-Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Atk stat.
-#-------------------------------
-[CLEVERMOCHI]
-Name = Clever Mochi
-NamePlural = Clever Mochis
-Pocket = 2
-Price = 500
-FieldUse = OnPokemon
-Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Def stat.
-#-------------------------------
-[SWIFTMOCHI]
-Name = Swift Mochi
-NamePlural = Swift Mochis
-Pocket = 2
-Price = 500
-FieldUse = OnPokemon
-Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Speed stat.
-#-------------------------------
-[FRESHSTARTMOCHI]
-Name = Fresh-Start Mochi
-NamePlural = Fresh-Start Mochis
-Pocket = 2
-Price = 300
-FieldUse = OnPokemon
-Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It causes a Pokémon to lose all its base points.
 #-------------------------------
 [METEORITE]
 Name = Meteorite

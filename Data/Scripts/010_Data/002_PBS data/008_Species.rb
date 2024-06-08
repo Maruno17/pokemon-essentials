@@ -166,6 +166,10 @@ module GameData
       DATA.each_value { |species| yield species if species.form == 0 }
     end
 
+    def self.each_form_for_species(species)
+      DATA.each_value { |species| yield species if species.species == species }
+    end
+
     def self.species_count
       ret = 0
       self.each_species { |species| ret += 1 }
@@ -381,7 +385,9 @@ module GameData
         return 1 if !prevo_data.incense.nil?
         prevo_min_level = prevo_data.minimum_level
         evo_method_data = GameData::Evolution.get(evo[1])
-        return prevo_min_level if evo_method_data.level_up_proc.nil? && evo_method_data.id != :Shedinja
+        return prevo_min_level if evo_method_data.level_up_proc.nil? &&
+                                  evo_method_data.battle_level_up_proc.nil? &&
+                                  evo_method_data.id != :Shedinja
         any_level_up = evo_method_data.any_level_up
         return (any_level_up) ? prevo_min_level + 1 : evo[2]
       end

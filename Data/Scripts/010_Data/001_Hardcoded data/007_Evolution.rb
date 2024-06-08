@@ -5,6 +5,7 @@ module GameData
     attr_reader :parameter
     attr_reader :any_level_up   # false means parameter is the minimum level
     attr_reader :level_up_proc
+    attr_reader :battle_level_up_proc
     attr_reader :use_item_proc
     attr_reader :on_trade_proc
     attr_reader :after_battle_proc
@@ -25,6 +26,7 @@ module GameData
       @parameter            = hash[:parameter]
       @any_level_up         = hash[:any_level_up] || false
       @level_up_proc        = hash[:level_up_proc]
+      @battle_level_up_proc = hash[:battle_level_up_proc]
       @use_item_proc        = hash[:use_item_proc]
       @on_trade_proc        = hash[:on_trade_proc]
       @after_battle_proc    = hash[:after_battle_proc]
@@ -36,6 +38,15 @@ module GameData
 
     def call_level_up(*args)
       return (@level_up_proc) ? @level_up_proc.call(*args) : nil
+    end
+
+    def call_battle_level_up(*args)
+      if @battle_level_up_proc
+        return @battle_level_up_proc.call(*args)
+      elsif @level_up_proc
+        return @level_up_proc.call(*args)
+      end
+      return nil
     end
 
     def call_use_item(*args)
@@ -199,18 +210,14 @@ GameData::Evolution.register({
 })
 
 GameData::Evolution.register({
-  :id            => :LevelBattle,
-  :parameter     => Integer,
-  :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.level >= parameter
-  }
-})
-
-GameData::Evolution.register({
   :id            => :LevelCoins,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
     next $player.coins >= parameter
+  },
+  :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
+    $player.coins -= parameter
+    next true
   }
 })
 
@@ -528,11 +535,26 @@ GameData::Evolution.register({
   :any_level_up  => true,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
     next pkmn.evolution_counter >= parameter
+  },
+  :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
+    pkmn.evolution_counter = 0
+    next true
   }
 })
 
 #===============================================================================
-# Evolution methods that trigger when using an item on the Pokémon
+# Evolution methods that trigger when levelling up in battle.
+#===============================================================================
+GameData::Evolution.register({
+  :id                   => :LevelBattle,
+  :parameter            => Integer,
+  :battle_level_up_proc => proc { |pkmn, parameter|
+    next pkmn.level >= parameter
+  }
+})
+
+#===============================================================================
+# Evolution methods that trigger when using an item on the Pokémon.
 #===============================================================================
 GameData::Evolution.register({
   :id            => :Item,
@@ -583,7 +605,7 @@ GameData::Evolution.register({
 })
 
 #===============================================================================
-# Evolution methods that trigger when the Pokémon is obtained in a trade
+# Evolution methods that trigger when the Pokémon is obtained in a trade.
 #===============================================================================
 GameData::Evolution.register({
   :id            => :Trade,
@@ -637,25 +659,39 @@ GameData::Evolution.register({
   :id            => :TradeSpecies,
   :parameter     => :Species,
   :on_trade_proc => proc { |pkmn, parameter, other_pkmn|
-    next pkmn.species == parameter && !other_pkmn.hasItem?(:EVERSTONE)
+    next other_pkmn.species == parameter && !other_pkmn.hasItem?(:EVERSTONE)
   }
 })
 
 #===============================================================================
-# Evolution methods that are triggered after any battle
+# Evolution methods that are triggered after any battle.
 #===============================================================================
 GameData::Evolution.register({
-  :id                => :BattleDealCriticalHit,
+  :id                => :AfterBattleCounter,
   :parameter         => Integer,
+  :any_level_up      => true,   # Needs any level up
   :after_battle_proc => proc { |pkmn, party_index, parameter|
-    next $game_temp.party_critical_hits_dealt &&
-         $game_temp.party_critical_hits_dealt[party_index] &&
-         $game_temp.party_critical_hits_dealt[party_index] >= parameter
+    ret = pkmn.evolution_counter >= parameter
+    pkmn.evolution_counter = 0   # Always resets after battle
+    next ret
+  }
+})
+
+# Doesn't cause an evolution itself. Just makes the Pokémon ready to evolve by
+# another means (e.g. via an event). Note that pkmn.evolution_counter is not
+# reset after the battle.
+GameData::Evolution.register({
+  :id                => :AfterBattleCounterMakeReady,
+  :parameter         => Integer,
+  :any_level_up      => true,   # Needs any level up
+  :after_battle_proc => proc { |pkmn, party_index, parameter|
+    pkmn.ready_to_evolve = true if pkmn.evolution_counter >= parameter
+    next false
   }
 })
 
 #===============================================================================
-# Evolution methods that are triggered by an event
+# Evolution methods that are triggered by an event.
 # Each event has its own number, which is the value of the parameter as defined
 # in pokemon.txt/pokemon_forms.txt. It is also 'number' in def pbEvolutionEvent,
 # which triggers evolution checks for a particular event number. 'value' in an
@@ -685,17 +721,9 @@ GameData::Evolution.register({
 })
 
 GameData::Evolution.register({
-  :id                => :EventAfterDamageTaken,
-  :parameter         => Integer,
-  :after_battle_proc => proc { |pkmn, party_index, parameter|
-    if $game_temp.party_direct_damage_taken &&
-       $game_temp.party_direct_damage_taken[party_index] &&
-       $game_temp.party_direct_damage_taken[party_index] >= 49
-      pkmn.ready_to_evolve = true
-    end
-    next false
-  },
-  :event_proc        => proc { |pkmn, parameter, value|
+  :id         => :EventReady,
+  :parameter  => Integer,
+  :event_proc => proc { |pkmn, parameter, value|
     next value == parameter && pkmn.ready_to_evolve
   }
 })

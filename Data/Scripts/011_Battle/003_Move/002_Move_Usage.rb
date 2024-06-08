@@ -297,10 +297,8 @@ class Battle::Move
       @battle.pbDisplay(_INTL("The substitute took damage for {1}!", target.pbThis(true)))
     end
     if target.damageState.critical
-      if $game_temp.party_critical_hits_dealt &&
-         $game_temp.party_critical_hits_dealt[user.pokemonIndex] &&
-         user.pbOwnedByPlayer?
-        $game_temp.party_critical_hits_dealt[user.pokemonIndex] += 1
+      if user.pokemon.isSpecies?(:FARFETCHD) && user.pokemon.form == 1
+        user.pokemon.evolution_counter += 1
       end
       if target.damageState.affection_critical
         if numTargets > 1
@@ -396,10 +394,8 @@ class Battle::Move
     target.tookMoveDamageThisRound = true if damage > 0 && !target.damageState.substitute   # For Focus Punch
     target.tookDamageThisRound = true if damage > 0   # For Assurance
     target.lastAttacker.push(user.index)              # For Revenge
-    if $game_temp.party_direct_damage_taken &&
-       $game_temp.party_direct_damage_taken[target.pokemonIndex] &&
-       target.pbOwnedByPlayer?
-      $game_temp.party_direct_damage_taken[target.pokemonIndex] += damage
+    if target.pokemon.isSpecies?(:YAMASK) && target.pokemon.form == 1
+      target.pokemon.evolution_counter += damage
     end
   end
 end

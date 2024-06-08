@@ -847,7 +847,8 @@ class Battle::Move::RemoveScreens < Battle::Move
 end
 
 #===============================================================================
-# User is protected against moves with the "B" flag this round. (Detect, Protect)
+# User is protected against moves with the "CanProtect" flag this round.
+# (Detect, Protect)
 #===============================================================================
 class Battle::Move::ProtectUser < Battle::Move::ProtectMove
   def initialize(battle, move)
@@ -857,8 +858,8 @@ class Battle::Move::ProtectUser < Battle::Move::ProtectMove
 end
 
 #===============================================================================
-# User is protected against moves with the "B" flag this round. If a Pokémon
-# makes contact with the user while this effect applies, that Pokémon is
+# User is protected against moves with the "CanProtect" flag this round. If a
+# Pokémon makes contact with the user while this effect applies, that Pokémon is
 # poisoned. (Baneful Bunker)
 #===============================================================================
 class Battle::Move::ProtectUserBanefulBunker < Battle::Move::ProtectMove

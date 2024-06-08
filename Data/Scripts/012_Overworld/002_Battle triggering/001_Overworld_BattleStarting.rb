@@ -15,8 +15,6 @@ class Game_Temp
   attr_accessor :encounter_triggered
   attr_accessor :encounter_type
   attr_accessor :party_levels_before_battle
-  attr_accessor :party_critical_hits_dealt
-  attr_accessor :party_direct_damage_taken
 
   def battle_rules
     @battle_rules = {} if !@battle_rules
@@ -112,12 +110,8 @@ end
 EventHandlers.add(:on_start_battle, :record_party_status,
   proc {
     $game_temp.party_levels_before_battle = []
-    $game_temp.party_critical_hits_dealt = []
-    $game_temp.party_direct_damage_taken = []
     $player.party.each_with_index do |pkmn, i|
       $game_temp.party_levels_before_battle[i] = pkmn.level
-      $game_temp.party_critical_hits_dealt[i] = 0
-      $game_temp.party_direct_damage_taken[i] = 0
     end
   }
 )
@@ -611,8 +605,6 @@ EventHandlers.add(:on_end_battle, :evolve_and_black_out,
     pbEvolutionCheck if Settings::CHECK_EVOLUTION_AFTER_ALL_BATTLES ||
                         (decision != 2 && decision != 5)   # not a loss or a draw
     $game_temp.party_levels_before_battle = nil
-    $game_temp.party_critical_hits_dealt = nil
-    $game_temp.party_direct_damage_taken = nil
     # Check for blacking out or gaining Pickup/Huney Gather items
     case decision
     when 1, 4   # Win, capture
@@ -639,7 +631,7 @@ def pbEvolutionCheck
     if new_species.nil? && $game_temp.party_levels_before_battle &&
        $game_temp.party_levels_before_battle[i] &&
        $game_temp.party_levels_before_battle[i] < pkmn.level
-      new_species = pkmn.check_evolution_on_level_up
+      new_species = pkmn.check_evolution_on_battle_level_up
     end
     new_species = pkmn.check_evolution_after_battle(i) if new_species.nil?
     next if new_species.nil?

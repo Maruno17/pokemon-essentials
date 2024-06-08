@@ -360,6 +360,9 @@ class Battle::Move::UserLosesHalfHP < Battle::Move::RecoilMove
     # NOTE: This move's recoil is not prevented by Rock Head/Magic Guard.
     amt = pbRecoilDamage(user, target)
     amt = 1 if amt < 1
+    if user.pokemon.isSpecies?(:BASCULIN) && [2, 3].include?(user.pokemon.form)
+      user.pokemon.evolution_counter += amt
+    end
     user.pbReduceHP(amt, false)
     @battle.pbDisplay(_INTL("{1} is damaged by recoil!", user.pbThis))
     user.pbItemHPHealCheck

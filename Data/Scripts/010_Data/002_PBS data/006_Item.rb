@@ -244,7 +244,8 @@ module GameData
         :KYOGRE    => [:BLUEORB],
         :GROUDON   => [:REDORB],
         :ZACIAN    => [:RUSTEDSWORD],
-        :ZAMAZENTA => [:RUSTEDSHIELD]
+        :ZAMAZENTA => [:RUSTEDSHIELD],
+        :OGERPON   => [:WELLSPRINGMASK, :HEARTHFLAMEMASK, :CORNERSTONEMASK]
       }
       return combos[species]&.include?(@id)
     end

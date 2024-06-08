@@ -183,6 +183,17 @@ EventHandlers.add(:on_step_taken, :auto_move_player,
   }
 )
 
+# Certain species of Pokémon record the distance travelled while they were in
+# the party. Those species use this information to evolve.
+EventHandlers.add(:on_step_taken, :party_pokemon_distance_tracker,
+  proc { |event|
+    $player.party.each_pokemon do |pkmn|
+      next if ![:PAWMO, :BRAMBLIN, :RELLOR].include?(pkmn.species)
+      pkmn.evolution_counter += 1
+    end
+  }
+)
+
 def pbOnStepTaken(eventTriggered)
   if $game_player.move_route_forcing || pbMapInterpreterRunning?
     EventHandlers.trigger(:on_step_taken, $game_player)

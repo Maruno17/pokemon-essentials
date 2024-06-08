@@ -715,49 +715,73 @@ ItemHandlers::UseOnPokemonMaximum.add(:HPUP, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:HP, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:HPUP, :HEALTHMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:HPUP, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:HP, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:HPUP, :HEALTHMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:PROTEIN, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:ATTACK, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:PROTEIN, :MUSCLEMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:PROTEIN, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:ATTACK, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:PROTEIN, :MUSCLEMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:IRON, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:DEFENSE, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:IRON, :RESISTMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:IRON, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:DEFENSE, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:IRON, :RESISTMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:CALCIUM, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:SPECIAL_ATTACK, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:CALCIUM, :GENIUSMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:CALCIUM, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:SPECIAL_ATTACK, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:CALCIUM, :GENIUSMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:ZINC, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:SPECIAL_DEFENSE, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:ZINC, :CLEVERMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:ZINC, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:SPECIAL_DEFENSE, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:ZINC, :CLEVERMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:CARBOS, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:SPEED, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:CARBOS, :SWIFTMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:CARBOS, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:SPEED, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:CARBOS, :SWIFTMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:HEALTHFEATHER, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:HP, 1, pkmn, true)
@@ -830,6 +854,16 @@ ItemHandlers::UseOnPokemon.add(:SWIFTFEATHER, proc { |item, qty, pkmn, scene|
 })
 
 ItemHandlers::UseOnPokemon.copy(:SWIFTFEATHER, :SWIFTWING)
+
+ItemHandlers::UseOnPokemon.add(:FRESHSTARTMOCHI, proc { |item, qty, pkmn, scene|
+  if !pkmn.ev.any? { |stat, value| value > 0 }
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
+  end
+  GameData::Stat.each_main { |s| pkmn.ev[s.id] = 0 }
+  scene.pbDisplay(_INTL("{1}'s base points were all reset to zero!", pkmn.name))
+  next true
+})
 
 ItemHandlers::UseOnPokemon.add(:LONELYMINT, proc { |item, qty, pkmn, scene|
   pbNatureChangingMint(:LONELY, item, pkmn, scene)
@@ -1198,7 +1232,8 @@ ItemHandlers::UseOnPokemon.add(:PURPLENECTAR, proc { |item, qty, pkmn, scene|
 ItemHandlers::UseOnPokemon.add(:REVEALGLASS, proc { |item, qty, pkmn, scene|
   if !pkmn.isSpecies?(:TORNADUS) &&
      !pkmn.isSpecies?(:THUNDURUS) &&
-     !pkmn.isSpecies?(:LANDORUS)
+     !pkmn.isSpecies?(:LANDORUS) &&
+     !pkmn.isSpecies?(:ENAMORUS)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   elsif pkmn.fainted?

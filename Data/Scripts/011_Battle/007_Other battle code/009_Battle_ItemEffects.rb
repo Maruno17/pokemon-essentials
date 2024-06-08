@@ -959,11 +959,13 @@ Battle::ItemEffects::DamageCalcFromUser.add(:NORMALGEM,
   }
 )
 
-Battle::ItemEffects::DamageCalcFromUser.add(:PIXIEPLATE,
+Battle::ItemEffects::DamageCalcFromUser.add(:FAIRYFEATHER,
   proc { |item, user, target, move, mults, power, type|
     mults[:power_multiplier] *= 1.2 if type == :FAIRY
   }
 )
+
+Battle::ItemEffects::DamageCalcFromUser.copy(:FAIRYFEATHER, :PIXIEPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:POISONBARB,
   proc { |item, user, target, move, mults, power, type|

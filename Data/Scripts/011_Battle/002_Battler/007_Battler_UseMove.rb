@@ -238,6 +238,9 @@ class Battle::Battler
     # Record move as having been used
     @lastMoveUsed     = move.id
     @lastMoveUsedType = move.calcType   # For Conversion 2
+    if @pokemon.isSpecies?(:PRIMEAPE) && @lastMoveUsed == :RAGEFIST
+      @pokemon.evolution_counter += 1
+    end
     if !specialUsage
       @lastRegularMoveUsed   = move.id   # For Disable, Encore, Instruct, Mimic, Mirror Move, Sketch, Spite
       @lastRegularMoveTarget = choice[3]   # For Instruct (remembering original target is fine)
@@ -707,7 +710,13 @@ class Battle::Battler
       move.pbEffectAgainstTarget(user, b)
     end
     move.pbEffectGeneral(user)
-    targets.each { |b| b.pbFaint if b&.fainted? }
+    targets.each do |b|
+      next if !b&.fainted?
+      b.pbFaint
+      if user.pokemon.isSpecies?(:BISHARP) && b.isSpecies?(:BISHARP) && b.item == :LEADERSCREST
+        user.pokemon.evolution_counter += 1
+      end
+    end
     user.pbFaint if user.fainted?
     # Additional effect
     if !user.hasActiveAbility?(:SHEERFORCE)

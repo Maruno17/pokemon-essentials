@@ -136,24 +136,21 @@ module Compiler
     yield lastsection, sectionname if havesection
   end
 
-  # Used for types.txt, abilities.txt, moves.txt, items.txt, berry_plants.txt,
-  # pokemon.txt, pokemon_forms.txt, pokemon_metrics.txt, shadow_pokemon.txt,
-  # ribbons.txt, trainer_types.txt, battle_facility_lists.txt, Battle Tower
-  # trainers PBS files and dungeon_parameters.txt
+  # Used for most PBS files.
   def pbEachFileSection(f, schema = nil)
     pbEachFileSectionEx(f, schema) do |section, name|
       yield section, name if block_given? && name[/^.+$/]
     end
   end
 
-  # Used for metadata.txt and map_metadata.txt
+  # Unused.
   def pbEachFileSectionNumbered(f, schema = nil)
     pbEachFileSectionEx(f, schema) do |section, name|
       yield section, name.to_i if block_given? && name[/^\d+$/]
     end
   end
 
-  # Used by translated text compiler
+  # Used by translated text compiler.
   def pbEachSection(f)
     lineno      = 1
     havesection = false
@@ -183,7 +180,7 @@ module Compiler
     yield lastsection, sectionname if havesection
   end
 
-  # Unused
+  # Unused.
   def pbEachCommentedLine(f)
     lineno = 1
     f.each_line do |line|
@@ -196,7 +193,7 @@ module Compiler
     end
   end
 
-  # Used for town_map.txt and Battle Tower Pokémon PBS files
+  # Used for Battle Tower Pokémon PBS files.
   def pbCompilerEachCommentedLine(filename)
     File.open(filename, "rb") do |f|
       FileLineData.file = filename
@@ -215,7 +212,7 @@ module Compiler
     end
   end
 
-  # Unused
+  # Unused.
   def pbEachPreppedLine(f)
     lineno = 1
     f.each_line do |line|
@@ -229,8 +226,8 @@ module Compiler
     end
   end
 
-  # Used for map_connections.txt, phone.txt, regional_dexes.txt, encounters.txt,
-  # trainers.txt and dungeon_tilesets.txt
+  # Used for map_connections.txt, regional_dexes.txt, encounters.txt,
+  # trainers.txt and plugin meta.txt files.
   def pbCompilerEachPreppedLine(filename)
     File.open(filename, "rb") do |f|
       FileLineData.file = filename
@@ -986,7 +983,7 @@ module Compiler
       e = $!
       raise e if e.class.to_s == "Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)
       pbPrintException(e)
-      data_files.each do |filename|
+      get_all_pbs_data_filenames_to_compile.each do |filename|
         begin
           File.delete("Data/#{filename[0]}") if FileTest.exist?("Data/#{filename[0]}")
         rescue SystemCallError

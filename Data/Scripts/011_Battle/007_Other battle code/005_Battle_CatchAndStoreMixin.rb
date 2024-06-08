@@ -49,13 +49,9 @@ module Battle::CatchAndStoreMixin
             if idx < party_size - 1
               @initialItems[0][idx] = @initialItems[0][idx + 1]
               $game_temp.party_levels_before_battle[idx] = $game_temp.party_levels_before_battle[idx + 1]
-              $game_temp.party_critical_hits_dealt[idx] = $game_temp.party_critical_hits_dealt[idx + 1]
-              $game_temp.party_direct_damage_taken[idx] = $game_temp.party_direct_damage_taken[idx + 1]
             else
               @initialItems[0][idx] = nil
               $game_temp.party_levels_before_battle[idx] = nil
-              $game_temp.party_critical_hits_dealt[idx] = nil
-              $game_temp.party_direct_damage_taken[idx] = nil
             end
           end
           break

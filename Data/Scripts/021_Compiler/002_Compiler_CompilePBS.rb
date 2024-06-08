@@ -981,7 +981,7 @@ module Compiler
             end
           elsif sub_schema[key]   # Property of a Pokémon
             if !current_pkmn
-              raise _INTL("Pokémon hasn't been defined yet!") + "\n" + FileLineData.linereport
+              raise _INTL("Property \"{1}\" is Pokémon-specific, but a Pokémon hasn't been defined yet.", key) + "\n" + FileLineData.linereport
             end
             current_pkmn[sub_schema[key][0]] = get_csv_record($~[2], sub_schema[key])
           end

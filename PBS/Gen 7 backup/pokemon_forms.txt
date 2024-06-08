@@ -82,7 +82,7 @@ Weight = 3.8
 Color = Black
 Pokedex = With its incisors, it gnaws through doors and infiltrates people's homes. Then, with a twitch of its whiskers, it steals whatever food it finds.
 Generation = 7
-Flags = InheritFormWithEverstone
+Flags = EggInRegion_1,InheritFormWithEverstone
 WildItemUncommon = PECHABERRY
 Evolution = RATICATE,LevelNight,20
 #-------------------------------
@@ -128,7 +128,7 @@ Weight = 40.0
 Color = White
 Pokedex = The skin on its back is as hard as steel. Predators go after its soft belly, so it clings to the ground desperately.
 Generation = 7
-Flags = InheritFormWithEverstone
+Flags = EggInRegion_1,InheritFormWithEverstone
 Evolution = SANDSLASH,Item,ICESTONE
 #-------------------------------
 [SANDSLASH,1]
@@ -157,7 +157,7 @@ EggMoves = AGILITY,CHARM,DISABLE,ENCORE,EXTRASENSORY,FLAIL,FREEZEDRY,HOWL,HYPNOS
 Color = White
 Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and sprays them around to cool itself off.
 Generation = 7
-Flags = InheritFormWithEverstone
+Flags = EggInRegion_1,InheritFormWithEverstone
 WildItemUncommon = SNOWBALL
 Evolution = NINETALES,Item,ICESTONE
 #-------------------------------
@@ -187,7 +187,7 @@ EggMoves = ANCIENTPOWER,BEATUP,ENDURE,FEINTATTACK,FINALGAMBIT,HEADBUTT,MEMENTO,M
 Weight = 1.0
 Pokedex = Its head sports an altered form of whiskers made of metal. When in communication with its comrades, its whiskers wobble to and fro.
 Generation = 7
-Flags = InheritFormWithEverstone
+Flags = EggInRegion_1,InheritFormWithEverstone
 #-------------------------------
 [DUGTRIO,1]
 FormName = Alolan
@@ -213,7 +213,7 @@ EggMoves = AMNESIA,ASSIST,CHARM,COVET,FLAIL,FLATTER,FOULPLAY,HYPNOSIS,PARTINGSHO
 Color = Blue
 Pokedex = It's impulsive, selfish, and fickle. It's very popular with some Trainers who like giving it the attention it needs.
 Generation = 7
-Flags = InheritFormWithEverstone
+Flags = EggInRegion_1,InheritFormWithEverstone
 Evolution = PERSIAN,Happiness
 #-------------------------------
 [PERSIAN,1]
@@ -254,7 +254,7 @@ Weight = 20.3
 Color = Gray
 Pokedex = Geodude compete against each other with headbutts. The iron sand on their heads will stick to whichever one has stronger magnetism.
 Generation = 7
-Flags = InheritFormWithEverstone
+Flags = EggInRegion_1,InheritFormWithEverstone
 WildItemUncommon = CELLBATTERY
 #-------------------------------
 [GRAVELER,1]
@@ -312,7 +312,7 @@ Weight = 42.0
 Color = Green
 Pokedex = A Grimer, which had been brought in to solve a problem with garbage, developed over time into this form.
 Generation = 7
-Flags = InheritFormWithEverstone
+Flags = EggInRegion_1,InheritFormWithEverstone
 #-------------------------------
 [MUK,1]
 FormName = Alolan
