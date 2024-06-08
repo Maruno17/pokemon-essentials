@@ -242,6 +242,30 @@ FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_30
 Description = A cuff made from woven-together Galarica Twigs. Giving it to a Galarian Slowpoke would make it very happy.
 #-------------------------------
+[BLACKAUGURITE]
+Name = Black Augurite
+NamePlural = Black Augurites
+PortionName = piece of Black Augurite
+PortionNamePlural = pieces of Black Augurite
+Pocket = 1
+Price = 8000
+SellPrice = 500
+BPPrice = 5
+FieldUse = OnPokemon
+Flags = EvolutionStone,Fling_80
+Description = A glassy black stone that produces a sharp cutting edge when split. It's loved by a certain Pokémon.
+#-------------------------------
+[PEATBLOCK]
+Name = Peat Block
+NamePlural = Peat Blocks
+Pocket = 1
+Price = 10000
+SellPrice = 500
+BPPrice = 5
+FieldUse = OnPokemon
+Flags = EvolutionStone,Fling_60
+Description = A block of muddy material that can be used as fuel for burning when it is dried. It's loved by a certain Pokémon.
+#-------------------------------
 [GALARICAWREATH]
 Name = Galarica Wreath
 NamePlural = Galarica Wreaths
@@ -2129,6 +2153,33 @@ Price = 10000
 SellPrice = 0
 Flags = Fling_60
 Description = A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.
+#-------------------------------
+[ADAMANTCRYSTAL]
+Name = Adamant Crystal
+NamePlural = Adamant Crystals
+Pocket = 1
+Price = 4000
+SellPrice = 0
+Flags = Fling_60
+Description = An item to be held by Dialga. This large, glowing gem wells with power and allows the Pokémon to change form.
+#-------------------------------
+[LUSTROUSGLOBE]
+Name = Lustrous Globe
+NamePlural = Lustrous Globes
+Pocket = 1
+Price = 4000
+SellPrice = 0
+Flags = Fling_60
+Description = An item to be held by Palkia. This large, glowing orb wells with power and allows the Pokémon to change form.
+#-------------------------------
+[GRISEOUSCORE]
+Name = Griseous Core
+NamePlural = Griseous Cores
+Pocket = 1
+Price = 4000
+SellPrice = 0
+Flags = Fling_60
+Description = An item to be held by Giratina. This large, glowing gem wells with power and allows the Pokémon to change form.
 #-------------------------------
 [RUSTEDSWORD]
 Name = Rusted Sword

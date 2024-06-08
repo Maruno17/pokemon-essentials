@@ -75,6 +75,8 @@ class Pokemon
   attr_accessor :fused
   # @return [Integer] this Pokémon's personal ID
   attr_accessor :personalID
+  # A number used by certain species to evolve.
+  attr_writer :evolution_counter
   # Used by Galarian Yamask to remember that it took sufficient damage from a
   # battle and can evolve.
   attr_accessor :ready_to_evolve
@@ -112,6 +114,11 @@ class Pokemon
 
   def species_data
     return GameData::Species.get_species_form(@species, form_simple)
+  end
+
+  def evolution_counter
+    @evolution_counter ||= 0
+    return @evolution_counter
   end
 
   #=============================================================================
@@ -971,6 +978,7 @@ class Pokemon
   #=============================================================================
   # Evolution checks
   #=============================================================================
+
   # Checks whether this Pokemon can evolve because of levelling up.
   # @return [Symbol, nil] the ID of the species to evolve into
   def check_evolution_on_level_up

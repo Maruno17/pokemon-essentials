@@ -199,6 +199,22 @@ GameData::Evolution.register({
 })
 
 GameData::Evolution.register({
+  :id            => :LevelBattle,
+  :parameter     => Integer,
+  :level_up_proc => proc { |pkmn, parameter|
+    next pkmn.level >= parameter
+  }
+})
+
+GameData::Evolution.register({
+  :id            => :LevelCoins,
+  :parameter     => Integer,
+  :level_up_proc => proc { |pkmn, parameter|
+    next $player.coins >= parameter
+  }
+})
+
+GameData::Evolution.register({
   :id            => :LevelDarkness,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
@@ -503,6 +519,15 @@ GameData::Evolution.register({
   :level_up_proc => proc { |pkmn, parameter|
     map_metadata = $game_map.metadata
     next map_metadata&.town_map_position && map_metadata.town_map_position[0] == parameter
+  }
+})
+
+GameData::Evolution.register({
+  :id            => :Counter,
+  :parameter     => Integer,
+  :any_level_up  => true,   # Needs any level up
+  :level_up_proc => proc { |pkmn, parameter|
+    next pkmn.evolution_counter >= parameter
   }
 })
 
