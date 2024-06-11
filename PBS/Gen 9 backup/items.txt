@@ -274,7 +274,7 @@ SellPrice = 500
 BPPrice = 5
 FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_60
-Description = A block of muddy material that can be used as fuel for burning when it is dried. It's loved by a certain Pokémon.
+Description = A block of muddy material that can be used as fuel when it is dried. It's loved by a certain Pokémon.
 #-------------------------------
 [SYRUPYAPPLE]
 Name = Syrupy Apple
@@ -295,7 +295,7 @@ Price = 1600
 BPPrice = 5
 FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_80
-Description = A peculiar teacup that can make a certain species of Pokémon evolve. It may be cracked, but tea drunk from it is delicious.
+Description = A peculiar cracked teacup that can make a certain species of Pokémon evolve.
 #-------------------------------
 [MASTERPIECETEACUP]
 Name = Masterpiece Teacup
@@ -305,7 +305,7 @@ Price = 38000
 BPPrice = 5
 FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_80
-Description = A peculiar teacup that can make a certain species of Pokémon evolve. It may be chipped, but tea drunk from it is delicious.
+Description = A peculiar chipped teacup that can make a certain species of Pokémon evolve.
 #-------------------------------
 [METALALLOY]
 Name = Metal Alloy
@@ -943,6 +943,31 @@ BPPrice = 25
 Flags = Fling_60
 Description = An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of rain and sun.
 #-------------------------------
+[ABILITYSHIELD]
+Name = Ability Shield
+NamePlural = Ability Shields
+Pocket = 1
+Price = 20000
+Flags = Fling_30
+Description = An item to be held by a Pokémon. This cute shield protects the holder from having its Ability changed by others.
+#-------------------------------
+[CLEARAMULET]
+Name = Clear Amulet
+NamePlural = Clear Amulets
+Pocket = 1
+Price = 30000
+Flags = Fling_30
+Description = An item to be held by a Pokémon. It protects the holder from having its stats lowered by other Pokémon.
+#-------------------------------
+[COVERTCLOAK]
+Name = Covert Cloak
+NamePlural = Covert Cloaks
+Pocket = 1
+Price = 20000
+SellPrice = 5000
+Flags = Fling_30
+Description = An item to be held by a Pokémon. This hooded cloak protects the holder from moves' additional effects.
+#-------------------------------
 [EJECTBUTTON]
 Name = Eject Button
 NamePlural = Eject Buttons
@@ -1127,6 +1152,17 @@ BPPrice = 15
 Flags = Fling_90
 Description = A Pokémon held item that extends the duration of multiturn attacks like Bind and Wrap.
 #-------------------------------
+[LOADEDDICE]
+Name = Loaded Dice
+NamePlural = Loaded Dice
+PortionName = set of Loaded Dice
+PortionNamePlural = sets of Loaded Dice
+Pocket = 1
+Price = 20000
+SellPrice = 5000
+Flags = Fling_30
+Description = An item to be held by a Pokémon. This dice ensures that the holder's multistrike moves hit more times.
+#-------------------------------
 [BINDINGBAND]
 Name = Binding Band
 NamePlural = Binding Bands
@@ -1205,6 +1241,15 @@ BPPrice = 15
 Flags = Fling_10
 Description = A single-use item to be held by a Pokémon. It allows the immediate use of a move that charges up first.
 #-------------------------------
+[MIRRORHERB]
+Name = Mirror Herb
+NamePlural = Mirror Herbs
+Pocket = 1
+Price = 30000
+SellPrice = 7500
+Flags = Fling_30
+Description = An item to be held by a Pokémon. It allows the holder to copy an opponent's stat increases once.
+#-------------------------------
 [ABSORBBULB]
 Name = Absorb Bulb
 NamePlural = Absorb Bulbs
@@ -1281,6 +1326,16 @@ BPPrice = 10
 Flags = Fling_30
 Description = An item to be held by a Pokémon. It boosts Speed when intimidated. It can be used only once.
 #-------------------------------
+[BOOSTERENERGY]
+Name = Booster Energy
+NamePlural = Booster Energies
+PortionName = capsule of Booster Energy
+PortionNamePlural = capsules of Booster Energy
+Pocket = 1
+Price = 0
+Flags = Fling_30
+Description = An item to be held by Pokémon with certain Abilities. Its energy boosts the strength of the Pokémon.
+#-------------------------------
 [ROOMSERVICE]
 Name = Room Service
 NamePlural = Room Services
@@ -1355,6 +1410,15 @@ SellPrice = 2000
 BPPrice = 25
 Flags = Fling_30
 Description = A Pokémon held item that boosts a move used consecutively. Its effect is reset if another move is used.
+#-------------------------------
+[PUNCHINGGLOVE]
+Name = Punching Glove
+NamePlural = Punching Gloves
+Pocket = 1
+Price = 15000
+SellPrice = 3750
+Flags = Fling_30
+Description = An item to be held by a Pokémon. It powers up the holder's punching moves and prevents direct contact.
 #-------------------------------
 [MUSCLEBAND]
 Name = Muscle Band
@@ -1829,7 +1893,7 @@ NamePlural = Fairy Feathers
 Pocket = 1
 Price = 3000
 Flags = Fling_10
-Description = An item to be held by a Pokémon. This feather, which gleams faintly when hit by light, boosts the power of the holder's Fairy-type moves.
+Description = An item to be held by a Pokémon. This gleaming feather boosts the power of the holder's Fairy-type moves.
 #-------------------------------
 [SILKSCARF]
 Name = Silk Scarf
@@ -2250,7 +2314,7 @@ Pocket = 1
 Price = 4000
 SellPrice = 0
 Flags = Fling_60
-Description = An item to be held by Dialga. This large, glowing gem wells with power and allows the Pokémon to change form.
+Description = A large, glowing gem to be held by Dialga. It wells with power and allows the Pokémon to change form.
 #-------------------------------
 [LUSTROUSGLOBE]
 Name = Lustrous Globe
@@ -2259,7 +2323,7 @@ Pocket = 1
 Price = 4000
 SellPrice = 0
 Flags = Fling_60
-Description = An item to be held by Palkia. This large, glowing orb wells with power and allows the Pokémon to change form.
+Description = A large, glowing orb to be held by Palkia. It wells with power and allows the Pokémon to change form.
 #-------------------------------
 [GRISEOUSCORE]
 Name = Griseous Core
@@ -2268,7 +2332,7 @@ Pocket = 1
 Price = 4000
 SellPrice = 0
 Flags = Fling_60
-Description = An item to be held by Giratina. This large, glowing gem wells with power and allows the Pokémon to change form.
+Description = A large, glowing gem to be held by Giratina. It wells with power and allows the Pokémon to change form.
 #-------------------------------
 [RUSTEDSWORD]
 Name = Rusted Sword
@@ -2283,6 +2347,29 @@ NamePlural = Rusted Shields
 Pocket = 1
 Price = 0
 Description = It is said that a hero used this shield to halt a disaster in ancient times. But it's grown rusty and worn.
+#-------------------------------
+[WELLSPRINGMASK]
+Name = Wellspring Mask
+NamePlural = Wellspring Masks
+Pocket = 1
+Flags = Fling_60
+Description = An item to be held by Ogerpon. This carved wooden mask allows Ogerpon to wield the Water type in battle.
+#-------------------------------
+[HEARTHFLAMEMASK]
+Name = Hearthflame Mask
+NamePlural = Hearthflame Masks
+Pocket = 1
+Price = 0
+Flags = Fling_60
+Description = An item to be held by Ogerpon. This carved wooden mask allows Ogerpon to wield the Fire type in battle.
+#-------------------------------
+[CORNERSTONEMASK]
+Name = Cornerstone Mask
+NamePlural = Cornerstone Masks
+Pocket = 1
+Price = 0
+Flags = Fling_60
+Description = An item to be held by Ogerpon. This carved wooden mask allows Ogerpon to wield the Rock type in battle.
 #-------------------------------
 [DOUSEDRIVE]
 Name = Douse Drive
@@ -6703,6 +6790,33 @@ FieldUse = OnPokemon
 Flags = KeyItem
 Description = Reins that people presented to the king. They separate Calyrex and its beloved steed.
 #-------------------------------
+[METEORITE]
+Name = Meteorite
+NamePlural = Meteorites
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Flags = KeyItem
+Description = A slightly warm rock that fell to earth from space. It allows a certain species of Pokémon to change forms.
+#-------------------------------
+[SCROLLOFDARKNESS]
+Name = Scroll of Darkness
+NamePlural = Scrolls of Darkness
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Flags = KeyItem
+Description = A scroll containing the true secrets of the path of darkness. It can evolve a certain species of Pokémon.
+#-------------------------------
+[SCROLLOFWATERS]
+Name = Scroll of Waters
+NamePlural = Scrolls of Waters
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Flags = KeyItem
+Description = A scroll containing the true secrets of the path of water. It can evolve a certain species of Pokémon.
+#-------------------------------
 [OVALCHARM]
 Name = Oval Charm
 NamePlural = Oval Charms
@@ -6757,7 +6871,7 @@ NamePlural = Aurora Tickets
 Pocket = 8
 Price = 0
 Flags = KeyItem
-Description = A ticket required to board the ship to Doxy Island. It glows beautifully.
+Description = A ticket required to board the ship to Berth Island. It glows beautifully.
 #-------------------------------
 [OLDSEAMAP]
 Name = Old Sea Map
@@ -6766,139 +6880,3 @@ Pocket = 8
 Price = 0
 Flags = KeyItem
 Description = A faded sea chart that shows the way to a certain island.
-
-
-
-
-
-
-#-------------------------------
-[WELLSPRINGMASK]
-Name = Wellspring Mask
-NamePlural = Wellspring Masks
-Pocket = 1
-Flags = Fling_60
-Description = An item to be held by Ogerpon. This carved wooden mask is adorned with crystals and allows Ogerpon to wield the Water type during battle.
-#-------------------------------
-[HEARTHFLAMEMASK]
-Name = Hearthflame Mask
-NamePlural = Hearthflame Masks
-Pocket = 1
-Price = 0
-Flags = Fling_60
-Description = An item to be held by Ogerpon. This carved wooden mask is adorned with crystals and allows Ogerpon to wield the Fire type during battle.
-#-------------------------------
-[CORNERSTONEMASK]
-Name = Cornerstone Mask
-NamePlural = Cornerstone Masks
-Pocket = 1
-Price = 0
-Flags = Fling_60
-Description = An item to be held by Ogerpon. This carved wooden mask is adorned with crystals and allows Ogerpon to wield the Rock type during battle.
-#-------------------------------
-[LEADERSCREST]
-Name = Leader's Crest
-NamePlural = Leader's Crests
-Pocket = 1
-Price = 3000
-Flags = Fling_30
-Description = A shard of what appears to be an old blade of some sort. It is held only by Bisharp that head up a group of Pawniard.
-#-------------------------------
-[GIMMIGHOULCOIN]
-Name = Gimmighoul Coin
-NamePlural = Gimmighoul Coins
-Pocket = 1
-Price = 800
-Flags = Fling_30
-Description = Material accidentally dropped by a Pokémon. It seems that Gimmighoul treasure and hoard these.
-#-------------------------------
-[SCROLLOFDARKNESS]
-Name = Scroll of Darkness
-NamePlural = Scrolls of Darkness
-Pocket = 8
-Price = 0
-FieldUse = OnPokemon
-Flags = KeyItem
-Description = A peculiar scroll that can make a certain species of Pokémon evolve. Written upon it are the true secrets of the path of darkness.
-#-------------------------------
-[SCROLLOFWATERS]
-Name = Scroll of Waters
-NamePlural = Scrolls of Waters
-Pocket = 8
-Price = 0
-FieldUse = OnPokemon
-Flags = KeyItem
-Description = A peculiar scroll that can make a certain species of Pokémon evolve. Written upon it are the true secrets of the path of water.
-#-------------------------------
-[BOOSTERENERGY]
-Name = Booster Energy
-NamePlural = Booster Energies
-PortionName = capsule of Booster Energy
-PortionNamePlural = capsules of Booster Energy
-Pocket = 1
-Price = 0
-Flags = Fling_30
-Description = An item to be held by Pokémon with certain Abilities. The energy that fills this capsule boosts the strength of the Pokémon.
-#-------------------------------
-[ABILITYSHIELD]
-Name = Ability Shield
-NamePlural = Ability Shields
-Pocket = 1
-Price = 20000
-Flags = Fling_30
-Description = An item to be held by a Pokémon. This cute and rather unique-looking shield protects the holder from having its Ability changed by others.
-#-------------------------------
-[CLEARAMULET]
-Name = Clear Amulet
-NamePlural = Clear Amulets
-Pocket = 1
-Price = 30000
-Flags = Fling_30
-Description = An item to be held by a Pokémon. This clear, sparkling amulet protects the holder from having its stats lowered by moves used against it or by other Pokémon's Abilities.
-#-------------------------------
-[MIRRORHERB]
-Name = Mirror Herb
-NamePlural = Mirror Herbs
-Pocket = 1
-Price = 30000
-SellPrice = 7500
-Flags = Fling_30
-Description = An item to be held by a Pokémon. This herb will allow the holder to mirror an opponent's stat increases to boost its own stats - but only once.
-#-------------------------------
-[PUNCHINGGLOVE]
-Name = Punching Glove
-NamePlural = Punching Gloves
-Pocket = 1
-Price = 15000
-SellPrice = 3750
-Flags = Fling_30
-Description = An item to be held by a Pokémon. This protective glove boosts the power of the holder's punching moves and prevents direct contact with targets.
-#-------------------------------
-[COVERTCLOAK]
-Name = Covert Cloak
-NamePlural = Covert Cloaks
-Pocket = 1
-Price = 20000
-SellPrice = 5000
-Flags = Fling_30
-Description = An item to be held by a Pokémon. This hooded cloak conceals the holder, tricking the eyes of its enemies and protecting it from the additional effects of moves.
-#-------------------------------
-[LOADEDDICE]
-Name = Loaded Dice
-NamePlural = Loaded Dice
-PortionName = set of Loaded Dice
-PortionNamePlural = sets of Loaded Dice
-Pocket = 1
-Price = 20000
-SellPrice = 5000
-Flags = Fling_30
-Description = An item to be held by a Pokémon. This loaded dice always rolls a good number, and holding one can ensure that the holder's multistrike moves hit more times.
-#-------------------------------
-[METEORITE]
-Name = Meteorite
-NamePlural = Meteorites
-Pocket = 8
-Price = 0
-FieldUse = OnPokemon
-Flags = KeyItem
-Description = A rock that fell to earth from space. It's slightly warm to the touch. It allows a certain species of Pokémon to change forms.

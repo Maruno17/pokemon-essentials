@@ -187,7 +187,7 @@ EventHandlers.add(:on_step_taken, :auto_move_player,
 # the party. Those species use this information to evolve.
 EventHandlers.add(:on_step_taken, :party_pokemon_distance_tracker,
   proc { |event|
-    $player.party.each_pokemon do |pkmn|
+    $player.pokemon_party.each do |pkmn|
       next if ![:PAWMO, :BRAMBLIN, :RELLOR].include?(pkmn.species)
       pkmn.evolution_counter += 1
     end

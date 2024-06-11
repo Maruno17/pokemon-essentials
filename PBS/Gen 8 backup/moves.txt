@@ -530,7 +530,7 @@ Target = NearOther
 FunctionCode = AddSpikesToFoeSide
 Flags = Contact,CanProtect,CanMirrorMove,Slicing
 EffectChance = 100
-Description = The user slashes its shell blade at the target. Shell splinters left behind by this attack remain scattered under the target as spikes.
+Description = The user slashes its shell blade at the target. This leaves shell splinters under the target as spikes.
 #-------------------------------
 [KNOCKOFF]
 Name = Knock Off
@@ -1232,7 +1232,7 @@ Target = AllNearFoes
 FunctionCode = ParalyzeTargetAlwaysHitsInRain
 Flags = CanProtect,CanMirrorMove,Wind
 EffectChance = 20
-Description = The user summons a thunderous tempest and savagely attacks with lightning and wind. This may also leave opposing Pokémon with paralysis.
+Description = The user savagely attacks with lightning and wind. This may also leave the opponents with paralysis.
 #-------------------------------
 [THUNDERBOLT]
 Name = Thunderbolt
@@ -1603,7 +1603,7 @@ Target = AllNearFoes
 FunctionCode = LowerTargetAttack1
 Flags = Wind,CanProtect,CanMirrorMove,CannotMetronome
 EffectChance = 30
-Description = The user attacks by wrapping opposing Pokémon in fierce winds brimming with love and hate. This may also lower their Attack stats.
+Description = The user attacks with fierce winds brimming with love and hate. This may also lower foes' Attack stats.
 #-------------------------------
 [MOONBLAST]
 Name = Moonblast
@@ -2016,7 +2016,7 @@ Target = NearOther
 FunctionCode = LowerTargetDefense1FlinchTarget
 Flags = CanProtect,CanMirrorMove,HighCriticalHitRate
 EffectChance = 100
-Description = The user kicks, then fires three arrows. This move has a heightened chance of landing a critical hit and may also lower the target's Defense stat or make it flinch.
+Description = This move is more likely to be a critical hit, and may also lower the target's Defense stat or make it flinch.
 #-------------------------------
 [SECRETSWORD]
 Name = Secret Sword
@@ -2448,7 +2448,7 @@ TotalPP = 10
 Target = User
 FunctionCode = RaiseUserAtkDefSpd1
 Flags = Dance
-Description = The user performs an intense dance to usher in victory, boosting its Attack, Defense, and Speed stats.
+Description = The user dances intensely to usher in victory, boosting its Attack, Defense and Speed stats.
 #-------------------------------
 [VCREATE]
 Name = V-create
@@ -2998,7 +2998,7 @@ Target = AllNearFoes
 FunctionCode = LowerTargetSpeed1AlwaysHitsInRain
 Flags = CanProtect,CanMirrorMove,Wind
 EffectChance = 30
-Description = The user attacks with savagely cold winds that cause both body and spirit to tremble. This may also lower the Speed stats of opposing Pokémon.
+Description = The user attacks with savagely cold winds. This may also lower the Speed stats of opposing Pokémon.
 #-------------------------------
 [FLY]
 Name = Fly
@@ -3394,7 +3394,7 @@ Target = NearOther
 FunctionCode = DoublePowerIfTargetStatusProblemBurnTarget
 Flags = CanProtect,CanMirrorMove
 EffectChance = 30
-Description = The user attacks with myriad fireballs. This may also leave the target with a burn. This move's power is doubled if the target has a status condition.
+Description = The user attacks with fireballs that may cause a burn. Power doubles if the target has a status problem.
 #-------------------------------
 [OMINOUSWIND]
 Name = Ominous Wind
@@ -4131,7 +4131,7 @@ TotalPP = 5
 Target = NearOther
 FunctionCode = LowerUserDefSpDef1
 Flags = Contact,CanProtect,CanMirrorMove,Punching
-Description = The user smashes into the target in a full-body tackle. This also lowers the user's Defense and Sp. Def stats.
+Description = The user smashes into the target in a full-body tackle. This also lowers the user's Defense and Sp. Def.
 #-------------------------------
 [PRECIPICEBLADES]
 Name = Precipice Blades
@@ -4168,7 +4168,7 @@ Target = AllNearFoes
 FunctionCode = BurnTargetAlwaysHitsInRain
 Flags = CanProtect,CanMirrorMove,Wind
 EffectChance = 20
-Description = The user attacks by wrapping opposing Pokémon in fierce winds and searingly hot sand. This may also leave them with a burn.
+Description = The user wraps opposing Pokémon in searingly hot sand. This may also leave them with a burn.
 #-------------------------------
 [HIGHHORSEPOWER]
 Name = High Horsepower
@@ -4530,7 +4530,7 @@ Target = NearOther
 FunctionCode = FlinchTarget
 Flags = CanProtect,CanMirrorMove
 EffectChance = 30
-Description = The user hurls giant chunks of ice at the target to inflict damage. This may also make the target flinch.
+Description = The user hurls giant chunks of ice at the target. This may also make the target flinch.
 #-------------------------------
 [ICEBEAM]
 Name = Ice Beam
@@ -6906,7 +6906,7 @@ Target = NearOther
 FunctionCode = PoisonParalyzeOrSleepTarget
 Flags = Contact,CanProtect,CanMirrorMove
 EffectChance = 50
-Description = The user lashes out at the target with ruinous claws. This may also leave the target poisoned, paralyzed, or asleep.
+Description = The user lashes out with ruinous claws. This may also leave the target poisoned, paralyzed or asleep.
 #-------------------------------
 [POISONJAB]
 Name = Poison Jab
@@ -6970,7 +6970,7 @@ Target = NearOther
 FunctionCode = DoublePowerIfTargetPoisonedPoisonTarget
 Flags = CanProtect,CanMirrorMove
 EffectChance = 50
-Description = The user launches countless toxic barbs to inflict damage. This may also poison the target. This move's power is doubled if the target is already poisoned.
+Description = The user fires toxic barbs that may poison the target. Power is doubled if the target is already poisoned.
 #-------------------------------
 [CLEARSMOG]
 Name = Clear Smog
@@ -7336,7 +7336,7 @@ Target = NearOther
 FunctionCode = RaiseUserSpeed1
 Flags = CanProtect,CanMirrorMove,HighCriticalHitRate
 EffectChance = 100
-Description = The user slashes the target with aura-enriched wings. This also boosts the user's Speed stat. This move has a heightened chance of landing a critical hit.
+Description = The user slashes with aura-enriched wings, and boosts the user's Speed stat. High critical hit chance.
 #-------------------------------
 [EXPANDINGFORCE]
 Name = Expanding Force
@@ -7462,7 +7462,7 @@ Target = NearOther
 FunctionCode = RaiseUserDefense1
 Flags = Contact,CanProtect,CanMirrorMove
 EffectChance = 100
-Description = Cloaking itself in psychic energy, the user slams into the target. This also boosts the user's Defense stat.
+Description = The user slams into the target cloaked in psychic energy. This also boosts the user's Defense stat.
 #-------------------------------
 [PSYBEAM]
 Name = Psybeam
@@ -7737,7 +7737,7 @@ Accuracy = 0
 TotalPP = 5
 Target = UserAndAllies
 FunctionCode = HealUserAndAlliesQuarterOfTotalHPCureStatus
-Description = The user receives a blessing from the crescent moon, restoring HP and curing status conditions for itself and its ally Pokémon currently in the battle.
+Description = The user receives a blessing from the moon, healing HP and status problems for itself and its allies.
 #-------------------------------
 [LUNARDANCE]
 Name = Lunar Dance
@@ -8073,7 +8073,7 @@ Target = NearOther
 FunctionCode = AddStealthRocksToFoeSide
 Flags = Contact,CanProtect,CanMirrorMove,Slicing
 EffectChance = 100
-Description = The user swings its stone axes at the target. Stone splinters left behind by this attack float around the target.
+Description = The user swings its stone axes at the target. It leaves stone splinters around the target.
 #-------------------------------
 [ANCIENTPOWER]
 Name = Ancient Power
@@ -8593,7 +8593,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = RecoilThirdOfDamageDealt
 Flags = Contact,CanProtect,CanMirrorMove
-Description = The user shrouds itself in water and slams into the target with its whole body to inflict damage. This also damages the user quite a lot.
+Description = The user shrouds itself in water and slams with its whole body. This also hurts the user quite a lot.
 #-------------------------------
 [HYDROPUMP]
 Name = Hydro Pump

@@ -242,6 +242,16 @@ FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_30
 Description = A cuff made from woven-together Galarica Twigs. Giving it to a Galarian Slowpoke would make it very happy.
 #-------------------------------
+[GALARICAWREATH]
+Name = Galarica Wreath
+NamePlural = Galarica Wreaths
+Pocket = 1
+Price = 6000
+BPPrice = 5
+FieldUse = OnPokemon
+Flags = EvolutionStone,Fling_30
+Description = A wreath made from woven-together Galarica Twigs. A Galarian Slowpoke wearing this would be very happy.
+#-------------------------------
 [BLACKAUGURITE]
 Name = Black Augurite
 NamePlural = Black Augurites
@@ -264,17 +274,7 @@ SellPrice = 500
 BPPrice = 5
 FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_60
-Description = A block of muddy material that can be used as fuel for burning when it is dried. It's loved by a certain Pokémon.
-#-------------------------------
-[GALARICAWREATH]
-Name = Galarica Wreath
-NamePlural = Galarica Wreaths
-Pocket = 1
-Price = 6000
-BPPrice = 5
-FieldUse = OnPokemon
-Flags = EvolutionStone,Fling_30
-Description = A wreath made from woven-together Galarica Twigs. A Galarian Slowpoke wearing this would be very happy.
+Description = A block of muddy material that can be used as fuel when it is dried. It's loved by a certain Pokémon.
 #-------------------------------
 [REDAPRICORN]
 Name = Red Apricorn
@@ -6605,7 +6605,7 @@ NamePlural = Aurora Tickets
 Pocket = 8
 Price = 0
 Flags = KeyItem
-Description = A ticket required to board the ship to Doxy Island. It glows beautifully.
+Description = A ticket required to board the ship to Berth Island. It glows beautifully.
 #-------------------------------
 [OLDSEAMAP]
 Name = Old Sea Map
