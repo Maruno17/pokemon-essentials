@@ -1805,7 +1805,7 @@ Battle::ItemEffects::WeatherExtender.add(:HEATROCK,
 
 Battle::ItemEffects::WeatherExtender.add(:ICYROCK,
   proc { |item, weather, duration, battler, battle|
-    next 8 if weather == :Hail
+    next 8 if [:Hail, :Snowstorm].include?(weather)
   }
 )
 

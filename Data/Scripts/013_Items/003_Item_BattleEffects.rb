@@ -52,11 +52,7 @@ ItemHandlers::CanUseInBattle.addIf(:poke_balls,
     #       this case, but only in trainer battles, and the trainer will deflect
     #       them if they are trying to catch a non-Shadow Pokémon.)
     if battle.pbOpposingBattlerCount > 1 && !(GameData::Item.get(item).is_snag_ball? && battle.trainerBattle?)
-      if battle.pbOpposingBattlerCount == 2
-        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are two Pokémon!")) if showMessages
-      elsif showMessages
-        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there is more than one Pokémon!"))
-      end
+      scene.pbDisplay(_INTL("It's no good! It's impossible to aim unless there is only one Pokémon!")) if showMessages
       next false
     end
     next true
@@ -306,7 +302,7 @@ ItemHandlers::UseInBattle.add(:GUARDSPEC, proc { |item, battler, battle|
 })
 
 ItemHandlers::UseInBattle.add(:POKEDOLL, proc { |item, battler, battle|
-  battle.decision = 3
+  battle.decision = Battle::Outcome::FLEE
   battle.pbDisplayPaused(_INTL("You got away safely!"))
 })
 

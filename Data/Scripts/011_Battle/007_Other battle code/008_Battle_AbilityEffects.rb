@@ -322,7 +322,7 @@ Battle::AbilityEffects::SpeedCalc.add(:SLOWSTART,
 
 Battle::AbilityEffects::SpeedCalc.add(:SLUSHRUSH,
   proc { |ability, battler, mult|
-    next mult * 2 if [:Hail].include?(battler.effectiveWeather)
+    next mult * 2 if [:Hail, :Snowstorm].include?(battler.effectiveWeather)
   }
 )
 
@@ -376,7 +376,7 @@ Battle::AbilityEffects::OnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
       battle.pbHideAbilitySplash(battler)
       pbSEPlay("Battle flee")
       battle.pbDisplay(_INTL("{1} fled from battle!", battler.pbThis))
-      battle.decision = 3   # Escaped
+      battle.decision = Battle::Outcome::FLEE
       next true
     end
     # In trainer battles
@@ -1204,7 +1204,7 @@ Battle::AbilityEffects::AccuracyCalcFromTarget.add(:SANDVEIL,
 
 Battle::AbilityEffects::AccuracyCalcFromTarget.add(:SNOWCLOAK,
   proc { |ability, mods, user, target, move, type|
-    mods[:evasion_multiplier] *= 1.25 if target.effectiveWeather == :Hail
+    mods[:evasion_multiplier] *= 1.25 if [:Hail, :Snowstorm].include?(target.effectiveWeather)
   }
 )
 
@@ -2391,7 +2391,7 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:DRYSKIN,
 
 Battle::AbilityEffects::EndOfRoundWeather.add(:ICEBODY,
   proc { |ability, weather, battler, battle|
-    next unless weather == :Hail
+    next if ![:Hail, :Snowstorm].include?(weather)
     next if !battler.canHeal?
     battle.pbShowAbilitySplash(battler)
     battler.pbRecoverHP(battler.totalhp / 16)
@@ -2406,7 +2406,7 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:ICEBODY,
 
 Battle::AbilityEffects::EndOfRoundWeather.add(:ICEFACE,
   proc { |ability, weather, battler, battle|
-    next if weather != :Hail
+    next if ![:Hail, :Snowstorm].include?(weather)
     next if !battler.canRestoreIceFace || battler.form != 1
     battle.pbShowAbilitySplash(battler)
     if !Battle::Scene::USE_ABILITY_SPLASH
@@ -2936,7 +2936,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:GRASSYSURGE,
 Battle::AbilityEffects::OnSwitchIn.add(:ICEFACE,
   proc { |ability, battler, battle, switch_in|
     next if !battler.isSpecies?(:EISCUE) || battler.form != 1
-    next if battler.effectiveWeather != :Hail
+    next if ![:Hail, :Snowstorm].include?(battler.effectiveWeather)
     battle.pbShowAbilitySplash(battler)
     if !Battle::Scene::USE_ABILITY_SPLASH
       battle.pbDisplay(_INTL("{1}'s {2} activated!", battler.pbThis, battler.abilityName))
@@ -3145,7 +3145,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:SLOWSTART,
 
 Battle::AbilityEffects::OnSwitchIn.add(:SNOWWARNING,
   proc { |ability, battler, battle, switch_in|
-    battle.pbStartWeatherAbility(:Hail, battler)
+    battle.pbStartWeatherAbility((Settings::USE_SNOWSTORM_WEATHER_INSTEAD_OF_HAIL ? :Snowstorm : :Hail), battler)
   }
 )
 

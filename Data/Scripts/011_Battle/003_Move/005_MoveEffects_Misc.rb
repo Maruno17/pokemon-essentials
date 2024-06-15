@@ -261,7 +261,7 @@ end
 class Battle::Move::StartHailWeather < Battle::Move::WeatherMove
   def initialize(battle, move)
     super
-    @weatherType = :Hail
+    @weatherType = (Settings::USE_SNOWSTORM_WEATHER_INSTEAD_OF_HAIL) ? :Snowstorm : :Hail
   end
 end
 

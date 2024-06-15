@@ -76,7 +76,7 @@ class Battle::AI::AIBattler
       ret += [self.totalhp / 8, 1].max if [:Sun, :HarshSun].include?(weather) && battler.takesIndirectDamage?
       ret -= [self.totalhp / 8, 1].max if [:Rain, :HeavyRain].include?(weather) && battler.canHeal?
     when :ICEBODY
-      ret -= [self.totalhp / 16, 1].max if weather == :Hail && battler.canHeal?
+      ret -= [self.totalhp / 16, 1].max if [:Hail, :Snowstorm].include?(weather) && battler.canHeal?
     when :RAINDISH
       ret -= [self.totalhp / 16, 1].max if [:Rain, :HeavyRain].include?(weather) && battler.canHeal?
     when :SOLARPOWER

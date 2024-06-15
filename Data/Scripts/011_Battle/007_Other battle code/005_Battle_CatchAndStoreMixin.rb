@@ -170,7 +170,7 @@ module Battle::CatchAndStoreMixin
       end
       battler.pbReset
       if pbAllFainted?(battler.index)
-        @decision = (trainerBattle?) ? 1 : 4   # Battle ended by win/capture
+        @decision = (trainerBattle?) ? Battle::Outcome::WIN : Battle::Outcome::CATCH
       end
       # Modify the Pokémon's properties because of the capture
       if GameData::Item.get(ball).is_snag_ball?

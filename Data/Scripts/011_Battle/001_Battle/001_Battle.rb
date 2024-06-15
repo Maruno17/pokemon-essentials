@@ -1,4 +1,4 @@
-# Results of battle:
+# Results of battle (see module Outcome):
 #    0 - Undecided or aborted
 #    1 - Player won
 #    2 - Player lost
@@ -38,6 +38,29 @@
 #       (There is no guarantee that this list is complete.)
 
 class Battle
+  module Outcome
+    UNDECIDED = 0
+    WIN       = 1
+    LOSE      = 2   # Also used when player forfeits a trainer battle
+    FLEE      = 3   # Player or wild Pokémon ran away, count as a win
+    CATCH     = 4   # Counts as a win
+    DRAW      = 5
+
+    def self.decided?(decision)
+      return decision != UNDECIDED
+    end
+
+    def self.should_black_out?(decision)
+      return decision == LOSE || decision == DRAW
+    end
+
+    def self.success?(decision)
+      return !self.should_black_out?(decision)
+    end
+  end
+
+  #-----------------------------------------------------------------------------
+
   attr_reader   :scene            # Scene object for this battle
   attr_reader   :peer
   attr_reader   :field            # Effects common to the whole of a battle
@@ -50,7 +73,7 @@ class Battle
   attr_accessor :time             # Time of day (0=day, 1=eve, 2=night)
   attr_accessor :environment      # Battle surroundings (for mechanics purposes)
   attr_reader   :turnCount
-  attr_accessor :decision         # Decision: 0=undecided; 1=win; 2=loss; 3=escaped; 4=caught
+  attr_accessor :decision         # Outcome of battle
   attr_reader   :player           # Player trainer (or array of trainers)
   attr_reader   :opponent         # Opponent trainer (or array of trainers)
   attr_accessor :items            # Items held by opponents
@@ -114,7 +137,7 @@ class Battle
     @time              = 0
     @environment       = :None   # e.g. Tall grass, cave, still water
     @turnCount         = 0
-    @decision          = 0
+    @decision          = Outcome::UNDECIDED
     @caughtPokemon     = []
     player   = [player] if !player.nil? && !player.is_a?(Array)
     opponent = [opponent] if !opponent.nil? && !opponent.is_a?(Array)
@@ -171,6 +194,10 @@ class Battle
     @mega_rings        = []
     GameData::Item.each { |item| @mega_rings.push(item.id) if item.has_flag?("MegaRing") }
     @battleAI          = AI.new(self)
+  end
+
+  def decided?
+    return Outcome.decided?(@decision)
   end
 
   #=============================================================================
@@ -730,6 +757,7 @@ class Battle
     when :Rain        then pbDisplay(_INTL("It started to rain!"))
     when :Sandstorm   then pbDisplay(_INTL("A sandstorm brewed!"))
     when :Hail        then pbDisplay(_INTL("It started to hail!"))
+    when :Snowstorm   then pbDisplay(_INTL("It started to snow!"))
     when :HarshSun    then pbDisplay(_INTL("The sunlight turned extremely harsh!"))
     when :HeavyRain   then pbDisplay(_INTL("A heavy rain began to fall!"))
     when :StrongWinds then pbDisplay(_INTL("Mysterious strong winds are protecting Flying-type Pokémon!"))

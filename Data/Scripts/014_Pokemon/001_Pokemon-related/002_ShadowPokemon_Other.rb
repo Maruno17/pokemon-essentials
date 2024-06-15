@@ -432,7 +432,7 @@ EventHandlers.add(:on_start_battle, :record_party_heart_gauges,
 )
 
 EventHandlers.add(:on_end_battle, :check_ready_to_purify,
-  proc { |_decision, _canLose|
+  proc { |_outcome, _canLose|
     $game_temp.party_heart_gauges_before_battle.each_with_index do |value, i|
       pkmn = $player.party[i]
       next if !pkmn || !value || value == 0

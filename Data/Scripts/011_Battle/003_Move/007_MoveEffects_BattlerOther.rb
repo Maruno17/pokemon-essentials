@@ -317,7 +317,7 @@ end
 #===============================================================================
 class Battle::Move::FreezeTargetAlwaysHitsInHail < Battle::Move::FreezeTarget
   def pbBaseAccuracy(user, target)
-    return 0 if target.effectiveWeather == :Hail
+    return 0 if [:Hail, :Snowstorm].include?(target.effectiveWeather)
     return super
   end
 end

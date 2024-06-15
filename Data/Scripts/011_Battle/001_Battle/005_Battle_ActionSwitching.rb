@@ -140,10 +140,10 @@ class Battle
   # General switching method that checks if any Pokémon need to be sent out and,
   # if so, does. Called at the end of each round.
   def pbEORSwitch(favorDraws = false)
-    return if @decision > 0 && !favorDraws
-    return if @decision == 5 && favorDraws
+    return if decided? && !favorDraws
+    return if @decision == Outcome::DRAW && favorDraws
     pbJudge
-    return if @decision > 0
+    return if decided?
     # Check through each fainted battler to see if that spot can be filled.
     switched = []
     loop do

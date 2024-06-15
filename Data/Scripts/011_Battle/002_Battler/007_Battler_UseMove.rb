@@ -10,7 +10,7 @@ class Battle::Battler
       pbBeginTurn(choice)
       pbSEPlay("Battle flee")
       @battle.pbDisplay(_INTL("{1} fled from battle!", pbThis))
-      @battle.decision = 3
+      @battle.decision = Battle::Outcome::FLEE
       pbEndTurn(choice)
       return true
     end
@@ -537,7 +537,7 @@ class Battle::Battler
         end
         b.lastRoundMoved = oldLastRoundMoved
         @battle.pbJudge
-        return if @battle.decision > 0
+        return if @battle.decided?
       end
       b.effects[PBEffects::Instructed] = false
     end
@@ -573,7 +573,7 @@ class Battle::Battler
           nextUser.effects[PBEffects::Outrage] = oldOutrage
           nextUser.currentMove = oldCurrentMove
           @battle.pbJudge
-          return if @battle.decision > 0
+          return if @battle.decided?
         end
         nextUser.effects[PBEffects::Dancer] = false
       end

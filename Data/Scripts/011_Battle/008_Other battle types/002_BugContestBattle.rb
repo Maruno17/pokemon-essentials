@@ -78,6 +78,6 @@ class BugContestBattle < Battle
 
   def pbEndOfRoundPhase
     super
-    @decision = 3 if @ballCount <= 0 && @decision == 0
+    @decision = Battle::Outcome::FLEE if @ballCount <= 0 && !decided?
   end
 end

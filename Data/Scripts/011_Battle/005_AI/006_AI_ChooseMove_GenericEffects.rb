@@ -593,7 +593,8 @@ class Battle::AI
         :Sun       => :HEATROCK,
         :Rain      => :DAMPROCK,
         :Sandstorm => :SMOOTHROCK,
-        :Hail      => :ICYROCK
+        :Hail      => :ICYROCK,
+        :Snowstorm => :ICYROCK
       }[weather]
       ret += 4 if weather_extender && move_user.has_active_item?(weather_extender)
     end
@@ -635,6 +636,8 @@ class Battle::AI
         if b.battler.takesHailDamage?   # End of round damage
           ret += (b.opposes?(move_user)) ? 10 : -10
         end
+      when :Snowstorm
+        # TODO: Snowstorm AI.
       when :ShadowSky
         # Check for battlers affected by Shadow Sky's effects
         if b.has_damaging_move_of_type?(:SHADOW)
@@ -650,13 +653,14 @@ class Battle::AI
           :Sun       => [:CHLOROPHYLL, :FLOWERGIFT, :FORECAST, :HARVEST, :LEAFGUARD, :SOLARPOWER],
           :Rain      => [:DRYSKIN, :FORECAST, :HYDRATION, :RAINDISH, :SWIFTSWIM],
           :Sandstorm => [:SANDFORCE, :SANDRUSH, :SANDVEIL],
-          :Hail      => [:FORECAST, :ICEBODY, :SLUSHRUSH, :SNOWCLOAK]
+          :Hail      => [:FORECAST, :ICEBODY, :SLUSHRUSH, :SNOWCLOAK],
+          :Snowstorm => [:FORECAST, :ICEBODY, :SLUSHRUSH, :SNOWCLOAK]
         }[weather]
         if beneficial_abilities && beneficial_abilities.length > 0 &&
            b.has_active_ability?(beneficial_abilities)
           ret += (b.opposes?(move_user)) ? -5 : 5
         end
-        if weather == :Hail && b.ability == :ICEFACE
+        if [:Hail, :Snowstorm].include?(weather) && b.ability == :ICEFACE
           ret += (b.opposes?(move_user)) ? -5 : 5
         end
         negative_abilities = {
@@ -679,6 +683,9 @@ class Battle::AI
           :Hail      => ["FreezeTargetAlwaysHitsInHail",
                          "StartWeakenDamageAgainstUserSideIfHail",
                          "TypeAndPowerDependOnWeather"],
+          :Snowstorm => ["FreezeTargetAlwaysHitsInHail",
+                         "StartWeakenDamageAgainstUserSideIfHail",
+                         "TypeAndPowerDependOnWeather"],
           :ShadowSky => ["TypeAndPowerDependOnWeather"]
         }[weather]
         if beneficial_moves && beneficial_moves.length > 0 &&
@@ -693,6 +700,8 @@ class Battle::AI
           :Sandstorm => ["HealUserDependingOnWeather",
                          "TwoTurnAttackOneTurnInSun"],
           :Hail      => ["HealUserDependingOnWeather",
+                         "TwoTurnAttackOneTurnInSun"],
+          :Snowstorm => ["HealUserDependingOnWeather",
                          "TwoTurnAttackOneTurnInSun"]
         }[weather]
         if negative_moves && negative_moves.length > 0 &&

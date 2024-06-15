@@ -190,7 +190,7 @@ class Battle::Battler
         case effectiveWeather
         when :Sun, :HarshSun   then newForm = 1
         when :Rain, :HeavyRain then newForm = 2
-        when :Hail             then newForm = 3
+        when :Hail, :Snowstorm then newForm = 3
         end
         if @form != newForm
           @battle.pbShowAbilitySplash(self, true)
@@ -217,7 +217,7 @@ class Battle::Battler
     end
     # Eiscue - Ice Face
     if !ability_changed && isSpecies?(:EISCUE) && self.ability == :ICEFACE &&
-       @form == 1 && effectiveWeather == :Hail
+       @form == 1 && [:Hail, :Snowstorm].include?(effectiveWeather)
       @canRestoreIceFace = true   # Changed form at end of round
     end
   end

@@ -747,6 +747,12 @@ MultipleForms.register(:CALYREX, {
   }
 })
 
+MultipleForms.register(:BASCULEGION, {
+  "getForm" => proc { |pkmn|
+    next (pkmn.female?) ? 3 : 2
+  }
+})
+
 MultipleForms.register(:LECHONK, {
   "getForm" => proc { |pkmn|
     next pkmn.gender

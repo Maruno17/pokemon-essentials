@@ -12,7 +12,7 @@ class Battle::Move::FleeFromBattle < Battle::Move
 
   def pbEffectGeneral(user)
     @battle.pbDisplay(_INTL("{1} fled from battle!", user.pbThis))
-    @battle.decision = 3   # Escaped
+    @battle.decision = Battle::Outcome::FLEE
   end
 end
 
@@ -52,7 +52,7 @@ class Battle::Move::SwitchOutUserStatusMove < Battle::Move
   def pbEffectGeneral(user)
     if user.wild?
       @battle.pbDisplay(_INTL("{1} fled from battle!", user.pbThis))
-      @battle.decision = 3   # Escaped
+      @battle.decision = Battle::Outcome::FLEE
     end
   end
 end
@@ -196,7 +196,7 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
   end
 
   def pbEffectAgainstTarget(user, target)
-    @battle.decision = 3 if target.wild?   # Escaped from battle
+    @battle.decision = Battle::Outcome::FLEE if target.wild?
   end
 
   def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers)
@@ -230,7 +230,7 @@ class Battle::Move::SwitchOutTargetDamagingMove < Battle::Move
     if target.wild? && target.allAllies.length == 0 && @battle.canRun &&
        target.level <= user.level &&
        (target.effects[PBEffects::Substitute] == 0 || ignoresSubstitute?(user))
-      @battle.decision = 3   # Escaped from battle
+      @battle.decision = Battle::Outcome::FLEE
     end
   end
 

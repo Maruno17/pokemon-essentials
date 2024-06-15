@@ -821,7 +821,7 @@ class Battle::Move::StartWeakenDamageAgainstUserSideIfHail < Battle::Move
   def canSnatch?; return true; end
 
   def pbMoveFailed?(user, targets)
-    if user.effectiveWeather != :Hail
+    if ![:Hail, :Snowstorm].include?(user.effectiveWeather)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1561,7 +1561,7 @@ class Battle::Move::TypeAndPowerDependOnWeather < Battle::Move
       ret = :WATER if GameData::Type.exists?(:WATER)
     when :Sandstorm
       ret = :ROCK if GameData::Type.exists?(:ROCK)
-    when :Hail
+    when :Hail, :Snowstorm
       ret = :ICE if GameData::Type.exists?(:ICE)
     when :ShadowSky
       ret = :NONE

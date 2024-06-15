@@ -52,20 +52,23 @@ module Settings
   NUM_BADGES_BOOST_SPEED   = (MECHANICS_GENERATION >= 4) ? 999 : 3
 
   #-----------------------------------------------------------------------------
-  # Ability and item effects
+  # Move, ability and item effects
   #-----------------------------------------------------------------------------
 
+  # Whether the in-battle hail weather is replaced by Snowstorm (from Gen 9+)
+  # instead.
+  USE_SNOWSTORM_WEATHER_INSTEAD_OF_HAIL = (MECHANICS_GENERATION >= 9)
   # Whether weather caused by an ability lasts 5 rounds (true) or forever (false).
-  FIXED_DURATION_WEATHER_FROM_ABILITY = (MECHANICS_GENERATION >= 6)
+  FIXED_DURATION_WEATHER_FROM_ABILITY   = (MECHANICS_GENERATION >= 6)
   # Whether X items (X Attack, etc.) raise their stat by 2 stages (true) or 1
   # (false).
-  X_STAT_ITEMS_RAISE_BY_TWO_STAGES    = (MECHANICS_GENERATION >= 7)
+  X_STAT_ITEMS_RAISE_BY_TWO_STAGES      = (MECHANICS_GENERATION >= 7)
   # Whether some Poké Balls have catch rate multipliers from Gen 7 (true) or
   # from earlier generations (false).
-  NEW_POKE_BALL_CATCH_RATES           = (MECHANICS_GENERATION >= 7)
+  NEW_POKE_BALL_CATCH_RATES             = (MECHANICS_GENERATION >= 7)
   # Whether Soul Dew powers up Psychic and Dragon-type moves by 20% (true) or
   # raises the holder's Special Attack and Special Defense by 50% (false).
-  SOUL_DEW_POWERS_UP_TYPES            = (MECHANICS_GENERATION >= 7)
+  SOUL_DEW_POWERS_UP_TYPES              = (MECHANICS_GENERATION >= 7)
 
   #-----------------------------------------------------------------------------
   # Affection
@@ -120,6 +123,7 @@ module Settings
   # End of battle
   #-----------------------------------------------------------------------------
 
+  CAN_FORFEIT_TRAINER_BATTLES         = (MECHANICS_GENERATION >= 9)
   # The Game Switch which, while ON, prevents the player from losing money if
   # they lose a battle (they can still gain money from trainers for winning).
   NO_MONEY_LOSS                       = 33

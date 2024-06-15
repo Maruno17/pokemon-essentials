@@ -77,7 +77,7 @@ end
 #===============================================================================
 # Blacking out animation
 #===============================================================================
-def pbStartOver(gameover = false)
+def pbStartOver(game_over = false)
   if pbInBugContest?
     pbBugContestStartOver
     return
@@ -85,12 +85,15 @@ def pbStartOver(gameover = false)
   $stats.blacked_out_count += 1
   $player.heal_party
   if $PokemonGlobal.pokecenterMapId && $PokemonGlobal.pokecenterMapId >= 0
-    if gameover
+    if game_over
       pbMessage("\\w[]\\wm\\c[8]\\l[3]" +
-                _INTL("After the unfortunate defeat, you scurry back to a Pokémon Center."))
-    else
+                _INTL("After the unfortunate defeat, you hurry to the Pokémon Center."))
+    elsif $player.all_fainted?
       pbMessage("\\w[]\\wm\\c[8]\\l[3]" +
-                _INTL("You scurry back to a Pokémon Center, protecting your exhausted Pokémon from any further harm..."))
+                _INTL("You hurry to the Pokémon Center, shielding your exhausted Pokémon from any further harm..."))
+    else   # Forfeited a trainer battle
+      pbMessage("\\w[]\\wm\\c[8]\\l[3]" +
+                _INTL("You went running to the Pokémon Center to regroup and reconsider your battle strategy..."))
     end
     pbCancelVehicles
     Followers.clear
@@ -112,12 +115,15 @@ def pbStartOver(gameover = false)
       $player.heal_party
       return
     end
-    if gameover
+    if game_over
       pbMessage("\\w[]\\wm\\c[8]\\l[3]" +
-                _INTL("After the unfortunate defeat, you scurry back home."))
-    else
+                _INTL("After the unfortunate defeat, you hurry back home."))
+    elsif $player.all_fainted?
       pbMessage("\\w[]\\wm\\c[8]\\l[3]" +
-                _INTL("You scurry back home, protecting your exhausted Pokémon from any further harm..."))
+                _INTL("You hurry back home, shielding your exhausted Pokémon from any further harm..."))
+    else   # Forfeited a trainer battle
+      pbMessage("\\w[]\\wm\\c[8]\\l[3]" +
+                _INTL("You went running back home to regroup and reconsider your battle strategy..."))
     end
     if homedata
       pbCancelVehicles

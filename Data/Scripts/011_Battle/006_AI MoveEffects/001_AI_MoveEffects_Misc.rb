@@ -245,7 +245,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartHailWeather",
     if ai.trainer.high_skill? && battle.field.weather != :None
       score -= ai.get_score_for_weather(battle.field.weather, user)
     end
-    score += ai.get_score_for_weather(:Hail, user, true)
+    score += ai.get_score_for_weather((Settings::USE_SNOWSTORM_WEATHER_INSTEAD_OF_HAIL ? :Snowstorm : :Hail), user, true)
     next score
   }
 )

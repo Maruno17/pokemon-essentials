@@ -706,7 +706,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenSpecialDamageAgainstUserSi
 Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenDamageAgainstUserSideIfHail",
   proc { |move, user, ai, battle|
     next true if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
-    next true if user.battler.effectiveWeather != :Hail
+    next true if ![:Hail, :Snowstorm].include?(user.battler.effectiveWeather)
     next false
   }
 )
