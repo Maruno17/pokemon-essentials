@@ -334,7 +334,7 @@ class Battle::Battler
       @battle.successStates[user.index].protected = true
       return false
     end
-    if !(user.hasActiveAbility?(:UNSEENFIST) && move.contactMove?)
+    if !(user.hasActiveAbility?(:UNSEENFIST) && move.pbContactMove?(user))
       # Wide Guard
       if target.pbOwnSide.effects[PBEffects::WideGuard] && user.index != target.index &&
          move.pbTarget(user).num_targets > 1 &&
@@ -444,7 +444,7 @@ class Battle::Battler
         target.effects[PBEffects::MagicCoat] = false
         return false
       end
-      if target.hasActiveAbility?(:MAGICBOUNCE) && !@battle.moldBreaker &&
+      if target.hasActiveAbility?(:MAGICBOUNCE) && !target.beingMoldBroken? &&
          !target.effects[PBEffects::MagicBounce]
         target.damageState.magicBounce = true
         target.effects[PBEffects::MagicBounce] = true
@@ -469,7 +469,7 @@ class Battle::Battler
     # Airborne-based immunity to Ground moves
     if move.damagingMove? && move.calcType == :GROUND &&
        target.airborne? && !move.hitsFlyingTargets?
-      if target.hasActiveAbility?(:LEVITATE) && !@battle.moldBreaker
+      if target.hasActiveAbility?(:LEVITATE) && !target.beingMoldBroken?
         if show_message
           @battle.pbShowAbilitySplash(target)
           if Battle::Scene::USE_ABILITY_SPLASH
@@ -502,7 +502,7 @@ class Battle::Battler
         return false
       end
       if Settings::MECHANICS_GENERATION >= 6
-        if target.hasActiveAbility?(:OVERCOAT) && !@battle.moldBreaker
+        if target.hasActiveAbility?(:OVERCOAT) && !target.beingMoldBroken?
           if show_message
             @battle.pbShowAbilitySplash(target)
             if Battle::Scene::USE_ABILITY_SPLASH

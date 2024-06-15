@@ -239,7 +239,9 @@ module GameData
                        :DRAGONMEMORY,
                        :DARKMEMORY,
                        :FAIRYMEMORY],
-        :GIRATINA  => [:GRISEOUSORB],
+        :DIALGA    => [:ADAMANTCRYSTAL],
+        :PALKIA    => [:LUSTROUSGLOBE],
+        :GIRATINA  => [:GRISEOUSORB, :GRISEOUSCORE],
         :GENESECT  => [:BURNDRIVE, :CHILLDRIVE, :DOUSEDRIVE, :SHOCKDRIVE],
         :KYOGRE    => [:BLUEORB],
         :GROUDON   => [:REDORB],
@@ -247,6 +249,7 @@ module GameData
         :ZAMAZENTA => [:RUSTEDSHIELD],
         :OGERPON   => [:WELLSPRINGMASK, :HEARTHFLAMEMASK, :CORNERSTONEMASK]
       }
+      combos[:GIRATINA].delete(:GRISEOUSORB) if Settings::MECHANICS_GENERATION >= 9
       return combos[species]&.include?(@id)
     end
 

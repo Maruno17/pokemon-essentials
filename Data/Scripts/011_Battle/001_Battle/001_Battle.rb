@@ -484,8 +484,10 @@ class Battle
     return allSameSideBattlers.select { |b| b.pbOwnedByPlayer? }.length
   end
 
-  def pbCheckGlobalAbility(abil)
-    allBattlers.each { |b| return b if b.hasActiveAbility?(abil) }
+  def pbCheckGlobalAbility(abil, check_mold_breaker = false)
+    allBattlers.each do |b|
+      return b if b.hasActiveAbility?(abil) && (!check_mold_breaker || !b.beingMoldBroken?)
+    end
     return nil
   end
 
@@ -495,6 +497,13 @@ class Battle
       return b if b.hasActiveAbility?(abil)
     end
     return nil
+  end
+
+  # Returns an array containing the IDs of all active abilities.
+  def pbAllActiveAbilities
+    ret = []
+    allBattlers.each { |b| ret.push(b.ability_id) if b.abilityActive? }
+    return ret
   end
 
   # Given a battler index, and using battle side sizes, returns an array of

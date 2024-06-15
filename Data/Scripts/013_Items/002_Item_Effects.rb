@@ -409,6 +409,30 @@ ItemHandlers::UseOnPokemon.addIf(:evolution_stones,
   }
 )
 
+ItemHandlers::UseOnPokemon.add(:SCROLLOFWATERS, proc { |item, qty, pkmn, scene|
+  if pkmn.shadowPokemon?
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
+  end
+  newspecies = pkmn.check_evolution_on_use_item(item)
+  if newspecies
+    pkmn.form = 1   # NOTE: This is the only difference to the generic evolution stone code.
+    pbFadeOutInWithMusic do
+      evo = PokemonEvolutionScene.new
+      evo.pbStartScreen(pkmn, newspecies)
+      evo.pbEvolution(false)
+      evo.pbEndScreen
+      if scene.is_a?(PokemonPartyScreen)
+        scene.pbRefreshAnnotations(proc { |p| !p.check_evolution_on_use_item(item).nil? })
+        scene.pbRefresh
+      end
+    end
+    next true
+  end
+  scene.pbDisplay(_INTL("It won't have any effect."))
+  next false
+})
+
 ItemHandlers::UseOnPokemon.add(:POTION, proc { |item, qty, pkmn, scene|
   next pbHPItem(pkmn, 20, scene)
 })
@@ -1138,8 +1162,12 @@ ItemHandlers::UseOnPokemon.add(:ABILITYPATCH, proc { |item, qty, pkmn, scene|
   if scene.pbConfirm(_INTL("Do you want to change {1}'s Ability?", pkmn.name))
     abils = pkmn.getAbilityList
     new_ability_id = nil
-    abils.each { |a| new_ability_id = a[0] if a[1] == 2 }
-    if !new_ability_id || pkmn.hasHiddenAbility? || pkmn.isSpecies?(:ZYGARDE)
+    if pkmn.hasHiddenAbility?
+      new_ability_id = 0 if Settings::MECHANICS_GENERATION >= 9   # First regular ability
+    else
+      abils.each { |a| new_ability_id = a[0] if a[1] == 2 }   # Hidden ability
+    end
+    if !new_ability_id || pkmn.isSpecies?(:ZYGARDE)
       scene.pbDisplay(_INTL("It won't have any effect."))
       next false
     end
@@ -1151,6 +1179,22 @@ ItemHandlers::UseOnPokemon.add(:ABILITYPATCH, proc { |item, qty, pkmn, scene|
     next true
   end
   next false
+})
+
+ItemHandlers::UseOnPokemon.add(:METEORITE, proc { |item, qty, pkmn, scene|
+  if !pkmn.isSpecies?(:DEOXYS)
+    scene.pbDisplay(_INTL("It had no effect."))
+    next false
+  elsif pkmn.fainted?
+    scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
+  end
+  new_form = (pkmn.form + 1) % 4   # Normal, Attack, Defense, Speed
+  pkmn.setForm(new_form) do
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} transformed!", pkmn.name))
+  end
+  next true
 })
 
 ItemHandlers::UseOnPokemon.add(:GRACIDEA, proc { |item, qty, pkmn, scene|

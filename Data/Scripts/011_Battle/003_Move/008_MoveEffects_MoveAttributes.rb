@@ -73,7 +73,7 @@ class Battle::Move::OHKO < Battle::Move::FixedDamageMove
       @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis)) if show_message
       return true
     end
-    if target.hasActiveAbility?(:STURDY) && !@battle.moldBreaker
+    if target.hasActiveAbility?(:STURDY) && !target.beingMoldBroken?
       if show_message
         @battle.pbShowAbilitySplash(target)
         if Battle::Scene::USE_ABILITY_SPLASH
@@ -191,9 +191,18 @@ class Battle::Move::PowerLowerWithUserHP < Battle::Move
 end
 
 #===============================================================================
+# Power increases with the target's HP. (Hard Press)
+#===============================================================================
+class Battle::Move::PowerHigherWithTargetHP100 < Battle::Move
+  def pbBaseDamage(baseDmg, user, target)
+    return [100 * target.hp / target.totalhp, 1].max
+  end
+end
+
+#===============================================================================
 # Power increases with the target's HP. (Crush Grip, Wring Out)
 #===============================================================================
-class Battle::Move::PowerHigherWithTargetHP < Battle::Move
+class Battle::Move::PowerHigherWithTargetHP120 < Battle::Move
   def pbBaseDamage(baseDmg, user, target)
     return [120 * target.hp / target.totalhp, 1].max
   end
@@ -392,6 +401,23 @@ class Battle::Move::RandomPowerDoublePowerIfTargetUnderground < Battle::Move
     damageMult *= 2 if target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground")
     damageMult /= 2 if @battle.field.terrain == :Grassy
     return damageMult
+  end
+end
+
+#===============================================================================
+# Power is increased by 50% in sunny weather. (Hydro Steam)
+#===============================================================================
+class Battle::Move::IncreasePowerInSun < Battle::Move
+  # NOTE: No code needed here. Effect is coded in def pbCalcDamageMultipliers.
+end
+
+#===============================================================================
+# Power is increased by 50% if Electric Terrain applies. (Psyblade)
+#===============================================================================
+class Battle::Move::IncreasePowerInElectricTerrain < Battle::Move
+  def pbBaseDamage(baseDmg, user, target)
+    baseDmg = (baseDmg * 1.5).floor if @battle.field.terrain == :Electric && target.affectedByTerrain?
+    return baseDmg
   end
 end
 
@@ -1087,6 +1113,15 @@ end
 class Battle::Move::RecoilHalfOfDamageDealt < Battle::Move::RecoilMove
   def pbRecoilDamage(user, target)
     return (target.damageState.totalHPLost / 2.0).round
+  end
+end
+
+#===============================================================================
+# User takes recoil damage equal to 1/2 of is maximum HP. (Chloroblast)
+#===============================================================================
+class Battle::Move::RecoilHalfOfTotalHP < Battle::Move::RecoilMove
+  def pbRecoilDamage(user, target)
+    return (user.totalhp / 2.0).round
   end
 end
 

@@ -388,6 +388,16 @@ class Battle::Move::RaiseUserAtkDef1 < Battle::Move::MultiStatUpMove
 end
 
 #===============================================================================
+# Increases the user's Attack, Defense and Speed by 1 stage each. (Victory Dance)
+#===============================================================================
+class Battle::Move::RaiseUserAtkDefSpd1 < Battle::Move::MultiStatUpMove
+  def initialize(battle, move)
+    super
+    @statUp = [:ATTACK, 1, :DEFENSE, 1, :SPEED, 1]
+  end
+end
+
+#===============================================================================
 # Increases the user's Attack, Defense and accuracy by 1 stage each. (Coil)
 #===============================================================================
 class Battle::Move::RaiseUserAtkDefAcc1 < Battle::Move::MultiStatUpMove
@@ -1037,7 +1047,7 @@ class Battle::Move::LowerTargetSpAtk2IfCanAttract < Battle::Move::TargetStatDown
       @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis)) if show_message
       return true
     end
-    if target.hasActiveAbility?(:OBLIVIOUS) && !@battle.moldBreaker
+    if target.hasActiveAbility?(:OBLIVIOUS) && !target.beingMoldBroken?
       if show_message
         @battle.pbShowAbilitySplash(target)
         if Battle::Scene::USE_ABILITY_SPLASH
@@ -1054,7 +1064,7 @@ class Battle::Move::LowerTargetSpAtk2IfCanAttract < Battle::Move::TargetStatDown
 
   def pbAdditionalEffect(user, target)
     return if user.gender == 2 || target.gender == 2 || user.gender == target.gender
-    return if target.hasActiveAbility?(:OBLIVIOUS) && !@battle.moldBreaker
+    return if target.hasActiveAbility?(:OBLIVIOUS) && !target.beingMoldBroken?
     super
   end
 end
@@ -1106,6 +1116,17 @@ class Battle::Move::LowerTargetSpeed1 < Battle::Move::TargetStatDownMove
   def initialize(battle, move)
     super
     @statDown = [:SPEED, 1]
+  end
+end
+
+#===============================================================================
+# Decreases the target's Speed by 1 stage. Accuracy perfect in rain.
+# (Bleakwind Storm)
+#===============================================================================
+class Battle::Move::LowerTargetSpeed1AlwaysHitsInRain < Battle::Move::LowerTargetSpeed1
+  def pbBaseAccuracy(user, target)
+    return 0 if [:Rain, :HeavyRain].include?(target.effectiveWeather)
+    return super
   end
 end
 
@@ -1932,6 +1953,9 @@ class Battle::Move::StartUserSideDoubleSpeed < Battle::Move
   def pbEffectGeneral(user)
     user.pbOwnSide.effects[PBEffects::Tailwind] = 4
     @battle.pbDisplay(_INTL("The Tailwind blew from behind {1}!", user.pbTeam(true)))
+    @battle.allSameSideBattlers(user).each do |b|
+      pbRaiseStatStageByAbility(:ATTACK, 1, b) if b.hasActiveAbility?(:WINDRIDER)
+    end
   end
 end
 

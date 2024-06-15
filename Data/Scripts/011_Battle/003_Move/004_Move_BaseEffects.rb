@@ -212,7 +212,7 @@ class Battle::Move::TargetMultiStatDownMove < Battle::Move
       # NOTE: It's a bit of a faff to make sure the appropriate failure message
       #       is shown here, I know.
       canLower = false
-      if target.hasActiveAbility?(:CONTRARY) && !@battle.moldBreaker
+      if target.hasActiveAbility?(:CONTRARY) && !target.beingMoldBroken?
         (@statDown.length / 2).times do |i|
           next if target.statStageAtMax?(@statDown[i * 2])
           canLower = true

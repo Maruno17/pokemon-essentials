@@ -18,7 +18,7 @@ class Battle::AI
       desire_mult = -1
     end
     # If target has Contrary, use different calculations to score the stat change
-    if !ignore_contrary && !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY)
+    if !ignore_contrary && !fixed_change && target.has_active_ability?(:CONTRARY) && !target.being_mold_broken?
       if desire_mult > 0 && whole_effect
         PBDebug.log_score_change(MOVE_USELESS_SCORE - score, "don't prefer raising target's stats (it has Contrary)")
         return MOVE_USELESS_SCORE
@@ -62,7 +62,7 @@ class Battle::AI
       end
       # Calculate amount that stat will be raised by
       increment = stat_changes[idx + 1]
-      increment *= 2 if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:SIMPLE)
+      increment *= 2 if !fixed_change && target.has_active_ability?(:SIMPLE) && !target.being_mold_broken?
       increment = [increment, Battle::Battler::STAT_STAGE_MAXIMUM - target.stages[stat]].min   # The actual stages gained
       # Count this as a valid stat raise
       real_stat_changes.push([stat, increment]) if increment > 0
@@ -324,7 +324,7 @@ class Battle::AI
       desire_mult = 1
     end
     # If target has Contrary, use different calculations to score the stat change
-    if !ignore_contrary && !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:CONTRARY)
+    if !ignore_contrary && !fixed_change && target.has_active_ability?(:CONTRARY) && !target.being_mold_broken?
       if desire_mult > 0 && whole_effect
         PBDebug.log_score_change(MOVE_USELESS_SCORE - score, "don't prefer lowering target's stats (it has Contrary)")
         return MOVE_USELESS_SCORE
@@ -366,7 +366,7 @@ class Battle::AI
       end
       # Calculate amount that stat will be lowered by
       decrement = stat_changes[idx + 1]
-      decrement *= 2 if !fixed_change && !@battle.moldBreaker && target.has_active_ability?(:SIMPLE)
+      decrement *= 2 if !fixed_change && target.has_active_ability?(:SIMPLE) && !target.being_mold_broken?
       decrement = [decrement, Battle::Battler::STAT_STAGE_MAXIMUM + target.stages[stat]].min   # The actual stages lost
       # Count this as a valid stat drop
       real_stat_changes.push([stat, decrement]) if decrement > 0

@@ -576,7 +576,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToInflictedStatu
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FlinchTarget",
   proc { |score, move, user, target, ai, battle|
     next score if target.faster_than?(user) || target.effects[PBEffects::Substitute] > 0
-    next score if target.has_active_ability?(:INNERFOCUS) && !battle.moldBreaker
+    next score if target.has_active_ability?(:INNERFOCUS) && !target.being_mold_broken?
     add_effect = move.get_score_change_for_additional_effect(user, target)
     next score if add_effect == -999   # Additional effect will be negated
     score += add_effect

@@ -72,7 +72,7 @@ class Battle::Battler
       end
     end
     # Uproar immunity
-    if newStatus == :SLEEP && !(hasActiveAbility?(:SOUNDPROOF) && !@battle.moldBreaker)
+    if newStatus == :SLEEP && !(hasActiveAbility?(:SOUNDPROOF) && !beingMoldBroken?)
       @battle.allBattlers.each do |b|
         next if b.effects[PBEffects::Uproar] == 0
         @battle.pbDisplay(_INTL("But the uproar kept {1} awake!", pbThis(true))) if showMessages
@@ -105,17 +105,16 @@ class Battle::Battler
     immAlly = nil
     if Battle::AbilityEffects.triggerStatusImmunityNonIgnorable(self.ability, self, newStatus)
       immuneByAbility = true
-    elsif self_inflicted || !@battle.moldBreaker
-      if abilityActive? && Battle::AbilityEffects.triggerStatusImmunity(self.ability, self, newStatus)
+    elsif abilityActive? && (self_inflicted || !beingMoldBroken?) &&
+       Battle::AbilityEffects.triggerStatusImmunity(self.ability, self, newStatus)
+      immuneByAbility = true
+    else
+      allAllies.each do |b|
+        next if !b.abilityActive? || (!self_inflicted && b.beingMoldBroken?)
+        next if !Battle::AbilityEffects.triggerStatusImmunityFromAlly(b.ability, self, newStatus)
         immuneByAbility = true
-      else
-        allAllies.each do |b|
-          next if !b.abilityActive?
-          next if !Battle::AbilityEffects.triggerStatusImmunityFromAlly(b.ability, self, newStatus)
-          immuneByAbility = true
-          immAlly = b
-          break
-        end
+        immAlly = b
+        break
       end
     end
     if immuneByAbility
@@ -456,7 +455,7 @@ class Battle::Battler
       @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!", pbThis(true))) if showMessages
       return false
     end
-    if (selfInflicted || !@battle.moldBreaker) && hasActiveAbility?(:OWNTEMPO)
+    if (selfInflicted || !beingMoldBroken?) && hasActiveAbility?(:OWNTEMPO)
       if showMessages
         @battle.pbShowAbilitySplash(self)
         if Battle::Scene::USE_ABILITY_SPLASH
@@ -516,32 +515,30 @@ class Battle::Battler
       @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis)) if showMessages
       return false
     end
-    if !@battle.moldBreaker
-      if hasActiveAbility?([:AROMAVEIL, :OBLIVIOUS])
+    if hasActiveAbility?([:AROMAVEIL, :OBLIVIOUS]) && !beingMoldBroken?
+      if showMessages
+        @battle.pbShowAbilitySplash(self)
+        if Battle::Scene::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
+        else
+          @battle.pbDisplay(_INTL("{1}'s {2} prevents romance!", pbThis, abilityName))
+        end
+        @battle.pbHideAbilitySplash(self)
+      end
+      return false
+    else
+      allAllies.each do |b|
+        next if !b.hasActiveAbility?(:AROMAVEIL) || b.beingMoldBroken?
         if showMessages
-          @battle.pbShowAbilitySplash(self)
+          @battle.pbShowAbilitySplash(b)
           if Battle::Scene::USE_ABILITY_SPLASH
             @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
           else
-            @battle.pbDisplay(_INTL("{1}'s {2} prevents romance!", pbThis, abilityName))
+            @battle.pbDisplay(_INTL("{1}'s {2} prevents romance!", b.pbThis, b.abilityName))
           end
-          @battle.pbHideAbilitySplash(self)
+          @battle.pbHideAbilitySplash(b)
         end
         return false
-      else
-        allAllies.each do |b|
-          next if !b.hasActiveAbility?(:AROMAVEIL)
-          if showMessages
-            @battle.pbShowAbilitySplash(b)
-            if Battle::Scene::USE_ABILITY_SPLASH
-              @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
-            else
-              @battle.pbDisplay(_INTL("{1}'s {2} prevents romance!", b.pbThis, b.abilityName))
-            end
-            @battle.pbHideAbilitySplash(b)
-          end
-          return false
-        end
       end
     end
     return true
@@ -569,7 +566,7 @@ class Battle::Battler
   # Flinching
   #=============================================================================
   def pbFlinch(_user = nil)
-    return if hasActiveAbility?(:INNERFOCUS) && !@battle.moldBreaker
+    return if hasActiveAbility?(:INNERFOCUS) && !beingMoldBroken?
     @effects[PBEffects::Flinch] = true
   end
 end

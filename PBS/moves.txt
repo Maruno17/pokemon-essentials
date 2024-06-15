@@ -6163,7 +6163,7 @@ Power = 1
 Accuracy = 100
 TotalPP = 5
 Target = NearOther
-FunctionCode = PowerHigherWithTargetHP
+FunctionCode = PowerHigherWithTargetHP120
 Flags = Contact,CanProtect,CanMirrorMove
 Description = The target is crushed with great force. The attack is more powerful the more HP the target has left.
 #-------------------------------
@@ -6319,7 +6319,7 @@ Power = 1
 Accuracy = 100
 TotalPP = 5
 Target = NearOther
-FunctionCode = PowerHigherWithTargetHP
+FunctionCode = PowerHigherWithTargetHP120
 Flags = Contact,CanProtect,CanMirrorMove
 Description = The user powerfully wrings the foe. The more HP the foe has, the greater this attack's power.
 #-------------------------------
@@ -8900,7 +8900,7 @@ Power = 130
 Accuracy = 100
 TotalPP = 5
 Target = NearOther
-FunctionCode = RemoveTerrain
+FunctionCode = RemoveTerrainFailsIfNoTerrain
 Flags = Contact,CanProtect,CanMirrorMove
 Description = The user attacks while destroying the terrain. This move fails when the ground isn't a terrain.
 #-------------------------------

@@ -270,8 +270,21 @@ MultipleForms.register(:ROTOM, {
   }
 })
 
+MultipleForms.register(:DIALGA, {
+  "getForm" => proc { |pkmn|
+    next pkmn.hasItem?(:ADAMANTCRYSTAL) ? 1 : 0
+  }
+})
+
+MultipleForms.register(:PALKIA, {
+  "getForm" => proc { |pkmn|
+    next pkmn.hasItem?(:LUSTROUSGLOBE) ? 1 : 0
+  }
+})
+
 MultipleForms.register(:GIRATINA, {
   "getForm" => proc { |pkmn|
+    next 1 if pkmn.hasItem?(:GRISEOUSCORE)
     next 1 if pkmn.hasItem?(:GRISEOUSORB) && Settings::MECHANICS_GENERATION <= 8
     next 1 if $game_map&.metadata&.has_flag?("DistortionWorld")
     next 0

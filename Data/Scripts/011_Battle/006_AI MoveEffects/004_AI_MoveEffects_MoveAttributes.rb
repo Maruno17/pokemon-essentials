@@ -63,7 +63,7 @@ Battle::AI::Handlers::MoveBasePower.add("LowerTargetHPToUserHP",
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("OHKO",
   proc { |move, user, target, ai, battle|
     next true if target.level > user.level
-    next true if !battle.moldBreaker && target.has_active_ability?(:STURDY)
+    next true if target.has_active_ability?(:STURDY) && !target.being_mold_broken?
     next false
   }
 )
@@ -144,7 +144,8 @@ Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
-                                         "PowerHigherWithTargetHP")
+                                         "PowerHigherWithTargetHP100",
+                                         "PowerHigherWithTargetHP120")
 
 #===============================================================================
 #

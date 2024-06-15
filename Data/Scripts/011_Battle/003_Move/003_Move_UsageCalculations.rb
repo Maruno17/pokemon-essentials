@@ -37,8 +37,8 @@ class Battle::Move
         ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
       # Foresight
-      if (user.hasActiveAbility?(:SCRAPPY) || target.effects[PBEffects::Foresight]) &&
-         defType == :GHOST
+      if (user.hasActiveAbility?(:SCRAPPY) || user.hasActiveAbility?(:MINDSEYE) ||
+          target.effects[PBEffects::Foresight]) && defType == :GHOST
         ret = Effectiveness::NORMAL_EFFECTIVE_MULTIPLIER
       end
       # Miracle Eye
@@ -136,7 +136,7 @@ class Battle::Move
         b.ability, modifiers, user, target, self, @calcType
       )
     end
-    if target.abilityActive? && !@battle.moldBreaker
+    if target.abilityActive? && !target.beingMoldBroken?
       Battle::AbilityEffects.triggerAccuracyCalcFromTarget(
         target.ability, modifiers, user, target, self, @calcType
       )
@@ -163,6 +163,7 @@ class Battle::Move
     end
     modifiers[:evasion_stage] = 0 if target.effects[PBEffects::Foresight] && modifiers[:evasion_stage] > 0
     modifiers[:evasion_stage] = 0 if target.effects[PBEffects::MiracleEye] && modifiers[:evasion_stage] > 0
+    modifiers[:evasion_stage] = 0 if user.hasActiveAbility?(:MINDSEYE)
   end
 
   #=============================================================================
@@ -182,7 +183,7 @@ class Battle::Move
     if c >= 0 && user.abilityActive?
       c = Battle::AbilityEffects.triggerCriticalCalcFromUser(user.ability, user, target, c)
     end
-    if c >= 0 && target.abilityActive? && !@battle.moldBreaker
+    if c >= 0 && target.abilityActive? && !target.beingMoldBroken?
       c = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target.ability, user, target, c)
     end
     # Item effects that alter critical hit rate
@@ -253,7 +254,7 @@ class Battle::Move
     baseDmg = pbBaseDamage(@power, user, target)
     # Calculate user's attack stat
     atk, atkStage = pbGetAttackStats(user, target)
-    if !target.hasActiveAbility?(:UNAWARE) || @battle.moldBreaker
+    if !target.hasActiveAbility?(:UNAWARE) || target.beingMoldBroken?
       atkStage = max_stage if target.damageState.critical && atkStage < max_stage
       atk = (atk.to_f * stageMul[atkStage] / stageDiv[atkStage]).floor
     end
@@ -282,12 +283,33 @@ class Battle::Move
 
   def pbCalcDamageMultipliers(user, target, numTargets, type, baseDmg, multipliers)
     # Global abilities
-    if (@battle.pbCheckGlobalAbility(:DARKAURA) && type == :DARK) ||
-       (@battle.pbCheckGlobalAbility(:FAIRYAURA) && type == :FAIRY)
-      if @battle.pbCheckGlobalAbility(:AURABREAK)
+    all_abilities = @battle.pbAllActiveAbilities
+    if (all_abilities.include?(:DARKAURA) && type == :DARK) ||
+       (all_abilities.include?(:FAIRYAURA) && type == :FAIRY)
+      if all_abilities.include?(:AURABREAK)
         multipliers[:power_multiplier] *= 3 / 4.0
       else
         multipliers[:power_multiplier] *= 4 / 3.0
+      end
+    end
+    if all_abilities.include?(:TABLETSOFRUIN) && user.ability_id != :TABLETSOFRUIN
+      multipliers[:power_multiplier] *= 3 / 4.0 if physicalMove?
+    end
+    if all_abilities.include?(:VESSELOFRUIN) && user.ability_id != :VESSELOFRUIN
+      multipliers[:power_multiplier] *= 3 / 4.0 if specialMove?
+    end
+    if all_abilities.include?(:SWORDOFRUIN) && user.ability_id != :SWORDOFRUIN
+      if @battle.field.effects[PBEffects::WonderRoom] > 0
+        multipliers[:defense_multiplier] *= 3 / 4.0 if specialMove?
+      else
+        multipliers[:defense_multiplier] *= 3 / 4.0 if physicalMove?
+      end
+    end
+    if all_abilities.include?(:BEADSOFRUIN) && user.ability_id != :BEADSOFRUIN
+      if @battle.field.effects[PBEffects::WonderRoom] > 0
+        multipliers[:defense_multiplier] *= 3 / 4.0 if physicalMove?
+      else
+        multipliers[:defense_multiplier] *= 3 / 4.0 if specialMove?
       end
     end
     # Ability effects that alter damage
@@ -296,34 +318,30 @@ class Battle::Move
         user.ability, user, target, self, multipliers, baseDmg, type
       )
     end
-    if !@battle.moldBreaker
-      # NOTE: It's odd that the user's Mold Breaker prevents its partner's
-      #       beneficial abilities (i.e. Flower Gift boosting Atk), but that's
-      #       how it works.
-      user.allAllies.each do |b|
-        next if !b.abilityActive?
-        Battle::AbilityEffects.triggerDamageCalcFromAlly(
-          b.ability, user, target, self, multipliers, baseDmg, type
-        )
-      end
-      if target.abilityActive?
+    # NOTE: It's odd that the user's Mold Breaker prevents its partner's
+    #       beneficial abilities (i.e. Flower Gift boosting Atk), but that's
+    #       how it works.
+    user.allAllies.each do |b|
+      next if !b.abilityActive? || b.beingMoldBroken?
+      Battle::AbilityEffects.triggerDamageCalcFromAlly(
+        b.ability, user, target, self, multipliers, baseDmg, type
+      )
+    end
+    if target.abilityActive?
+      if !target.beingMoldBroken?
         Battle::AbilityEffects.triggerDamageCalcFromTarget(
           target.ability, user, target, self, multipliers, baseDmg, type
         )
       end
-    end
-    if target.abilityActive?
       Battle::AbilityEffects.triggerDamageCalcFromTargetNonIgnorable(
         target.ability, user, target, self, multipliers, baseDmg, type
       )
     end
-    if !@battle.moldBreaker
-      target.allAllies.each do |b|
-        next if !b.abilityActive?
-        Battle::AbilityEffects.triggerDamageCalcFromTargetAlly(
-          b.ability, user, target, self, multipliers, baseDmg, type
-        )
-      end
+    target.allAllies.each do |b|
+      next if !b.abilityActive? || b.beingMoldBroken?
+      Battle::AbilityEffects.triggerDamageCalcFromTargetAlly(
+        b.ability, user, target, self, multipliers, baseDmg, type
+      )
     end
     # Item effects that alter damage
     if user.itemActive?
@@ -400,13 +418,17 @@ class Battle::Move
     # Multi-targeting attacks
     multipliers[:final_damage_multiplier] *= 0.75 if numTargets > 1
     # Weather
-    case user.effectiveWeather
+    case target.effectiveWeather
     when :Sun, :HarshSun
       case type
       when :FIRE
         multipliers[:final_damage_multiplier] *= 1.5
       when :WATER
-        multipliers[:final_damage_multiplier] /= 2
+        if @function_code == "IncreasePowerInSun" && [:Sun, :HarshSun].include?(user.effectiveWeather)
+          multipliers[:final_damage_multiplier] *= 1.5
+        else
+          multipliers[:final_damage_multiplier] /= 2
+        end
       end
     when :Rain, :HeavyRain
       case type
@@ -487,7 +509,7 @@ class Battle::Move
   # Additional effect chance
   #=============================================================================
   def pbAdditionalEffectChance(user, target, effectChance = 0)
-    return 0 if target.hasActiveAbility?(:SHIELDDUST) && !@battle.moldBreaker
+    return 0 if target.hasActiveAbility?(:SHIELDDUST) && !target.beingMoldBroken?
     ret = (effectChance > 0) ? effectChance : @addlEffect
     return ret if ret > 100
     if (Settings::MECHANICS_GENERATION >= 6 || @function_code != "EffectDependsOnEnvironment") &&
@@ -502,7 +524,7 @@ class Battle::Move
   #       not here.
   def pbFlinchChance(user, target)
     return 0 if flinchingMove?
-    return 0 if target.hasActiveAbility?(:SHIELDDUST) && !@battle.moldBreaker
+    return 0 if target.hasActiveAbility?(:SHIELDDUST) && !target.beingMoldBroken?
     ret = 0
     if user.hasActiveAbility?(:STENCH, true) ||
        user.hasActiveItem?([:KINGSROCK, :RAZORFANG], true)

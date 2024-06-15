@@ -110,13 +110,13 @@ class Battle::AI::AIMove
       @move.pbOnStartUse(user.battler, [target.battler])   # Calculate category
     end
     atk, atk_stage = @move.pbGetAttackStats(user.battler, target.battler)
-    if !target.has_active_ability?(:UNAWARE) || @ai.battle.moldBreaker
+    if !target.has_active_ability?(:UNAWARE) || target.being_mold_broken?
       atk_stage = max_stage if is_critical && atk_stage < max_stage
       atk = (atk.to_f * stage_mul[atk_stage] / stage_div[atk_stage]).floor
     end
     ##### Calculate target's defense stat #####
     defense, def_stage = @move.pbGetDefenseStats(user.battler, target.battler)
-    if !user.has_active_ability?(:UNAWARE) || @ai.battle.moldBreaker
+    if !user.has_active_ability?(:UNAWARE) || user.being_mold_broken?
       def_stage = max_stage if is_critical && def_stage > max_stage
       defense = (defense.to_f * stage_mul[def_stage] / stage_div[def_stage]).floor
     end
@@ -171,24 +171,22 @@ class Battle::AI::AIMove
         )
       end
     end
-    if !@ai.battle.moldBreaker
-      user_battler.allAllies.each do |b|
-        next if !b.abilityActive?
-        Battle::AbilityEffects.triggerDamageCalcFromAlly(
-          b.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
-        )
-      end
-      if target.ability_active?
-        case target.ability_id
-        when :FILTER, :SOLIDROCK
-          if Effectiveness.super_effective_type?(calc_type, *target.pbTypes(true))
-            multipliers[:final_damage_multiplier] *= 0.75
-          end
-        else
-          Battle::AbilityEffects.triggerDamageCalcFromTarget(
-            target.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
-          )
+    user_battler.allAllies.each do |b|
+      next if !b.abilityActive? || b.beingMoldBroken?
+      Battle::AbilityEffects.triggerDamageCalcFromAlly(
+        b.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
+      )
+    end
+    if target.ability_active? && !target.being_mold_broken?
+      case target.ability_id
+      when :FILTER, :SOLIDROCK
+        if Effectiveness.super_effective_type?(calc_type, *target.pbTypes(true))
+          multipliers[:final_damage_multiplier] *= 0.75
         end
+      else
+        Battle::AbilityEffects.triggerDamageCalcFromTarget(
+          target.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
+        )
       end
     end
     if target.ability_active?
@@ -196,13 +194,11 @@ class Battle::AI::AIMove
         target.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
       )
     end
-    if !@ai.battle.moldBreaker
-      target_battler.allAllies.each do |b|
-        next if !b.abilityActive?
-        Battle::AbilityEffects.triggerDamageCalcFromTargetAlly(
-          b.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
-        )
-      end
+    target_battler.allAllies.each do |b|
+      next if !b.abilityActive? || b.beingMoldBroken?
+      Battle::AbilityEffects.triggerDamageCalcFromTargetAlly(
+        b.ability, user_battler, target_battler, @move, multipliers, base_dmg, calc_type
+      )
     end
     # Item effects that alter damage
     if user.item_active?
@@ -445,7 +441,7 @@ class Battle::AI::AIMove
         b.ability, modifiers, user_battler, target_battler, @move, calc_type
       )
     end
-    if !@ai.battle.moldBreaker && target.ability_active?
+    if target.ability_active? && !target.being_mold_broken?
       Battle::AbilityEffects.triggerAccuracyCalcFromTarget(
         target.ability, modifiers, user_battler, target_battler, @move, calc_type
       )
@@ -510,7 +506,7 @@ class Battle::AI::AIMove
          user_battler, target_battler, crit_stage)
       return -1 if crit_stage < 0
     end
-    if !@ai.battle.moldBreaker && target.ability_active?
+    if target.ability_active? && !target.being_mold_broken?
       crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target_battler.ability,
          user_battler, target_battler, crit_stage)
       return -1 if crit_stage < 0
@@ -556,7 +552,7 @@ class Battle::AI::AIMove
     # Additional effect will be negated
     return -999 if user.has_active_ability?(:SHEERFORCE)
     return -999 if target && user.index != target.index &&
-                   target.has_active_ability?(:SHIELDDUST) && !@ai.battle.moldBreaker
+                   target.has_active_ability?(:SHIELDDUST) && !target.being_mold_broken?
     # Additional effect will always trigger
     return 0 if chance > 100
     # Calculate the chance

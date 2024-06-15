@@ -341,16 +341,22 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPsychicTerrain",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureCheck.add("RemoveTerrain",
-  proc { |move, user, ai, battle|
-    next battle.field.terrain == :None
-  }
-)
 Battle::AI::Handlers::MoveEffectScore.add("RemoveTerrain",
   proc { |score, move, user, ai, battle|
     next score - ai.get_score_for_terrain(battle.field.terrain, user)
   }
 )
+
+#===============================================================================
+#
+#===============================================================================
+Battle::AI::Handlers::MoveFailureCheck.add("RemoveTerrainFailsIfNoTerrain",
+  proc { |move, user, ai, battle|
+    next battle.field.terrain == :None
+  }
+)
+Battle::AI::Handlers::MoveEffectScore.copy("RemoveTerrain",
+                                           "RemoveTerrainFailsIfNoTerrain")
 
 #===============================================================================
 #

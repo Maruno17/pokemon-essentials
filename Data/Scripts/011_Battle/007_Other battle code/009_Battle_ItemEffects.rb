@@ -9,6 +9,8 @@ module Battle::ItemEffects
   OnStatLoss                      = ItemHandlerHash.new
   # Battler's status problem
   StatusCure                      = ItemHandlerHash.new
+  # Battler's stat stages
+  StatLossImmunity                = ItemHandlerHash.new
   # Priority and turn order
   PriorityBracketChange           = ItemHandlerHash.new
   PriorityBracketUse              = ItemHandlerHash.new
@@ -79,6 +81,12 @@ module Battle::ItemEffects
 
   def self.triggerStatusCure(item, battler, battle, forced)
     return trigger(StatusCure, item, battler, battle, forced)
+  end
+
+  #=============================================================================
+
+  def self.triggerStatLossImmunity(item, battler, stat, battle, show_messages)
+    return trigger(StatLossImmunity, item, battler, stat, battle, show_messages)
   end
 
   #=============================================================================
@@ -628,6 +636,18 @@ Battle::ItemEffects::StatusCure.add(:RAWSTBERRY,
 )
 
 #===============================================================================
+# StatLossImmunity handlers
+#===============================================================================
+
+Battle::ItemEffects::StatLossImmunity.add(:CLEARAMULET,
+  proc { |item, battler, stat, battle, showMessages|
+    battle.pbDisplay(_INTL("The effects of {1}'s {2} prevent its stats from being lowered!",
+                           battler.pbThis, GameData::Item.get(item).name)) if showMessages
+    next true
+  }
+)
+
+#===============================================================================
 # PriorityBracketChange handlers
 #===============================================================================
 
@@ -730,6 +750,8 @@ Battle::ItemEffects::DamageCalcFromUser.add(:ADAMANTORB,
   }
 )
 
+Battle::ItemEffects::DamageCalcFromUser.copy(:ADAMANTORB, :ADAMANTCRYSTAL)
+
 Battle::ItemEffects::DamageCalcFromUser.add(:BLACKBELT,
   proc { |item, user, target, move, mults, power, type|
     mults[:power_multiplier] *= 1.2 if type == :FIGHTING
@@ -771,6 +793,14 @@ Battle::ItemEffects::DamageCalcFromUser.add(:CHOICESPECS,
     mults[:power_multiplier] *= 1.5 if move.specialMove?
   }
 )
+
+Battle::ItemEffects::DamageCalcFromUser.add(:CORNERSTONEMASK,
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if user.isSpecies?(:OGERPON)
+  }
+)
+
+Battle::ItemEffects::DamageCalcFromUser.copy(:CORNERSTONEMASK, :HEARTHFLAMEEMASK, :WELLSPRINGMASK)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:DARKGEM,
   proc { |item, user, target, move, mults, power, type|
@@ -858,6 +888,8 @@ Battle::ItemEffects::DamageCalcFromUser.add(:GRISEOUSORB,
   }
 )
 
+Battle::ItemEffects::DamageCalcFromUser.copy(:GRISEOUSORB, :GRISEOUSCORE)
+
 Battle::ItemEffects::DamageCalcFromUser.add(:GROUNDGEM,
   proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:GROUND, move, type, mults)
@@ -899,6 +931,8 @@ Battle::ItemEffects::DamageCalcFromUser.add(:LUSTROUSORB,
     end
   }
 )
+
+Battle::ItemEffects::DamageCalcFromUser.copy(:LUSTROUSORB, :LUSTROUSGLOBE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:MAGNET,
   proc { |item, user, target, move, mults, power, type|
@@ -984,6 +1018,12 @@ Battle::ItemEffects::DamageCalcFromUser.add(:POISONGEM,
 Battle::ItemEffects::DamageCalcFromUser.add(:PSYCHICGEM,
   proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:PSYCHIC, move, type, mults)
+  }
+)
+
+Battle::ItemEffects::DamageCalcFromUser.add(:PUNCHINGGLOVE,
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.1 if move.punchingMove?
   }
 )
 
@@ -1551,7 +1591,7 @@ Battle::ItemEffects::AfterMoveUseFromTarget.add(:REDCARD,
     battle.pbDisplay(_INTL("{1} held up its {2} against {3}!",
        battler.pbThis, battler.itemName, user.pbThis(true)))
     battler.pbConsumeItem
-    if user.hasActiveAbility?(:SUCTIONCUPS) && !battle.moldBreaker
+    if user.hasActiveAbility?(:SUCTIONCUPS) && !user.being_mold_broken?
       battle.pbShowAbilitySplash(user)
       if Battle::Scene::USE_ABILITY_SPLASH
         battle.pbDisplay(_INTL("{1} anchors itself!", user.pbThis))

@@ -89,7 +89,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:target_can_Magic_Coat_o
     if move.statusMove? && move.move.canMagicCoat? && target.opposes?(user) &&
        (target.faster_than?(user) || !target.battler.semiInvulnerable?)
       old_score = score
-      if !battle.moldBreaker && target.has_active_ability?(:MAGICBOUNCE)
+      if target.has_active_ability?(:MAGICBOUNCE) && !target.being_mold_broken?
         score = Battle::AI::MOVE_USELESS_SCORE
         PBDebug.log_score_change(score - old_score, "useless because target will Magic Bounce it")
       elsif target.has_move_with_function?("BounceBackProblemCausingStatusMoves") &&
@@ -108,7 +108,7 @@ Battle::AI::Handlers::GeneralMoveScore.add(:any_foe_can_Magic_Coat_or_Bounce_mov
       old_score = score
       ai.each_foe_battler(user.side) do |b, i|
         next if user.faster_than?(b) && b.battler.semiInvulnerable?
-        if b.has_active_ability?(:MAGICBOUNCE) && !battle.moldBreaker
+        if b.has_active_ability?(:MAGICBOUNCE) && !b.being_mold_broken?
           score = Battle::AI::MOVE_USELESS_SCORE
           PBDebug.log_score_change(score - old_score, "useless because a foe will Magic Bounce it")
           break
@@ -336,7 +336,7 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:external_flinching_effe
        user.faster_than?(target) && target.effects[PBEffects::Substitute] == 0
       if user.has_active_item?([:KINGSROCK, :RAZORFANG]) ||
          user.has_active_ability?(:STENCH)
-        if battle.moldBreaker || !target.has_active_ability?([:INNERFOCUS, :SHIELDDUST])
+        if !target.has_active_ability?([:INNERFOCUS, :SHIELDDUST]) || target.being_mold_broken?
           old_score = score
           score += 8
           score += 5 if move.move.multiHitMove?

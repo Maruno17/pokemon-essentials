@@ -342,19 +342,16 @@ class Battle::Move::StartPsychicTerrain < Battle::Move
 end
 
 #===============================================================================
-# Removes the current terrain. Fails if there is no terrain in effect.
-# (Steel Roller)
+# Removes the current terrain. (Ice Spinner)
 #===============================================================================
 class Battle::Move::RemoveTerrain < Battle::Move
-  def pbMoveFailed?(user, targets)
-    if @battle.field.terrain == :None
-      @battle.pbDisplay(_INTL("But it failed!"))
-      return true
-    end
-    return false
-  end
-
+  # NOTE: Bulbapedia claims that Ice Spinner shouldn't remove terrain if the
+  #       user faints because of its Life Orb or is switched out by Red Card.
+  #       I can't find any evidence of this. Also, those items trigger at the
+  #       very end of a move's use, way after move effects usually happen. I'm
+  #       treating Bulbapedia's claim as a mistake and ignoring it.
   def pbEffectGeneral(user)
+    return if user.fainted?
     case @battle.field.terrain
     when :Electric
       @battle.pbDisplay(_INTL("The electricity disappeared from the battlefield."))
@@ -366,6 +363,20 @@ class Battle::Move::RemoveTerrain < Battle::Move
       @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield."))
     end
     @battle.field.terrain = :None
+  end
+end
+
+#===============================================================================
+# Removes the current terrain. Fails if there is no terrain in effect.
+# (Steel Roller)
+#===============================================================================
+class Battle::Move::RemoveTerrainFailsIfNoTerrain < Battle::Move::RemoveTerrain
+  def pbMoveFailed?(user, targets)
+    if @battle.field.terrain == :None
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
   end
 end
 

@@ -274,6 +274,10 @@ class Battle::AI::AIBattler
     return battler.hasMoldBreaker?
   end
 
+  def being_mold_broken?
+    return battler.beingMoldBroken?
+  end
+
   #-----------------------------------------------------------------------------
 
   def item_id; return battler.item_id; end

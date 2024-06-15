@@ -201,7 +201,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SwitchOutTargetDamagingM
   proc { |score, move, user, target, ai, battle|
     next score if target.wild?
     # No score modification if the target can't be made to switch out
-    next score if !battle.moldBreaker && target.has_active_ability?(:SUCTIONCUPS)
+    next score if target.has_active_ability?(:SUCTIONCUPS) && !target.being_mold_broken?
     next score if target.effects[PBEffects::Ingrain]
     # No score modification if the target can't be replaced
     can_switch = false
@@ -764,7 +764,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("DisableTargetStatusMove
     next true if target.effects[PBEffects::Taunt] > 0
     next true if move.move.pbMoveFailedAromaVeil?(user.battler, target.battler, false)
     next true if Settings::MECHANICS_GENERATION >= 6 &&
-                 !battle.moldBreaker && target.has_active_ability?(:OBLIVIOUS)
+                 target.has_active_ability?(:OBLIVIOUS) && !target.being_mold_broken?
     next false
   }
 )

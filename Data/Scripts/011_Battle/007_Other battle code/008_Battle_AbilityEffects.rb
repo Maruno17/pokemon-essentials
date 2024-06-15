@@ -462,13 +462,19 @@ Battle::AbilityEffects::StatusImmunity.add(:MAGMAARMOR,
   }
 )
 
+Battle::AbilityEffects::StatusImmunity.add(:PURIFYINGSALT,
+  proc { |ability, battler, status|
+    next true
+  }
+)
+
 Battle::AbilityEffects::StatusImmunity.add(:WATERVEIL,
   proc { |ability, battler, status|
     next true if status == :BURN
   }
 )
 
-Battle::AbilityEffects::StatusImmunity.copy(:WATERVEIL, :WATERBUBBLE)
+Battle::AbilityEffects::StatusImmunity.copy(:WATERVEIL, :THERMALEXCHANGE, :WATERBUBBLE)
 
 #===============================================================================
 # StatusImmunityNonIgnorable handlers
@@ -661,7 +667,7 @@ Battle::AbilityEffects::StatusCure.add(:WATERVEIL,
   }
 )
 
-Battle::AbilityEffects::StatusCure.copy(:WATERVEIL, :WATERBUBBLE)
+Battle::AbilityEffects::StatusCure.copy(:WATERVEIL, :THERMALEXCHANGE, :WATERBUBBLE)
 
 #===============================================================================
 # StatLossImmunity handlers
@@ -750,6 +756,8 @@ Battle::AbilityEffects::StatLossImmunity.add(:KEENEYE,
     next true
   }
 )
+
+Battle::AbilityEffects::StatLossImmunity.copy(:KEENEYE, :MINDSEYE)
 
 #===============================================================================
 # StatLossImmunityNonIgnorable handlers
@@ -916,6 +924,12 @@ Battle::AbilityEffects::MoveImmunity.add(:BULLETPROOF,
   }
 )
 
+Battle::AbilityEffects::MoveImmunity.add(:EARTHEATER,
+  proc { |ability, user, target, move, type, battle, show_message|
+    next target.pbMoveImmunityHealingAbility(user, move, type, :GROUND, show_message)
+  }
+)
+
 Battle::AbilityEffects::MoveImmunity.add(:FLASHFIRE,
   proc { |ability, user, target, move, type, battle, show_message|
     next false if user.index == target.index
@@ -1018,6 +1032,36 @@ Battle::AbilityEffects::MoveImmunity.add(:WATERABSORB,
 )
 
 Battle::AbilityEffects::MoveImmunity.copy(:WATERABSORB, :DRYSKIN)
+
+Battle::AbilityEffects::MoveImmunity.add(:WELLBAKEDBODY,
+  proc { |ability, user, target, move, type, battle, show_message|
+    next target.pbMoveImmunityStatRaisingAbility(user, move, type,
+       :FIRE, :DEFENSE, 2, show_message)
+  }
+)
+
+Battle::AbilityEffects::MoveImmunity.add(:WINDRIDER,
+  proc { |ability, user, target, move, type, battle, show_message|
+    next false if user.index == target.index
+    next false if !move.windMove?
+    if show_message
+      battle.pbShowAbilitySplash(target)
+      if target.pbCanRaiseStatStage?(:ATTACK, target)
+        if Battle::Scene::USE_ABILITY_SPLASH
+          target.pbRaiseStatStage(:ATTACK, 1, target)
+        else
+          target.pbRaiseStatStageByCause(:ATTACK, 1, target, target.abilityName)
+        end
+      elsif Battle::Scene::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
+      else
+        battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!", target.pbThis, target.abilityName, move.name))
+      end
+      battle.pbHideAbilitySplash(target)
+    end
+    next true
+  }
+)
 
 Battle::AbilityEffects::MoveImmunity.add(:WONDERGUARD,
   proc { |ability, user, target, move, type, battle, show_message|
@@ -1351,12 +1395,24 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:RIVALRY,
   }
 )
 
+Battle::AbilityEffects::DamageCalcFromUser.add(:ROCKYPAYLOAD,
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:attack_multiplier] *= 1.5 if type == :ROCK
+  }
+)
+
 Battle::AbilityEffects::DamageCalcFromUser.add(:SANDFORCE,
   proc { |ability, user, target, move, mults, power, type|
     if user.effectiveWeather == :Sandstorm &&
        [:ROCK, :GROUND, :STEEL].include?(type)
       mults[:power_multiplier] *= 1.3
     end
+  }
+)
+
+Battle::AbilityEffects::DamageCalcFromUser.add(:SHARPNESS,
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.5 if move.slicingMove?
   }
 )
 
@@ -1443,7 +1499,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:TORRENT,
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:TOUGHCLAWS,
   proc { |ability, user, target, move, mults, power, type|
-    mults[:power_multiplier] *= 4 / 3.0 if move.contactMove?
+    mults[:power_multiplier] *= 4 / 3.0 if move.pbContactMove?(user)
   }
 )
 
@@ -1578,6 +1634,12 @@ Battle::AbilityEffects::DamageCalcFromTarget.add(:PUNKROCK,
   }
 )
 
+Battle::AbilityEffects::DamageCalcFromTarget.add(:PURIFYINGSALT,
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:attack_multiplier] /= 2 if move.calcType == :GHOST
+  }
+)
+
 Battle::AbilityEffects::DamageCalcFromTarget.add(:THICKFAT,
   proc { |ability, user, target, move, mults, power, type|
     mults[:power_multiplier] /= 2 if [:FIRE, :ICE].include?(type)
@@ -1663,20 +1725,18 @@ Battle::AbilityEffects::OnBeingHit.add(:AFTERMATH,
     next if !target.fainted?
     next if !move.pbContactMove?(user)
     battle.pbShowAbilitySplash(target)
-    if !battle.moldBreaker
-      dampBattler = battle.pbCheckGlobalAbility(:DAMP)
-      if dampBattler
-        battle.pbShowAbilitySplash(dampBattler)
-        if Battle::Scene::USE_ABILITY_SPLASH
-          battle.pbDisplay(_INTL("{1} cannot use {2}!", target.pbThis, target.abilityName))
-        else
-          battle.pbDisplay(_INTL("{1} cannot use {2} because of {3}'s {4}!",
-             target.pbThis, target.abilityName, dampBattler.pbThis(true), dampBattler.abilityName))
-        end
-        battle.pbHideAbilitySplash(dampBattler)
-        battle.pbHideAbilitySplash(target)
-        next
+    dampBattler = battle.pbCheckGlobalAbility(:DAMP, true)
+    if dampBattler
+      battle.pbShowAbilitySplash(dampBattler)
+      if Battle::Scene::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1} cannot use {2}!", target.pbThis, target.abilityName))
+      else
+        battle.pbDisplay(_INTL("{1} cannot use {2} because of {3}'s {4}!",
+           target.pbThis, target.abilityName, dampBattler.pbThis(true), dampBattler.abilityName))
       end
+      battle.pbHideAbilitySplash(dampBattler)
+      battle.pbHideAbilitySplash(target)
+      next
     end
     if user.takesIndirectDamage?(Battle::Scene::USE_ABILITY_SPLASH) &&
        user.affectedByContactEffect?(Battle::Scene::USE_ABILITY_SPLASH)
@@ -1922,6 +1982,8 @@ Battle::AbilityEffects::OnBeingHit.add(:MUMMY,
   }
 )
 
+Battle::AbilityEffects::OnBeingHit.copy(:MUMMY, :LINGERINGAROMA)
+
 Battle::AbilityEffects::OnBeingHit.add(:PERISHBODY,
   proc { |ability, user, target, move, battle|
     next if !move.pbContactMove?(user)
@@ -1980,6 +2042,15 @@ Battle::AbilityEffects::OnBeingHit.add(:STAMINA,
   }
 )
 
+Battle::AbilityEffects::OnBeingHit.add(:SEEDSOWER,
+  proc { |ability, user, target, move, battle|
+    next if battle.field.terrain == :Grassy
+    battle.pbShowAbilitySplash(target)
+    battle.pbStartTerrain(target, :Grassy)
+    # NOTE: The ability splash is hidden again in def pbStartTerrain.
+  }
+)
+
 Battle::AbilityEffects::OnBeingHit.add(:STATIC,
   proc { |ability, user, target, move, battle|
     next if !move.pbContactMove?(user)
@@ -1993,6 +2064,30 @@ Battle::AbilityEffects::OnBeingHit.add(:STATIC,
            target.pbThis, target.abilityName, user.pbThis(true))
       end
       user.pbParalyze(target, msg)
+    end
+    battle.pbHideAbilitySplash(target)
+  }
+)
+
+Battle::AbilityEffects::OnBeingHit.add(:THERMALEXCHANGE,
+  proc { |ability, user, target, move, battle|
+    next if move.calcType != :FIRE
+    target.pbRaiseStatStageByAbility(:ATTACK, 1, target)
+  }
+)
+
+Battle::AbilityEffects::OnBeingHit.add(:TOXICDEBRIS,
+  proc { |ability, user, target, move, battle|
+    next if !move.physicalMove?
+    next if target.pbOpposingSide.effects[PBEffects::ToxicSpikes] >= 2
+    battle.pbShowAbilitySplash(target)
+    target.pbOpposingSide.effects[PBEffects::ToxicSpikes] += 1
+    if Battle::Scene::USE_ABILITY_SPLASH
+      battle.pbDisplay(_INTL("Poison spikes were scattered all around {1}'s feet!",
+                             target.pbOpposingTeam(true)))
+    else
+      battle.pbDisplay(_INTL("{1}'s {2} scattered poison spikes all around {3}'s feet!",
+                            target.pbThis, target.abilityName, target.pbOpposingTeam(true)))
     end
     battle.pbHideAbilitySplash(target)
   }
@@ -2060,10 +2155,10 @@ Battle::AbilityEffects::OnBeingHit.add(:WEAKARMOR,
 
 Battle::AbilityEffects::OnDealingHit.add(:POISONTOUCH,
   proc { |ability, user, target, move, battle|
-    next if !move.contactMove?
+    next if !move.pbContactMove?(user)
     next if battle.pbRandom(100) >= 30
     battle.pbShowAbilitySplash(user)
-    if target.hasActiveAbility?(:SHIELDDUST) && !battle.moldBreaker
+    if target.hasActiveAbility?(:SHIELDDUST) && !target.being_mold_broken?
       battle.pbShowAbilitySplash(target)
       if !Battle::Scene::USE_ABILITY_SPLASH
         battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
@@ -2075,6 +2170,27 @@ Battle::AbilityEffects::OnDealingHit.add(:POISONTOUCH,
         msg = _INTL("{1}'s {2} poisoned {3}!", user.pbThis, user.abilityName, target.pbThis(true))
       end
       target.pbPoison(user, msg)
+    end
+    battle.pbHideAbilitySplash(user)
+  }
+)
+
+Battle::AbilityEffects::OnDealingHit.add(:TOXICCHAIN,
+  proc { |ability, user, target, move, battle|
+    next if battle.pbRandom(100) >= 30
+    battle.pbShowAbilitySplash(user)
+    if target.hasActiveAbility?(:SHIELDDUST) && !target.being_mold_broken?
+      battle.pbShowAbilitySplash(target)
+      if !Battle::Scene::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
+      end
+      battle.pbHideAbilitySplash(target)
+    elsif target.pbCanPoison?(user, Battle::Scene::USE_ABILITY_SPLASH)
+      msg = nil
+      if !Battle::Scene::USE_ABILITY_SPLASH
+        msg = _INTL("{1}'s {2} badly poisoned {3}!", user.pbThis, user.abilityName, target.pbThis(true))
+      end
+      target.pbPoison(user, msg, true)
     end
     battle.pbHideAbilitySplash(user)
   }
@@ -2215,7 +2331,7 @@ Battle::AbilityEffects::AfterMoveUseFromTarget.add(:PICKPOCKET,
     #       sense, so this code doesn't do it.
     next if target.wild?
     next if switched_battlers.include?(user.index)   # User was switched out
-    next if !move.contactMove?
+    next if !move.pbContactMove?(user)
     next if user.effects[PBEffects::Substitute] > 0 || target.damageState.substitute
     next if target.item || !user.item
     next if user.unlosableItem?(user.item) || target.unlosableItem?(user.item)
@@ -3054,6 +3170,13 @@ Battle::AbilityEffects::OnSwitchIn.add(:UNNERVE,
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} is too nervous to eat Berries!", battler.pbOpposingTeam))
     battle.pbHideAbilitySplash(battler)
+  }
+)
+
+Battle::AbilityEffects::OnSwitchIn.add(:WINDRIDER,
+  proc { |ability, battler, battle, switch_in|
+    next if battler.pbOwnSide.effects[PBEffects::Tailwind] == 0
+    battler.pbRaiseStatStageByAbility(:ATTACK, 1, battler)
   }
 )
 

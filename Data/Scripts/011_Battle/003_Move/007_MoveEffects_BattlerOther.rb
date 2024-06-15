@@ -177,6 +177,16 @@ class Battle::Move::ParalyzeTargetIfNotTypeImmune < Battle::Move::ParalyzeTarget
 end
 
 #===============================================================================
+# Paralyzes the target. Accuracy perfect in rain. (Wildbolt Storm)
+#===============================================================================
+class Battle::Move::ParalyzeTargetAlwaysHitsInRain < Battle::Move::ParalyzeTarget
+  def pbBaseAccuracy(user, target)
+    return 0 if [:Rain, :HeavyRain].include?(target.effectiveWeather)
+    return super
+  end
+end
+
+#===============================================================================
 # Paralyzes the target. Accuracy perfect in rain, 50% in sunshine. Hits some
 # semi-invulnerable targets. (Thunder)
 #===============================================================================
@@ -230,6 +240,16 @@ class Battle::Move::BurnTarget < Battle::Move
   def pbAdditionalEffect(user, target)
     return if target.damageState.substitute
     target.pbBurn(user) if target.pbCanBurn?(user, false, self)
+  end
+end
+
+#===============================================================================
+# Burns the target. Accuracy perfect in rain. (Sandsear Storm)
+#===============================================================================
+class Battle::Move::BurnTargetAlwaysHitsInRain < Battle::Move::BurnTarget
+  def pbBaseAccuracy(user, target)
+    return 0 if [:Rain, :HeavyRain].include?(target.effectiveWeather)
+    return super
   end
 end
 
