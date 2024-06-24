@@ -200,6 +200,19 @@ class Battle::Move::HealUserByHalfOfDamageDoneIfTargetAsleep < Battle::Move
 end
 
 #===============================================================================
+# User gains half the HP it inflicts as damage. Burns the target. (Matcha Gotcha)
+#===============================================================================
+class Battle::Move::HealUserByHalfOfDamageDoneBurnTarget < Battle::Move::BurnTarget
+  def healingMove?; return Settings::MECHANICS_GENERATION >= 6; end
+
+  def pbEffectAgainstTarget(user, target)
+    return if target.damageState.hpLost <= 0
+    hpGain = (target.damageState.hpLost / 2.0).round
+    user.pbRecoverHPFromDrain(hpGain, target)
+  end
+end
+
+#===============================================================================
 # User gains 3/4 the HP it inflicts as damage. (Draining Kiss, Oblivion Wing)
 #===============================================================================
 class Battle::Move::HealUserByThreeQuartersOfDamageDone < Battle::Move

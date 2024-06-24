@@ -152,6 +152,7 @@ class Battle::Battler
       b.effects[PBEffects::Attract] = -1 if b.effects[PBEffects::Attract] == @index
     end
     @effects[PBEffects::BanefulBunker]       = false
+    @effects[PBEffects::BurningBulwark]      = false
     @effects[PBEffects::BeakBlast]           = false
     @effects[PBEffects::Bide]                = 0
     @effects[PBEffects::BideDamage]          = 0
@@ -168,6 +169,7 @@ class Battle::Battler
     @effects[PBEffects::DestinyBondTarget]   = -1
     @effects[PBEffects::Disable]             = 0
     @effects[PBEffects::DisableMove]         = nil
+    @effects[PBEffects::DoubleShock]         = false
     @effects[PBEffects::Electrify]           = false
     @effects[PBEffects::Encore]              = 0
     @effects[PBEffects::EncoreMove]          = nil
@@ -243,6 +245,7 @@ class Battle::Battler
     @effects[PBEffects::RagePowder]          = false
     @effects[PBEffects::Rollout]             = 0
     @effects[PBEffects::Roost]               = false
+    @effects[PBEffects::SilkTrap]            = false
     @effects[PBEffects::SkyDrop]             = -1
     @battle.allBattlers.each do |b|   # Other battlers no longer Sky Dropped by self
       b.effects[PBEffects::SkyDrop] = -1 if b.effects[PBEffects::SkyDrop] == @index

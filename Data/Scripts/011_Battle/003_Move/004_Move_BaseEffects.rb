@@ -155,8 +155,14 @@ end
 class Battle::Move::StatDownMove < Battle::Move
   attr_reader :statDown
 
+  def pbOnStartUse(user, targets)
+    @stats_lowered = false
+  end
+
   def pbEffectWhenDealingDamage(user, target)
+    return if @stats_lowered
     return if @battle.pbAllFainted?(target.idxOwnSide)
+    @stats_lowered = true
     showAnim = true
     (@statDown.length / 2).times do |i|
       next if !user.pbCanLowerStatStage?(@statDown[i * 2], user, self)

@@ -66,7 +66,7 @@ class Battle::Battler
 
   def form=(value)
     @form = value
-    @pokemon.form = value if @pokemon
+    @pokemon.form = value if @pokemon && !@effects[PBEffects::Transform]
   end
 
   def ability
@@ -308,15 +308,17 @@ class Battle::Battler
   # same type more than once, and should not include any invalid types.
   def pbTypes(withExtraType = false)
     ret = @types.uniq
-    # Burn Up erases the Fire-type.
+    # Burn Up erases the Fire-type
     ret.delete(:FIRE) if @effects[PBEffects::BurnUp]
-    # Roost erases the Flying-type. If there are no types left, adds the Normal-
-    # type.
+    # Double Shock erases the Electric-type
+    ret.delete(:ELECTRIC) if @effects[PBEffects::DoubleShock]
+    # Roost erases the Flying-type (if there are no types left, adds the Normal-
+    # type)
     if @effects[PBEffects::Roost]
       ret.delete(:FLYING)
       ret.push(:NORMAL) if ret.length == 0
     end
-    # Add the third type specially.
+    # Add the third type specially
     if withExtraType && @effects[PBEffects::ExtraType] && !ret.include?(@effects[PBEffects::ExtraType])
       ret.push(@effects[PBEffects::ExtraType])
     end

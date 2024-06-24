@@ -10,6 +10,7 @@ module Battle::DebugVariables
     PBEffects::Bide           => {name: "Bide number of rounds remaining",                 default: 0},
     PBEffects::BideDamage     => {name: "Bide damage accumulated",                         default: 0, max: 999},
     PBEffects::BideTarget     => {name: "Bide last battler to hurt self",                  default: -1},   # Battler index
+    PBEffects::BurningBulwark => {name: "Burning Bulwark applies this round",              default: false},
     PBEffects::BurnUp         => {name: "Burn Up has removed self's Fire type",            default: false},
     PBEffects::Charge         => {name: "Charge number of rounds remaining",               default: 0},
     PBEffects::ChoiceBand     => {name: "Move locked into by Choice items",                default: nil, type: :move},
@@ -24,6 +25,7 @@ module Battle::DebugVariables
 #    PBEffects::DestinyBondTarget - not suitable for setting via debug
     PBEffects::Disable        => {name: "Disable number of rounds remaining",              default: 0},
     PBEffects::DisableMove    => {name: "Disabled move",                                   default: nil, type: :move},
+    PBEffects::DoubleShock    => {name: "Double Shock has removed self's Electric type",   default: false},
     PBEffects::Electrify      => {name: "Electrify making moves Electric",                 default: false},
     PBEffects::Embargo        => {name: "Embargo number of rounds remaining",              default: 0},
     PBEffects::Encore         => {name: "Encore number of rounds remaining",               default: 0},
@@ -91,6 +93,7 @@ module Battle::DebugVariables
     PBEffects::Rollout        => {name: "Rollout rounds remaining (lower=stronger)",       default: 0},
     PBEffects::Roost          => {name: "Roost removing Flying type this round",           default: false},
 #    PBEffects::ShellTrap - only applies to use of specific move, not suitable for setting via debug
+    PBEffects::SilkTrap       => {name: "Silk Trap applies this round",                    default: false},
 #    PBEffects::SkyDrop - only applies to use of specific move, not suitable for setting via debug
     PBEffects::SlowStart      => {name: "Slow Start rounds remaining",                     default: 0},
     PBEffects::SmackDown      => {name: "Smack Down is grounding self",                    default: false},

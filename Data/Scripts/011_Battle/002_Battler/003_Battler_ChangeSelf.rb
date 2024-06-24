@@ -135,6 +135,7 @@ class Battle::Battler
       @effects[PBEffects::ExtraType] = nil
     end
     @effects[PBEffects::BurnUp] = false
+    @effects[PBEffects::DoubleShock] = false
     @effects[PBEffects::Roost]  = false
   end
 
@@ -142,6 +143,7 @@ class Battle::Battler
     @types = @pokemon.types
     @effects[PBEffects::ExtraType] = nil
     @effects[PBEffects::BurnUp] = false
+    @effects[PBEffects::DoubleShock] = false
     @effects[PBEffects::Roost]  = false
   end
 
@@ -293,6 +295,7 @@ class Battle::Battler
     oldAbil = @ability_id
     @effects[PBEffects::Transform]        = true
     @effects[PBEffects::TransformSpecies] = target.species
+    self.form = target.form
     pbChangeTypes(target)
     self.ability = target.ability
     @attack  = target.attack

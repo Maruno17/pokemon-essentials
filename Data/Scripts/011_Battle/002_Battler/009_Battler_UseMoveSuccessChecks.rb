@@ -369,6 +369,14 @@ class Battle::Battler
           @battle.successStates[user.index].protected = true
           return false
         end
+        # Mat Block
+        if target.pbOwnSide.effects[PBEffects::MatBlock] && move.damagingMove?
+          # NOTE: Confirmed no common animation for this effect.
+          @battle.pbDisplay(_INTL("{1} was blocked by the kicked-up mat!", move.name)) if show_message
+          target.damageState.protected = true
+          @battle.successStates[user.index].protected = true
+          return false
+        end
         # King's Shield
         if target.effects[PBEffects::KingsShield] && move.damagingMove?
           if show_message
@@ -380,6 +388,34 @@ class Battle::Battler
           if move.pbContactMove?(user) && user.affectedByContactEffect? &&
              user.pbCanLowerStatStage?(:ATTACK, target)
             user.pbLowerStatStage(:ATTACK, (Settings::MECHANICS_GENERATION >= 8) ? 1 : 2, target)
+          end
+          return false
+        end
+        # Obstruct
+        if target.effects[PBEffects::Obstruct] && move.damagingMove?
+          if show_message
+            @battle.pbCommonAnimation("Obstruct", target)
+            @battle.pbDisplay(_INTL("{1} protected itself!", target.pbThis))
+          end
+          target.damageState.protected = true
+          @battle.successStates[user.index].protected = true
+          if move.pbContactMove?(user) && user.affectedByContactEffect? &&
+             user.pbCanLowerStatStage?(:DEFENSE, target)
+            user.pbLowerStatStage(:DEFENSE, 2, target)
+          end
+          return false
+        end
+        # Silk Trap
+        if target.effects[PBEffects::SilkTrap] && move.damagingMove?
+          if show_message
+            @battle.pbCommonAnimation("SilkTrap", target)
+            @battle.pbDisplay(_INTL("{1} protected itself!", target.pbThis))
+          end
+          target.damageState.protected = true
+          @battle.successStates[user.index].protected = true
+          if move.pbContactMove?(user) && user.affectedByContactEffect? &&
+             user.pbCanLowerStatStage?(:SPEED, target)
+            user.pbLowerStatStage(:SPEED, 1, target)
           end
           return false
         end
@@ -413,26 +449,18 @@ class Battle::Battler
           end
           return false
         end
-        # Obstruct
-        if target.effects[PBEffects::Obstruct] && move.damagingMove?
+        # Burning Bulwark
+        if target.effects[PBEffects::BurningBulwark]
           if show_message
-            @battle.pbCommonAnimation("Obstruct", target)
+            @battle.pbCommonAnimation("BurningBulwark", target)
             @battle.pbDisplay(_INTL("{1} protected itself!", target.pbThis))
           end
           target.damageState.protected = true
           @battle.successStates[user.index].protected = true
           if move.pbContactMove?(user) && user.affectedByContactEffect? &&
-             user.pbCanLowerStatStage?(:DEFENSE, target)
-            user.pbLowerStatStage(:DEFENSE, 2, target)
+             user.pbCanBurn?(target, false)
+            user.pbBurn(target)
           end
-          return false
-        end
-        # Mat Block
-        if target.pbOwnSide.effects[PBEffects::MatBlock] && move.damagingMove?
-          # NOTE: Confirmed no common animation for this effect.
-          @battle.pbDisplay(_INTL("{1} was blocked by the kicked-up mat!", move.name)) if show_message
-          target.damageState.protected = true
-          @battle.successStates[user.index].protected = true
           return false
         end
       end

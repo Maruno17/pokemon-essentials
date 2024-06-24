@@ -2015,7 +2015,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = LowerTargetDefense1FlinchTarget
 Flags = CanProtect,CanMirrorMove,HighCriticalHitRate
-EffectChance = 100
+EffectChance = 101
 Description = This move is more likely to be a critical hit, and may also lower the target's Defense stat or make it flinch.
 #-------------------------------
 [SECRETSWORD]

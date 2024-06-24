@@ -717,7 +717,12 @@ class Battle
     # Reset/count down battler-specific effects (no messages)
     allBattlers.each do |battler|
       battler.effects[PBEffects::BanefulBunker]    = false
-      battler.effects[PBEffects::Charge]           -= 1 if battler.effects[PBEffects::Charge] > 0
+      battler.effects[PBEffects::BurningBulwark]   = false
+      if Settings::MECHANICS_GENERATION >= 9
+        battler.effects[PBEffects::Charge]         -= 1 if battler.effects[PBEffects::Charge] > 1
+      else
+        battler.effects[PBEffects::Charge]         -= 1 if battler.effects[PBEffects::Charge] > 0
+      end
       battler.effects[PBEffects::Counter]          = -1
       battler.effects[PBEffects::CounterTarget]    = -1
       battler.effects[PBEffects::Electrify]        = false
@@ -746,6 +751,7 @@ class Battle
       battler.effects[PBEffects::Protect]          = false
       battler.effects[PBEffects::RagePowder]       = false
       battler.effects[PBEffects::Roost]            = false
+      battler.effects[PBEffects::SilkTrap]         = false
       battler.effects[PBEffects::Snatch]           = 0
       battler.effects[PBEffects::SpikyShield]      = false
       battler.effects[PBEffects::Spotlight]        = 0

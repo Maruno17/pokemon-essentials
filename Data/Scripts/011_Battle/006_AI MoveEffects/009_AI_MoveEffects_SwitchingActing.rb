@@ -800,7 +800,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetStatusMoves
       "ProtectUserFromDamagingMovesKingsShield",           # King's Shield
       "ProtectUserFromDamagingMovesObstruct",              # Obstruct
       "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
-      "ProtectUserBanefulBunker"                           # Baneful Bunker
+      "ProtectUserBanefulBunker",                          # Baneful Bunker
+      "ProtectUserFromDamagingMovesSilkTrap",              # Silk Trap
+      "ProtectUserFromDamagingMovesBurningBulwark"         # Burning Bulwark
     ]
     if target.check_for_move { |m| m.statusMove? && protection_moves.include?(m.function_code) }
       score += 10

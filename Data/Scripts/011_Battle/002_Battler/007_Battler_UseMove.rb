@@ -106,7 +106,9 @@ class Battle::Battler
       end
     end
     @effects[PBEffects::BeakBlast]   = false
-    @effects[PBEffects::Charge]      = 0 if @effects[PBEffects::Charge] == 1
+    if Settings::MECHANICS_GENERATION < 9 || @lastMoveUsedType == :ELECTRIC
+      @effects[PBEffects::Charge]    = 0 if @effects[PBEffects::Charge] == 1
+    end
     @effects[PBEffects::GemConsumed] = nil
     @effects[PBEffects::ShellTrap]   = false
     @battle.allBattlers.each { |b| b.pbContinualAbilityChecks }   # Trace, end primordial weathers

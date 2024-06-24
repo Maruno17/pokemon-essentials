@@ -9,6 +9,7 @@ module PBEffects
   Bide                = 4
   BideDamage          = 5
   BideTarget          = 6
+  BurningBulwark      = 1107
   BurnUp              = 7
   Charge              = 8
   ChoiceBand          = 9
@@ -23,6 +24,7 @@ module PBEffects
   DestinyBondTarget   = 18
   Disable             = 19
   DisableMove         = 20
+  DoubleShock         = 9922
   Electrify           = 21
   Embargo             = 22
   Encore              = 23
@@ -91,6 +93,7 @@ module PBEffects
   Rollout             = 86
   Roost               = 87
   ShellTrap           = 88
+  SilkTrap            = 1189
   SkyDrop             = 89
   SlowStart           = 90
   SmackDown           = 91

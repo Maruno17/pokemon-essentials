@@ -422,6 +422,38 @@ class Battle::Move::IncreasePowerInElectricTerrain < Battle::Move
 end
 
 #===============================================================================
+# Damage is increased by 33% if the move is super-effective. (Electro Drift)
+#===============================================================================
+class Battle::Move::IncreasePowerIfSuperEffective < Battle::Move
+  def pbModifyDamage(damageMult, user, target)
+    damageMult = damageMult * 4 / 3 if Effectiveness.super_effective?(target.damageState.typeMod)
+    return damageMult
+  end
+end
+
+#===============================================================================
+# Power is doubled 30% of the time. (Fickle Beam)
+#===============================================================================
+class Battle::Move::DoublePower30PercentChance < Battle::Move
+  def pbOnStartUse(user, targets)
+    @double_power = @battle.pbRandom(100) < 30
+    if @double_power
+      @battle.pbDisplayBrief(_INTL("{1} is going all out for this attack!", user.pbThis))
+    end
+  end
+
+  def pbBaseDamage(baseDmg, user, target)
+    baseDmg *= 2 if @double_power
+    return baseDmg
+  end
+
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    hitNum = 1 if @double_power
+    super
+  end
+end
+
+#===============================================================================
 # Power is doubled if the target's HP is down to 1/2 or less. (Brine)
 #===============================================================================
 class Battle::Move::DoublePowerIfTargetHPLessThanHalf < Battle::Move
@@ -478,6 +510,20 @@ class Battle::Move::DoublePowerIfTargetPoisoned < Battle::Move
 end
 
 #===============================================================================
+# Power is doubled if the target is poisoned, and then poisons the target.
+# (Barb Barrage)
+#===============================================================================
+class Battle::Move::DoublePowerIfTargetPoisonedPoisonTarget < Battle::Move::PoisonTarget
+  def pbBaseDamage(baseDmg, user, target)
+    if target.poisoned? &&
+       (target.effects[PBEffects::Substitute] == 0 || ignoresSubstitute?(user))
+      baseDmg *= 2
+    end
+    return baseDmg
+  end
+end
+
+#===============================================================================
 # Power is doubled if the target is paralyzed. Cures the target of paralysis.
 # (Smelling Salts)
 #===============================================================================
@@ -502,6 +548,20 @@ end
 # Power is doubled if the target has a status problem. (Hex)
 #===============================================================================
 class Battle::Move::DoublePowerIfTargetStatusProblem < Battle::Move
+  def pbBaseDamage(baseDmg, user, target)
+    if target.pbHasAnyStatus? &&
+       (target.effects[PBEffects::Substitute] == 0 || ignoresSubstitute?(user))
+      baseDmg *= 2
+    end
+    return baseDmg
+  end
+end
+
+#===============================================================================
+# Power is doubled if the target has a status problem, and then burns the
+# target. (Infernal Parade)
+#===============================================================================
+class Battle::Move::DoublePowerIfTargetStatusProblemBurnTarget < Battle::Move::BurnTarget
   def pbBaseDamage(baseDmg, user, target)
     if target.pbHasAnyStatus? &&
        (target.effects[PBEffects::Substitute] == 0 || ignoresSubstitute?(user))
@@ -896,6 +956,18 @@ class Battle::Move::ProtectUserBanefulBunker < Battle::Move::ProtectMove
 end
 
 #===============================================================================
+# User is protected against damaging moves this round. If a Pokémon makes
+# contact with the user while this effect applies, that Pokémon is burned.
+# (Burning Bulwark)
+#===============================================================================
+class Battle::Move::ProtectUserFromDamagingMovesBurningBulwark < Battle::Move::ProtectMove
+  def initialize(battle, move)
+    super
+    @effect = PBEffects::BurningBulwark
+  end
+end
+
+#===============================================================================
 # User is protected against damaging moves this round. Decreases the Attack of
 # the user of a stopped contact move by 2 stages. (King's Shield)
 #===============================================================================
@@ -916,6 +988,19 @@ class Battle::Move::ProtectUserFromDamagingMovesObstruct < Battle::Move::Protect
   def initialize(battle, move)
     super
     @effect = PBEffects::Obstruct
+  end
+end
+
+#===============================================================================
+# For the rest of this round, the user avoids all damaging moves that would hit
+# it. If a move that makes contact is stopped by this effect, decreases the
+# Speed of the Pokémon using that move by 1 stage. Contributes to Protect's
+# counter. (Silk Trap)
+#===============================================================================
+class Battle::Move::ProtectUserFromDamagingMovesSilkTrap < Battle::Move::ProtectMove
+  def initialize(battle, move)
+    super
+    @effect = PBEffects::SilkTrap
   end
 end
 
@@ -1004,9 +1089,11 @@ end
 class Battle::Move::RemoveProtections < Battle::Move
   def pbEffectAgainstTarget(user, target)
     target.effects[PBEffects::BanefulBunker]          = false
+    target.effects[PBEffects::BurningBulwark]         = false
     target.effects[PBEffects::KingsShield]            = false
     target.effects[PBEffects::Obstruct]               = false
     target.effects[PBEffects::Protect]                = false
+    target.effects[PBEffects::SilkTrap]               = false
     target.effects[PBEffects::SpikyShield]            = false
     target.pbOwnSide.effects[PBEffects::CraftyShield] = false
     target.pbOwnSide.effects[PBEffects::MatBlock]     = false
@@ -1047,9 +1134,11 @@ class Battle::Move::HoopaRemoveProtectionsBypassSubstituteLowerUserDef1 < Battle
 
   def pbEffectAgainstTarget(user, target)
     target.effects[PBEffects::BanefulBunker]          = false
+    target.effects[PBEffects::BurningBulwark]         = false
     target.effects[PBEffects::KingsShield]            = false
     target.effects[PBEffects::Obstruct]               = false
     target.effects[PBEffects::Protect]                = false
+    target.effects[PBEffects::SilkTrap]               = false
     target.effects[PBEffects::SpikyShield]            = false
     target.pbOwnSide.effects[PBEffects::CraftyShield] = false
     target.pbOwnSide.effects[PBEffects::MatBlock]     = false
@@ -1314,6 +1403,46 @@ class Battle::Move::TypeIsUserFirstType < Battle::Move
   def pbBaseType(user)
     userTypes = user.pbTypes(true)
     return userTypes[0] || @type
+  end
+end
+
+#===============================================================================
+# This move's type is the same as the user's second type, only if the user is
+# Ogerpon. (Ivy Cudgel)
+#===============================================================================
+class Battle::Move::TypeDependsOnUserOgerponForm < Battle::Move
+  def pbBaseType(user)
+    if user.isSpecies?(:OGERPON)
+      case user.form
+      when 1
+        return :WATER if GameData::Type.exists?(:WATER)
+      when 2
+        return :FIRE if GameData::Type.exists?(:FIRE)
+      when 3
+        return :ROCK if GameData::Type.exists?(:ROCK)
+      end
+    end
+    return @type
+  end
+end
+
+#===============================================================================
+# This move's type is the same as the user's second type, only if the user is
+# Ogerpon. (Ivy Cudgel)
+#===============================================================================
+class Battle::Move::TypeDependsOnUserTaurosFormRemoveScreens < Battle::Move::RemoveScreens
+  def pbBaseType(user)
+    if user.isSpecies?(:TAUROS)
+      case user.form
+      when 1
+        return :FIGHTING if GameData::Type.exists?(:WATER)
+      when 2
+        return :FIRE if GameData::Type.exists?(:FIRE)
+      when 3
+        return :WATER if GameData::Type.exists?(:ROCK)
+      end
+    end
+    return @type
   end
 end
 

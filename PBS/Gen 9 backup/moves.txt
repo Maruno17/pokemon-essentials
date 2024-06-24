@@ -2222,7 +2222,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = LowerTargetDefense1FlinchTarget
 Flags = CanProtect,CanMirrorMove,HighCriticalHitRate
-EffectChance = 100
+EffectChance = 101
 Description = This move is more likely to be a critical hit, and may also lower the target's Defense stat or make it flinch.
 #-------------------------------
 [SECRETSWORD]
@@ -3169,7 +3169,7 @@ Accuracy = 0
 TotalPP = 10
 Target = User
 Priority = 4
-FunctionCode = ProtectUserBurningBulwark
+FunctionCode = ProtectUserFromDamagingMovesBurningBulwark
 Description = The user's intensely hot fur protects it from attacks and also burns any attacker that makes contact.
 #-------------------------------
 [SUNNYDAY]
@@ -3969,7 +3969,7 @@ Power = 100
 Accuracy = 100
 TotalPP = 10
 Target = NearOther
-FunctionCode = TypeIsUserOgerponSecondType
+FunctionCode = TypeDependsOnUserOgerponForm
 Flags = CanProtect,CanMirrorMove,HighCriticalHitRate
 Description = The user hits with an ivy-wrapped cudgel. The user's mask sets the move's type. High critical hit chance.
 #-------------------------------
@@ -5352,7 +5352,7 @@ Power = 120
 Accuracy = 100
 TotalPP = 5
 Target = NearOther
-FunctionCode = TargetAndTypeDependOnUserTerapagosForm
+FunctionCode = None
 Flags = CanProtect,CanMirrorMove,CannotMetronome
 Description = With the power of its crystals, the user bombards and eliminates the target.
 #-------------------------------
@@ -5424,7 +5424,7 @@ Power = 90
 Accuracy = 100
 TotalPP = 10
 Target = NearOther
-FunctionCode = TypeIsUserTaurosSecondTypeRemoveScreens
+FunctionCode = TypeDependsOnUserTaurosFormRemoveScreens
 Flags = Contact,CanProtect,CanMirrorMove,CannotMetronome
 Description = The user performs a raging tackle. This move's type depends on the user's form. It can break barriers.
 #-------------------------------
@@ -6163,7 +6163,7 @@ Power = 1
 Accuracy = 100
 TotalPP = 5
 Target = NearOther
-FunctionCode = PowerHigherWithTargetHP
+FunctionCode = PowerHigherWithTargetHP120
 Flags = Contact,CanProtect,CanMirrorMove
 Description = The target is crushed with great force. The attack is more powerful the more HP the target has left.
 #-------------------------------
@@ -6319,7 +6319,7 @@ Power = 1
 Accuracy = 100
 TotalPP = 5
 Target = NearOther
-FunctionCode = PowerHigherWithTargetHP
+FunctionCode = PowerHigherWithTargetHP120
 Flags = Contact,CanProtect,CanMirrorMove
 Description = The user powerfully wrings the foe. The more HP the foe has, the greater this attack's power.
 #-------------------------------
@@ -8176,7 +8176,7 @@ TotalPP = 15
 Target = User
 Priority = 2
 FunctionCode = UserSwapsPositionsWithAlly
-Description = The user teleports using a strange power and switches its place with one of its allies.
+Description = The user uses a strange power to switch places with an ally. More likely to fail if used in succession.
 #-------------------------------
 [AMNESIA]
 Name = Amnesia
@@ -8900,7 +8900,7 @@ Power = 130
 Accuracy = 100
 TotalPP = 5
 Target = NearOther
-FunctionCode = RemoveTerrain
+FunctionCode = RemoveTerrainFailsIfNoTerrain
 Flags = Contact,CanProtect,CanMirrorMove
 Description = The user attacks while destroying the terrain. This move fails when the ground isn't a terrain.
 #-------------------------------
