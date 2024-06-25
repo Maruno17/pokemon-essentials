@@ -309,8 +309,8 @@ class Battle::Battler
     return true
   end
 
-  def pbSleep(msg = nil)
-    pbInflictStatus(:SLEEP, pbSleepDuration, msg)
+  def pbSleep(user = nil, msg = nil)
+    pbInflictStatus(:SLEEP, pbSleepDuration, msg, user)
   end
 
   def pbSleepSelf(msg = nil, duration = -1)
@@ -391,8 +391,8 @@ class Battle::Battler
     return pbCanInflictStatus?(:FROZEN, user, showMessages, move)
   end
 
-  def pbFreeze(msg = nil)
-    pbInflictStatus(:FROZEN, 0, msg)
+  def pbFreeze(user = nil, msg = nil)
+    pbInflictStatus(:FROZEN, 0, msg, user)
   end
 
   #=============================================================================

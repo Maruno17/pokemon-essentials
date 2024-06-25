@@ -181,17 +181,17 @@ class Battle::Move
     c = 0
     # Ability effects that alter critical hit rate
     if c >= 0 && user.abilityActive?
-      c = Battle::AbilityEffects.triggerCriticalCalcFromUser(user.ability, user, target, c)
+      c = Battle::AbilityEffects.triggerCriticalCalcFromUser(user.ability, user, target, self, c)
     end
     if c >= 0 && target.abilityActive? && !target.beingMoldBroken?
-      c = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target.ability, user, target, c)
+      c = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target.ability, user, target, self, c)
     end
     # Item effects that alter critical hit rate
     if c >= 0 && user.itemActive?
-      c = Battle::ItemEffects.triggerCriticalCalcFromUser(user.item, user, target, c)
+      c = Battle::ItemEffects.triggerCriticalCalcFromUser(user.item, user, target, self, c)
     end
     if c >= 0 && target.itemActive?
-      c = Battle::ItemEffects.triggerCriticalCalcFromTarget(target.item, user, target, c)
+      c = Battle::ItemEffects.triggerCriticalCalcFromTarget(target.item, user, target, self, c)
     end
     return false if c < 0
     # Move-specific "always/never a critical hit" effects

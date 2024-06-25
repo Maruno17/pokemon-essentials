@@ -514,6 +514,10 @@ module Settings
   # start the game (in Debug mode). You will not need to hold Ctrl/Shift to
   # compile anything.
   PROMPT_TO_COMPILE    = false
+  # Whether the game will skip the intro splash screens and title screen, and go
+  # straight to the Continue/New Game screen. Only applies to playing in Debug
+  # mode.
+  SKIP_TITLE_SCREEN    = true
   # Whether the game will skip the Continue/New Game screen and go straight into
   # a saved game (if there is one) or start a new game (if there isn't). Only
   # applies to playing in Debug mode.

@@ -242,11 +242,19 @@ class Battle::Scene
         case useType
         when 1   # Use on Pokémon
           if @battle.pbTeamLengthFromBattlerIndex(idxBattler) == 1
-            break if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
+            if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
+              break
+            else
+              next
+            end
           end
         when 3   # Use on battler
           if @battle.pbPlayerBattlerCount == 1
-            break if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
+            if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
+              break
+            else
+              next
+            end
           end
         end
         # Fade out and hide Bag screen

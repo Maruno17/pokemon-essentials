@@ -27,6 +27,10 @@ class PokemonTrainerCard_Scene
     pbSetSystemFont(@sprites["overlay"].bitmap)
     @sprites["trainer"] = IconSprite.new(336, 112, @viewport)
     @sprites["trainer"].setBitmap(GameData::TrainerType.player_front_sprite_filename($player.trainer_type))
+    if !@sprites["trainer"].bitmap
+      raise _INTL("No trainer front sprite exists for the player character, expected a file at {1}.",
+                  "Graphics/Trainers/" + $player.trainer_type.to_s + ".png")
+    end
     @sprites["trainer"].x -= (@sprites["trainer"].bitmap.width - 128) / 2
     @sprites["trainer"].y -= (@sprites["trainer"].bitmap.height - 128)
     @sprites["trainer"].z = 2

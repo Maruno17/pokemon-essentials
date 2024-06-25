@@ -208,7 +208,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
   #     pbShowWindow to make the graphic appear while the command menu is being
   #     displayed.
   USE_GRAPHICS     = true
-  TYPE_ICON_HEIGHT = 28
+  TYPE_ICON_HEIGHT = GameData::Type::ICON_SIZE[1]
   # Text colours of PP of selected move
   PP_COLORS = [
     Color.new(248, 72, 72), Color.new(136, 48, 48),    # Red, zero PP

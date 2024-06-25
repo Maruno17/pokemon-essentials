@@ -278,13 +278,13 @@ class Battle::Move::EffectDependsOnEnvironment < Battle::Move
     return if @battle.pbRandom(100) >= chance
     case @secretPower
     when 2
-      target.pbSleep if target.pbCanSleep?(user, false, self)
+      target.pbSleep(user) if target.pbCanSleep?(user, false, self)
     when 10
       target.pbBurn(user) if target.pbCanBurn?(user, false, self)
     when 0, 1
       target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
     when 9
-      target.pbFreeze if target.pbCanFreeze?(user, false, self)
+      target.pbFreeze(user) if target.pbCanFreeze?(user, false, self)
     when 5
       if target.pbCanLowerStatStage?(:ATTACK, user, self)
         target.pbLowerStatStage(:ATTACK, 1, user)

@@ -205,12 +205,12 @@ module Battle::AbilityEffects
     DamageCalcFromTargetAlly.trigger(ability, user, target, move, mults, power, type)
   end
 
-  def self.triggerCriticalCalcFromUser(ability, user, target, crit_stage)
-    return trigger(CriticalCalcFromUser, ability, user, target, crit_stage, ret: crit_stage)
+  def self.triggerCriticalCalcFromUser(ability, user, target, move, crit_stage)
+    return trigger(CriticalCalcFromUser, ability, user, target, move, crit_stage, ret: crit_stage)
   end
 
-  def self.triggerCriticalCalcFromTarget(ability, user, target, crit_stage)
-    return trigger(CriticalCalcFromTarget, ability, user, target, crit_stage, ret: crit_stage)
+  def self.triggerCriticalCalcFromTarget(ability, user, target, move, crit_stage)
+    return trigger(CriticalCalcFromTarget, ability, user, target, move, crit_stage, ret: crit_stage)
   end
 
   #=============================================================================
@@ -1693,13 +1693,13 @@ Battle::AbilityEffects::DamageCalcFromTargetAlly.add(:FRIENDGUARD,
 #===============================================================================
 
 Battle::AbilityEffects::CriticalCalcFromUser.add(:MERCILESS,
-  proc { |ability, user, target, c|
+  proc { |ability, user, target, move, c|
     next 99 if target.poisoned?
   }
 )
 
 Battle::AbilityEffects::CriticalCalcFromUser.add(:SUPERLUCK,
-  proc { |ability, user, target, c|
+  proc { |ability, user, target, move, c|
     next c + 1
   }
 )
@@ -1709,7 +1709,7 @@ Battle::AbilityEffects::CriticalCalcFromUser.add(:SUPERLUCK,
 #===============================================================================
 
 Battle::AbilityEffects::CriticalCalcFromTarget.add(:BATTLEARMOR,
-  proc { |ability, user, target, c|
+  proc { |ability, user, target, move, c|
     next -1
   }
 )
@@ -1847,7 +1847,7 @@ Battle::AbilityEffects::OnBeingHit.add(:EFFECTSPORE,
             msg = _INTL("{1}'s {2} made {3} fall asleep!", target.pbThis,
                target.abilityName, user.pbThis(true))
           end
-          user.pbSleep(msg)
+          user.pbSleep(target, msg)
         end
       when 1
         if user.pbCanPoison?(target, Battle::Scene::USE_ABILITY_SPLASH)

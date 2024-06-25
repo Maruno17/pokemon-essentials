@@ -125,12 +125,12 @@ module Battle::ItemEffects
     DamageCalcFromTarget.trigger(item, user, target, move, mults, power, type)
   end
 
-  def self.triggerCriticalCalcFromUser(item, user, target, crit_stage)
-    return trigger(CriticalCalcFromUser, item, user, target, crit_stage, ret: crit_stage)
+  def self.triggerCriticalCalcFromUser(item, user, target, move, crit_stage)
+    return trigger(CriticalCalcFromUser, item, user, target, move, crit_stage, ret: crit_stage)
   end
 
-  def self.triggerCriticalCalcFromTarget(item, user, target, crit_stage)
-    return trigger(CriticalCalcFromTarget, item, user, target, crit_stage, ret: crit_stage)
+  def self.triggerCriticalCalcFromTarget(item, user, target, move, crit_stage)
+    return trigger(CriticalCalcFromTarget, item, user, target, move, crit_stage, ret: crit_stage)
   end
 
   #=============================================================================
@@ -1280,13 +1280,13 @@ Battle::ItemEffects::DamageCalcFromTarget.add(:YACHEBERRY,
 #===============================================================================
 
 Battle::ItemEffects::CriticalCalcFromUser.add(:LUCKYPUNCH,
-  proc { |item, user, target, c|
+  proc { |item, user, target, move, c|
     next c + 2 if user.isSpecies?(:CHANSEY)
   }
 )
 
 Battle::ItemEffects::CriticalCalcFromUser.add(:RAZORCLAW,
-  proc { |item, user, target, c|
+  proc { |item, user, target, move, c|
     next c + 1
   }
 )
@@ -1294,7 +1294,7 @@ Battle::ItemEffects::CriticalCalcFromUser.add(:RAZORCLAW,
 Battle::ItemEffects::CriticalCalcFromUser.copy(:RAZORCLAW, :SCOPELENS)
 
 Battle::ItemEffects::CriticalCalcFromUser.add(:LEEK,
-  proc { |item, user, target, c|
+  proc { |item, user, target, move, c|
     next c + 2 if user.isSpecies?(:FARFETCHD) || user.isSpecies?(:SIRFETCHD)
   }
 )

@@ -11,12 +11,12 @@ class Battle::Move::SleepTarget < Battle::Move
 
   def pbEffectAgainstTarget(user, target)
     return if damagingMove?
-    target.pbSleep
+    target.pbSleep(user)
   end
 
   def pbAdditionalEffect(user, target)
     return if target.damageState.substitute
-    target.pbSleep if target.pbCanSleep?(user, false, self)
+    target.pbSleep(user) if target.pbCanSleep?(user, false, self)
   end
 end
 
@@ -331,12 +331,12 @@ class Battle::Move::FreezeTarget < Battle::Move
 
   def pbEffectAgainstTarget(user, target)
     return if damagingMove?
-    target.pbFreeze
+    target.pbFreeze(user)
   end
 
   def pbAdditionalEffect(user, target)
     return if target.damageState.substitute
-    target.pbFreeze if target.pbCanFreeze?(user, false, self)
+    target.pbFreeze(user) if target.pbCanFreeze?(user, false, self)
   end
 end
 
@@ -371,7 +371,7 @@ class Battle::Move::FreezeFlinchTarget < Battle::Move
     chance = pbAdditionalEffectChance(user, target, 10)
     return if chance == 0
     if target.pbCanFreeze?(user, false, self) && @battle.pbRandom(100) < chance
-      target.pbFreeze
+      target.pbFreeze(user)
     end
     target.pbFlinch(user) if @battle.pbRandom(100) < chance
   end
@@ -385,7 +385,7 @@ class Battle::Move::ParalyzeBurnOrFreezeTarget < Battle::Move
     return if target.damageState.substitute
     case @battle.pbRandom(3)
     when 0 then target.pbBurn(user) if target.pbCanBurn?(user, false, self)
-    when 1 then target.pbFreeze if target.pbCanFreeze?(user, false, self)
+    when 1 then target.pbFreeze(user) if target.pbCanFreeze?(user, false, self)
     when 2 then target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
     end
   end
@@ -400,7 +400,7 @@ class Battle::Move::PoisonParalyzeOrSleepTarget < Battle::Move
     case @battle.pbRandom(3)
     when 0 then target.pbPoison(user) if target.pbCanPoison?(user, false, self)
     when 1 then target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
-    when 2 then target.pbSleep if target.pbCanSleep?(user, false, self)
+    when 2 then target.pbSleep(user) if target.pbCanSleep?(user, false, self)
     end
   end
 end
@@ -429,7 +429,7 @@ class Battle::Move::GiveUserStatusToTarget < Battle::Move
     msg = ""
     case user.status
     when :SLEEP
-      target.pbSleep
+      target.pbSleep(user)
       msg = _INTL("{1} woke up.", user.pbThis)
     when :POISON
       target.pbPoison(user, nil, user.statusCount != 0)
@@ -441,7 +441,7 @@ class Battle::Move::GiveUserStatusToTarget < Battle::Move
       target.pbParalyze(user)
       msg = _INTL("{1} was cured of paralysis.", user.pbThis)
     when :FROZEN
-      target.pbFreeze
+      target.pbFreeze(user)
       msg = _INTL("{1} was thawed out.", user.pbThis)
     end
     if msg != ""

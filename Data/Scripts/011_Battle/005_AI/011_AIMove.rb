@@ -503,23 +503,23 @@ class Battle::AI::AIMove
     # Ability effects that alter critical hit rate
     if user.ability_active?
       crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromUser(user_battler.ability,
-         user_battler, target_battler, crit_stage)
+         user_battler, target_battler, @move, crit_stage)
       return -1 if crit_stage < 0
     end
     if target.ability_active? && !target.being_mold_broken?
       crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target_battler.ability,
-         user_battler, target_battler, crit_stage)
+         user_battler, target_battler, @move, crit_stage)
       return -1 if crit_stage < 0
     end
     # Item effects that alter critical hit rate
     if user.item_active?
       crit_stage = Battle::ItemEffects.triggerCriticalCalcFromUser(user_battler.item,
-         user_battler, target_battler, crit_stage)
+         user_battler, target_battler, @move, crit_stage)
       return -1 if crit_stage < 0
     end
     if target.item_active?
       crit_stage = Battle::ItemEffects.triggerCriticalCalcFromTarget(user_battler.item,
-         user_battler, target_battler, crit_stage)
+         user_battler, target_battler, @move, crit_stage)
       return -1 if crit_stage < 0
     end
     # Other effects
