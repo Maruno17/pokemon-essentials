@@ -612,7 +612,7 @@ def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, &block)
           pkmn.moves[move_index].pp = [oldmovepp, pkmn.moves[move_index].total_pp].min
         end
         pbMessage(_INTL("1, 2, and...\\wt[16] ...\\wt[16] ...\\wt[16] Ta-da!") + "\\se[Battle ball drop]\1", &block)
-        pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd..." + "\1", pkmn_name, old_move_name), &block)
+        pbMessage(_INTL("{1} forgot how to use {2}.\nAnd..." + "\1", pkmn_name, old_move_name), &block)
         pbMessage("\\se[]" + _INTL("{1} learned {2}!", pkmn_name, move_name) + "\\se[Pkmn move learnt]", &block)
         pkmn.changeHappiness("machine") if by_machine
         return true

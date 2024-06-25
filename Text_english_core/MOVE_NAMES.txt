@@ -32,6 +32,8 @@ Silver Wind
 Silver Wind
 Fell Stinger
 Fell Stinger
+Pounce
+Pounce
 Struggle Bug
 Struggle Bug
 Fury Cutter
@@ -52,6 +54,8 @@ Quiver Dance
 Quiver Dance
 Rage Powder
 Rage Powder
+Silk Trap
+Silk Trap
 Spider Web
 Spider Web
 Sticky Web
@@ -68,6 +72,8 @@ Fiery Wrath
 Fiery Wrath
 Darkest Lariat
 Darkest Lariat
+Kowtow Cleave
+Kowtow Cleave
 Night Daze
 Night Daze
 Crunch
@@ -88,6 +94,8 @@ Night Slash
 Night Slash
 Sucker Punch
 Sucker Punch
+Ceaseless Edge
+Ceaseless Edge
 Knock Off
 Knock Off
 Assurance
@@ -110,12 +118,16 @@ Pursuit
 Pursuit
 Beat Up
 Beat Up
+Comeuppance
+Comeuppance
 Fling
 Fling
 Power Trip
 Power Trip
 Punishment
 Punishment
+Ruination
+Ruination
 Dark Void
 Dark Void
 Embargo
@@ -154,6 +166,8 @@ Roar of Time
 Roar of Time
 Draco Meteor
 Draco Meteor
+Glaive Rush
+Glaive Rush
 Outrage
 Outrage
 Clanging Scales
@@ -172,6 +186,10 @@ Dragon Pulse
 Dragon Pulse
 Dragon Claw
 Dragon Claw
+Order Up
+Order Up
+Fickle Beam
+Fickle Beam
 Breaking Swipe
 Breaking Swipe
 Dragon Breath
@@ -192,10 +210,16 @@ Dragon Rage
 Dragon Rage
 Clangorous Soul
 Clangorous Soul
+Dragon Cheer
+Dragon Cheer
 Dragon Dance
 Dragon Dance
 Bolt Strike
 Bolt Strike
+Electro Shot
+Electro Shot
+Double Shock
+Double Shock
 Volt Tackle
 Volt Tackle
 Zap Cannon
@@ -204,10 +228,16 @@ Aura Wheel
 Aura Wheel
 Thunder
 Thunder
+Electro Drift
+Electro Drift
 Fusion Bolt
 Fusion Bolt
 Plasma Fists
 Plasma Fists
+Supercell Slam
+Supercell Slam
+Wildbolt Storm
+Wildbolt Storm
 Thunderbolt
 Thunderbolt
 Wild Charge
@@ -228,6 +258,8 @@ ThunderPunch
 ThunderPunch
 Rising Voltage
 Rising Voltage
+Thunderclap
+Thunderclap
 Volt Switch
 Volt Switch
 Parabolic Charge
@@ -272,12 +304,16 @@ Fleur Cannon
 Fleur Cannon
 Misty Explosion
 Misty Explosion
+Springtide Storm
+Springtide Storm
 Moonblast
 Moonblast
 Play Rough
 Play Rough
 Strange Steam
 Strange Steam
+Alluring Voice
+Alluring Voice
 Dazzling Gleam
 Dazzling Gleam
 Spirit Break
@@ -322,12 +358,16 @@ High Jump Kick
 High Jump Kick
 Hi Jump Kick
 Hi Jump Kick
+Axe Kick
+Axe Kick
 Close Combat
 Close Combat
 Focus Blast
 Focus Blast
 Superpower
 Superpower
+Collision Course
+Collision Course
 Cross Chop
 Cross Chop
 Dynamic Punch
@@ -344,6 +384,8 @@ Sacred Sword
 Sacred Sword
 Thunderous Kick
 Thunderous Kick
+Triple Arrows
+Triple Arrows
 Secret Sword
 Secret Sword
 Sky Uppercut
@@ -364,6 +406,8 @@ Wake-Up Slap
 Wake-Up Slap
 Low Sweep
 Low Sweep
+Upper Hand
+Upper Hand
 Circle Throw
 Circle Throw
 Force Palm
@@ -414,6 +458,8 @@ Octolock
 Octolock
 Quick Guard
 Quick Guard
+Victory Dance
+Victory Dance
 V-create
 V-create
 Blast Burn
@@ -430,10 +476,14 @@ Burn Up
 Burn Up
 Overheat
 Overheat
+Armor Cannon
+Armor Cannon
 Flare Blitz
 Flare Blitz
 Pyro Ball
 Pyro Ball
+Raging Fury
+Raging Fury
 Fire Blast
 Fire Blast
 Fusion Flare
@@ -448,6 +498,8 @@ Searing Shot
 Searing Shot
 Heat Wave
 Heat Wave
+Bitter Blade
+Bitter Blade
 Flamethrower
 Flamethrower
 Blaze Kick
@@ -460,10 +512,14 @@ Fire Pledge
 Fire Pledge
 Lava Plume
 Lava Plume
+Torch Song
+Torch Song
 Fire Punch
 Fire Punch
 Mystical Fire
 Mystical Fire
+Temper Flare
+Temper Flare
 Burning Jealousy
 Burning Jealousy
 Flame Burst
@@ -482,6 +538,8 @@ Fire Spin
 Fire Spin
 Heat Crash
 Heat Crash
+Burning Bulwark
+Burning Bulwark
 Sunny Day
 Sunny Day
 Will-O-Wisp
@@ -498,6 +556,8 @@ Aeroblast
 Aeroblast
 Beak Blast
 Beak Blast
+Bleakwind Storm
+Bleakwind Storm
 Fly
 Fly
 Bounce
@@ -558,14 +618,22 @@ Shadow Ball
 Shadow Ball
 Spirit Shackle
 Spirit Shackle
+Bitter Malice
+Bitter Malice
 Shadow Claw
 Shadow Claw
 Hex
 Hex
+Infernal Parade
+Infernal Parade
 Ominous Wind
 Ominous Wind
 Shadow Punch
 Shadow Punch
+Last Respects
+Last Respects
+Rage Fist
+Rage Fist
 Shadow Sneak
 Shadow Sneak
 Astonish
@@ -588,6 +656,8 @@ Spite
 Spite
 Trick-or-Treat
 Trick-or-Treat
+Chloroblast
+Chloroblast
 Frenzy Plant
 Frenzy Plant
 Leaf Storm
@@ -604,6 +674,8 @@ Solar Beam
 Solar Beam
 Wood Hammer
 Wood Hammer
+Ivy Cudgel
+Ivy Cudgel
 Energy Ball
 Energy Ball
 Leaf Blade
@@ -618,12 +690,16 @@ Grass Pledge
 Grass Pledge
 Grav Apple
 Grav Apple
+Matcha Gotcha
+Matcha Gotcha
 Seed Bomb
 Seed Bomb
 Giga Drain
 Giga Drain
 Horn Leech
 Horn Leech
+Flower Trick
+Flower Trick
 Grassy Glide
 Grassy Glide
 Trop Kick
@@ -634,8 +710,12 @@ Magical Leaf
 Magical Leaf
 Needle Arm
 Needle Arm
+Syrup Bomb
+Syrup Bomb
 Razor Leaf
 Razor Leaf
+Trailblaze
+Trailblaze
 Vine Whip
 Vine Whip
 Branch Poke
@@ -674,6 +754,8 @@ Leech Seed
 Leech Seed
 Sleep Powder
 Sleep Powder
+Spicy Extract
+Spicy Extract
 Spiky Shield
 Spiky Shield
 Spore
@@ -686,10 +768,14 @@ Synthesis
 Synthesis
 Worry Seed
 Worry Seed
+Headlong Rush
+Headlong Rush
 Precipice Blades
 Precipice Blades
 Earthquake
 Earthquake
+Sandsear Storm
+Sandsear Storm
 High Horsepower
 High Horsepower
 Earth Power
@@ -750,10 +836,14 @@ Blizzard
 Blizzard
 Ice Hammer
 Ice Hammer
+Mountain Gale
+Mountain Gale
 Ice Beam
 Ice Beam
 Icicle Crash
 Icicle Crash
+Ice Spinner
+Ice Spinner
 Ice Punch
 Ice Punch
 Freeze-Dry
@@ -784,12 +874,16 @@ Sheer Cold
 Sheer Cold
 Aurora Veil
 Aurora Veil
+Chilly Reception
+Chilly Reception
 Hail
 Hail
 Haze
 Haze
 Mist
 Mist
+Snowscape
+Snowscape
 Explosion
 Explosion
 Self-Destruct
@@ -800,6 +894,8 @@ Giga Impact
 Giga Impact
 Hyper Beam
 Hyper Beam
+Blood Moon
+Blood Moon
 Boomburst
 Boomburst
 Last Resort
@@ -816,14 +912,20 @@ Multi-Attack
 Multi-Attack
 Techno Blast
 Techno Blast
+Tera Starstorm
+Tera Starstorm
 Thrash
 Thrash
 Egg Bomb
 Egg Bomb
+Hyper Drill
+Hyper Drill
 Judgment
 Judgment
 Hyper Voice
 Hyper Voice
+Raging Bull
+Raging Bull
 Revelation Dance
 Revelation Dance
 Rock Climb
@@ -848,6 +950,8 @@ Slam
 Slam
 Strength
 Strength
+Tera Blast
+Tera Blast
 Tri Attack
 Tri Attack
 Crush Claw
@@ -924,6 +1028,8 @@ Feint
 Feint
 Tail Slap
 Tail Slap
+Population Bomb
+Population Bomb
 Rage
 Rage
 Spike Cannon
@@ -1014,6 +1120,8 @@ Defense Curl
 Defense Curl
 Disable
 Disable
+Doodle
+Doodle
 Double Team
 Double Team
 Encore
@@ -1022,6 +1130,8 @@ Endure
 Endure
 Entrainment
 Entrainment
+Fillet Away
+Fillet Away
 Flash
 Flash
 Focus Energy
@@ -1086,6 +1196,8 @@ Perish Song
 Perish Song
 Play Nice
 Play Nice
+Power Shift
+Power Shift
 Protect
 Protect
 Psych Up
@@ -1098,6 +1210,8 @@ Reflect Type
 Reflect Type
 Refresh
 Refresh
+Revival Blessing
+Revival Blessing
 Roar
 Roar
 Safeguard
@@ -1108,6 +1222,8 @@ Screech
 Screech
 Sharpen
 Sharpen
+Shed Tail
+Shed Tail
 Shell Smash
 Shell Smash
 Simple Beam
@@ -1158,6 +1274,8 @@ Teeter Dance
 Teeter Dance
 Tickle
 Tickle
+Tidy Up
+Tidy Up
 Transform
 Transform
 Whirlwind
@@ -1172,12 +1290,16 @@ Belch
 Belch
 Gunk Shot
 Gunk Shot
+Malignant Chain
+Malignant Chain
 Sludge Wave
 Sludge Wave
 Shell Side Arm
 Shell Side Arm
 Sludge Bomb
 Sludge Bomb
+Dire Claw
+Dire Claw
 Poison Jab
 Poison Jab
 Cross Poison
@@ -1186,6 +1308,8 @@ Sludge
 Sludge
 Venoshock
 Venoshock
+Barb Barrage
+Barb Barrage
 Clear Smog
 Clear Smog
 Poison Fang
@@ -1196,6 +1320,8 @@ Acid
 Acid
 Acid Spray
 Acid Spray
+Mortal Spin
+Mortal Spin
 Smog
 Smog
 Poison Sting
@@ -1248,28 +1374,42 @@ Psychic Fangs
 Psychic Fangs
 Eerie Spell
 Eerie Spell
+Esper Wing
+Esper Wing
 Expanding Force
 Expanding Force
 Extrasensory
 Extrasensory
 Hyperspace Hole
 Hyperspace Hole
+Lumina Crash
+Lumina Crash
+Psyblade
+Psyblade
 Psyshock
 Psyshock
 Zen Headbutt
 Zen Headbutt
+Psychic Noise
+Psychic Noise
 Luster Purge
 Luster Purge
 Mist Ball
 Mist Ball
+Mystical Power
+Mystical Power
 Psycho Cut
 Psycho Cut
+Psyshield Bash
+Psyshield Bash
 Psybeam
 Psybeam
 Heart Stamp
 Heart Stamp
 Confusion
 Confusion
+Twin Beam
+Twin Beam
 Stored Power
 Stored Power
 Mirror Coat
@@ -1312,6 +1452,8 @@ Kinesis
 Kinesis
 Light Screen
 Light Screen
+Lunar Blessing
+Lunar Blessing
 Lunar Dance
 Lunar Dance
 Magic Coat
@@ -1344,6 +1486,8 @@ Skill Swap
 Skill Swap
 Speed Swap
 Speed Swap
+Take Heart
+Take Heart
 Telekinesis
 Telekinesis
 Teleport
@@ -1364,10 +1508,14 @@ Diamond Storm
 Diamond Storm
 Stone Edge
 Stone Edge
+Mighty Cleave
+Mighty Cleave
 Power Gem
 Power Gem
 Rock Slide
 Rock Slide
+Stone Axe
+Stone Axe
 Ancient Power
 Ancient Power
 AncientPower
@@ -1380,6 +1528,8 @@ Smack Down
 Smack Down
 Accelerock
 Accelerock
+Salt Cure
+Salt Cure
 Rollout
 Rollout
 Rock Blast
@@ -1394,18 +1544,24 @@ Tar Shot
 Tar Shot
 Wide Guard
 Wide Guard
+Gigaton Hammer
+Gigaton Hammer
 Doom Desire
 Doom Desire
 Steel Beam
 Steel Beam
 Steel Roller
 Steel Roller
+Make It Rain
+Make It Rain
 Behemoth Bash
 Behemoth Bash
 Behemoth Blade
 Behemoth Blade
 Iron Tail
 Iron Tail
+Spin Out
+Spin Out
 Sunsteel Strike
 Sunsteel Strike
 Meteor Mash
@@ -1430,10 +1586,14 @@ Gear Grind
 Gear Grind
 Metal Claw
 Metal Claw
+Tachyon Cutter
+Tachyon Cutter
 Bullet Punch
 Bullet Punch
 Gyro Ball
 Gyro Ball
+Hard Press
+Hard Press
 Heavy Slam
 Heavy Slam
 Metal Burst
@@ -1448,12 +1608,16 @@ King's Shield
 King's Shield
 Metal Sound
 Metal Sound
+Shelter
+Shelter
 Shift Gear
 Shift Gear
 Hydro Cannon
 Hydro Cannon
 Water Spout
 Water Spout
+Wave Crash
+Wave Crash
 Hydro Pump
 Hydro Pump
 Origin Pulse
@@ -1474,8 +1638,12 @@ Fishious Rend
 Fishious Rend
 Liquidation
 Liquidation
+Aqua Step
+Aqua Step
 Dive
 Dive
+Hydro Steam
+Hydro Steam
 Scald
 Scald
 Snipe Shot
@@ -1486,6 +1654,8 @@ Waterfall
 Waterfall
 Razor Shell
 Razor Shell
+Aqua Cutter
+Aqua Cutter
 Brine
 Brine
 Bubble Beam
@@ -1496,8 +1666,12 @@ Octazooka
 Octazooka
 Flip Turn
 Flip Turn
+Jet Punch
+Jet Punch
 Water Pulse
 Water Pulse
+Chilling Water
+Chilling Water
 Aqua Jet
 Aqua Jet
 Bubble
@@ -1508,6 +1682,8 @@ Clamp
 Clamp
 Whirlpool
 Whirlpool
+Triple Dive
+Triple Dive
 Surging Strikes
 Surging Strikes
 Water Shuriken

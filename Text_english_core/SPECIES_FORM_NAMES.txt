@@ -80,6 +80,24 @@ Hero of Many Battles
 Hero of Many Battles
 Single Strike Style
 Single Strike Style
+Family of Four
+Family of Four
+Green Plumage
+Green Plumage
+Zero Form
+Zero Form
+Curly Form
+Curly Form
+Two-Segment Form
+Two-Segment Form
+Chest Form
+Chest Form
+Counterfeit Form
+Counterfeit Form
+Unremarkable Form
+Unremarkable Form
+Teal Mask
+Teal Mask
 Mega Venusaur
 Mega Venusaur
 Mega Charizard X
@@ -96,6 +114,8 @@ Alolan
 Alolan
 Galarian
 Galarian
+Hisuian
+Hisuian
 Mega Alakazam
 Mega Alakazam
 Mega Slowbro
@@ -106,6 +126,12 @@ Mega Kangaskhan
 Mega Kangaskhan
 Mega Pinsir
 Mega Pinsir
+Paldean (Combat Breed)
+Paldean (Combat Breed)
+Paldean (Blaze Breed)
+Paldean (Blaze Breed)
+Paldean (Aqua Breed)
+Paldean (Aqua Breed)
 Mega Gyarados
 Mega Gyarados
 Mega Aerodactyl
@@ -118,6 +144,8 @@ Spiky-Eared
 Spiky-Eared
 Mega Ampharos
 Mega Ampharos
+Paldean
+Paldean
 B
 B
 C
@@ -310,6 +338,8 @@ Mega Audino
 Mega Audino
 Blue-Striped
 Blue-Striped
+White-Striped
+White-Striped
 Zen Mode
 Zen Mode
 Galarian Standard Mode
@@ -538,3 +568,39 @@ Ice Rider
 Ice Rider
 Shadow Rider
 Shadow Rider
+Bloodmoon Ursaluna
+Bloodmoon Ursaluna
+Therian Form
+Therian Form
+Family of Three
+Family of Three
+Blue Plumage
+Blue Plumage
+Yellow Plumage
+Yellow Plumage
+White Plumage
+White Plumage
+Hero Form
+Hero Form
+Droopy Form
+Droopy Form
+Stretchy Form
+Stretchy Form
+Three-Segment Form
+Three-Segment Form
+Roaming Form
+Roaming Form
+Artisan Form
+Artisan Form
+Masterpiece Form
+Masterpiece Form
+Wellspring Mask
+Wellspring Mask
+Hearthflame Mask
+Hearthflame Mask
+Cornerstone Mask
+Cornerstone Mask
+Terastal Form
+Terastal Form
+Stellar Form
+Stellar Form

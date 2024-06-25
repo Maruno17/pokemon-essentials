@@ -32,6 +32,8 @@ The foe is attacked with powdery scales blown by wind. It may also raise all the
 The foe is attacked with powdery scales blown by wind. It may also raise all the user's stats.
 When the user knocks out a target with this move, the user's Attack stat rises drastically.
 When the user knocks out a target with this move, the user's Attack stat rises drastically.
+The user attacks by pouncing on the target. This also lowers the target's Speed stat.
+The user attacks by pouncing on the target. This also lowers the target's Speed stat.
 While resisting, the user attacks the opposing Pokémon. The targets' Sp. Atk stat is reduced.
 While resisting, the user attacks the opposing Pokémon. The targets' Sp. Atk stat is reduced.
 The target is slashed with scythes or claws. Its power increases if it hits in succession.
@@ -52,6 +54,8 @@ The user performs a beautiful dance. It boosts the user's Sp. Atk, Sp. Def, and 
 The user performs a beautiful dance. It boosts the user's Sp. Atk, Sp. Def, and Speed stats.
 The user scatters irritating powder to draw attention to itself. Opponents aim only at the user.
 The user scatters irritating powder to draw attention to itself. Opponents aim only at the user.
+The user spins a silken trap to protect itself from damage. Contact with it lowers the attacker's Speed.
+The user spins a silken trap to protect itself from damage. Contact with it lowers the attacker's Speed.
 The user ensnares the target with thin, gooey silk so it can't flee from battle.
 The user ensnares the target with thin, gooey silk so it can't flee from battle.
 Weaves a sticky net around the opposing team, which lowers their Speed stats upon switching in.
@@ -68,6 +72,8 @@ The user transforms its wrath into a fire-like aura to attack. This may also mak
 The user transforms its wrath into a fire-like aura to attack. This may also make foes flinch.
 The user swings both arms and hits the target. Ignores the target's stat changes.
 The user swings both arms and hits the target. Ignores the target's stat changes.
+The user slashes at the target after kowtowing to make it drop its guard. This attack never misses.
+The user slashes at the target after kowtowing to make it drop its guard. This attack never misses.
 The user lets loose a pitch-black shock wave at its target. It may also lower the target's accuracy.
 The user lets loose a pitch-black shock wave at its target. It may also lower the target's accuracy.
 The user crunches up the target with sharp fangs. It may also lower the target's Defense stat.
@@ -88,6 +94,8 @@ The user slashes the target the instant an opportunity arises. Critical hits lan
 The user slashes the target the instant an opportunity arises. Critical hits land more easily.
 This move enables the user to attack first. It fails if the target is not readying an attack, however.
 This move enables the user to attack first. It fails if the target is not readying an attack, however.
+The user slashes its shell blade at the target. This leaves shell splinters under the target as spikes.
+The user slashes its shell blade at the target. This leaves shell splinters under the target as spikes.
 The user slaps down the target's held item, preventing that item from being used in the battle.
 The user slaps down the target's held item, preventing that item from being used in the battle.
 If the target has already taken some damage in the same turn, this attack's power is doubled.
@@ -108,12 +116,16 @@ An attack move that inflicts double damage if used on a target that is switching
 An attack move that inflicts double damage if used on a target that is switching out of battle.
 The user gets all the party Pokémon to attack the foe. The more party Pokémon, the more damage.
 The user gets all the party Pokémon to attack the foe. The more party Pokémon, the more damage.
+The user retaliates with much greater force against the opponent that last inflicted damage on it.
+The user retaliates with much greater force against the opponent that last inflicted damage on it.
 The user flings its held item at the target to attack. Its power and effects depend on the item.
 The user flings its held item at the target to attack. Its power and effects depend on the item.
 The user boasts of its strength. Power increases the more the user's stats are raised.
 The user boasts of its strength. Power increases the more the user's stats are raised.
 This attack's power increases the more the target has powered up with stat changes.
 This attack's power increases the more the target has powered up with stat changes.
+The user summons a ruinous disaster. This cuts the target's HP in half.
+The user summons a ruinous disaster. This cuts the target's HP in half.
 Opposing Pokémon are dragged into a world of total darkness that makes them sleep.
 Opposing Pokémon are dragged into a world of total darkness that makes them sleep.
 It prevents the target from using its held item. Its Trainer is also prevented from using items on it.
@@ -152,6 +164,8 @@ The user blasts the target with power that distorts even time. The user must res
 The user blasts the target with power that distorts even time. The user must rest on the next turn.
 Comets are summoned down from the sky. The attack's recoil harshly reduces the user's Sp. Atk stat.
 Comets are summoned down from the sky. The attack's recoil harshly reduces the user's Sp. Atk stat.
+The user recklessly charges. Until its next turn, attacks on the user cannot miss and do double damage.
+The user recklessly charges. Until its next turn, attacks on the user cannot miss and do double damage.
 The user rampages and attacks for two to three turns. It then becomes confused, however.
 The user rampages and attacks for two to three turns. It then becomes confused, however.
 The user rubs its scales and makes a huge noise. Also lowers the user's Defense stat.
@@ -170,6 +184,10 @@ The target is attacked with a shock wave generated by the user's gaping mouth.
 The target is attacked with a shock wave generated by the user's gaping mouth.
 The user slashes the target with huge, sharp claws.
 The user slashes the target with huge, sharp claws.
+The user attacks with elegant poise. One of the user's stats is raised based on the Tatsugiri in its mouth.
+The user attacks with elegant poise. One of the user's stats is raised based on the Tatsugiri in its mouth.
+The user shoots a beam of light to inflict damage. Sometimes the move's power is doubled.
+The user shoots a beam of light to inflict damage. Sometimes the move's power is doubled.
 The user swings its tough tail wildly and attacks all foes. This also lowers their Attack stats.
 The user swings its tough tail wildly and attacks all foes. This also lowers their Attack stats.
 The user exhales a mighty gust that inflicts damage. It may also leave the target with paralysis.
@@ -188,10 +206,16 @@ This attack hits the target with a shock wave of pure rage. This attack always i
 This attack hits the target with a shock wave of pure rage. This attack always inflicts 40 HP damage.
 The user raises all its stats by using some of its HP.
 The user raises all its stats by using some of its HP.
+The user raises its allies' morale with a draconic cry. This raises their chance of landing critical hits.
+The user raises its allies' morale with a draconic cry. This raises their chance of landing critical hits.
 The user vigorously performs a mystic, powerful dance that boosts its Attack and Speed stats.
 The user vigorously performs a mystic, powerful dance that boosts its Attack and Speed stats.
 The user charges at its foe, surrounding itself with lightning. It may also leave the target paralyzed.
 The user charges at its foe, surrounding itself with lightning. It may also leave the target paralyzed.
+The user gathers electricity and boosts its Sp. Atk stat, then attacks on the next turn.
+The user gathers electricity and boosts its Sp. Atk stat, then attacks on the next turn.
+The user discharges all the electricity from its body. The user will no longer be Electric type.
+The user discharges all the electricity from its body. The user will no longer be Electric type.
 The user electrifies itself, then charges at the foe. It causes considerable damage to the user as well.
 The user electrifies itself, then charges at the foe. It causes considerable damage to the user as well.
 The user fires an electric blast like a cannon to inflict damage and cause paralysis.
@@ -200,10 +224,16 @@ Morpeko attacks and raises its Speed with energy stored in its cheeks. Type chan
 Morpeko attacks and raises its Speed with energy stored in its cheeks. Type changes with the user's form.
 A wicked thunderbolt is dropped on the foe to inflict damage. It may also leave the target paralyzed.
 A wicked thunderbolt is dropped on the foe to inflict damage. It may also leave the target paralyzed.
+The user races forward, piercing with futuristic electricity. A supereffective hit deals more damage.
+The user races forward, piercing with futuristic electricity. A supereffective hit deals more damage.
 The user throws down a giant thunderbolt. It does more damage if influenced by an enormous flame.
 The user throws down a giant thunderbolt. It does more damage if influenced by an enormous flame.
 The user attacks with electrically charged fists. Normal-type moves become Electric-type.
 The user attacks with electrically charged fists. Normal-type moves become Electric-type.
+The user electrifies itself and drops onto the target. If this move misses, the user takes damage instead.
+The user electrifies itself and drops onto the target. If this move misses, the user takes damage instead.
+The user savagely attacks with lightning and wind. This may also leave the opponents with paralysis.
+The user savagely attacks with lightning and wind. This may also leave the opponents with paralysis.
 A strong electric blast is loosed at the target. It may also leave the target with paralysis.
 A strong electric blast is loosed at the target. It may also leave the target with paralysis.
 The user shrouds itself in electricity and smashes into its foe. It also damages the user a little.
@@ -222,6 +252,8 @@ The target is punched with an electrified fist. It may also leave the target wit
 The target is punched with an electrified fist. It may also leave the target with paralysis.
 The user attacks with electric voltage rising from the ground. Power is doubled on Electric Terrain.
 The user attacks with electric voltage rising from the ground. Power is doubled on Electric Terrain.
+The user attacks first with a jolt of electricity. It fails if the target is not readying an attack.
+The user attacks first with a jolt of electricity. It fails if the target is not readying an attack.
 The user attacks everything around it. The user's HP is restored by half the damage dealt.
 The user attacks everything around it. The user's HP is restored by half the damage dealt.
 The user throws an electrically charged tackle at the target. It may also leave the target with paralysis.
@@ -262,12 +294,16 @@ The user unleashes a strong beam. The attack's recoil harshly lowers the user's 
 The user unleashes a strong beam. The attack's recoil harshly lowers the user's Sp. Atk stat.
 The user attacks everything around and faints upon using this move. Power increases on Misty Terrain.
 The user attacks everything around and faints upon using this move. Power increases on Misty Terrain.
+The user attacks with fierce winds brimming with love and hate. This may also lower foes' Attack stats.
+The user attacks with fierce winds brimming with love and hate. This may also lower foes' Attack stats.
 The user attacks by borrowing the power of the moon. This may also lower the target's Sp. Atk stat.
 The user attacks by borrowing the power of the moon. This may also lower the target's Sp. Atk stat.
 The user plays rough with the target and attacks it. This may also lower the target's Attack stat.
 The user plays rough with the target and attacks it. This may also lower the target's Attack stat.
 The user attacks the target by emitting steam. This may also confuse the target.
 The user attacks the target by emitting steam. This may also confuse the target.
+The user attacks with its angelic voice. This also confuses the target if its stats were raised this turn.
+The user attacks with its angelic voice. This also confuses the target if its stats were raised this turn.
 The user damages opposing Pokémon by emitting a powerful flash.
 The user damages opposing Pokémon by emitting a powerful flash.
 The user attacks the target with immense force. This also lowers the target's Sp. Atk stat.
@@ -310,12 +346,16 @@ The user attacks wildly with its thick leek. The user can't move on the next tur
 The user attacks wildly with its thick leek. The user can't move on the next turn.
 The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.
 The target is attacked with a knee kick from a jump. If it misses, the user is hurt instead.
+The user kicks up and slams its heel down. This may confuse the target. Missing will damage the user.
+The user kicks up and slams its heel down. This may confuse the target. Missing will damage the user.
 The user fights the foe up close without guarding itself. It also cuts the user's Defense and Sp. Def.
 The user fights the foe up close without guarding itself. It also cuts the user's Defense and Sp. Def.
 The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.
 The user heightens its mental focus and unleashes its power. It may also lower the target's Sp. Def.
 The user attacks the target with great power. However, it also lowers the user's Attack and Defense.
 The user attacks the target with great power. However, it also lowers the user's Attack and Defense.
+The user crashes and causes a massive prehistoric explosion. A supereffective hit deals more damage.
+The user crashes and causes a massive prehistoric explosion. A supereffective hit deals more damage.
 The user delivers a double chop with its forearms crossed. Critical hits land more easily.
 The user delivers a double chop with its forearms crossed. Critical hits land more easily.
 The user punches the target with full, concentrated power. It confuses the target if it hits.
@@ -330,6 +370,8 @@ The user attacks by slicing with its long horns. The target's stat changes don't
 The user attacks by slicing with its long horns. The target's stat changes don't affect the damage.
 Overwhelms the target with lightning-like movement, then kicks. Lowers the target's Defense stat.
 Overwhelms the target with lightning-like movement, then kicks. Lowers the target's Defense stat.
+This move is more likely to be a critical hit, and may also lower the target's Defense stat or make it flinch.
+This move is more likely to be a critical hit, and may also lower the target's Defense stat or make it flinch.
 The user cuts with its long horn. The odd power contained in it does physical damage to the foe.
 The user cuts with its long horn. The odd power contained in it does physical damage to the foe.
 The user attacks the target with an uppercut thrown skyward with force.
@@ -350,6 +392,8 @@ This attack inflicts big damage on a sleeping target. It also wakes the target u
 This attack inflicts big damage on a sleeping target. It also wakes the target up, however.
 The user attacks the target's legs swiftly, reducing the target's Speed stat.
 The user attacks the target's legs swiftly, reducing the target's Speed stat.
+The user strikes with its palm, making the target flinch. It fails if the target will not use a priority move.
+The user strikes with its palm, making the target flinch. It fails if the target will not use a priority move.
 The user throws the target and drags out another Pokémon in its party. In the wild, the battle ends.
 The user throws the target and drags out another Pokémon in its party. In the wild, the battle ends.
 The target is attacked with a shock wave. It may also leave the target with paralysis.
@@ -400,6 +444,8 @@ Locks the target in and prevents it from fleeing. Also lowers the target's Defen
 Locks the target in and prevents it from fleeing. Also lowers the target's Defense and Sp. Def each turn.
 The user protects itself and its allies from priority moves. If may fail if used in succession.
 The user protects itself and its allies from priority moves. If may fail if used in succession.
+The user dances intensely to usher in victory, boosting its Attack, Defense and Speed stats.
+The user dances intensely to usher in victory, boosting its Attack, Defense and Speed stats.
 With a fiery forehead, the user hurls itself at the foe. It lowers the user's Defense, Sp. Def, and Speed.
 With a fiery forehead, the user hurls itself at the foe. It lowers the user's Defense, Sp. Def, and Speed.
 The target is razed by a fiery explosion. The user must rest on the next turn, however.
@@ -416,10 +462,14 @@ To inflict massive damage, the user burns itself out. The user will no longer be
 To inflict massive damage, the user burns itself out. The user will no longer be Fire type.
 The user attacks the target at full power. The attack's recoil sharply reduces the user's Sp. Atk stat.
 The user attacks the target at full power. The attack's recoil sharply reduces the user's Sp. Atk stat.
+The user shoots its own armor as blazing projectiles. This also lowers the user's Defense and Sp. Def.
+The user shoots its own armor as blazing projectiles. This also lowers the user's Defense and Sp. Def.
 The user cloaks itself in fire and charges at the foe. The user also takes damage and may burn the target.
 The user cloaks itself in fire and charges at the foe. The user also takes damage and may burn the target.
 Attacks by igniting a small stone and launching it as a fiery ball. May also burn the target.
 Attacks by igniting a small stone and launching it as a fiery ball. May also burn the target.
+The user rampages around spewing flames for two to three turns. The user then becomes confused.
+The user rampages around spewing flames for two to three turns. The user then becomes confused.
 The foe is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.
 The foe is attacked with an intense blast of all-consuming fire. It may also leave the target with a burn.
 The user brings down a giant flame. It does more damage if influenced by an enormous thunderbolt.
@@ -434,6 +484,8 @@ An inferno of scarlet flames torches everything around the user. It may leave th
 An inferno of scarlet flames torches everything around the user. It may leave the foe with a burn.
 The user attacks by exhaling hot breath on the opposing team. It may also leave targets with a burn.
 The user attacks by exhaling hot breath on the opposing team. It may also leave targets with a burn.
+The user slashes with bitter feelings toward the living. The user heals by half the damage dealt.
+The user slashes with bitter feelings toward the living. The user heals by half the damage dealt.
 The target is scorched with an intense blast of fire. It may also leave the target with a burn.
 The target is scorched with an intense blast of fire. It may also leave the target with a burn.
 The user launches a kick with a high critical-hit ratio. It may also leave the target with a burn.
@@ -446,10 +498,14 @@ A column of fire hits opposing Pokémon. When used with its Grass equivalent, it
 A column of fire hits opposing Pokémon. When used with its Grass equivalent, it makes a sea of fire.
 An inferno of scarlet flames torches everything around the user. It may leave targets with a burn.
 An inferno of scarlet flames torches everything around the user. It may leave targets with a burn.
+The user blows out raging flames as if singing a song. This also boosts the user's Sp. Atk stat.
+The user blows out raging flames as if singing a song. This also boosts the user's Sp. Atk stat.
 The target is punched with a fiery fist. It may leave the target with a burn.
 The target is punched with a fiery fist. It may leave the target with a burn.
 The user attacks by breathing a special, hot fire. This also lowers the target's Sp. Atk stat.
 The user attacks by breathing a special, hot fire. This also lowers the target's Sp. Atk stat.
+The user attacks the target in desperation. This move's power is doubled if the user's previous move failed.
+The user attacks the target in desperation. This move's power is doubled if the user's previous move failed.
 The user attacks with energy from jealousy. This burns all foes that had their stats boosted this turn.
 The user attacks with energy from jealousy. This burns all foes that had their stats boosted this turn.
 The user attacks the foe with a bursting flame. It also damages Pokémon next to the target.
@@ -468,6 +524,8 @@ The target becomes trapped within a fierce vortex of fire that rages for four to
 The target becomes trapped within a fierce vortex of fire that rages for four to five turns.
 The user slams the foe with its flaming body. The heavier the user is, the greater the damage.
 The user slams the foe with its flaming body. The heavier the user is, the greater the damage.
+The user's intensely hot fur protects it from attacks and also burns any attacker that makes contact.
+The user's intensely hot fur protects it from attacks and also burns any attacker that makes contact.
 The user intensifies the sun for five turns, powering up Fire-type moves.
 The user intensifies the sun for five turns, powering up Fire-type moves.
 The user shoots a sinister, bluish-white flame at the target to inflict a burn.
@@ -484,6 +542,8 @@ A vortex of air is shot at the target to inflict damage. Critical hits land more
 A vortex of air is shot at the target to inflict damage. Critical hits land more easily.
 The user heats up its beak before attacking. Making contact in this time results in a burn.
 The user heats up its beak before attacking. Making contact in this time results in a burn.
+The user attacks with savagely cold winds. This may also lower the Speed stats of opposing Pokémon.
+The user attacks with savagely cold winds. This may also lower the Speed stats of opposing Pokémon.
 The user soars, then strikes on the second turn. It can also be used for flying to any familiar town.
 The user soars, then strikes on the second turn. It can also be used for flying to any familiar town.
 The user bounces up high, then drops on the foe on the second turn. It may also paralyze the foe.
@@ -542,14 +602,22 @@ The user hurls a shadowy blob at the target. It may also lower the target's Sp. 
 The user hurls a shadowy blob at the target. It may also lower the target's Sp. Def stat.
 The user attacks while also stitching the target's shadow to the ground to prevent it fleeing.
 The user attacks while also stitching the target's shadow to the ground to prevent it fleeing.
+The user attacks the target with spine-chilling resentment. This also lowers the target's Attack stat.
+The user attacks the target with spine-chilling resentment. This also lowers the target's Attack stat.
 The user slashes with a sharp claw made from shadows. Critical hits land more easily.
 The user slashes with a sharp claw made from shadows. Critical hits land more easily.
 This relentless attack does massive damage to a target affected by status problems.
 This relentless attack does massive damage to a target affected by status problems.
+The user attacks with fireballs that may cause a burn. Power doubles if the target has a status problem.
+The user attacks with fireballs that may cause a burn. Power doubles if the target has a status problem.
 The user blasts the target with a gust of repulsive wind. It may also raise all the user's stats at once.
 The user blasts the target with a gust of repulsive wind. It may also raise all the user's stats at once.
 The user throws a punch from the shadows. The punch lands without fail.
 The user throws a punch from the shadows. The punch lands without fail.
+The user attacks to avenge its allies. The move is stronger if the user has more defeated allies.
+The user attacks to avenge its allies. The move is stronger if the user has more defeated allies.
+The user attacks with rage energy. The move is stronger the more times the user has been hit by attacks.
+The user attacks with rage energy. The move is stronger the more times the user has been hit by attacks.
 The user extends its shadow and attacks the target from behind. This move always goes first.
 The user extends its shadow and attacks the target from behind. This move always goes first.
 The user attacks the target while shouting in a startling fashion. It may also make the target flinch.
@@ -572,6 +640,8 @@ The user unleashes its grudge on the move last used by the target by cutting 4 P
 The user unleashes its grudge on the move last used by the target by cutting 4 PP from it.
 The user takes the target trick-or-treating. This adds Ghost type to the target's type.
 The user takes the target trick-or-treating. This adds Ghost type to the target's type.
+The user launches its amassed chlorophyll to inflict damage on the target. This also damages the user.
+The user launches its amassed chlorophyll to inflict damage on the target. This also damages the user.
 The user slams the target with an enormous tree. The user can't move on the next turn.
 The user slams the target with an enormous tree. The user can't move on the next turn.
 A storm of sharp is whipped up. The attack's recoil harshly reduces the user's Sp. Atk stat.
@@ -588,6 +658,8 @@ A two-turn attack. The user gathers light, then blasts a bundled beam on the sec
 A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.
 The user slams its rugged body into the target to attack. The user also sustains serious damage.
 The user slams its rugged body into the target to attack. The user also sustains serious damage.
+The user hits with an ivy-wrapped cudgel. The user's mask sets the move's type. High critical hit chance.
+The user hits with an ivy-wrapped cudgel. The user's mask sets the move's type. High critical hit chance.
 The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.
 The user draws power from nature and fires it at the target. It may also lower the target's Sp. Def.
 The user handles a sharp leaf like a sword and attacks by slashing. It has a high critical-hit ratio.
@@ -602,12 +674,16 @@ A column of grass hits the foes. When used with its water equivalent, it creates
 A column of grass hits the foes. When used with its water equivalent, it creates a vast swamp.
 The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense.
 The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense.
+The user fires a blast of tea. The user heals by half the damage dealt. This may also burn the target.
+The user fires a blast of tea. The user heals by half the damage dealt. This may also burn the target.
 The user slams a barrage of hard-shelled seeds down on the target from above.
 The user slams a barrage of hard-shelled seeds down on the target from above.
 A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
 A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
 The user drains the foe's energy with its horns. The user's HP is restored by half the damage inflicted.
 The user drains the foe's energy with its horns. The user's HP is restored by half the damage inflicted.
+The user throws a rigged bouquet of flowers. This attack never misses and is always a critical hit.
+The user throws a rigged bouquet of flowers. This attack never misses and is always a critical hit.
 Gliding on the ground, the user attacks the target. This move always goes first on Grassy Terrain.
 Gliding on the ground, the user attacks the target. This move always goes first on Grassy Terrain.
 The user lands an intense tropical kick on the target. This also lowers the target's Attack stat.
@@ -618,8 +694,12 @@ The user scatters curious leaves that chase the target. This attack will not mis
 The user scatters curious leaves that chase the target. This attack will not miss.
 The user attacks by wildly swinging its thorny arms. It may also make the target flinch.
 The user attacks by wildly swinging its thorny arms. It may also make the target flinch.
+The user sets off an explosion of sticky syrup. This lowers the target's Speed stat over three turns.
+The user sets off an explosion of sticky syrup. This lowers the target's Speed stat over three turns.
 Sharp-edged leaves are launched to slash at the opposing team. Critical hits land more easily.
 Sharp-edged leaves are launched to slash at the opposing team. Critical hits land more easily.
+The user attacks suddenly as if leaping out from tall grass. This also boosts the user's Speed stat.
+The user attacks suddenly as if leaping out from tall grass. This also boosts the user's Speed stat.
 The target is struck with slender, whiplike vines to inflict damage.
 The target is struck with slender, whiplike vines to inflict damage.
 The user attacks the target by poking it with a sharply pointed branch.
@@ -652,6 +732,8 @@ A seed is planted on the target. It steals some HP from the target every turn.
 A seed is planted on the target. It steals some HP from the target every turn.
 The user scatters a big cloud of sleep-inducing dust around the target.
 The user scatters a big cloud of sleep-inducing dust around the target.
+The user emits a very spicy extract, sharply raising the target's Attack and harshly lowering its Defense.
+The user emits a very spicy extract, sharply raising the target's Attack and harshly lowering its Defense.
 Protects the user from attacks. Also damages attackers that make contact with the user.
 Protects the user from attacks. Also damages attackers that make contact with the user.
 The user scatters bursts of spores that induce sleep.
@@ -662,10 +744,14 @@ The user scatters a cloud of paralyzing powder. It may leave the target with par
 The user scatters a cloud of paralyzing powder. It may leave the target with paralysis.
 A seed that causes worry is planted on the foe. It prevents sleep by making its Ability Insomnia.
 A seed that causes worry is planted on the foe. It prevents sleep by making its Ability Insomnia.
+The user smashes into the target in a full-body tackle. This also lowers the user's Defense and Sp. Def.
+The user smashes into the target in a full-body tackle. This also lowers the user's Defense and Sp. Def.
 The user attacks its foes by manifesting the power of the land in fearsome blades of stone.
 The user attacks its foes by manifesting the power of the land in fearsome blades of stone.
 The user sets off an earthquake that strikes every Pokémon around it.
 The user sets off an earthquake that strikes every Pokémon around it.
+The user wraps opposing Pokémon in searingly hot sand. This may also leave them with a burn.
+The user wraps opposing Pokémon in searingly hot sand. This may also leave them with a burn.
 The user fiercely attacks the target using its entire body.
 The user fiercely attacks the target using its entire body.
 The user makes the ground under the foe erupt with power. It may also lower the target's Sp. Def.
@@ -724,10 +810,14 @@ A howling blizzard is summoned to strike the opposing team. It may also freeze t
 A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.
 The user swings and hits with its strong, heavy fist. It lowers the user's Speed, however.
 The user swings and hits with its strong, heavy fist. It lowers the user's Speed, however.
+The user hurls giant chunks of ice at the target. This may also make the target flinch.
+The user hurls giant chunks of ice at the target. This may also make the target flinch.
 The target is struck with an icy-cold beam of energy. It may also freeze the target solid.
 The target is struck with an icy-cold beam of energy. It may also freeze the target solid.
 The user attacks by harshly dropping an icicle onto the foe. It may also make the target flinch.
 The user attacks by harshly dropping an icicle onto the foe. It may also make the target flinch.
+The user covers its feet in ice and twirls around, slamming into the target. This also destroys the terrain.
+The user covers its feet in ice and twirls around, slamming into the target. This also destroys the terrain.
 The target is punched with an icy fist. It may also leave the target frozen.
 The target is punched with an icy fist. It may also leave the target frozen.
 The user rapidly cools the target. This may freeze the target. Is super-effective on Water types.
@@ -756,12 +846,16 @@ The foe is attacked with a blast of absolute-zero cold. The target instantly fai
 The foe is attacked with a blast of absolute-zero cold. The target instantly faints if it hits.
 This move reduces damage from attacks for five turns. This can be used only in a hailstorm.
 This move reduces damage from attacks for five turns. This can be used only in a hailstorm.
+The user tells a really bad joke before switching out. This summons a snowstorm lasting five turns.
+The user tells a really bad joke before switching out. This summons a snowstorm lasting five turns.
 The user summons a hail storm lasting five turns. It damages all Pokémon except the Ice type.
 The user summons a hail storm lasting five turns. It damages all Pokémon except the Ice type.
 The user creates a haze that eliminates every stat change among all the Pokémon engaged in battle.
 The user creates a haze that eliminates every stat change among all the Pokémon engaged in battle.
 The user cloaks its body with a white mist that prevents any of its stats from being cut for five turns.
 The user cloaks its body with a white mist that prevents any of its stats from being cut for five turns.
+The user summons a snowstorm lasting five turns. This boosts the Defense stats of Ice types.
+The user summons a snowstorm lasting five turns. This boosts the Defense stats of Ice types.
 The user explodes to inflict damage on those around it. The user faints upon using this move.
 The user explodes to inflict damage on those around it. The user faints upon using this move.
 The user blows up to inflict damage on all Pokémon in battle. The user faints upon using this move.
@@ -770,6 +864,8 @@ The user charges at the target using every bit of its power. The user must rest 
 The user charges at the target using every bit of its power. The user must rest on the next turn.
 The foe is attacked with a powerful beam. The user must rest on the next turn to regain its energy.
 The foe is attacked with a powerful beam. The user must rest on the next turn to regain its energy.
+The user unleashes the full brunt of its spirit from a full red moon. This move can't be used twice in a row.
+The user unleashes the full brunt of its spirit from a full red moon. This move can't be used twice in a row.
 The user attacks everything around it with the destructive power of a terrible, explosive sound.
 The user attacks everything around it with the destructive power of a terrible, explosive sound.
 This move can be used only after the user has used all the other moves it knows in the battle.
@@ -786,12 +882,18 @@ Cloaking itself in high energy, the user slams into the target. This move's type
 Cloaking itself in high energy, the user slams into the target. This move's type depends on the held memory.
 The user fires a beam of light at its target. The type changes depending on the Drive the user holds.
 The user fires a beam of light at its target. The type changes depending on the Drive the user holds.
+With the power of its crystals, the user bombards and eliminates the target.
+With the power of its crystals, the user bombards and eliminates the target.
 A large egg is hurled at the target with maximum force to inflict damage.
 A large egg is hurled at the target with maximum force to inflict damage.
+The user spins its drill at high speed to pierce the target. This can hit through protective moves.
+The user spins its drill at high speed to pierce the target. This can hit through protective moves.
 The user releases countless shots of light. Its type varies with the kind of Plate the user is holding.
 The user releases countless shots of light. Its type varies with the kind of Plate the user is holding.
 The user lets loose a horribly echoing shout with the power to inflict damage.
 The user lets loose a horribly echoing shout with the power to inflict damage.
+The user performs a raging tackle. This move's type depends on the user's form. It can break barriers.
+The user performs a raging tackle. This move's type depends on the user's form. It can break barriers.
 The user attacks the target by dancing very hard. The user's type determines the type of this move.
 The user attacks the target by dancing very hard. The user's type determines the type of this move.
 The user attacks the target by smashing into it with incredible force. It may also confuse the target.
@@ -814,6 +916,8 @@ The target is slammed with a long tail, vines, etc., to inflict damage.
 The target is slammed with a long tail, vines, etc., to inflict damage.
 The target is slugged with a punch thrown at maximum power. It can also be used to move heavy boulders.
 The target is slugged with a punch thrown at maximum power. It can also be used to move heavy boulders.
+The user fires a beam of Tera energy at the target to inflict damage.
+The user fires a beam of Tera energy at the target to inflict damage.
 The user strikes with a simultaneous three-beam attack. May also paralyze, burn, or freeze the target.
 The user strikes with a simultaneous three-beam attack. May also paralyze, burn, or freeze the target.
 The user slashes the target with hard and sharp claws. It may also lower the target's Defense.
@@ -884,6 +988,8 @@ An attack that hits a target using Protect or Detect. It also lifts the effects 
 An attack that hits a target using Protect or Detect. It also lifts the effects of those moves.
 The user attacks by striking the target with its hard tail. It hits the Pokémon two to five times in a row.
 The user attacks by striking the target with its hard tail. It hits the Pokémon two to five times in a row.
+The user's fellows gather in droves to perform a combo attack that hits one to ten times in a row.
+The user's fellows gather in droves to perform a combo attack that hits one to ten times in a row.
 As long as this move is in use, the user's Attack rises each time the user is hit in battle.
 As long as this move is in use, the user's Attack rises each time the user is hit in battle.
 The target is hit with a flurry of punches that strike two to five times in a row.
@@ -968,6 +1074,8 @@ The user curls up to conceal weak spots and raise its Defense stat.
 The user curls up to conceal weak spots and raise its Defense stat.
 For four turns, this move prevents the target from using the move it last used.
 For four turns, this move prevents the target from using the move it last used.
+The user captures the target's very essence in a sketch. The user and its allies copy the target's Ability.
+The user captures the target's very essence in a sketch. The user and its allies copy the target's Ability.
 By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.
 By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.
 The user compels the target to keep using only the move it last used for three turns.
@@ -976,6 +1084,8 @@ The user endures any attack with at least 1 HP. Its chance of failing rises if i
 The user endures any attack with at least 1 HP. Its chance of failing rises if it is used in succession.
 The user dances to compel the target to mimic it, making the target's Ability the same as the user's.
 The user dances to compel the target to mimic it, making the target's Ability the same as the user's.
+The user sharply boosts its Attack, Sp. Atk, and Speed stats by using its own HP.
+The user sharply boosts its Attack, Sp. Atk, and Speed stats by using its own HP.
 The user flashes a light that cuts the target's accuracy. It can also be used to illuminate caves.
 The user flashes a light that cuts the target's accuracy. It can also be used to illuminate caves.
 The user takes a deep breath and focuses so that critical hits land more easily.
@@ -1038,6 +1148,8 @@ Any Pokémon that hears this song faints in three turns, unless it switches out 
 Any Pokémon that hears this song faints in three turns, unless it switches out of battle.
 The user and target become friends. The target loses its will to fight, lowering its Attack stat.
 The user and target become friends. The target loses its will to fight, lowering its Attack stat.
+The user swaps its Attack and Defense stats.
+The user swaps its Attack and Defense stats.
 The user hypnotizes itself into copying any stat change made by the target.
 The user hypnotizes itself into copying any stat change made by the target.
 Restoring its own cells, the user restores its own HP by half of its max HP.
@@ -1048,6 +1160,8 @@ The user reflects the target's type, making it the same type as the target.
 The user reflects the target's type, making it the same type as the target.
 The user rests to cure itself of a poisoning, burn, or paralysis.
 The user rests to cure itself of a poisoning, burn, or paralysis.
+The user bestows a loving blessing, reviving a fainted party Pokémon to half of its max HP.
+The user bestows a loving blessing, reviving a fainted party Pokémon to half of its max HP.
 The target is scared off and replaced by another Pokémon in its party. In the wild, the battle ends.
 The target is scared off and replaced by another Pokémon in its party. In the wild, the battle ends.
 The user creates a protective field that prevents status problems for five turns.
@@ -1058,6 +1172,8 @@ An earsplitting screech harshly reduces the target's Defense stat.
 An earsplitting screech harshly reduces the target's Defense stat.
 The user reduces its polygon count to make itself more jagged, raising the Attack stat.
 The user reduces its polygon count to make itself more jagged, raising the Attack stat.
+The user creates a substitute using its own HP and then switches places with a party Pokémon.
+The user creates a substitute using its own HP and then switches places with a party Pokémon.
 The user breaks its shell, lowering its defenses but sharply raising attacking and Speed stats.
 The user breaks its shell, lowering its defenses but sharply raising attacking and Speed stats.
 The user's mysterious psychic wave changes the target's Ability to Simple.
@@ -1102,6 +1218,8 @@ The user performs a wobbly dance that confuses the Pokémon around it.
 The user performs a wobbly dance that confuses the Pokémon around it.
 The user tickles the target into laughing, reducing its Attack and Defense stats.
 The user tickles the target into laughing, reducing its Attack and Defense stats.
+The user removes all entry hazards and Substitutes. This also boosts the user's Attack and Speed.
+The user removes all entry hazards and Substitutes. This also boosts the user's Attack and Speed.
 The user transforms into a copy of the target right down to having the same move set.
 The user transforms into a copy of the target right down to having the same move set.
 The foe is blown away, to be replaced by another Pokémon in its party. In the wild, the battle ends.
@@ -1116,18 +1234,24 @@ The user lets out a damaging belch at the target. The user must eat a held Berry
 The user lets out a damaging belch at the target. The user must eat a held Berry to use this move.
 The user shoots filthy garbage at the target to attack. It may also poison the target.
 The user shoots filthy garbage at the target to attack. It may also poison the target.
+The user wraps the target in a toxic, corrosive chain. This may also badly poison the target.
+The user wraps the target in a toxic, corrosive chain. This may also badly poison the target.
 It swamps the area around the user with a giant sludge wave. It may also poison those hit.
 It swamps the area around the user with a giant sludge wave. It may also poison those hit.
 Inflicts physical or special damage, whichever will be more effective. May also poison the target.
 Inflicts physical or special damage, whichever will be more effective. May also poison the target.
 Unsanitary sludge is hurled at the target. It may also poison the target.
 Unsanitary sludge is hurled at the target. It may also poison the target.
+The user lashes out with ruinous claws. This may also leave the target poisoned, paralyzed or asleep.
+The user lashes out with ruinous claws. This may also leave the target poisoned, paralyzed or asleep.
 The target is stabbed with a tentacle or arm seeped with poison. It may also poison the target.
 The target is stabbed with a tentacle or arm seeped with poison. It may also poison the target.
 A slashing attack with a poisonous blade that may also poison the foe. Critical hits land more easily.
 A slashing attack with a poisonous blade that may also poison the foe. Critical hits land more easily.
 The user drenches the foe in a special poisonous liquid. Its power doubles if the target is poisoned.
 The user drenches the foe in a special poisonous liquid. Its power doubles if the target is poisoned.
+The user fires toxic barbs that may poison the target. Power is doubled if the target is already poisoned.
+The user fires toxic barbs that may poison the target. Power is doubled if the target is already poisoned.
 The user attacks by throwing a clump of special mud. All status changes are returned to normal.
 The user attacks by throwing a clump of special mud. All status changes are returned to normal.
 The user bites the target with toxic fangs. It may also leave the target badly poisoned.
@@ -1138,6 +1262,8 @@ The foe is attacked with a spray of harsh acid. It may also lower the target's S
 The foe is attacked with a spray of harsh acid. It may also lower the target's Sp. Def stat.
 The user spits fluid that works to melt the target. This harshly reduces the target's Sp. Def stat.
 The user spits fluid that works to melt the target. This harshly reduces the target's Sp. Def stat.
+Performs a spin that eliminates certain traps and hazards. This also poisons opposing Pokémon.
+Performs a spin that eliminates certain traps and hazards. This also poisons opposing Pokémon.
 The target is attacked with a discharge of filthy gases. It may also poison the target.
 The target is attacked with a discharge of filthy gases. It may also poison the target.
 The user stabs the target with a poisonous stinger. This may also poison the target.
@@ -1188,26 +1314,40 @@ The user bites the target using psychic capabilities. This can also destroy Ligh
 The user bites the target using psychic capabilities. This can also destroy Light Screen and Reflect.
 The user attacks with tremendous psychic power. This also removes 3 PP from the target's last move.
 The user attacks with tremendous psychic power. This also removes 3 PP from the target's last move.
+The user slashes with aura-enriched wings, and boosts the user's Speed stat. High critical hit chance.
+The user slashes with aura-enriched wings, and boosts the user's Speed stat. High critical hit chance.
 The user attacks the target with psychic power. Powers up and hits all foes on Psychic Terrain.
 The user attacks the target with psychic power. Powers up and hits all foes on Psychic Terrain.
 The user attacks with an odd, unseeable power. It may also make the target flinch.
 The user attacks with an odd, unseeable power. It may also make the target flinch.
 Using a hyperspace hole, the user appears right next to the target and strikes. Skips protections.
 Using a hyperspace hole, the user appears right next to the target and strikes. Skips protections.
+The user attacks by unleashing mind-altering light. This also harshly lowers the target's Sp. Def.
+The user attacks by unleashing mind-altering light. This also harshly lowers the target's Sp. Def.
+The user rends the target with an ethereal blade. This move is stronger on Electric Terrain.
+The user rends the target with an ethereal blade. This move is stronger on Electric Terrain.
 The user focuses its willpower to its head and attacks the foe. It may also make the target flinch.
 The user focuses its willpower to its head and attacks the foe. It may also make the target flinch.
+The user attacks with unpleasant sound waves. For two turns, the target cannot recover HP.
+The user attacks with unpleasant sound waves. For two turns, the target cannot recover HP.
 The user lets loose a damaging burst of light. It may also reduce the target's Sp. Def stat.
 The user lets loose a damaging burst of light. It may also reduce the target's Sp. Def stat.
 A mistlike flurry of down envelops and damages the target. It may also lower the target's Sp. Atk.
 A mistlike flurry of down envelops and damages the target. It may also lower the target's Sp. Atk.
+The user attacks by emitting a mysterious power. This also boosts the user's Sp. Atk stat.
+The user attacks by emitting a mysterious power. This also boosts the user's Sp. Atk stat.
 The user tears at the target with blades formed by psychic power. Critical hits land more easily.
 The user tears at the target with blades formed by psychic power. Critical hits land more easily.
+The user slams into the target cloaked in psychic energy. This also boosts the user's Defense stat.
+The user slams into the target cloaked in psychic energy. This also boosts the user's Defense stat.
 The target is attacked with a peculiar ray. It may also cause confusion.
 The target is attacked with a peculiar ray. It may also cause confusion.
 The user unleashes a vicious blow after its cute act makes the foe less wary. It may also cause flinching.
 The user unleashes a vicious blow after its cute act makes the foe less wary. It may also cause flinching.
 The target is hit by a weak telekinetic force. It may also leave the target confused.
 The target is hit by a weak telekinetic force. It may also leave the target confused.
+The user shoots mystical beams from its eyes to inflict damage. The target is hit twice in a row.
+The user shoots mystical beams from its eyes to inflict damage. The target is hit twice in a row.
 The user attacks with stored power. The more the user's stats are raised, the greater the damage.
 The user attacks with stored power. The more the user's stats are raised, the greater the damage.
 A retaliation move that counters any special attack, inflicting double the damage taken.
@@ -1218,6 +1358,8 @@ The user relaxes and lightens its body to move faster. It sharply boosts the Spe
 The user relaxes and lightens its body to move faster. It sharply boosts the Speed stat.
 The user teleports using a strange power and switches its place with one of its allies.
 The user teleports using a strange power and switches its place with one of its allies.
+The user uses a strange power to switch places with an ally. More likely to fail if used in succession.
+The user uses a strange power to switch places with an ally. More likely to fail if used in succession.
 The user temporarily empties its mind to forget its concerns. It sharply raises the user's Sp. Def stat.
 The user temporarily empties its mind to forget its concerns. It sharply raises the user's Sp. Def stat.
 The user throws up a sturdy wall that sharply raises its Defense stat.
@@ -1250,6 +1392,8 @@ The user distracts the target by bending a spoon. It lowers the target's accurac
 The user distracts the target by bending a spoon. It lowers the target's accuracy.
 A wondrous wall of light is put up to suppress damage from special attacks for five turns.
 A wondrous wall of light is put up to suppress damage from special attacks for five turns.
+The user receives a blessing from the moon, healing HP and status problems for itself and its allies.
+The user receives a blessing from the moon, healing HP and status problems for itself and its allies.
 The user faints. In return, the Pokémon taking its place will have its status and HP fully restored.
 The user faints. In return, the Pokémon taking its place will have its status and HP fully restored.
 A barrier reflects back to the target moves like Leech Seed and moves that damage status.
@@ -1282,6 +1426,8 @@ The user employs its psychic power to exchange Abilities with the target.
 The user employs its psychic power to exchange Abilities with the target.
 The user exchanges Speed stats with the target.
 The user exchanges Speed stats with the target.
+The user lifts its spirits, curing its own status conditions and boosting its Sp. Atk and Sp. Def stats.
+The user lifts its spirits, curing its own status conditions and boosting its Sp. Atk and Sp. Def stats.
 The user makes the target float with its psychic power. The target is easier to hit for three turns.
 The user makes the target float with its psychic power. The target is easier to hit for three turns.
 The user switches place with a party Pokémon. Also warps to the last Pokémon Center visited.
@@ -1302,10 +1448,14 @@ The user whips up a storm of diamonds to damage foes. This may also sharply rais
 The user whips up a storm of diamonds to damage foes. This may also sharply raise the user's Defense stat.
 The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio.
 The user stabs the foe with sharpened stones from below. It has a high critical-hit ratio.
+The user cleaves the target with the light accumulated atop its head. This move hits through protections.
+The user cleaves the target with the light accumulated atop its head. This move hits through protections.
 The user attacks with a ray of light that sparkles as if it were made of gemstones.
 The user attacks with a ray of light that sparkles as if it were made of gemstones.
 Large boulders are hurled at the foes to inflict damage. It may also make the targets flinch.
 Large boulders are hurled at the foes to inflict damage. It may also make the targets flinch.
+The user swings its stone axes at the target. It leaves stone splinters around the target.
+The user swings its stone axes at the target. It leaves stone splinters around the target.
 The user attacks with a prehistoric power. It may also raise all the user's stats at once.
 The user attacks with a prehistoric power. It may also raise all the user's stats at once.
 Boulders are hurled at the target. It also lowers the target's Speed by preventing its movement.
@@ -1316,6 +1466,8 @@ The user throws a stone or projectile to attack. A flying Pokémon will fall to 
 The user throws a stone or projectile to attack. A flying Pokémon will fall to the ground when hit.
 The user smashes into the target at high speed. This move always goes first.
 The user smashes into the target at high speed. This move always goes first.
+The user salt cures the target, inflicting damage every turn. Steel and Water types take more damage.
+The user salt cures the target, inflicting damage every turn. Steel and Water types take more damage.
 The user hurls hard rocks at the target. Two to five rocks are launched in quick succession.
 The user hurls hard rocks at the target. Two to five rocks are launched in quick succession.
 The user polishes its body to reduce drag. It can sharply raise the Speed stat.
@@ -1328,18 +1480,24 @@ Pours sticky tar over the target, lowering its Speed and making it weaker to Fir
 Pours sticky tar over the target, lowering its Speed and making it weaker to Fire-type moves.
 The user and its allies are protected from wide-ranging attacks for a turn. May fail if used in succession.
 The user and its allies are protected from wide-ranging attacks for a turn. May fail if used in succession.
+The user swings its whole body around to attack with its huge hammer. Can't be used twice in a row.
+The user swings its whole body around to attack with its huge hammer. Can't be used twice in a row.
 Two turns after this move is used, the user blasts the target with a concentrated bundle of light.
 Two turns after this move is used, the user blasts the target with a concentrated bundle of light.
 The user fires a beam of steel that it collected from its entire body. This also damages the user.
 The user fires a beam of steel that it collected from its entire body. This also damages the user.
 The user attacks while destroying the terrain. This move fails when the ground isn't a terrain.
 The user attacks while destroying the terrain. This move fails when the ground isn't a terrain.
+The user throws a mass of coins. This also lowers the user's Sp. Atk. The money is picked up afterwards.
+The user throws a mass of coins. This also lowers the user's Sp. Atk. The money is picked up afterwards.
 The user becomes a gigantic shield and slams into the target.
 The user becomes a gigantic shield and slams into the target.
 The user becomes a gigantic sword and cuts the target.
 The user becomes a gigantic sword and cuts the target.
 The target is slammed with a steel-hard tail. It may also lower the target's Defense stat.
 The target is slammed with a steel-hard tail. It may also lower the target's Defense stat.
+The user spins furiously by straining its legs. This also harshly lowers the user's Speed stat.
+The user spins furiously by straining its legs. This also harshly lowers the user's Speed stat.
 The user slams into the target with the force of a meteor. Can't be stopped by the target's Ability.
 The user slams into the target with the force of a meteor. Can't be stopped by the target's Ability.
 The target is hit with a hard punch fired like a meteor. It may also raise the user's Attack.
@@ -1364,6 +1522,8 @@ The user attacks by throwing two steel gears at its target.
 The user attacks by throwing two steel gears at its target.
 The target is raked with steel claws. It may also raise the user's Attack stat.
 The target is raked with steel claws. It may also raise the user's Attack stat.
+The user attacks by launching particle blades at the target twice in a row. This attack never misses.
+The user attacks by launching particle blades at the target twice in a row. This attack never misses.
 The user strikes the target with tough punches as fast as bullets. This move always goes first.
 The user strikes the target with tough punches as fast as bullets. This move always goes first.
 The user tackles the target with a high-speed spin. The slower the user, the greater the damage.
@@ -1382,12 +1542,16 @@ Protects itself from damage. It also harshly lowers the Attack of attackers that
 Protects itself from damage. It also harshly lowers the Attack of attackers that make contact.
 A horrible sound like scraping metal harshly reduces the target's Sp. Def stat.
 A horrible sound like scraping metal harshly reduces the target's Sp. Def stat.
+The user makes its skin as hard as an iron shield, sharply boosting its Defense stat.
+The user makes its skin as hard as an iron shield, sharply boosting its Defense stat.
 The user rotates its gears, raising its Attack and sharply raising its Speed.
 The user rotates its gears, raising its Attack and sharply raising its Speed.
 The target is hit with a watery blast. The user must rest on the next turn, however.
 The target is hit with a watery blast. The user must rest on the next turn, however.
 The user spouts water to damage the foe. The lower the user's HP, the less powerful it becomes.
 The user spouts water to damage the foe. The lower the user's HP, the less powerful it becomes.
+The user shrouds itself in water and slams with its whole body. This also hurts the user quite a lot.
+The user shrouds itself in water and slams with its whole body. This also hurts the user quite a lot.
 The target is blasted by a huge volume of water launched under great pressure.
 The target is blasted by a huge volume of water launched under great pressure.
 The user attacks opposing Pokémon with countless beams of light that glow a deep and brilliant blue.
@@ -1408,8 +1572,12 @@ The user rends the target with its hard gills. Power doubles if the user moves f
 The user rends the target with its hard gills. Power doubles if the user moves first.
 The user slams into the target using a full-force blast of water. May lower the target's Defense.
 The user slams into the target using a full-force blast of water. May lower the target's Defense.
+The user attacks the target using light and fluid dance steps. This also boosts the user's Speed stat.
+The user attacks the target using light and fluid dance steps. This also boosts the user's Speed stat.
 Diving on the first turn, the user rises and hits on the next turn. It can be used to dive in the ocean.
 Diving on the first turn, the user rises and hits on the next turn. It can be used to dive in the ocean.
+The user blasts the target with boiling-hot water. This move is stronger in harsh sunlight.
+The user blasts the target with boiling-hot water. This move is stronger in harsh sunlight.
 The user shoots boiling hot water at its target. It may also leave the target with a burn.
 The user shoots boiling hot water at its target. It may also leave the target with a burn.
 The user ignores any effects that redirect moves, allowing this move to hit the chosen target.
@@ -1420,14 +1588,20 @@ The user charges at the target and may make it flinch. It can also be used to cl
 The user charges at the target and may make it flinch. It can also be used to climb a waterfall.
 The user cuts the foe with sharp shells. It may also lower the target's Defense stat.
 The user cuts the foe with sharp shells. It may also lower the target's Defense stat.
+The user cuts with a blade of pressurized water. This move is more likely to be a critical hit.
+The user cuts with a blade of pressurized water. This move is more likely to be a critical hit.
 If the target's HP is down to about half, this attack will hit with double the power.
 If the target's HP is down to about half, this attack will hit with double the power.
 A spray of bubbles is forcefully ejected at the target. It may also lower its Speed stat.
 A spray of bubbles is forcefully ejected at the target. It may also lower its Speed stat.
 The user attacks by spraying ink in the foe's face or eyes. It may also lower the target's accuracy.
 The user attacks by spraying ink in the foe's face or eyes. It may also lower the target's accuracy.
+The user summons a torrent around its fist and punches at blinding speed. This always goes first.
+The user summons a torrent around its fist and punches at blinding speed. This always goes first.
 The user attacks the target with a pulsing blast of water. It may also confuse the target.
 The user attacks the target with a pulsing blast of water. It may also confuse the target.
+The user showers the target with power-sapping cold water. This also lowers the target's Attack stat.
+The user showers the target with power-sapping cold water. This also lowers the target's Attack stat.
 A spray of countless bubbles is jetted at the opposing team. It may also lower the targets' Speed stats.
 A spray of countless bubbles is jetted at the opposing team. It may also lower the targets' Speed stats.
 The target is blasted with a forceful shot of water.
@@ -1436,6 +1610,8 @@ The target is clamped and squeezed by the user's very thick and sturdy shell for
 The target is clamped and squeezed by the user's very thick and sturdy shell for four to five turns.
 Traps foes in a violent swirling whirlpool for four to five turns.
 Traps foes in a violent swirling whirlpool for four to five turns.
+The user performs a perfectly timed triple dive, splashing the target three times in a row.
+The user performs a perfectly timed triple dive, splashing the target three times in a row.
 Hits three times in a row with mastery of the Water style. This attack always deals critical hits.
 Hits three times in a row with mastery of the Water style. This attack always deals critical hits.
 The user hits the target with throwing stars 2-5 times in a row. This move always goes first.

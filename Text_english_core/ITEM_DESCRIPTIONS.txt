@@ -54,6 +54,22 @@ A cuff made from woven-together Galarica Twigs. Giving it to a Galarian Slowpoke
 A cuff made from woven-together Galarica Twigs. Giving it to a Galarian Slowpoke would make it very happy.
 A wreath made from woven-together Galarica Twigs. A Galarian Slowpoke wearing this would be very happy.
 A wreath made from woven-together Galarica Twigs. A Galarian Slowpoke wearing this would be very happy.
+A glassy black stone that produces a sharp cutting edge when split. It's loved by a certain Pokémon.
+A glassy black stone that produces a sharp cutting edge when split. It's loved by a certain Pokémon.
+A block of muddy material that can be used as fuel when it is dried. It's loved by a certain Pokémon.
+A block of muddy material that can be used as fuel when it is dried. It's loved by a certain Pokémon.
+A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally syrupy.
+A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally syrupy.
+A peculiar cracked teacup that can make a certain species of Pokémon evolve.
+A peculiar cracked teacup that can make a certain species of Pokémon evolve.
+A peculiar chipped teacup that can make a certain species of Pokémon evolve.
+A peculiar chipped teacup that can make a certain species of Pokémon evolve.
+A peculiar metal that can make certain species of Pokémon evolve. It is composed of many layers.
+A peculiar metal that can make certain species of Pokémon evolve. It is composed of many layers.
+A peculiar set of armor that can make a certain species of Pokémon evolve. Malicious will lurks within it.
+A peculiar set of armor that can make a certain species of Pokémon evolve. Malicious will lurks within it.
+A peculiar set of armor that can make a certain species of Pokémon evolve. Auspicious wishes live within it.
+A peculiar set of armor that can make a certain species of Pokémon evolve. Auspicious wishes live within it.
 A red Apricorn. It assails your nostrils.
 A red Apricorn. It assails your nostrils.
 A yellow Apricorn. It has an invigorating scent.
@@ -140,6 +156,10 @@ A stone figure made in a civilization about 3,000 years ago. A maniac will buy i
 A stone figure made in a civilization about 3,000 years ago. A maniac will buy it for a high price.
 A crown made in a civilization about 3,000 years ago. A maniac will buy it for a high price.
 A crown made in a civilization about 3,000 years ago. A maniac will buy it for a high price.
+A small and rare bamboo shoot. It's quite popular with a certain class of gourmands.
+A small and rare bamboo shoot. It's quite popular with a certain class of gourmands.
+A large and rare bamboo shoot. It's extremely popular with a certain class of gourmands.
+A large and rare bamboo shoot. It's extremely popular with a certain class of gourmands.
 A fertilizer to be spread on soft soil in regions where Berries are grown. A maniac will buy it for a high price.
 A fertilizer to be spread on soft soil in regions where Berries are grown. A maniac will buy it for a high price.
 Pure salt that can be discovered deep inside the Shoal Cave. A maniac will buy it for a high price.
@@ -178,6 +198,12 @@ These boots prevent the effects of traps set on the battlefield.
 These boots prevent the effects of traps set on the battlefield.
 An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of rain and sun.
 An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of rain and sun.
+An item to be held by a Pokémon. This cute shield protects the holder from having its Ability changed by others.
+An item to be held by a Pokémon. This cute shield protects the holder from having its Ability changed by others.
+An item to be held by a Pokémon. It protects the holder from having its stats lowered by other Pokémon.
+An item to be held by a Pokémon. It protects the holder from having its stats lowered by other Pokémon.
+An item to be held by a Pokémon. This hooded cloak protects the holder from moves' additional effects.
+An item to be held by a Pokémon. This hooded cloak protects the holder from moves' additional effects.
 If the holder is hit by an attack, it will switch with another Pokémon in your party.
 If the holder is hit by an attack, it will switch with another Pokémon in your party.
 An item to be held by a Pokémon. When the holder's stats are lowered, it will be switched out of battle.
@@ -218,6 +244,8 @@ An item to be held by a Pokémon. Protective moves like Light Screen and Reflect
 An item to be held by a Pokémon. Protective moves like Light Screen and Reflect will be effective longer.
 A Pokémon held item that extends the duration of multiturn attacks like Bind and Wrap.
 A Pokémon held item that extends the duration of multiturn attacks like Bind and Wrap.
+An item to be held by a Pokémon. This dice ensures that the holder's multistrike moves hit more times.
+An item to be held by a Pokémon. This dice ensures that the holder's multistrike moves hit more times.
 A band that increases the power of binding moves when held.
 A band that increases the power of binding moves when held.
 A Pokémon held item that boosts the power of HP-stealing moves to let the holder recover more HP.
@@ -234,6 +262,8 @@ An item to be held by a Pokémon. It restores any lowered stat in battle. It can
 An item to be held by a Pokémon. It restores any lowered stat in battle. It can be used only once.
 A single-use item to be held by a Pokémon. It allows the immediate use of a move that charges up first.
 A single-use item to be held by a Pokémon. It allows the immediate use of a move that charges up first.
+An item to be held by a Pokémon. It allows the holder to copy an opponent's stat increases once.
+An item to be held by a Pokémon. It allows the holder to copy an opponent's stat increases once.
 A consumable bulb. If the holder is hit by a Water-type move, its Sp. Atk will rise.
 A consumable bulb. If the holder is hit by a Water-type move, its Sp. Atk will rise.
 A consumable battery. If the holder is hit by an Electric-type move, its Attack will rise.
@@ -250,6 +280,8 @@ Raises Sp. Atk when a Pokémon uses a sound-based move.
 Raises Sp. Atk when a Pokémon uses a sound-based move.
 An item to be held by a Pokémon. It boosts Speed when intimidated. It can be used only once.
 An item to be held by a Pokémon. It boosts Speed when intimidated. It can be used only once.
+An item to be held by Pokémon with certain Abilities. Its energy boosts the strength of the Pokémon.
+An item to be held by Pokémon with certain Abilities. Its energy boosts the strength of the Pokémon.
 An item to be held by a Pokémon. Lowers Speed when Trick Room takes effect.
 An item to be held by a Pokémon. Lowers Speed when Trick Room takes effect.
 An item to be held by a Pokémon. It boosts Defense on Electric Terrain. It can only be used once.
@@ -266,6 +298,8 @@ An item to be held by a Pokémon. It is a well-worn belt that slightly boosts th
 An item to be held by a Pokémon. It is a well-worn belt that slightly boosts the power of supereffective moves.
 A Pokémon held item that boosts a move used consecutively. Its effect is reset if another move is used.
 A Pokémon held item that boosts a move used consecutively. Its effect is reset if another move is used.
+An item to be held by a Pokémon. It powers up the holder's punching moves and prevents direct contact.
+An item to be held by a Pokémon. It powers up the holder's punching moves and prevents direct contact.
 An item to be held by a Pokémon. It is a headband that slightly boosts the power of physical moves.
 An item to be held by a Pokémon. It is a headband that slightly boosts the power of physical moves.
 An item to be held by a Pokémon. It is a thick pair of glasses that slightly boosts the power of special moves.
@@ -358,6 +392,8 @@ An item to be held by a Pokémon. It is a shady-looking pair of glasses that boo
 An item to be held by a Pokémon. It is a shady-looking pair of glasses that boosts Dark-type moves.
 An item to be held by a Pokémon. It is a special metallic film that ups the power of Steel-type moves.
 An item to be held by a Pokémon. It is a special metallic film that ups the power of Steel-type moves.
+An item to be held by a Pokémon. This gleaming feather boosts the power of the holder's Fairy-type moves.
+An item to be held by a Pokémon. This gleaming feather boosts the power of the holder's Fairy-type moves.
 An item to be held by a Pokémon. It is a sumptuous scarf that boosts the power of Normal-type moves.
 An item to be held by a Pokémon. It is a sumptuous scarf that boosts the power of Normal-type moves.
 An item to be held by a Pokémon. It is a stone tablet that boosts the power of Fire-type moves.
@@ -454,10 +490,22 @@ A beautifully glowing orb to be held by Palkia. It boosts the power of Dragon- a
 A beautifully glowing orb to be held by Palkia. It boosts the power of Dragon- and Water-type moves.
 A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.
 A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.
+A large, glowing gem to be held by Dialga. It wells with power and allows the Pokémon to change form.
+A large, glowing gem to be held by Dialga. It wells with power and allows the Pokémon to change form.
+A large, glowing orb to be held by Palkia. It wells with power and allows the Pokémon to change form.
+A large, glowing orb to be held by Palkia. It wells with power and allows the Pokémon to change form.
+A large, glowing gem to be held by Giratina. It wells with power and allows the Pokémon to change form.
+A large, glowing gem to be held by Giratina. It wells with power and allows the Pokémon to change form.
 It is said that a hero used this sword to halt a disaster in ancient times. But it's grown rusty and worn.
 It is said that a hero used this sword to halt a disaster in ancient times. But it's grown rusty and worn.
 It is said that a hero used this shield to halt a disaster in ancient times. But it's grown rusty and worn.
 It is said that a hero used this shield to halt a disaster in ancient times. But it's grown rusty and worn.
+An item to be held by Ogerpon. This carved wooden mask allows Ogerpon to wield the Water type in battle.
+An item to be held by Ogerpon. This carved wooden mask allows Ogerpon to wield the Water type in battle.
+An item to be held by Ogerpon. This carved wooden mask allows Ogerpon to wield the Fire type in battle.
+An item to be held by Ogerpon. This carved wooden mask allows Ogerpon to wield the Fire type in battle.
+An item to be held by Ogerpon. This carved wooden mask allows Ogerpon to wield the Rock type in battle.
+An item to be held by Ogerpon. This carved wooden mask allows Ogerpon to wield the Rock type in battle.
 A cassette to be held by Genesect. It changes Techno Blast to a Water-type move.
 A cassette to be held by Genesect. It changes Techno Blast to a Water-type move.
 A cassette to be held by Genesect. It changes Techno Blast to an Electric-type move.
@@ -734,6 +782,20 @@ An item for use on a Pokémon. It slightly increases the base Sp. Def stat of a 
 An item for use on a Pokémon. It slightly increases the base Sp. Def stat of a single Pokémon.
 An item for use on a Pokémon. It slightly increases the base Speed stat of a single Pokémon.
 An item for use on a Pokémon. It slightly increases the base Speed stat of a single Pokémon.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's HP stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's HP stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Attack stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Attack stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Defense stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Defense stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Atk stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Atk stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Def stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Def stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Speed stat.
+A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Speed stat.
+A mochi cake with Berries kneaded into its dough. It causes a Pokémon to lose all its base points.
+A mochi cake with Berries kneaded into its dough. It causes a Pokémon to lose all its base points.
 When a Pokémon smells this mint, its Attack will grow more easily, but its Defense will grow more slowly.
 When a Pokémon smells this mint, its Attack will grow more easily, but its Defense will grow more slowly.
 When a Pokémon smells this mint, its Attack will grow more easily, but its Sp. Atk will grow more slowly.
@@ -1316,6 +1378,12 @@ Reins that people presented to the king. They unite Calyrex with its beloved ste
 Reins that people presented to the king. They unite Calyrex with its beloved steed.
 Reins that people presented to the king. They separate Calyrex and its beloved steed.
 Reins that people presented to the king. They separate Calyrex and its beloved steed.
+A slightly warm rock that fell to earth from space. It allows a certain species of Pokémon to change forms.
+A slightly warm rock that fell to earth from space. It allows a certain species of Pokémon to change forms.
+A scroll containing the true secrets of the path of darkness. It can evolve a certain species of Pokémon.
+A scroll containing the true secrets of the path of darkness. It can evolve a certain species of Pokémon.
+A scroll containing the true secrets of the path of water. It can evolve a certain species of Pokémon.
+A scroll containing the true secrets of the path of water. It can evolve a certain species of Pokémon.
 An oval charm said to increase the chance of Eggs being found at the Day Care.
 An oval charm said to increase the chance of Eggs being found at the Day Care.
 A shiny charm said to increase the chance of finding a Shiny Pokémon.
@@ -1328,7 +1396,7 @@ This ring contains an untold power that somehow enables Pokémon carrying Mega S
 This ring contains an untold power that somehow enables Pokémon carrying Mega Stones to Mega Evolve.
 A device that allows you to access the Pokémon storage system. There are some places where it won't work.
 A device that allows you to access the Pokémon storage system. There are some places where it won't work.
-A ticket required to board the ship to Doxy Island. It glows beautifully.
-A ticket required to board the ship to Doxy Island. It glows beautifully.
+A ticket required to board the ship to Berth Island. It glows beautifully.
+A ticket required to board the ship to Berth Island. It glows beautifully.
 A faded sea chart that shows the way to a certain island.
 A faded sea chart that shows the way to a certain island.

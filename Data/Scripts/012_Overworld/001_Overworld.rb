@@ -97,7 +97,7 @@ EventHandlers.add(:on_player_step_taken_can_transfer, :poison_party,
       pkmn.hp -= 1 if pkmn.hp > 1 || Settings::POISON_FAINT_IN_FIELD
       if pkmn.hp == 1 && !Settings::POISON_FAINT_IN_FIELD
         pkmn.status = :NONE
-        pbMessage(_INTL("{1} survived the poisoning.\\nThe poison faded away!", pkmn.name))
+        pbMessage(_INTL("{1} survived the poisoning.\nThe poison faded away!", pkmn.name))
         next
       elsif pkmn.hp == 0
         pkmn.changeHappiness("faint")
@@ -705,7 +705,7 @@ def pbItemBall(item, quantity = 1)
     else
       pbMessage("\\me[#{meName}]" + _INTL("You found a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
     end
-    pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+    pbMessage(_INTL("You put the {1} in\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
                     itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
     return true
   end
@@ -755,7 +755,7 @@ def pbReceiveItem(item, quantity = 1)
     pbMessage("\\me[#{meName}]" + _INTL("You obtained a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
   end
   if $bag.add(item, quantity)   # If item can be added
-    pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+    pbMessage(_INTL("You put the {1} in\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
                     itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
     return true
   end
@@ -771,7 +771,7 @@ def pbBuyPrize(item, quantity = 1)
   item_name = (quantity > 1) ? item.portion_name_plural : item.portion_name
   pocket = item.pocket
   return false if !$bag.add(item, quantity)
-  pbMessage("\\CN" + _INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+  pbMessage("\\CN" + _INTL("You put the {1} in\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
                            item_name, pocket, PokemonBag.pocket_names[pocket - 1]))
   return true
 end

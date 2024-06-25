@@ -56,6 +56,22 @@ Galarica Cuff
 Galarica Cuff
 Galarica Wreath
 Galarica Wreath
+Black Augurite
+Black Augurite
+Peat Block
+Peat Block
+Syrupy Apple
+Syrupy Apple
+Unremarkable Teacup
+Unremarkable Teacup
+Masterpiece Teacup
+Masterpiece Teacup
+Metal Alloy
+Metal Alloy
+Malicious Armor
+Malicious Armor
+Auspicious Armor
+Auspicious Armor
 Red Apricorn
 Red Apricorn
 Yellow Apricorn
@@ -164,6 +180,10 @@ Relic Statue
 Relic Statue
 Relic Crown
 Relic Crown
+Tiny Bamboo Shoot
+Tiny Bamboo Shoot
+Big Bamboo Shoot
+Big Bamboo Shoot
 Growth Mulch
 Growth Mulch
 Damp Mulch
@@ -210,6 +230,12 @@ Heavy-Duty Boots
 Heavy-Duty Boots
 Utility Umbrella
 Utility Umbrella
+Ability Shield
+Ability Shield
+Clear Amulet
+Clear Amulet
+Covert Cloak
+Covert Cloak
 Eject Button
 Eject Button
 Eject Pack
@@ -250,6 +276,8 @@ Light Clay
 Light Clay
 Grip Claw
 Grip Claw
+Loaded Dice
+Loaded Dice
 Binding Band
 Binding Band
 Big Root
@@ -266,6 +294,8 @@ White Herb
 White Herb
 Power Herb
 Power Herb
+Mirror Herb
+Mirror Herb
 Absorb Bulb
 Absorb Bulb
 Cell Battery
@@ -282,6 +312,8 @@ Throat Spray
 Throat Spray
 Adrenaline Orb
 Adrenaline Orb
+Booster Energy
+Booster Energy
 Room Service
 Room Service
 Electric Seed
@@ -298,6 +330,8 @@ Expert Belt
 Expert Belt
 Metronome
 Metronome
+Punching Glove
+Punching Glove
 Muscle Band
 Muscle Band
 Wise Glasses
@@ -404,6 +438,8 @@ BlackGlasses
 BlackGlasses
 Metal Coat
 Metal Coat
+Fairy Feather
+Fairy Feather
 Silk Scarf
 Silk Scarf
 Flame Plate
@@ -506,10 +542,22 @@ Lustrous Orb
 Lustrous Orb
 Griseous Orb
 Griseous Orb
+Adamant Crystal
+Adamant Crystal
+Lustrous Globe
+Lustrous Globe
+Griseous Core
+Griseous Core
 Rusted Sword
 Rusted Sword
 Rusted Shield
 Rusted Shield
+Wellspring Mask
+Wellspring Mask
+Hearthflame Mask
+Hearthflame Mask
+Cornerstone Mask
+Cornerstone Mask
 Douse Drive
 Douse Drive
 Shock Drive
@@ -810,6 +858,20 @@ Swift Feather
 Swift Feather
 Swift Wing
 Swift Wing
+Health Mochi
+Health Mochi
+Muscle Mochi
+Muscle Mochi
+Resist Mochi
+Resist Mochi
+Genius Mochi
+Genius Mochi
+Clever Mochi
+Clever Mochi
+Swift Mochi
+Swift Mochi
+Fresh-Start Mochi
+Fresh-Start Mochi
 Lonely Mint
 Lonely Mint
 Adamant Mint
@@ -1444,6 +1506,12 @@ N-Lunarizer
 N-Lunarizer
 Reins of Unity
 Reins of Unity
+Meteorite
+Meteorite
+Scroll of Darkness
+Scroll of Darkness
+Scroll of Waters
+Scroll of Waters
 Oval Charm
 Oval Charm
 Shiny Charm
@@ -1456,8 +1524,6 @@ Mega Ring
 Mega Ring
 Pokémon Box Link
 Pokémon Box Link
-Pokémon Box
-Pokémon Box
 Aurora Ticket
 Aurora Ticket
 Old Sea Map

@@ -328,7 +328,7 @@ def pbDebugDayCare
         msg = _INTL("Cost: ${1}", slot.cost)
         if pkmn.level < GameData::GrowthRate.max_level
           end_exp = pkmn.growth_rate.minimum_exp_for_level(pkmn.level + 1)
-          msg += "\\n" + _INTL("Steps to next level: {1}", end_exp - pkmn.exp)
+          msg += "\n" + _INTL("Steps to next level: {1}", end_exp - pkmn.exp)
         end
         # Show level change and cost
         case pbMessage("\\ts[]" + msg,

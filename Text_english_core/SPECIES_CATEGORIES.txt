@@ -1292,13 +1292,175 @@ Swift Horse
 Swift Horse
 King
 King
+Axe
+Axe
+Peat
+Peat
+Big Fish
+Big Fish
+Free Climb
+Free Climb
+Pin Cluster
+Pin Cluster
+Love-Hate
+Love-Hate
+Grass Cat
+Grass Cat
+Magician
+Magician
+Fire Croc
+Fire Croc
+Singer
+Singer
+Duckling
+Duckling
+Practicing
+Practicing
+Dancer
+Dancer
+Hog
+Hog
+String Ball
+String Ball
+Grasshopper
+Grasshopper
+Hands-On
+Hands-On
+Couple
+Couple
+Family
+Family
+Olive
+Olive
+Parrot
+Parrot
+Rock Salt
+Rock Salt
+Fire Child
+Fire Child
+Fire Warrior
+Fire Warrior
+Fire Blades
+Fire Blades
+EleTadpole
+EleTadpole
+EleFrog
+EleFrog
+Storm Petrel
+Storm Petrel
+Frigatebird
+Frigatebird
+Rascal
+Rascal
+Boss
+Boss
+Toxic Mouse
+Toxic Mouse
+Toxic Monkey
+Toxic Monkey
+Tumbleweed
+Tumbleweed
+Woodear
+Woodear
+Ambush
+Ambush
+Spicy Pepper
+Spicy Pepper
+Rolling
+Rolling
+Frill
+Frill
+Ostrich
+Ostrich
+Metalsmith
+Metalsmith
+Hammer
+Hammer
+Garden Eel
+Garden Eel
+Item Drop
+Item Drop
+Dolphin
+Dolphin
+Single-Cyl
+Single-Cyl
+Multi-Cyl
+Multi-Cyl
+Earthworm
+Earthworm
+Ghost Dog
+Ghost Dog
+Synchronize
+Synchronize
+Terra Whale
+Terra Whale
+Jettison
+Jettison
+Big Catfish
+Big Catfish
+Mimicry
+Mimicry
+Rage Monkey
+Rage Monkey
+Spiny Fish
+Spiny Fish
+Big Blade
+Big Blade
+Paradox
+Paradox
+Ice Fin
+Ice Fin
+Ice Dragon
+Ice Dragon
+Coin Chest
+Coin Chest
+Coin Entity
+Coin Entity
+Ruinous
+Ruinous
+Candy Apple
+Candy Apple
+Matcha
+Matcha
+Retainer
+Retainer
+Mask
+Mask
+Apple Hydra
+Apple Hydra
+Tera
+Tera
+Subjugation
+Subjugation
 Unique Horn
 Unique Horn
+Sphere
+Sphere
 Strong Legs
 Strong Legs
 Malevolent
 Malevolent
+Ghost Flame
+Ghost Flame
+Poison Fish
+Poison Fish
 Hexpert
 Hexpert
+Spinning
+Spinning
+Mellow
+Mellow
+Spiteful Fox
+Spiteful Fox
+Baneful Fox
+Baneful Fox
+Battle Cry
+Battle Cry
+Shell Bunker
+Shell Bunker
 High King
 High King
+Hero
+Hero
+Coin Hunter
+Coin Hunter

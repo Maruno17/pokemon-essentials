@@ -217,9 +217,9 @@ module Translator
       ret.gsub!(/\r/, "<<r>>")
       ret.gsub!(/\n/, "<<n>>")
       ret.gsub!(/\t/, "<<t>>")
-      ret.gsub!(/\[/, "<<[>>")
-      ret.gsub!(/\]/, "<<]>>")
       ret.gsub!(/\x01/, "<<1>>")
+      ret.gsub!(/^\[/, "<<[>>")
+      ret.gsub!(/^\]/, "<<]>>")
       return ret
     end
     return value
@@ -228,12 +228,12 @@ module Translator
   def denormalize_value(value)
     if value[/<<[rnt1\[\]]>>/]
       ret = value.dup
-      ret.gsub!(/<<1>>/, "\1")
       ret.gsub!(/<<r>>/, "\r")
       ret.gsub!(/<<n>>/, "\n")
+      ret.gsub!(/<<t>>/, "\t")
+      ret.gsub!(/<<1>>/, "\1")
       ret.gsub!(/<<\[>>/, "[")
       ret.gsub!(/<<\]>>/, "]")
-      ret.gsub!(/<<t>>/, "\t")
       return ret
     end
     return value

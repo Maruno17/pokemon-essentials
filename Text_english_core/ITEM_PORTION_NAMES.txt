@@ -4,6 +4,14 @@
 [ITEM_PORTION_NAMES]
 jar of Honey
 jar of Honey
+piece of Black Augurite
+piece of Black Augurite
+hunk of Metal Alloy
+hunk of Metal Alloy
+set of Malicious Armor
+set of Malicious Armor
+set of Auspicious Armor
+set of Auspicious Armor
 bag of Stardust
 bag of Stardust
 Relic Copper coin
@@ -44,6 +52,8 @@ pair of Choice Specs
 pair of Choice Specs
 lump of Light Clay
 lump of Light Clay
+set of Loaded Dice
+set of Loaded Dice
 blob of Black Sludge
 blob of Black Sludge
 serving of Leftovers
@@ -52,6 +62,8 @@ clump of Luminous Moss
 clump of Luminous Moss
 bottle of Throat Spray
 bottle of Throat Spray
+capsule of Booster Energy
+capsule of Booster Energy
 voucher for Room Service
 voucher for Room Service
 pair of Wise Glasses

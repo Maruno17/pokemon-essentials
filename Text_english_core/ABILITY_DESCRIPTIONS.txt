@@ -506,3 +506,87 @@ Combines Unnerve and Chilling Neigh Abilities.
 Combines Unnerve and Chilling Neigh Abilities.
 Combines Unnerve and Grim Neigh Abilities.
 Combines Unnerve and Grim Neigh Abilities.
+When the Pokémon is hit, creates Grassy Terrain.
+When the Pokémon is hit, creates Grassy Terrain.
+Raises Attack when hit by a Fire move. Can't be burned.
+Raises Attack when hit by a Fire move. Can't be burned.
+Lowers defences and ups offences/Speed at half HP.
+Lowers defences and ups offences/Speed at half HP.
+Immune to status problems and resists Ghost damage.
+Immune to status problems and resists Ghost damage.
+Sharply boosts Defense when hit by Fire moves.
+Sharply boosts Defense when hit by Fire moves.
+Boosts Attack if hit or affected by a wind move.
+Boosts Attack if hit or affected by a wind move.
+Can't be forced to switch out. Intimidate ups Attack.
+Can't be forced to switch out. Intimidate ups Attack.
+Powers up Rock-type moves.
+Powers up Rock-type moves.
+Powers up an Electric move if hit by a wind move.
+Powers up an Electric move if hit by a wind move.
+Transforms into its Hero Form when it switches out.
+Transforms into its Hero Form when it switches out.
+On entering battle, enters an ally Dodonzo's mouth.
+On entering battle, enters an ally Dodonzo's mouth.
+Powers up the next Electric move when it is hit.
+Powers up the next Electric move when it is hit.
+Boosts the highest stat in sun or with Booster Energy.
+Boosts the highest stat in sun or with Booster Energy.
+Boosts the highest stat on Electric Terrain.
+Boosts the highest stat on Electric Terrain.
+Full immunity to other Pokémon's status moves.
+Full immunity to other Pokémon's status moves.
+Lowers the Sp. Atk of all Pokémon except itself.
+Lowers the Sp. Atk of all Pokémon except itself.
+Lowers the Defense of all Pokémon except itself.
+Lowers the Defense of all Pokémon except itself.
+Lowers the Attack of all Pokémon except itself.
+Lowers the Attack of all Pokémon except itself.
+Lowers the Sp. Def of all Pokémon except itself.
+Lowers the Sp. Def of all Pokémon except itself.
+Causes harsh sunlight and boosts Attack in sunlight.
+Causes harsh sunlight and boosts Attack in sunlight.
+Creates Electric Terrain and ups Sp. Atk stat on it.
+Creates Electric Terrain and ups Sp. Atk stat on it.
+Copies boosts when an opponent's stat raises.
+Copies boosts when an opponent's stat raises.
+After consuming a Berry, eats it again next turn.
+After consuming a Berry, eats it again next turn.
+Powers up slicing moves.
+Powers up slicing moves.
+Raises Attack and Sp. Atk for each defeated ally.
+Raises Attack and Sp. Atk for each defeated ally.
+On entering battle, copies an ally's stat changes.
+On entering battle, copies an ally's stat changes.
+Scatters poison spikes when hit by physical moves.
+Scatters poison spikes when hit by physical moves.
+Prevents opponents from using priority moves.
+Prevents opponents from using priority moves.
+Restores HP when hit by a Ground-type move.
+Restores HP when hit by a Ground-type move.
+Status moves ignore foe Abilities by acting slowly.
+Status moves ignore foe Abilities by acting slowly.
+On entering battle, the ally restores a little HP.
+On entering battle, the ally restores a little HP.
+Ignores Ghost immunities. Cannot lose accuracy.
+Ignores Ghost immunities. Cannot lose accuracy.
+The Pokémon's shining mask boosts its Speed stat.
+The Pokémon's shining mask boosts its Speed stat.
+The Pokémon's shining mask boosts its Attack stat.
+The Pokémon's shining mask boosts its Attack stat.
+The Pokémon's shining mask boosts its Sp. Def stat.
+The Pokémon's shining mask boosts its Sp. Def stat.
+The Pokémon's shining mask boosts its Defense stat.
+The Pokémon's shining mask boosts its Defense stat.
+The Pokémon may badly poison any target it hits.
+The Pokémon may badly poison any target it hits.
+On entering battle, lowers the foes' evasiveness.
+On entering battle, lowers the foes' evasiveness.
+Transforms into its Terastal Form in battle.
+Transforms into its Terastal Form in battle.
+At full HP, damage taken is not very effective.
+At full HP, damage taken is not very effective.
+Eliminates all effects of weather and terrain.
+Eliminates all effects of weather and terrain.
+Poisoning another Pokémon also causes confusion.
+Poisoning another Pokémon also causes confusion.

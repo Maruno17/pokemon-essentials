@@ -420,7 +420,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   hadnonspace = false
   havenl = false
   position = 0
-  while position < textchars.length
+  while position <= textchars.length
     nextline = 0
     graphic = nil
     graphicX = 0
@@ -565,7 +565,10 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     else
       xStart = 0
       yStart = 0
-      width = isWaitChar(textchars[position]) ? 0 : bitmap.text_size(textchars[position]).width
+      width = 0
+      if textchars[position]
+        width = isWaitChar(textchars[position]) ? 0 : bitmap.text_size(textchars[position]).width
+      end
       width += 2 if width > 0 && outline2count > 0
     end
     if rightalign == 1 && nextline == 0
@@ -608,7 +611,10 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
         end
       end
     end
-    isspace = (textchars[position][/\s/] || isWaitChar(textchars[position])) ? true : false
+    isspace = false
+    if textchars[position]
+      isspace = (textchars[position][/\s/] || isWaitChar(textchars[position])) ? true : false
+    end
     if hadspace && !isspace
       # set last word to here
       lastword[0] = characters.length
@@ -630,7 +636,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
                        (boldcount > 0), (italiccount > 0), colors[0], colors[1],
                        (underlinecount > 0), (strikecount > 0), fontname, fontsize,
                        position, graphicRect,
-                       ((outlinecount > 0) ? 1 : 0) + ((outline2count > 0) ? 2 : 0)])
+                       ((outlinecount > 0) ? 1 : 0) + ((outline2count > 0) ? 2 : 0)]) if graphic || textchars[position]
       charactersInternal.push([alignment, y, xStart, textchars[position], extraspace])
     end
     x += width

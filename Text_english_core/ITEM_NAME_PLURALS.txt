@@ -56,6 +56,22 @@ Galarica Cuffs
 Galarica Cuffs
 Galarica Wreaths
 Galarica Wreaths
+Black Augurites
+Black Augurites
+Peat Blocks
+Peat Blocks
+Syrupy Apples
+Syrupy Apples
+Unremarkable Teacups
+Unremarkable Teacups
+Masterpiece Teacups
+Masterpiece Teacups
+Metal Alloys
+Metal Alloys
+Malicious Armors
+Malicious Armors
+Auspicious Armors
+Auspicious Armors
 Red Apricorns
 Red Apricorns
 Yellow Apricorns
@@ -164,6 +180,10 @@ Relic Statues
 Relic Statues
 Relic Crowns
 Relic Crowns
+Tiny Bamboo Shoots
+Tiny Bamboo Shoots
+Big Bamboo Shoots
+Big Bamboo Shoots
 Growth Mulch
 Growth Mulch
 Damp Mulch
@@ -210,6 +230,12 @@ Heavy-Duty Boots
 Heavy-Duty Boots
 Utility Umbrellas
 Utility Umbrellas
+Ability Shields
+Ability Shields
+Clear Amulets
+Clear Amulets
+Covert Cloaks
+Covert Cloaks
 Eject Buttons
 Eject Buttons
 Eject Packs
@@ -250,6 +276,8 @@ Light Clays
 Light Clays
 Grip Claws
 Grip Claws
+Loaded Dice
+Loaded Dice
 Binding Bands
 Binding Bands
 Big Roots
@@ -266,6 +294,8 @@ White Herbs
 White Herbs
 Power Herbs
 Power Herbs
+Mirror Herbs
+Mirror Herbs
 Absorb Bulbs
 Absorb Bulbs
 Cell Batteries
@@ -282,6 +312,8 @@ Throat Sprays
 Throat Sprays
 Adrenaline Orbs
 Adrenaline Orbs
+Booster Energies
+Booster Energies
 Room Services
 Room Services
 Electric Seeds
@@ -298,6 +330,8 @@ Expert Belts
 Expert Belts
 Metronomes
 Metronomes
+Punching Gloves
+Punching Gloves
 Muscle Bands
 Muscle Bands
 Wise Glasses
@@ -404,6 +438,8 @@ BlackGlasses
 BlackGlasses
 Metal Coats
 Metal Coats
+Fairy Feathers
+Fairy Feathers
 Silk Scarves
 Silk Scarves
 Flame Plates
@@ -506,10 +542,22 @@ Lustrous Orbs
 Lustrous Orbs
 Griseous Orbs
 Griseous Orbs
+Adamant Crystals
+Adamant Crystals
+Lustrous Globes
+Lustrous Globes
+Griseous Cores
+Griseous Cores
 Rusted Swords
 Rusted Swords
 Rusted Shields
 Rusted Shields
+Wellspring Masks
+Wellspring Masks
+Hearthflame Masks
+Hearthflame Masks
+Cornerstone Masks
+Cornerstone Masks
 Douse Drives
 Douse Drives
 Shock Drives
@@ -810,6 +858,20 @@ Swift Feathers
 Swift Feathers
 Swift Wings
 Swift Wings
+Health Mochis
+Health Mochis
+Muscle Mochis
+Muscle Mochis
+Resist Mochis
+Resist Mochis
+Genius Mochis
+Genius Mochis
+Clever Mochis
+Clever Mochis
+Swift Mochis
+Swift Mochis
+Fresh-Start Mochis
+Fresh-Start Mochis
 Lonely Mints
 Lonely Mints
 Adamant Mints
@@ -1444,6 +1506,12 @@ N-Lunarizers
 N-Lunarizers
 Reins of Unity
 Reins of Unity
+Meteorites
+Meteorites
+Scrolls of Darkness
+Scrolls of Darkness
+Scrolls of Waters
+Scrolls of Waters
 Oval Charms
 Oval Charms
 Shiny Charms
@@ -1456,8 +1524,6 @@ Mega Rings
 Mega Rings
 Pokémon Box Links
 Pokémon Box Links
-Pokémon Boxes
-Pokémon Boxes
 Aurora Tickets
 Aurora Tickets
 Old Sea Maps
