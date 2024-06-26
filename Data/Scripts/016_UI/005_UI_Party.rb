@@ -173,8 +173,6 @@ class PokemonPartyPanel < Sprite
   TEXT_BASE_COLOR    = Color.new(248, 248, 248)
   TEXT_SHADOW_COLOR  = Color.new(40, 40, 40)
   HP_BAR_WIDTH       = 96
-  STATUS_ICON_WIDTH  = 44
-  STATUS_ICON_HEIGHT = 16
 
   def initialize(pokemon, index, viewport = nil)
     super(viewport)
@@ -427,7 +425,7 @@ class PokemonPartyPanel < Sprite
       status = GameData::Status.count
     end
     return if status < 0
-    statusrect = Rect.new(0, STATUS_ICON_HEIGHT * status, STATUS_ICON_WIDTH, STATUS_ICON_HEIGHT)
+    statusrect = Rect.new(0, status * GameData::Status::ICON_SIZE[1], *GameData::Status::ICON_SIZE)
     @overlaysprite.bitmap.blt(78, 68, @statuses.bitmap, statusrect)
   end
 

@@ -13,6 +13,8 @@ module GameData
 
     DATA = {}
 
+    ICON_SIZE = [44, 16]
+
     extend ClassMethodsSymbols
     include InstanceMethods
 

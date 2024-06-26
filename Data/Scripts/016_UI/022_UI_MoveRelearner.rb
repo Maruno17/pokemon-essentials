@@ -95,7 +95,7 @@ class MoveRelearner_Scene
     textpos.push([accuracy == 0 ? "---" : "#{accuracy}%", 468, 184, :center,
                   Color.new(64, 64, 64), Color.new(176, 176, 176)])
     pbDrawTextPositions(overlay, textpos)
-    imagepos.push(["Graphics/UI/category", 436, 116, 0, category * 28, 64, 28])
+    imagepos.push(["Graphics/UI/category", 436, 116, 0, category * CATEGORY_ICON_SIZE[1], *CATEGORY_ICON_SIZE])
     if @sprites["commands"].index < @moves.length - 1
       imagepos.push(["Graphics/UI/Move Reminder/buttons", 48, 350, 0, 0, 76, 32])
     end

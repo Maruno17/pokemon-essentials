@@ -35,6 +35,8 @@ module GameData
       "Description"  => [:real_description, "q"]
     }
 
+    CATEGORY_ICON_SIZE = [64, 28]
+
     extend ClassMethodsSymbols
     include InstanceMethods
 
