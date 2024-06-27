@@ -1,5 +1,5 @@
 #===============================================================================
-# This script modifies the battle system to implement battle rules
+# This script modifies the battle system to implement battle rules.
 #===============================================================================
 class Battle
   unless @__clauses__aliased
@@ -102,7 +102,7 @@ class Battle::Battler
 end
 
 #===============================================================================
-# Double Team
+# Double Team.
 #===============================================================================
 class Battle::Move::RaiseUserEvasion1
   unless method_defined?(:__clauses__pbMoveFailed?)
@@ -119,7 +119,7 @@ class Battle::Move::RaiseUserEvasion1
 end
 
 #===============================================================================
-# Minimize
+# Minimize.
 #===============================================================================
 class Battle::Move::RaiseUserEvasion2MinimizeUser
   unless method_defined?(:__clauses__pbMoveFailed?)
@@ -136,7 +136,7 @@ class Battle::Move::RaiseUserEvasion2MinimizeUser
 end
 
 #===============================================================================
-# Skill Swap
+# Skill Swap.
 #===============================================================================
 class Battle::Move::UserTargetSwapAbilities
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
@@ -153,7 +153,7 @@ class Battle::Move::UserTargetSwapAbilities
 end
 
 #===============================================================================
-# Sonic Boom
+# Sonic Boom.
 #===============================================================================
 class Battle::Move::FixedDamage20
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
@@ -170,7 +170,7 @@ class Battle::Move::FixedDamage20
 end
 
 #===============================================================================
-# Dragon Rage
+# Dragon Rage.
 #===============================================================================
 class Battle::Move::FixedDamage40
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
@@ -238,7 +238,7 @@ class Battle::Move::OHKOHitsUndergroundTarget
 end
 
 #===============================================================================
-# Self-Destruct
+# Self-Destruct.
 #===============================================================================
 class Battle::Move::UserFaintsExplosive
   unless method_defined?(:__clauses__pbMoveFailed?)
@@ -270,7 +270,7 @@ class Battle::Move::UserFaintsExplosive
 end
 
 #===============================================================================
-# Perish Song
+# Perish Song.
 #===============================================================================
 class Battle::Move::StartPerishCountsForAllBattlers
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
@@ -288,7 +288,7 @@ class Battle::Move::StartPerishCountsForAllBattlers
 end
 
 #===============================================================================
-# Destiny Bond
+# Destiny Bond.
 #===============================================================================
 class Battle::Move::AttackerFaintsIfUserFaints
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)

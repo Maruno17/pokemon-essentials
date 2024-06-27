@@ -1,7 +1,8 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Scene
-  #=============================================================================
-  # Animates the battle intro
-  #=============================================================================
+  # Animates the battle intro.
   def pbBattleIntroAnimation
     # Make everything appear
     introAnim = Animation::Intro.new(@sprites, @viewport, @battle)
@@ -54,9 +55,7 @@ class Battle::Scene
     end
   end
 
-  #=============================================================================
-  # Animates a party lineup appearing for the given side
-  #=============================================================================
+  # Animates a party lineup appearing for the given side.
   def pbShowPartyLineup(side, fullAnim = false)
     @animations.push(
       Animation::LineupAppear.new(@sprites, @viewport, side,
@@ -69,11 +68,9 @@ class Battle::Scene
     end
   end
 
-  #=============================================================================
   # Animates an opposing trainer sliding in from off-screen. Will animate a
   # previous trainer that is already on-screen slide off first. Used at the end
   # of battle.
-  #=============================================================================
   def pbShowOpponent(idxTrainer)
     # Set up trainer appearing animation
     appearAnim = Animation::TrainerAppear.new(@sprites, @viewport, idxTrainer)
@@ -84,12 +81,10 @@ class Battle::Scene
     end
   end
 
-  #=============================================================================
   # Animates a trainer's sprite and party lineup hiding (if they are visible).
   # Animates a Pokémon being sent out into battle, then plays the shiny
   # animation for it if relevant.
   # sendOuts is an array; each element is itself an array: [idxBattler,pkmn]
-  #=============================================================================
   def pbSendOutBattlers(sendOuts, startBattle = false)
     return if sendOuts.length == 0
     # If party balls are still appearing, wait for them to finish showing up, as
@@ -155,9 +150,7 @@ class Battle::Scene
     end
   end
 
-  #=============================================================================
-  # Animates a Pokémon being recalled into its Poké Ball and its data box hiding
-  #=============================================================================
+  # Animates a Pokémon being recalled into its Poké Ball and its data box hiding.
   def pbRecall(idxBattler)
     @briefMessage = false
     # Recall animation
@@ -178,9 +171,10 @@ class Battle::Scene
     dataBoxAnim.dispose
   end
 
-  #=============================================================================
-  # Ability splash bar animations
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Ability splash bar animations.
+  #-----------------------------------------------------------------------------
+
   def pbShowAbilitySplash(battler)
     return if !USE_ABILITY_SPLASH
     side = battler.index % 2
@@ -213,9 +207,10 @@ class Battle::Scene
     pbShowAbilitySplash(battler)
   end
 
-  #=============================================================================
-  # HP change animations
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # HP change animations.
+  #-----------------------------------------------------------------------------
+
   # Shows a HP-changing common animation and animates a data box's HP bar.
   # Called by def pbReduceHP, def pbRecoverHP.
   def pbHPChanged(battler, oldHP, showAnim = false)
@@ -277,9 +272,9 @@ class Battle::Scene
     damageAnims.each { |a| a.dispose }
   end
 
-  #=============================================================================
-  # Animates a data box's Exp bar
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
+  # Animates a data box's Exp bar.
   def pbEXPBar(battler, startExp, endExp, tempExp1, tempExp2)
     return if !battler || endExp == startExp
     startExpLevel = tempExp1 - startExp
@@ -292,9 +287,7 @@ class Battle::Scene
     end
   end
 
-  #=============================================================================
-  # Shows stats windows upon a Pokémon levelling up
-  #=============================================================================
+  # Shows stats windows upon a Pokémon levelling up.
   def pbLevelUp(pkmn, _battler, oldTotalHP, oldAttack, oldDefense, oldSpAtk, oldSpDef, oldSpeed)
     pbTopRightWindow(
       _INTL("Max. HP<r>+{1}\nAttack<r>+{2}\nDefense<r>+{3}\nSp. Atk<r>+{4}\nSp. Def<r>+{5}\nSpeed<r>+{6}",
@@ -307,9 +300,7 @@ class Battle::Scene
     )
   end
 
-  #=============================================================================
-  # Animates a Pokémon fainting
-  #=============================================================================
+  # Animates a Pokémon fainting.
   def pbFaintBattler(battler)
     @briefMessage = false
     old_height = @sprites["pokemon_#{battler.index}"].src_rect.height
@@ -327,9 +318,10 @@ class Battle::Scene
     @sprites["pokemon_#{battler.index}"].src_rect.height = old_height
   end
 
-  #=============================================================================
-  # Animates throwing a Poké Ball at a Pokémon in an attempt to catch it
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Animates throwing a Poké Ball at a Pokémon in an attempt to catch it.
+  #-----------------------------------------------------------------------------
+
   def pbThrow(ball, shakes, critical, targetBattler, showPlayer = false)
     @briefMessage = false
     captureAnim = Animation::PokeballThrowCapture.new(
@@ -386,9 +378,9 @@ class Battle::Scene
   end
 
   #=============================================================================
+
   # Hides all battler shadows before yielding to a move animation, and then
-  # restores the shadows afterwards
-  #=============================================================================
+  # restores the shadows afterwards.
   def pbSaveShadows
     # Remember which shadows were visible
     shadows = Array.new(@battle.battlers.length) do |i|
@@ -406,9 +398,10 @@ class Battle::Scene
     end
   end
 
-  #=============================================================================
-  # Loads a move/common animation
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Loads a move/common animation.
+  #-----------------------------------------------------------------------------
+
   # Returns the animation ID to use for a given move/user. Returns nil if that
   # move has no animations defined for it.
   def pbFindMoveAnimDetails(move2anim, moveID, idxUser, hitNum = 0)
@@ -487,9 +480,10 @@ class Battle::Scene
     return nil
   end
 
-  #=============================================================================
-  # Plays a move/common animation
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Plays a move/common animation.
+  #-----------------------------------------------------------------------------
+
   # Plays a move animation.
   def pbAnimation(moveID, user, targets, hitNum = 0)
     animID = pbFindMoveAnimation(moveID, user.index, hitNum)

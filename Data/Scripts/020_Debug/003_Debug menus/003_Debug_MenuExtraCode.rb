@@ -39,7 +39,7 @@ def pbWarpToMap
 end
 
 #===============================================================================
-# Debug Variables screen
+# Debug Variables screen.
 #===============================================================================
 class SpriteWindow_DebugVariables < Window_DrawableCommand
   attr_reader :mode
@@ -227,7 +227,7 @@ def pbDebugVariables(mode)
 end
 
 #===============================================================================
-# Debug Day Care screen
+# Debug Day Care screen.
 #===============================================================================
 def pbDebugDayCare
   day_care = $PokemonGlobal.day_care
@@ -376,7 +376,7 @@ def pbDebugDayCare
 end
 
 #===============================================================================
-# Debug roaming Pokémon screen
+# Debug roaming Pokémon screen.
 #===============================================================================
 class SpriteWindow_DebugRoamers < Window_DrawableCommand
   def initialize(viewport)
@@ -548,7 +548,7 @@ def pbDebugRoamers
 end
 
 #===============================================================================
-# Battle animations import/export
+# Battle animations import/export.
 #===============================================================================
 def pbExportAllAnimations
   begin
@@ -663,7 +663,7 @@ def pbImportAllAnimations
 end
 
 #===============================================================================
-# Properly erases all non-existent tiles in maps (including event graphics)
+# Properly erases all non-existent tiles in maps (including event graphics).
 #===============================================================================
 def pbDebugFixInvalidTiles
   total_errors = 0
@@ -739,7 +739,7 @@ def pbCheckTileValidity(tile_id, map, tilesets, passages)
 end
 
 #===============================================================================
-# Pseudo-party screen for editing Pokémon being set up for a wild battle
+# Pseudo-party screen for editing Pokémon being set up for a wild battle.
 #===============================================================================
 class PokemonDebugPartyScreen
   def initialize

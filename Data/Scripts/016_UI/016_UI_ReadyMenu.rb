@@ -300,7 +300,7 @@ class PokemonReadyMenu
 end
 
 #===============================================================================
-# Using a registered item
+# Using a registered item.
 #===============================================================================
 def pbUseKeyItem
   moves = [:CUT, :DEFOG, :DIG, :DIVE, :FLASH, :FLY, :HEADBUTT, :ROCKCLIMB,

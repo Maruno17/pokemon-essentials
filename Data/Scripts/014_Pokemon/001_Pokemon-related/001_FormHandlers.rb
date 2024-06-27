@@ -140,7 +140,7 @@ def pbSpindaSpots(pkmn, bitmap)
 end
 
 #===============================================================================
-# Regular form differences
+# Regular form differences.
 #===============================================================================
 
 MultipleForms.register(:UNOWN, {
@@ -803,7 +803,7 @@ MultipleForms.register(:OGERPON, {
 })
 
 #===============================================================================
-# Regional forms
+# Regional forms.
 # This code is for determining the form of a Pokémon in an egg created at the
 # Day Care, where that Pokémon's species has regional forms. The regional form
 # chosen depends on the region in which the egg was produced (not where it
@@ -845,12 +845,12 @@ MultipleForms.copy(
 )
 
 #===============================================================================
-# Regional forms
+# Regional forms.
 # These species don't have visually different regional forms, but they need to
 # evolve into different forms depending on the location where they evolve.
 #===============================================================================
 
-# Alolan forms
+# Alolan forms.
 MultipleForms.register(:PIKACHU, {
   "getForm" => proc { |pkmn|
     next if pkmn.form_simple >= 2
@@ -864,7 +864,7 @@ MultipleForms.register(:PIKACHU, {
 
 MultipleForms.copy(:PIKACHU, :EXEGGCUTE, :CUBONE)
 
-# Galarian forms
+# Galarian forms.
 MultipleForms.register(:KOFFING, {
   "getForm" => proc { |pkmn|
     next if pkmn.form_simple >= 2
@@ -878,7 +878,7 @@ MultipleForms.register(:KOFFING, {
 
 MultipleForms.copy(:KOFFING, :MIMEJR)
 
-# Hisuian forms
+# Hisuian forms.
 MultipleForms.register(:QUILAVA, {
   "getForm" => proc { |pkmn|
     next if pkmn.form_simple >= 2

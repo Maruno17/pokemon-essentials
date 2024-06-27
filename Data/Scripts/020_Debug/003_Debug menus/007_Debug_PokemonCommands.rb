@@ -1,6 +1,7 @@
 #===============================================================================
-# HP/Status options
+# HP/Status options.
 #===============================================================================
+
 MenuHandlers.add(:pokemon_debug_menu, :hp_status_menu, {
   "name"   => _INTL("HP/status..."),
   "parent" => :main
@@ -146,8 +147,9 @@ MenuHandlers.add(:pokemon_debug_menu, :set_pokerus, {
 })
 
 #===============================================================================
-# Level/stats options
+# Level/stats options.
 #===============================================================================
+
 MenuHandlers.add(:pokemon_debug_menu, :level_stats, {
   "name"   => _INTL("Level/stats..."),
   "parent" => :main
@@ -450,8 +452,9 @@ MenuHandlers.add(:pokemon_debug_menu, :set_sheen, {
 })
 
 #===============================================================================
-# Moves options
+# Moves options.
 #===============================================================================
+
 MenuHandlers.add(:pokemon_debug_menu, :moves, {
   "name"   => _INTL("Moves..."),
   "parent" => :main
@@ -571,8 +574,9 @@ MenuHandlers.add(:pokemon_debug_menu, :set_initial_moves, {
 })
 
 #===============================================================================
-# Other options
+# Other options.
 #===============================================================================
+
 MenuHandlers.add(:pokemon_debug_menu, :set_item, {
   "name"   => _INTL("Set item"),
   "parent" => :main,
@@ -802,8 +806,9 @@ MenuHandlers.add(:pokemon_debug_menu, :species_and_form, {
 })
 
 #===============================================================================
-# Cosmetic options
+# Cosmetic options.
 #===============================================================================
+
 MenuHandlers.add(:pokemon_debug_menu, :cosmetic, {
   "name"   => _INTL("Cosmetic info..."),
   "parent" => :main
@@ -973,8 +978,9 @@ MenuHandlers.add(:pokemon_debug_menu, :ownership, {
 })
 
 #===============================================================================
-# Can store/release/trade
+# Can store/release/trade.
 #===============================================================================
+
 MenuHandlers.add(:pokemon_debug_menu, :set_discardable, {
   "name"   => _INTL("Set discardable"),
   "parent" => :main,
@@ -1002,8 +1008,9 @@ MenuHandlers.add(:pokemon_debug_menu, :set_discardable, {
 })
 
 #===============================================================================
-# Other options
+# Other options.
 #===============================================================================
+
 MenuHandlers.add(:pokemon_debug_menu, :set_egg, {
   "name"        => _INTL("Set egg"),
   "parent"      => :main,

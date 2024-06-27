@@ -1,6 +1,7 @@
 #===============================================================================
-# UseText handlers
+# UseText handlers.
 #===============================================================================
+
 ItemHandlers::UseText.add(:BICYCLE, proc { |item|
   next ($PokemonGlobal.bicycle) ? _INTL("Walk") : _INTL("Use")
 })
@@ -16,7 +17,7 @@ ItemHandlers::UseText.add(:EXPALL, proc { |item|
 })
 
 #===============================================================================
-# UseFromBag handlers
+# UseFromBag handlers.
 # Return values: 0 = not used
 #                1 = used
 #                2 = close the Bag to use
@@ -91,7 +92,7 @@ ItemHandlers::UseFromBag.addIf(:move_machines,
 )
 
 #===============================================================================
-# ConfirmUseInField handlers
+# ConfirmUseInField handlers.
 # Return values: true/false
 # Called when an item is used from the Ready Menu.
 # If an item does not have this handler, it is treated as returning true.
@@ -112,7 +113,7 @@ ItemHandlers::ConfirmUseInField.add(:ESCAPEROPE, proc { |item|
 })
 
 #===============================================================================
-# UseInField handlers
+# UseInField handlers.
 # Return values: false = not used
 #                true = used
 # Called if an item is used from the Bag (not on a Pokémon and not a TM/HM) and
@@ -378,7 +379,7 @@ ItemHandlers::UseInField.add(:EXPALLOFF, proc { |item|
 })
 
 #===============================================================================
-# UseOnPokemon handlers
+# UseOnPokemon handlers.
 #===============================================================================
 
 # Applies to all items defined as an evolution stone.

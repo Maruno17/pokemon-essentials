@@ -23,7 +23,7 @@ class PokemonGlobalMetadata
 end
 
 #===============================================================================
-# General purpose utilities
+# General purpose utilities.
 #===============================================================================
 def pbDrawGauge(bitmap, rect, color, value, maxValue)
   return if !bitmap
@@ -100,7 +100,7 @@ class PurifyChamberSet
   end
 
   # Tempo refers to the type advantages of each Pokemon in a certain set in a
-  # clockwise direction. Tempo also depends on the number of Pokemon in the set
+  # clockwise direction. Tempo also depends on the number of Pokemon in the set.
   def tempo
     ret = 0
     @list.length.times do |i|
@@ -1296,6 +1296,7 @@ end
 #===============================================================================
 #
 #===============================================================================
+
 MenuHandlers.add(:pc_menu, :purify_chamber, {
   "name"      => _INTL("Purify Chamber"),
   "order"     => 30,

@@ -1,7 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Move
-  #=============================================================================
-  # Move's type calculation
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Move's type calculation.
+  #-----------------------------------------------------------------------------
+
   def pbBaseType(user)
     ret = @type
     if ret && user.abilityActive?
@@ -26,9 +30,10 @@ class Battle::Move
     return ret
   end
 
-  #=============================================================================
-  # Type effectiveness calculation
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Type effectiveness calculation.
+  #-----------------------------------------------------------------------------
+
   def pbCalcTypeModSingle(moveType, defType, user, target)
     ret = Effectiveness.calculate(moveType, defType)
     if Effectiveness.ineffective_type?(moveType, defType)
@@ -78,9 +83,10 @@ class Battle::Move
     return ret
   end
 
-  #=============================================================================
-  # Accuracy check
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Accuracy check.
+  #-----------------------------------------------------------------------------
+
   def pbBaseAccuracy(user, target); return @accuracy; end
 
   # Accuracy calculations for one-hit KO moves are handled elsewhere.
@@ -166,9 +172,10 @@ class Battle::Move
     modifiers[:evasion_stage] = 0 if user.hasActiveAbility?(:MINDSEYE)
   end
 
-  #=============================================================================
-  # Critical hit check
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Critical hit check.
+  #-----------------------------------------------------------------------------
+
   # Return values:
   #   -1: Never a critical hit.
   #    0: Calculate normally.
@@ -220,9 +227,10 @@ class Battle::Move
     return false
   end
 
-  #=============================================================================
-  # Damage calculation
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Damage calculation.
+  #-----------------------------------------------------------------------------
+
   def pbBaseDamage(baseDmg, user, target);              return baseDmg;    end
   def pbBaseDamageMultiplier(damageMult, user, target); return damageMult; end
   def pbModifyDamage(damageMult, user, target);         return damageMult; end
@@ -505,9 +513,10 @@ class Battle::Move
     multipliers[:final_damage_multiplier] = pbModifyDamage(multipliers[:final_damage_multiplier], user, target)
   end
 
-  #=============================================================================
-  # Additional effect chance
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Additional effect chance.
+  #-----------------------------------------------------------------------------
+
   def pbAdditionalEffectChance(user, target, effectChance = 0)
     return 0 if target.hasActiveAbility?(:SHIELDDUST) && !target.beingMoldBroken?
     ret = (effectChance > 0) ? effectChance : @addlEffect

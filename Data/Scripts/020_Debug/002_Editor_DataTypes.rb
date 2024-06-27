@@ -1,5 +1,5 @@
 #===============================================================================
-# Data type properties
+# Data type properties.
 #===============================================================================
 module UndefinedProperty
   def self.set(_settingname, oldsetting)
@@ -1619,7 +1619,7 @@ module EncounterSlotProperty
 end
 
 #===============================================================================
-# Core property editor script
+# Core property editor script.
 #===============================================================================
 def pbPropertyList(title, data, properties, saveprompt = false)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)

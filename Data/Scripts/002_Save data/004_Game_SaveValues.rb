@@ -1,4 +1,6 @@
+#===============================================================================
 # Contains the save values defined in Essentials by default.
+#===============================================================================
 
 SaveData.register(:player) do
   ensure_class :Player

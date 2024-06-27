@@ -420,8 +420,9 @@ end
 #===============================================================================
 #
 #===============================================================================
+
 # Record current heart gauges of Pokémon in party, to see if they drop to zero
-# during battle and need to say they're ready to be purified afterwards
+# during battle and need to say they're ready to be purified afterwards.
 EventHandlers.add(:on_start_battle, :record_party_heart_gauges,
   proc {
     $game_temp.party_heart_gauges_before_battle = []

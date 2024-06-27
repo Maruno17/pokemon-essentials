@@ -1,5 +1,5 @@
 #===============================================================================
-# Map Factory (allows multiple maps to be loaded at once and connected)
+# Map Factory (allows multiple maps to be loaded at once and connected).
 #===============================================================================
 class PokemonMapFactory
   attr_reader :maps
@@ -384,12 +384,14 @@ module MapFactoryHelper
   @@MapConnections = nil
   @@MapDims        = nil
 
-  def self.clear
+  module_function
+
+  def clear
     @@MapConnections = nil
     @@MapDims        = nil
   end
 
-  def self.getMapConnections
+  def getMapConnections
     if !@@MapConnections
       @@MapConnections = []
       conns = load_data("Data/map_connections.dat")
@@ -427,26 +429,26 @@ module MapFactoryHelper
     return @@MapConnections
   end
 
-  def self.hasConnections?(id)
+  def hasConnections?(id)
     conns = MapFactoryHelper.getMapConnections
     return conns[id] ? true : false
   end
 
-  def self.mapsConnected?(id1, id2)
+  def mapsConnected?(id1, id2)
     MapFactoryHelper.eachConnectionForMap(id1) do |conn|
       return true if conn[0] == id2 || conn[3] == id2
     end
     return false
   end
 
-  def self.eachConnectionForMap(id)
+  def eachConnectionForMap(id)
     conns = MapFactoryHelper.getMapConnections
     return if !conns[id]
     conns[id].each { |conn| yield conn }
   end
 
-  # Gets the height and width of the map with id
-  def self.getMapDims(id)
+  # Gets the height and width of the map with id.
+  def getMapDims(id)
     # Create cache if doesn't exist
     @@MapDims = [] if !@@MapDims
     # Add map to cache if can't be found
@@ -464,7 +466,7 @@ module MapFactoryHelper
 
   # Returns the X or Y coordinate of an edge on the map with id.
   # Considers the special strings "N","W","E","S"
-  def self.getMapEdge(id, edge)
+  def getMapEdge(id, edge)
     return 0 if ["N", "W"].include?(edge)
     dims = getMapDims(id)   # Get dimensions
     return dims[0] if edge == "E"
@@ -472,7 +474,7 @@ module MapFactoryHelper
     return dims[0]   # real dimension (use width)
   end
 
-  def self.mapInRange?(map)
+  def mapInRange?(map)
     range = 6   # Number of tiles
     dispx = map.display_x
     dispy = map.display_y
@@ -483,7 +485,7 @@ module MapFactoryHelper
     return true
   end
 
-  def self.mapInRangeById?(id, dispx, dispy)
+  def mapInRangeById?(id, dispx, dispy)
     range = 6   # Number of tiles
     dims = MapFactoryHelper.getMapDims(id)
     return false if dispx >= (dims[0] + range) * Game_Map::REAL_RES_X

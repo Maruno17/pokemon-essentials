@@ -13,7 +13,7 @@ class Game_Temp
 end
 
 #===============================================================================
-# Using the Poke Radar
+# Using the Poke Radar.
 #===============================================================================
 def pbCanUsePokeRadar?
   # Can't use Radar if not in tall grass
@@ -156,8 +156,9 @@ def pbPokeRadarGetEncounter(rarity = 0)
 end
 
 #===============================================================================
-# Event handlers
+# Event handlers.
 #===============================================================================
+
 EventHandlers.add(:on_wild_species_chosen, :poke_radar_chain,
   proc { |encounter|
     if GameData::EncounterType.get($game_temp.encounter_type).type != :land ||
@@ -256,8 +257,9 @@ EventHandlers.add(:on_enter_map, :cancel_poke_radar,
 )
 
 #===============================================================================
-# Item handlers
+# Item handlers.
 #===============================================================================
+
 ItemHandlers::UseInField.add(:POKERADAR, proc { |item|
   next pbUsePokeRadar
 })

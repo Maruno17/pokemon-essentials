@@ -1,8 +1,10 @@
+#===============================================================================
 # The SaveData module is used to manipulate save data. It contains the {Value}s
 # that make up the save data and {Conversion}s for resolving incompatibilities
 # between Essentials and game versions.
 # @see SaveData.register
 # @see SaveData.register_conversion
+#===============================================================================
 module SaveData
   # Contains the file path of the save file.
   FILE_PATH = if File.directory?(System.data_directory)

@@ -145,7 +145,7 @@ class SliderOption
 end
 
 #===============================================================================
-# Main options list
+# Main options list.
 #===============================================================================
 class Window_PokemonOption < Window_DrawableCommand
   attr_reader :value_changed
@@ -263,7 +263,7 @@ class Window_PokemonOption < Window_DrawableCommand
 end
 
 #===============================================================================
-# Options main screen
+# Options main screen.
 #===============================================================================
 class PokemonOption_Scene
   attr_reader :sprites
@@ -379,8 +379,9 @@ class PokemonOptionScreen
 end
 
 #===============================================================================
-# Options Menu commands
+# Options Menu commands.
 #===============================================================================
+
 MenuHandlers.add(:options_menu, :bgm_volume, {
   "name"        => _INTL("Music Volume"),
   "order"       => 10,

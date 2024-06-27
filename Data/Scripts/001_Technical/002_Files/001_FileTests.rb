@@ -1,5 +1,5 @@
 #===============================================================================
-#  Reads files of certain format from a directory
+# Reads files of certain format from a directory
 #===============================================================================
 class Dir
   # Reads all files in a directory

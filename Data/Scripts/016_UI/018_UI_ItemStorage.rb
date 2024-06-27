@@ -196,8 +196,10 @@ end
 # The window _helpwindow_ will display the _helptext_.
 #===============================================================================
 module UIHelper
+  module_function
+
   # Letter by letter display of the message _msg_ by the window _helpwindow_.
-  def self.pbDisplay(helpwindow, msg, brief)
+  def pbDisplay(helpwindow, msg, brief)
     cw = helpwindow
     oldvisible = cw.visible
     cw.letterbyletter = true
@@ -215,7 +217,7 @@ module UIHelper
     cw.visible = oldvisible
   end
 
-  def self.pbDisplayStatic(msgwindow, message)
+  def pbDisplayStatic(msgwindow, message)
     oldvisible = msgwindow.visible
     msgwindow.visible        = true
     msgwindow.letterbyletter = false
@@ -237,7 +239,7 @@ module UIHelper
 
   # Letter by letter display of the message _msg_ by the window _helpwindow_,
   # used to ask questions.  Returns true if the user chose yes, false if no.
-  def self.pbConfirm(helpwindow, msg)
+  def pbConfirm(helpwindow, msg)
     dw = helpwindow
     oldvisible = dw.visible
     dw.letterbyletter = true
@@ -273,7 +275,7 @@ module UIHelper
     return ret
   end
 
-  def self.pbChooseNumber(helpwindow, helptext, maximum, initnum = 1)
+  def pbChooseNumber(helpwindow, helptext, maximum, initnum = 1)
     oldvisible = helpwindow.visible
     helpwindow.visible        = true
     helpwindow.text           = helptext
@@ -338,7 +340,7 @@ module UIHelper
     return ret
   end
 
-  def self.pbShowCommands(helpwindow, helptext, commands, initcmd = 0)
+  def pbShowCommands(helpwindow, helptext, commands, initcmd = 0)
     ret = -1
     oldvisible = helpwindow.visible
     helpwindow.visible        = helptext ? true : false

@@ -64,14 +64,14 @@ module Battle::AbilityEffects
   # Running from battle
   CertainEscapeFromBattle          = AbilityHandlerHash.new   # Run Away
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.trigger(hash, *args, ret: false)
     new_ret = hash.trigger(*args)
     return (!new_ret.nil?) ? new_ret : ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerSpeedCalc(ability, battler, mult)
     return trigger(SpeedCalc, ability, battler, mult, ret: mult)
@@ -81,13 +81,13 @@ module Battle::AbilityEffects
     return trigger(WeightCalc, ability, battler, weight, ret: weight)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerOnHPDroppedBelowHalf(ability, user, move_user, battle)
     return trigger(OnHPDroppedBelowHalf, ability, user, move_user, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerStatusCheckNonIgnorable(ability, battler, status)
     return trigger(StatusCheckNonIgnorable, ability, battler, status)
@@ -113,7 +113,7 @@ module Battle::AbilityEffects
     return trigger(StatusCure, ability, battler)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerStatLossImmunity(ability, battler, stat, battle, show_messages)
     return trigger(StatLossImmunity, ability, battler, stat, battle, show_messages)
@@ -135,7 +135,7 @@ module Battle::AbilityEffects
     OnStatLoss.trigger(ability, battler, stat, user)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerPriorityChange(ability, battler, move, priority)
     return trigger(PriorityChange, ability, battler, move, priority, ret: priority)
@@ -149,7 +149,7 @@ module Battle::AbilityEffects
     PriorityBracketUse.trigger(ability, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerOnFlinch(ability, battler, battle)
     OnFlinch.trigger(ability, battler, battle)
@@ -163,13 +163,13 @@ module Battle::AbilityEffects
     return trigger(MoveImmunity, ability, user, target, move, type, battle, show_message)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerModifyMoveBaseType(ability, user, move, type)
     return trigger(ModifyMoveBaseType, ability, user, move, type, ret: type)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerAccuracyCalcFromUser(ability, mods, user, target, move, type)
     AccuracyCalcFromUser.trigger(ability, mods, user, target, move, type)
@@ -183,7 +183,7 @@ module Battle::AbilityEffects
     AccuracyCalcFromTarget.trigger(ability, mods, user, target, move, type)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerDamageCalcFromUser(ability, user, target, move, mults, power, type)
     DamageCalcFromUser.trigger(ability, user, target, move, mults, power, type)
@@ -213,7 +213,7 @@ module Battle::AbilityEffects
     return trigger(CriticalCalcFromTarget, ability, user, target, move, crit_stage, ret: crit_stage)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerOnBeingHit(ability, user, target, move, battle)
     OnBeingHit.trigger(ability, user, target, move, battle)
@@ -223,7 +223,7 @@ module Battle::AbilityEffects
     OnDealingHit.trigger(ability, user, target, move, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerOnEndOfUsingMove(ability, user, targets, move, battle)
     OnEndOfUsingMove.trigger(ability, user, targets, move, battle)
@@ -233,7 +233,7 @@ module Battle::AbilityEffects
     AfterMoveUseFromTarget.trigger(ability, target, user, move, switched_battlers, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerEndOfRoundWeather(ability, weather, battler, battle)
     EndOfRoundWeather.trigger(ability, weather, battler, battle)
@@ -251,7 +251,7 @@ module Battle::AbilityEffects
     EndOfRoundGainItem.trigger(ability, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerCertainSwitching(ability, switcher, battle)
     return trigger(CertainSwitching, ability, switcher, battle)
@@ -285,7 +285,7 @@ module Battle::AbilityEffects
     OnIntimidated.trigger(ability, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerCertainEscapeFromBattle(ability, battler)
     return trigger(CertainEscapeFromBattle, ability, battler)

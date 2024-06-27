@@ -1,5 +1,5 @@
 #===============================================================================
-# Base class for all three menu classes below
+# Base class for all three menu classes below.
 #===============================================================================
 class Battle::Scene::MenuBase
   attr_accessor :x
@@ -92,7 +92,7 @@ class Battle::Scene::MenuBase
 end
 
 #===============================================================================
-# Command menu (Fight/Pokémon/Bag/Run)
+# Command menu (Fight/Pokémon/Bag/Run).
 #===============================================================================
 class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
   # If true, displays graphics from Graphics/UI/Battle/overlay_command.png
@@ -193,7 +193,7 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
 end
 
 #===============================================================================
-# Fight menu (choose a move)
+# Fight menu (choose a move).
 #===============================================================================
 class Battle::Scene::FightMenu < Battle::Scene::MenuBase
   attr_reader :battler
@@ -437,7 +437,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
 end
 
 #===============================================================================
-# Target menu (choose a move's target)
+# Target menu (choose a move's target).
 # NOTE: Unlike the command and fight menus, this one doesn't have a textbox-only
 #       version.
 #===============================================================================

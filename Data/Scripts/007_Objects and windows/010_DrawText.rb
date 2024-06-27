@@ -1,5 +1,5 @@
 #===============================================================================
-# Text colors
+# Text colors.
 #===============================================================================
 # Unused
 def ctag(color)
@@ -70,7 +70,7 @@ def getContrastColor(color)
 end
 
 #===============================================================================
-# Format text
+# Format text.
 #===============================================================================
 FORMATREGEXP = /<(\/?)(c|c2|c3|o|fn|br|fs|i|b|r|pg|pog|u|s|icon|img|ac|ar|al|outln|outln2)(\s*\=\s*([^>]*))?>/i
 
@@ -790,7 +790,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
 end
 
 #===============================================================================
-# Draw text and images on a bitmap
+# Draw text and images on a bitmap.
 #===============================================================================
 def getLineBrokenText(bitmap, value, width, dims)
   x = 0
@@ -1134,7 +1134,7 @@ def pbDrawTextPositions(bitmap, textpos)
 end
 
 #===============================================================================
-# Draw images on a bitmap
+# Draw images on a bitmap.
 #===============================================================================
 def pbCopyBitmap(dstbm, srcbm, x, y, opacity = 255)
   rc = Rect.new(0, 0, srcbm.width, srcbm.height)

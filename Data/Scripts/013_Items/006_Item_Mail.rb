@@ -1,5 +1,5 @@
 #===============================================================================
-# Data structure representing mail that the Pokémon can hold
+# Data structure representing mail that the Pokémon can hold.
 #===============================================================================
 class Mail
   attr_accessor :item, :message, :sender, :poke1, :poke2, :poke3

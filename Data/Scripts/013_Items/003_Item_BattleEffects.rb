@@ -1,6 +1,7 @@
 #===============================================================================
-# CanUseInBattle handlers
+# CanUseInBattle handlers.
 #===============================================================================
+
 ItemHandlers::CanUseInBattle.add(:GUARDSPEC, proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
   if !battler || battler.pbOwnSide.effects[PBEffects::Mist] > 0
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
@@ -292,9 +293,10 @@ ItemHandlers::CanUseInBattle.add(:POKEFLUTE, proc { |item, pokemon, battler, mov
 })
 
 #===============================================================================
-# UseInBattle handlers
-# For items used directly or on an opposing battler
+# UseInBattle handlers.
+# For items used directly or on an opposing battler.
 #===============================================================================
+
 ItemHandlers::UseInBattle.add(:GUARDSPEC, proc { |item, battler, battle|
   battler.pbOwnSide.effects[PBEffects::Mist] = 5
   battle.pbDisplay(_INTL("{1} became shrouded in mist!", battler.pbTeam))
@@ -323,9 +325,10 @@ ItemHandlers::UseInBattle.addIf(:poke_balls,
 )
 
 #===============================================================================
-# BattleUseOnPokemon handlers
-# For items used on Pokémon or on a Pokémon's move
+# BattleUseOnPokemon handlers.
+# For items used on Pokémon or on a Pokémon's move.
 #===============================================================================
+
 ItemHandlers::BattleUseOnPokemon.add(:POTION, proc { |item, pokemon, battler, choices, scene|
   pbBattleHPItem(pokemon, battler, 20, scene)
 })
@@ -527,8 +530,8 @@ ItemHandlers::BattleUseOnPokemon.add(:MAXELIXIR, proc { |item, pokemon, battler,
 })
 
 #===============================================================================
-# BattleUseOnBattler handlers
-# For items used on a Pokémon in battle
+# BattleUseOnBattler handlers.
+# For items used on a Pokémon in battle.
 #===============================================================================
 
 ItemHandlers::BattleUseOnBattler.add(:REDFLUTE, proc { |item, battler, scene|

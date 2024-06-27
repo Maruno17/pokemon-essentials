@@ -20,7 +20,7 @@ class Trainer
     return "#{trainer_type_name} #{@name}"
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # Portion of the ID which is visible on the Trainer Card
   def public_ID(id = nil)
@@ -41,7 +41,7 @@ class Trainer
     return 0
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def trainer_type_name; return GameData::TrainerType.get(self.trainer_type).name;            end
   def base_money;        return GameData::TrainerType.get(self.trainer_type).base_money;      end
@@ -53,7 +53,7 @@ class Trainer
   def flags;             return GameData::TrainerType.get(self.trainer_type).flags;           end
   def has_flag?(flag);   return GameData::TrainerType.get(self.trainer_type).has_flag?(flag); end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def pokemon_party
     return @party.find_all { |p| p && !p.egg? }
@@ -165,7 +165,7 @@ class Trainer
     @party.each { |pkmn| pkmn.heal }
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def initialize(name, trainer_type)
     @trainer_type = GameData::TrainerType.get(trainer_type).id

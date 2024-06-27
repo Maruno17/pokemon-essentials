@@ -1,5 +1,5 @@
 #===============================================================================
-# Records which file, section and line are currently being read
+# Records which file, section and line are currently being read.
 #===============================================================================
 module FileLineData
   @file     = ""
@@ -51,7 +51,7 @@ module FileLineData
 end
 
 #===============================================================================
-# Compiler
+# Compiler.
 #===============================================================================
 module Compiler
   @@categories = {}
@@ -92,8 +92,9 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # PBS file readers
+  # PBS file readers.
   #-----------------------------------------------------------------------------
+
   def pbEachFileSectionEx(f, schema = nil)
     lineno      = 1
     havesection = false
@@ -251,6 +252,7 @@ module Compiler
   # Splits a string containing comma-separated values into an array of those
   # values.
   #-----------------------------------------------------------------------------
+
   def split_csv_line(string)
     # Split the string into an array of values, using a comma as the separator
     values = string.split(",")
@@ -292,9 +294,10 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Convert a string to certain kinds of values
+  # Convert a string to certain kinds of values.
   #-----------------------------------------------------------------------------
-  # Unused
+
+  # Unused.
   # NOTE: This method is about 10 times slower than split_csv_line.
   def csvfield!(str)
     ret = ""
@@ -331,7 +334,7 @@ module Compiler
     return ret
   end
 
-  # Unused
+  # Unused.
   def csvBoolean!(str, _line = -1)
     field = csvfield!(str)
     return true if field[/^(?:1|TRUE|YES|Y)$/i]
@@ -339,7 +342,7 @@ module Compiler
     raise _INTL("Field '{1}' is not a Boolean value (true, false, 1, 0).", field) + "\n" + FileLineData.linereport
   end
 
-  # Unused
+  # Unused.
   def csvInt!(str, _line = -1)
     ret = csvfield!(str)
     if !ret[/^\-?\d+$/]
@@ -348,7 +351,7 @@ module Compiler
     return ret.to_i
   end
 
-  # Unused
+  # Unused.
   def csvPosInt!(str, _line = -1)
     ret = csvfield!(str)
     if !ret[/^\d+$/]
@@ -357,19 +360,19 @@ module Compiler
     return ret.to_i
   end
 
-  # Unused
+  # Unused.
   def csvFloat!(str, _line = -1)
     ret = csvfield!(str)
     return Float(ret) rescue raise _INTL("Field '{1}' is not a number.", ret) + "\n" + FileLineData.linereport
   end
 
-  # Unused
+  # Unused.
   def csvEnumField!(value, enumer, _key, _section)
     ret = csvfield!(value)
     return checkEnumField(ret, enumer)
   end
 
-  # Unused
+  # Unused.
   def csvEnumFieldOrInt!(value, enumer, _key, _section)
     ret = csvfield!(value)
     return ret.to_i if ret[/\-?\d+/]
@@ -482,7 +485,7 @@ module Compiler
     raise _INTL("Enumeration not defined.") + "\n" + FileLineData.linereport
   end
 
-  # Unused
+  # Unused.
   def checkEnumFieldOrNil(ret, enumer)
     case enumer
     when Module
@@ -508,9 +511,9 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Convert a string to values using a schema
-  #-----------------------------------------------------------------------------
-  # Unused
+
+  # Convert a string to values using a schema.
+  # Unused.
   # @deprecated This method is slated to be removed in v22.
   def pbGetCsvRecord(rec, lineno, schema)
     Deprecation.warn_method("pbGetCsvRecord", "v22", "get_csv_record")
@@ -684,8 +687,8 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Convert a string to values using a schema
-  #-----------------------------------------------------------------------------
+
+  # Convert a string to values using a schema.
   def get_csv_record(rec, schema)
     ret = []
     repeat = false
@@ -736,8 +739,8 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Write values to a file using a schema
-  #-----------------------------------------------------------------------------
+
+  # Write values to a file using a schema.
   def pbWriteCsvRecord(record, file, schema)
     rec = (record.is_a?(Array)) ? record.flatten : [record]
     start = (["*", "^"].include?(schema[1][0, 1])) ? 1 : 0
@@ -844,6 +847,7 @@ module Compiler
   # Parse string into a likely constant name and return its ID number (if any).
   # Last ditch attempt to figure out whether a constant is defined.
   #-----------------------------------------------------------------------------
+
   # Unused
   def pbGetConst(mod, item, err)
     isDef = false
@@ -918,8 +922,9 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Replace text in PBS files before compiling them
+  # Replace text in PBS files before compiling them.
   #-----------------------------------------------------------------------------
+
   def edit_and_rewrite_pbs_file_text(filename)
     return if !block_given?
     lines = []
@@ -946,8 +951,9 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile all data
+  # Compile all data.
   #-----------------------------------------------------------------------------
+
   def categories_to_compile(all_categories = false)
     ret = []
     Input.update

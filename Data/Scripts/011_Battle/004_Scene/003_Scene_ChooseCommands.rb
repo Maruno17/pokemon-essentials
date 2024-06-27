@@ -1,8 +1,12 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Scene
-  #=============================================================================
-  # The player chooses a main command for a Pokémon
+  #-----------------------------------------------------------------------------
+  # The player chooses a main command for a Pokémon.
   # Return values: -1=Cancel, 0=Fight, 1=Bag, 2=Pokémon, 3=Run, 4=Call
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def pbCommandMenu(idxBattler, firstAction)
     shadowTrainer = (GameData::Type.exists?(:SHADOW) && @battle.trainerBattle?)
     cmds = [
@@ -62,9 +66,10 @@ class Battle::Scene
     return ret
   end
 
-  #=============================================================================
-  # The player chooses a move for a Pokémon to use
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # The player chooses a move for a Pokémon to use.
+  #-----------------------------------------------------------------------------
+
   def pbFightMenu(idxBattler, megaEvoPossible = false)
     battler = @battle.battlers[idxBattler]
     cw = @sprites["fightWindow"]
@@ -132,12 +137,13 @@ class Battle::Scene
     @lastMove[idxBattler] = cw.index
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Opens the party screen to choose a Pokémon to switch in (or just view its
-  # summary screens)
+  # summary screens).
   # mode: 0=Pokémon command, 1=choose a Pokémon to send to the Boxes, 2=view
   #       summaries only
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def pbPartyScreen(idxBattler, canCancel = false, mode = 0)
     # Fade out and hide all sprites
     visibleSprites = pbFadeOutAndHide(@sprites)
@@ -190,9 +196,10 @@ class Battle::Scene
     pbFadeInAndShow(@sprites, visibleSprites)
   end
 
-  #=============================================================================
-  # Opens the Bag screen and chooses an item to use
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Opens the Bag screen and chooses an item to use.
+  #-----------------------------------------------------------------------------
+
   def pbItemMenu(idxBattler, _firstAction)
     # Fade out and hide all sprites
     visibleSprites = pbFadeOutAndHide(@sprites)
@@ -331,9 +338,11 @@ class Battle::Scene
     pbFadeInAndShow(@sprites, visibleSprites) if !wasTargeting
   end
 
-  #=============================================================================
-  # The player chooses a target battler for a move/item (non-single battles only)
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # The player chooses a target battler for a move/item (non-single battles
+  # only).
+  #-----------------------------------------------------------------------------
+
   # Returns an array containing battler names to display when choosing a move's
   # target.
   # nil means can't select that position, "" means can select that position but
@@ -446,9 +455,10 @@ class Battle::Scene
     return ret
   end
 
-  #=============================================================================
-  # Opens a Pokémon's summary screen to try to learn a new move
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Opens a Pokémon's summary screen to try to learn a new move.
+  #-----------------------------------------------------------------------------
+
   # Called whenever a Pokémon should forget a move. It should return -1 if the
   # selection is canceled, or 0 to 3 to indicate the move to forget. It should
   # not allow HM moves to be forgotten.
@@ -462,16 +472,18 @@ class Battle::Scene
     return ret
   end
 
-  #=============================================================================
-  # Opens the nicknaming screen for a newly caught Pokémon
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Opens the nicknaming screen for a newly caught Pokémon.
+  #-----------------------------------------------------------------------------
+
   def pbNameEntry(helpText, pkmn)
     return pbEnterPokemonName(helpText, 0, Pokemon::MAX_NAME_SIZE, "", pkmn)
   end
 
-  #=============================================================================
-  # Shows the Pokédex entry screen for a newly caught Pokémon
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Shows the Pokédex entry screen for a newly caught Pokémon.
+  #-----------------------------------------------------------------------------
+
   def pbShowPokedex(species)
     pbFadeOutIn do
       scene = PokemonPokedexInfo_Scene.new

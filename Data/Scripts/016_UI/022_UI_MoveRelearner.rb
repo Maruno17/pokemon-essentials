@@ -1,5 +1,5 @@
 #===============================================================================
-# Scene class for handling appearance of the screen
+# Scene class for handling appearance of the screen.
 #===============================================================================
 class MoveRelearner_Scene
   VISIBLEMOVES = 4
@@ -107,7 +107,7 @@ class MoveRelearner_Scene
                Color.new(64, 64, 64), Color.new(176, 176, 176))
   end
 
-  # Processes the scene
+  # Processes the scene.
   def pbChooseMove
     oldcmd = -1
     pbActivateWindow(@sprites, "commands") do
@@ -130,7 +130,7 @@ class MoveRelearner_Scene
     end
   end
 
-  # End the scene here
+  # End the scene here.
   def pbEndScene
     pbFadeOutAndHide(@sprites) { pbUpdate }
     pbDisposeSpriteHash(@sprites)
@@ -140,7 +140,7 @@ class MoveRelearner_Scene
 end
 
 #===============================================================================
-# Screen class for handling game logic
+# Screen class for handling game logic.
 #===============================================================================
 class MoveRelearnerScreen
   def initialize(scene)

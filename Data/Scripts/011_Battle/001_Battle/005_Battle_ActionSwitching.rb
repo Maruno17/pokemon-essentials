@@ -1,7 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle
-  #=============================================================================
-  # Choosing Pokémon to switch
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Choosing Pokémon to switch.
+  #-----------------------------------------------------------------------------
+
   # Checks whether the replacement Pokémon (at party index idxParty) can enter
   # battle.
   # NOTE: Messages are only shown while in the party screen when choosing a
@@ -104,10 +108,11 @@ class Battle
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Open the party screen and potentially pick a replacement Pokémon (or AI
-  # chooses replacement)
-  #=============================================================================
+  # chooses replacement).
+  #-----------------------------------------------------------------------------
+
   # Open party screen and potentially choose a Pokémon to switch with. Used in
   # all instances where the party screen is opened.
   def pbPartyScreen(idxBattler, checkLaxOnly = false, canCancel = false, shouldRegister = false)
@@ -134,9 +139,10 @@ class Battle
     return @battleAI.pbDefaultChooseNewEnemy(idxBattler)
   end
 
-  #=============================================================================
-  # Switching Pokémon
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Switching Pokémon.
+  #-----------------------------------------------------------------------------
+
   # General switching method that checks if any Pokémon need to be sent out and,
   # if so, does. Called at the end of each round.
   def pbEORSwitch(favorDraws = false)
@@ -296,9 +302,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # Effects upon a Pokémon entering battle
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Effects upon a Pokémon entering battle.
+  #-----------------------------------------------------------------------------
+
   # Called at the start of battle only.
   def pbOnAllBattlersEnteringBattle
     pbCalculatePriority(true)

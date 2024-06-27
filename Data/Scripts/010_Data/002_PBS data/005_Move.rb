@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class Move
     attr_reader :id
@@ -18,7 +21,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "moves.dat"
     PBS_BASE_FILENAME = "moves"
-
     SCHEMA = {
       "SectionName"  => [:id,               "m"],
       "Name"         => [:real_name,        "s"],
@@ -34,11 +36,12 @@ module GameData
       "EffectChance" => [:effect_chance,    "u"],
       "Description"  => [:real_description, "q"]
     }
-
     CATEGORY_ICON_SIZE = [64, 28]
 
     extend ClassMethodsSymbols
     include InstanceMethods
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id               = hash[:id]

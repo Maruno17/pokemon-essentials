@@ -1,5 +1,5 @@
 #===============================================================================
-# Battle preparation
+# Battle preparation.
 #===============================================================================
 class PokemonGlobalMetadata
   attr_accessor :nextBattleBGM
@@ -127,7 +127,7 @@ def pbCanTripleBattle?
 end
 
 #===============================================================================
-# Helper methods for setting up and closing down battles
+# Helper methods for setting up and closing down battles.
 #===============================================================================
 module BattleCreationHelperMethods
   module_function
@@ -343,7 +343,7 @@ module BattleCreationHelperMethods
 end
 
 #===============================================================================
-# Wild battles
+# Wild battles.
 #===============================================================================
 class WildBattle
   # Used when walking in tall grass, hence the additional code.
@@ -436,7 +436,7 @@ class WildBattle
 end
 
 #===============================================================================
-# Trainer battles
+# Trainer battles.
 #===============================================================================
 class TrainerBattle
   # Used by most trainer events, which can be positioned in such a way that
@@ -597,7 +597,7 @@ class TrainerBattle
 end
 
 #===============================================================================
-# After battles
+# After battles.
 #===============================================================================
 EventHandlers.add(:on_end_battle, :evolve_and_black_out,
   proc { |outcome, canLose|

@@ -1,12 +1,13 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
-  #=============================================================================
   # Decide whether the trainer is allowed to tell the Pokémon to use the given
   # move. Called when choosing a command for the round.
   # Also called when processing the Pokémon's action, because these effects also
   # prevent Pokémon action. Relevant because these effects can become active
   # earlier in the same round (after choosing the command but before using the
   # move) or an unusable move may be called by another move such as Metronome.
-  #=============================================================================
   def pbCanChooseMove?(move, commandPhase, showMessages = true, specialUsage = false)
     # Disable
     if @effects[PBEffects::DisableMove] == move.id && !specialUsage
@@ -99,9 +100,9 @@ class Battle::Battler
     return true
   end
 
-  #=============================================================================
-  # Obedience check
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
+  # Obedience check.
   # Return true if Pokémon continues attacking (although it may have chosen to
   # use a different move in disobedience), or false if attack stops.
   def pbObedienceCheck?(choice)
@@ -175,11 +176,11 @@ class Battle::Battler
     return false
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Check whether the user (self) is able to take action at all.
   # If this returns true, and if PP isn't a problem, the move will be considered
   # to have been used (even if it then fails for whatever reason).
-  #=============================================================================
   def pbTryUseMove(choice, move, specialUsage, skipAccuracyCheck)
     # Check whether it's possible for self to use the given move
     # NOTE: Encore has already changed the move being used, no need to have a
@@ -296,10 +297,10 @@ class Battle::Battler
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Initial success check against the target. Done once before the first hit.
   # Includes move-specific failure conditions, protections and type immunities.
-  #=============================================================================
   def pbSuccessCheckAgainstTarget(move, user, target, targets)
     show_message = move.pbShowFailMessages?(targets)
     typeMod = move.pbCalcTypeMod(move.calcType, user, target)
@@ -595,10 +596,10 @@ class Battle::Battler
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Per-hit success check against the target.
   # Includes semi-invulnerable move use and accuracy calculation.
-  #=============================================================================
   def pbSuccessCheckPerHit(move, user, target, skipAccuracyCheck)
     # Two-turn attacks can't fail here in the charging turn
     return true if user.effects[PBEffects::TwoTurnAttack]
@@ -617,9 +618,9 @@ class Battle::Battler
     return false
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Message shown when a move fails the per-hit success check above.
-  #=============================================================================
   def pbMissMessage(move, user, target)
     if target.damageState.affection_missed
       @battle.pbDisplay(_INTL("{1} avoided the move in time with your shout!", target.pbThis))

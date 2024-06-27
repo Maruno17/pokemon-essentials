@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module SaveData
   # Contains Conversion objects for each defined conversion:
   # {
@@ -21,6 +24,7 @@ module SaveData
   #=============================================================================
   # Represents a conversion made to save data.
   # New conversions are added using {SaveData.register_conversion}.
+  #=============================================================================
   class Conversion
     # @return [Symbol] conversion ID
     attr_reader :id
@@ -134,7 +138,8 @@ module SaveData
     # @!endgroup
   end
 
-  #=============================================================================
+  #---------------------------------------------------------------------------
+
   # Registers a {Conversion} to occur for save data that meets the given criteria.
   # Two types of criteria can be defined: {Conversion#essentials_version} and
   # {Conversion#game_version}. The conversion is automatically run on save data

@@ -1,5 +1,5 @@
 #===============================================================================
-# Pokémon party buttons and menu
+# Pokémon party buttons and menu.
 #===============================================================================
 class PokemonPartyConfirmCancelSprite < Sprite
   attr_reader :selected
@@ -131,7 +131,7 @@ class Window_CommandPokemonColor < Window_CommandPokemon
 end
 
 #===============================================================================
-# Blank party panel
+# Blank party panel.
 #===============================================================================
 class PokemonPartyBlankPanel < Sprite
   attr_accessor :text
@@ -160,7 +160,7 @@ class PokemonPartyBlankPanel < Sprite
 end
 
 #===============================================================================
-# Pokémon party panel
+# Pokémon party panel.
 #===============================================================================
 class PokemonPartyPanel < Sprite
   attr_reader :pokemon
@@ -471,7 +471,7 @@ class PokemonPartyPanel < Sprite
 end
 
 #===============================================================================
-# Pokémon party visuals
+# Pokémon party visuals.
 #===============================================================================
 class PokemonParty_Scene
   def pbStartScene(party, starthelptext, annotations = nil, multiselect = false, can_access_storage = false)
@@ -901,7 +901,7 @@ class PokemonParty_Scene
 end
 
 #===============================================================================
-# Pokémon party mechanics
+# Pokémon party mechanics.
 #===============================================================================
 class PokemonPartyScreen
   attr_reader :scene
@@ -1316,6 +1316,7 @@ end
 # inserted after the second command instead, which is usually "Debug". See
 # insert_index above if you need to change this.
 #===============================================================================
+
 MenuHandlers.add(:party_menu, :summary, {
   "name"      => _INTL("Summary"),
   "order"     => 10,
@@ -1483,7 +1484,7 @@ MenuHandlers.add(:party_menu_item, :move, {
 })
 
 #===============================================================================
-# Open the party screen
+# Open the party screen.
 #===============================================================================
 def pbPokemonScreen
   pbFadeOutIn do
@@ -1494,7 +1495,7 @@ def pbPokemonScreen
 end
 
 #===============================================================================
-# Choose a Pokémon in the party
+# Choose a Pokémon in the party.
 #===============================================================================
 # Choose a Pokémon/egg from the party.
 # Stores result in variable _variableNumber_ and the chosen Pokémon's name in

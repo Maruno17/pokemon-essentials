@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module Compiler
   @@categories[:pbs_files] = {
     :should_compile => proc { |compiling| next should_compile_pbs_files? },
@@ -122,7 +125,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Generic methods used when compiling PBS files
+  # Generic methods used when compiling PBS files.
   #-----------------------------------------------------------------------------
   def compile_pbs_file_message_start(filename)
     # The `` around the file's name turns it cyan
@@ -201,7 +204,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile Town Map data
+  # Compile Town Map data.
   #-----------------------------------------------------------------------------
   def compile_town_map(*paths)
     compile_PBS_file_generic(GameData::TownMap, *paths) do |final_validate, hash|
@@ -232,7 +235,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile map connections
+  # Compile map connections.
   #-----------------------------------------------------------------------------
   def compile_connections(*paths)
     hashenum = {
@@ -271,7 +274,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile type data
+  # Compile type data.
   #-----------------------------------------------------------------------------
   def compile_types(*paths)
     compile_PBS_file_generic(GameData::Type, *paths) do |final_validate, hash|
@@ -309,7 +312,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile ability data
+  # Compile ability data.
   #-----------------------------------------------------------------------------
   def compile_abilities(*paths)
     compile_PBS_file_generic(GameData::Ability, *paths) do |final_validate, hash|
@@ -333,7 +336,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile move data
+  # Compile move data.
   #-----------------------------------------------------------------------------
   def compile_moves(*paths)
     compile_PBS_file_generic(GameData::Move, *paths) do |final_validate, hash|
@@ -363,7 +366,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile item data
+  # Compile item data.
   #-----------------------------------------------------------------------------
   def compile_items(*paths)
     compile_PBS_file_generic(GameData::Item, *paths) do |final_validate, hash|
@@ -396,7 +399,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile berry plant data
+  # Compile berry plant data.
   #-----------------------------------------------------------------------------
   def compile_berry_plants(*paths)
     compile_PBS_file_generic(GameData::BerryPlant, *paths) do |final_validate, hash|
@@ -411,7 +414,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile Pokémon data
+  # Compile Pokémon data.
   #-----------------------------------------------------------------------------
   def compile_pokemon(*paths)
     compile_PBS_file_generic(GameData::Species, *paths) do |final_validate, hash|
@@ -514,7 +517,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile Pokémon forms data
+  # Compile Pokémon forms data.
   # NOTE: Doesn't use compile_PBS_file_generic because it needs its own schema
   #       and shouldn't clear GameData::Species at the start.
   #-----------------------------------------------------------------------------
@@ -671,7 +674,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile Pokémon metrics data
+  # Compile Pokémon metrics data.
   #-----------------------------------------------------------------------------
   def compile_pokemon_metrics(*paths)
     compile_PBS_file_generic(GameData::SpeciesMetrics, *paths) do |final_validate, hash|
@@ -696,7 +699,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile Shadow Pokémon data
+  # Compile Shadow Pokémon data.
   #-----------------------------------------------------------------------------
   def compile_shadow_pokemon(*paths)
     compile_PBS_file_generic(GameData::ShadowPokemon, *paths) do |final_validate, hash|
@@ -721,7 +724,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile Regional Dexes
+  # Compile Regional Dexes.
   #-----------------------------------------------------------------------------
   def compile_regional_dexes(*paths)
     dex_lists = []
@@ -762,7 +765,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile ribbon data
+  # Compile ribbon data.
   #-----------------------------------------------------------------------------
   def compile_ribbons(*paths)
     compile_PBS_file_generic(GameData::Ribbon, *paths) do |final_validate, hash|
@@ -786,7 +789,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile wild encounter data
+  # Compile wild encounter data.
   #-----------------------------------------------------------------------------
   def compile_encounters(*paths)
     GameData::Encounter::DATA.clear
@@ -898,7 +901,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile trainer type data
+  # Compile trainer type data.
   #-----------------------------------------------------------------------------
   def compile_trainer_types(*paths)
     compile_PBS_file_generic(GameData::TrainerType, *paths) do |final_validate, hash|
@@ -925,7 +928,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile individual trainer data
+  # Compile individual trainer data.
   #-----------------------------------------------------------------------------
   def compile_trainers(*paths)
     GameData::Trainer::DATA.clear
@@ -1085,7 +1088,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile Battle Tower and other Cups trainers/Pokémon
+  # Compile Battle Tower and other Cups trainers/Pokémon.
   #-----------------------------------------------------------------------------
   def compile_trainer_lists(path = "PBS/battle_facility_lists.txt")
     compile_pbs_file_message_start(path)
@@ -1202,7 +1205,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile metadata
+  # Compile metadata.
   # NOTE: Doesn't use compile_PBS_file_generic because it contains data for two
   #       different GameData classes.
   #-----------------------------------------------------------------------------
@@ -1307,7 +1310,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile map metadata
+  # Compile map metadata.
   #-----------------------------------------------------------------------------
   def compile_map_metadata(*paths)
     compile_PBS_file_generic(GameData::MapMetadata, *paths) do |final_validate, hash|
@@ -1330,7 +1333,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile dungeon tileset data
+  # Compile dungeon tileset data.
   #-----------------------------------------------------------------------------
   def compile_dungeon_tilesets(*paths)
     compile_PBS_file_generic(GameData::DungeonTileset, *paths) do |final_validate, hash|
@@ -1345,7 +1348,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile dungeon parameters data
+  # Compile dungeon parameters data.
   #-----------------------------------------------------------------------------
   def compile_dungeon_parameters(*paths)
     compile_PBS_file_generic(GameData::DungeonParameters, *paths) do |final_validate, hash|
@@ -1371,7 +1374,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Compile phone messages
+  # Compile phone messages.
   #-----------------------------------------------------------------------------
   def compile_phone(*paths)
     compile_PBS_file_generic(GameData::PhoneMessage, *paths) do |final_validate, hash|

@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module Compiler
   module_function
 
@@ -30,7 +33,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Generic methods used when writing PBS files
+  # Generic methods used when writing PBS files.
   #-----------------------------------------------------------------------------
   def write_pbs_file_message_start(filename)
     # The `` around the file's name turns it cyan
@@ -101,14 +104,14 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save Town Map data to PBS file
+  # Save Town Map data to PBS file.
   #-----------------------------------------------------------------------------
   def write_town_map
     write_PBS_file_generic(GameData::TownMap)
   end
 
   #-----------------------------------------------------------------------------
-  # Save map connections to PBS file
+  # Save map connections to PBS file.
   #-----------------------------------------------------------------------------
   def normalize_connection(conn)
     ret = conn.clone
@@ -168,42 +171,42 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save type data to PBS file
+  # Save type data to PBS file.
   #-----------------------------------------------------------------------------
   def write_types
     write_PBS_file_generic(GameData::Type)
   end
 
   #-----------------------------------------------------------------------------
-  # Save ability data to PBS file
+  # Save ability data to PBS file.
   #-----------------------------------------------------------------------------
   def write_abilities
     write_PBS_file_generic(GameData::Ability)
   end
 
   #-----------------------------------------------------------------------------
-  # Save move data to PBS file
+  # Save move data to PBS file.
   #-----------------------------------------------------------------------------
   def write_moves
     write_PBS_file_generic(GameData::Move)
   end
 
   #-----------------------------------------------------------------------------
-  # Save item data to PBS file
+  # Save item data to PBS file.
   #-----------------------------------------------------------------------------
   def write_items
     write_PBS_file_generic(GameData::Item)
   end
 
   #-----------------------------------------------------------------------------
-  # Save berry plant data to PBS file
+  # Save berry plant data to PBS file.
   #-----------------------------------------------------------------------------
   def write_berry_plants
     write_PBS_file_generic(GameData::BerryPlant)
   end
 
   #-----------------------------------------------------------------------------
-  # Save Pokémon data to PBS file
+  # Save Pokémon data to PBS file.
   # NOTE: Doesn't use write_PBS_file_generic because it needs to ignore defined
   #       species with a form that isn't 0.
   #-----------------------------------------------------------------------------
@@ -259,7 +262,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save Pokémon forms data to PBS file
+  # Save Pokémon forms data to PBS file.
   # NOTE: Doesn't use write_PBS_file_generic because it needs to ignore defined
   #       species with a form of 0, and needs its own schema.
   #-----------------------------------------------------------------------------
@@ -319,7 +322,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Write species metrics
+  # Write species metrics.
   # NOTE: Doesn't use write_PBS_file_generic because it needs to ignore defined
   #       metrics for forms of species where the metrics are the same as for the
   #       base species.
@@ -387,7 +390,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save Shadow Pokémon data to PBS file
+  # Save Shadow Pokémon data to PBS file.
   #-----------------------------------------------------------------------------
   def write_shadow_pokemon
     return if GameData::ShadowPokemon::DATA.empty?
@@ -395,7 +398,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save Regional Dexes to PBS file
+  # Save Regional Dexes to PBS file.
   #-----------------------------------------------------------------------------
   def write_regional_dexes(path = "PBS/regional_dexes.txt")
     write_pbs_file_message_start(path)
@@ -427,14 +430,14 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save ability data to PBS file
+  # Save ability data to PBS file.
   #-----------------------------------------------------------------------------
   def write_ribbons
     write_PBS_file_generic(GameData::Ribbon)
   end
 
   #-----------------------------------------------------------------------------
-  # Save wild encounter data to PBS file
+  # Save wild encounter data to PBS file.
   #-----------------------------------------------------------------------------
   def write_encounters
     paths = get_all_PBS_file_paths(GameData::Encounter)
@@ -478,14 +481,14 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save trainer type data to PBS file
+  # Save trainer type data to PBS file.
   #-----------------------------------------------------------------------------
   def write_trainer_types
     write_PBS_file_generic(GameData::TrainerType)
   end
 
   #-----------------------------------------------------------------------------
-  # Save individual trainer data to PBS file
+  # Save individual trainer data to PBS file.
   #-----------------------------------------------------------------------------
   def write_trainers
     paths = get_all_PBS_file_paths(GameData::Trainer)
@@ -542,7 +545,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save trainer list data to PBS file
+  # Save trainer list data to PBS file.
   #-----------------------------------------------------------------------------
   def write_trainer_lists(path = "PBS/battle_facility_lists.txt")
     trainerlists = load_data("Data/trainer_lists.dat") rescue nil
@@ -565,7 +568,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save Battle Tower trainer data to PBS file
+  # Save Battle Tower trainer data to PBS file.
   #-----------------------------------------------------------------------------
   def write_battle_tower_trainers(bttrainers, filename)
     return if !bttrainers || !filename
@@ -604,7 +607,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save Battle Tower Pokémon data to PBS file
+  # Save Battle Tower Pokémon data to PBS file.
   #-----------------------------------------------------------------------------
   def write_battle_tower_pokemon(btpokemon, filename)
     return if !btpokemon || !filename
@@ -655,7 +658,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save metadata data to PBS file
+  # Save metadata data to PBS file.
   # NOTE: Doesn't use write_PBS_file_generic because it contains data for two
   #       different GameData classes.
   #-----------------------------------------------------------------------------
@@ -717,7 +720,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save map metadata data to PBS file
+  # Save map metadata data to PBS file.
   # NOTE: Doesn't use write_PBS_file_generic because it writes the RMXP map name
   #       next to the section header for each map.
   #-----------------------------------------------------------------------------
@@ -763,7 +766,7 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save dungeon tileset contents data to PBS file
+  # Save dungeon tileset contents data to PBS file.
   # NOTE: Doesn't use write_PBS_file_generic because it writes the tileset name
   #       next to the section header for each tileset.
   #-----------------------------------------------------------------------------
@@ -811,14 +814,14 @@ module Compiler
   end
 
   #-----------------------------------------------------------------------------
-  # Save dungeon parameters to PBS file
+  # Save dungeon parameters to PBS file.
   #-----------------------------------------------------------------------------
   def write_dungeon_parameters
     write_PBS_file_generic(GameData::DungeonParameters)
   end
 
   #-----------------------------------------------------------------------------
-  # Save phone messages to PBS file
+  # Save phone messages to PBS file.
   #-----------------------------------------------------------------------------
   def write_phone
     write_PBS_file_generic(GameData::PhoneMessage)

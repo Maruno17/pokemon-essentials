@@ -1,18 +1,14 @@
 #===============================================================================
 # * Hall of Fame - by FL (Credits will be apreciated)
-#===============================================================================
-#
+#-------------------------------------------------------------------------------
 # This script is for Pokémon Essentials. It makes a recordable Hall of Fame
 # like the Gen 3 games.
-#
-#===============================================================================
-#
+#-------------------------------------------------------------------------------
 # To this scripts works, put it above main, put a 512x384 picture in
 # hallfamebars and a 8x24 background picture in hallfamebg. To call this script,
 # use 'pbHallOfFameEntry'. After you recorder the first entry, you can access
 # the hall teams using a PC. You can also check the player Hall of Fame last
 # number using '$PokemonGlobal.hallOfFameLastNumber'.
-#
 #===============================================================================
 class HallOfFame_Scene
   # When true, all pokémon will be in one line.
@@ -449,20 +445,6 @@ end
 #===============================================================================
 #
 #===============================================================================
-MenuHandlers.add(:pc_menu, :hall_of_fame, {
-  "name"      => _INTL("Hall of Fame"),
-  "order"     => 40,
-  "condition" => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
-  "effect"    => proc { |menu|
-    pbMessage("\\se[PC access]" + _INTL("Accessed the Hall of Fame."))
-    pbHallOfFamePC
-    next false
-  }
-})
-
-#===============================================================================
-#
-#===============================================================================
 class PokemonGlobalMetadata
   attr_writer :hallOfFame
   # Number necessary if hallOfFame array reach in its size limit
@@ -492,3 +474,14 @@ def pbHallOfFamePC
   screen = HallOfFameScreen.new(scene)
   screen.pbStartScreenPC
 end
+
+MenuHandlers.add(:pc_menu, :hall_of_fame, {
+  "name"      => _INTL("Hall of Fame"),
+  "order"     => 40,
+  "condition" => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
+  "effect"    => proc { |menu|
+    pbMessage("\\se[PC access]" + _INTL("Accessed the Hall of Fame."))
+    pbHallOfFamePC
+    next false
+  }
+})

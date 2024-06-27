@@ -1,18 +1,21 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle
   class BattleAbortedException < Exception; end
+
+  #-----------------------------------------------------------------------------
 
   def pbAbort
     raise BattleAbortedException.new("Battle aborted")
   end
 
-  #=============================================================================
   # Makes sure all Pokémon exist that need to. Alter the type of battle if
   # necessary. Will never try to create battler positions, only delete them
   # (except for wild Pokémon whose number of positions are fixed). Reduces the
   # size of each side by 1 and tries again. If the side sizes are uneven, only
   # the larger side's size will be reduced by 1 each time, until both sides are
   # an equal size (then both sides will be reduced equally).
-  #=============================================================================
   def pbEnsureParticipants
     # Prevent battles larger than 2v2 if both sides have multiple trainers
     # NOTE: This is necessary to ensure that battlers can never become unable to
@@ -103,9 +106,10 @@ class Battle
     end
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Set up all battlers
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def pbCreateBattler(idxBattler, pkmn, idxParty)
     if !@battlers[idxBattler].nil?
       raise _INTL("Battler index {1} already exists", idxBattler)
@@ -164,9 +168,10 @@ class Battle
     return ret
   end
 
-  #=============================================================================
-  # Send out all battlers at the start of battle
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Send out all battlers at the start of battle.
+  #-----------------------------------------------------------------------------
+
   def pbStartBattleSendOut(sendOuts)
     # "Want to battle" messages
     if wildBattle?
@@ -241,9 +246,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # Start a battle
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Start a battle.
+  #-----------------------------------------------------------------------------
+
   def pbStartBattle
     PBDebug.log("")
     PBDebug.log("================================================================")
@@ -317,9 +323,10 @@ class Battle
     pbBattleLoop
   end
 
-  #=============================================================================
-  # Main battle loop
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Main battle loop.
+  #-----------------------------------------------------------------------------
+
   def pbBattleLoop
     @turnCount = 0
     loop do   # Now begin the battle loop
@@ -347,9 +354,10 @@ class Battle
     pbEndOfBattle
   end
 
-  #=============================================================================
-  # End of battle
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End of battle.
+  #-----------------------------------------------------------------------------
+
   def pbGainMoney
     return if !@internalBattle || !@moneyGain
     # Money rewarded from opposing trainers
@@ -511,9 +519,10 @@ class Battle
     return @decision
   end
 
-  #=============================================================================
-  # Judging
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Judging.
+  #-----------------------------------------------------------------------------
+
   def pbJudgeCheckpoint(user, move = nil); end
 
   def pbDecisionOnTime

@@ -30,6 +30,7 @@ end
 #===============================================================================
 # IsUnconditional
 #===============================================================================
+
 Battle::PokeBallEffects::IsUnconditional.add(:MASTERBALL, proc { |ball, battle, battler|
   next true
 })
@@ -40,6 +41,7 @@ Battle::PokeBallEffects::IsUnconditional.add(:MASTERBALL, proc { |ball, battle, 
 #       Ball is a Beast Ball). In this case, all Balls' catch rates are set
 #       elsewhere to 0.1x.
 #===============================================================================
+
 Battle::PokeBallEffects::ModifyCatchRate.add(:GREATBALL, proc { |ball, catchRate, battle, battler|
   next catchRate * 1.5
 })
@@ -189,6 +191,7 @@ Battle::PokeBallEffects::ModifyCatchRate.add(:BEASTBALL, proc { |ball, catchRate
 #===============================================================================
 # OnCatch
 #===============================================================================
+
 Battle::PokeBallEffects::OnCatch.add(:HEALBALL, proc { |ball, battle, pkmn|
   pkmn.heal
 })

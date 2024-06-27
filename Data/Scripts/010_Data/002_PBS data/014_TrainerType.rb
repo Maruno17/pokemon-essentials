@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class TrainerType
     attr_reader :id
@@ -15,7 +18,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "trainer_types.dat"
     PBS_BASE_FILENAME = "trainer_types"
-
     SCHEMA = {
       "SectionName" => [:id,          "m"],
       "Name"        => [:real_name,   "s"],
@@ -100,6 +102,8 @@ module GameData
       outfit = ($player) ? $player.outfit : 0
       return self.check_file(tr_type, "Graphics/UI/Town Map/player_", sprintf("_%d", outfit))
     end
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id              = hash[:id]

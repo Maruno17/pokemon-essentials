@@ -1,7 +1,11 @@
+#===============================================================================
 # The Game module contains methods for saving and loading the game.
+#===============================================================================
 module Game
+  module_function
+
   # Initializes various global variables and loads the game data.
-  def self.initialize
+  def initialize
     $game_temp          = Game_Temp.new
     $game_system        = Game_System.new
     $data_animations    = load_data("Data/Animations.rxdata")
@@ -18,7 +22,7 @@ module Game
 
   # Loads bootup data from save file (if it exists) or creates bootup data (if
   # it doesn't).
-  def self.set_up_system
+  def set_up_system
     save_data = (SaveData.exists?) ? SaveData.read_from_file(SaveData::FILE_PATH) : {}
     if save_data.empty?
       SaveData.initialize_bootup_values
@@ -36,7 +40,7 @@ module Game
 
   # Called when starting a new game. Initializes global variables
   # and transfers the player into the map scene.
-  def self.start_new
+  def start_new
     if $game_map&.events
       $game_map.events.each_value { |event| event.clear_starting }
     end
@@ -60,12 +64,12 @@ module Game
   # Loads the game from the given save data and starts the map scene.
   # @param save_data [Hash] hash containing the save data
   # @raise [SaveData::InvalidValueError] if an invalid value is being loaded
-  def self.load(save_data)
+  def load(save_data)
     validate save_data => Hash
     SaveData.load_all_values(save_data)
     $game_temp.last_uptime_refreshed_play_time = System.uptime
     $stats.play_sessions += 1
-    self.load_map
+    load_map
     pbAutoplayOnSave
     $game_map.update
     $PokemonMap.updateMap
@@ -73,7 +77,7 @@ module Game
   end
 
   # Loads and validates the map. Called when loading a saved game.
-  def self.load_map
+  def load_map
     $game_map = $map_factory.map
     magic_number_matches = ($game_system.magic_number == $data_system.magic_number)
     if !magic_number_matches || $PokemonGlobal.safesave
@@ -108,7 +112,7 @@ module Game
   # @param safe [Boolean] whether $PokemonGlobal.safesave should be set to true
   # @return [Boolean] whether the operation was successful
   # @raise [SaveData::InvalidValueError] if an invalid value is being saved
-  def self.save(save_file = SaveData::FILE_PATH, safe: false)
+  def save(save_file = SaveData::FILE_PATH, safe: false)
     validate save_file => String, safe => [TrueClass, FalseClass]
     $PokemonGlobal.safesave = safe
     $game_system.save_count += 1

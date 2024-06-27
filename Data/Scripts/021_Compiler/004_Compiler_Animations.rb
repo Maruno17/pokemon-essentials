@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module Compiler
   @@categories[:animations] = {
     :should_compile => proc { |compiling| next false },
@@ -9,7 +12,7 @@ module Compiler
   module_function
 
   #-----------------------------------------------------------------------------
-  # Compile battle animations
+  # Compile battle animations.
   #-----------------------------------------------------------------------------
   def compile_animations
     Console.echo_li(_INTL("Compiling animations..."))

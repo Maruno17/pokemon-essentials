@@ -1,7 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
-  #=============================================================================
-  # Turn processing
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Turn processing.
+  #-----------------------------------------------------------------------------
+
   def pbProcessTurn(choice, tryFlee = true)
     return false if fainted?
     # Wild roaming Pokémon always flee if possible
@@ -55,9 +59,10 @@ class Battle::Battler
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   #
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def pbBeginTurn(_choice)
     # Cancel some lingering effects which only apply until the user next moves
     @effects[PBEffects::DestinyBondPrevious] = @effects[PBEffects::DestinyBond]
@@ -131,10 +136,11 @@ class Battle::Battler
     pbItemHPHealCheck
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Simple "use move" method, used when a move calls another move and for Future
-  # Sight's attack
-  #=============================================================================
+  # Sight's attack.
+  #-----------------------------------------------------------------------------
+
   def pbUseMoveSimple(moveID, target = -1, idxMove = -1, specialUsage = true)
     choice = []
     choice[0] = :UseMove   # "Use move"
@@ -150,9 +156,10 @@ class Battle::Battler
     pbUseMove(choice, specialUsage)
   end
 
-  #=============================================================================
-  # Master "use move" method
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Master "use move" method.
+  #-----------------------------------------------------------------------------
+
   def pbUseMove(choice, specialUsage = false)
     # NOTE: This is intentionally determined before a multi-turn attack can
     #       set specialUsage to true.
@@ -582,9 +589,10 @@ class Battle::Battler
     end
   end
 
-  #=============================================================================
-  # Attack a single target
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Attack a single target.
+  #-----------------------------------------------------------------------------
+
   def pbProcessMoveHit(move, user, targets, hitNum, skipAccuracyCheck)
     return false if user.fainted?
     # For two-turn attacks being used in a single turn

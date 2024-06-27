@@ -1,5 +1,5 @@
 #===============================================================================
-# ItemHandlers
+# ItemHandlers.
 #===============================================================================
 module ItemHandlers
   UseText             = ItemHandlerHash.new
@@ -13,42 +13,44 @@ module ItemHandlers
   BattleUseOnBattler  = ItemHandlerHash.new
   BattleUseOnPokemon  = ItemHandlerHash.new
 
-  def self.hasUseText(item)
+  module_function
+
+  def hasUseText(item)
     return !UseText[item].nil?
   end
 
   # Shows "Use" option in Bag.
-  def self.hasOutHandler(item)
+  def hasOutHandler(item)
     return !UseFromBag[item].nil? || !UseInField[item].nil? || !UseOnPokemon[item].nil?
   end
 
   # Shows "Register" option in Bag.
-  def self.hasUseInFieldHandler(item)
+  def hasUseInFieldHandler(item)
     return !UseInField[item].nil?
   end
 
-  def self.hasUseOnPokemon(item)
+  def hasUseOnPokemon(item)
     return !UseOnPokemon[item].nil?
   end
 
-  def self.hasUseOnPokemonMaximum(item)
+  def hasUseOnPokemonMaximum(item)
     return !UseOnPokemonMaximum[item].nil?
   end
 
-  def self.hasUseInBattle(item)
+  def hasUseInBattle(item)
     return !UseInBattle[item].nil?
   end
 
-  def self.hasBattleUseOnBattler(item)
+  def hasBattleUseOnBattler(item)
     return !BattleUseOnBattler[item].nil?
   end
 
-  def self.hasBattleUseOnPokemon(item)
+  def hasBattleUseOnPokemon(item)
     return !BattleUseOnPokemon[item].nil?
   end
 
-  # Returns text to display instead of "Use"
-  def self.getUseText(item)
+  # Returns text to display instead of "Use".
+  def getUseText(item)
     return UseText.trigger(item)
   end
 
@@ -56,7 +58,7 @@ module ItemHandlers
   # 0 - Item not used
   # 1 - Item used, don't end screen
   # 2 - Item used, end screen
-  def self.triggerUseFromBag(item)
+  def triggerUseFromBag(item)
     return UseFromBag.trigger(item) if UseFromBag[item]
     # No UseFromBag handler exists; check the UseInField handler if present
     if UseInField[item]
@@ -65,8 +67,8 @@ module ItemHandlers
     return 0
   end
 
-  # Returns whether item can be used
-  def self.triggerConfirmUseInField(item)
+  # Returns whether item can be used.
+  def triggerConfirmUseInField(item)
     return true if !ConfirmUseInField[item]
     return ConfirmUseInField.trigger(item)
   end
@@ -75,41 +77,41 @@ module ItemHandlers
   # -1 - Item effect not found
   # 0  - Item not used
   # 1  - Item used
-  def self.triggerUseInField(item)
+  def triggerUseInField(item)
     return -1 if !UseInField[item]
     return (UseInField.trigger(item)) ? 1 : 0
   end
 
-  # Returns whether item was used
-  def self.triggerUseOnPokemon(item, qty, pkmn, scene)
+  # Returns whether item was used.
+  def triggerUseOnPokemon(item, qty, pkmn, scene)
     return false if !UseOnPokemon[item]
     return UseOnPokemon.trigger(item, qty, pkmn, scene)
   end
 
   # Returns the maximum number of the item that can be used on the Pokémon at once.
-  def self.triggerUseOnPokemonMaximum(item, pkmn)
+  def triggerUseOnPokemonMaximum(item, pkmn)
     return 1 if !UseOnPokemonMaximum[item]
     return 1 if !Settings::USE_MULTIPLE_STAT_ITEMS_AT_ONCE
     return [UseOnPokemonMaximum.trigger(item, pkmn), 1].max
   end
 
-  def self.triggerCanUseInBattle(item, pkmn, battler, move, firstAction, battle, scene, showMessages = true)
+  def triggerCanUseInBattle(item, pkmn, battler, move, firstAction, battle, scene, showMessages = true)
     return true if !CanUseInBattle[item]   # Can use the item by default
     return CanUseInBattle.trigger(item, pkmn, battler, move, firstAction, battle, scene, showMessages)
   end
 
-  def self.triggerUseInBattle(item, battler, battle)
+  def triggerUseInBattle(item, battler, battle)
     UseInBattle.trigger(item, battler, battle)
   end
 
-  # Returns whether item was used
-  def self.triggerBattleUseOnBattler(item, battler, scene)
+  # Returns whether item was used.
+  def triggerBattleUseOnBattler(item, battler, scene)
     return false if !BattleUseOnBattler[item]
     return BattleUseOnBattler.trigger(item, battler, scene)
   end
 
-  # Returns whether item was used
-  def self.triggerBattleUseOnPokemon(item, pkmn, battler, choices, scene)
+  # Returns whether item was used.
+  def triggerBattleUseOnPokemon(item, pkmn, battler, choices, scene)
     return false if !BattleUseOnPokemon[item]
     return BattleUseOnPokemon.trigger(item, pkmn, battler, choices, scene)
   end
@@ -127,7 +129,7 @@ def pbCanUseOnPokemon?(item)
 end
 
 #===============================================================================
-# Change a Pokémon's level
+# Change a Pokémon's level.
 #===============================================================================
 def pbChangeLevel(pkmn, new_level, scene)
   new_level = new_level.clamp(1, GameData::GrowthRate.max_level)
@@ -328,7 +330,7 @@ def pbGainExpFromExpCandy(pkmn, base_amt, qty, scene)
 end
 
 #===============================================================================
-# Restore HP
+# Restore HP.
 #===============================================================================
 def pbItemRestoreHP(pkmn, restoreHP)
   newHP = pkmn.hp + restoreHP
@@ -362,7 +364,7 @@ def pbBattleHPItem(pkmn, battler, restoreHP, scene)
 end
 
 #===============================================================================
-# Restore PP
+# Restore PP.
 #===============================================================================
 def pbRestorePP(pkmn, idxMove, pp)
   return 0 if !pkmn.moves[idxMove] || !pkmn.moves[idxMove].id
@@ -383,7 +385,7 @@ def pbBattleRestorePP(pkmn, battler, idxMove, pp)
 end
 
 #===============================================================================
-# Change EVs
+# Change EVs.
 #===============================================================================
 def pbJustRaiseEffortValues(pkmn, stat, evGain)
   stat = GameData::Stat.get(stat).id
@@ -484,7 +486,7 @@ def pbRaiseHappinessAndLowerEV(pkmn, scene, stat, qty, messages)
 end
 
 #===============================================================================
-# Change nature
+# Change nature.
 #===============================================================================
 def pbNatureChangingMint(new_nature, item, pkmn, scene)
   if pkmn.nature_for_stats == new_nature
@@ -503,7 +505,7 @@ def pbNatureChangingMint(new_nature, item, pkmn, scene)
 end
 
 #===============================================================================
-# Battle items
+# Battle items.
 #===============================================================================
 def pbBattleItemCanCureStatus?(status, pkmn, scene, showMessages)
   if !pkmn.able? || pkmn.status != status
@@ -522,7 +524,7 @@ def pbBattleItemCanRaiseStat?(stat, battler, scene, showMessages)
 end
 
 #===============================================================================
-# Decide whether the player is able to ride/dismount their Bicycle
+# Decide whether the player is able to ride/dismount their Bicycle.
 #===============================================================================
 def pbBikeCheck
   if $PokemonGlobal.surfing || $PokemonGlobal.diving ||
@@ -551,7 +553,7 @@ def pbBikeCheck
 end
 
 #===============================================================================
-# Find the closest hidden item (for Itemfinder)
+# Find the closest hidden item (for Itemfinder).
 #===============================================================================
 def pbClosestHiddenItem
   result = []
@@ -577,7 +579,7 @@ def pbClosestHiddenItem
 end
 
 #===============================================================================
-# Teach and forget a move
+# Teach and forget a move.
 #===============================================================================
 def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, &block)
   return false if !pkmn
@@ -638,7 +640,7 @@ def pbForgetMove(pkmn, moveToLearn)
 end
 
 #===============================================================================
-# Use an item from the Bag and/or on a Pokémon
+# Use an item from the Bag and/or on a Pokémon.
 #===============================================================================
 # @return [Integer] 0 = item wasn't used; 1 = item used; 2 = close Bag to use in field
 def pbUseItem(bag, item, bagscene = nil)
@@ -706,7 +708,7 @@ def pbUseItem(bag, item, bagscene = nil)
 end
 
 # Only called when in the party screen and having chosen an item to be used on
-# the selected Pokémon
+# the selected Pokémon.
 def pbUseItemOnPokemon(item, pkmn, scene)
   itm = GameData::Item.get(item)
   # TM or HM
@@ -776,7 +778,7 @@ def pbCheckUseOnPokemon(item, pkmn, _screen)
 end
 
 #===============================================================================
-# Give an item to a Pokémon to hold, and take a held item from a Pokémon
+# Give an item to a Pokémon to hold, and take a held item from a Pokémon.
 #===============================================================================
 def pbGiveItemToPokemon(item, pkmn, scene, pkmnid = 0)
   newitemname = GameData::Item.get(item).portion_name
@@ -854,7 +856,7 @@ def pbTakeItemFromPokemon(pkmn, scene)
 end
 
 #===============================================================================
-# Choose an item from the Bag
+# Choose an item from the Bag.
 #===============================================================================
 def pbChooseItem(var = 0, *args)
   ret = nil

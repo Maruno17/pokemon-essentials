@@ -65,7 +65,7 @@ class BattleSwapScene
     @mode = 1
   end
 
-  # End the scene here
+  # End the scene here.
   def pbEndScene
     pbFadeOutAndHide(@sprites) { pbUpdate }
     pbDisposeSpriteHash(@sprites)
@@ -93,7 +93,7 @@ class BattleSwapScene
     return commands
   end
 
-  # Processes the scene
+  # Processes the scene.
   def pbChoosePokemon(canCancel)
     pbActivateWindow(@sprites, "list") do
       loop do

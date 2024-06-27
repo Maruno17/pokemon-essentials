@@ -305,7 +305,7 @@ def pbCsvPosInt!(str)
 end
 
 #===============================================================================
-# Money and coins windows
+# Money and coins windows.
 #===============================================================================
 def pbGetGoldString
   return _INTL("${1}", $player.money.to_s_formatted)
@@ -400,7 +400,7 @@ def pbDisposeMessageWindow(msgwindow)
 end
 
 #===============================================================================
-# Main message-displaying function
+# Main message-displaying function.
 #===============================================================================
 def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = nil)
   return if !msgwindow
@@ -685,7 +685,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
 end
 
 #===============================================================================
-# Message-displaying functions
+# Message-displaying functions.
 #===============================================================================
 def pbMessage(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd = 0, &block)
   ret = 0

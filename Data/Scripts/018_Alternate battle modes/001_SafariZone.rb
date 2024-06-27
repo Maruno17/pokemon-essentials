@@ -79,6 +79,7 @@ end
 #===============================================================================
 #
 #===============================================================================
+
 EventHandlers.add(:on_enter_map, :end_safari_game,
   proc { |_old_map_id|
     pbSafariState.pbEnd if !pbInSafari?
@@ -104,6 +105,7 @@ EventHandlers.add(:on_player_step_taken_can_transfer, :safari_game_counter,
 #===============================================================================
 #
 #===============================================================================
+
 EventHandlers.add(:on_calling_wild_battle, :safari_battle,
   proc { |pkmn, handled|
     # handled is an array: [nil]. If [true] or [false], the battle has already
@@ -176,6 +178,10 @@ class PokemonPauseMenu
     end
   end
 end
+
+#===============================================================================
+#
+#===============================================================================
 
 MenuHandlers.add(:pause_menu, :quit_safari_game, {
   "name"      => _INTL("Quit"),

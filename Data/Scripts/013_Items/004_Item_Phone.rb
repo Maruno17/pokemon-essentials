@@ -112,7 +112,7 @@ class Phone
     @contacts = new_contacts
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # Checks once every second.
   def refresh_ready_trainers
@@ -143,7 +143,7 @@ class Phone
     contact.time_to_ready = 0
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.rematch_variant
     return $PokemonGlobal.phone.rematch_variant
@@ -366,7 +366,7 @@ class Phone
       return valid_contacts.sample
     end
 
-    #===========================================================================
+    #-----------------------------------------------------------------------------
 
     def make_incoming
       return if !can_make?
@@ -442,7 +442,7 @@ class Phone
       pbMessage(_INTL("Click!") + "\\wt[10]\n......\\wt[5] ......\1")
     end
 
-    #===========================================================================
+    #-----------------------------------------------------------------------------
 
     def generate_trainer_dialogue(contact)
       validate contact => Phone::Contact

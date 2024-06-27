@@ -115,7 +115,7 @@ module RandomDungeon
       return new_x, new_y
     end
 
-    #===========================================================================
+    #---------------------------------------------------------------------------
 
     def generate_layout
       # Set visitable nodes
@@ -394,7 +394,7 @@ module RandomDungeon
       return @map_data.write
     end
 
-    #===========================================================================
+    #---------------------------------------------------------------------------
 
     # Returns whether the given coordinates are a room floor that isn't too
     # close to a corridor. For positioning events/the player upon entering.
@@ -423,7 +423,7 @@ module RandomDungeon
       return tile_is_ground?(@map_data[x, y, 0]) && !tile_is_wall?(@map_data[x, y, 1])
     end
 
-    #===========================================================================
+    #---------------------------------------------------------------------------
 
     def generate
       @rng_seed = @parameters.rng_seed || $PokemonGlobal.dungeon_rng_seed || Random.new_seed
@@ -505,7 +505,7 @@ module RandomDungeon
       end
     end
 
-    #===========================================================================
+    #---------------------------------------------------------------------------
 
     # Determines whether all floor tiles are contiguous. Sets @need_redraw if
     # there are 2+ floor regions that are isolated from each other.
@@ -725,7 +725,7 @@ module RandomDungeon
       end
     end
 
-    #===========================================================================
+    #---------------------------------------------------------------------------
 
     # Draws a cell's contents, which is an underlying pattern based on
     # tile_layout (the corridors), and possibly a room on top of that.
@@ -975,7 +975,7 @@ module RandomDungeon
       end
     end
 
-    #===========================================================================
+    #---------------------------------------------------------------------------
 
     # Convert dungeon layout into proper map tiles from a tileset, and modifies
     # the given map's data accordingly.

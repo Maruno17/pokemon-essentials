@@ -1,3 +1,4 @@
+#===============================================================================
 # Results of battle (see module Outcome):
 #    0 - Undecided or aborted
 #    1 - Player won
@@ -36,7 +37,7 @@
 #           class Game_Temp
 #             def add_battle_rule
 #       (There is no guarantee that this list is complete.)
-
+#===============================================================================
 class Battle
   module Outcome
     UNDECIDED = 0
@@ -115,9 +116,8 @@ class Battle
 
   def pbRandom(x); return rand(x); end
 
-  #=============================================================================
-  # Creating the battle class
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def initialize(scene, p1, p2, player, opponent)
     if p1.length == 0
       raise ArgumentError.new(_INTL("Party 1 has no Pokémon."))
@@ -200,9 +200,10 @@ class Battle
     return Outcome.decided?(@decision)
   end
 
-  #=============================================================================
-  # Information about the type and size of the battle
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Information about the type and size of the battle.
+  #-----------------------------------------------------------------------------
+
   def wildBattle?;    return @opponent.nil?;  end
   def trainerBattle?; return !@opponent.nil?; end
 
@@ -236,9 +237,10 @@ class Battle
     return (pbSideSize(0) > pbSideSize(1)) ? (pbSideSize(0) - 1) * 2 : (pbSideSize(1) * 2) - 1
   end
 
-  #=============================================================================
-  # Trainers and owner-related methods
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Trainers and owner-related methods.
+  #-----------------------------------------------------------------------------
+
   def pbPlayer; return @player[0]; end
 
   # Given a battler index, returns the index within @player/@opponent of the
@@ -324,9 +326,10 @@ class Battle
     return ret
   end
 
-  #=============================================================================
-  # Get party information (counts all teams on the same side)
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Get party information (counts all teams on the same side).
+  #-----------------------------------------------------------------------------
+
   def pbParty(idxBattler)
     return (opposes?(idxBattler)) ? @party2 : @party1
   end
@@ -407,10 +410,11 @@ class Battle
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Get team information (a team is only the Pokémon owned by a particular
-  # trainer)
-  #=============================================================================
+  # trainer).
+  #-----------------------------------------------------------------------------
+
   def pbTeamIndexRangeFromBattlerIndex(idxBattler)
     partyStarts = pbPartyStarts(idxBattler)
     idxTrainer = pbGetOwnerIndexFromBattlerIndex(idxBattler)
@@ -464,9 +468,10 @@ class Battle
     return ret
   end
 
-  #=============================================================================
-  # Iterate through battlers
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Iterate through battlers.
+  #-----------------------------------------------------------------------------
+
   # Unused
   def eachBattler
     @battlers.each { |b| yield b if b && !b.fainted? }
@@ -577,9 +582,10 @@ class Battle
     return [idxBattler]
   end
 
-  #=============================================================================
-  # Comparing the positions of two battlers
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Comparing the positions of two battlers.
+  #-----------------------------------------------------------------------------
+
   def opposes?(idxBattler1, idxBattler2 = 0)
     idxBattler1 = idxBattler1.index if idxBattler1.respond_to?("index")
     idxBattler2 = idxBattler2.index if idxBattler2.respond_to?("index")
@@ -612,9 +618,10 @@ class Battle
     return true
   end
 
-  #=============================================================================
-  # Altering a party or rearranging battlers
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Altering a party or rearranging battlers.
+  #-----------------------------------------------------------------------------
+
   def pbRemoveFromParty(idxBattler, idxParty)
     party = pbParty(idxBattler)
     # Erase the Pokémon from the party
@@ -670,9 +677,10 @@ class Battle
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   #
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Returns the battler representing the Pokémon at index idxParty in its party,
   # on the same side as a battler with battler index of idxBattlerOther.
   def pbFindBattler(idxParty, idxBattlerOther = 0)
@@ -724,9 +732,10 @@ class Battle
     return @nextPickupUse
   end
 
-  #=============================================================================
-  # Weather
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Weather.
+  #-----------------------------------------------------------------------------
+
   def defaultWeather=(value)
     @field.defaultWeather  = value
     @field.weather         = value
@@ -811,9 +820,10 @@ class Battle
     # NOTE: The ability splash is hidden again in def pbStartWeather.
   end
 
-  #=============================================================================
-  # Terrain
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Terrain.
+  #-----------------------------------------------------------------------------
+
   def defaultTerrain=(value)
     @field.defaultTerrain  = value
     @field.terrain         = value
@@ -847,9 +857,10 @@ class Battle
     allBattlers.each { |b| b.pbItemTerrainStatBoostCheck }
   end
 
-  #=============================================================================
-  # Messages and animations
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Messages and animations.
+  #-----------------------------------------------------------------------------
+
   def pbDisplay(msg, &block)
     @scene.pbDisplayMessage(msg, &block)
   end

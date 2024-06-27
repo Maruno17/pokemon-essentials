@@ -1,5 +1,5 @@
 #===============================================================================
-# Pokémon icons
+# Pokémon icons.
 #===============================================================================
 class PokemonBoxIcon < IconSprite
   def initialize(pokemon, viewport = nil)
@@ -44,7 +44,7 @@ class PokemonBoxIcon < IconSprite
 end
 
 #===============================================================================
-# Pokémon sprite
+# Pokémon sprite.
 #===============================================================================
 class MosaicPokemonSprite < PokemonSprite
   attr_reader :mosaic
@@ -140,7 +140,7 @@ class AutoMosaicPokemonSprite < MosaicPokemonSprite
 end
 
 #===============================================================================
-# Cursor
+# Cursor.
 #===============================================================================
 class PokemonBoxArrow < Sprite
   attr_accessor :quickswap
@@ -306,7 +306,7 @@ class PokemonBoxArrow < Sprite
 end
 
 #===============================================================================
-# Box
+# Box.
 #===============================================================================
 class PokemonBoxSprite < Sprite
   attr_accessor :refreshBox
@@ -461,7 +461,7 @@ class PokemonBoxSprite < Sprite
 end
 
 #===============================================================================
-# Party pop-up panel
+# Party pop-up panel.
 #===============================================================================
 class PokemonBoxPartySprite < Sprite
   def initialize(party, viewport = nil)
@@ -578,7 +578,7 @@ class PokemonBoxPartySprite < Sprite
 end
 
 #===============================================================================
-# Pokémon storage visuals
+# Pokémon storage visuals.
 #===============================================================================
 class PokemonStorageScene
   attr_reader :quickswap
@@ -1485,7 +1485,7 @@ class PokemonStorageScene
 end
 
 #===============================================================================
-# Pokémon storage mechanics
+# Pokémon storage mechanics.
 #===============================================================================
 class PokemonStorageScreen
   attr_reader :scene

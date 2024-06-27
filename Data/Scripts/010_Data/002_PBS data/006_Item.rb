@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class Item
     attr_reader :id
@@ -21,7 +24,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "items.dat"
     PBS_BASE_FILENAME = "items"
-
     SCHEMA = {
       "SectionName"       => [:id,                       "m"],
       "Name"              => [:real_name,                "s"],
@@ -115,6 +117,8 @@ module GameData
       ret = sprintf("Graphics/UI/Mail/mail_%s", item_data.id)
       return pbResolveBitmap(ret) ? ret : nil
     end
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id                       = hash[:id]

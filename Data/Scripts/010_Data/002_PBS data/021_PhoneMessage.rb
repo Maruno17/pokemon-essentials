@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class PhoneMessage
     attr_reader :id
@@ -11,7 +14,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "phone.dat"
     PBS_BASE_FILENAME = "phone"
-
     SCHEMA = {
       "SectionName"    => [:id,              "q"],
       "Intro"          => [:intro,           "^q"],
@@ -68,6 +70,8 @@ module GameData
       key = [tr_type.to_sym, tr_name, tr_version]
       return (self::DATA.has_key?(key)) ? self::DATA[key] : nil
     end
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id              = hash[:id]

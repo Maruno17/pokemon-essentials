@@ -1,6 +1,6 @@
 #===============================================================================
-# "Duel" mini-game
-# Based on the Duel minigame by Alael
+# "Duel" mini-game.
+# Based on the Duel minigame by Alael.
 #===============================================================================
 class DuelWindow < Window_AdvancedTextPokemon
   attr_reader :hp
@@ -375,11 +375,13 @@ class PokemonDuel
   end
 end
 
+#===============================================================================
 # Starts a duel.
 # trainer_id - ID or symbol of the opponent's trainer type.
 # trainer_name - Name of the opponent
 # event - Game_Event object for the character's event
 # speeches - Array of 12 speeches
+#===============================================================================
 def pbDuel(trainer_id, trainer_name, event, speeches)
   trainer_id = GameData::TrainerType.get(trainer_id).id
   duel = PokemonDuel.new

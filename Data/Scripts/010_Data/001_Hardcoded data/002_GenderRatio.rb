@@ -1,7 +1,9 @@
+#===============================================================================
 # If a Pokémon's gender ratio is none of :AlwaysMale, :AlwaysFemale or
 # :Genderless, then it will choose a random number between 0 and 255 inclusive,
 # and compare it to the @female_chance. If the random number is lower than this
 # chance, it will be female; otherwise, it will be male.
+#===============================================================================
 module GameData
   class GenderRatio
     attr_reader :id
@@ -15,6 +17,8 @@ module GameData
 
     def self.load; end
     def self.save; end
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id            = hash[:id]
@@ -35,6 +39,8 @@ module GameData
   end
 end
 
+#===============================================================================
+#
 #===============================================================================
 
 GameData::GenderRatio.register({

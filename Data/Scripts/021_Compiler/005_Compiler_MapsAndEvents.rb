@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module Compiler
   SCRIPT_REPLACEMENTS = [
     ["Kernel.",                      ""],
@@ -61,9 +64,9 @@ module Compiler
 
   module_function
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Add new map files to the map tree.
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   def import_new_maps
     return false if !$DEBUG
     mapfiles = {}
@@ -104,9 +107,9 @@ module Compiler
     return imported
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Generate and modify event commands.
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   def generate_move_route(commands)
     route           = RPG::MoveRoute.new
     route.repeat    = false
@@ -270,9 +273,8 @@ module Compiler
     event.pages.push(page)
   end
 
-  #=============================================================================
-  #
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def safequote(x)
     x = x.gsub(/\"\#\'\\/) { |a| "\\" + a }
     x = x.gsub(/\t/, "\\t")
@@ -489,9 +491,9 @@ module Compiler
     end
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Convert trainer comments to trainer event.
-  #=============================================================================
   def convert_to_trainer_event(event, trainerChecker)
     return nil if !event || event.pages.length == 0
     list = event.pages[0].list
@@ -784,12 +786,12 @@ module Compiler
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Convert event name to item event.
   # Checks if the event's name is "Item:POTION" or "HiddenItem:POTION". If so,
   # rewrites the whole event into one now named "Item"/"HiddenItem" which gives
   # that item when interacted with.
-  #=============================================================================
   def convert_to_item_event(event)
     return nil if !event || event.pages.length == 0
     name = event.name
@@ -829,11 +831,11 @@ module Compiler
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Checks whether a given event is likely to be a door. If so, rewrite it to
   # include animating the event as though it was a door opening and closing as the
   # player passes through.
-  #=============================================================================
   def update_door_event(event, mapData)
     changed = false
     return false if event.is_a?(RPG::CommonEvent)
@@ -924,9 +926,9 @@ module Compiler
     return changed
   end
 
-  #=============================================================================
-  # Fix up standard code snippets
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Fix up standard code snippets.
+  #-----------------------------------------------------------------------------
   def event_is_empty?(e)
     return true if !e
     return false if e.is_a?(RPG::CommonEvent)
@@ -1597,9 +1599,9 @@ module Compiler
     return (changed) ? event : nil
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Convert events used as counters into proper counters.
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Checks if the event has just 1 page, which has no conditions and no commands
   # and whose movement type is "Fixed".
   def plain_event?(event)
@@ -1699,9 +1701,9 @@ module Compiler
     return changed
   end
 
-  #=============================================================================
-  # Main compiler method for events
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Main compiler method for events.
+  #-----------------------------------------------------------------------------
   def compile_trainer_events
     mapData = MapData.new
     t = System.uptime

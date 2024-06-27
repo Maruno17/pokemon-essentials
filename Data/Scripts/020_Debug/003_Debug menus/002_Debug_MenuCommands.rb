@@ -1,6 +1,7 @@
 #===============================================================================
-# Field options
+# Field options.
 #===============================================================================
+
 MenuHandlers.add(:debug_menu, :field_menu, {
   "name"        => _INTL("Field options..."),
   "parent"      => :main,
@@ -264,8 +265,9 @@ MenuHandlers.add(:debug_menu, :skip_credits, {
 })
 
 #===============================================================================
-# Battle options
+# Battle options.
 #===============================================================================
+
 MenuHandlers.add(:debug_menu, :battle_menu, {
   "name"        => _INTL("Battle options..."),
   "parent"      => :main,
@@ -543,8 +545,9 @@ MenuHandlers.add(:debug_menu, :toggle_logging, {
 })
 
 #===============================================================================
-# Pokémon options
+# Pokémon options.
 #===============================================================================
+
 MenuHandlers.add(:debug_menu, :pokemon_menu, {
   "name"        => _INTL("Pokémon options..."),
   "parent"      => :main,
@@ -716,8 +719,9 @@ MenuHandlers.add(:debug_menu, :open_storage, {
 })
 
 #===============================================================================
-# Shadow Pokémon options
+# Shadow Pokémon options.
 #===============================================================================
+
 MenuHandlers.add(:debug_menu, :shadow_pokemon_menu, {
   "name"        => _INTL("Shadow Pokémon options..."),
   "parent"      => :pokemon_menu,
@@ -766,8 +770,9 @@ MenuHandlers.add(:debug_menu, :relic_stone, {
 })
 
 #===============================================================================
-# Item options
+# Item options.
 #===============================================================================
+
 MenuHandlers.add(:debug_menu, :items_menu, {
   "name"        => _INTL("Item options..."),
   "parent"      => :main,
@@ -837,8 +842,9 @@ MenuHandlers.add(:debug_menu, :empty_bag, {
 })
 
 #===============================================================================
-# Player options
+# Player options.
 #===============================================================================
+
 MenuHandlers.add(:debug_menu, :player_menu, {
   "name"        => _INTL("Player options..."),
   "parent"      => :main,
@@ -1143,8 +1149,9 @@ MenuHandlers.add(:debug_menu, :random_id, {
 })
 
 #===============================================================================
-# PBS file editors
+# PBS file editors.
 #===============================================================================
+
 MenuHandlers.add(:debug_menu, :pbs_editors_menu, {
   "name"        => _INTL("PBS file editors..."),
   "parent"      => :main,
@@ -1261,8 +1268,9 @@ MenuHandlers.add(:debug_menu, :set_pokedex_lists, {
 })
 
 #===============================================================================
-# Other editors
+# Other editors.
 #===============================================================================
+
 MenuHandlers.add(:debug_menu, :editors_menu, {
   "name"        => _INTL("Other editors..."),
   "parent"      => :main,
@@ -1324,8 +1332,9 @@ MenuHandlers.add(:debug_menu, :fix_invalid_tiles, {
 })
 
 #===============================================================================
-# Other options
+# Other options.
 #===============================================================================
+
 MenuHandlers.add(:debug_menu, :files_menu, {
   "name"        => _INTL("Files options..."),
   "parent"      => :main,

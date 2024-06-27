@@ -1,7 +1,8 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
-  #=============================================================================
-  # Effect per hit
-  #=============================================================================
+  # Effect per hit.
   def pbEffectsOnMakingHit(move, user, target)
     if target.damageState.calcDamage > 0 && !target.damageState.substitute
       # Target's ability
@@ -82,9 +83,7 @@ class Battle::Battler
     end
   end
 
-  #=============================================================================
-  # Effects after all hits (i.e. at end of move usage)
-  #=============================================================================
+  # Effects after all hits (i.e. at end of move usage).
   def pbEffectsAfterMove(user, targets, move, numHits)
     # Defrost
     if move.damagingMove?

@@ -1,5 +1,5 @@
 #===============================================================================
-# General purpose utilities
+# General purpose utilities.
 #===============================================================================
 def _pbNextComb(comb, length)
   i = comb.length - 1
@@ -98,7 +98,7 @@ class AntiRandom
 end
 
 #===============================================================================
-# Constants utilities
+# Constants utilities.
 #===============================================================================
 # Unused
 def isConst?(val, mod, constant)
@@ -152,7 +152,7 @@ def getConstantNameOrValue(mod, value)
 end
 
 #===============================================================================
-# Event utilities
+# Event utilities.
 #===============================================================================
 def pbTimeEvent(variableNumber, secs = 86_400)
   return if !$game_variables
@@ -217,7 +217,7 @@ def pbNoticePlayer(event, always_show_exclaim = false)
 end
 
 #===============================================================================
-# Player-related utilities, random name generator
+# Player-related utilities, random name generator.
 #===============================================================================
 # Unused
 def pbGetPlayerGraphic
@@ -369,7 +369,7 @@ def getRandomName(maxLength = 100)
 end
 
 #===============================================================================
-# Regional and National Pokédexes utilities
+# Regional and National Pokédexes utilities.
 #===============================================================================
 # Returns the ID number of the region containing the player's current location,
 # as determined by the current map's metadata.
@@ -415,7 +415,7 @@ def pbGetRegionalDexLength(region_dex)
 end
 
 #===============================================================================
-# Other utilities
+# Other utilities.
 #===============================================================================
 def pbTextEntry(helptext, minlength, maxlength, variableNumber)
   $game_variables[variableNumber] = pbEnterText(helptext, minlength, maxlength)

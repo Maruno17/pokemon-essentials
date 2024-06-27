@@ -1,6 +1,6 @@
 #===============================================================================
-# "Slot Machine" mini-game
-# By Maruno
+# "Slot Machine" mini-game.
+# By Maruno.
 #-------------------------------------------------------------------------------
 # Run with:      pbSlotMachine(1)
 # - The number is either 0 (easy), 1 (default) or 2 (hard).

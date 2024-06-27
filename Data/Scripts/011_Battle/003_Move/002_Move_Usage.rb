@@ -1,7 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Move
-  #=============================================================================
-  # Effect methods per move usage
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Effect methods per move usage.
+  #-----------------------------------------------------------------------------
+
   def pbCanChooseMove?(user, commandPhase, showMessages); return true; end   # For Belch
   def pbDisplayChargeMessage(user); end   # For Focus Punch/shell Trap/Beak Blast
   def pbOnStartUse(user, targets); end
@@ -24,9 +28,10 @@ class Battle::Move
   def pbShowFailMessages?(targets); return true; end
   def pbMissMessage(user, target); return false; end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   #
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   # Whether the move is currently in the "charging" turn of a two-turn move.
   # Is false if Power Herb or another effect lets a two-turn move charge and
   # attack in the same turn.
@@ -56,9 +61,10 @@ class Battle::Move
   # For two-turn moves when they charge and attack in the same turn.
   def pbQuickChargingMove(user, targets); end
 
-  #=============================================================================
-  # Effect methods per hit
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Effect methods per hit.
+  #-----------------------------------------------------------------------------
+
   def pbOverrideSuccessCheckPerHit(user, target); return false; end
   def pbCrashDamage(user); end
   def pbInitialEffect(user, targets, hitNum); end
@@ -83,9 +89,10 @@ class Battle::Move
   def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers); end
   def pbEndOfMoveUsageEffect(user, targets, numHits, switchedBattlers); end
 
-  #=============================================================================
-  # Check if target is immune to the move because of its ability
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Check if target is immune to the move because of its ability.
+  #-----------------------------------------------------------------------------
+
   def pbImmunityByAbility(user, target, show_message)
     ret = false
     if target.abilityActive? && !target.beingMoldBroken?
@@ -95,9 +102,10 @@ class Battle::Move
     return ret
   end
 
-  #=============================================================================
-  # Move failure checks
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Move failure checks.
+  #-----------------------------------------------------------------------------
+
   # Check whether the move fails completely due to move-specific requirements.
   def pbMoveFailed?(user, targets); return false; end
   # Checks whether the move will be ineffective against the target.
@@ -156,9 +164,10 @@ class Battle::Move
     return false
   end
 
-  #=============================================================================
-  # Weaken the damage dealt (doesn't actually change a battler's HP)
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Weaken the damage dealt (doesn't actually change a battler's HP).
+  #-----------------------------------------------------------------------------
+
   def pbCheckDamageAbsorption(user, target)
     # Substitute will take the damage
     if target.effects[PBEffects::Substitute] > 0 && !ignoresSubstitute?(user) &&
@@ -225,9 +234,10 @@ class Battle::Move
     target.damageState.totalHPLost += damage
   end
 
-  #=============================================================================
-  # Change the target's HP by the amount calculated above
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Change the target's HP by the amount calculated above.
+  #-----------------------------------------------------------------------------
+
   def pbInflictHPDamage(target)
     if target.damageState.substitute
       target.effects[PBEffects::Substitute] -= target.damageState.hpLost
@@ -236,9 +246,10 @@ class Battle::Move
     end
   end
 
-  #=============================================================================
-  # Animate the damage dealt, including lowering the HP
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Animate the damage dealt, including lowering the HP.
+  #-----------------------------------------------------------------------------
+
   # Animate being damaged and losing HP (by a move)
   def pbAnimateHitAndHPLost(user, targets)
     # Animate allies first, then foes
@@ -269,9 +280,10 @@ class Battle::Move
     end
   end
 
-  #=============================================================================
-  # Messages upon being hit
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Messages upon being hit.
+  #-----------------------------------------------------------------------------
+
   def pbEffectivenessMessage(user, target, numTargets = 1)
     return if self.is_a?(Battle::Move::FixedDamageMove)
     return if target.damageState.disguise || target.damageState.iceFace

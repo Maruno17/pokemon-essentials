@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class Trainer
     attr_reader :id
@@ -12,7 +15,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "trainers.dat"
     PBS_BASE_FILENAME = "trainers"
-
     # "Pokemon" is specially mentioned in def compile_trainers and def
     # write_trainers, and acts as a subheading for a particular Pokémon.
     SCHEMA = {
@@ -82,6 +84,8 @@ module GameData
       key = [tr_type.to_sym, tr_name, tr_version]
       return (self::DATA.has_key?(key)) ? self::DATA[key] : nil
     end
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id              = hash[:id]

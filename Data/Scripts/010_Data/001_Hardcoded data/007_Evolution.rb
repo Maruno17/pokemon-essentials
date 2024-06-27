@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class Evolution
     attr_reader :id
@@ -19,6 +22,8 @@ module GameData
 
     def self.load; end
     def self.save; end
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id                   = hash[:id]
@@ -72,10 +77,16 @@ module GameData
 end
 
 #===============================================================================
+#
+#===============================================================================
 
 GameData::Evolution.register({
   :id => :None
 })
+
+#===============================================================================
+#
+#===============================================================================
 
 GameData::Evolution.register({
   :id            => :Level,
@@ -545,6 +556,7 @@ GameData::Evolution.register({
 #===============================================================================
 # Evolution methods that trigger when levelling up in battle.
 #===============================================================================
+
 GameData::Evolution.register({
   :id                   => :LevelBattle,
   :parameter            => Integer,
@@ -556,6 +568,7 @@ GameData::Evolution.register({
 #===============================================================================
 # Evolution methods that trigger when using an item on the Pokémon.
 #===============================================================================
+
 GameData::Evolution.register({
   :id            => :Item,
   :parameter     => :Item,
@@ -607,6 +620,7 @@ GameData::Evolution.register({
 #===============================================================================
 # Evolution methods that trigger when the Pokémon is obtained in a trade.
 #===============================================================================
+
 GameData::Evolution.register({
   :id            => :Trade,
   :on_trade_proc => proc { |pkmn, parameter, other_pkmn|
@@ -666,6 +680,7 @@ GameData::Evolution.register({
 #===============================================================================
 # Evolution methods that are triggered after any battle.
 #===============================================================================
+
 GameData::Evolution.register({
   :id                => :AfterBattleCounter,
   :parameter         => Integer,

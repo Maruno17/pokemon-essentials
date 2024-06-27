@@ -1,5 +1,5 @@
 #===============================================================================
-# Load various wild battle music
+# Load various wild battle music.
 #===============================================================================
 # wildParty is an array of Pokémon objects.
 def pbGetWildBattleBGM(_wildParty)
@@ -58,7 +58,7 @@ def pbGetWildCaptureME
 end
 
 #===============================================================================
-# Load/play various trainer battle music
+# Load/play various trainer battle music.
 #===============================================================================
 def pbPlayTrainerIntroBGM(trainer_type)
   trainer_type_data = GameData::TrainerType.get(trainer_type)

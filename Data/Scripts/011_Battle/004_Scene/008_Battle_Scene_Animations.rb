@@ -1,5 +1,5 @@
 #===============================================================================
-# Shows the battle scene fading in while elements slide around into place
+# Shows the battle scene fading in while elements slide around into place.
 #===============================================================================
 class Battle::Scene::Animation::Intro < Battle::Scene::Animation
   def initialize(sprites, viewport, battle)
@@ -59,7 +59,7 @@ end
 
 #===============================================================================
 # Shows wild Pokémon fading back to their normal color, and triggers their intro
-# animations
+# animations.
 #===============================================================================
 class Battle::Scene::Animation::Intro2 < Battle::Scene::Animation
   def initialize(sprites, viewport, sideSize)
@@ -79,7 +79,7 @@ class Battle::Scene::Animation::Intro2 < Battle::Scene::Animation
 end
 
 #===============================================================================
-# Makes a side's party bar and balls appear
+# Makes a side's party bar and balls appear.
 #===============================================================================
 class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
   BAR_DISPLAY_WIDTH = 248
@@ -178,7 +178,7 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
 end
 
 #===============================================================================
-# Makes a Pokémon's data box appear
+# Makes a Pokémon's data box appear.
 #===============================================================================
 class Battle::Scene::Animation::DataBoxAppear < Battle::Scene::Animation
   def initialize(sprites, viewport, idxBox)
@@ -197,7 +197,7 @@ class Battle::Scene::Animation::DataBoxAppear < Battle::Scene::Animation
 end
 
 #===============================================================================
-# Makes a Pokémon's data box disappear
+# Makes a Pokémon's data box disappear.
 #===============================================================================
 class Battle::Scene::Animation::DataBoxDisappear < Battle::Scene::Animation
   def initialize(sprites, viewport, idxBox)
@@ -215,7 +215,7 @@ class Battle::Scene::Animation::DataBoxDisappear < Battle::Scene::Animation
 end
 
 #===============================================================================
-# Makes a Pokémon's ability bar appear
+# Makes a Pokémon's ability bar appear.
 #===============================================================================
 class Battle::Scene::Animation::AbilitySplashAppear < Battle::Scene::Animation
   def initialize(sprites, viewport, side)
@@ -234,7 +234,7 @@ class Battle::Scene::Animation::AbilitySplashAppear < Battle::Scene::Animation
 end
 
 #===============================================================================
-# Makes a Pokémon's ability bar disappear
+# Makes a Pokémon's ability bar disappear.
 #===============================================================================
 class Battle::Scene::Animation::AbilitySplashDisappear < Battle::Scene::Animation
   def initialize(sprites, viewport, side)
@@ -524,7 +524,7 @@ class Battle::Scene::Animation::PokeballTrainerSendOut < Battle::Scene::Animatio
 end
 
 #===============================================================================
-# Shows a Pokémon being recalled into its Poké Ball
+# Shows a Pokémon being recalled into its Poké Ball.
 #===============================================================================
 class Battle::Scene::Animation::BattlerRecall < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
@@ -572,7 +572,7 @@ class Battle::Scene::Animation::BattlerRecall < Battle::Scene::Animation
 end
 
 #===============================================================================
-# Shows a Pokémon flashing after taking damage
+# Shows a Pokémon flashing after taking damage.
 #===============================================================================
 class Battle::Scene::Animation::BattlerDamage < Battle::Scene::Animation
   def initialize(sprites, viewport, idxBattler, effectiveness)
@@ -608,7 +608,7 @@ class Battle::Scene::Animation::BattlerDamage < Battle::Scene::Animation
 end
 
 #===============================================================================
-# Shows a Pokémon fainting
+# Shows a Pokémon fainting.
 #===============================================================================
 class Battle::Scene::Animation::BattlerFaint < Battle::Scene::Animation
   def initialize(sprites, viewport, idxBattler, battle)
@@ -656,7 +656,7 @@ class Battle::Scene::Animation::BattlerFaint < Battle::Scene::Animation
 end
 
 #===============================================================================
-# Shows the player's Poké Ball being thrown to capture a Pokémon
+# Shows the player's Poké Ball being thrown to capture a Pokémon.
 #===============================================================================
 class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin
@@ -812,7 +812,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
 end
 
 #===============================================================================
-# Shows the player throwing a Poké Ball and it being deflected
+# Shows the player throwing a Poké Ball and it being deflected.
 #===============================================================================
 class Battle::Scene::Animation::PokeballThrowDeflect < Battle::Scene::Animation
   include Battle::Scene::Animation::BallAnimationMixin

@@ -1,23 +1,28 @@
+#===============================================================================
+#
+#===============================================================================
 module ScreenPosHelper
-  def self.pbScreenZoomX(ch)
+  @heightcache = {}
+
+  module_function
+
+  def pbScreenZoomX(ch)
     return Game_Map::TILE_WIDTH / 32.0
   end
 
-  def self.pbScreenZoomY(ch)
+  def pbScreenZoomY(ch)
     return Game_Map::TILE_HEIGHT / 32.0
   end
 
-  def self.pbScreenX(ch)
+  def pbScreenX(ch)
     return ch.screen_x
   end
 
-  def self.pbScreenY(ch)
+  def pbScreenY(ch)
     return ch.screen_y
   end
 
-  @heightcache = {}
-
-  def self.bmHeight(bm)
+  def bmHeight(bm)
     h = @heightcache[bm]
     if !h
       bmap = AnimatedBitmap.new("Graphics/Characters/" + bm, 0)
@@ -28,7 +33,7 @@ module ScreenPosHelper
     return h
   end
 
-  def self.pbScreenZ(ch, height = nil)
+  def pbScreenZ(ch, height = nil)
     if height.nil?
       height = 0
       if ch.tile_id > 0

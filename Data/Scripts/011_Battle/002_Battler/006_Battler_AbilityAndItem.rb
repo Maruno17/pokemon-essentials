@@ -1,7 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
-  #=============================================================================
-  # Ability trigger checks
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Ability trigger checks.
+  #-----------------------------------------------------------------------------
+
   def pbAbilitiesOnSwitchOut
     if abilityActive?
       Battle::AbilityEffects.triggerOnSwitchOut(self.ability, self, false)
@@ -98,9 +102,10 @@ class Battle::Battler
     end
   end
 
-  #=============================================================================
-  # Ability curing
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Ability curing.
+  #-----------------------------------------------------------------------------
+
   # Cures status conditions, confusion and infatuation.
   def pbAbilityStatusCureCheck
     if abilityActive?
@@ -108,9 +113,10 @@ class Battle::Battler
     end
   end
 
-  #=============================================================================
-  # Ability effects
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Ability effects.
+  #-----------------------------------------------------------------------------
+
   # For abilities that grant immunity to moves of a particular type, and raises
   # one of the ability's bearer's stats instead.
   def pbMoveImmunityStatRaisingAbility(user, move, moveType, immuneType, stat, increment, show_message)
@@ -165,9 +171,10 @@ class Battle::Battler
     return true
   end
 
-  #=============================================================================
-  # Ability change
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Ability change.
+  #-----------------------------------------------------------------------------
+
   def pbOnLosingAbility(oldAbil, suppressed = false)
     if oldAbil == :NEUTRALIZINGGAS && (suppressed || !@effects[PBEffects::GastroAcid])
       pbAbilitiesOnNeutralizingGasEnding
@@ -206,9 +213,10 @@ class Battle::Battler
     @battle.pbEndPrimordialWeather
   end
 
-  #=============================================================================
-  # Held item consuming/removing
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Held item consuming/removing.
+  #-----------------------------------------------------------------------------
+
   def canConsumeBerry?
     return false if @battle.pbCheckOpposingAbility([:UNNERVE, :ASONECHILLINGNEIGH, :ASONEGRIMNEIGH], @index)
     return true
@@ -285,9 +293,10 @@ class Battle::Battler
     pbSymbiosis if !own_item && !fling   # Bug Bite/Pluck users trigger Symbiosis
   end
 
-  #=============================================================================
-  # Held item trigger checks
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Held item trigger checks.
+  #-----------------------------------------------------------------------------
+
   # NOTE: A Pokémon using Bug Bite/Pluck, and a Pokémon having an item thrown at
   #       it via Fling, will gain the effect of the item even if the Pokémon is
   #       affected by item-negating effects.
@@ -393,9 +402,10 @@ class Battle::Battler
     end
   end
 
-  #=============================================================================
-  # Item effects
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Item effects.
+  #-----------------------------------------------------------------------------
+
   def pbConfusionBerry(item_to_use, forced, confuse_stat, confuse_msg)
     return false if !forced && !canHeal?
     return false if !forced && !canConsumePinchBerry?(Settings::MECHANICS_GENERATION >= 7)

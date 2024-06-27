@@ -211,6 +211,8 @@ module Translator
     end
   end
 
+  #-----------------------------------------------------------------------------
+
   def normalize_value(value)
     if value[/[\r\n\t\x01]|^[\[\]]/]
       ret = value.dup
@@ -709,51 +711,53 @@ module MessageTypes
   POKEMON_NICKNAMES            = 30
   @@messages = Translation.new
 
-  def self.load_default_messages
+  module_function
+
+  def load_default_messages
     @@messages.load_default_messages
   end
 
-  def self.load_message_files(filename)
+  def load_message_files(filename)
     @@messages.load_message_files(filename)
   end
 
-  def self.save_default_messages
+  def save_default_messages
     @@messages.save_default_messages
   end
 
-  def self.setMessages(type, array)
+  def setMessages(type, array)
     @@messages.setMessages(type, array)
   end
 
-  def self.addMessages(type, array)
+  def addMessages(type, array)
     @@messages.addMessages(type, array)
   end
 
-  def self.setMessagesAsHash(type, array)
+  def setMessagesAsHash(type, array)
     @@messages.setMessagesAsHash(type, array)
   end
 
-  def self.addMessagesAsHash(type, array)
+  def addMessagesAsHash(type, array)
     @@messages.addMessagesAsHash(type, array)
   end
 
-  def self.setMapMessagesAsHash(type, array)
+  def setMapMessagesAsHash(type, array)
     @@messages.setMapMessagesAsHash(type, array)
   end
 
-  def self.addMapMessagesAsHash(type, array)
+  def addMapMessagesAsHash(type, array)
     @@messages.addMapMessagesAsHash(type, array)
   end
 
-  def self.get(type, id)
+  def get(type, id)
     return @@messages.get(type, id)
   end
 
-  def self.getFromHash(type, key)
+  def getFromHash(type, key)
     return @@messages.getFromHash(type, key)
   end
 
-  def self.getFromMapHash(type, key)
+  def getFromMapHash(type, key)
     return @@messages.getFromMapHash(type, key)
   end
 end

@@ -1,9 +1,10 @@
 #===============================================================================
-# "Triple Triad" mini-game
-# By Unknown
+# "Triple Triad" mini-game.
+# By Unknown.
 #===============================================================================
+
 #===============================================================================
-# Card class
+# Card class.
 #===============================================================================
 class TriadCard
   attr_reader :species, :form
@@ -134,7 +135,7 @@ class TriadCard
 end
 
 #===============================================================================
-# Duel screen visuals
+# Duel screen visuals.
 #===============================================================================
 class TriadSquare
   attr_accessor :owner, :card, :type
@@ -159,7 +160,7 @@ class TriadSquare
 end
 
 #===============================================================================
-# Scene class for handling appearance of the screen
+# Scene class for handling appearance of the screen.
 #===============================================================================
 class TriadScene
   def pbStartScene(battle)
@@ -587,7 +588,7 @@ class TriadScene
 end
 
 #===============================================================================
-# Duel screen logic
+# Duel screen logic.
 #===============================================================================
 class TriadScreen
   attr_accessor :openHand, :countUnplayedCards
@@ -945,7 +946,7 @@ class TriadScreen
 end
 
 #===============================================================================
-# Start duel
+# Start duel.
 #===============================================================================
 def pbCanTriadDuel?
   card_count = $PokemonGlobal.triads.total_cards
@@ -963,7 +964,7 @@ def pbTriadDuel(name, minLevel, maxLevel, rules = nil, oppdeck = nil, prize = ni
 end
 
 #===============================================================================
-# Card storage
+# Card storage.
 #===============================================================================
 class PokemonGlobalMetadata
   attr_writer :triads
@@ -1043,7 +1044,7 @@ class TriadStorage
 end
 
 #===============================================================================
-# Card shop screen
+# Card shop screen.
 #===============================================================================
 def pbBuyTriads
   commands = []
@@ -1289,7 +1290,7 @@ def pbTriadList
 end
 
 #===============================================================================
-# Give the player a particular card
+# Give the player a particular card.
 #===============================================================================
 def pbGiveTriadCard(species, quantity = 1)
   sp = GameData::Species.try_get(species)

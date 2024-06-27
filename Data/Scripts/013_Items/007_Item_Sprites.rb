@@ -1,5 +1,5 @@
 #===============================================================================
-# Item icon
+# Item icon.
 #===============================================================================
 class ItemIconSprite < Sprite
   attr_reader :item
@@ -111,7 +111,7 @@ class ItemIconSprite < Sprite
 end
 
 #===============================================================================
-# Item held icon (used in the party screen)
+# Item held icon (used in the party screen).
 #===============================================================================
 class HeldItemIconSprite < Sprite
   def initialize(x, y, pokemon, viewport = nil)

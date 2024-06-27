@@ -34,7 +34,7 @@ class SpriteWindow < Window
     @_windowskin
   end
 
-  # Flags used to preserve compatibility with RGSS/RGSS2's version of Window
+  # Flags used to preserve compatibility with RGSS/RGSS2's version of Window.
   module CompatBits
     CORRECT_Z          = 1
     EXPAND_BACK        = 2

@@ -264,7 +264,7 @@ class PokemonStorage
 end
 
 #===============================================================================
-# Regional Storage scripts
+# Regional Storage scripts.
 #===============================================================================
 class RegionalStorage
   def initialize
@@ -382,7 +382,7 @@ def pbLockWallpaper(index)
 end
 
 #===============================================================================
-# Look through Pokémon in storage
+# Look through Pokémon in storage.
 #===============================================================================
 # Yields every Pokémon/egg in storage in turn.
 def pbEachPokemon

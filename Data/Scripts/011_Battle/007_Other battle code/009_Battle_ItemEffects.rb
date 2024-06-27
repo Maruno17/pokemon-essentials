@@ -50,14 +50,14 @@ module Battle::ItemEffects
   # Running from battle
   CertainEscapeFromBattle         = ItemHandlerHash.new   # Smoke Ball
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.trigger(hash, *args, ret: false)
     new_ret = hash.trigger(*args)
     return (!new_ret.nil?) ? new_ret : ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerSpeedCalc(item, battler, mult)
     return trigger(SpeedCalc, item, battler, mult, ret: mult)
@@ -67,7 +67,7 @@ module Battle::ItemEffects
     return trigger(WeightCalc, item, battler, w, ret: w)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerHPHeal(item, battler, battle, forced)
     return trigger(HPHeal, item, battler, battle, forced)
@@ -77,19 +77,19 @@ module Battle::ItemEffects
     return trigger(OnStatLoss, item, user, move_user, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerStatusCure(item, battler, battle, forced)
     return trigger(StatusCure, item, battler, battle, forced)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerStatLossImmunity(item, battler, stat, battle, show_messages)
     return trigger(StatLossImmunity, item, battler, stat, battle, show_messages)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerPriorityBracketChange(item, battler, battle)
     return trigger(PriorityBracketChange, item, battler, battle, ret: 0)
@@ -99,13 +99,13 @@ module Battle::ItemEffects
     PriorityBracketUse.trigger(item, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerOnMissingTarget(item, user, target, move, hit_num, battle)
     OnMissingTarget.trigger(item, user, target, move, hit_num, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerAccuracyCalcFromUser(item, mods, user, target, move, type)
     AccuracyCalcFromUser.trigger(item, mods, user, target, move, type)
@@ -115,7 +115,7 @@ module Battle::ItemEffects
     AccuracyCalcFromTarget.trigger(item, mods, user, target, move, type)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerDamageCalcFromUser(item, user, target, move, mults, power, type)
     DamageCalcFromUser.trigger(item, user, target, move, mults, power, type)
@@ -133,7 +133,7 @@ module Battle::ItemEffects
     return trigger(CriticalCalcFromTarget, item, user, target, move, crit_stage, ret: crit_stage)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerOnBeingHit(item, user, target, move, battle)
     OnBeingHit.trigger(item, user, target, move, battle)
@@ -143,7 +143,7 @@ module Battle::ItemEffects
     return trigger(OnBeingHitPositiveBerry, item, battler, battle, forced)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerAfterMoveUseFromTarget(item, battler, user, move, switched_battlers, battle)
     AfterMoveUseFromTarget.trigger(item, battler, user, move, switched_battlers, battle)
@@ -161,7 +161,7 @@ module Battle::ItemEffects
     return trigger(OnEndOfUsingMoveStatRestore, item, battler, battle, forced)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerExpGainModifier(item, battler, exp)
     return trigger(ExpGainModifier, item, battler, exp, ret: -1)
@@ -173,7 +173,7 @@ module Battle::ItemEffects
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerWeatherExtender(item, weather, duration, battler, battle)
     return trigger(WeatherExtender, item, weather, duration, battler, battle, ret: duration)
@@ -187,7 +187,7 @@ module Battle::ItemEffects
     return trigger(TerrainStatBoost, item, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerEndOfRoundHealing(item, battler, battle)
     EndOfRoundHealing.trigger(item, battler, battle)
@@ -197,7 +197,7 @@ module Battle::ItemEffects
     EndOfRoundEffect.trigger(item, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerCertainSwitching(item, switcher, battle)
     return trigger(CertainSwitching, item, switcher, battle)
@@ -215,7 +215,7 @@ module Battle::ItemEffects
     return trigger(OnIntimidated, item, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerCertainEscapeFromBattle(item, battler)
     return trigger(CertainEscapeFromBattle, item, battler)

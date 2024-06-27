@@ -1,5 +1,5 @@
 #===============================================================================
-# Constant checks
+# Constant checks.
 #===============================================================================
 # Pokérus check
 EventHandlers.add(:on_frame_update, :pokerus_counter,
@@ -64,7 +64,7 @@ EventHandlers.add(:on_frame_update, :cue_bgm_after_delay,
 )
 
 #===============================================================================
-# Checks per step
+# Checks per step.
 #===============================================================================
 # Party Pokémon gain happiness from walking
 EventHandlers.add(:on_player_step_taken, :gain_happiness,
@@ -122,7 +122,7 @@ def pbCheckAllFainted
   end
 end
 
-# Gather soot from soot grass
+# Gather soot from soot grass.
 EventHandlers.add(:on_step_taken, :pick_up_soot,
   proc { |event|
     thistile = $map_factory.getRealTilePos(event.map.map_id, event.x, event.y)
@@ -142,7 +142,7 @@ EventHandlers.add(:on_step_taken, :pick_up_soot,
   }
 )
 
-# Show grass rustle animation
+# Show grass rustle animation.
 EventHandlers.add(:on_step_taken, :grass_rustling,
   proc { |event|
     next if !$scene.is_a?(Scene_Map)
@@ -155,7 +155,7 @@ EventHandlers.add(:on_step_taken, :grass_rustling,
   }
 )
 
-# Show water ripple animation
+# Show water ripple animation.
 EventHandlers.add(:on_step_taken, :still_water_ripple,
   proc { |event|
     next if !$scene.is_a?(Scene_Map)
@@ -168,7 +168,7 @@ EventHandlers.add(:on_step_taken, :still_water_ripple,
   }
 )
 
-# Auto-move the player over waterfalls and ice
+# Auto-move the player over waterfalls and ice.
 EventHandlers.add(:on_step_taken, :auto_move_player,
   proc { |event|
     next if !$scene.is_a?(Scene_Map)
@@ -211,7 +211,7 @@ def pbOnStepTaken(eventTriggered)
   $game_temp.encounter_triggered = false   # This info isn't needed here
 end
 
-# Start wild encounters while turning on the spot
+# Start wild encounters while turning on the spot.
 EventHandlers.add(:on_player_change_direction, :trigger_encounter,
   proc {
     repel_active = ($PokemonGlobal.repel > 0)
@@ -243,7 +243,7 @@ def pbBattleOnStepTaken(repel_active)
 end
 
 #===============================================================================
-# Checks when moving between maps
+# Checks when moving between maps.
 #===============================================================================
 # Set up various data related to the new map.
 EventHandlers.add(:on_enter_map, :setup_new_map,
@@ -340,7 +340,7 @@ EventHandlers.add(:on_map_or_spriteset_change, :show_location_window,
 )
 
 #===============================================================================
-# Event locations, terrain tags
+# Event locations, terrain tags.
 #===============================================================================
 # NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
 def pbFacingTile(direction = nil, event = nil)
@@ -425,7 +425,7 @@ def pbFacingEachOther(event1, event2)
 end
 
 #===============================================================================
-# Audio playing
+# Audio playing.
 #===============================================================================
 def pbCueBGM(bgm, seconds, volume = nil, pitch = nil)
   return if !bgm
@@ -462,7 +462,7 @@ def pbAutoplayOnSave
 end
 
 #===============================================================================
-# Event movement
+# Event movement.
 #===============================================================================
 module PBMoveRoute
   DOWN                  = 1
@@ -550,7 +550,7 @@ def pbMoveRoute(event, commands, waitComplete = false)
   return route
 end
 
-# duration is in seconds
+# duration is in seconds.
 def pbWait(duration)
   timer_start = System.uptime
   until System.uptime - timer_start >= duration
@@ -562,7 +562,7 @@ def pbWait(duration)
 end
 
 #===============================================================================
-# Player/event movement in the field
+# Player/event movement in the field.
 #===============================================================================
 def pbSlideOnIce
   if !$DEBUG || !Input.press?(Input::CTRL)
@@ -616,7 +616,7 @@ def pbMoveTowardPlayer(event)
 end
 
 #===============================================================================
-# Bridges, cave escape points, and setting the heal point
+# Bridges, cave escape points, and setting the heal point.
 #===============================================================================
 def pbBridgeOn(height = 2)
   $PokemonGlobal.bridge = height
@@ -659,7 +659,7 @@ def pbSetPokemonCenter
 end
 
 #===============================================================================
-# Partner trainer
+# Partner trainer.
 #===============================================================================
 def pbRegisterPartner(tr_type, tr_name, tr_id = 0)
   tr_type = GameData::TrainerType.get(tr_type).id
@@ -678,7 +678,7 @@ def pbDeregisterPartner
 end
 
 #===============================================================================
-# Picking up an item found on the ground
+# Picking up an item found on the ground.
 #===============================================================================
 def pbItemBall(item, quantity = 1)
   item = GameData::Item.get(item)
@@ -728,7 +728,7 @@ def pbItemBall(item, quantity = 1)
 end
 
 #===============================================================================
-# Being given an item
+# Being given an item.
 #===============================================================================
 def pbReceiveItem(item, quantity = 1)
   item = GameData::Item.get(item)
@@ -763,7 +763,7 @@ def pbReceiveItem(item, quantity = 1)
 end
 
 #===============================================================================
-# Buying a prize item from the Game Corner
+# Buying a prize item from the Game Corner.
 #===============================================================================
 def pbBuyPrize(item, quantity = 1)
   item = GameData::Item.get(item)

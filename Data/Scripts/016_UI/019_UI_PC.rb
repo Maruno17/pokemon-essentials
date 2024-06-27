@@ -160,6 +160,7 @@ end
 #===============================================================================
 #
 #===============================================================================
+
 MenuHandlers.add(:pc_menu, :pokemon_storage, {
   "name"      => proc {
     next ($player.seen_storage_creator) ? _INTL("{1}'s PC", pbGetStorageCreator) : _INTL("Someone's PC")

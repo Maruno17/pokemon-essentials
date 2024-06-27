@@ -1,5 +1,5 @@
 #===============================================================================
-# Wild encounters editor
+# Wild encounters editor.
 #===============================================================================
 # Main editor method for editing wild encounters. Lists all defined encounter
 # sets, and edits them.
@@ -340,7 +340,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
 end
 
 #===============================================================================
-# Trainer type editor
+# Trainer type editor.
 #===============================================================================
 def pbTrainerTypeEditor
   properties = GameData::TrainerType.editor_properties
@@ -443,7 +443,7 @@ def pbTrainerTypeEditorNew(default_name)
 end
 
 #===============================================================================
-# Individual trainer editor
+# Individual trainer editor.
 #===============================================================================
 module TrainerBattleProperty
   NUM_ITEMS = 8
@@ -599,7 +599,7 @@ def pbTrainerBattleEditor
 end
 
 #===============================================================================
-# Trainer Pokémon editor
+# Trainer Pokémon editor.
 #===============================================================================
 module TrainerPokemonProperty
   def self.set(settingname, initsetting)
@@ -687,7 +687,7 @@ module TrainerPokemonProperty
 end
 
 #===============================================================================
-# Metadata editor
+# Metadata editor.
 #===============================================================================
 def pbMetadataScreen
   sel_player = -1
@@ -774,7 +774,7 @@ def pbEditPlayerMetadata(player_id = 1)
 end
 
 #===============================================================================
-# Map metadata editor
+# Map metadata editor.
 #===============================================================================
 def pbMapMetadataScreen(map_id = 0)
   loop do
@@ -817,7 +817,7 @@ def pbEditMapMetadata(map_id)
 end
 
 #===============================================================================
-# Item editor
+# Item editor.
 #===============================================================================
 def pbItemEditor
   properties = GameData::Item.editor_properties
@@ -921,7 +921,7 @@ def pbItemEditorNew(default_name)
 end
 
 #===============================================================================
-# Pokémon species editor
+# Pokémon species editor.
 #===============================================================================
 def pbPokemonEditor
   properties = GameData::Species.editor_properties
@@ -987,7 +987,7 @@ def pbPokemonEditor
 end
 
 #===============================================================================
-# Regional Dexes editor
+# Regional Dexes editor.
 #===============================================================================
 def pbRegionalDexEditor(dex)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -1247,7 +1247,7 @@ def pbEvoFamiliesToStrings
 end
 
 #===============================================================================
-# Battle animations rearranger
+# Battle animations rearranger.
 #===============================================================================
 def pbAnimationsOrganiser
   list = pbLoadBattleAnimations

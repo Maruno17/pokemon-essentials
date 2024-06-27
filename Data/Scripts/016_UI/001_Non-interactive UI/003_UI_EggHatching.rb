@@ -1,10 +1,10 @@
 #===============================================================================
 # * Egg Hatch Animation - by FL (Credits will be apreciated)
 #                         Tweaked by Maruno
-#===============================================================================
+#-------------------------------------------------------------------------------
 # This script is for Pokémon Essentials. It's an egg hatch animation that
 # works even with special eggs like Manaphy egg.
-#===============================================================================
+#-------------------------------------------------------------------------------
 # To this script works, put it above Main and put a picture (a 5 frames
 # sprite sheet) with egg sprite height and 5 times the egg sprite width at
 # Graphics/Battlers/eggCracks.

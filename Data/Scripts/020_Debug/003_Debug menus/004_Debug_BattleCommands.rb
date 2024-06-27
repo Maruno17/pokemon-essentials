@@ -1,6 +1,7 @@
 #===============================================================================
-# Battler Options
+# Battler options.
 #===============================================================================
+
 MenuHandlers.add(:battle_debug_menu, :battlers, {
   "name"        => _INTL("Battlers..."),
   "parent"      => :main,
@@ -71,8 +72,9 @@ MenuHandlers.add(:battle_debug_menu, :speed_order, {
 })
 
 #===============================================================================
-# Pokémon
+# Pokémon.
 #===============================================================================
+
 MenuHandlers.add(:battle_debug_menu, :pokemon_teams, {
   "name"        => _INTL("Pokémon teams"),
   "parent"      => :main,
@@ -130,8 +132,9 @@ MenuHandlers.add(:battle_debug_menu, :pokemon_teams, {
 })
 
 #===============================================================================
-# Trainer Options
+# Trainer options.
 #===============================================================================
+
 MenuHandlers.add(:battle_debug_menu, :trainers, {
   "name"        => _INTL("Trainer options..."),
   "parent"      => :main,
@@ -226,8 +229,9 @@ MenuHandlers.add(:battle_debug_menu, :mega_evolution, {
 })
 
 #===============================================================================
-# Field Options
+# Field options.
 #===============================================================================
+
 MenuHandlers.add(:battle_debug_menu, :field, {
   "name"        => _INTL("Field effects..."),
   "parent"      => :main,

@@ -1,5 +1,5 @@
 #===============================================================================
-# Abstraction layer for Pokemon Essentials
+# Abstraction layer for Pokemon Essentials.
 #===============================================================================
 class PokemonMartAdapter
   def getMoney
@@ -96,7 +96,7 @@ class PokemonMartAdapter
 end
 
 #===============================================================================
-# Buy and Sell adapters
+# Buy and Sell adapters.
 #===============================================================================
 class BuyAdapter
   def initialize(adapter)
@@ -174,7 +174,7 @@ class SellAdapter
 end
 
 #===============================================================================
-# Pokémon Mart
+# Pokémon Mart.
 #===============================================================================
 class Window_PokemonMart < Window_DrawableCommand
   def initialize(stock, adapter, x, y, width, height, viewport = nil)

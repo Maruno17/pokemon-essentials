@@ -310,6 +310,7 @@ end
 #===============================================================================
 #
 #===============================================================================
+
 EventHandlers.add(:on_map_or_spriteset_change, :show_bug_contest_timer,
   proc { |scene, _map_changed|
     next if !pbInBugContest? || pbBugContestState.decision != 0 || BugContestState::TIME_ALLOWED == 0
@@ -347,6 +348,7 @@ EventHandlers.add(:on_leave_map, :end_bug_contest,
 #===============================================================================
 #
 #===============================================================================
+
 EventHandlers.add(:on_calling_wild_battle, :bug_contest_battle,
   proc { |pkmn, handled|
     # handled is an array: [nil]. If [true] or [false], the battle has already
@@ -422,6 +424,10 @@ class PokemonPauseMenu
     end
   end
 end
+
+#===============================================================================
+#
+#===============================================================================
 
 MenuHandlers.add(:pause_menu, :quit_bug_contest, {
   "name"      => _INTL("Quit Contest"),

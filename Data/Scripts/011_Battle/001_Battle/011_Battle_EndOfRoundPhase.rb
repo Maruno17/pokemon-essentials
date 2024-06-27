@@ -1,7 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle
-  #=============================================================================
-  # End Of Round end weather check and weather effects
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round end weather check and weather effects.
+  #-----------------------------------------------------------------------------
+
   def pbEOREndWeather(priority)
     # NOTE: Primordial weather doesn't need to be checked here, because if it
     #       could wear off here, it will have worn off already.
@@ -74,9 +78,10 @@ class Battle
     battler.pbFaint if battler.fainted?
   end
 
-  #=============================================================================
-  # End Of Round use delayed moves (Future Sight, Doom Desire)
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round use delayed moves (Future Sight, Doom Desire).
+  #-----------------------------------------------------------------------------
+
   def pbEORUseFutureSight(position, position_index)
     return if !position || position.effects[PBEffects::FutureSightCounter] == 0
     position.effects[PBEffects::FutureSightCounter] -= 1
@@ -116,9 +121,10 @@ class Battle
     position.effects[PBEffects::FutureSightUserPartyIndex] = -1
   end
 
-  #=============================================================================
-  # End Of Round healing from Wish
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round healing from Wish.
+  #-----------------------------------------------------------------------------
+
   def pbEORWishHealing
     @positions.each_with_index do |pos, idxPos|
       next if !pos || pos.effects[PBEffects::Wish] == 0
@@ -131,9 +137,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # End Of Round Sea of Fire damage (Fire Pledge + Grass Pledge combination)
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round Sea of Fire damage (Fire Pledge + Grass Pledge combination).
+  #-----------------------------------------------------------------------------
+
   def pbEORSeaOfFireDamage(priority)
     2.times do |side|
       next if sides[side].effects[PBEffects::SeaOfFire] == 0
@@ -152,9 +159,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # End Of Round healing from Grassy Terrain
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round healing from Grassy Terrain.
+  #-----------------------------------------------------------------------------
+
   def pbEORTerrainHealing(battler)
     return if battler.fainted?
     # Grassy Terrain (healing)
@@ -165,9 +173,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # End Of Round various healing effects
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round various healing effects.
+  #-----------------------------------------------------------------------------
+
   def pbEORHealingEffects(priority)
     # Aqua Ring
     priority.each do |battler|
@@ -205,9 +214,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # End Of Round deal damage from status problems
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round deal damage from status problems.
+  #-----------------------------------------------------------------------------
+
   def pbEORStatusProblemDamage(priority)
     # Damage from poisoning
     priority.each do |battler|
@@ -255,9 +265,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # End Of Round deal damage from effects (except by trapping)
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round deal damage from effects (except by trapping).
+  #-----------------------------------------------------------------------------
+
   def pbEOREffectDamage(priority)
     # Damage from sleep (Nightmare)
     priority.each do |battler|
@@ -278,9 +289,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # End Of Round deal damage to trapped battlers
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round deal damage to trapped battlers.
+  #-----------------------------------------------------------------------------
+
   TRAPPING_MOVE_COMMON_ANIMATIONS = {
     :BIND        => "Bind",
     :CLAMP       => "Clamp",
@@ -312,9 +324,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # End Of Round end effects that apply to a battler
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round end effects that apply to a battler.
+  #-----------------------------------------------------------------------------
+
   def pbEORCountDownBattlerEffect(priority, effect)
     priority.each do |battler|
       next if battler.fainted? || battler.effects[effect] == 0
@@ -394,9 +407,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # End Of Round end effects that apply to one side of the field
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round end effects that apply to one side of the field.
+  #-----------------------------------------------------------------------------
+
   def pbEORCountDownSideEffect(side, effect, msg)
     return if @sides[side].effects[effect] <= 0
     @sides[side].effects[effect] -= 1
@@ -436,9 +450,10 @@ class Battle
                              _INTL("{1}'s Aurora Veil wore off!", @battlers[side].pbTeam))
   end
 
-  #=============================================================================
-  # End Of Round end effects that apply to the whole field
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round end effects that apply to the whole field.
+  #-----------------------------------------------------------------------------
+
   def pbEORCountDownFieldEffect(effect, msg)
     return if @field.effects[effect] <= 0
     @field.effects[effect] -= 1
@@ -470,9 +485,10 @@ class Battle
                               _INTL("Magic Room wore off, and held items' effects returned to normal!"))
   end
 
-  #=============================================================================
-  # End Of Round end terrain check
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round end terrain check.
+  #-----------------------------------------------------------------------------
+
   def pbEOREndTerrain
     # Count down terrain duration
     @field.terrainDuration -= 1 if @field.terrainDuration > 0
@@ -509,9 +525,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # End Of Round end self-inflicted effects on battler
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round end self-inflicted effects on battler.
+  #-----------------------------------------------------------------------------
+
   def pbEOREndBattlerSelfEffects(battler)
     return if battler.fainted?
     # Hyper Mode (Shadow Pokémon)
@@ -541,9 +558,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # End Of Round shift distant battlers to middle positions
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # End Of Round shift distant battlers to middle positions.
+  #-----------------------------------------------------------------------------
+
   def pbEORShiftDistantBattlers
     # Move battlers around if none are near to each other
     # NOTE: This code assumes each side has a maximum of 3 battlers on it, and
@@ -596,9 +614,10 @@ class Battle
     end
   end
 
-  #=============================================================================
-  # Main End Of Round phase method
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Main End Of Round phase method.
+  #-----------------------------------------------------------------------------
+
   def pbEndOfRoundPhase
     PBDebug.log("")
     PBDebug.log("[End of round #{@turnCount + 1}]")
