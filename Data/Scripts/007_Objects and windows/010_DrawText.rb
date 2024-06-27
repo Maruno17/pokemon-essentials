@@ -39,36 +39,6 @@ def shadowctagFromRgb(param)
   return shadowctagFromColor(Color.new_from_rgb(param))
 end
 
-# @deprecated This method is slated to be removed in v22.
-def colorToRgb32(color)
-  Deprecation.warn_method("colorToRgb32", "v22", "color.to_rgb32")
-  return color.to_rgb32
-end
-
-# @deprecated This method is slated to be removed in v22.
-def colorToRgb16(color)
-  Deprecation.warn_method("colorToRgb16", "v22", "color.to_rgb15")
-  return color.to_rgb15
-end
-
-# @deprecated This method is slated to be removed in v22.
-def rgbToColor(param)
-  Deprecation.warn_method("rgbToColor", "v22", "Color.new_from_rgb(param)")
-  return Color.new_from_rgb(param)
-end
-
-# @deprecated This method is slated to be removed in v22.
-def rgb15ToColor(param)
-  Deprecation.warn_method("rgb15ToColor", "v22", "Color.new_from_rgb(param)")
-  return Color.new_from_rgb(param)
-end
-
-# @deprecated This method is slated to be removed in v22.
-def getContrastColor(color)
-  Deprecation.warn_method("getContrastColor", "v22", "color.get_contrast_color")
-  return color.get_contrast_color
-end
-
 #===============================================================================
 # Format text.
 #===============================================================================

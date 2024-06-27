@@ -23,14 +23,6 @@ class Battle::Move
 
   CRITICAL_HIT_RATIOS = (Settings::NEW_CRITICAL_HIT_RATE_MECHANICS) ? [24, 8, 2, 1] : [16, 8, 4, 3, 2]
 
-  def to_int; return @id; end
-
-  # @deprecated This method is slated to be removed in v22.
-  def baseDamage
-    Deprecation.warn_method("baseDamage", "v22", "power")
-    return @power
-  end
-
   #-----------------------------------------------------------------------------
   # Creating a move.
   #-----------------------------------------------------------------------------

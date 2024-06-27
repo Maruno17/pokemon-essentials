@@ -73,19 +73,6 @@ end
 #===============================================================================
 # Checking for files and directories
 #===============================================================================
-# Works around a problem with FileTest.directory if directory contains accent marks
-# @deprecated This method is slated to be removed in v22.
-def safeIsDirectory?(f)
-  Deprecation.warn_method("safeIsDirectory?(f)", "v22", "FileTest.directory?(f)")
-  return FileTest.directory?(f)
-end
-
-# @deprecated This method is slated to be removed in v22.
-def safeExists?(f)
-  Deprecation.warn_method("safeExists?(f)", "v22", "FileTest.exist?(f)")
-  return FileTest.exist?(f)
-end
-
 # Similar to "Dir.glob", but designed to work around a problem with accessing
 # files if a path contains accent marks.
 # "dir" is the directory path, "wildcard" is the filename pattern to match.

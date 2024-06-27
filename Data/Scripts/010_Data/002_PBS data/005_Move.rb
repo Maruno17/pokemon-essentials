@@ -61,12 +61,6 @@ module GameData
       @pbs_file_suffix  = hash[:pbs_file_suffix]  || ""
     end
 
-    # @deprecated This method is slated to be removed in v22.
-    def base_damage
-      Deprecation.warn_method("base_damage", "v22", "power")
-      return @power
-    end
-
     # @return [String] the translated name of this move
     def name
       return pbGetMessageFromHash(MessageTypes::MOVE_NAMES, @real_name)

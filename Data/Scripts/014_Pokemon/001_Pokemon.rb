@@ -323,18 +323,6 @@ class Pokemon
     return species_data.types.clone
   end
 
-  # @deprecated This method is slated to be removed in v22.
-  def type1
-    Deprecation.warn_method("type1", "v22", "pkmn.types")
-    return types[0]
-  end
-
-  # @deprecated This method is slated to be removed in v22.
-  def type2
-    Deprecation.warn_method("type2", "v22", "pkmn.types")
-    return types[1] || types[0]
-  end
-
   # @param type [Symbol, String, GameData::Type] type to check
   # @return [Boolean] whether this Pokémon has the specified type
   def hasType?(type)

@@ -49,8 +49,7 @@ end
 # Permanently stores data of follower events (i.e. in save files).
 #===============================================================================
 class PokemonGlobalMetadata
-  attr_accessor :dependentEvents   # Deprecated - to be removed in v22
-  attr_writer   :followers
+  attr_writer :followers
 
   def followers
     @followers = [] if !@followers
