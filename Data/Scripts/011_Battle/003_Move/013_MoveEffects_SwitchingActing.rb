@@ -155,22 +155,7 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
   def canMagicCoat?;            return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.hasActiveAbility?(:SUCTIONCUPS) && !target.beingMoldBroken?
-      if show_message
-        @battle.pbShowAbilitySplash(target)
-        if Battle::Scene::USE_ABILITY_SPLASH
-          @battle.pbDisplay(_INTL("{1} anchors itself!", target.pbThis))
-        else
-          @battle.pbDisplay(_INTL("{1} anchors itself with {2}!", target.pbThis, target.abilityName))
-        end
-        @battle.pbHideAbilitySplash(target)
-      end
-      return true
-    end
-    if target.effects[PBEffects::Ingrain]
-      @battle.pbDisplay(_INTL("{1} anchored itself with its roots!", target.pbThis)) if show_message
-      return true
-    end
+    return true if !target.canBeForcedOutOfBattle?(show_message)
     if target.wild? && target.allAllies.length == 0 && @battle.canRun
       # End the battle
       if target.level > user.level
@@ -205,8 +190,7 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
     targets.each do |b|
       next if b.fainted? || b.damageState.unaffected
       next if b.wild?
-      next if b.effects[PBEffects::Ingrain]
-      next if b.hasActiveAbility?(:SUCTIONCUPS) && !b.beingMoldBroken?
+      next if !b.canBeForcedOutOfBattle?(false)
       newPkmn = @battle.pbGetReplacementPokemonIndex(b.index, true)   # Random
       next if newPkmn < 0
       @battle.pbRecallAndReplace(b.index, newPkmn, true)
@@ -240,8 +224,7 @@ class Battle::Move::SwitchOutTargetDamagingMove < Battle::Move
     targets.each do |b|
       next if b.fainted? || b.damageState.unaffected || b.damageState.substitute
       next if b.wild?
-      next if b.effects[PBEffects::Ingrain]
-      next if b.hasActiveAbility?(:SUCTIONCUPS) && !b.beingMoldBroken?
+      next if !b.canBeForcedOutOfBattle?(false)
       newPkmn = @battle.pbGetReplacementPokemonIndex(b.index, true)   # Random
       next if newPkmn < 0
       @battle.pbRecallAndReplace(b.index, newPkmn, true)

@@ -1591,20 +1591,7 @@ Battle::ItemEffects::AfterMoveUseFromTarget.add(:REDCARD,
     battle.pbDisplay(_INTL("{1} held up its {2} against {3}!",
        battler.pbThis, battler.itemName, user.pbThis(true)))
     battler.pbConsumeItem
-    if user.hasActiveAbility?(:SUCTIONCUPS) && !user.being_mold_broken?
-      battle.pbShowAbilitySplash(user)
-      if Battle::Scene::USE_ABILITY_SPLASH
-        battle.pbDisplay(_INTL("{1} anchors itself!", user.pbThis))
-      else
-        battle.pbDisplay(_INTL("{1} anchors itself with {2}!", user.pbThis, user.abilityName))
-      end
-      battle.pbHideAbilitySplash(user)
-      next
-    end
-    if user.effects[PBEffects::Ingrain]
-      battle.pbDisplay(_INTL("{1} anchored itself with its roots!", user.pbThis))
-      next
-    end
+    next if !user.canBeForcedOutOfBattle?
     battle.pbRecallAndReplace(user.index, newPkmn, true)
     battle.pbDisplay(_INTL("{1} was dragged out!", user.pbThis))
     battle.pbClearChoice(user.index)   # Replacement Pokémon does nothing this round

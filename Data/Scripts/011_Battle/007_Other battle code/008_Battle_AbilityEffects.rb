@@ -364,6 +364,61 @@ Battle::AbilityEffects::WeightCalc.add(:LIGHTMETAL,
 # OnHPDroppedBelowHalf handlers
 #===============================================================================
 
+Battle::AbilityEffects::OnHPDroppedBelowHalf.add(:ANGERSHELL,
+  proc { |ability, battler, move_user, battle|
+    next false if !move_user   # Not triggered if damage wasn't from a move
+    next false if move_user.index == battler.index   # Not triggered by self-injury
+    stat_up   = [:ATTACK, 1, :SPECIAL_ATTACK, 1, :SPEED, 1]
+    stat_down = [:DEFENSE, 1, :SPECIAL_DEFENSE, 1]
+    # Check if it will have any effect
+    failed = true
+    (stat_down.length / 2).times do |i|
+      next if !battler.pbCanLowerStatStage?(stat_down[i * 2], battler)
+      failed = false
+      break
+    end
+    (stat_up.length / 2).times do |i|
+      next if !battler.pbCanRaiseStatStage?(stat_up[i * 2], battler)
+      failed = false
+      break
+    end
+    next false if failed
+    # Ability will have an effect; do it
+    battle.pbShowAbilitySplash(battler)
+    # Lower stats
+    show_anim = true
+    (stat_down.length / 2).times do |i|
+      next if !battler.pbCanLowerStatStage?(stat_down[i * 2], battler)
+      if Battle::Scene::USE_ABILITY_SPLASH
+        if battler.pbLowerStatStage(stat_down[i * 2], stat_down[(i * 2) + 1], battler, show_anim)
+          show_anim = false
+        end
+      else
+        if battler.pbLowerStatStageByCause(stat_down[i * 2], stat_down[(i * 2) + 1], battler, battler.abilityName, show_anim)
+          show_anim = false
+        end
+      end
+    end
+    # Raise stats
+    show_anim = true
+    (stat_up.length / 2).times do |i|
+      next if !battler.pbCanRaiseStatStage?(stat_up[i * 2], battler)
+      if Battle::Scene::USE_ABILITY_SPLASH
+        if battler.pbRaiseStatStage(stat_up[i * 2], stat_up[(i * 2) + 1], battler, show_anim)
+          show_anim = false
+        end
+      else
+        if battler.pbRaiseStatStageByCause(stat_up[i * 2], stat_up[(i * 2) + 1], battler, battler.abilityName, show_anim)
+          show_anim = false
+        end
+      end
+    end
+    battle.pbHideAbilitySplash(battler)
+    next false
+  }
+)
+
+
 Battle::AbilityEffects::OnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
   proc { |ability, battler, move_user, battle|
     next false if battler.effects[PBEffects::SkyDrop] >= 0 ||

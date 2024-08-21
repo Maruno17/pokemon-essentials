@@ -638,6 +638,29 @@ class Battle::Battler
     return false
   end
 
+  # Returns whether this battler can be made to switch out because of another
+  # battler's move.
+  def canBeForcedOutOfBattle?(show_message = true)
+    if hasActiveAbility?(:SUCTIONCUPS) && !beingMoldBroken?
+      if show_message
+        @battle.pbShowAbilitySplash(self)
+        if Battle::Scene::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("{1} anchors itself!", pbThis))
+        else
+          @battle.pbDisplay(_INTL("{1} anchors itself with {2}!", pbThis, abilityName))
+        end
+        @battle.pbHideAbilitySplash(self)
+      end
+      return false
+    end
+    return false if hasActiveAbility?(:GUARDDOG) && !beingMoldBroken?
+    if @effects[PBEffects::Ingrain]
+      @battle.pbDisplay(_INTL("{1} anchored itself with its roots!", pbThis)) if show_message
+      return false
+    end
+    return true
+  end
+
   def movedThisRound?
     return @lastRoundMoved && @lastRoundMoved == @battle.turnCount
   end

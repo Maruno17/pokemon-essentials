@@ -332,7 +332,14 @@ class Battle::Battler
       return false
     end
     if Battle::Scene::USE_ABILITY_SPLASH
-      return pbLowerStatStageByAbility(:ATTACK, 1, user, false)
+      if hasActiveAbility?(:GUARDDOG)
+        @battle.pbShowAbilitySplash(self)
+        ret = pbRaiseStatStageByAbility(:ATTACK, 1, user, false)
+        @battle.pbHideAbilitySplash(self)
+        return ret
+      else
+        return pbLowerStatStageByAbility(:ATTACK, 1, user, false)
+      end
     end
     # NOTE: These checks exist to ensure appropriate messages are shown if
     #       Intimidate is blocked somehow (i.e. the messages should mention the
@@ -364,6 +371,10 @@ class Battle::Battler
                                 pbThis, itemName, user.pbThis(true), user.abilityName))
         return false
       end
+    end
+    if hasActiveAbility?(:GUARDDOG)
+      return false if !pbCanRaiseStatStage?(:ATTACK, user)
+      return pbRaiseStatStageByCause(:ATTACK, 1, user, user.abilityName)
     end
     return false if !pbCanLowerStatStage?(:ATTACK, user)
     return pbLowerStatStageByCause(:ATTACK, 1, user, user.abilityName)

@@ -202,6 +202,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SwitchOutTargetDamagingM
     next score if target.wild?
     # No score modification if the target can't be made to switch out
     next score if target.has_active_ability?(:SUCTIONCUPS) && !target.being_mold_broken?
+    next score if target.has_active_ability?(:GUARDDOG) && !target.being_mold_broken?
     next score if target.effects[PBEffects::Ingrain]
     # No score modification if the target can't be replaced
     can_switch = false
