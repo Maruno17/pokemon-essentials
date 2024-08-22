@@ -2,11 +2,13 @@ module UI
   #=============================================================================
   # The visuals class.
   #=============================================================================
-  class BaseUIVisuals
-    GRAPHICS_FOLDER         = "Graphics/UI/"
-    BACKGROUND_FILENAME     = "bg"
-    BLACK_TEXT_COLOR        = Color.new(72, 72, 72)
-    BLACK_TEXT_SHADOW_COLOR = Color.new(160, 160, 160)
+  class BaseVisuals
+    UI_FOLDER             = "Graphics/UI/"
+    @@graphics_folder     = ""   # Subfolder in UI_FOLDER
+    @@background_filename = "bg"
+    @@text_colors = {   # These color themes are added to @sprites[:overlay]
+      :default => [Color.new(72, 72, 72), Color.new(160, 160, 160)]   # Base and shadow colour
+    }
 
     def initialize
       @bitmaps = {}
@@ -29,17 +31,18 @@ module UI
     end
 
     def initialize_background
-      addBackgroundPlane(@sprites, :background, GRAPHICS_FOLDER + background_filename, @viewport)
+      addBackgroundPlane(@sprites, :background, @@graphics_folder + background_filename, @viewport)
       @sprites[:background].z = -1000
     end
 
     def background_filename
-      return gendered_filename(BACKGROUND_FILENAME)
+      return gendered_filename(@@background_filename)
     end
 
     def initialize_overlay
       @sprites[:overlay] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
       @sprites[:overlay].z = 1000
+      @@text_colors.each_pair { |key, values| @sprites[:overlay].add_text_theme(key, *values) }
       pbSetSystemFont(@sprites[:overlay].bitmap)
     end
 
@@ -49,7 +52,7 @@ module UI
     #---------------------------------------------------------------------------
 
     def add_icon_sprite(key, x, y, filename = nil)
-      @sprites[key] = IconSprite.new(x, y, :viewport)
+      @sprites[key] = IconSprite.new(x, y, @viewport)
       @sprites[key].setBitmap(filename) if filename
     end
 
@@ -73,6 +76,10 @@ module UI
 
     #---------------------------------------------------------------------------
 
+    def graphics_folder
+      return UI_FOLDER + @@graphics_folder
+    end
+
     def gendered_filename(base_filename)
       return filename_with_appendix(base_filename, "_f") if $player.female?
       return base_filename
@@ -81,7 +88,7 @@ module UI
     def filename_with_appendix(base_filename, appendix)
       if appendix && appendix != ""
         trial_filename = base_filename + appendix
-        return trial_filename if pbResolveBitmap(GRAPHICS_FOLDER + trial_filename)
+        return trial_filename if pbResolveBitmap(graphics_folder + trial_filename)
       end
       return base_filename
     end
@@ -102,13 +109,23 @@ module UI
 
     #---------------------------------------------------------------------------
 
+    def draw_text(string, text_x, text_y, align: :left, theme: :default, outline: :shadow, overlay: :overlay)
+      @sprites[overlay].draw_themed_text(string, text_x, text_y, align, theme, outline)
+    end
+
+    def draw_image(filename, image_x, image_y, src_x = 0, src_y = 0, src_width = -1, src_height = -1, overlay: :overlay)
+      @sprites[overlay].draw_image(filename, image_x, image_y, src_x, src_y, src_width, src_height)
+    end
+
+    #---------------------------------------------------------------------------
+
     # Redraw everything on the screen.
     def refresh
       refresh_overlay
     end
 
     def refresh_overlay
-      @sprites[:overlay].bitmap.clear
+      @sprites[:overlay].bitmap.clear if @sprites[:overlay]
     end
 
     #---------------------------------------------------------------------------
@@ -146,14 +163,15 @@ module UI
   #=============================================================================
   # The logic class.
   #=============================================================================
-  class BaseUIScreen
+  class BaseScreen
     def initialize
+      @disposed = false
       initialize_visuals
       main
     end
 
     def initialize_visuals
-      @visuals = UI::BaseUIVisuals.new
+      @visuals = UI::BaseVisuals.new
     end
 
     def start_screen
@@ -161,8 +179,17 @@ module UI
     end
 
     def end_screen
+      return if @disposed
       @visuals.fade_out
       @visuals.dispose
+      @disposed = true
+    end
+
+    # Same as def end_screen but without fading out.
+    def silent_end_screen
+      return if @disposed
+      @visuals.dispose
+      @disposed = true
     end
 
     #-----------------------------------------------------------------------------
@@ -180,6 +207,10 @@ module UI
     end
 
     #-----------------------------------------------------------------------------
+
+    def refresh
+      @visuals.refresh
+    end
 
     def main
       start_screen

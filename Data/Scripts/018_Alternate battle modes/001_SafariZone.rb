@@ -164,20 +164,35 @@ end
 #===============================================================================
 #
 #===============================================================================
-class PokemonPauseMenu
-  alias __safari_pbShowInfo pbShowInfo unless method_defined?(:__safari_pbShowInfo)
+class UI::PauseMenu < UI::BaseScreen
+  alias __safari_show_info show_info unless method_defined?(:__safari_show_info)
 
-  def pbShowInfo
-    __safari_pbShowInfo
+  def show_info
+    __safari_show_info
     return if !pbInSafari?
     if Settings::SAFARI_STEPS <= 0
-      @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
+      @visuals.show_info(_INTL("Balls: {1}", pbSafariState.ballcount))
     else
-      @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
-                              pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
+      @visuals.show_info(_INTL("Steps: {1}/{2}\nBalls: {3}",
+                               pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
     end
   end
 end
+
+# class PokemonPauseMenu
+#   alias __safari_pbShowInfo pbShowInfo unless method_defined?(:__safari_pbShowInfo)
+#
+#   def pbShowInfo
+#     __safari_pbShowInfo
+#     return if !pbInSafari?
+#     if Settings::SAFARI_STEPS <= 0
+#       @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
+#     else
+#       @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
+#                               pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
+#     end
+#   end
+# end
 
 #===============================================================================
 #
@@ -188,15 +203,15 @@ MenuHandlers.add(:pause_menu, :quit_safari_game, {
   "order"     => 60,
   "condition" => proc { next pbInSafari? },
   "effect"    => proc { |menu|
-    menu.pbHideMenu
+    menu.hide_menu
     if pbConfirmMessage(_INTL("Would you like to leave the Safari Game right now?"))
-      menu.pbEndScene
+      menu.silent_end_screen
       pbSafariState.decision = 1
       pbSafariState.pbGoToStart
       next true
     end
-    menu.pbRefresh
-    menu.pbShowMenu
+    menu.refresh
+    menu.show_menu
     next false
   }
 })

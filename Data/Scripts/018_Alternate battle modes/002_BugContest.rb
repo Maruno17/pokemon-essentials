@@ -408,22 +408,39 @@ end
 #===============================================================================
 #
 #===============================================================================
-class PokemonPauseMenu
-  alias __bug_contest_pbShowInfo pbShowInfo unless method_defined?(:__bug_contest_pbShowInfo)
+class UI::PauseMenu < UI::BaseScreen
+  alias __bug_contest_show_info show_info unless method_defined?(:__bug_contest_show_info)
 
-  def pbShowInfo
-    __bug_contest_pbShowInfo
+  def show_info
+    __bug_contest_show_info
     return if !pbInBugContest?
     if pbBugContestState.lastPokemon
-      @scene.pbShowInfo(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
-                              pbBugContestState.lastPokemon.speciesName,
-                              pbBugContestState.lastPokemon.level,
-                              pbBugContestState.ballcount))
+      @visuals.show_info(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
+                               pbBugContestState.lastPokemon.speciesName,
+                               pbBugContestState.lastPokemon.level,
+                               pbBugContestState.ballcount))
     else
-      @scene.pbShowInfo(_INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount))
+      @visuals.show_info(_INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount))
     end
   end
 end
+
+# class PokemonPauseMenu
+#   alias __bug_contest_pbShowInfo pbShowInfo unless method_defined?(:__bug_contest_pbShowInfo)
+#
+#   def pbShowInfo
+#     __bug_contest_pbShowInfo
+#     return if !pbInBugContest?
+#     if pbBugContestState.lastPokemon
+#       @scene.pbShowInfo(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
+#                               pbBugContestState.lastPokemon.speciesName,
+#                               pbBugContestState.lastPokemon.level,
+#                               pbBugContestState.ballcount))
+#     else
+#       @scene.pbShowInfo(_INTL("Caught: None\nBalls: {1}", pbBugContestState.ballcount))
+#     end
+#   end
+# end
 
 #===============================================================================
 #
@@ -434,14 +451,14 @@ MenuHandlers.add(:pause_menu, :quit_bug_contest, {
   "order"     => 60,
   "condition" => proc { next pbInBugContest? },
   "effect"    => proc { |menu|
-    menu.pbHideMenu
+    menu.hide_menu
     if pbConfirmMessage(_INTL("Would you like to end the Contest now?"))
-      menu.pbEndScene
+      menu.silent_end_screen
       pbBugContestState.pbStartJudging
       next true
     end
-    menu.pbRefresh
-    menu.pbShowMenu
+    menu.refresh
+    menu.show_menu
     next false
   }
 })

@@ -3,19 +3,117 @@
 # This bitmap can't be changed to a different one.
 #===============================================================================
 class BitmapSprite < Sprite
+  attr_reader :text_themes
+
   def initialize(width, height, viewport = nil)
     super(viewport)
     self.bitmap = Bitmap.new(width, height)
+    @text_themes = {}
     @initialized = true
+  end
+
+  def dispose
+    self.bitmap.dispose if !self.disposed?
+    super
   end
 
   def bitmap=(value)
     super(value) if !@initialized
   end
 
-  def dispose
-    self.bitmap.dispose if !self.disposed?
-    super
+  #-----------------------------------------------------------------------------
+
+  def add_text_theme(id, base_color, shadow_color = nil)
+    @text_themes[id] = [base_color, shadow_color]
+  end
+
+  # TODO: Replaces def pbDrawTextPositions.
+  def draw_themed_text(string, text_x, text_y, align = :left, theme = :default, outline = :shadow)
+    string_size = self.bitmap.text_size(string)
+    case align
+    when :right
+      text_x -= string_size.width
+    when :center
+      text_x -= (string_size.width / 2)
+    end
+    if !@text_themes[theme]
+      theme = (@text_themes[:default]) ? :default : @text_themes.keys.first
+    end
+    case outline || :shadow
+    when :shadow
+      draw_shadowed_text(string, text_x, text_y, theme)
+    when :outline
+      draw_outlined_text(string, text_x, text_y, theme)
+    when :none
+      draw_plain_text(string, text_x, text_y, theme)
+    end
+  end
+
+  # TODO: Replaces def pbDrawShadowText.
+  def draw_shadowed_text(string, text_x, text_y, theme)
+    return if !@text_themes[theme]
+    base_color, shadow_color = @text_themes[theme]
+    string_size = self.bitmap.text_size(string)
+    string_width = string_size.width + 1
+    string_height = string_size.height + 1
+    if shadow_color && shadow_color.alpha > 0
+      self.bitmap.font.color = shadow_color
+      self.bitmap.draw_text(text_x + 2, text_y, string_width, string_height, string, 0)
+      self.bitmap.draw_text(text_x, text_y + 2, string_width, string_height, string, 0)
+      self.bitmap.draw_text(text_x + 2, text_y + 2, string_width, string_height, string, 0)
+    end
+    if base_color && base_color.alpha > 0
+      self.bitmap.font.color = base_color
+      self.bitmap.draw_text(text_x, text_y, string_width, string_height, string, 0)
+    end
+  end
+
+  # TODO: Replaces def pbDrawOutlineText.
+  def draw_outlined_text(string, text_x, text_y, theme)
+    return if !@text_themes[theme]
+    base_color, shadow_color = @text_themes[theme]
+    string_size = self.bitmap.text_size(string)
+    string_width = string_size.width + 1
+    string_height = string_size.height + 1
+    if shadow_color && shadow_color.alpha > 0
+      self.bitmap.font.color = shadow_color
+      self.bitmap.draw_text(text_x - 2, text_y - 2, string_width, string_height, string, 0)
+      self.bitmap.draw_text(text_x, text_y - 2, string_width, string_height, string, 0)
+      self.bitmap.draw_text(text_x + 2, text_y - 2, string_width, string_height, string, 0)
+      self.bitmap.draw_text(text_x - 2, text_y, string_width, string_height, string, 0)
+      self.bitmap.draw_text(text_x + 2, text_y, string_width, string_height, string, 0)
+      self.bitmap.draw_text(text_x - 2, text_y + 2, string_width, string_height, string, 0)
+      self.bitmap.draw_text(text_x, text_y + 2, string_width, string_height, string, 0)
+      self.bitmap.draw_text(text_x + 2, text_y + 2, string_width, string_height, string, 0)
+    end
+    if base_color && base_color.alpha > 0
+      self.bitmap.font.color = base_color
+      self.bitmap.draw_text(text_x, text_y, string_width, string_height, string, 0)
+    end
+  end
+
+  # TODO: Replaces def pbDrawPlainText.
+  def draw_plain_text(string, text_x, text_y, theme)
+    return if !@text_themes[theme]
+    base_color = @text_themes[theme][0]
+    return if !base_color || base_color.alpha == 0
+    string_size = self.bitmap.text_size(string)
+    string_width = string_size.width + 1
+    string_height = string_size.height + 1
+    self.bitmap.font.color = base_color
+    self.bitmap.draw_text(text_x, text_y, string_width, string_height, string, 0)
+  end
+
+  #-----------------------------------------------------------------------------
+
+  # TODO: Replaces def pbDrawImagePositions.
+  def draw_image(filename, image_x, image_y, src_x = 0, src_y = 0, src_width = -1, src_height = -1)
+    src_bitmap = AnimatedBitmap.new(pbBitmapName(filename))
+    src_width = (src_width >= 0) ? src_width : src_bitmap.width
+    src_height = (src_height >= 0) ? src_height : src_bitmap.height
+    src_rect = Rect.new(src_x, src_y, src_width, src_height)
+    self.bitmap.blt(image_x, image_y, src_bitmap.bitmap, src_rect)
+    src_bitmap.dispose
   end
 end
 
