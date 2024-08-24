@@ -54,16 +54,33 @@ module UI
 
     #---------------------------------------------------------------------------
 
-    def add_overlay(key)
-      @sprites[key] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @sprites[key].z = 1000
-      self.class::TEXT_COLOR_THEMES.each_pair { |key, values| @sprites[key].add_text_theme(key, *values) }
-      pbSetSystemFont(@sprites[key].bitmap)
+    def add_overlay(overlay)
+      @sprites[overlay] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
+      @sprites[overlay].z = 1000
+      self.class::TEXT_COLOR_THEMES.each_pair { |key, values| @sprites[overlay].add_text_theme(key, *values) }
+      pbSetSystemFont(@sprites[overlay].bitmap)
     end
 
     def add_icon_sprite(key, x, y, filename = nil)
       @sprites[key] = IconSprite.new(x, y, @viewport)
       @sprites[key].setBitmap(filename) if filename
+    end
+
+    def add_animated_arrow(key, x, y, direction)
+      case direction
+      when :up
+        @sprites[key] = AnimatedSprite.new(UI_FOLDER + "up_arrow", 8, 28, 40, 2, @viewport)
+      when :down
+        @sprites[key] = AnimatedSprite.new(UI_FOLDER + "down_arrow", 8, 28, 40, 2, @viewport)
+      when :left
+        @sprites[key] = AnimatedSprite.new(UI_FOLDER + "left_arrow", 8, 40, 28, 2, @viewport)
+      when :right
+        @sprites[key] = AnimatedSprite.new(UI_FOLDER + "right_arrow", 8, 40, 28, 2, @viewport)
+      end
+      @sprites[key].x = x
+      @sprites[key].y = y
+      @sprites[key].visible = false
+      @sprites[key].play
     end
 
     #---------------------------------------------------------------------------
@@ -228,6 +245,18 @@ module UI
 
     def draw_text(string, text_x, text_y, align: :left, theme: :default, outline: :shadow, overlay: :overlay)
       @sprites[overlay].draw_themed_text(string.to_s, text_x, text_y, align, theme, outline)
+    end
+
+    def draw_paragraph_text(string, text_x, text_y, text_width, num_lines, theme: :default, overlay: :overlay)
+      drawTextEx(@sprites[overlay].bitmap, text_x, text_y, text_width, num_lines,
+                 string, *self.class::TEXT_COLOR_THEMES[theme])
+    end
+
+    # NOTE: This also draws string in a paragraph, but with no limit on the
+    #       number of lines.
+    def draw_formatted_text(string, text_x, text_y, text_width, theme: :default, overlay: :overlay)
+      drawFormattedTextEx(@sprites[overlay].bitmap, text_x, text_y, text_width,
+                          string, *self.class::TEXT_COLOR_THEMES[theme])
     end
 
     def draw_image(filename, image_x, image_y, src_x = 0, src_y = 0, src_width = -1, src_height = -1, overlay: :overlay)

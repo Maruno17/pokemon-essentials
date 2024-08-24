@@ -9,6 +9,7 @@ module GameData
   class Stat
     attr_reader :id
     attr_reader :real_name
+    attr_reader :real_name_semi_brief
     attr_reader :real_name_brief
     attr_reader :type
     attr_reader :pbs_order
@@ -39,16 +40,21 @@ module GameData
     #---------------------------------------------------------------------------
 
     def initialize(hash)
-      @id              = hash[:id]
-      @real_name       = hash[:name]       || "Unnamed"
-      @real_name_brief = hash[:name_brief] || "None"
-      @type            = hash[:type]       || :none
-      @pbs_order       = hash[:pbs_order]  || -1
+      @id                   = hash[:id]
+      @real_name            = hash[:name]            || "Unnamed"
+      @real_name_semi_brief = hash[:name_semi_brief]
+      @real_name_brief      = hash[:name_brief]      || "None"
+      @type                 = hash[:type]            || :none
+      @pbs_order            = hash[:pbs_order]       || -1
     end
 
     # @return [String] the translated name of this stat
     def name
       return _INTL(@real_name)
+    end
+
+    def name_semi_brief
+      return _INTL(@real_name_semi_brief || @real_name)
     end
 
     # @return [String] the translated brief name of this stat
@@ -87,19 +93,21 @@ GameData::Stat.register({
 })
 
 GameData::Stat.register({
-  :id         => :SPECIAL_ATTACK,
-  :name       => _INTL("Special Attack"),
-  :name_brief => _INTL("SpAtk"),
-  :type       => :main_battle,
-  :pbs_order  => 4
+  :id              => :SPECIAL_ATTACK,
+  :name            => _INTL("Special Attack"),
+  :name_semi_brief => _INTL("Sp. Atk"),
+  :name_brief      => _INTL("SpAtk"),
+  :type            => :main_battle,
+  :pbs_order       => 4
 })
 
 GameData::Stat.register({
-  :id         => :SPECIAL_DEFENSE,
-  :name       => _INTL("Special Defense"),
-  :name_brief => _INTL("SpDef"),
-  :type       => :main_battle,
-  :pbs_order  => 5
+  :id              => :SPECIAL_DEFENSE,
+  :name            => _INTL("Special Defense"),
+  :name_semi_brief => _INTL("Sp. Def"),
+  :name_brief      => _INTL("SpDef"),
+  :type            => :main_battle,
+  :pbs_order       => 5
 })
 
 GameData::Stat.register({

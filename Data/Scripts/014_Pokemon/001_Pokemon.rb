@@ -315,6 +315,21 @@ class Pokemon
   end
 
   #-----------------------------------------------------------------------------
+  # Stats.
+  #-----------------------------------------------------------------------------
+  def stat(id)
+    case id
+    when :HP              then return @totalhp
+    when :ATTACK          then return @attack
+    when :DEFENSE         then return @defense
+    when :SPECIAL_ATTACK  then return @spatk
+    when :SPECIAL_DEFENSE then return @spdef
+    when :SPEED           then return @speed
+    end
+    return 0
+  end
+
+  #-----------------------------------------------------------------------------
   # Types.
   #-----------------------------------------------------------------------------
 

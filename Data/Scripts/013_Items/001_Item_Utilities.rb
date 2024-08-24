@@ -780,6 +780,7 @@ end
 # Give an item to a Pokémon to hold, and take a held item from a Pokémon.
 #===============================================================================
 def pbGiveItemToPokemon(item, pkmn, scene, pkmnid = 0)
+  return false if item.nil?
   newitemname = GameData::Item.get(item).portion_name
   if pkmn.egg?
     scene.pbDisplay(_INTL("Eggs can't hold items."))

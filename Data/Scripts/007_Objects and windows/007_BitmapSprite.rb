@@ -108,12 +108,12 @@ class BitmapSprite < Sprite
 
   # TODO: Replaces def pbDrawImagePositions.
   def draw_image(filename, image_x, image_y, src_x = 0, src_y = 0, src_width = -1, src_height = -1)
-    src_bitmap = AnimatedBitmap.new(pbBitmapName(filename))
+    src_bitmap = (filename.is_a?(AnimatedBitmap)) ? filename : AnimatedBitmap.new(pbBitmapName(filename))
     src_width = (src_width >= 0) ? src_width : src_bitmap.width
     src_height = (src_height >= 0) ? src_height : src_bitmap.height
     src_rect = Rect.new(src_x, src_y, src_width, src_height)
     self.bitmap.blt(image_x, image_y, src_bitmap.bitmap, src_rect)
-    src_bitmap.dispose
+    src_bitmap.dispose if !filename.is_a?(AnimatedBitmap)
   end
 end
 
