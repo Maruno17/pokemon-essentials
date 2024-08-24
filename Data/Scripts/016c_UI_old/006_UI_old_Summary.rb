@@ -1,3 +1,4 @@
+=begin
 #===============================================================================
 #
 #===============================================================================
@@ -75,12 +76,23 @@ class RibbonSelectionSprite < MoveSelectionSprite
     @spriteVisible = value if !@updating
   end
 
+  def recheck_visibility
+    @updating = true
+    self.visible = @spriteVisible && @index >= 0 &&
+                   @index < UI::PokemonSummaryVisuals::RIBBON_COLUMNS * UI::PokemonSummaryVisuals::RIBBON_ROWS
+    @updating = false
+  end
+
   def refresh
+    recheck_visibility
+    cols = UI::PokemonSummaryVisuals::RIBBON_COLUMNS
+    offset_x = UI::PokemonSummaryVisuals::RIBBON_SIZE[0] + UI::PokemonSummaryVisuals::RIBBON_SPACING_X
+    offset_y = UI::PokemonSummaryVisuals::RIBBON_SIZE[1] + UI::PokemonSummaryVisuals::RIBBON_SPACING_Y
+    self.x = UI::PokemonSummaryVisuals::RIBBON_X - 2 + ((self.index % cols) * offset_x)
+    self.y = UI::PokemonSummaryVisuals::RIBBON_Y - 2 + ((self.index / cols) * offset_y)
+    self.bitmap = @movesel.bitmap
     w = @movesel.width
     h = @movesel.height / 2
-    self.x = 228 + ((self.index % 4) * 68)
-    self.y = 76 + ((self.index / 4).floor * 68)
-    self.bitmap = @movesel.bitmap
     if self.preselected
       self.src_rect.set(0, h, w, h)
     else
@@ -89,11 +101,9 @@ class RibbonSelectionSprite < MoveSelectionSprite
   end
 
   def update
-    @updating = true
     super
-    self.visible = @spriteVisible && @index >= 0 && @index < 12
+    recheck_visibility
     @movesel.update
-    @updating = false
     refresh
   end
 end
@@ -839,7 +849,7 @@ class PokemonSummary_Scene
     pbDrawTextPositions(overlay, textpos)
     # Draw selected move's damage category icon
     imagepos = [["Graphics/UI/category", 166, 124,
-                 0, selected_move.display_category(@pokemon) * CATEGORY_ICON_SIZE[1], *CATEGORY_ICON_SIZE]]
+                 0, selected_move.display_category(@pokemon) * GameData::Move::CATEGORY_ICON_SIZE[1], *GameData::Move::CATEGORY_ICON_SIZE]]
     pbDrawImagePositions(overlay, imagepos)
     # Draw selected move's description
     drawTextEx(overlay, 4, 224, 230, 5, selected_move.description, base, shadow)
@@ -1367,6 +1377,7 @@ class PokemonSummaryScreen
     return ret
   end
 
+  # Unused.
   def pbStartChooseMoveScreen(party, partyindex, message)
     ret = -1
     @scene.pbStartForgetScene(party, partyindex, nil)
@@ -1388,9 +1399,8 @@ def pbChooseMove(pokemon, variableNumber, nameVarNumber)
   return if !pokemon
   ret = -1
   pbFadeOutIn do
-    scene = PokemonSummary_Scene.new
-    screen = PokemonSummaryScreen.new(scene)
-    ret = screen.pbStartForgetScreen([pokemon], 0, nil)
+    screen = UI::PokemonSummary.new(pokemon, mode: :choose_move)
+    ret = screen.result
   end
   $game_variables[variableNumber] = ret
   if ret >= 0
@@ -1400,3 +1410,4 @@ def pbChooseMove(pokemon, variableNumber, nameVarNumber)
   end
   $game_map.need_refresh = true if $game_map
 end
+=end

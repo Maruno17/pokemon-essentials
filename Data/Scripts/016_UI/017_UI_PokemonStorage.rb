@@ -1246,16 +1246,16 @@ class PokemonStorageScene
 
   def pbSummary(selected, heldpoke)
     oldsprites = pbFadeOutAndHide(@sprites)
-    scene = PokemonSummary_Scene.new
-    screen = PokemonSummaryScreen.new(scene)
     if heldpoke
-      screen.pbStartScreen([heldpoke], 0)
+      UI::PokemonSummary.new(heldpoke)
     elsif selected[0] == -1
-      @selection = screen.pbStartScreen(@storage.party, selected[1])
+      screen = UI::PokemonSummary.new(@storage.party, selected[1])
+      @selection = screen.result
       pbPartySetArrow(@sprites["arrow"], @selection)
       pbUpdateOverlay(@selection, @storage.party)
     else
-      @selection = screen.pbStartScreen(@storage.boxes[selected[0]], selected[1])
+      screen = UI::PokemonSummary.new(@storage.boxes[selected[0]], selected[1])
+      @selection = screen.result
       pbSetArrow(@sprites["arrow"], @selection)
       pbUpdateOverlay(@selection)
     end

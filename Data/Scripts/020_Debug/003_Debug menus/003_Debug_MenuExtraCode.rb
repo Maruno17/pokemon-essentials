@@ -335,9 +335,7 @@ def pbDebugDayCare
                        [_INTL("Summary"), _INTL("Withdraw"), _INTL("Cancel")], 3)
         when 0   # Summary
           pbFadeOutIn do
-            scene = PokemonSummary_Scene.new
-            screen = PokemonSummaryScreen.new(scene, false)
-            screen.pbStartScreen([pkmn], 0)
+            UI::PokemonSummary.new(pkmn)
             need_refresh = true
           end
         when 1   # Withdraw

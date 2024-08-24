@@ -63,9 +63,7 @@ module Battle::CatchAndStoreMixin
           break
         when 2   # See X's summary
           pbFadeOutIn do
-            summary_scene = PokemonSummary_Scene.new
-            summary_screen = PokemonSummaryScreen.new(summary_scene, true)
-            summary_screen.pbStartScreen([pkmn], 0)
+            screen = UI::PokemonSummary.new(pkmn, mode: :in_battle)
           end
         when 3   # Check party
           @scene.pbPartyScreen(0, true, 2)

@@ -3,11 +3,11 @@ module UI
   # The visuals class.
   #=============================================================================
   class BaseVisuals
-    UI_FOLDER             = "Graphics/UI/"
-    @@graphics_folder     = ""   # Subfolder in UI_FOLDER
-    @@background_filename = "bg"
-    @@text_colors = {   # These color themes are added to @sprites[:overlay]
-      :default => [Color.new(72, 72, 72), Color.new(160, 160, 160)]   # Base and shadow colour
+    UI_FOLDER           = "Graphics/UI/"
+    GRAPHICS_FOLDER     = ""   # Subfolder in UI_FOLDER
+    BACKGROUND_FILENAME = "bg"
+    TEXT_COLOR_THEMES   = {   # These color themes are added to @sprites[:overlay]
+      :default => [Color.new(72, 172, 72), Color.new(160, 160, 160)]   # Base and shadow colour
     }
 
     def initialize
@@ -17,7 +17,8 @@ module UI
       initialize_bitmaps
       initialize_background
       initialize_overlay
-      # TODO: Initialize message box (and dialogue box?) for messages to use.
+      initialize_message_box
+      # TODO: Initialize dialogue box for messages to use?
       initialize_sprites
       refresh
     end
@@ -31,25 +32,34 @@ module UI
     end
 
     def initialize_background
-      addBackgroundPlane(@sprites, :background, @@graphics_folder + background_filename, @viewport)
+      addBackgroundPlane(@sprites, :background, self.class::GRAPHICS_FOLDER + background_filename, @viewport)
       @sprites[:background].z = -1000
     end
 
-    def background_filename
-      return gendered_filename(@@background_filename)
+    def initialize_overlay
+      add_overlay(:overlay)
     end
 
-    def initialize_overlay
-      @sprites[:overlay] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @sprites[:overlay].z = 1000
-      @@text_colors.each_pair { |key, values| @sprites[:overlay].add_text_theme(key, *values) }
-      pbSetSystemFont(@sprites[:overlay].bitmap)
+    def initialize_message_box
+      @sprites[:message_box] = Window_AdvancedTextPokemon.new("")
+      @sprites[:message_box].viewport       = @viewport
+      @sprites[:message_box].z              = 2000
+      @sprites[:message_box].visible        = false
+      @sprites[:message_box].letterbyletter = true
+      pbBottomLeftLines(@sprites[:message_box], 2)
     end
 
     def initialize_sprites
     end
 
     #---------------------------------------------------------------------------
+
+    def add_overlay(key)
+      @sprites[key] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
+      @sprites[key].z = 1000
+      self.class::TEXT_COLOR_THEMES.each_pair { |key, values| @sprites[key].add_text_theme(key, *values) }
+      pbSetSystemFont(@sprites[key].bitmap)
+    end
 
     def add_icon_sprite(key, x, y, filename = nil)
       @sprites[key] = IconSprite.new(x, y, @viewport)
@@ -77,7 +87,11 @@ module UI
     #---------------------------------------------------------------------------
 
     def graphics_folder
-      return UI_FOLDER + @@graphics_folder
+      return UI_FOLDER + self.class::GRAPHICS_FOLDER
+    end
+
+    def background_filename
+      return gendered_filename(self.class::BACKGROUND_FILENAME)
     end
 
     def gendered_filename(base_filename)
@@ -96,21 +110,124 @@ module UI
     #---------------------------------------------------------------------------
 
     def show_message(text)
-      pbMessage(text) { update_visuals }
+      @sprites[:message_box].text = text
+      @sprites[:message_box].visible = true
+      loop do
+        Graphics.update
+        Input.update
+        update_visuals
+        if @sprites[:message_box].busy?
+          if Input.trigger?(Input::USE)
+            pbPlayDecisionSE if @sprites[:message_box].pausing?
+            @sprites[:message_box].resume
+          end
+        elsif Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
+          break
+        end
+      end
+      @sprites[:message_box].visible = false
     end
 
     def show_confirm_message(text)
-      return pbConfirmMessage(text) { update_visuals }
+      ret = false
+      @sprites[:message_box].text    = text
+      @sprites[:message_box].visible = true
+      using(cmd_window = Window_CommandPokemon.new([_INTL("Yes"), _INTL("No")])) do
+        cmd_window.z       = @viewport.z + 1
+        cmd_window.visible = false
+        pbBottomRight(cmd_window)
+        cmd_window.y -= @sprites[:message_box].height
+        loop do
+          Graphics.update
+          Input.update
+          update_visuals
+          cmd_window.visible = true if !@sprites[:message_box].busy?
+          cmd_window.update
+          if !@sprites[:message_box].busy?
+            if Input.trigger?(Input::BACK)
+              pbPlayCancelSE
+              ret = false
+              break
+            elsif Input.trigger?(Input::USE) && @sprites[:message_box].resume
+              pbPlayDecisionSE
+              ret = (cmd_window.index == 0)
+              break
+            end
+          end
+        end
+      end
+      @sprites[:message_box].visible = false
+      return ret
     end
 
-    def show_choice_message(text, options, cancel_index)
-      return pbMessage(text, options, cancel_index) { update_visuals }
+    def show_choice_message(text, options, index = 0)
+      ret = -1
+      commands = options
+      commands = options.values if options.is_a?(Hash)
+      @sprites[:message_box].text    = text
+      @sprites[:message_box].visible = true
+      using(cmd_window = Window_CommandPokemon.new(commands)) do
+        cmd_window.z       = @viewport.z + 1
+        cmd_window.visible = false
+        cmd_window.index   = index
+        pbBottomRight(cmd_window)
+        cmd_window.y -= @sprites[:message_box].height
+        loop do
+          Graphics.update
+          Input.update
+          update_visuals
+          cmd_window.visible = true if !@sprites[:message_box].busy?
+          cmd_window.update
+          if !@sprites[:message_box].busy?
+            if Input.trigger?(Input::BACK)
+              pbPlayCancelSE
+              ret = -1
+              break
+            elsif Input.trigger?(Input::USE) && @sprites[:message_box].resume
+              pbPlayDecisionSE
+              ret = cmd_window.index
+              break
+            end
+          end
+        end
+      end
+      @sprites[:message_box].visible = false
+      ret = options.keys[ret] if options.is_a?(Hash)
+      return ret
+    end
+
+    def show_choice(options, index = 0)
+      ret = -1
+      commands = options
+      commands = options.values if options.is_a?(Hash)
+      using(cmd_window = Window_CommandPokemon.new(commands)) do
+        cmd_window.z     = @viewport.z + 1
+        cmd_window.index = index
+        pbBottomRight(cmd_window)
+        loop do
+          Graphics.update
+          Input.update
+          update_visuals
+          cmd_window.update
+          if Input.trigger?(Input::BACK)
+            pbPlayCancelSE
+            ret = -1
+            break
+          elsif Input.trigger?(Input::USE)
+            pbPlayDecisionSE
+            ret = cmd_window.index
+            break
+          end
+        end
+      end
+      ret = options.keys[ret] if options.is_a?(Hash)
+      return ret
     end
 
     #---------------------------------------------------------------------------
 
     def draw_text(string, text_x, text_y, align: :left, theme: :default, outline: :shadow, overlay: :overlay)
-      @sprites[overlay].draw_themed_text(string, text_x, text_y, align, theme, outline)
+      @sprites[overlay].draw_themed_text(string.to_s, text_x, text_y, align, theme, outline)
     end
 
     def draw_image(filename, image_x, image_y, src_x = 0, src_y = 0, src_width = -1, src_height = -1, overlay: :overlay)
@@ -141,10 +258,10 @@ module UI
       return nil
     end
 
-    def update
-      update_visuals
-      return update_input
-    end
+#    def update
+#      update_visuals
+#      return update_input
+#    end
 
     #---------------------------------------------------------------------------
 
@@ -153,7 +270,8 @@ module UI
       loop do
         Graphics.update
         Input.update
-        ret = update
+        update_visuals
+        ret = update_input
         break if ret
       end
       return ret
@@ -164,9 +282,12 @@ module UI
   # The logic class.
   #=============================================================================
   class BaseScreen
+    attr_reader :result
+
     def initialize
       @disposed = false
       initialize_visuals
+      # TODO: Call main separately, not here?
       main
     end
 
@@ -198,19 +319,31 @@ module UI
       @visuals.show_message(text)
     end
 
+    alias pbDisplay show_message
+
     def show_confirm_message(text)
       return @visuals.show_confirm_message(text)
     end
 
-    def show_choice_message(text, options, cancel_index)
-      return @visuals.show_choice_message(text, options, cancel_index)
+    alias pbConfirm show_confirm_message
+
+    def show_choice_message(text, options, initial_index = 0)
+      return @visuals.show_choice_message(text, options, initial_index)
     end
+
+    def show_choice(options, initial_index = 0)
+      return @visuals.show_choice(options, initial_index)
+    end
+
+    alias pbShowCommands show_choice
 
     #-----------------------------------------------------------------------------
 
     def refresh
       @visuals.refresh
     end
+
+    #-----------------------------------------------------------------------------
 
     def main
       start_screen
