@@ -30,7 +30,7 @@ class UI::PokemonSummaryMoveCursor < Sprite
   def refresh
     cursor_width = @cursor_bitmap.width
     cursor_height = @cursor_bitmap.height / 2
-    self.x = UI::PokemonSummaryVisuals::MOVE_LIST_X - CURSOR_THICKNESS
+    self.x = UI::PokemonSummaryVisuals::MOVE_LIST_X_DETAILED - CURSOR_THICKNESS
     self.y = UI::PokemonSummaryVisuals::MOVE_LIST_Y - CURSOR_THICKNESS + (self.index * UI::PokemonSummaryVisuals::MOVE_LIST_SPACING)
     self.y += UI::PokemonSummaryVisuals::MOVE_LIST_OFFSET_WHEN_NEW_MOVE if @new_move
     self.y += UI::PokemonSummaryVisuals::MOVE_LIST_NEW_MOVE_SPACING if @new_move && self.index == Pokemon::MAX_MOVES
@@ -135,13 +135,16 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     :pp_quarter   => [Color.new(248, 136, 32), Color.new(144, 72, 24)],
     :pp_zero      => [Color.new(248, 72, 72), Color.new(136, 48, 48)]
   }
+  PARTY_ICONS_COUNT              = 6
+  PARTY_ICON_SIZE                = [18, 18]   # In the party_icons.png graphic
   MARKING_WIDTH                  = 16
   MARKING_HEIGHT                 = 16
-  MOVE_LIST_X                    = 246
+  MOVE_LIST_X                    = 230
+  MOVE_LIST_X_DETAILED           = MOVE_LIST_X + 32
   MOVE_LIST_Y                    = 98
   MOVE_LIST_SPACING              = 64    # Y distance between top of two adjacent move areas
   MOVE_LIST_OFFSET_WHEN_NEW_MOVE = -76   # Offset for y coordinate
-  MOVE_LIST_NEW_MOVE_SPACING     = 20    # New move is separated from known moves
+  MOVE_LIST_NEW_MOVE_SPACING     = 22    # New move is separated from known moves
   RIBBON_SIZE                    = [64, 64]   # [width, height]
   RIBBON_SPACING_X               = 4
   RIBBON_SPACING_Y               = 4
@@ -155,64 +158,68 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
 
   PAGE_HANDLERS = HandlerHash.new
   PAGE_HANDLERS.add(:info, {
-    :name  => proc { next _INTL("INFO") },
-    :order => 10,
-    :draw  => [
+    :name       => proc { next _INTL("INFO") },
+    :order      => 10,
+    :icon_index => 0,
+    :draw       => [
       :draw_common_page_contents,
-      :draw_pokemon_types_info,
-      :draw_species,
       :draw_pokedex_number,
-      :draw_exp,
+      :draw_species,
       :draw_original_trainer_details,
+      :draw_held_item,
+      :draw_exp,
       :draw_shadow_pokemon_info
     ]
   })
-  PAGE_HANDLERS.add(:memo, {
-    :name  => proc { next _INTL("TRAINER MEMO") },
-    :order => 20,
-    :draw  => [
-      :draw_common_page_contents,
-      :draw_memo
-    ]
-  })
   PAGE_HANDLERS.add(:skills, {
-    :name  => proc { next _INTL("SKILLS") },
-    :order => 30,
-    :draw  => [
+    :name       => proc { next _INTL("SKILLS") },
+    :order      => 20,
+    :icon_index => 1,
+    :draw       => [
       :draw_common_page_contents,
-      :draw_hp_numbers,
-      :draw_hp_bar,
       :draw_stats,
       :draw_ability
     ]
   })
   PAGE_HANDLERS.add(:moves, {
-    :name  => proc { next _INTL("MOVES") },
-    :order => 40,
-    :draw  => [
+    :name       => proc { next _INTL("MOVES") },
+    :order      => 30,
+    :icon_index => 2,
+    :draw       => [
       :draw_common_page_contents,
       :draw_moves_list
     ]
   })
   PAGE_HANDLERS.add(:ribbons, {
-    :name  => proc { next _INTL("RIBBONS") },
-    :order => 50,
-#    :should_show => proc { |pokemon| next pokemon.numRibbons > 0 },
-    :draw  => [
+    :name       => proc { next _INTL("RIBBONS") },
+    :order      => 40,
+    :icon_index => 3,
+    :should_show => proc { |pokemon| next pokemon.numRibbons > 0 },
+    :draw       => [
       :draw_common_page_contents,
       :draw_ribbon_count,
       :draw_ribbons_in_grid,
       :draw_ribbon_properties
     ]
   })
+  PAGE_HANDLERS.add(:memo, {
+    :name       => proc { next _INTL("TRAINER MEMO") },
+    :order      => 50,
+    :icon_index => 4,
+    :draw       => [
+      :draw_common_page_contents,
+      :draw_memo
+    ]
+  })
   PAGE_HANDLERS.add(:egg_memo, {
-    :name     => proc { next _INTL("TRAINER MEMO") },
-    :egg_page => true,
-    :draw     => [
+    :name       => proc { next _INTL("TRAINER MEMO") },
+    :egg_page   => true,
+    :icon_index => 5,
+    :draw       => [
       :draw_page_name,
-      :draw_pokemon_name,
+      :draw_page_icons,
       :draw_poke_ball,
-      :draw_held_item,
+      :draw_pokemon_name,
       :draw_markings,
       :draw_egg_memo
     ]
@@ -220,9 +227,11 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
   # Pseudo-page, only used to draw different contents for the detailed moves
   # page.
   PAGE_HANDLERS.add(:detailed_moves, {
+    :icon_index  => 2,
     :should_show => proc { |pokemon| next false },
     :draw        => [
       :draw_page_name,
+      :draw_page_icons,
       :draw_pokemon_types_for_detailed_moves_page,
       :draw_moves_list,
       :draw_move_properties
@@ -232,44 +241,67 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
   #-----------------------------------------------------------------------------
 
   def initialize(party, party_index = 0, mode = :normal, new_move = nil)
-    @party       = party
-    @party_index = party_index
-    @pokemon     = @party[@party_index]
-    @mode        = mode
-    @new_move    = new_move   # Only used if @mode is :choose_move
-    @page        = (@mode == :choose_move) ? :moves : all_pages[0]
-    @move_index  = (@mode == :choose_move) ? 0 : nil
+    @party                = party
+    @party_index          = party_index
+    @pokemon              = @party[@party_index]
+    @visible_party_length = 0
+    @visible_index        = 0
+    @party.each_with_index do |pkmn, i|
+      next if !pkmn
+      @visible_party_length += 1
+      @visible_index = @visible_party_length - 1 if i == @party_index
+    end
+    @visible_top_index    = 0
+    @mode                 = mode
+    @new_move             = new_move   # Only used if @mode is :choose_move
+    @page                 = (@mode == :choose_move) ? :moves : all_pages[0]
+    @move_index           = (@mode == :choose_move) ? 0 : nil
     super()
   end
 
   def initialize_bitmaps
-    @bitmaps[:types]    = AnimatedBitmap.new(UI_FOLDER + _INTL("types"))
-    @bitmaps[:markings] = AnimatedBitmap.new(graphics_folder + "markings")
+    @bitmaps[:types]       = AnimatedBitmap.new(UI_FOLDER + _INTL("types"))
+    @bitmaps[:markings]    = AnimatedBitmap.new(graphics_folder + "markings")
+    @bitmaps[:numbers]     = AnimatedBitmap.new(graphics_folder + "numbers")
+    @bitmaps[:page_icons]  = AnimatedBitmap.new(graphics_folder + "page_icons")
+    @bitmaps[:party_icons] = AnimatedBitmap.new(graphics_folder + "party_icons")
+  end
+
+  def initialize_background
+    super
+    addBackgroundPlane(@sprites, :page_background, self.class::GRAPHICS_FOLDER + page_background_filename, @viewport)
+    @sprites[:page_background].z = 100
   end
 
   def initialize_sprites
     # Pokémon sprite
     @sprites[:pokemon] = PokemonSprite.new(@viewport)
     @sprites[:pokemon].setOffset(PictureOrigin::CENTER)
-    @sprites[:pokemon].x       = 104
-    @sprites[:pokemon].y       = 206
+    @sprites[:pokemon].x       = 112
+    @sprites[:pokemon].y       = 208
     @sprites[:pokemon].visible = (@mode != :choose_move)
     @sprites[:pokemon].setPokemonBitmap(@pokemon)
-    # Held item icon
-    @sprites[:held_item_icon] = ItemIconSprite.new(30, 320, @pokemon.item_id, @viewport)
-    @sprites[:held_item_icon].blankzero = true
     # Page-specific sprites
+    initialize_info_page_sprites
     initialize_move_page_sprites
     initialize_ribbon_page_sprites
     initialize_marking_sprites
+  end
+
+  def initialize_info_page_sprites
+    # Held item icon
+    @sprites[:held_item_icon] = ItemIconSprite.new(260, 256, @pokemon.item_id, @viewport)
+    @sprites[:held_item_icon].z         = 200
+    @sprites[:held_item_icon].blankzero = true
   end
 
   def initialize_move_page_sprites
     # Pokémon icon
     @sprites[:pokemon_icon] = PokemonIconSprite.new(@pokemon, @viewport)
     @sprites[:pokemon_icon].setOffset(PictureOrigin::CENTER)
-    @sprites[:pokemon_icon].x       = 46
+    @sprites[:pokemon_icon].x       = 50
     @sprites[:pokemon_icon].y       = 92
+    @sprites[:pokemon_icon].z       = 200
     @sprites[:pokemon_icon].visible = (@mode == :choose_move)
     # Cursor to highlight a move selected to be swapped
     @sprites[:selected_move_cursor] = UI::PokemonSummaryMoveCursor.new(@viewport, true)
@@ -296,23 +328,23 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
 
   def initialize_marking_sprites
     # Background image of marking panel
-    add_icon_sprite(:marking_bg, 260, 88, graphics_folder + "overlay_marking")
-    @sprites[:marking_bg].z = 1400
+    add_icon_sprite(:marking_bg, 254, 88, graphics_folder + "overlay_marking")
+    @sprites[:marking_bg].z       = 1400
     @sprites[:marking_bg].visible = false
     # Overlay for marking panel
     add_overlay(:marking_overlay)
-    @sprites[:marking_overlay].z = 1500
+    @sprites[:marking_overlay].z       = 1500
     @sprites[:marking_overlay].visible = false
     # Cursor to highlight the currently selected marking option
     add_icon_sprite(:marking_cursor, 0, 0, graphics_folder + "cursor_marking")
-    @sprites[:marking_cursor].z = 1600
-    @sprites[:marking_cursor].src_rect.height = @sprites[:marking_cursor].bitmap.height / 2
+    @sprites[:marking_cursor].z       = 1600
     @sprites[:marking_cursor].visible = false
+    @sprites[:marking_cursor].src_rect.height = @sprites[:marking_cursor].bitmap.height / 2
   end
 
   #-----------------------------------------------------------------------------
 
-  def background_filename
+  def page_background_filename
     return "bg_moves_learning" if @new_move     # Intentionally first
     return "bg_moves_detailed" if @move_index   # Intentionally second
     ret = BACKGROUND_FILENAME + "_" + @page.to_s
@@ -361,6 +393,12 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     # Set the new Pokémon
     @party_index = new_index
     @pokemon = @party[@party_index]
+    @visible_index = 0
+    @party.each_with_index do |pkmn, i|
+      next if !pkmn
+      break if i == @party_index
+      @visible_index += 1
+    end
     # Want to stay on the nth page, or the closest available one
     pages = all_pages
     new_page_index = old_page_index.clamp(0, pages.length - 1)
@@ -385,6 +423,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
 
   def refresh_background
     @sprites[:background].setBitmap(graphics_folder + background_filename)
+    @sprites[:page_background].setBitmap(graphics_folder + page_background_filename)
   end
 
   def draw_page_contents
@@ -393,91 +432,143 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
 
   def page_to_draw
     ret = @page
-    ret = :detailed_moves if @new_move || @move_index
+    ret = :detailed_moves if showing_detailed_move_page?
     return ret
+  end
+
+  def showing_detailed_move_page?
+    return !(@new_move || @move_index).nil?
   end
 
   #-----------------------------------------------------------------------------
 
   def draw_common_page_contents
     draw_page_name
-    draw_pokemon_name
-    draw_pokemon_level
-    draw_gender
+    draw_page_icons
     draw_poke_ball
-    draw_status_icon
+    draw_pokemon_name
     draw_shiny_icon
+    draw_pokemon_level
     draw_pokerus_icon
-    draw_held_item
+    draw_gender
+    draw_party_icons
     draw_markings
+    draw_pokemon_types_common
+    draw_hp_numbers
+    draw_hp_bar
+    draw_status_icon
   end
 
   def draw_page_name
-    draw_text(PAGE_HANDLERS[@page][:name].call, 26, 22)
+    draw_text(PAGE_HANDLERS[@page][:name].call, 30, 22)
   end
 
-  def draw_pokemon_name
-    draw_text(@pokemon.name, 46, 68)
-  end
-
-  def draw_pokemon_level
-    draw_text(@pokemon.level, 46, 98, theme: :black)
-  end
-
-  def draw_gender
-    if @pokemon.male?
-      draw_text(_INTL("♂"), 178, 68, theme: :male)
-    elsif @pokemon.female?
-      draw_text(_INTL("♀"), 178, 68, theme: :female)
+  def draw_page_icons
+    return if @new_move
+    icon_width = 56
+    icon_height = 64
+    start_x = 226
+    start_y = 2
+    spacing_x = 0
+    # Draw all inactive page icons
+    pages = all_pages
+    pages.each_with_index do |this_page, i|
+      src_index = PAGE_HANDLERS[this_page][:icon_index]
+      next if !src_index
+      draw_image(@bitmaps[:page_icons], start_x + (i * (icon_width + spacing_x)), start_y,
+                 src_index * icon_width, 0, icon_width, icon_height)
+    end
+    # Draw current page's active icon
+    index = pages.index(@page)
+    src_index = PAGE_HANDLERS[@page][:icon_index]
+    if src_index
+      draw_image(@bitmaps[:page_icons], start_x + (index * (icon_width + spacing_x)), start_y,
+                src_index * icon_width, icon_height, icon_width, icon_height)
     end
   end
 
   # Show the Poké Ball containing the Pokémon
   def draw_poke_ball
     ball_filename = graphics_folder + sprintf("icon_ball_%s", @pokemon.poke_ball)
-    draw_image(ball_filename, 14, 60)
+    draw_image(ball_filename, 6, 60)
   end
 
-  # Show status/fainted/Pokérus infected icon
-  def draw_status_icon
-    status = -1
-    if @pokemon.fainted?
-      status = GameData::Status.count - 1
-    elsif @pokemon.status != :NONE
-      status = GameData::Status.get(@pokemon.status).icon_position
-    elsif @pokemon.pokerusStage == 1
-      status = GameData::Status.count
-    end
-    if status >= 0
-      draw_image(UI_FOLDER + _INTL("statuses"), 124, 100,
-                0, status * GameData::Status::ICON_SIZE[1], *GameData::Status::ICON_SIZE)
-    end
+  def draw_pokemon_name
+    draw_text(@pokemon.name, 42, 68)
   end
 
   def draw_shiny_icon
-    draw_image(UI_FOLDER + "shiny", 2, 134) if @pokemon.shiny?
+    draw_image(UI_FOLDER + "shiny", 14, 100) if @pokemon.shiny?
+  end
+
+  def draw_pokemon_level
+    draw_image(graphics_folder + _INTL("level"), 42, 102)
+    draw_number_from_image(@bitmaps[:numbers], @pokemon.level, 64, 102)
   end
 
   def draw_pokerus_icon
     return if @pokemon.pokerusStage != 2
-    draw_image(graphics_folder + "icon_pokerus", 176, 100)
+    draw_image(graphics_folder + "icon_pokerus", 134, 100)
   end
 
-  def draw_held_item
-    @sprites[:held_item_icon].visible = true
-    @sprites[:held_item_icon].item = @pokemon.item_id
-    draw_text(_INTL("Item"), 66, 324)
-    # Write the held item's name
-    if @pokemon.hasItem?
-      draw_text(@pokemon.item.name, 16, 358, theme: :black)
-    else
-      draw_text(_INTL("None"), 16, 358, theme: :faded)
+  def draw_gender
+    if @pokemon.male?
+      draw_text(_INTL("♂"), 174, 98, theme: :male)
+    elsif @pokemon.female?
+      draw_text(_INTL("♀"), 174, 98, theme: :female)
+    end
+  end
+
+  def draw_party_icons
+    # Don't show any party icons if there is 0 or 1 Pokémon in the party
+    return if @visible_party_length <= 1
+    # Setup numbers
+    @visible_top_index = [@visible_top_index, @visible_index].min
+    @visible_top_index = [@visible_top_index, @visible_index - PARTY_ICONS_COUNT + 1].max
+    x_pos = 0
+    y_pos = 162
+    # Draw up arrow
+    arrow_y = y_pos - PARTY_ICON_SIZE[1]
+    arrow_y -= PARTY_ICON_SIZE[1] if @visible_top_index > 0   # Showing up dots
+    if @visible_index > 0   # Enabled arrow
+      draw_image(@bitmaps[:party_icons], x_pos, arrow_y,
+                 PARTY_ICON_SIZE[0] * 2, 0, *PARTY_ICON_SIZE)
+    else   # Disabled arrow
+      draw_image(@bitmaps[:party_icons], x_pos, arrow_y,
+                PARTY_ICON_SIZE[0] * 3, 0, *PARTY_ICON_SIZE)
+    end
+    # Draw up dots
+    if @visible_top_index > 0
+      draw_image(@bitmaps[:party_icons], x_pos, y_pos - PARTY_ICON_SIZE[1],
+                 PARTY_ICON_SIZE[0] * 4, 0, *PARTY_ICON_SIZE)
+    end
+    # Draw party icons
+    num_balls = [@visible_party_length, PARTY_ICONS_COUNT].min
+    num_balls.times do |i|
+      src_x_index = (i + @visible_top_index == @visible_index) ? 1 : 0
+      draw_image(@bitmaps[:party_icons], x_pos, y_pos + (i * PARTY_ICON_SIZE[1]),
+                 PARTY_ICON_SIZE[0] * src_x_index, 0, *PARTY_ICON_SIZE)
+    end
+    # Draw down dots
+    if @visible_party_length - @visible_top_index > PARTY_ICONS_COUNT
+      draw_image(@bitmaps[:party_icons], x_pos, y_pos + (num_balls * PARTY_ICON_SIZE[1]),
+                 PARTY_ICON_SIZE[0] * 7, 0, *PARTY_ICON_SIZE)
+    end
+    # Draw down arrow
+    arrow_y = y_pos + (num_balls * PARTY_ICON_SIZE[1])
+    arrow_y += PARTY_ICON_SIZE[1] if @visible_party_length - @visible_top_index > PARTY_ICONS_COUNT   # Showing down dots
+    if @visible_index < @visible_party_length - 1   # Enabled arrow
+      draw_image(@bitmaps[:party_icons], x_pos, arrow_y,
+                 PARTY_ICON_SIZE[0] * 5, 0, *PARTY_ICON_SIZE)
+    else   # Disabled arrow
+      draw_image(@bitmaps[:party_icons], x_pos, arrow_y,
+                 PARTY_ICON_SIZE[0] * 6, 0, *PARTY_ICON_SIZE)
     end
   end
 
   def draw_markings
-    x = 84
-    y = 292
+    x = 106
+    y = 288
     mark_variants = @bitmaps[:markings].bitmap.height / MARKING_HEIGHT
     markings = @pokemon.markings
     (@bitmaps[:markings].bitmap.width / MARKING_WIDTH).times do |i|
@@ -488,13 +579,8 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     end
   end
 
-  def draw_pokemon_types_info
-    draw_text(_INTL("Type"), 238, 150)
-    draw_pokemon_type_icons(402, 146, 2)
-  end
-
-  def draw_pokemon_types_for_detailed_moves_page
-    draw_pokemon_type_icons(130, 78, 6)
+  def draw_pokemon_types_common
+    draw_pokemon_type_icons(66, 314, 2)
   end
 
   # x and y are the top left corner of the type icon if there is only one type.
@@ -509,10 +595,42 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     end
   end
 
-  def draw_species
-    draw_text(_INTL("Species"), 238, 118)
-    draw_text(@pokemon.speciesName, 435, 118, align: :center, theme: :black)
+  def draw_hp_numbers
+    hp_text = sprintf("%d/%d", @pokemon.hp, @pokemon.totalhp)
+    draw_number_from_image(@bitmaps[:numbers], hp_text, 182, 366, align: :right)
   end
+
+  def draw_hp_bar
+    return if @pokemon.fainted?
+    bar_x = 48
+    bar_y = 352
+    bar_total_width = 128
+    bar_width = [@pokemon.hp * bar_total_width / @pokemon.totalhp.to_f, 1.0].max
+    bar_width = ((bar_width / 2).round) * 2   # Make the bar's length a multiple of 2 pixels
+    hp_zone = 0                                                  # Green
+    hp_zone = 1 if @pokemon.hp <= (@pokemon.totalhp / 2).floor   # Yellow
+    hp_zone = 2 if @pokemon.hp <= (@pokemon.totalhp / 4).floor   # Red
+    draw_image(graphics_folder + "hp_bar_fill", bar_x, bar_y,
+               0, hp_zone * 6, bar_width, 6)
+  end
+
+  # Show status/fainted/Pokérus infected icon
+  def draw_status_icon
+    status = -1
+    if @pokemon.fainted?
+      status = GameData::Status.count - 1
+    elsif @pokemon.status != :NONE
+      status = GameData::Status.get(@pokemon.status).icon_position
+    elsif @pokemon.pokerusStage == 1
+      status = GameData::Status.count
+    end
+    if status >= 0
+      draw_image(UI_FOLDER + _INTL("statuses"), 12, 364,
+                0, status * GameData::Status::ICON_SIZE[1], *GameData::Status::ICON_SIZE)
+    end
+  end
+
+  #-----------------------------------------------------------------------------
 
   def draw_pokedex_number
     draw_text(_INTL("Dex No."), 238, 86)
@@ -533,209 +651,77 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       end
     end
     # Draw text
+    number_x = 428
+    number_y = 86
     dex_num_theme = (@pokemon.shiny?) ? :shiny : :black
     if dex_num <= 0
-      draw_text("???", 435, 86, align: :center, theme: dex_num_theme)
+      draw_text("???", number_x, number_y, align: :center, theme: dex_num_theme)
     else
       dex_num -= 1 if dex_num_shift
-      draw_text(sprintf("%03d", dex_num), 435, 86, align: :center, theme: dex_num_theme)
+      draw_text(sprintf("%03d", dex_num), number_x, number_y, align: :center, theme: dex_num_theme)
+    end
+  end
+
+  def draw_species
+    draw_text(_INTL("Species"), 238, 118)
+    draw_text(@pokemon.speciesName, 428, 118, align: :center, theme: :black)
+  end
+
+  def draw_original_trainer_details
+    draw_text(_INTL("OT"), 238, 150)
+    draw_text(_INTL("ID No."), 238, 182)
+    owner_name = (@pokemon.owner.name.empty?) ? _INTL("RENTAL") : @pokemon.owner.name
+    owner_theme = [:male, :female][@pokemon.owner.gender || 99] || :black
+    draw_text(owner_name, 428, 150, align: :center, theme: owner_theme)
+    owner_number = (@pokemon.owner.name.empty?) ? "?????" : sprintf("%05d", @pokemon.owner.public_id)
+    draw_text(owner_number, 428, 182, align: :center, theme: :black)
+  end
+
+  def draw_held_item
+    @sprites[:held_item_icon].visible = true
+    @sprites[:held_item_icon].item = @pokemon.item_id
+    draw_text(_INTL("Held Item"), 302, 230)
+    # Write the held item's name
+    if @pokemon.hasItem?
+      draw_text(@pokemon.item.name, 302, 262, theme: :black)
+    else
+      draw_text(_INTL("None"), 302, 262, theme: :black)
     end
   end
 
   def draw_exp
     return if @pokemon.shadowPokemon?
     # Draw text
-    draw_text(_INTL("Exp. Points"), 238, 246)
-    draw_text(@pokemon.exp.to_s_formatted, 488, 278, align: :right, theme: :black)
-    draw_text(_INTL("To Next Lv."), 238, 310)
+    draw_text(_INTL("Exp. Points"), 238, 310)
+    draw_text(@pokemon.exp.to_s_formatted, 490, 310, align: :right, theme: :black)
+    draw_text(_INTL("To Next Lv."), 238, 342)
     end_exp = @pokemon.growth_rate.minimum_exp_for_level(@pokemon.level + 1)
-    draw_text((end_exp - @pokemon.exp).to_s_formatted, 488, 342, align: :right, theme: :black)
+    draw_text((end_exp - @pokemon.exp).to_s_formatted, 490, 342, align: :right, theme: :black)
     # Draw Exp bar
     if @pokemon.level < GameData::GrowthRate.max_level
       exp_width = @pokemon.exp_fraction * 128
       exp_width = ((exp_width / 2).round) * 2
-      draw_image(graphics_folder + "overlay_exp", 362, 372,
+      draw_image(graphics_folder + "exp_bar_fill", 362, 372,
                  0, 0, exp_width, -1)
     end
-  end
-
-  def draw_original_trainer_details
-    draw_text(_INTL("OT"), 238, 182)
-    draw_text(_INTL("ID No."), 238, 214)
-    owner_name = (@pokemon.owner.name.empty?) ? _INTL("RENTAL") : @pokemon.owner.name
-    owner_theme = [:male, :female][@pokemon.owner.gender || 99] || :black
-    draw_text(owner_name, 435, 182, align: :center, theme: owner_theme)
-    owner_number = (@pokemon.owner.name.empty?) ? "?????" : sprintf("%05d", @pokemon.owner.public_id)
-    draw_text(owner_number, 435, 214, align: :center, theme: :black)
   end
 
   def draw_shadow_pokemon_info
     return if !@pokemon.shadowPokemon?
     # Draw background to cover the Exp area
-    draw_image(graphics_folder + "overlay_shadow", 224, 240)
+    draw_image(graphics_folder + "overlay_shadow", 224, 298)
     # Draw heart gauge bar
     shadow_fract = @pokemon.heart_gauge.to_f / @pokemon.max_gauge_size
-    draw_image(graphics_folder + "overlay_shadowbar", 242, 280,
+    draw_image(graphics_folder + "shadow_bar_fill", 242, 372,
                0, 0, (shadow_fract * 248).floor, -1)
     # Draw heart gauge text
-    draw_text(_INTL("Heart Gauge"), 238, 246)
     heart_message = [_INTL("The door to its heart is open! Undo the final lock!"),
                      _INTL("The door to its heart is almost fully open."),
                      _INTL("The door to its heart is nearly open."),
                      _INTL("The door to its heart is opening wider."),
                      _INTL("The door to its heart is opening up."),
                      _INTL("The door to its heart is tightly shut.")][@pokemon.heartStage]
-    draw_formatted_text(heart_message, 234, 310, 264, theme: :black)
-  end
-
-  def draw_egg_memo
-    # Set up memo
-    red_text_tag = shadowc3tag(*TEXT_COLOR_THEMES[:shiny])
-    black_text_tag = shadowc3tag(*TEXT_COLOR_THEMES[:black])
-    memo = ""
-    # Add date received to memo
-    if @pokemon.timeReceived
-      date  = @pokemon.timeReceived.day
-      month = pbGetMonthName(@pokemon.timeReceived.mon)
-      year  = @pokemon.timeReceived.year
-      # TODO: Write this date the wrong way round for United States of Americans.
-      memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
-    end
-    # Add map name egg was received on to memo
-    map_name = pbGetMapNameFromId(@pokemon.obtain_map)
-    map_name = @pokemon.obtain_text if @pokemon.obtain_text && !@pokemon.obtain_text.empty?
-    if map_name && map_name != ""
-      map_name = red_text_tag + map_name + black_text_tag
-      memo += black_text_tag + _INTL("A mysterious Pokémon Egg received from {1}.", map_name) + "\n"
-    else
-      memo += black_text_tag + _INTL("A mysterious Pokémon Egg.") + "\n"
-    end
-    memo += "\n"   # Empty line
-    # Add Egg Watch blurb to memo
-    memo += black_text_tag + _INTL("\"The Egg Watch\"") + "\n"
-    egg_state = _INTL("It looks like this Egg will take a long time to hatch.")
-    egg_state = _INTL("What will hatch from this? It doesn't seem close to hatching.") if @pokemon.steps_to_hatch < 10_200
-    egg_state = _INTL("It appears to move occasionally. It may be close to hatching.") if @pokemon.steps_to_hatch < 2550
-    egg_state = _INTL("Sounds can be heard coming from inside! It will hatch soon!") if @pokemon.steps_to_hatch < 1275
-    memo += black_text_tag + egg_state
-    # Draw all text
-    draw_formatted_text(memo, 232, 86, 268)
-  end
-
-  def draw_memo
-    # Set up memo
-    red_text_tag = shadowc3tag(*TEXT_COLOR_THEMES[:shiny])
-    black_text_tag = shadowc3tag(*TEXT_COLOR_THEMES[:black])
-    memo = ""
-    # Add nature to memo
-    show_nature = (!@pokemon.shadowPokemon? || @pokemon.heartStage <= 3)
-    if show_nature
-      nature_name = red_text_tag + @pokemon.nature.name + black_text_tag
-      memo += _INTL("{1} nature.", nature_name) + "\n"
-    end
-    # Add date received to memo
-    if @pokemon.timeReceived
-      date  = @pokemon.timeReceived.day
-      month = pbGetMonthName(@pokemon.timeReceived.mon)
-      year  = @pokemon.timeReceived.year
-      # TODO: Write this date the wrong way round for United States of Americans.
-      memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
-    end
-    # Add map name Pokémon was received on to memo
-    map_name = pbGetMapNameFromId(@pokemon.obtain_map)
-    map_name = @pokemon.obtain_text if @pokemon.obtain_text && !@pokemon.obtain_text.empty?
-    map_name = _INTL("Faraway place") if nil_or_empty?(map_name)
-    memo += red_text_tag + map_name + "\n"
-    # Write how Pokémon was obtained
-    met_text = [
-      _INTL("Met at Lv. {1}.", @pokemon.obtain_level),
-      _INTL("Egg received."),
-      _INTL("Traded at Lv. {1}.", @pokemon.obtain_level),
-      "",
-      _INTL("Had a fateful encounter at Lv. {1}.", @pokemon.obtain_level)
-    ][@pokemon.obtain_method]
-    memo += black_text_tag + met_text + "\n" if met_text && met_text != ""
-    # If Pokémon was hatched, add when and where it hatched to memo
-    if @pokemon.obtain_method == 1
-      if @pokemon.timeEggHatched
-        date  = @pokemon.timeEggHatched.day
-        month = pbGetMonthName(@pokemon.timeEggHatched.mon)
-        year  = @pokemon.timeEggHatched.year
-        # TODO: Write this date the wrong way round for United States of Americans.
-        memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
-      end
-      map_name = pbGetMapNameFromId(@pokemon.hatched_map)
-      map_name = _INTL("Faraway place") if nil_or_empty?(map_name)
-      memo += red_text_tag + map_name + "\n"
-      memo += black_text_tag + _INTL("Egg hatched.") + "\n"
-    else
-      memo += "\n"   # Empty line
-    end
-    # Add characteristic to memo
-    if show_nature
-      best_stat = nil
-      best_iv = 0
-      stats_order = [:HP, :ATTACK, :DEFENSE, :SPEED, :SPECIAL_ATTACK, :SPECIAL_DEFENSE]
-      start_point = @pokemon.personalID % stats_order.length   # Tiebreaker
-      stats_order.length.times do |i|
-        stat = stats_order[(i + start_point) % stats_order.length]
-        if !best_stat || @pokemon.iv[stat] > @pokemon.iv[best_stat]
-          best_stat = stat
-          best_iv = @pokemon.iv[best_stat]
-        end
-      end
-      characteristics = {
-        :HP              => [_INTL("Loves to eat."),
-                            _INTL("Takes plenty of siestas."),
-                            _INTL("Nods off a lot."),
-                            _INTL("Scatters things often."),
-                            _INTL("Likes to relax.")],
-        :ATTACK          => [_INTL("Proud of its power."),
-                            _INTL("Likes to thrash about."),
-                            _INTL("A little quick tempered."),
-                            _INTL("Likes to fight."),
-                            _INTL("Quick tempered.")],
-        :DEFENSE         => [_INTL("Sturdy body."),
-                            _INTL("Capable of taking hits."),
-                            _INTL("Highly persistent."),
-                            _INTL("Good endurance."),
-                            _INTL("Good perseverance.")],
-        :SPECIAL_ATTACK  => [_INTL("Highly curious."),
-                            _INTL("Mischievous."),
-                            _INTL("Thoroughly cunning."),
-                            _INTL("Often lost in thought."),
-                            _INTL("Very finicky.")],
-        :SPECIAL_DEFENSE => [_INTL("Strong willed."),
-                            _INTL("Somewhat vain."),
-                            _INTL("Strongly defiant."),
-                            _INTL("Hates to lose."),
-                            _INTL("Somewhat stubborn.")],
-        :SPEED           => [_INTL("Likes to run."),
-                            _INTL("Alert to sounds."),
-                            _INTL("Impetuous and silly."),
-                            _INTL("Somewhat of a clown."),
-                            _INTL("Quick to flee.")]
-      }
-      memo += black_text_tag + characteristics[best_stat][best_iv % 5] + "\n"
-    end
-    # Write memo
-    draw_formatted_text(memo, 232, 86, 268)
-  end
-
-  def draw_hp_numbers
-    draw_text(_INTL("HP"), 292, 82, align: :center)
-    draw_text(sprintf("%d/%d", @pokemon.hp, @pokemon.totalhp), 462, 82, align: :right, theme: :black)
-  end
-
-  def draw_hp_bar
-    return if @pokemon.fainted?
-    bar_width = [@pokemon.hp * 96 / @pokemon.totalhp.to_f, 1.0].max
-    bar_width = ((bar_width / 2).round) * 2   # Make the bar's length a multiple of 2 pixels
-    hp_zone = 0                                                  # Green
-    hp_zone = 1 if @pokemon.hp <= (@pokemon.totalhp / 2).floor   # Yellow
-    hp_zone = 2 if @pokemon.hp <= (@pokemon.totalhp / 4).floor   # Red
-    draw_image(graphics_folder + "overlay_hp", 360, 110,
-               0, hp_zone * 6, bar_width, 6)
+    draw_formatted_text(heart_message, 232, 310, 268, theme: :black)
   end
 
   def draw_stats
@@ -749,21 +735,21 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       end
     end
     # Write stats text (except for HP)
-    text_y = 126
+    text_y = 86
     GameData::Stat.each_main do |stat|
       next if stat.id == :HP
-      draw_text(stat.name_semi_brief, 248, text_y, theme: stat_themes[stat.id])
-      draw_text(@pokemon.stat(stat.id), 456, text_y, align: :right, theme: :black)
+      draw_text(stat.name_semi_brief, 238, text_y, theme: stat_themes[stat.id])
+      draw_text(@pokemon.stat(stat.id), 458, text_y, align: :right, theme: :black)
       text_y += 32
     end
   end
 
   def draw_ability
-    draw_text(_INTL("Ability"), 224, 290)
+    draw_text(_INTL("Ability"), 224, 262)
     ability = @pokemon.ability
     return if !ability
-    draw_text(ability.name, 362, 290, theme: :black)
-    draw_paragraph_text(ability.description, 224, 322, 282, 2, theme: :black)
+    draw_text(ability.name, 332, 262, theme: :black)
+    draw_paragraph_text(ability.description, 224, 294, 284, 3, theme: :black)
   end
 
   def draw_moves_list
@@ -773,25 +759,32 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       text_y = MOVE_LIST_Y + (i * MOVE_LIST_SPACING)
       text_y += MOVE_LIST_OFFSET_WHEN_NEW_MOVE if @new_move   # Showing an extra move being learned
       text_y += MOVE_LIST_NEW_MOVE_SPACING if i == Pokemon::MAX_MOVES   # New move is separated from known moves
-      draw_move_in_list(move, MOVE_LIST_X, text_y)
+      area_x = MOVE_LIST_X
+      area_x = MOVE_LIST_X_DETAILED if showing_detailed_move_page?
+      draw_move_in_list(move, area_x, text_y)
     end
   end
 
   def draw_move_in_list(move, x, y)
+    pp_numbers_x = (showing_detailed_move_page?) ? x + 234 : x + 256
     if !move
-      draw_text("-", x + 70, y + 6, theme: :black)
-      draw_text("--", x + 196, y + 38, align: :right, theme: :black)
+#      draw_text("-", x + 8, y + 6, theme: :black)
+#      draw_text("--", pp_numbers_x, y + 38, theme: :black)
       return
     end
+    # Draw move name
+    draw_text(move.name, x + 8, y + 6, theme: :black)
     # Draw move type icon
     type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
-    draw_image(@bitmaps[:types], x + 2, y + 2,
+    draw_image(@bitmaps[:types], x + 8, y + 32,
                0, type_number * GameData::Type::ICON_SIZE[1], *GameData::Type::ICON_SIZE)
-    # Draw move name
-    draw_text(move.name, x + 70, y + 6, theme: :black)
+    # Draw move category
+    draw_image(UI_FOLDER + "category", x + 74, y + 32,
+               0, move.display_category(@pokemon) * GameData::Move::CATEGORY_ICON_SIZE[1], *GameData::Move::CATEGORY_ICON_SIZE)
     # Draw PP text
     if move.total_pp > 0
-      draw_text(_INTL("PP"), x + 96, y + 38, theme: :black)
+      pp_text_x = (showing_detailed_move_page?) ? x + 144 : x + 154
+      draw_text(_INTL("PP"), pp_text_x, y + 38, theme: :black)
       pp_text_theme = :black
       if move.pp == 0
         pp_text_theme = :pp_zero
@@ -800,32 +793,33 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       elsif move.pp * 2 <= move.total_pp
         pp_text_theme = :pp_half
       end
-      draw_text(sprintf("%d/%d", move.pp, move.total_pp), x + 214, y + 38, align: :right, theme: pp_text_theme)
+      draw_text(sprintf("%d/%d", move.pp, move.total_pp), pp_numbers_x, y + 38, align: :right, theme: pp_text_theme)
     end
+  end
+
+  def draw_pokemon_types_for_detailed_moves_page
+    draw_pokemon_type_icons(138, 78, 6)
   end
 
   def draw_move_properties
     selected_move = ((@move_index || 0) == Pokemon::MAX_MOVES) ? @new_move : @pokemon.moves[@move_index || 0]
-    # Category
-    draw_text(_INTL("CATEGORY"), 20, 128)
-    draw_image(UI_FOLDER + "category", 166, 124,
-      0, selected_move.display_category(@pokemon) * GameData::Move::CATEGORY_ICON_SIZE[1], *GameData::Move::CATEGORY_ICON_SIZE)
     # Power
-    draw_text(_INTL("POWER"), 20, 160)
+    draw_text(_INTL("POWER"), 20, 128)
     power_text = selected_move.display_damage(@pokemon)
     power_text = "---" if power_text == 0   # Status move
     power_text = "???" if power_text == 1   # Variable power move
-    draw_text(power_text, 216, 160, align: :right, theme: :black)
+    draw_text(power_text, 222, 128, align: :right, theme: :black)
     # Accuracy
-    draw_text(_INTL("ACCURACY"), 20, 192)
+    draw_text(_INTL("ACCURACY"), 20, 160)
     accuracy = selected_move.display_accuracy(@pokemon)
     if accuracy == 0
-      draw_text("---", 216, 192, align: :right, theme: :black)
+      draw_text("---", 222, 160, align: :right, theme: :black)
     else
-      draw_text("#{accuracy}%", 216 + @sprites[:overlay].bitmap.text_size("%").width, 192, align: :right, theme: :black)
+      draw_text(accuracy, 222, 160, align: :right, theme: :black)
+      draw_text("%", 222, 160, theme: :black)
     end
     # Description
-    draw_paragraph_text(selected_move.description, 4, 224, 230, 5, theme: :black)
+    draw_paragraph_text(selected_move.description, 4, 192, 246, 6, theme: :black)
   end
 
   def draw_ribbon_count
@@ -862,13 +856,148 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     end
   end
 
+  def draw_memo
+    # Set up memo
+    red_text_tag = shadowc3tag(*TEXT_COLOR_THEMES[:shiny])
+    black_text_tag = shadowc3tag(*TEXT_COLOR_THEMES[:black])
+    memo = ""
+    show_nature = (!@pokemon.shadowPokemon? || @pokemon.heartStage <= 3)
+    # Add nature to memo
+    if show_nature
+      nature_name = red_text_tag + @pokemon.nature.name + black_text_tag
+      memo += _INTL("{1} nature.", nature_name) + "\n"
+    end
+    # Add characteristic to memo
+    if show_nature
+      best_stat = nil
+      best_iv = 0
+      stats_order = [:HP, :ATTACK, :DEFENSE, :SPEED, :SPECIAL_ATTACK, :SPECIAL_DEFENSE]
+      start_point = @pokemon.personalID % stats_order.length   # Tiebreaker
+      stats_order.length.times do |i|
+        stat = stats_order[(i + start_point) % stats_order.length]
+        if !best_stat || @pokemon.iv[stat] > @pokemon.iv[best_stat]
+          best_stat = stat
+          best_iv = @pokemon.iv[best_stat]
+        end
+      end
+      characteristics = {
+        :HP              => [_INTL("Loves to eat."),
+                             _INTL("Takes plenty of siestas."),
+                             _INTL("Nods off a lot."),
+                             _INTL("Scatters things often."),
+                             _INTL("Likes to relax.")],
+        :ATTACK          => [_INTL("Proud of its power."),
+                             _INTL("Likes to thrash about."),
+                             _INTL("A little quick tempered."),
+                             _INTL("Likes to fight."),
+                             _INTL("Quick tempered.")],
+        :DEFENSE         => [_INTL("Sturdy body."),
+                             _INTL("Capable of taking hits."),
+                             _INTL("Highly persistent."),
+                             _INTL("Good endurance."),
+                             _INTL("Good perseverance.")],
+        :SPECIAL_ATTACK  => [_INTL("Highly curious."),
+                             _INTL("Mischievous."),
+                             _INTL("Thoroughly cunning."),
+                             _INTL("Often lost in thought."),
+                             _INTL("Very finicky.")],
+        :SPECIAL_DEFENSE => [_INTL("Strong willed."),
+                             _INTL("Somewhat vain."),
+                             _INTL("Strongly defiant."),
+                             _INTL("Hates to lose."),
+                             _INTL("Somewhat stubborn.")],
+        :SPEED           => [_INTL("Likes to run."),
+                             _INTL("Alert to sounds."),
+                             _INTL("Impetuous and silly."),
+                             _INTL("Somewhat of a clown."),
+                             _INTL("Quick to flee.")]
+      }
+      memo += black_text_tag + characteristics[best_stat][best_iv % 5] + "\n"
+    end
+    # Add blank line
+    memo += "\n" if show_nature
+    # Write how Pokémon was obtained
+    met_text = [
+      _INTL("Met at Lv. {1}.", @pokemon.obtain_level),
+      _INTL("Egg received."),
+      _INTL("Traded at Lv. {1}.", @pokemon.obtain_level),
+      "",
+      _INTL("Had a fateful encounter at Lv. {1}.", @pokemon.obtain_level)
+    ][@pokemon.obtain_method]
+    memo += black_text_tag + met_text + "\n" if met_text && met_text != ""
+    # Add date received to memo
+    if @pokemon.timeReceived
+      date  = @pokemon.timeReceived.day
+      month = pbGetMonthName(@pokemon.timeReceived.mon)
+      year  = @pokemon.timeReceived.year
+      # TODO: Write this date the wrong way round for United States of Americans.
+      memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
+    end
+    # Add map name Pokémon was received on to memo
+    map_name = pbGetMapNameFromId(@pokemon.obtain_map)
+    map_name = @pokemon.obtain_text if @pokemon.obtain_text && !@pokemon.obtain_text.empty?
+    map_name = _INTL("Faraway place") if nil_or_empty?(map_name)
+    memo += red_text_tag + map_name + "\n"
+    # If Pokémon was hatched, add when and where it hatched to memo
+    if @pokemon.obtain_method == 1
+      memo += black_text_tag + _INTL("Egg hatched.") + "\n"
+      if @pokemon.timeEggHatched
+        date  = @pokemon.timeEggHatched.day
+        month = pbGetMonthName(@pokemon.timeEggHatched.mon)
+        year  = @pokemon.timeEggHatched.year
+        # TODO: Write this date the wrong way round for United States of Americans.
+        memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
+      end
+      map_name = pbGetMapNameFromId(@pokemon.hatched_map)
+      map_name = _INTL("Faraway place") if nil_or_empty?(map_name)
+      memo += red_text_tag + map_name + "\n"
+    end
+    # Write memo
+    draw_formatted_text(memo, 232, 86, 268)
+  end
+
+  def draw_egg_memo
+    # Set up memo
+    red_text_tag = shadowc3tag(*TEXT_COLOR_THEMES[:shiny])
+    black_text_tag = shadowc3tag(*TEXT_COLOR_THEMES[:black])
+    memo = ""
+    # Add date received to memo
+    if @pokemon.timeReceived
+      date  = @pokemon.timeReceived.day
+      month = pbGetMonthName(@pokemon.timeReceived.mon)
+      year  = @pokemon.timeReceived.year
+      # TODO: Write this date the wrong way round for United States of Americans.
+      memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
+    end
+    # Add map name egg was received on to memo
+    map_name = pbGetMapNameFromId(@pokemon.obtain_map)
+    map_name = @pokemon.obtain_text if @pokemon.obtain_text && !@pokemon.obtain_text.empty?
+    if map_name && map_name != ""
+      map_name = red_text_tag + map_name + black_text_tag
+      memo += black_text_tag + _INTL("A mysterious Pokémon Egg received from {1}.", map_name) + "\n"
+    else
+      memo += black_text_tag + _INTL("A mysterious Pokémon Egg.") + "\n"
+    end
+    # Draw obtain text
+    draw_formatted_text(memo, 232, 86, 268)
+    # Add Egg Watch blurb to memo
+    draw_text(_INTL("The Egg Watch"), 238, 246)
+    egg_state = _INTL("It looks like this Egg will take a long time to hatch.")
+    egg_state = _INTL("What will hatch from this? It doesn't seem close to hatching.") if @pokemon.steps_to_hatch < 10_200
+    egg_state = _INTL("It appears to move occasionally. It may be close to hatching.") if @pokemon.steps_to_hatch < 2550
+    egg_state = _INTL("Sounds can be heard coming from inside! It will hatch soon!") if @pokemon.steps_to_hatch < 1275
+    memo = black_text_tag + egg_state
+    # Draw all text
+    draw_formatted_text(memo, 232, 278, 268)
+  end
+
   #-----------------------------------------------------------------------------
 
   def refresh_markings_panel
     # Set values to use when drawing the markings panel
-    marking_x = 300
+    marking_x = 298
     marking_y = 154
-    marking_spacing_x = 42 + MARKING_WIDTH
+    marking_spacing_x = 46 + MARKING_WIDTH
     marking_spacing_y = 34 + MARKING_HEIGHT
     markings_per_row = 3
     mark_variants = @bitmaps[:markings].bitmap.height / MARKING_HEIGHT
@@ -885,23 +1014,23 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
                  overlay: :marking_overlay)
     end
     # Draw text
-    draw_text(_INTL("Mark {1}", @pokemon.name), 366, 102, align: :center, overlay: :marking_overlay)
-    draw_text(_INTL("OK"), 366, 254, align: :center, overlay: :marking_overlay)
-    draw_text(_INTL("Cancel"), 366, 304, align: :center, overlay: :marking_overlay)
+    draw_text(_INTL("Mark {1}", @pokemon.name), 368, 102, align: :center, overlay: :marking_overlay)
+    draw_text(_INTL("OK"), 368, 254, align: :center, overlay: :marking_overlay)
+    draw_text(_INTL("Cancel"), 368, 304, align: :center, overlay: :marking_overlay)
   end
 
   def refresh_markings_cursor
     case @marking_index
     when 6   # OK
-      @sprites[:marking_cursor].x = 284
+      @sprites[:marking_cursor].x = 282
       @sprites[:marking_cursor].y = 244
       @sprites[:marking_cursor].src_rect.y = @sprites[:marking_cursor].bitmap.height / 2
     when 7   # Cancel
-      @sprites[:marking_cursor].x = 284
+      @sprites[:marking_cursor].x = 282
       @sprites[:marking_cursor].y = 294
       @sprites[:marking_cursor].src_rect.y = @sprites[:marking_cursor].bitmap.height / 2
     else
-      @sprites[:marking_cursor].x = 284 + (58 * (@marking_index % 3))
+      @sprites[:marking_cursor].x = 282 + (62 * (@marking_index % 3))
       @sprites[:marking_cursor].y = 144 + (50 * (@marking_index / 3))
       @sprites[:marking_cursor].src_rect.y = 0
     end

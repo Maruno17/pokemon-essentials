@@ -1254,7 +1254,7 @@ class PokemonStorageScene
       pbPartySetArrow(@sprites["arrow"], @selection)
       pbUpdateOverlay(@selection, @storage.party)
     else
-      screen = UI::PokemonSummary.new(@storage.boxes[selected[0]], selected[1])
+      screen = UI::PokemonSummary.new(@storage.boxes[selected[0]].pokemon, selected[1])
       @selection = screen.result
       pbSetArrow(@sprites["arrow"], @selection)
       pbUpdateOverlay(@selection)

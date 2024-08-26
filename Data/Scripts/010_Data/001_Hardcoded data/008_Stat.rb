@@ -95,7 +95,7 @@ GameData::Stat.register({
 GameData::Stat.register({
   :id              => :SPECIAL_ATTACK,
   :name            => _INTL("Special Attack"),
-  :name_semi_brief => _INTL("Sp. Atk"),
+  :name_semi_brief => _INTL("Sp. Attack"),
   :name_brief      => _INTL("SpAtk"),
   :type            => :main_battle,
   :pbs_order       => 4
@@ -104,7 +104,7 @@ GameData::Stat.register({
 GameData::Stat.register({
   :id              => :SPECIAL_DEFENSE,
   :name            => _INTL("Special Defense"),
-  :name_semi_brief => _INTL("Sp. Def"),
+  :name_semi_brief => _INTL("Sp. Defense"),
   :name_brief      => _INTL("SpDef"),
   :type            => :main_battle,
   :pbs_order       => 5

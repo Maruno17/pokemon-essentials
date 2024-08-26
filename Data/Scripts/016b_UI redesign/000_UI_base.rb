@@ -263,6 +263,24 @@ module UI
       @sprites[overlay].draw_image(filename, image_x, image_y, src_x, src_y, src_width, src_height)
     end
 
+    # The image is assumed to be the digits 0-9 and then a "/", all the same
+    # width, in a horizontal row.
+    def draw_number_from_image(bitmap, string, text_x, text_y, align: :left, overlay: :overlay)
+      string = string.to_s
+      raise _INTL("Can't draw {1} as a number.", string) if !string.scan(/[^\d\/]/).empty?
+      char_width  = bitmap.width / 11
+      char_height = bitmap.height
+      chars = string.split(//)
+      chars.reverse! if align == :right
+      chars.length.times do |i|
+        char = chars[i]
+        index = (char == "/") ? 10 : char.to_i
+        char_x = (align == :right) ? text_x - ((i + 1) * char_width) : text_x + (i * char_width)
+        draw_image(bitmap, char_x, text_y,
+                   index * char_width, 0, char_width, char_height, overlay: overlay)
+      end
+    end
+
     #---------------------------------------------------------------------------
 
     # Redraw everything on the screen.
