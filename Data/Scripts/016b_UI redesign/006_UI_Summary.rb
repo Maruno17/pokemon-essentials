@@ -407,9 +407,13 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     @sprites[:pokemon].setPokemonBitmap(@pokemon)
     @ribbon_offset = 0
     # Play sound effect
+    play_pokemon_cry
+    refresh
+  end
+
+  def play_pokemon_cry
     pbSEStop
     (@pokemon.egg?) ? pbSEPlay("GUI summary change page") : @pokemon.play_cry
-    refresh
   end
 
   #-----------------------------------------------------------------------------
@@ -523,8 +527,9 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     # Don't show any party icons if there is 0 or 1 Pokémon in the party
     return if @visible_party_length <= 1
     # Setup numbers
-    @visible_top_index = [@visible_top_index, @visible_index].min
-    @visible_top_index = [@visible_top_index, @visible_index - PARTY_ICONS_COUNT + 1].max
+    @visible_top_index = [@visible_top_index, @visible_index - ((PARTY_ICONS_COUNT - 1) / 2)].min
+    @visible_top_index = [@visible_top_index, @visible_index - (PARTY_ICONS_COUNT / 2), 0].max
+    @visible_top_index = @visible_top_index.clamp(0, [@visible_party_length - PARTY_ICONS_COUNT, 0].max)
     x_pos = 0
     y_pos = 162
     # Draw up arrow
@@ -595,11 +600,6 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     end
   end
 
-  def draw_hp_numbers
-    hp_text = sprintf("%d/%d", @pokemon.hp, @pokemon.totalhp)
-    draw_number_from_image(@bitmaps[:numbers], hp_text, 182, 366, align: :right)
-  end
-
   def draw_hp_bar
     return if @pokemon.fainted?
     bar_x = 48
@@ -612,6 +612,11 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     hp_zone = 2 if @pokemon.hp <= (@pokemon.totalhp / 4).floor   # Red
     draw_image(graphics_folder + "hp_bar_fill", bar_x, bar_y,
                0, hp_zone * 6, bar_width, 6)
+  end
+
+  def draw_hp_numbers
+    hp_text = sprintf("%d/%d", @pokemon.hp, @pokemon.totalhp)
+    draw_number_from_image(@bitmaps[:numbers], hp_text, 182, 366, align: :right)
   end
 
   # Show status/fainted/Pokérus infected icon
@@ -768,8 +773,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
   def draw_move_in_list(move, x, y)
     pp_numbers_x = (showing_detailed_move_page?) ? x + 234 : x + 256
     if !move
-#      draw_text("-", x + 8, y + 6, theme: :black)
-#      draw_text("--", pp_numbers_x, y + 38, theme: :black)
+      draw_text("---", x + 8, y + 6, theme: :black)
       return
     end
     # Draw move name
@@ -993,6 +997,49 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
 
   #-----------------------------------------------------------------------------
 
+  def refresh_move_cursor
+    # Update cursor positions
+    @sprites[:move_cursor].index = @move_index
+    @sprites[:selected_move_cursor].index = @swap_move_index
+    # Update cursor z values
+    if @swap_move_index >= 0
+      @sprites[:selected_move_cursor].z = @sprites[:move_cursor].z + 1
+      @sprites[:selected_move_cursor].z -= 2 if @move_index != @swap_move_index
+    end
+  end
+
+  def refresh_ribbon_cursor
+    # Scroll ribbons grid to keep cursor on-screen
+    sel_ribbon_row = @ribbon_index / RIBBON_COLUMNS
+    @ribbon_offset = [@ribbon_offset, sel_ribbon_row].min   # Scroll up
+    @ribbon_offset = [@ribbon_offset, sel_ribbon_row - RIBBON_ROWS + 1].max   # Scroll down
+    # Update cursor positions
+    @sprites[:ribbon_cursor].index = @ribbon_index - (@ribbon_offset * RIBBON_COLUMNS)
+    @sprites[:selected_ribbon_cursor].index = @swap_ribbon_index - (@ribbon_offset * RIBBON_COLUMNS)
+    # Update cursor z values
+    if @swap_ribbon_index >= 0
+      @sprites[:selected_ribbon_cursor].z = @sprites[:ribbon_cursor].z + 1
+      @sprites[:selected_ribbon_cursor].z -= 2 if @ribbon_index != @swap_ribbon_index
+    end
+  end
+
+  def refresh_markings_cursor
+    case @marking_index
+    when 6   # OK
+      @sprites[:marking_cursor].x = 282
+      @sprites[:marking_cursor].y = 244
+      @sprites[:marking_cursor].src_rect.y = @sprites[:marking_cursor].bitmap.height / 2
+    when 7   # Cancel
+      @sprites[:marking_cursor].x = 282
+      @sprites[:marking_cursor].y = 294
+      @sprites[:marking_cursor].src_rect.y = @sprites[:marking_cursor].bitmap.height / 2
+    else
+      @sprites[:marking_cursor].x = 282 + (62 * (@marking_index % 3))
+      @sprites[:marking_cursor].y = 144 + (50 * (@marking_index / 3))
+      @sprites[:marking_cursor].src_rect.y = 0
+    end
+  end
+
   def refresh_markings_panel
     # Set values to use when drawing the markings panel
     marking_x = 298
@@ -1019,23 +1066,6 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     draw_text(_INTL("Cancel"), 368, 304, align: :center, overlay: :marking_overlay)
   end
 
-  def refresh_markings_cursor
-    case @marking_index
-    when 6   # OK
-      @sprites[:marking_cursor].x = 282
-      @sprites[:marking_cursor].y = 244
-      @sprites[:marking_cursor].src_rect.y = @sprites[:marking_cursor].bitmap.height / 2
-    when 7   # Cancel
-      @sprites[:marking_cursor].x = 282
-      @sprites[:marking_cursor].y = 294
-      @sprites[:marking_cursor].src_rect.y = @sprites[:marking_cursor].bitmap.height / 2
-    else
-      @sprites[:marking_cursor].x = 282 + (62 * (@marking_index % 3))
-      @sprites[:marking_cursor].y = 144 + (50 * (@marking_index / 3))
-      @sprites[:marking_cursor].src_rect.y = 0
-    end
-  end
-
   #-----------------------------------------------------------------------------
 
   def update_input
@@ -1053,6 +1083,18 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     end
     # Check for interaction
     if Input.trigger?(Input::USE)
+      return update_interaction(Input::USE)
+    elsif Input.trigger?(Input::BACK)
+      return update_interaction(Input::BACK)
+    elsif Input.trigger?(Input::ACTION)
+      return update_interaction(Input::ACTION)
+    end
+    return nil
+  end
+
+  def update_interaction(input)
+    case input
+    when Input::USE
       case @page
       when :moves
         pbPlayDecisionSE
@@ -1066,12 +1108,11 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
           return :interact_menu
         end
       end
-    elsif Input.trigger?(Input::BACK)
+    when Input::ACTION
+      @pokemon.play_cry if !@pokemon.egg?
+    when Input::BACK
       pbPlayCloseMenuSE
       return :quit
-    elsif Input.trigger?(Input::ACTION)
-      pbSEStop
-      @pokemon.play_cry
     end
     return nil
   end
@@ -1113,8 +1154,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
           # Start swapping moves
           @swap_move_index = @move_index
           @sprites[:selected_move_cursor].visible = true
-          @sprites[:selected_move_cursor].index   = @swap_move_index
-          @sprites[:selected_move_cursor].z = @sprites[:move_cursor].z + 1
+          refresh_move_cursor
         end
       end
     elsif Input.trigger?(Input::BACK)
@@ -1147,7 +1187,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     @sprites[:pokemon_icon].pokemon = @pokemon
     @sprites[:pokemon_icon].visible = true
     @sprites[:move_cursor].visible = true
-    @sprites[:move_cursor].index = @move_index
+    refresh_move_cursor
     refresh
     # Navigate loop
     loop do
@@ -1158,12 +1198,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       break if update_input_move
       if @move_index != old_move_index
         pbPlayCursorSE
-        # Update cursor positions
-        @sprites[:move_cursor].index = @move_index
-        if @swap_move_index >= 0
-          @sprites[:selected_move_cursor].z = @sprites[:move_cursor].z + 1
-          @sprites[:selected_move_cursor].z -= 2 if @move_index != @swap_move_index
-        end
+        refresh_move_cursor
         refresh
       end
     end
@@ -1217,8 +1252,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
         pbPlayDecisionSE
         @swap_ribbon_index = @ribbon_index
         @sprites[:selected_ribbon_cursor].visible = true
-        @sprites[:selected_ribbon_cursor].index = @swap_ribbon_index - (@ribbon_offset * RIBBON_COLUMNS)
-        @sprites[:selected_ribbon_cursor].z = @sprites[:ribbon_cursor].z + 1
+        refresh_ribbon_cursor
       end
     elsif Input.trigger?(Input::BACK)
       # Cancel swapping ribbons, or return true to close
@@ -1240,7 +1274,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     @swap_ribbon_index = -1
     total_rows = [(@pokemon.ribbons.length + RIBBON_COLUMNS - 1) / RIBBON_COLUMNS, RIBBON_ROWS].max
     @sprites[:ribbon_cursor].visible = true
-    @sprites[:ribbon_cursor].index = @ribbon_index - (@ribbon_offset * RIBBON_COLUMNS)
+    refresh_ribbon_cursor
     refresh
     # Navigate loop
     loop do
@@ -1254,17 +1288,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       break if update_input_ribbon
       if @ribbon_index != old_ribbon_index || @swap_ribbon_index != old_swap_ribbon_index
         pbPlayCursorSE if @swap_ribbon_index == old_swap_ribbon_index
-        # Scroll ribbons grid to keep cursor on-screen
-        sel_ribbon_row = @ribbon_index / RIBBON_COLUMNS
-        @ribbon_offset = [@ribbon_offset, sel_ribbon_row].min   # Scroll up
-        @ribbon_offset = [@ribbon_offset, sel_ribbon_row - RIBBON_ROWS + 1].max   # Scroll down
-        # Update cursor positions
-        @sprites[:ribbon_cursor].index = @ribbon_index - (@ribbon_offset * RIBBON_COLUMNS)
-        @sprites[:selected_ribbon_cursor].index = @swap_ribbon_index - (@ribbon_offset * RIBBON_COLUMNS)
-        if @swap_ribbon_index >= 0
-          @sprites[:selected_ribbon_cursor].z = @sprites[:ribbon_cursor].z + 1
-          @sprites[:selected_ribbon_cursor].z -= 2 if @ribbon_index != @swap_ribbon_index
-        end
+        refresh_ribbon_cursor
         refresh
       end
     end
@@ -1375,6 +1399,11 @@ end
 #
 #===============================================================================
 class UI::PokemonSummary < UI::BaseScreen
+  attr_reader   :party, :mode
+  attr_accessor :party_index, :pokemon
+
+  SCREEN_ID = :summary_screen
+
   # party is an array of Pokemon objects or a single Pokemon object.
   # mode is :normal or :choose_move or :in_battle.
   # If mode is :choose_move, new_move is either nil or a move ID.
@@ -1394,7 +1423,7 @@ class UI::PokemonSummary < UI::BaseScreen
 
   def start_screen
     super   # Fade in
-    @pokemon.play_cry if @mode != :choose_move
+    @visuals.play_pokemon_cry if @mode != :choose_move
   end
 
   #-----------------------------------------------------------------------------
@@ -1409,83 +1438,138 @@ class UI::PokemonSummary < UI::BaseScreen
     end
     super
   end
+end
 
-  def perform_action(command)
-    case command
-    when :go_to_previous_pokemon
-      if @party_index > 0
-        new_index = @party_index
-        loop do
-          new_index -= 1
-          break if @party[new_index]
-          break if new_index <= 0
-        end
-        if new_index != @party_index && @party[new_index]
-          # NOTE: @visuals.set_party_index plays an SE.
-          @party_index = new_index
-          @pokemon = @party[@party_index]
-          @visuals.set_party_index(@party_index)
-        end
+#===============================================================================
+# Actions that can be triggered in the Pokémon summary screen.
+#===============================================================================
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :go_to_previous_pokemon,
+  :effect => proc { |screen|
+    if screen.party_index > 0
+      new_index = screen.party_index
+      loop do
+        new_index -= 1
+        break if screen.party[new_index]
+        break if new_index <= 0
       end
-    when :go_to_next_pokemon
-      if @party_index < @party.length - 1
-        new_index = @party_index
-        loop do
-          new_index += 1
-          break if @party[new_index]
-          break if new_index >= @party.length - 1
-        end
-        if new_index != @party_index && @party[new_index]
-          # NOTE: @visuals.set_party_index plays an SE.
-          @party_index = new_index
-          @pokemon = @party[@party_index]
-          @visuals.set_party_index(@party_index)
-        end
-      end
-    when :navigate_moves
-      move_index = @visuals.navigate_moves
-      return move_index if @mode == :choose_move
-      refresh
-    when :navigate_ribbons
-      @visuals.navigate_ribbons
-      refresh
-    when :marking
-      @visuals.navigate_markings
-      refresh
-    when :interact_menu
-      if @mode != :in_battle
-        commands = {}
-        if !@pokemon.egg?
-          commands[:give_item] = _INTL("Give item")
-          commands[:take_item] = _INTL("Take item") if @pokemon.hasItem?
-          commands[:pokedex]   = _INTL("View Pokédex") if $player.has_pokedex
-        end
-        commands[:marking]     = _INTL("Mark")
-        commands[:cancel]      = _INTL("Cancel")
-        choice = show_choice(commands)
-        perform_action(choice)
-      end
-    when :give_item
-      item = nil
-      pbFadeOutIn do
-        scene = PokemonBag_Scene.new
-        screen = PokemonBagScreen.new(scene, $bag)
-        item = screen.pbChooseItemScreen(proc { |itm| GameData::Item.get(itm).can_hold? })
-      end
-      refresh if pbGiveItemToPokemon(item, @pokemon, self, @party_index)
-    when :take_item
-      refresh if pbTakeItemFromPokemon(@pokemon, self)
-    when :pokedex
-      $player.pokedex.register_last_seen(@pokemon)
-      pbFadeOutIn do
-        scene = PokemonPokedexInfo_Scene.new
-        screen = PokemonPokedexInfoScreen.new(scene)
-        screen.pbStartSceneSingle(@pokemon.species)
+      if new_index != screen.party_index && screen.party[new_index]
+        # NOTE: @visuals.set_party_index plays an SE.
+        screen.party_index = new_index
+        screen.pokemon = screen.party[screen.party_index]
+        screen.visuals.set_party_index(screen.party_index)
       end
     end
-    return nil
-  end
-end
+  }
+)
+
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :go_to_next_pokemon,
+  :effect => proc { |screen|
+    if screen.party_index < screen.party.length - 1
+      new_index = screen.party_index
+      loop do
+        new_index += 1
+        break if screen.party[new_index]
+        break if new_index >= screen.party.length - 1
+      end
+      if new_index != screen.party_index && screen.party[new_index]
+        # NOTE: @visuals.set_party_index plays an SE.
+        screen.party_index = new_index
+        screen.pokemon = screen.party[screen.party_index]
+        screen.visuals.set_party_index(screen.party_index)
+      end
+    end
+  }
+)
+
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :navigate_moves,
+  :returns_value => true,
+  :effect => proc { |screen|
+    move_index = screen.visuals.navigate_moves
+    next move_index if screen.mode == :choose_move
+    screen.refresh
+    next nil
+  }
+)
+
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :navigate_ribbons,
+  :effect => proc { |screen|
+    screen.visuals.navigate_ribbons
+    screen.refresh
+  }
+)
+
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :marking,
+  :effect => proc { |screen|
+    screen.visuals.navigate_markings
+    screen.refresh
+  }
+)
+
+# Shows a choice menu using the MenuHandlers options below.
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :interact_menu,
+  :menu      => :summary_screen_interact,
+  :condition => proc { |screen| next screen.mode != :in_battle }
+)
+
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :give_item,
+  :effect => proc { |screen|
+    item = nil
+    pbFadeOutIn do
+      bag_scene = PokemonBag_Scene.new
+      bag_screen = PokemonBagScreen.new(bag_scene, $bag)
+      item = bag_screen.pbChooseItemScreen(proc { |itm| GameData::Item.get(itm).can_hold? })
+    end
+    screen.refresh if pbGiveItemToPokemon(item, screen.pokemon, screen, screen.party_index)
+  }
+)
+
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :take_item,
+  :effect => proc { |screen|
+    screen.refresh if pbTakeItemFromPokemon(screen.pokemon, screen)
+  }
+)
+
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :pokedex,
+  :effect => proc { |screen|
+    $player.pokedex.register_last_seen(screen.pokemon)
+    pbFadeOutIn do
+      dex_scene = PokemonPokedexInfo_Scene.new
+      dex_screen = PokemonPokedexInfoScreen.new(dex_scene)
+      dex_screen.pbStartSceneSingle(screen.pokemon.species)
+    end
+  }
+)
+
+#===============================================================================
+# Menu options for choice menus that exist in the Pokémon summary screen.
+#===============================================================================
+MenuHandlers.add(:summary_screen_interact, :give_item, {
+  "name"      => _INTL("Give item"),
+  "order"     => 10,
+  "condition" => proc { |screen| next !screen.pokemon.egg? }
+})
+
+MenuHandlers.add(:summary_screen_interact, :take_item, {
+  "name"      => _INTL("Take item"),
+  "order"     => 20,
+  "condition" => proc { |screen| next !screen.pokemon.egg? && screen.pokemon.hasItem? }
+})
+
+MenuHandlers.add(:summary_screen_interact, :pokedex, {
+  "name"      => _INTL("View Pokédex"),
+  "order"     => 30,
+  "condition" => proc { |screen| next !screen.pokemon.egg? && $player.has_pokedex }
+})
+
+MenuHandlers.add(:summary_screen_interact, :marking, {
+  "name"      => _INTL("Mark"),
+  "order"     => 40
+})
+
+MenuHandlers.add(:summary_screen_interact, :cancel, {
+  "name"      => _INTL("Cancel"),
+  "order"     => 9999
+})
 
 #===============================================================================
 #

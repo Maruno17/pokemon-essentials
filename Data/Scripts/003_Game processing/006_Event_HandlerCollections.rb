@@ -97,6 +97,10 @@ module MenuHandlers
     @@handlers[menu]&.clear
   end
 
+  def get(menu, option)
+    return @@handlers[menu][option]
+  end
+
   def each(menu)
     return if !@@handlers.has_key?(menu)
     @@handlers[menu].each { |option, hash| yield option, hash }
@@ -123,5 +127,36 @@ module MenuHandlers
     option_hash = @@handlers[menu][option]
     return nil if !option_hash || !option_hash[function]
     return option_hash[function].call(*args)
+  end
+end
+
+#===============================================================================
+#
+#===============================================================================
+module UIActionHandlers
+  @@handlers = {}
+
+  module_function
+
+  def add(menu, action, hash)
+    @@handlers[menu] = HandlerHash.new if !@@handlers.has_key?(menu)
+    @@handlers[menu].add(action, hash)
+  end
+
+  def remove(menu, action)
+    @@handlers[menu]&.remove(action)
+  end
+
+  def clear(menu)
+    @@handlers[menu]&.clear
+  end
+
+  def get(menu, action)
+    return @@handlers[menu][action]
+  end
+
+  def each(menu)
+    return if !@@handlers.has_key?(menu)
+    @@handlers[menu].each { |action, hash| yield action, hash }
   end
 end

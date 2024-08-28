@@ -329,6 +329,7 @@ module UI
   # The logic class.
   #=============================================================================
   class BaseScreen
+    attr_reader :visuals
     attr_reader :result
 
     def initialize
@@ -384,6 +385,14 @@ module UI
 
     alias pbShowCommands show_choice
 
+    def show_choice_from_menu_handler(menu_handler_id)
+      commands = {}
+      MenuHandlers.each_available(menu_handler_id, self) do |option, hash, name|
+        commands[option] = name
+      end
+      return show_choice(commands)
+    end
+
     #-----------------------------------------------------------------------------
 
     def refresh
@@ -404,6 +413,22 @@ module UI
     end
 
     def perform_action(command)
+      return nil if !self.class::SCREEN_ID
+      action_hash = UIActionHandlers.get(self.class::SCREEN_ID, command)
+      return nil if !action_hash
+      return nil if action_hash[:condition] && !action_hash[:condition].call(self)
+      if action_hash[:menu]
+        choice = show_choice_from_menu_handler(action_hash[:menu])
+        perform_action(choice) if choice
+      elsif action_hash[:effect]
+        return perform_action_effect(action_hash)
+      end
+      return nil
+    end
+
+    def perform_action_effect(action_hash)
+      ret = action_hash[:effect].call(self)
+      return ret if action_hash[:returns_value]
       return nil
     end
   end

@@ -702,7 +702,7 @@ class PokemonParty_Scene
 
   def pbSummary(pkmnid, inbattle = false)
     oldsprites = pbFadeOutAndHide(@sprites)
-    UI::PokemonSummary.new(@party, pkmnid)
+    UI::PokemonSummary.new(@party, pkmnid, mode: (inbattle ? :in_battle : :normal))
     yield if block_given?
     pbRefresh
     pbFadeInAndShow(@sprites, oldsprites)
