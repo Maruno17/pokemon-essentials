@@ -54,7 +54,7 @@ module Settings
   # The maximum amount of soot the player can have.
   MAX_SOOT             = 9_999
   # The maximum length, in characters, that the player's name can be.
-  MAX_PLAYER_NAME_SIZE = 10
+  MAX_PLAYER_NAME_SIZE = 12
   # A set of arrays each containing a trainer type followed by a Game Variable
   # number. If the Variable isn't set to 0, then all trainers with the
   # associated trainer type will be named as whatever is in that Variable.

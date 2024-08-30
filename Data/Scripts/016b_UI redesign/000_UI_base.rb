@@ -7,7 +7,7 @@ module UI
     GRAPHICS_FOLDER     = ""   # Subfolder in UI_FOLDER
     BACKGROUND_FILENAME = "bg"
     TEXT_COLOR_THEMES   = {   # These color themes are added to @sprites[:overlay]
-      :default => [Color.new(72, 172, 72), Color.new(160, 160, 160)]   # Base and shadow colour
+      :default => [Color.new(72, 72, 72), Color.new(160, 160, 160)]   # Base and shadow colour
     }
 
     def initialize
@@ -18,7 +18,7 @@ module UI
       initialize_background
       initialize_overlay
       initialize_message_box
-      # TODO: Initialize dialogue box for messages to use?
+      # TODO: Initialize dialogue box for messages to use.
       initialize_sprites
       refresh
     end
@@ -238,6 +238,24 @@ module UI
         end
       end
       ret = options.keys[ret] if options.is_a?(Hash)
+      return ret
+    end
+
+    #---------------------------------------------------------------------------
+
+    # NOTE: max_width should include the width of the text shadow at the end of
+    #       the string (because characters in the font have a blank 2 pixels
+    #       after them for the shadow to occupy).
+    def crop_text(string, max_width, continue_string = "…", overlay: :overlay)
+      return string if max_width <= 0
+      return string if @sprites[overlay].bitmap.text_size(string).width <= max_width
+      ret = string
+      continue_width = @sprites[overlay].bitmap.text_size(continue_string).width
+      loop do
+        ret = ret[0...-1]
+        break if @sprites[overlay].bitmap.text_size(ret).width <= max_width - continue_width
+      end
+      ret += continue_string
       return ret
     end
 

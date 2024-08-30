@@ -1,118 +1,79 @@
 #===============================================================================
 #
 #===============================================================================
-class UI::PokemonSummaryMoveCursor < Sprite
-  attr_reader :index
-
+class UI::PokemonSummaryMoveCursor < ChangelingSprite
+  BITMAPS = {
+    :normal   => ["Graphics/UI/Summary/cursor_move", 0, 0, 252, 74],
+    :selected => ["Graphics/UI/Summary/cursor_move", 0, 74, 252, 74]
+  }
   CURSOR_THICKNESS = 6
 
-  def initialize(viewport = nil, preselected = false, new_move = false)
-    super(viewport)
-    @cursor_bitmap = AnimatedBitmap.new("Graphics/UI/Summary/cursor_move")
-    @frame = 0
-    @index = 0
-    @preselected = preselected
-    @new_move = new_move
+  def initialize(viewport = nil, selected = false, extra_move = false)
+    super(0, 0, viewport)
+    change_bitmap((selected) ? :selected : :normal)
+    @extra_move = extra_move
     self.z = 1600
-    refresh
-  end
-
-  def dispose
-    @cursor_bitmap.dispose
-    super
+    self.visible = false
+    @index = 0
   end
 
   def index=(value)
     @index = value
-    refresh
+    refresh_visibility
+    refresh_position
   end
 
-  def refresh
-    cursor_width = @cursor_bitmap.width
-    cursor_height = @cursor_bitmap.height / 2
+  def refresh_visibility
+    self.visible = (@index >= 0)
+  end
+
+
+  def refresh_position
+    return if @index < 0
     self.x = UI::PokemonSummaryVisuals::MOVE_LIST_X_DETAILED - CURSOR_THICKNESS
-    self.y = UI::PokemonSummaryVisuals::MOVE_LIST_Y - CURSOR_THICKNESS + (self.index * UI::PokemonSummaryVisuals::MOVE_LIST_SPACING)
-    self.y += UI::PokemonSummaryVisuals::MOVE_LIST_OFFSET_WHEN_NEW_MOVE if @new_move
-    self.y += UI::PokemonSummaryVisuals::MOVE_LIST_NEW_MOVE_SPACING if @new_move && self.index == Pokemon::MAX_MOVES
-    self.bitmap = @cursor_bitmap.bitmap
-    if @preselected
-      self.src_rect.set(0, cursor_height, cursor_width, cursor_height)
-    else
-      self.src_rect.set(0, 0, cursor_width, cursor_height)
-    end
-  end
-
-  def update
-    super
-    @cursor_bitmap.update
-    refresh
+    self.y = UI::PokemonSummaryVisuals::MOVE_LIST_Y - CURSOR_THICKNESS + (@index * UI::PokemonSummaryVisuals::MOVE_LIST_SPACING)
+    self.y += UI::PokemonSummaryVisuals::MOVE_LIST_OFFSET_WHEN_NEW_MOVE if @extra_move
+    self.y += UI::PokemonSummaryVisuals::MOVE_LIST_NEW_MOVE_SPACING if @extra_move && @index == Pokemon::MAX_MOVES
   end
 end
 
 #===============================================================================
 #
 #===============================================================================
-class UI::PokemonSummaryRibbonCursor < Sprite
+class UI::PokemonSummaryRibbonCursor < ChangelingSprite
   attr_reader :index
 
+  BITMAPS = {
+    :normal   => ["Graphics/UI/Summary/cursor_ribbon", 0, 0, 68, 68],
+    :selected => ["Graphics/UI/Summary/cursor_ribbon", 0, 68, 68, 68]
+  }
   CURSOR_THICKNESS = 2
 
-  def initialize(viewport = nil, preselected = false)
-    super(viewport)
-    @cursor_bitmap = AnimatedBitmap.new("Graphics/UI/Summary/cursor_ribbon")
-    @frame = 0
-    @index = 0
-    @preselected = preselected
-    @updating = false
-    @cursor_visible = true
+  def initialize(viewport = nil, selected = false)
+    super(0, 0, viewport)
+    change_bitmap((selected) ? :selected : :normal)
     self.z = 1600
-    refresh
-  end
-
-  def dispose
-    @cursor_bitmap.dispose
-    super
+    self.visible = false
+    @index = 0
   end
 
   def index=(value)
     @index = value
-    refresh
+    refresh_visibility
+    refresh_position
   end
 
-  def visible=(value)
-    super
-    @cursor_visible = value if !@updating
+  def refresh_visibility
+    self.visible = (@index >= 0 && @index < UI::PokemonSummaryVisuals::RIBBON_COLUMNS * UI::PokemonSummaryVisuals::RIBBON_ROWS)
   end
 
-  def recheck_visibility
-    @updating = true
-    self.visible = @cursor_visible && @index >= 0 &&
-                   @index < UI::PokemonSummaryVisuals::RIBBON_COLUMNS * UI::PokemonSummaryVisuals::RIBBON_ROWS
-    @updating = false
-  end
-
-  def refresh
-    recheck_visibility
+  def refresh_position
+    return if @index < 0
     cols = UI::PokemonSummaryVisuals::RIBBON_COLUMNS
     offset_x = UI::PokemonSummaryVisuals::RIBBON_SIZE[0] + UI::PokemonSummaryVisuals::RIBBON_SPACING_X
     offset_y = UI::PokemonSummaryVisuals::RIBBON_SIZE[1] + UI::PokemonSummaryVisuals::RIBBON_SPACING_Y
     self.x = UI::PokemonSummaryVisuals::RIBBON_X - CURSOR_THICKNESS + ((self.index % cols) * offset_x)
     self.y = UI::PokemonSummaryVisuals::RIBBON_Y - CURSOR_THICKNESS + ((self.index / cols) * offset_y)
-    self.bitmap = @cursor_bitmap.bitmap
-    w = @cursor_bitmap.width
-    h = @cursor_bitmap.height / 2
-    if @preselected
-      self.src_rect.set(0, h, w, h)
-    else
-      self.src_rect.set(0, 0, w, h)
-    end
-  end
-
-  def update
-    super
-    recheck_visibility
-    @cursor_bitmap.update
-    refresh
   end
 end
 
@@ -305,7 +266,6 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     @sprites[:pokemon_icon].visible = (@mode == :choose_move)
     # Cursor to highlight a move selected to be swapped
     @sprites[:selected_move_cursor] = UI::PokemonSummaryMoveCursor.new(@viewport, true)
-    @sprites[:selected_move_cursor].visible = false
     # Cursor to highlight the currently selected move
     @sprites[:move_cursor] = UI::PokemonSummaryMoveCursor.new(@viewport, false, !@new_move.nil?)
     @sprites[:move_cursor].visible = (@mode == :choose_move)
@@ -314,10 +274,8 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
   def initialize_ribbon_page_sprites
     # Cursor to highlight a ribbon selected to be swapped
     @sprites[:selected_ribbon_cursor] = UI::PokemonSummaryRibbonCursor.new(@viewport, true)
-    @sprites[:selected_ribbon_cursor].visible = false
     # Cursor to highlight the currently selected ribbon
     @sprites[:ribbon_cursor] = UI::PokemonSummaryRibbonCursor.new(@viewport)
-    @sprites[:ribbon_cursor].visible = false
     # Arrow to indicate more ribbons are above the ones visible when navigating ribbons
     add_animated_arrow(:up_arrow, 350, 56, :up)
     @sprites[:up_arrow].z = 1700
@@ -498,7 +456,9 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
   end
 
   def draw_pokemon_name
-    draw_text(@pokemon.name, 42, 68)
+    pokemon_name = @pokemon.name
+    pokemon_name = crop_text(pokemon_name, 152)
+    draw_text(pokemon_name, 42, 68)
   end
 
   def draw_shiny_icon
@@ -669,13 +629,16 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
 
   def draw_species
     draw_text(_INTL("Species"), 238, 118)
-    draw_text(@pokemon.speciesName, 428, 118, align: :center, theme: :black)
+    species_name = @pokemon.speciesName
+    species_name = crop_text(species_name, 144)
+    draw_text(species_name, 428, 118, align: :center, theme: :black)
   end
 
   def draw_original_trainer_details
     draw_text(_INTL("OT"), 238, 150)
     draw_text(_INTL("ID No."), 238, 182)
     owner_name = (@pokemon.owner.name.empty?) ? _INTL("RENTAL") : @pokemon.owner.name
+    owner_name = crop_text(owner_name, 144)
     owner_theme = [:male, :female][@pokemon.owner.gender || 99] || :black
     draw_text(owner_name, 428, 150, align: :center, theme: owner_theme)
     owner_number = (@pokemon.owner.name.empty?) ? "?????" : sprintf("%05d", @pokemon.owner.public_id)
@@ -687,11 +650,9 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     @sprites[:held_item_icon].item = @pokemon.item_id
     draw_text(_INTL("Held Item"), 302, 230)
     # Write the held item's name
-    if @pokemon.hasItem?
-      draw_text(@pokemon.item.name, 302, 262, theme: :black)
-    else
-      draw_text(_INTL("None"), 302, 262, theme: :black)
-    end
+    item_name = (@pokemon.hasItem?) ? @pokemon.item.name : _INTL("None")
+    item_name = crop_text(item_name, 192)
+    draw_text(item_name, 302, 262, theme: :black)
   end
 
   def draw_exp
@@ -753,7 +714,9 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     draw_text(_INTL("Ability"), 224, 262)
     ability = @pokemon.ability
     return if !ability
-    draw_text(ability.name, 332, 262, theme: :black)
+    ability_name = ability.name
+    ability_name = crop_text(ability_name, 182)
+    draw_text(ability_name, 328, 262, theme: :black)
     draw_paragraph_text(ability.description, 224, 294, 284, 3, theme: :black)
   end
 
@@ -777,6 +740,8 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       return
     end
     # Draw move name
+    move_name = move.name
+    move_name = crop_text(move_name, (showing_detailed_move_page?) ? 230 : 262)
     draw_text(move.name, x + 8, y + 6, theme: :black)
     # Draw move type icon
     type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
@@ -934,8 +899,11 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       date  = @pokemon.timeReceived.day
       month = pbGetMonthName(@pokemon.timeReceived.mon)
       year  = @pokemon.timeReceived.year
-      # TODO: Write this date the wrong way round for United States of Americans.
-      memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
+      if System.user_language[3..4] == "US"
+        memo += black_text_tag + _INTL("{1} {2}, {3}", month, date, year) + "\n"
+      else
+        memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
+      end
     end
     # Add map name Pokémon was received on to memo
     map_name = pbGetMapNameFromId(@pokemon.obtain_map)
@@ -949,8 +917,11 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
         date  = @pokemon.timeEggHatched.day
         month = pbGetMonthName(@pokemon.timeEggHatched.mon)
         year  = @pokemon.timeEggHatched.year
-        # TODO: Write this date the wrong way round for United States of Americans.
-        memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
+        if System.user_language[3..4] == "US"
+          memo += black_text_tag + _INTL("{1} {2}, {3}", month, date, year) + "\n"
+        else
+          memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
+        end
       end
       map_name = pbGetMapNameFromId(@pokemon.hatched_map)
       map_name = _INTL("Faraway place") if nil_or_empty?(map_name)
@@ -970,8 +941,11 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       date  = @pokemon.timeReceived.day
       month = pbGetMonthName(@pokemon.timeReceived.mon)
       year  = @pokemon.timeReceived.year
-      # TODO: Write this date the wrong way round for United States of Americans.
-      memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
+      if System.user_language[3..4] == "US"
+        memo += black_text_tag + _INTL("{1} {2}, {3}", month, date, year) + "\n"
+      else
+        memo += black_text_tag + _INTL("{1} {2}, {3}", date, month, year) + "\n"
+      end
     end
     # Add map name egg was received on to memo
     map_name = pbGetMapNameFromId(@pokemon.obtain_map)
@@ -1148,12 +1122,11 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
             @pokemon.moves[@move_index], @pokemon.moves[@swap_move_index] = @pokemon.moves[@swap_move_index], @pokemon.moves[@move_index]
           end
           @swap_move_index = -1
-          @sprites[:selected_move_cursor].visible = false
+          refresh_move_cursor
           refresh
         else
           # Start swapping moves
           @swap_move_index = @move_index
-          @sprites[:selected_move_cursor].visible = true
           refresh_move_cursor
         end
       end
@@ -1167,7 +1140,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       if @swap_move_index >= 0
         pbPlayCancelSE
         @swap_move_index = -1
-        @sprites[:selected_move_cursor].visible = false
+        refresh_move_cursor
       else
         pbPlayCloseMenuSE
         return true
@@ -1245,13 +1218,12 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
           end
         end
         @swap_ribbon_index = -1
-        @sprites[:selected_ribbon_cursor].visible = false
+        refresh_ribbon_cursor
         refresh
       elsif @pokemon.ribbons[@ribbon_index]
         # Start swapping ribbons
         pbPlayDecisionSE
         @swap_ribbon_index = @ribbon_index
-        @sprites[:selected_ribbon_cursor].visible = true
         refresh_ribbon_cursor
       end
     elsif Input.trigger?(Input::BACK)
@@ -1259,7 +1231,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       if @swap_ribbon_index >= 0
         pbPlayCancelSE
         @swap_ribbon_index = -1
-        @sprites[:selected_ribbon_cursor].visible = false
+        refresh_ribbon_cursor
       else
         pbPlayCloseMenuSE
         return true

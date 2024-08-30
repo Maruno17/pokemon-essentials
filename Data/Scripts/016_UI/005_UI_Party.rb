@@ -9,13 +9,13 @@ class PokemonPartyConfirmCancelSprite < Sprite
     @refreshBitmap = true
     @bgsprite = ChangelingSprite.new(0, 0, viewport)
     if narrowbox
-      @bgsprite.addBitmap("desel", "Graphics/UI/Party/icon_cancel_narrow")
-      @bgsprite.addBitmap("sel", "Graphics/UI/Party/icon_cancel_narrow_sel")
+      @bgsprite.add_bitmap(:desel, "Graphics/UI/Party/icon_cancel_narrow")
+      @bgsprite.add_bitmap(:sel, "Graphics/UI/Party/icon_cancel_narrow_sel")
     else
-      @bgsprite.addBitmap("desel", "Graphics/UI/Party/icon_cancel")
-      @bgsprite.addBitmap("sel", "Graphics/UI/Party/icon_cancel_sel")
+      @bgsprite.add_bitmap(:desel, "Graphics/UI/Party/icon_cancel")
+      @bgsprite.add_bitmap(:sel, "Graphics/UI/Party/icon_cancel_sel")
     end
-    @bgsprite.changeBitmap("desel")
+    @bgsprite.change_bitmap(:desel)
     @overlaysprite = BitmapSprite.new(@bgsprite.bitmap.width, @bgsprite.bitmap.height, viewport)
     @overlaysprite.z = self.z + 1
     pbSetSystemFont(@overlaysprite.bitmap)
@@ -61,7 +61,7 @@ class PokemonPartyConfirmCancelSprite < Sprite
 
   def refresh
     if @bgsprite && !@bgsprite.disposed?
-      @bgsprite.changeBitmap((@selected) ? "sel" : "desel")
+      @bgsprite.change_bitmap((@selected) ? :sel : :desel)
       @bgsprite.x     = self.x
       @bgsprite.y     = self.y
       @bgsprite.color = self.color
@@ -184,31 +184,31 @@ class PokemonPartyPanel < Sprite
     @panelbgsprite = ChangelingSprite.new(0, 0, viewport)
     @panelbgsprite.z = self.z
     if @active   # Rounded panel
-      @panelbgsprite.addBitmap("able", "Graphics/UI/Party/panel_round")
-      @panelbgsprite.addBitmap("ablesel", "Graphics/UI/Party/panel_round_sel")
-      @panelbgsprite.addBitmap("fainted", "Graphics/UI/Party/panel_round_faint")
-      @panelbgsprite.addBitmap("faintedsel", "Graphics/UI/Party/panel_round_faint_sel")
-      @panelbgsprite.addBitmap("swap", "Graphics/UI/Party/panel_round_swap")
-      @panelbgsprite.addBitmap("swapsel", "Graphics/UI/Party/panel_round_swap_sel")
-      @panelbgsprite.addBitmap("swapsel2", "Graphics/UI/Party/panel_round_swap_sel2")
+      @panelbgsprite.add_bitmap(:able, "Graphics/UI/Party/panel_round")
+      @panelbgsprite.add_bitmap(:ablesel, "Graphics/UI/Party/panel_round_sel")
+      @panelbgsprite.add_bitmap(:fainted, "Graphics/UI/Party/panel_round_faint")
+      @panelbgsprite.add_bitmap(:faintedsel, "Graphics/UI/Party/panel_round_faint_sel")
+      @panelbgsprite.add_bitmap(:swap, "Graphics/UI/Party/panel_round_swap")
+      @panelbgsprite.add_bitmap(:swapsel, "Graphics/UI/Party/panel_round_swap_sel")
+      @panelbgsprite.add_bitmap(:swapsel2, "Graphics/UI/Party/panel_round_swap_sel2")
     else   # Rectangular panel
-      @panelbgsprite.addBitmap("able", "Graphics/UI/Party/panel_rect")
-      @panelbgsprite.addBitmap("ablesel", "Graphics/UI/Party/panel_rect_sel")
-      @panelbgsprite.addBitmap("fainted", "Graphics/UI/Party/panel_rect_faint")
-      @panelbgsprite.addBitmap("faintedsel", "Graphics/UI/Party/panel_rect_faint_sel")
-      @panelbgsprite.addBitmap("swap", "Graphics/UI/Party/panel_rect_swap")
-      @panelbgsprite.addBitmap("swapsel", "Graphics/UI/Party/panel_rect_swap_sel")
-      @panelbgsprite.addBitmap("swapsel2", "Graphics/UI/Party/panel_rect_swap_sel2")
+      @panelbgsprite.add_bitmap(:able, "Graphics/UI/Party/panel_rect")
+      @panelbgsprite.add_bitmap(:ablesel, "Graphics/UI/Party/panel_rect_sel")
+      @panelbgsprite.add_bitmap(:fainted, "Graphics/UI/Party/panel_rect_faint")
+      @panelbgsprite.add_bitmap(:faintedsel, "Graphics/UI/Party/panel_rect_faint_sel")
+      @panelbgsprite.add_bitmap(:swap, "Graphics/UI/Party/panel_rect_swap")
+      @panelbgsprite.add_bitmap(:swapsel, "Graphics/UI/Party/panel_rect_swap_sel")
+      @panelbgsprite.add_bitmap(:swapsel2, "Graphics/UI/Party/panel_rect_swap_sel2")
     end
     @hpbgsprite = ChangelingSprite.new(0, 0, viewport)
     @hpbgsprite.z = self.z + 1
-    @hpbgsprite.addBitmap("able", _INTL("Graphics/UI/Party/overlay_hp_back"))
-    @hpbgsprite.addBitmap("fainted", _INTL("Graphics/UI/Party/overlay_hp_back_faint"))
-    @hpbgsprite.addBitmap("swap", _INTL("Graphics/UI/Party/overlay_hp_back_swap"))
+    @hpbgsprite.add_bitmap(:able, _INTL("Graphics/UI/Party/overlay_hp_back"))
+    @hpbgsprite.add_bitmap(:fainted, _INTL("Graphics/UI/Party/overlay_hp_back_faint"))
+    @hpbgsprite.add_bitmap(:swap, _INTL("Graphics/UI/Party/overlay_hp_back_swap"))
     @ballsprite = ChangelingSprite.new(0, 0, viewport)
     @ballsprite.z = self.z + 1
-    @ballsprite.addBitmap("desel", "Graphics/UI/Party/icon_ball")
-    @ballsprite.addBitmap("sel", "Graphics/UI/Party/icon_ball_sel")
+    @ballsprite.add_bitmap(:desel, "Graphics/UI/Party/icon_ball")
+    @ballsprite.add_bitmap(:sel, "Graphics/UI/Party/icon_ball_sel")
     @pkmnsprite = PokemonIconSprite.new(pokemon, viewport)
     @pkmnsprite.setOffset(PictureOrigin::CENTER)
     @pkmnsprite.active = @active
@@ -296,21 +296,21 @@ class PokemonPartyPanel < Sprite
     return if !@panelbgsprite || @panelbgsprite.disposed?
     if self.selected
       if self.preselected
-        @panelbgsprite.changeBitmap("swapsel2")
+        @panelbgsprite.change_bitmap(:swapsel2)
       elsif @switching
-        @panelbgsprite.changeBitmap("swapsel")
+        @panelbgsprite.change_bitmap(:swapsel)
       elsif @pokemon.fainted?
-        @panelbgsprite.changeBitmap("faintedsel")
+        @panelbgsprite.change_bitmap(:faintedsel)
       else
-        @panelbgsprite.changeBitmap("ablesel")
+        @panelbgsprite.change_bitmap(:ablesel)
       end
     else
       if self.preselected
-        @panelbgsprite.changeBitmap("swap")
+        @panelbgsprite.change_bitmap(:swap)
       elsif @pokemon.fainted?
-        @panelbgsprite.changeBitmap("fainted")
+        @panelbgsprite.change_bitmap(:fainted)
       else
-        @panelbgsprite.changeBitmap("able")
+        @panelbgsprite.change_bitmap(:able)
       end
     end
     @panelbgsprite.x     = self.x
@@ -323,11 +323,11 @@ class PokemonPartyPanel < Sprite
     @hpbgsprite.visible = (!@pokemon.egg? && !(@text && @text.length > 0))
     return if !@hpbgsprite.visible
     if self.preselected || (self.selected && @switching)
-      @hpbgsprite.changeBitmap("swap")
+      @hpbgsprite.change_bitmap(:swap)
     elsif @pokemon.fainted?
-      @hpbgsprite.changeBitmap("fainted")
+      @hpbgsprite.change_bitmap(:fainted)
     else
-      @hpbgsprite.changeBitmap("able")
+      @hpbgsprite.change_bitmap(:able)
     end
     @hpbgsprite.x     = self.x + 96
     @hpbgsprite.y     = self.y + 50
@@ -336,7 +336,7 @@ class PokemonPartyPanel < Sprite
 
   def refresh_ball_graphic
     return if !@ballsprite || @ballsprite.disposed?
-    @ballsprite.changeBitmap((self.selected) ? "sel" : "desel")
+    @ballsprite.change_bitmap((self.selected) ? :sel : :desel)
     @ballsprite.x     = self.x + 10
     @ballsprite.y     = self.y
     @ballsprite.color = self.color

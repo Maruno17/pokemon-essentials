@@ -156,15 +156,15 @@ class PokemonBoxArrow < Sprite
     @quickswap  = false
     @heldpkmn   = nil
     @handsprite = ChangelingSprite.new(0, 0, viewport)
-    @handsprite.addBitmap("point1", "Graphics/UI/Storage/cursor_point_1")
-    @handsprite.addBitmap("point2", "Graphics/UI/Storage/cursor_point_2")
-    @handsprite.addBitmap("grab", "Graphics/UI/Storage/cursor_grab")
-    @handsprite.addBitmap("fist", "Graphics/UI/Storage/cursor_fist")
-    @handsprite.addBitmap("point1q", "Graphics/UI/Storage/cursor_point_1_q")
-    @handsprite.addBitmap("point2q", "Graphics/UI/Storage/cursor_point_2_q")
-    @handsprite.addBitmap("grabq", "Graphics/UI/Storage/cursor_grab_q")
-    @handsprite.addBitmap("fistq", "Graphics/UI/Storage/cursor_fist_q")
-    @handsprite.changeBitmap("fist")
+    @handsprite.add_bitmap(:point1, "Graphics/UI/Storage/cursor_point_1")
+    @handsprite.add_bitmap(:point2, "Graphics/UI/Storage/cursor_point_2")
+    @handsprite.add_bitmap(:grab, "Graphics/UI/Storage/cursor_grab")
+    @handsprite.add_bitmap(:fist, "Graphics/UI/Storage/cursor_fist")
+    @handsprite.add_bitmap(:point1q, "Graphics/UI/Storage/cursor_point_1_q")
+    @handsprite.add_bitmap(:point2q, "Graphics/UI/Storage/cursor_point_2_q")
+    @handsprite.add_bitmap(:grabq, "Graphics/UI/Storage/cursor_grab_q")
+    @handsprite.add_bitmap(:fistq, "Graphics/UI/Storage/cursor_fist_q")
+    @handsprite.change_bitmap(:fist)
     @spriteX = self.x
     @spriteY = self.y
   end
@@ -269,36 +269,36 @@ class PokemonBoxArrow < Sprite
     @holding = false if !heldpkmn
     if @grabbing_timer_start
       if System.uptime - @grabbing_timer_start <= GRAB_TIME / 2
-        @handsprite.changeBitmap((@quickswap) ? "grabq" : "grab")
+        @handsprite.change_bitmap((@quickswap) ? :grabq : :grab)
         self.y = @spriteY + lerp(0, 16, GRAB_TIME / 2, @grabbing_timer_start, System.uptime)
       else
         @holding = true
-        @handsprite.changeBitmap((@quickswap) ? "fistq" : "fist")
+        @handsprite.change_bitmap((@quickswap) ? :fistq : :fist)
         delta_y = lerp(16, 0, GRAB_TIME / 2, @grabbing_timer_start + (GRAB_TIME / 2), System.uptime)
         self.y = @spriteY + delta_y
         @grabbing_timer_start = nil if delta_y == 0
       end
     elsif @placing_timer_start
       if System.uptime - @placing_timer_start <= GRAB_TIME / 2
-        @handsprite.changeBitmap((@quickswap) ? "fistq" : "fist")
+        @handsprite.change_bitmap((@quickswap) ? :fistq : :fist)
         self.y = @spriteY + lerp(0, 16, GRAB_TIME / 2, @placing_timer_start, System.uptime)
       else
         @holding = false
         @heldpkmn = nil
-        @handsprite.changeBitmap((@quickswap) ? "grabq" : "grab")
+        @handsprite.change_bitmap((@quickswap) ? :grabq : :grab)
         delta_y = lerp(16, 0, GRAB_TIME / 2, @placing_timer_start + (GRAB_TIME / 2), System.uptime)
         self.y = @spriteY + delta_y
         @placing_timer_start = nil if delta_y == 0
       end
     elsif holding?
-      @handsprite.changeBitmap((@quickswap) ? "fistq" : "fist")
+      @handsprite.change_bitmap((@quickswap) ? :fistq : :fist)
     else   # Idling
       self.x = @spriteX
       self.y = @spriteY
       if (System.uptime / 0.5).to_i.even?   # Changes every 0.5 seconds
-        @handsprite.changeBitmap((@quickswap) ? "point1q" : "point1")
+        @handsprite.change_bitmap((@quickswap) ? :point1q : :point1)
       else
-        @handsprite.changeBitmap((@quickswap) ? "point2q" : "point2")
+        @handsprite.change_bitmap((@quickswap) ? :point2q : :point2)
       end
     end
     @updating = false
