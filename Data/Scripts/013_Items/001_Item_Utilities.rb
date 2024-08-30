@@ -633,7 +633,7 @@ def pbForgetMove(pkmn, moveToLearn)
   ret = -1
   pbFadeOutIn do
     screen = UI::PokemonSummary.new([pkmn], 0, mode: :choose_move, new_move: moveToLearn)
-    ret = screen.result
+    ret = screen.choose_move
   end
   return ret
 end

@@ -1386,7 +1386,6 @@ class UI::PokemonSummary < UI::BaseScreen
     @mode        = mode
     @new_move    = (new_move) ? Pokemon::Move.new(new_move) : nil
     super()
-    @result = @party_index if @result.nil?
   end
 
   def initialize_visuals
@@ -1401,14 +1400,17 @@ class UI::PokemonSummary < UI::BaseScreen
   #-----------------------------------------------------------------------------
 
   def main
-    if @mode == :choose_move
-      pbSEPlay("GUI menu open")
-      start_screen
-      @result = perform_action(:navigate_moves)
-      end_screen
-      return
-    end
+    return choose_move if @mode == :choose_move
     super
+    @result = @party_index
+  end
+
+  def choose_move
+    pbSEPlay("GUI menu open")
+    start_screen
+    @result = perform_action(:navigate_moves)
+    end_screen
+    return @result
   end
 end
 
@@ -1551,7 +1553,7 @@ def pbChooseMove(pokemon, variableNumber, nameVarNumber)
   ret = -1
   pbFadeOutIn do
     screen = UI::PokemonSummary.new(pokemon, mode: :choose_move)
-    ret = screen.result
+    ret = screen.choose_move
   end
   $game_variables[variableNumber] = ret
   if ret >= 0

@@ -103,7 +103,7 @@ class Scene_Map
     $game_temp.in_menu = true
     $game_player.straighten
     $game_map.update
-    UI::PauseMenu.new
+    UI::PauseMenu.new.main
     $game_temp.in_menu = false
   end
 

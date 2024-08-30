@@ -273,7 +273,7 @@ MenuHandlers.add(:pause_menu, :trainer_card, {
   "effect"    => proc { |menu|
     pbPlayDecisionSE
     pbFadeOutIn do
-      UI::TrainerCard.new
+      UI::TrainerCard.new.main
       menu.refresh
     end
     next false

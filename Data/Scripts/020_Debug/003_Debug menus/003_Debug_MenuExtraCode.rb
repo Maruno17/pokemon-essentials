@@ -335,7 +335,7 @@ def pbDebugDayCare
                        [_INTL("Summary"), _INTL("Withdraw"), _INTL("Cancel")], 3)
         when 0   # Summary
           pbFadeOutIn do
-            UI::PokemonSummary.new(pkmn)
+            UI::PokemonSummary.new(pkmn).main
             need_refresh = true
           end
         when 1   # Withdraw

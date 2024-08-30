@@ -1400,7 +1400,7 @@ def pbChooseMove(pokemon, variableNumber, nameVarNumber)
   ret = -1
   pbFadeOutIn do
     screen = UI::PokemonSummary.new(pokemon, mode: :choose_move)
-    ret = screen.result
+    ret = screen.choose_move
   end
   $game_variables[variableNumber] = ret
   if ret >= 0

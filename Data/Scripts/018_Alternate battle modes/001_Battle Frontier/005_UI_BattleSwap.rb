@@ -146,7 +146,7 @@ class BattleSwapScene
 
   def pbSummary(list, index)
     visibleSprites = pbFadeOutAndHide(@sprites) { pbUpdate }
-    screen = UI::PokemonSummary.new(list, index)
+    screen = UI::PokemonSummary.new(list, index).main
     @sprites["list"].index = screen.result
     pbFadeInAndShow(@sprites, visibleSprites) { pbUpdate }
   end

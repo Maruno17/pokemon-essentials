@@ -1232,7 +1232,7 @@ class PurifyChamberScene
   def pbSummary(pos, heldpkmn)
     if heldpkmn
       oldsprites = pbFadeOutAndHide(@sprites)
-      UI::PokemonSummary.new(heldpkmn)
+      UI::PokemonSummary.new(heldpkmn).main
       pbFadeInAndShow(@sprites, oldsprites)
       return
     end
@@ -1249,7 +1249,7 @@ class PurifyChamberScene
     end
     return if party.length == 0
     oldsprites = pbFadeOutAndHide(@sprites)
-    screen = UI::PokemonSummary.new(party, startindex)
+    screen = UI::PokemonSummary.new(party, startindex).main
     selection = screen.result
     @sprites["setview"].cursor = indexes[selection]
     pbFadeInAndShow(@sprites, oldsprites)

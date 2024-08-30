@@ -353,8 +353,6 @@ module UI
     def initialize
       @disposed = false
       initialize_visuals
-      # TODO: Call main separately, not here?
-      main
     end
 
     def initialize_visuals
