@@ -355,7 +355,7 @@ MenuHandlers.add(:debug_menu, :test_wild_battle_advanced, {
       else                                   # Edit a Pokémon
         if pbConfirmMessage(_INTL("Change this Pokémon?"))
           scr = PokemonDebugPartyScreen.new
-          scr.pbPokemonDebug(pkmn[pkmnCmd], -1, nil, true)
+          scr.pokemon_debug_menu(pkmn[pkmnCmd], -1, nil, true)
           scr.pbEndScreen
         elsif pbConfirmMessage(_INTL("Delete this Pokémon?"))
           pkmn.delete_at(pkmnCmd)

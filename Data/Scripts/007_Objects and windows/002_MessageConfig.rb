@@ -491,7 +491,7 @@ def using(window)
 end
 
 def pbUpdateSpriteHash(windows)
-  windows.each do |i|
+  windows&.each do |i|
     window = i[1]
     if window
       if window.is_a?(Sprite) || window.is_a?(Window)
@@ -591,7 +591,7 @@ def pbFadeOutIn(z = 99999, nofadeout = false)
   end
 end
 
-def pbFadeOutInWithUpdate(z, sprites, nofadeout = false)
+def pbFadeOutInWithUpdate(sprites, z = 99999, nofadeout = false)
   duration = 0.4   # In seconds
   col = Color.new(0, 0, 0, 0)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)

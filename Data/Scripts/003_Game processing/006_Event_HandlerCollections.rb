@@ -114,6 +114,17 @@ module MenuHandlers
     sorted_keys.each do |option|
       hash = options[option]
       next if hash["condition"] && !hash["condition"].call(*args)
+      if hash["multi_options"]
+        extra_options = hash["multi_options"].call(*args)
+        if extra_options && extra_options.length > 0
+          if extra_options[0].is_a?(Array)
+            extra_options.each { |opt| yield *opt }
+          else
+            yield *extra_options
+          end
+        end
+        next
+      end
       if hash["name"].is_a?(Proc)
         name = hash["name"].call
       else

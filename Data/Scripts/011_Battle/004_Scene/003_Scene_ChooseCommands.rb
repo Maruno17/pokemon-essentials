@@ -152,46 +152,33 @@ class Battle::Scene
     partyStart, _partyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
     modParty = @battle.pbPlayerDisplayParty(idxBattler)
     # Start party screen
-    scene = PokemonParty_Scene.new
-    switchScreen = PokemonPartyScreen.new(scene, modParty)
-    msg = _INTL("Choose a Pokémon.")
-    msg = _INTL("Send which Pokémon to Boxes?") if mode == 1
-    switchScreen.pbStartScene(msg, @battle.pbNumPositions(0, 0))
-    # Loop while in party screen
-    loop do
-      # Select a Pokémon
-      scene.pbSetHelpText(msg)
-      idxParty = switchScreen.pbChoosePokemon
-      if idxParty < 0
-        next if !canCancel
-        break
-      end
+    party_mode = (mode == 1) ? :battle_choose_to_box : :battle_choose_pokemon
+    screen = UI::Party.new(modParty, mode: party_mode)
+    screen.choose_pokemon do |pkmn, party_index|
+      next canCancel if party_index < 0
       # Choose a command for the selected Pokémon
-      cmdSwitch  = -1
-      cmdBoxes   = -1
-      cmdSummary = -1
-      commands = []
-      commands[cmdSwitch  = commands.length] = _INTL("Switch In") if mode == 0 && modParty[idxParty].able? &&
-                                                                     (@battle.canSwitch || !canCancel)
-      commands[cmdBoxes   = commands.length] = _INTL("Send to Boxes") if mode == 1
-      commands[cmdSummary = commands.length] = _INTL("Summary")
-      commands[commands.length]              = _INTL("Cancel")
-      command = scene.pbShowCommands(_INTL("Do what with {1}?", modParty[idxParty].name), commands)
-      if (cmdSwitch >= 0 && command == cmdSwitch) ||   # Switch In
-         (cmdBoxes >= 0 && command == cmdBoxes)        # Send to Boxes
-        idxPartyRet = -1
+      commands = {}
+      commands[:switch_in]     = _INTL("Switch In") if mode == 0 && pkmn.able? &&
+                                                       (@battle.canSwitch || !canCancel)
+      commands[:send_to_boxes] = _INTL("Send to Boxes") if mode == 1
+      commands[:summary]       = _INTL("Summary")
+      commands[:cancel]        = _INTL("Cancel")
+      choice = screen.show_choice_message(_INTL("Do what with {1}?", pkmn.name), commands)
+      next canCancel if choice.nil?
+      case choice
+      when :switch_in, :send_to_boxes
+        real_party_index = -1
         partyPos.each_with_index do |pos, i|
-          next if pos != idxParty + partyStart
-          idxPartyRet = i
+          next if pos != party_index + partyStart
+          real_party_index = i
           break
         end
-        break if yield idxPartyRet, switchScreen
-      elsif cmdSummary >= 0 && command == cmdSummary   # Summary
-        scene.pbSummary(idxParty, true)
+        next true if yield real_party_index, screen
+      when :summary
+        screen.perform_action(:summary)
       end
+      next false
     end
-    # Close party screen
-    switchScreen.pbEndScene
     # Fade back into battle screen
     pbFadeInAndShow(@sprites, visibleSprites)
   end
@@ -272,34 +259,29 @@ class Battle::Scene
         partyStart, _partyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
         modParty = @battle.pbPlayerDisplayParty(idxBattler)
         # Start party screen
-        pkmnScene = PokemonParty_Scene.new
-        pkmnScreen = PokemonPartyScreen.new(pkmnScene, modParty)
-        pkmnScreen.pbStartScene(_INTL("Use on which Pokémon?"), @battle.pbNumPositions(0, 0))
-        idxParty = -1
-        # Loop while in party screen
-        loop do
-          # Select a Pokémon
-          pkmnScene.pbSetHelpText(_INTL("Use on which Pokémon?"))
-          idxParty = pkmnScreen.pbChoosePokemon
-          break if idxParty < 0
-          idxPartyRet = -1
+        party_idx = -1
+        party_screen = UI::Party.new(modParty, mode: :battle_use_item)
+        party_screen.choose_pokemon do |pkmn, party_index|
+          party_idx = party_index
+          next true if party_index < 0
+          # Use the item on the selected Pokémon
+          real_party_index = -1
           partyPos.each_with_index do |pos, i|
-            next if pos != idxParty + partyStart
-            idxPartyRet = i
+            next if pos != party_index + partyStart
+            real_party_index = i
             break
           end
-          next if idxPartyRet < 0
-          pkmn = party[idxPartyRet]
-          next if !pkmn || pkmn.egg?
-          idxMove = -1
+          next false if real_party_index < 0
+          next false if !pkmn || pkmn.egg?
+          move_index = -1
           if useType == 2   # Use on Pokémon's move
-            idxMove = pkmnScreen.pbChooseMove(pkmn, _INTL("Restore which move?"))
-            next if idxMove < 0
+            move_index = party_screen.choose_move(pkmn, _INTL("Restore which move?"))
+            next false if move_index < 0
           end
-          break if yield item.id, useType, idxPartyRet, idxMove, pkmnScene
+          next true if yield item.id, useType, real_party_index, move_index, party_screen
+          next false
         end
-        pkmnScene.pbEndScene
-        break if idxParty >= 0
+        break if party_idx >= 0   # Item was used; close the Bag screen
         # Cancelled choosing a Pokémon; show the Bag screen again
         itemScene.pbFadeInScene
       when 4   # Use on opposing battler (Poké Balls)

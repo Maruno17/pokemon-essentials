@@ -243,19 +243,19 @@ ItemHandlers::UseInField.add(:SACREDASH, proc { |item|
   end
   revived = 0
   pbFadeOutIn do
-    scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene, $player.party)
-    screen.pbStartScene(_INTL("Using item..."), false)
-    pbSEPlay("Use item in party")
-    $player.party.each_with_index do |pkmn, i|
-      next if !pkmn.fainted?
-      revived += 1
-      pkmn.heal
-      screen.pbRefreshSingle(i)
-      screen.pbDisplay(_INTL("{1}'s HP was restored.", pkmn.name))
+    screen = UI::Party.new($player.party, mode: :choose_pokemon)
+    screen.set_help_text(_INTL("Using item..."))
+    screen.show_and_hide do
+      $player.party.each_with_index do |pkmn, i|
+        next if !pkmn.fainted?
+        revived += 1
+        pkmn.heal
+        screen.refresh
+        pbSEPlay("Use item in party")
+        screen.show_message(_INTL("{1}'s HP was restored.", pkmn.name))
+      end
+      screen.show_message(_INTL("It won't have any effect.")) if revived == 0
     end
-    screen.pbDisplay(_INTL("It won't have any effect.")) if revived == 0
-    screen.pbEndScene
   end
   next (revived > 0)
 })
@@ -391,16 +391,16 @@ ItemHandlers::UseOnPokemon.addIf(:evolution_stones,
       scene.pbDisplay(_INTL("It won't have any effect."))
       next false
     end
-    newspecies = pkmn.check_evolution_on_use_item(item)
-    if newspecies
+    new_species = pkmn.check_evolution_on_use_item(item)
+    if new_species
       pbFadeOutInWithMusic do
         evo = PokemonEvolutionScene.new
-        evo.pbStartScreen(pkmn, newspecies)
+        evo.pbStartScreen(pkmn, new_species)
         evo.pbEvolution(false)
         evo.pbEndScreen
-        if scene.is_a?(PokemonPartyScreen)
-          scene.pbRefreshAnnotations(proc { |p| !p.check_evolution_on_use_item(item).nil? })
-          scene.pbRefresh
+        if scene.is_a?(UI::Party)
+          scene.set_able_annotation_proc(proc { |pkmn| !pkmn.check_evolution_on_use_item(item).nil? })
+          scene.refresh
         end
       end
       next true
@@ -415,17 +415,17 @@ ItemHandlers::UseOnPokemon.add(:SCROLLOFWATERS, proc { |item, qty, pkmn, scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  newspecies = pkmn.check_evolution_on_use_item(item)
-  if newspecies
+  new_species = pkmn.check_evolution_on_use_item(item)
+  if new_species
     pkmn.form = 1   # NOTE: This is the only difference to the generic evolution stone code.
     pbFadeOutInWithMusic do
       evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pkmn, newspecies)
+      evo.pbStartScreen(pkmn, new_species)
       evo.pbEvolution(false)
       evo.pbEndScreen
-      if scene.is_a?(PokemonPartyScreen)
-        scene.pbRefreshAnnotations(proc { |p| !p.check_evolution_on_use_item(item).nil? })
-        scene.pbRefresh
+      if scene.is_a?(UI::Party)
+        scene.set_able_annotation_proc(proc { |p| !p.check_evolution_on_use_item(item).nil? })
+        scene.refresh
       end
     end
     next true
@@ -995,7 +995,7 @@ ItemHandlers::UseOnPokemon.add(:RARECANDY, proc { |item, qty, pkmn, scene|
       evo.pbStartScreen(pkmn, new_species)
       evo.pbEvolution
       evo.pbEndScreen
-      scene.pbRefresh if scene.is_a?(PokemonPartyScreen)
+      scene.refresh if scene.is_a?(UI::Party)
     end
     next true
   end

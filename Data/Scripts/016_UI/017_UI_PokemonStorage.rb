@@ -1576,7 +1576,7 @@ class PokemonStorageScreen
             elsif cmdRelease >= 0 && command == cmdRelease   # Release
               pbRelease(selected, @heldpkmn)
             elsif cmdDebug >= 0 && command == cmdDebug   # Debug
-              pbPokemonDebug((@heldpkmn) ? @heldpkmn : pokemon, selected, heldpoke)
+              pokemon_debug_menu((@heldpkmn) ? @heldpkmn : pokemon, selected, heldpoke)
             end
           end
         end

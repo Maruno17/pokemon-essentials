@@ -149,7 +149,7 @@ end
 #
 #===============================================================================
 module PokemonDebugMixin
-  def pbPokemonDebug(pkmn, pkmnid, heldpoke = nil, settingUpBattle = false)
+  def pokemon_debug_menu(pkmn, pkmnid, heldpoke = nil, settingUpBattle = false)
     # Get all commands
     commands = CommandMenuList.new
     MenuHandlers.each_available(:pokemon_debug_menu) do |option, hash, name|
@@ -408,7 +408,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-class PokemonPartyScreen
+class UI::Party
   include PokemonDebugMixin
 end
 

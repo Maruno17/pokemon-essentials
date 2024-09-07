@@ -68,9 +68,9 @@ def pbPCMailbox
       commands.push(_INTL("Cancel"))
       command = pbShowCommands(nil, commands, -1, command)
       if command >= 0 && command < $PokemonGlobal.mailbox.length
-        mailIndex = command
+        mail_index = command
         commandMail = pbMessage(
-          _INTL("What do you want to do with {1}'s Mail?", $PokemonGlobal.mailbox[mailIndex].sender),
+          _INTL("What do you want to do with {1}'s Mail?", $PokemonGlobal.mailbox[mail_index].sender),
           [_INTL("Read"),
            _INTL("Move to Bag"),
            _INTL("Give"),
@@ -79,22 +79,36 @@ def pbPCMailbox
         case commandMail
         when 0   # Read
           pbFadeOutIn do
-            pbDisplayMail($PokemonGlobal.mailbox[mailIndex])
+            pbDisplayMail($PokemonGlobal.mailbox[mail_index])
           end
         when 1   # Move to Bag
           if pbConfirmMessage(_INTL("The message will be lost. Is that OK?"))
-            if $bag.add($PokemonGlobal.mailbox[mailIndex].item)
+            if $bag.add($PokemonGlobal.mailbox[mail_index].item)
               pbMessage(_INTL("The Mail was returned to the Bag with its message erased."))
-              $PokemonGlobal.mailbox.delete_at(mailIndex)
+              $PokemonGlobal.mailbox.delete_at(mail_index)
             else
               pbMessage(_INTL("The Bag is full."))
             end
           end
         when 2   # Give
           pbFadeOutIn do
-            sscene = PokemonParty_Scene.new
-            sscreen = PokemonPartyScreen.new(sscene, $player.party)
-            sscreen.pbPokemonGiveMailScreen(mailIndex)
+            screen = UI::Party.new($player.party, mode: :choose_pokemon)
+            screen.choose_pokemon do |pkmn, party_index|
+              next true if party_index < 0
+              if pkmn.egg?
+                screen.show_message(_INTL("Eggs can't hold mail."))
+              elsif pkmn.hasItem? || pkmn.mail
+                screen.show_message(_INTL("This Pokémon is holding an item. It can't hold mail."))
+              else
+                pkmn.mail = $PokemonGlobal.mailbox[mail_index]
+                pkmn.item = pkmn.mail.item
+                $PokemonGlobal.mailbox.delete_at(mail_index)
+                screen.refresh
+                screen.show_message(_INTL("Mail was transferred from the Mailbox."))
+                next true
+              end
+              next false
+            end
           end
         end
       else

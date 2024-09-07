@@ -218,6 +218,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     @page                 = (@mode == :choose_move) ? :moves : all_pages[0]
     @move_index           = (@mode == :choose_move) ? 0 : nil
     super()
+    refresh_move_cursor if @move_index
   end
 
   def initialize_bitmaps
@@ -974,9 +975,9 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
   def refresh_move_cursor
     # Update cursor positions
     @sprites[:move_cursor].index = @move_index
-    @sprites[:selected_move_cursor].index = @swap_move_index
+    @sprites[:selected_move_cursor].index = @swap_move_index || -1
     # Update cursor z values
-    if @swap_move_index >= 0
+    if @swap_move_index && @swap_move_index >= 0
       @sprites[:selected_move_cursor].z = @sprites[:move_cursor].z + 1
       @sprites[:selected_move_cursor].z -= 2 if @move_index != @swap_move_index
     end
@@ -1417,7 +1418,7 @@ end
 #===============================================================================
 # Actions that can be triggered in the Pokémon summary screen.
 #===============================================================================
-UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :go_to_previous_pokemon,
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :go_to_previous_pokemon, {
   :effect => proc { |screen|
     if screen.party_index > 0
       new_index = screen.party_index
@@ -1434,9 +1435,9 @@ UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :go_to_previous_pokemon,
       end
     end
   }
-)
+})
 
-UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :go_to_next_pokemon,
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :go_to_next_pokemon, {
   :effect => proc { |screen|
     if screen.party_index < screen.party.length - 1
       new_index = screen.party_index
@@ -1453,9 +1454,9 @@ UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :go_to_next_pokemon,
       end
     end
   }
-)
+})
 
-UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :navigate_moves,
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :navigate_moves, {
   :returns_value => true,
   :effect => proc { |screen|
     move_index = screen.visuals.navigate_moves
@@ -1463,29 +1464,29 @@ UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :navigate_moves,
     screen.refresh
     next nil
   }
-)
+})
 
-UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :navigate_ribbons,
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :navigate_ribbons, {
   :effect => proc { |screen|
     screen.visuals.navigate_ribbons
     screen.refresh
   }
-)
+})
 
-UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :marking,
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :marking, {
   :effect => proc { |screen|
     screen.visuals.navigate_markings
     screen.refresh
   }
-)
+})
 
 # Shows a choice menu using the MenuHandlers options below.
-UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :interact_menu,
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :interact_menu, {
   :menu      => :summary_screen_interact,
   :condition => proc { |screen| next screen.mode != :in_battle }
-)
+})
 
-UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :give_item,
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :give_item, {
   :effect => proc { |screen|
     item = nil
     pbFadeOutIn do
@@ -1495,15 +1496,15 @@ UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :give_item,
     end
     screen.refresh if pbGiveItemToPokemon(item, screen.pokemon, screen, screen.party_index)
   }
-)
+})
 
-UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :take_item,
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :take_item, {
   :effect => proc { |screen|
     screen.refresh if pbTakeItemFromPokemon(screen.pokemon, screen)
   }
-)
+})
 
-UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :pokedex,
+UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :pokedex, {
   :effect => proc { |screen|
     $player.pokedex.register_last_seen(screen.pokemon)
     pbFadeOutIn do
@@ -1512,7 +1513,7 @@ UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :pokedex,
       dex_screen.pbStartSceneSingle(screen.pokemon.species)
     end
   }
-)
+})
 
 #===============================================================================
 # Menu options for choice menus that exist in the Pokémon summary screen.

@@ -104,6 +104,10 @@ class HandlerHash
     return nil
   end
 
+  def keys
+    return @hash.keys
+  end
+
   def add(id, handler = nil, &handlerBlock)
     if ![Proc, Hash].include?(handler.class) && !block_given?
       raise ArgumentError, "#{self.class.name} for #{id.inspect} has no valid handler (#{handler.inspect} was given)"
@@ -158,6 +162,10 @@ class HandlerHashSymbol
       return add_if[1] if add_if[0].call(sym)
     end
     return nil
+  end
+
+  def keys
+    return @hash.keys
   end
 
   def add(sym, handler = nil, &handlerBlock)
@@ -223,6 +231,10 @@ class HandlerHashEnum
       end
     end
     return ret
+  end
+
+  def keys
+    return @hash.keys
   end
 
   def fromSymbol(sym)

@@ -686,10 +686,7 @@ class PokemonParty_Scene
       self.update
       break if oldsprite.x == old_start_x - (old_mult * Graphics.width / 2)
     end
-    Settings::MAX_PARTY_SIZE.times do |i|
-      @sprites["pokemon#{i}"].preselected = false
-      @sprites["pokemon#{i}"].switching   = false
-    end
+    pbClearSwitching
     pbRefresh
   end
 
@@ -914,43 +911,6 @@ class PokemonPartyScreen
     @scene.pbStartScene(@party, helptext, annotations)
   end
 
-  def pbChoosePokemon(helptext = nil)
-    @scene.pbSetHelpText(helptext) if helptext
-    return @scene.pbChoosePokemon
-  end
-
-  def pbPokemonGiveScreen(item)
-    @scene.pbStartScene(@party, _INTL("Give to which Pokémon?"))
-    pkmnid = @scene.pbChoosePokemon
-    ret = false
-    if pkmnid >= 0
-      ret = pbGiveItemToPokemon(item, @party[pkmnid], self, pkmnid)
-    end
-    pbRefreshSingle(pkmnid)
-    @scene.pbEndScene
-    return ret
-  end
-
-  def pbPokemonGiveMailScreen(mailIndex)
-    @scene.pbStartScene(@party, _INTL("Give to which Pokémon?"))
-    pkmnid = @scene.pbChoosePokemon
-    if pkmnid >= 0
-      pkmn = @party[pkmnid]
-      if pkmn.hasItem? || pkmn.mail
-        pbDisplay(_INTL("This Pokémon is holding an item. It can't hold mail."))
-      elsif pkmn.egg?
-        pbDisplay(_INTL("Eggs can't hold mail."))
-      else
-        pbDisplay(_INTL("Mail was transferred from the Mailbox."))
-        pkmn.mail = $PokemonGlobal.mailbox[mailIndex]
-        pkmn.item = pkmn.mail.item
-        $PokemonGlobal.mailbox.delete_at(mailIndex)
-        pbRefreshSingle(pkmnid)
-      end
-    end
-    @scene.pbEndScene
-  end
-
   def pbEndScene
     @scene.pbEndScene
   end
@@ -1006,6 +966,53 @@ class PokemonPartyScreen
     return true
   end
 
+  # For after using an evolution stone.
+  def pbRefreshAnnotations(ableProc)
+    return if !@scene.pbHasAnnotations?
+    annot = []
+    @party.each do |pkmn|
+      elig = ableProc.call(pkmn)
+      annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
+    end
+    @scene.pbAnnotate(annot)
+  end
+
+  def pbClearAnnotations
+    @scene.pbAnnotate(nil)
+  end
+
+  def pbPokemonGiveScreen(item)
+    @scene.pbStartScene(@party, _INTL("Give to which Pokémon?"))
+    pkmnid = @scene.pbChoosePokemon
+    ret = false
+    if pkmnid >= 0
+      ret = pbGiveItemToPokemon(item, @party[pkmnid], self, pkmnid)
+    end
+    pbRefreshSingle(pkmnid)
+    @scene.pbEndScene
+    return ret
+  end
+
+  def pbPokemonGiveMailScreen(mailIndex)
+    @scene.pbStartScene(@party, _INTL("Give to which Pokémon?"))
+    pkmnid = @scene.pbChoosePokemon
+    if pkmnid >= 0
+      pkmn = @party[pkmnid]
+      if pkmn.hasItem? || pkmn.mail
+        pbDisplay(_INTL("This Pokémon is holding an item. It can't hold mail."))
+      elsif pkmn.egg?
+        pbDisplay(_INTL("Eggs can't hold mail."))
+      else
+        pbDisplay(_INTL("Mail was transferred from the Mailbox."))
+        pkmn.mail = $PokemonGlobal.mailbox[mailIndex]
+        pkmn.item = pkmn.mail.item
+        $PokemonGlobal.mailbox.delete_at(mailIndex)
+        pbRefreshSingle(pkmnid)
+      end
+    end
+    @scene.pbEndScene
+  end
+
   def pbSwitch(oldid, newid)
     if oldid != newid
       @scene.pbSwitchBegin(oldid, newid)
@@ -1027,21 +1034,6 @@ class PokemonPartyScreen
       end
     end
     return @scene.pbShowCommands(helptext, movenames, index)
-  end
-
-  # For after using an evolution stone.
-  def pbRefreshAnnotations(ableProc)
-    return if !@scene.pbHasAnnotations?
-    annot = []
-    @party.each do |pkmn|
-      elig = ableProc.call(pkmn)
-      annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
-    end
-    @scene.pbAnnotate(annot)
-  end
-
-  def pbClearAnnotations
-    @scene.pbAnnotate(nil)
   end
 
   def pbPokemonMultipleEntryScreenEx(ruleset)
@@ -1132,6 +1124,11 @@ class PokemonPartyScreen
     end
     @scene.pbEndScene
     return ret
+  end
+
+  def pbChoosePokemon(helptext = nil)
+    @scene.pbSetHelpText(helptext) if helptext
+    return @scene.pbChoosePokemon
   end
 
   def pbChooseAblePokemon(ableProc, allowIneligible = false)
@@ -1480,78 +1477,3 @@ MenuHandlers.add(:party_menu_item, :move, {
     screen.scene.pbSelect(old_party_idx) if !moved
   }
 })
-
-#===============================================================================
-# Open the party screen.
-#===============================================================================
-def pbPokemonScreen
-  pbFadeOutIn do
-    sscene = PokemonParty_Scene.new
-    sscreen = PokemonPartyScreen.new(sscene, $player.party)
-    sscreen.pbPokemonScreen
-  end
-end
-
-#===============================================================================
-# Choose a Pokémon in the party.
-#===============================================================================
-# Choose a Pokémon/egg from the party.
-# Stores result in variable _variableNumber_ and the chosen Pokémon's name in
-# variable _nameVarNumber_; result is -1 if no Pokémon was chosen
-def pbChoosePokemon(variableNumber, nameVarNumber, ableProc = nil, allowIneligible = false)
-  chosen = 0
-  pbFadeOutIn do
-    scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene, $player.party)
-    if ableProc
-      chosen = screen.pbChooseAblePokemon(ableProc, allowIneligible)
-    else
-      screen.pbStartScene(_INTL("Choose a Pokémon."), false)
-      chosen = screen.pbChoosePokemon
-      screen.pbEndScene
-    end
-  end
-  pbSet(variableNumber, chosen)
-  if chosen >= 0
-    pbSet(nameVarNumber, $player.party[chosen].name)
-  else
-    pbSet(nameVarNumber, "")
-  end
-end
-
-def pbChooseNonEggPokemon(variableNumber, nameVarNumber)
-  pbChoosePokemon(variableNumber, nameVarNumber, proc { |pkmn| !pkmn.egg? })
-end
-
-def pbChooseAblePokemon(variableNumber, nameVarNumber)
-  pbChoosePokemon(variableNumber, nameVarNumber, proc { |pkmn| !pkmn.egg? && pkmn.hp > 0 })
-end
-
-# Same as pbChoosePokemon, but prevents choosing an egg or a Shadow Pokémon.
-def pbChooseTradablePokemon(variableNumber, nameVarNumber, ableProc = nil, allowIneligible = false)
-  chosen = 0
-  pbFadeOutIn do
-    scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene, $player.party)
-    if ableProc
-      chosen = screen.pbChooseTradablePokemon(ableProc, allowIneligible)
-    else
-      screen.pbStartScene(_INTL("Choose a Pokémon."), false)
-      chosen = screen.pbChoosePokemon
-      screen.pbEndScene
-    end
-  end
-  pbSet(variableNumber, chosen)
-  if chosen >= 0
-    pbSet(nameVarNumber, $player.party[chosen].name)
-  else
-    pbSet(nameVarNumber, "")
-  end
-end
-
-def pbChoosePokemonForTrade(variableNumber, nameVarNumber, wanted)
-  wanted = GameData::Species.get(wanted).species
-  pbChooseTradablePokemon(variableNumber, nameVarNumber, proc { |pkmn|
-    next pkmn.species == wanted
-  })
-end

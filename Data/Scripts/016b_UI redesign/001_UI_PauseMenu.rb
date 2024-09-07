@@ -200,16 +200,15 @@ MenuHandlers.add(:pause_menu, :party, {
   "condition" => proc { next $player.party_count > 0 },
   "effect"    => proc { |menu|
     pbPlayDecisionSE
-    hidden_move = nil
     pbFadeOutIn do
-      sscene = PokemonParty_Scene.new
-      sscreen = PokemonPartyScreen.new(sscene, $player.party)
-      hidden_move = sscreen.pbPokemonScreen
-      (hidden_move) ? menu.silent_end_screen : menu.refresh
+      UI::Party.new($player.party).main
+      ($game_temp.field_move_to_use) ? menu.silent_end_screen : menu.refresh
     end
-    next false if !hidden_move
+    next false if !$game_temp.field_move_to_use
     $game_temp.in_menu = false
-    pbUseHiddenMove(hidden_move[0], hidden_move[1])
+    pbUseHiddenMove($game_temp.field_move_user, $game_temp.field_move_to_use)
+    $game_temp.field_move_user = nil
+    $game_temp.field_move_to_use = nil
     next true
   }
 })

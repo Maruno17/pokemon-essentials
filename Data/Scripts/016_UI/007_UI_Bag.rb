@@ -513,10 +513,11 @@ class PokemonBagScreen
           @scene.pbDisplay(_INTL("The {1} can't be held.", itm.portion_name))
         else
           pbFadeOutIn do
-            sscene = PokemonParty_Scene.new
-            sscreen = PokemonPartyScreen.new(sscene, $player.party)
-            sscreen.pbPokemonGiveScreen(item)
-            @scene.pbRefresh
+            screen = UI::Party.new($player.party, mode: :choose_pokemon)
+            screen.choose_pokemon do |pkmn, party_index|
+              pbGiveItemToPokemon(item, screen.pokemon, screen, chosen) if party_index >= 0
+              next true
+            end
           end
         end
       elsif cmdToss >= 0 && command == cmdToss   # Toss item

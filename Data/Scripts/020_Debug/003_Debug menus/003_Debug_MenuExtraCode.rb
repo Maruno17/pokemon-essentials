@@ -738,6 +738,7 @@ end
 
 #===============================================================================
 # Pseudo-party screen for editing Pokémon being set up for a wild battle.
+# TODO: Rewrite this with the new UI code.
 #===============================================================================
 class PokemonDebugPartyScreen
   def initialize

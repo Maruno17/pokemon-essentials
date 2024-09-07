@@ -13,6 +13,8 @@ class Game_Temp
   attr_accessor :battle_abort             # battle flag: interrupt (unused)
   attr_accessor :title_screen_calling     # return to title screen flag
   attr_accessor :common_event_id          # common event ID to start
+  attr_accessor :field_move_to_use
+  attr_accessor :field_move_user
   # Flags indicating something is happening
   attr_accessor :in_menu                  # menu is open
   attr_accessor :in_storage               # in-Pokémon storage flag

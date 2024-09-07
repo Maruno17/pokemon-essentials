@@ -1,3 +1,5 @@
+# TODO: Rewrite all code in here to replace pbDisplay and whatnot, once storage
+#       screen and PokemonDebugPartyScreen have been rewritten.
 #===============================================================================
 # HP/Status options.
 #===============================================================================
@@ -90,8 +92,8 @@ MenuHandlers.add(:pokemon_debug_menu, :full_heal, {
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
       pkmn.heal
-      screen.pbDisplay(_INTL("{1} was fully healed.", pkmn.name))
       screen.pbRefreshSingle(pkmnid)
+      screen.pbDisplay(_INTL("{1} was fully healed.", pkmn.name))
     end
     next false
   }
@@ -1018,7 +1020,7 @@ MenuHandlers.add(:pokemon_debug_menu, :set_egg, {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
-      msg = [_INTL("Not an egg"),
+      msg = [_INTL("Not an egg."),
              _INTL("Egg (hatches in {1} steps).", pkmn.steps_to_hatch)][pkmn.egg? ? 1 : 0]
       cmd = screen.pbShowCommands(msg,
                                   [_INTL("Make egg"),
@@ -1113,9 +1115,10 @@ MenuHandlers.add(:pokemon_debug_menu, :duplicate, {
     next false if !screen.pbConfirm(_INTL("Are you sure you want to copy this Pokémon?"))
     clonedpkmn = pkmn.clone
     case screen
-    when PokemonPartyScreen
+    when UI::Party
       pbStorePokemon(clonedpkmn)
-      screen.pbHardRefresh
+      screen.refresh_party
+      screen.refresh
       screen.pbDisplay(_INTL("The Pokémon was duplicated."))
     when PokemonStorageScreen
       if screen.storage.pbMoveCaughtToParty(clonedpkmn)
@@ -1145,9 +1148,10 @@ MenuHandlers.add(:pokemon_debug_menu, :delete, {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     next false if !screen.pbConfirm(_INTL("Are you sure you want to delete this Pokémon?"))
     case screen
-    when PokemonPartyScreen
+    when UI::Party
       screen.party.delete_at(pkmnid)
-      screen.pbHardRefresh
+      screen.refresh_party
+      screen.refresh
     when PokemonStorageScreen
       screen.scene.pbRelease(pkmnid, heldpoke)
       (heldpoke) ? screen.heldpkmn = nil : screen.storage.pbDelete(pkmnid[0], pkmnid[1])

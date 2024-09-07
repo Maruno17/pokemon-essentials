@@ -1243,19 +1243,6 @@ end
 class Window_AdvancedCommandPokemon < Window_DrawableCommand
   attr_reader :commands
 
-  def textWidth(bitmap, text)
-    dims = [nil, 0]
-    chars = getFormattedText(bitmap, 0, 0,
-                             Graphics.width - self.borderX - SpriteWindow_Base::TEXT_PADDING - 16,
-                             -1, text, self.rowHeight, true, true)
-    chars.each do |ch|
-      dims[0] = dims[0] ? [dims[0], ch[1]].min : ch[1]
-      dims[1] = [dims[1], ch[1] + ch[3]].max
-    end
-    dims[0] = 0 if !dims[0]
-    return dims[1] - dims[0]
-  end
-
   def initialize(commands, width = nil)
     @starting = true
     @commands = []
@@ -1321,6 +1308,42 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     end
   end
 
+  def textWidth(bitmap, text)
+    dims = [nil, 0]
+    chars = getFormattedText(bitmap, 0, 0,
+                             Graphics.width - self.borderX - SpriteWindow_Base::TEXT_PADDING - 16,
+                             -1, text, self.rowHeight, true, true)
+    chars.each do |ch|
+      dims[0] = dims[0] ? [dims[0], ch[1]].min : ch[1]
+      dims[1] = [dims[1], ch[1] + ch[3]].max
+    end
+    dims[0] = 0 if !dims[0]
+    return dims[1] - dims[0]
+  end
+
+  def getAutoDims(commands, dims, width = nil)
+    rowMax = ((commands.length + self.columns - 1) / self.columns).to_i
+    windowheight = (rowMax * self.rowHeight)
+    windowheight += self.borderY
+    if !width || width < 0
+      width = 0
+      tmpbitmap = Bitmap.new(1, 1)
+      pbSetSystemFont(tmpbitmap)
+      commands.each do |i|
+        txt = toUnformattedText(i).gsub(/\n/, "")
+        width = [width, tmpbitmap.text_size(txt).width].max
+      end
+      # one 16 to allow cursor
+      width += 16 + 16 + SpriteWindow_Base::TEXT_PADDING
+      tmpbitmap.dispose
+    end
+    # Store suggested width and height of window
+    dims[0] = [self.borderX + 1,
+               (width * self.columns) + self.borderX + ((self.columns - 1) * self.columnSpacing)].max
+    dims[1] = [self.borderY + 1, windowheight].max
+    dims[1] = [dims[1], Graphics.height].min
+  end
+
   def resizeToFit(commands, width = nil)
     dims = []
     getAutoDims(commands, dims, width)
@@ -1340,7 +1363,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
       pbDrawShadowText(self.contents, rect.x, rect.y + (self.contents.text_offset_y || 0),
                        rect.width, rect.height, @commands[index], self.baseColor, self.shadowColor)
     else
-      chars = getFormattedText(self.contents, rect.x, rect.y + (self.contents.text_offset_y || 0),
+      chars = getFormattedText(self.contents, rect.x, rect.y + (self.contents.text_offset_y || 0) + 2,   # TEXT OFFSET
                                rect.width, rect.height, @commands[index], rect.height, true, true)
       drawFormattedChars(self.contents, chars)
     end

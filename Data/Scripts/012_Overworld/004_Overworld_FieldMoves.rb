@@ -14,6 +14,11 @@ module HiddenMoveHandlers
     return !CanUseMove[item].nil? && !UseMove[item].nil?
   end
 
+  def self.eachHandler
+    ret = CanUseMove.keys & UseMove.keys
+    ret.each { |key| yield key }
+  end
+
   # Returns whether move can be used
   def self.triggerCanUseMove(item, pokemon, showmsg)
     return false if !CanUseMove[item]
