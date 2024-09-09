@@ -1,3 +1,4 @@
+=begin
 #===============================================================================
 # Pokémon party buttons and menu.
 #===============================================================================
@@ -1477,3 +1478,4 @@ MenuHandlers.add(:party_menu_item, :move, {
     screen.scene.pbSelect(old_party_idx) if !moved
   }
 })
+=end

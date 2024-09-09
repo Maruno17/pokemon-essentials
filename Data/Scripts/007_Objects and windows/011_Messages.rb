@@ -304,6 +304,44 @@ def pbCsvPosInt!(str)
   return ret.to_i
 end
 
+def pbReplaceMessageText(text, msg_window)
+  # \sign[something] gets turned into \op\cl\ts[]\w[something]
+  text.gsub!(/\\sign\[([^\]]*)\]/i) { next "\\op\\cl\\ts[]\\w[" + $1 + "]" }
+  # Escaped characters
+  text.gsub!(/\\\\/, "\5")
+  text.gsub!(/\\1/, "\1")
+  text.gsub!(/\\n/i, "\n")
+  # Text placeholders
+  text.gsub!(/\\pn/i, $player.name) if $player
+  text.gsub!(/\\pm/i, _INTL("${1}", $player.money.to_s_formatted)) if $player
+  loop do
+    last_text = text.clone
+    text.gsub!(/\\v\[([0-9]+)\]/i) { $game_variables[$1.to_i] }
+    break if text == last_text
+  end
+  if $game_actors
+    text.gsub!(/\\n\[([1-8])\]/i) { next $game_actors[$1.to_i].name }
+  end
+  # Male/female text colors
+  text.gsub!(/\\pg/i, "\\b") if $player&.male?
+  text.gsub!(/\\pg/i, "\\r") if $player&.female?
+  text.gsub!(/\\pog/i, "\\r") if $player&.male?
+  text.gsub!(/\\pog/i, "\\b") if $player&.female?
+  text.gsub!(/\\pg/i, "")
+  text.gsub!(/\\pog/i, "")
+  male_text_tag = shadowc3tag(MessageConfig::MALE_TEXT_MAIN_COLOR, MessageConfig::MALE_TEXT_SHADOW_COLOR)
+  female_text_tag = shadowc3tag(MessageConfig::FEMALE_TEXT_MAIN_COLOR, MessageConfig::FEMALE_TEXT_SHADOW_COLOR)
+  text.gsub!(/\\b/i, male_text_tag)
+  text.gsub!(/\\r/i, female_text_tag)
+  # Other text colors
+  text.gsub!(/\\\[([0-9a-f]{8,8})\]/i) { "<c2=" + $1 + ">" }
+  isDarkSkin = isDarkWindowskin(msg_window.windowskin)
+  text.gsub!(/\\c\[([0-9]+)\]/i) do
+    main_color, shadow_color = get_text_colors_for_windowskin(msg_window.windowskin, $1.to_i, isDarkSkin)
+    next shadowc3tag(main_color, shadow_color)
+  end
+end
+
 #===============================================================================
 # Money and coins windows.
 #===============================================================================
@@ -419,28 +457,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   text = message.clone
   linecount = (Graphics.height > 400) ? 3 : 2
   ### Text replacement
-  text.gsub!(/\\sign\[([^\]]*)\]/i) do      # \sign[something] gets turned into
-    next "\\op\\cl\\ts[]\\w[" + $1 + "]"    # \op\cl\ts[]\w[something]
-  end
-  text.gsub!(/\\\\/, "\5")
-  text.gsub!(/\\1/, "\1")
-  if $game_actors
-    text.gsub!(/\\n\[([1-8])\]/i) { next $game_actors[$1.to_i].name }
-  end
-  text.gsub!(/\\pn/i,  $player.name) if $player
-  text.gsub!(/\\pm/i,  _INTL("${1}", $player.money.to_s_formatted)) if $player
-  text.gsub!(/\\n/i,   "\n")
-  text.gsub!(/\\\[([0-9a-f]{8,8})\]/i) { "<c2=" + $1 + ">" }
-  text.gsub!(/\\pg/i,  "\\b") if $player&.male?
-  text.gsub!(/\\pg/i,  "\\r") if $player&.female?
-  text.gsub!(/\\pog/i, "\\r") if $player&.male?
-  text.gsub!(/\\pog/i, "\\b") if $player&.female?
-  text.gsub!(/\\pg/i,  "")
-  text.gsub!(/\\pog/i, "")
-  male_text_tag = shadowc3tag(MessageConfig::MALE_TEXT_MAIN_COLOR, MessageConfig::MALE_TEXT_SHADOW_COLOR)
-  female_text_tag = shadowc3tag(MessageConfig::FEMALE_TEXT_MAIN_COLOR, MessageConfig::FEMALE_TEXT_SHADOW_COLOR)
-  text.gsub!(/\\b/i,   male_text_tag)
-  text.gsub!(/\\r/i,   female_text_tag)
+  pbReplaceMessageText(text, msgwindow)
   text.gsub!(/\\[Ww]\[([^\]]*)\]/) do
     w = $1.to_s
     if w == ""
@@ -449,16 +466,6 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
       msgwindow.setSkin("Graphics/Windowskins/#{w}", false)
     end
     next ""
-  end
-  isDarkSkin = isDarkWindowskin(msgwindow.windowskin)
-  text.gsub!(/\\c\[([0-9]+)\]/i) do
-    main_color, shadow_color = get_text_colors_for_windowskin(msgwindow.windowskin, $1.to_i, isDarkSkin)
-    next shadowc3tag(main_color, shadow_color)
-  end
-  loop do
-    last_text = text.clone
-    text.gsub!(/\\v\[([0-9]+)\]/i) { $game_variables[$1.to_i] }
-    break if text == last_text
   end
   loop do
     last_text = text.clone
@@ -473,6 +480,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     main_color, shadow_color = get_text_colors_for_windowskin(msgwindow.windowskin, 0, true)
     colortag = shadowc3tag(main_color, shadow_color)
   else
+    isDarkSkin = isDarkWindowskin(msgwindow.windowskin)
     main_color, shadow_color = get_text_colors_for_windowskin(msgwindow.windowskin, 0, isDarkSkin)
     colortag = shadowc3tag(main_color, shadow_color)
   end

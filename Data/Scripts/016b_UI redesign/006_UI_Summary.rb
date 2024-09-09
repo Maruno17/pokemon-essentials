@@ -743,7 +743,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     # Draw move name
     move_name = move.name
     move_name = crop_text(move_name, (showing_detailed_move_page?) ? 230 : 262)
-    draw_text(move.name, x + 8, y + 6, theme: :black)
+    draw_text(move_name, x + 8, y + 6, theme: :black)
     # Draw move type icon
     type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
     draw_image(@bitmaps[:types], x + 8, y + 32,

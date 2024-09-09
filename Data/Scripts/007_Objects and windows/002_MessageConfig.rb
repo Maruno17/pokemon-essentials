@@ -369,9 +369,15 @@ def get_text_colors_for_windowskin(windowskin, color, isDarkSkin)
   end
   # Special colour as listed above
   if isDarkSkin && color != 12   # Dark background, light text
+    if textcolors[(2 * (color - 1))].is_a?(Color)
+      return textcolors[(2 * (color - 1)) + 1], textcolors[2 * (color - 1)]
+    end
     return Color.new(*textcolors[(2 * (color - 1)) + 1]), Color.new(*textcolors[2 * (color - 1)])
   end
   # Light background, dark text
+  if textcolors[(2 * (color - 1))].is_a?(Color)
+    return textcolors[(2 * (color - 1))], textcolors[2 * (color - 1) + 1]
+  end
   return Color.new(*textcolors[2 * (color - 1)]), Color.new(*textcolors[(2 * (color - 1)) + 1])
 end
 
