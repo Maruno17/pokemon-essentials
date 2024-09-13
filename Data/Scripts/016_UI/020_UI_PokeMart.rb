@@ -27,12 +27,7 @@ class PokemonMartAdapter
   end
 
   def getDisplayName(item)
-    item_name = GameData::Item.get(item).name
-    if GameData::Item.get(item).is_machine?
-      machine = GameData::Item.get(item).move
-      item_name = _INTL("{1} {2}", item_name, GameData::Move.get(machine).name)
-    end
-    return item_name
+    return GameData::Item.get(item).display_name
   end
 
   def getDisplayNamePlural(item)
@@ -162,7 +157,7 @@ class SellAdapter
 
   def getDisplayPrice(item)
     if @adapter.showQuantity?(item)
-      return sprintf("x%d", @adapter.getQuantity(item))
+      return sprintf("×%d", @adapter.getQuantity(item))
     else
       return ""
     end
@@ -309,6 +304,10 @@ class PokemonMart_Scene
   end
 
   def pbStartSellScene2(bag, adapter)
+    # TODO: Don't have a subscene. Make a new BagVisuals class for choosing an
+    #       item to sell, and open that. It can inherit from class
+    #       UI::BagVisuals and add the money window (that may be all that needs
+    #       adding).
     @subscene = PokemonBag_Scene.new
     @adapter = adapter
     @viewport2 = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -487,7 +486,7 @@ class PokemonMart_Scene
       numwindow.height = 64
       numwindow.baseColor = Color.new(88, 88, 80)
       numwindow.shadowColor = Color.new(168, 184, 184)
-      numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+      numwindow.text = _INTL("×{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
       pbBottomRight(numwindow)
       numwindow.y -= helpwindow.height
       loop do
@@ -500,28 +499,28 @@ class PokemonMart_Scene
           curnumber -= 10
           curnumber = 1 if curnumber < 1
           if curnumber != oldnumber
-            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+            numwindow.text = _INTL("×{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
             pbPlayCursorSE
           end
         elsif Input.repeat?(Input::RIGHT)
           curnumber += 10
           curnumber = maximum if curnumber > maximum
           if curnumber != oldnumber
-            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+            numwindow.text = _INTL("×{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
             pbPlayCursorSE
           end
         elsif Input.repeat?(Input::UP)
           curnumber += 1
           curnumber = 1 if curnumber > maximum
           if curnumber != oldnumber
-            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+            numwindow.text = _INTL("×{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
             pbPlayCursorSE
           end
         elsif Input.repeat?(Input::DOWN)
           curnumber -= 1
           curnumber = maximum if curnumber < 1
           if curnumber != oldnumber
-            numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
+            numwindow.text = _INTL("×{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
             pbPlayCursorSE
           end
         elsif Input.trigger?(Input::USE)

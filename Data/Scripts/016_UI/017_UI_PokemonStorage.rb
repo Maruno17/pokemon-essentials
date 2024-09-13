@@ -1237,9 +1237,9 @@ class PokemonStorageScene
   def pbChooseItem(bag)
     ret = nil
     pbFadeOutIn do
-      scene = PokemonBag_Scene.new
-      screen = PokemonBagScreen.new(scene, bag)
-      ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).can_hold? })
+      bag_screen = UI::Bag.new(bag, mode: :choose_item)
+      bag_screen.set_filter_proc(proc { |itm| GameData::Item.get(itm).can_hold? })
+      ret = bag_screen.choose_item
     end
     return ret
   end

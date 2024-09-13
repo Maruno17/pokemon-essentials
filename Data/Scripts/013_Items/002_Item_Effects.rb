@@ -25,11 +25,11 @@ ItemHandlers::UseText.add(:EXPALL, proc { |item|
 # a Pokémon), calls the UseInField handler for it instead.
 #===============================================================================
 
-ItemHandlers::UseFromBag.add(:HONEY, proc { |item|
+ItemHandlers::UseFromBag.add(:HONEY, proc { |item, bag_screen|
   next 2
 })
 
-ItemHandlers::UseFromBag.add(:ESCAPEROPE, proc { |item|
+ItemHandlers::UseFromBag.add(:ESCAPEROPE, proc { |item, bag_screen|
   if !$game_player.can_map_transfer_with_follower?
     pbMessage(_INTL("It can't be used when you have someone with you."))
     next 0
@@ -41,13 +41,13 @@ ItemHandlers::UseFromBag.add(:ESCAPEROPE, proc { |item|
   next 0
 })
 
-ItemHandlers::UseFromBag.add(:BICYCLE, proc { |item|
+ItemHandlers::UseFromBag.add(:BICYCLE, proc { |item, bag_screen|
   next (pbBikeCheck) ? 2 : 0
 })
 
 ItemHandlers::UseFromBag.copy(:BICYCLE, :MACHBIKE, :ACROBIKE)
 
-ItemHandlers::UseFromBag.add(:OLDROD, proc { |item|
+ItemHandlers::UseFromBag.add(:OLDROD, proc { |item, bag_screen|
   notCliff = $game_map.passable?($game_player.x, $game_player.y, $game_player.direction, $game_player)
   next 2 if $game_player.pbFacingTerrainTag.can_fish && ($PokemonGlobal.surfing || notCliff)
   pbMessage(_INTL("Can't use that here."))
@@ -56,26 +56,28 @@ ItemHandlers::UseFromBag.add(:OLDROD, proc { |item|
 
 ItemHandlers::UseFromBag.copy(:OLDROD, :GOODROD, :SUPERROD)
 
-ItemHandlers::UseFromBag.add(:ITEMFINDER, proc { |item|
+ItemHandlers::UseFromBag.add(:ITEMFINDER, proc { |item, bag_screen|
   next 2
 })
 
 ItemHandlers::UseFromBag.copy(:ITEMFINDER, :DOWSINGMCHN, :DOWSINGMACHINE)
 
-ItemHandlers::UseFromBag.add(:TOWNMAP, proc { |item|
-  pbFadeOutIn do
+ItemHandlers::UseFromBag.add(:TOWNMAP, proc { |item, bag_screen|
+  pbFadeOutInWithUpdate(bag_screen&.sprites) do
     scene = PokemonRegionMap_Scene.new(-1, false)
     screen = PokemonRegionMapScreen.new(scene)
     ret = screen.pbStartScreen
-    $game_temp.fly_destination = ret if ret
-    next 99999 if ret   # Ugly hack to make Bag scene not reappear if flying
+    if ret
+      $game_temp.fly_destination = ret
+      bag_screen&.silent_end_screen
+    end
   end
   next ($game_temp.fly_destination) ? 2 : 0
 })
 
 ItemHandlers::UseFromBag.addIf(:move_machines,
   proc { |item| GameData::Item.get(item).is_machine? },
-  proc { |item|
+  proc { |item, bag_screen|
     if $player.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
       next 0
@@ -159,10 +161,13 @@ EventHandlers.add(:on_player_step_taken, :repel_counter,
     next if !pbConfirmMessage(_INTL("The repellent's effect wore off! Would you like to use another one?"))
     ret = nil
     pbFadeOutIn do
-      scene = PokemonBag_Scene.new
-      screen = PokemonBagScreen.new(scene, $bag)
-      ret = screen.pbChooseItemScreen(proc { |item| repels.include?(item) })
+      bag_screen = UI::Bag.new($bag, mode: :choose_item)
+      bag_screen.set_filter_proc(proc { |item| repels.include?(item) })
+      ret = bag_screen.choose_item
     end
+    # TODO: Would be nice if this didn't call pbUseItem, so that pbUseItem would
+    #       be exclusively called from the Bag screen and could rely on that
+    #       screen existing.
     pbUseItem($bag, ret) if ret
   }
 )

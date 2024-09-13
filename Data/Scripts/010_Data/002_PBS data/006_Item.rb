@@ -146,6 +146,15 @@ module GameData
       return pbGetMessageFromHash(MessageTypes::ITEM_NAMES, @real_name)
     end
 
+    def display_name
+      ret = name
+      if is_machine?
+        machine = @move
+        ret = sprintf("%s %s", ret, GameData::Move.get(@move).name)
+      end
+      return ret
+    end
+
     # @return [String] the translated plural version of the name of this item
     def name_plural
       return pbGetMessageFromHash(MessageTypes::ITEM_NAME_PLURALS, @real_name_plural)

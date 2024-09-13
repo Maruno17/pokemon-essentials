@@ -835,12 +835,11 @@ class SpriteWindow_Selectable < SpriteWindow_Base
     if item < 0 || item >= @item_max || item < self.top_item ||
        item > self.top_item + self.page_item_max
       return Rect.new(0, 0, 0, 0)
-    else
-      cursor_width = (self.width - self.borderX - ((@column_max - 1) * @column_spacing)) / @column_max
-      x = item % @column_max * (cursor_width + @column_spacing)
-      y = (item / @column_max * @row_height) - @virtualOy
-      return Rect.new(x, y, cursor_width, @row_height)
     end
+    cursor_width = (self.width - self.borderX - ((@column_max - 1) * @column_spacing)) / @column_max
+    x = item % @column_max * (cursor_width + @column_spacing)
+    y = (item / @column_max * @row_height) - @virtualOy
+    return Rect.new(x, y, cursor_width, @row_height)
   end
 
   def refresh; end

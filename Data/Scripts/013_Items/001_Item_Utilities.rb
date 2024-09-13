@@ -58,8 +58,8 @@ module ItemHandlers
   # 0 - Item not used
   # 1 - Item used, don't end screen
   # 2 - Item used, end screen
-  def triggerUseFromBag(item)
-    return UseFromBag.trigger(item) if UseFromBag[item]
+  def triggerUseFromBag(item, bag_screen = nil)
+    return UseFromBag.trigger(item, bag_screen) if UseFromBag[item]
     # No UseFromBag handler exists; check the UseInField handler if present
     if UseInField[item]
       return (UseInField.trigger(item)) ? 1 : 0
@@ -618,8 +618,11 @@ def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, screen 
         if by_machine && Settings::TAUGHT_MACHINES_KEEP_OLD_PP
           pkmn.moves[move_index].pp = [old_move_pp, pkmn.moves[move_index].total_pp].min
         end
+        # TODO: The last \\wt[16] is skipped in instant text speed. Or rather,
+        #       the text after it is shown at the same time as the text before
+        #       it, but the SE waits for that duration and then plays.
         pbMessage(_INTL("1, 2, and...\\wt[16] ...\\wt[16] ...\\wt[16] Ta-da!") + "\\se[Battle ball drop]\1", &block)
-        pbMessage(_INTL("{1} forgot how to use {2}.\nAnd..." + "\1", pkmn_name, old_move_name), &block)
+        pbMessage(_INTL("{1} forgot how to use {2}.\nAnd...", pkmn_name, old_move_name) + "\1", &block)
         pbMessage("\\se[]" + _INTL("{1} learned {2}!", pkmn_name, move_name) + "\\se[Pkmn move learnt]", &block)
         pkmn.changeHappiness("machine") if by_machine
         return true
@@ -646,6 +649,8 @@ end
 #===============================================================================
 # Use an item from the Bag and/or on a Pokémon.
 #===============================================================================
+# Called from the Bag screen and also when prompted to use a Repel when one runs
+# out (bag_scene will be nil for the latter).
 # @return [Integer] 0 = item wasn't used; 1 = item used; 2 = close Bag to use in field
 def pbUseItem(bag, item, bag_scene = nil)
   itm = GameData::Item.get(item)
@@ -697,7 +702,7 @@ def pbUseItem(bag, item, bag_scene = nil)
     end
     return (ret) ? 1 : 0
   elsif useType == 2 || itm.is_machine?   # Item is usable from Bag or teaches a move
-    intret = ItemHandlers.triggerUseFromBag(item)
+    intret = ItemHandlers.triggerUseFromBag(item, bag_scene)
     if intret >= 0
       bag.remove(item) if intret == 1 && itm.consumed_after_use?
       return intret
@@ -796,7 +801,7 @@ def pbGiveItemToPokemon(item, pkmn, scene, pkmnid = 0)
   end
   if pkmn.hasItem?
     olditemname = pkmn.item.portion_name
-    if newitemname.starts_with_vowel?
+    if olditemname.starts_with_vowel?
       scene.pbDisplay(_INTL("{1} is already holding an {2}.", pkmn.name, olditemname) + "\1")
     else
       scene.pbDisplay(_INTL("{1} is already holding a {2}.", pkmn.name, olditemname) + "\1")
@@ -869,9 +874,8 @@ end
 def pbChooseItem(var = 0, *args)
   ret = nil
   pbFadeOutIn do
-    scene = PokemonBag_Scene.new
-    screen = PokemonBagScreen.new(scene, $bag)
-    ret = screen.pbChooseItemScreen
+    bag_screen = UI::Bag.new($bag, mode: :choose_item)
+    ret = bag_screen.choose_item
   end
   $game_variables[var] = ret || :NONE if var > 0
   return ret
@@ -880,9 +884,9 @@ end
 def pbChooseApricorn(var = 0)
   ret = nil
   pbFadeOutIn do
-    scene = PokemonBag_Scene.new
-    screen = PokemonBagScreen.new(scene, $bag)
-    ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_apricorn? })
+    bag_screen = UI::Bag.new($bag, mode: :choose_item)
+    bag_screen.set_filter_proc(proc { |item| GameData::Item.get(item).is_apricorn? })
+    ret = bag_screen.choose_item
   end
   $game_variables[var] = ret || :NONE if var > 0
   return ret
@@ -891,9 +895,9 @@ end
 def pbChooseFossil(var = 0)
   ret = nil
   pbFadeOutIn do
-    scene = PokemonBag_Scene.new
-    screen = PokemonBagScreen.new(scene, $bag)
-    ret = screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).is_fossil? })
+    bag_screen = UI::Bag.new($bag, mode: :choose_item)
+    bag_screen.set_filter_proc(proc { |item| GameData::Item.get(item).is_fossil? })
+    ret = bag_screen.choose_item
   end
   $game_variables[var] = ret || :NONE if var > 0
   return ret

@@ -126,7 +126,7 @@ module MenuHandlers
         next
       end
       if hash["name"].is_a?(Proc)
-        name = hash["name"].call
+        name = hash["name"].call(*args)
       else
         name = _INTL(hash["name"])
       end

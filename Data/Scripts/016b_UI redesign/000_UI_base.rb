@@ -315,6 +315,12 @@ module UI
 
     #---------------------------------------------------------------------------
 
+    def index
+      return 0
+    end
+
+    #---------------------------------------------------------------------------
+
     def show_message(text)
       @sprites[:speech_box].visible = true
       @sprites[:speech_box].text = text
@@ -451,8 +457,16 @@ module UI
     end
 
     # TODO: Rewrite this.
-    def choose_number(help_text, maximum, init_num = 1)
-      return UIHelper.pbChooseNumber(@sprites[:speech_box], help_text, maximum, init_num) { update_visuals }
+    def choose_number(help_text, maximum, init_value = 1)
+      if maximum.is_a?(ChooseNumberParams)
+        return pbMessageChooseNumber(help_text, maximum) { update_visuals }
+      end
+      return UIHelper.pbChooseNumber(@sprites[:speech_box], help_text, maximum, init_value) { update_visuals }
+    end
+
+    #---------------------------------------------------------------------------
+
+    def refresh_on_index_changed(old_index)
     end
 
     #---------------------------------------------------------------------------
@@ -471,8 +485,12 @@ module UI
       loop do
         Graphics.update
         Input.update
+        old_index = index
         update_visuals
+        refresh_on_index_changed(old_index) if index != old_index
+        old_index = index
         ret = update_input
+        refresh_on_index_changed(old_index) if index != old_index
         break if ret
       end
       return ret
@@ -483,8 +501,8 @@ module UI
   # The logic class.
   #=============================================================================
   class BaseScreen
-    attr_reader :visuals
-    attr_reader :result
+    attr_reader   :visuals
+    attr_accessor :result
 
     def initialize
       @disposed = false
@@ -511,6 +529,16 @@ module UI
       return if @disposed
       @visuals.dispose
       @disposed = true
+    end
+
+    #-----------------------------------------------------------------------------
+
+    def sprites
+      return @visuals.sprites
+    end
+
+    def index
+      return @visuals.index
     end
 
     #-----------------------------------------------------------------------------
@@ -546,8 +574,8 @@ module UI
       return show_choice(commands)
     end
 
-    def choose_number(help_text, maximum, init_num = 1)
-      return @visuals.choose_number(help_text, maximum, init_num)
+    def choose_number(help_text, maximum, init_value = 1)
+      return @visuals.choose_number(help_text, maximum, init_value)
     end
 
     alias pbChooseNumber choose_number
@@ -597,7 +625,7 @@ module UI
       return nil if action_hash[:condition] && !action_hash[:condition].call(self)
       if action_hash[:menu]
         choice = show_choice_from_menu_handler(action_hash[:menu], action_hash[:menu_message]&.call(self))
-        perform_action(choice) if choice
+        return perform_action(choice) if choice
       elsif action_hash[:effect]
         return perform_action_effect(action_hash)
       end

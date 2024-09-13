@@ -82,7 +82,7 @@ class ReadyMenuButton < Sprite
         textpos.push([_INTL(">99"), 230, 24, :right,
                       Color.new(248, 248, 248), Color.new(40, 40, 40), :outline])
       else
-        textpos.push([_INTL("x{1}", qty), 230, 24, :right,
+        textpos.push([_INTL("×{1}", qty), 230, 24, :right,
                       Color.new(248, 248, 248), Color.new(40, 40, 40), :outline])
       end
     end

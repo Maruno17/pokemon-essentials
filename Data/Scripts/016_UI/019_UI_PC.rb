@@ -15,34 +15,50 @@ def pbPCItemStorage
                                       _INTL("Go back to the previous menu.")], -1, command)
     case command
     when 0   # Withdraw Item
-      if !$PokemonGlobal.pcItemStorage
-        $PokemonGlobal.pcItemStorage = PCItemStorage.new
-      end
+      $PokemonGlobal.pcItemStorage ||= PCItemStorage.new
       if $PokemonGlobal.pcItemStorage.empty?
         pbMessage(_INTL("There are no items."))
       else
         pbFadeOutIn do
           scene = WithdrawItemScene.new
-          screen = PokemonBagScreen.new(scene, $bag)
+          screen = ItemStorageScreen.new(scene, $bag)
           screen.pbWithdrawItemScreen
         end
       end
     when 1   # Deposit Item
+      $PokemonGlobal.pcItemStorage ||= PCItemStorage.new
+      item_storage = $PokemonGlobal.pcItemStorage
       pbFadeOutIn do
-        scene = PokemonBag_Scene.new
-        screen = PokemonBagScreen.new(scene, $bag)
-        screen.pbDepositItemScreen
+        bag_screen = UI::Bag.new($bag, mode: :choose_item)
+        given_item = bag_screen.choose_item do |item|
+          item_data = GameData::Item.get(item)
+          qty = $bag.quantity(item)
+          if qty > 1 && !item_data.is_important?
+            qty = bag_screen.choose_number(_INTL("How many do you want to deposit?"), qty)
+          end
+          if qty > 0
+            if item_storage.can_add?(item, qty)
+              raise "Can't delete items from Bag" if !$bag.remove(item, qty)
+              raise "Can't deposit items to storage" if !item_storage.add(item, qty)
+              bag_screen.refresh
+              disp_qty  = (item_data.is_important?) ? 1 : qty
+              item_name = (disp_qty > 1) ? item_data.portion_name_plural : item_data.portion_name
+              bag_screen.show_message(_INTL("Deposited {1} {2}.", disp_qty, item_name))
+            else
+              bag_screen.show_message(_INTL("There's no room to store items."))
+            end
+          end
+          next false
+        end
       end
     when 2   # Toss Item
-      if !$PokemonGlobal.pcItemStorage
-        $PokemonGlobal.pcItemStorage = PCItemStorage.new
-      end
+      $PokemonGlobal.pcItemStorage ||= PCItemStorage.new
       if $PokemonGlobal.pcItemStorage.empty?
         pbMessage(_INTL("There are no items."))
       else
         pbFadeOutIn do
           scene = TossItemScene.new
-          screen = PokemonBagScreen.new(scene, $bag)
+          screen = ItemStorageScreen.new(scene, $bag)
           screen.pbTossItemScreen
         end
       end

@@ -1,3 +1,5 @@
+# TODO: Could inherit from class UI::BagVisuals and just change some graphics.
+
 #===============================================================================
 #
 #===============================================================================
@@ -39,7 +41,7 @@ class Window_PokemonItemStorage < Window_DrawableCommand
       baseColor = (index == @sortIndex) ? Color.new(248, 24, 24) : self.baseColor
       textpos.push([itemname, rect.x, rect.y, :left, self.baseColor, self.shadowColor])
       if GameData::Item.get(item).show_quantity?
-        qty     = _ISPRINTF("x{1: 2d}", @bag[index][1])
+        qty     = _ISPRINTF("×{1: 2d}", @bag[index][1])
         sizeQty = self.contents.text_size(qty).width
         xQty = rect.x + rect.width - sizeQty - 2
         textpos.push([qty, xQty, rect.y, :left, baseColor, self.shadowColor])
@@ -191,6 +193,93 @@ class TossItemScene < ItemStorage_Scene
 end
 
 #===============================================================================
+#
+#===============================================================================
+class ItemStorageScreen
+  def initialize(scene, bag)
+    @bag   = bag
+    @scene = scene
+  end
+
+  def pbDisplay(text)
+    @scene.pbDisplay(text)
+  end
+
+  def pbConfirm(text)
+    return @scene.pbConfirm(text)
+  end
+
+  # UI logic for withdrawing an item in the item storage screen.
+  def pbWithdrawItemScreen
+    if !$PokemonGlobal.pcItemStorage
+      $PokemonGlobal.pcItemStorage = PCItemStorage.new
+    end
+    storage = $PokemonGlobal.pcItemStorage
+    @scene.pbStartScene(storage)
+    loop do
+      item = @scene.pbChooseItem
+      break if !item
+      itm = GameData::Item.get(item)
+      qty = storage.quantity(item)
+      if qty > 1 && !itm.is_important?
+        qty = @scene.pbChooseNumber(_INTL("How many do you want to withdraw?"), qty)
+      end
+      next if qty <= 0
+      if @bag.can_add?(item, qty)
+        if !storage.remove(item, qty)
+          raise "Can't delete items from storage"
+        end
+        if !@bag.add(item, qty)
+          raise "Can't withdraw items from storage"
+        end
+        @scene.pbRefresh
+        dispqty = (itm.is_important?) ? 1 : qty
+        itemname = (dispqty > 1) ? itm.portion_name_plural : itm.portion_name
+        pbDisplay(_INTL("Withdrew {1} {2}.", dispqty, itemname))
+      else
+        pbDisplay(_INTL("There's no more room in the Bag."))
+      end
+    end
+    @scene.pbEndScene
+  end
+
+  # UI logic for tossing an item in the item storage screen.
+  def pbTossItemScreen
+    if !$PokemonGlobal.pcItemStorage
+      $PokemonGlobal.pcItemStorage = PCItemStorage.new
+    end
+    storage = $PokemonGlobal.pcItemStorage
+    @scene.pbStartScene(storage)
+    loop do
+      item = @scene.pbChooseItem
+      break if !item
+      itm = GameData::Item.get(item)
+      if itm.is_important?
+        @scene.pbDisplay(_INTL("That's too important to toss out!"))
+        next
+      end
+      qty = storage.quantity(item)
+      itemname       = itm.portion_name
+      itemnameplural = itm.portion_name_plural
+      if qty > 1
+        qty = @scene.pbChooseNumber(_INTL("Toss out how many {1}?", itemnameplural), qty)
+      end
+      next if qty <= 0
+      itemname = itemnameplural if qty > 1
+      next if !pbConfirm(_INTL("Is it OK to throw away {1} {2}?", qty, itemname))
+      if !storage.remove(item, qty)
+        raise "Can't delete items from storage"
+      end
+      @scene.pbRefresh
+      pbDisplay(_INTL("Threw away {1} {2}.", qty, itemname))
+    end
+    @scene.pbEndScene
+  end
+end
+
+
+
+#===============================================================================
 # Common UI functions used in both the Bag and item storage screens.
 # Displays messages and allows the user to choose a number/command.
 # The window _helpwindow_ will display the _helptext_.
@@ -282,10 +371,10 @@ module UIHelper
     helpwindow.letterbyletter = false
     curnumber = initnum
     ret = 0
-    numwindow = Window_UnformattedTextPokemon.new("x000")
+    numwindow = Window_UnformattedTextPokemon.new("×000")
     numwindow.viewport       = helpwindow.viewport
     numwindow.letterbyletter = false
-    numwindow.text           = _ISPRINTF("x{1:03d}", curnumber)
+    numwindow.text           = _ISPRINTF("×{1:03d}", curnumber)
     numwindow.resizeToFit(numwindow.text, Graphics.width)
     pbBottomRight(numwindow)
     helpwindow.resizeHeightToFit(helpwindow.text, Graphics.width - numwindow.width)
@@ -309,28 +398,28 @@ module UIHelper
         curnumber += 1
         curnumber = 1 if curnumber > maximum
         if curnumber != oldnumber
-          numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
+          numwindow.text = _ISPRINTF("×{1:03d}", curnumber)
           pbPlayCursorSE
         end
       elsif Input.repeat?(Input::DOWN)
         curnumber -= 1
         curnumber = maximum if curnumber < 1
         if curnumber != oldnumber
-          numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
+          numwindow.text = _ISPRINTF("×{1:03d}", curnumber)
           pbPlayCursorSE
         end
       elsif Input.repeat?(Input::LEFT)
         curnumber -= 10
         curnumber = 1 if curnumber < 1
         if curnumber != oldnumber
-          numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
+          numwindow.text = _ISPRINTF("×{1:03d}", curnumber)
           pbPlayCursorSE
         end
       elsif Input.repeat?(Input::RIGHT)
         curnumber += 10
         curnumber = maximum if curnumber > maximum
         if curnumber != oldnumber
-          numwindow.text = _ISPRINTF("x{1:03d}", curnumber)
+          numwindow.text = _ISPRINTF("×{1:03d}", curnumber)
           pbPlayCursorSE
         end
       end

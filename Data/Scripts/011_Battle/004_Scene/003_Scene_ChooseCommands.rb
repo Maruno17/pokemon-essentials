@@ -199,123 +199,127 @@ class Battle::Scene
     else
       $bag.reset_last_selections
     end
-    # Start Bag screen
-    itemScene = PokemonBag_Scene.new
-    itemScene.pbStartScene($bag, true,
-                           proc { |item|
-                             useType = GameData::Item.get(item).battle_use
-                             next useType && useType > 0
-                           }, false)
-    # Loop while in Bag screen
     wasTargeting = false
-    loop do
-      # Select an item
-      item = itemScene.pbChooseItem
-      break if !item
-      # Choose a command for the selected item
-      item = GameData::Item.get(item)
-      itemName = item.name
-      useType = item.battle_use
-      cmdUse = -1
-      commands = []
-      commands[cmdUse = commands.length] = _INTL("Use") if useType && useType != 0
-      commands[commands.length]          = _INTL("Cancel")
-      command = itemScene.pbShowCommands(_INTL("{1} is selected.", itemName), commands)
-      next unless cmdUse >= 0 && command == cmdUse   # Use
-      # Use types:
-      # 0 = not usable in battle
-      # 1 = use on Pokémon (lots of items, Blue Flute)
-      # 2 = use on Pokémon's move (Ethers)
-      # 3 = use on battler (X items, Persim Berry, Red/Yellow Flutes)
-      # 4 = use on opposing battler (Poké Balls)
-      # 5 = use no target (Poké Doll, Guard Spec., Poké Flute, Launcher items)
-      case useType
-      when 1, 2, 3   # Use on Pokémon/Pokémon's move/battler
-        # Auto-choose the Pokémon/battler whose action is being decided if they
-        # are the only available Pokémon/battler to use the item on
+    # Start Bag screen
+    bag_screen = UI::Bag.new($bag, mode: :choose_item_in_battle)
+    bag_screen.set_filter_proc(proc { |itm|
+      use_type = GameData::Item.get(itm).battle_use
+      next use_type && use_type > 0
+    })
+    bag_screen.show_and_hide do
+      # Loop while in Bag screen
+      loop do
+        # Select an item
+        item = bag_screen.choose_item_core
+        break if !item
+        # Choose a command for the selected item
+        item = GameData::Item.get(item)
+        itemName = item.name
+        useType = item.battle_use
+        cmdUse = -1
+        commands = []
+        commands[cmdUse = commands.length] = _INTL("Use") if useType && useType != 0
+        commands[commands.length]          = _INTL("Cancel")
+        command = bag_screen.show_choice_message(_INTL("{1} is selected.", itemName), commands)
+        next unless cmdUse >= 0 && command == cmdUse   # Use
+        # Use types:
+        # 0 = not usable in battle
+        # 1 = use on Pokémon (lots of items, Blue Flute)
+        # 2 = use on Pokémon's move (Ethers)
+        # 3 = use on battler (X items, Persim Berry, Red/Yellow Flutes)
+        # 4 = use on opposing battler (Poké Balls)
+        # 5 = use no target (Poké Doll, Guard Spec., Poké Flute, Launcher items)
         case useType
-        when 1   # Use on Pokémon
-          if @battle.pbTeamLengthFromBattlerIndex(idxBattler) == 1
-            if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
-              break
-            else
-              next
+        when 1, 2, 3   # Use on Pokémon/Pokémon's move/battler
+          # Auto-choose the Pokémon/battler whose action is being decided if they
+          # are the only available Pokémon/battler to use the item on
+          case useType
+          when 1   # Use on Pokémon
+            if @battle.pbTeamLengthFromBattlerIndex(idxBattler) == 1
+              if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, bag_screen
+                break
+              else
+                next
+              end
+            end
+          when 3   # Use on battler
+            if @battle.pbPlayerBattlerCount == 1
+              if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, bag_screen
+                break
+              else
+                next
+              end
             end
           end
-        when 3   # Use on battler
-          if @battle.pbPlayerBattlerCount == 1
-            if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
-              break
-            else
-              next
-            end
-          end
-        end
-        # Fade out and hide Bag screen
-        itemScene.pbFadeOutScene
-        # Get player's party
-        party    = @battle.pbParty(idxBattler)
-        partyPos = @battle.pbPartyOrder(idxBattler)
-        partyStart, _partyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
-        modParty = @battle.pbPlayerDisplayParty(idxBattler)
-        # Start party screen
-        party_idx = -1
-        party_screen = UI::Party.new(modParty, mode: :battle_use_item)
-        party_screen.choose_pokemon do |pkmn, party_index|
-          party_idx = party_index
-          next true if party_index < 0
-          # Use the item on the selected Pokémon
-          real_party_index = -1
-          partyPos.each_with_index do |pos, i|
-            next if pos != party_index + partyStart
-            real_party_index = i
-            break
-          end
-          next false if real_party_index < 0
-          next false if !pkmn || pkmn.egg?
-          move_index = -1
-          if useType == 2   # Use on Pokémon's move
-            move_index = party_screen.choose_move(pkmn, _INTL("Restore which move?"))
-            next false if move_index < 0
-          end
-          next true if yield item.id, useType, real_party_index, move_index, party_screen
-          next false
-        end
-        break if party_idx >= 0   # Item was used; close the Bag screen
-        # Cancelled choosing a Pokémon; show the Bag screen again
-        itemScene.pbFadeInScene
-      when 4   # Use on opposing battler (Poké Balls)
-        idxTarget = -1
-        if @battle.pbOpposingBattlerCount(idxBattler) == 1
-          @battle.allOtherSideBattlers(idxBattler).each { |b| idxTarget = b.index }
-          break if yield item.id, useType, idxTarget, -1, itemScene
-        else
-          wasTargeting = true
           # Fade out and hide Bag screen
-          itemScene.pbFadeOutScene
-          # Fade in and show the battle screen, choosing a target
-          tempVisibleSprites = visibleSprites.clone
-          tempVisibleSprites["commandWindow"] = false
-          tempVisibleSprites["targetWindow"]  = true
-          idxTarget = pbChooseTarget(idxBattler, GameData::Target.get(:Foe), tempVisibleSprites)
-          if idxTarget >= 0
-            break if yield item.id, useType, idxTarget, -1, self
+          bag_sprites_status = pbFadeOutAndHide(bag_screen.sprites)
+          # Get player's party
+          party    = @battle.pbParty(idxBattler)
+          partyPos = @battle.pbPartyOrder(idxBattler)
+          partyStart, _partyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
+          modParty = @battle.pbPlayerDisplayParty(idxBattler)
+          # Start party screen
+          party_idx = -1
+          party_screen = UI::Party.new(modParty, mode: :battle_use_item)
+          party_screen.choose_pokemon do |pkmn, party_index|
+            party_idx = party_index
+            next true if party_index < 0
+            # Use the item on the selected Pokémon
+            real_party_index = -1
+            partyPos.each_with_index do |pos, i|
+              next if pos != party_index + partyStart
+              real_party_index = i
+              break
+            end
+            next false if real_party_index < 0
+            next false if !pkmn || pkmn.egg?
+            move_index = -1
+            if useType == 2   # Use on Pokémon's move
+              move_index = party_screen.choose_move(pkmn, _INTL("Restore which move?"))
+              next false if move_index < 0
+            end
+            if yield item.id, useType, real_party_index, move_index, party_screen
+              bag_screen.silent_end_screen
+              next true
+            end
+            party_idx = -1
+            next false
           end
-          # Target invalid/cancelled choosing a target; show the Bag screen again
-          wasTargeting = false
-          pbFadeOutAndHide(@sprites)
-          itemScene.pbFadeInScene
+          break if party_idx >= 0   # Item was used; close the Bag screen
+          # Cancelled choosing a Pokémon; show the Bag screen again
+          pbFadeInAndShow(bag_screen.sprites, bag_sprites_status)
+        when 4   # Use on opposing battler (Poké Balls)
+          idxTarget = -1
+          if @battle.pbOpposingBattlerCount(idxBattler) == 1
+            @battle.allOtherSideBattlers(idxBattler).each { |b| idxTarget = b.index }
+            break if yield item.id, useType, idxTarget, -1, bag_screen
+          else
+            wasTargeting = true
+            # Fade out and hide Bag screen
+            bag_sprites_status = pbFadeOutAndHide(bag_screen.sprites)
+            # Fade in and show the battle screen, choosing a target
+            tempVisibleSprites = visibleSprites.clone
+            tempVisibleSprites["commandWindow"] = false
+            tempVisibleSprites["targetWindow"]  = true
+            idxTarget = pbChooseTarget(idxBattler, GameData::Target.get(:Foe), tempVisibleSprites)
+            if idxTarget >= 0
+              break if yield item.id, useType, idxTarget, -1, self
+            end
+            # Target invalid/cancelled choosing a target; show the Bag screen again
+            wasTargeting = false
+            pbFadeOutAndHide(@sprites)
+            pbFadeInAndShow(bag_screen.sprites, bag_sprites_status)
+          end
+        when 5   # Use with no target
+          break if yield item.id, useType, idxBattler, -1, bag_screen
         end
-      when 5   # Use with no target
-        break if yield item.id, useType, idxBattler, -1, itemScene
       end
+      next true
     end
     @bagLastPocket = $bag.last_viewed_pocket
     @bagChoices    = $bag.last_pocket_selections.clone
     $bag.last_viewed_pocket     = oldLastPocket
     $bag.last_pocket_selections = oldChoices
-    # Close Bag screen
-    itemScene.pbEndScene
     # Fade back into battle screen (if not already showing it)
     pbFadeInAndShow(@sprites, visibleSprites) if !wasTargeting
   end

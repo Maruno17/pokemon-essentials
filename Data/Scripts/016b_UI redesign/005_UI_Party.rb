@@ -326,8 +326,8 @@ end
 #
 #===============================================================================
 class UI::PartyVisuals < UI::BaseVisuals
-  attr_reader :index
   attr_reader :sprites
+  attr_reader :index
   attr_reader :sub_mode
 
   GRAPHICS_FOLDER = "Party/"   # Subfolder in Graphics/UI
@@ -783,20 +783,12 @@ class UI::Party < UI::BaseScreen
 
   #-----------------------------------------------------------------------------
 
-  def index
-    return @visuals.index
-  end
-
   def set_index(new_index)
     @visuals.set_index(new_index)
   end
 
   def pokemon
     return (index < @party.length) ? @party[index] : nil
-  end
-
-  def sprites
-    return @visuals.sprites
   end
 
   def can_access_storage?
@@ -1194,18 +1186,18 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :item_use, {
     pkmn = screen.pokemon
     used_item = nil
     pbFadeOutInWithUpdate(screen.sprites) do
-      bag_scene = PokemonBag_Scene.new
-      bag_screen = PokemonBagScreen.new(bag_scene, $bag)
-      used_item = bag_screen.pbChooseItemScreen(proc { |item|
-        itm = GameData::Item.get(item)
+      bag_screen = UI::Bag.new($bag, mode: :choose_item)
+      bag_screen.set_filter_proc(proc { |itm|
+        item_data = GameData::Item.get(itm)
         next false if !pbCanUseOnPokemon?(itm)
-        next false if pkmn.hyper_mode && !GameData::Item.get(item)&.is_scent?
-        if itm.is_machine?
-          move = itm.move
+        next false if pkmn.hyper_mode && !item_data&.is_scent?
+        if item_data.is_machine?
+          move = item_data.move
           next false if pkmn.hasMove?(move) || !pkmn.compatible_with_move?(move)
         end
         next true
       })
+      used_item = bag_screen.choose_item
     end
     if used_item
       pbUseItemOnPokemon(used_item, pkmn, screen)
@@ -1219,9 +1211,9 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :item_give, {
     pkmn = screen.pokemon
     given_item = nil
     pbFadeOutInWithUpdate(screen.sprites) do
-      bag_scene = PokemonBag_Scene.new
-      bag_screen = PokemonBagScreen.new(bag_scene, $bag)
-      given_item = bag_screen.pbChooseItemScreen(proc { |item| GameData::Item.get(item).can_hold? })
+      bag_screen = UI::Bag.new($bag, mode: :choose_item)
+      bag_screen.set_filter_proc(proc { |itm| GameData::Item.get(itm).can_hold? })
+      given_item = bag_screen.choose_item
     end
     if given_item
       pbGiveItemToPokemon(given_item, pkmn, screen, screen.index)
@@ -1360,6 +1352,31 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :use_SOFTBOILED, {
 #===============================================================================
 # Menu options for choice menus that exist in the party screen.
 #===============================================================================
+MenuHandlers.add(:party_screen_menu, :open_storage, {
+  "name"      => _INTL("Access Pokémon Boxes"),
+  "order"     => 10,
+  "condition" => proc { |screen| next screen.can_access_storage? }
+})
+
+MenuHandlers.add(:party_screen_menu, :switch_pokemon_mode, {
+  "name"      => _INTL("Mode: Switch Pokémon"),
+  "order"     => 20,
+  "condition" => proc { |screen| next screen.party.length > 1 }
+})
+
+MenuHandlers.add(:party_screen_menu, :item_move_mode, {
+  "name"      => _INTL("Mode: Switch items"),
+  "order"     => 30,
+  "condition" => proc { |screen| next screen.party.length > 1 }
+})
+
+MenuHandlers.add(:party_screen_menu, :cancel, {
+  "name"      => _INTL("Cancel"),
+  "order"     => 9999
+})
+
+#-------------------------------------------------------------------------------
+
 MenuHandlers.add(:party_screen_interact, :summary, {
   "name"      => _INTL("Summary"),
   "order"     => 10
@@ -1446,31 +1463,6 @@ MenuHandlers.add(:party_screen_interact_mail, :mail_cancel, {
 })
 
 MenuHandlers.add(:party_screen_interact, :cancel, {
-  "name"      => _INTL("Cancel"),
-  "order"     => 9999
-})
-
-#-------------------------------------------------------------------------------
-
-MenuHandlers.add(:party_screen_menu, :open_storage, {
-  "name"      => _INTL("Access Pokémon Boxes"),
-  "order"     => 10,
-  "condition" => proc { |screen| next screen.can_access_storage? }
-})
-
-MenuHandlers.add(:party_screen_menu, :switch_pokemon_mode, {
-  "name"      => _INTL("Mode: Switch Pokémon"),
-  "order"     => 20,
-  "condition" => proc { |screen| next screen.party.length > 1 }
-})
-
-MenuHandlers.add(:party_screen_menu, :item_move_mode, {
-  "name"      => _INTL("Mode: Switch items"),
-  "order"     => 30,
-  "condition" => proc { |screen| next screen.party.length > 1 }
-})
-
-MenuHandlers.add(:party_screen_menu, :cancel, {
   "name"      => _INTL("Cancel"),
   "order"     => 9999
 })

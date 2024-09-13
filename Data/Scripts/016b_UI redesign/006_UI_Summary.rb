@@ -1489,10 +1489,10 @@ UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :interact_menu, {
 UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :give_item, {
   :effect => proc { |screen|
     item = nil
-    pbFadeOutIn do
-      bag_scene = PokemonBag_Scene.new
-      bag_screen = PokemonBagScreen.new(bag_scene, $bag)
-      item = bag_screen.pbChooseItemScreen(proc { |itm| GameData::Item.get(itm).can_hold? })
+    pbFadeOutInWithUpdate(screen.sprites) do
+      bag_screen = UI::Bag.new($bag, mode: :choose_item)
+      bag_screen.set_filter_proc(proc { |itm| GameData::Item.get(itm).can_hold? })
+      item = bag_screen.choose_item
     end
     screen.refresh if pbGiveItemToPokemon(item, screen.pokemon, screen, screen.party_index)
   }
@@ -1507,7 +1507,7 @@ UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :take_item, {
 UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :pokedex, {
   :effect => proc { |screen|
     $player.pokedex.register_last_seen(screen.pokemon)
-    pbFadeOutIn do
+    pbFadeOutInWithUpdate(screen.sprites) do
       dex_scene = PokemonPokedexInfo_Scene.new
       dex_screen = PokemonPokedexInfoScreen.new(dex_scene)
       dex_screen.pbStartSceneSingle(screen.pokemon.species)
