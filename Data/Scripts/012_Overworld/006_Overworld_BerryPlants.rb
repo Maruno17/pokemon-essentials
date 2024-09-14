@@ -459,7 +459,7 @@ def pbPickBerry(berry, qty = 1)
   end
   pocket = berry.pocket
   pbMessage(_INTL("You put the {1} in\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
-                  berry_name, pocket, PokemonBag.pocket_names[pocket - 1]) + "\1")
+                  berry_name, pocket, GameData::BagPocket.get(pocket).name) + "\1")
   if Settings::NEW_BERRY_PLANTS
     pbMessage(_INTL("The soil returned to its soft and earthy state."))
   else

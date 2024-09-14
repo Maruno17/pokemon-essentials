@@ -375,6 +375,14 @@ module Compiler
   end
 
   def validate_compiled_item(hash)
+    # Support for pockets still being numbers
+    if hash[:pocket] && hash[:pocket].is_a?(Integer)
+      all_pockets = GameData::BagPocket.all_pockets
+      if hash[:pocket] <= 0 || !all_pockets[hash[:pocket] - 1]
+        raise _INTL("Invalid pocket number {1} for item {2}.", hash[:pocket], hash[:id])
+      end
+      hash[:pocket] = all_pockets[hash[:pocket] - 1]
+    end
   end
 
   def validate_all_compiled_items

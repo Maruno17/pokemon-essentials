@@ -211,7 +211,7 @@ class UI::BagVisuals < UI::BaseVisuals
     @sprites[:item_list].switching_base_color   = TEXT_COLOR_THEMES[:switching][0]
     @sprites[:item_list].switching_shadow_color = TEXT_COLOR_THEMES[:switching][1]
     @sprites[:item_list].items                  = @bag.pockets[@pocket]
-    @sprites[:item_list].index                  = @bag.last_viewed_index(@pocket)
+    @sprites[:item_list].index                  = @bag.last_viewed_index(@pocket) if @mode != :choose_item
     @sprites[:item_list].active                 = false
   end
 
@@ -231,7 +231,9 @@ class UI::BagVisuals < UI::BaseVisuals
   #-----------------------------------------------------------------------------
 
   def background_filename
-    return gendered_filename(self.class::BACKGROUND_FILENAME + "_" + @pocket.to_s)
+    ret = gendered_filename(self.class::BACKGROUND_FILENAME + "_" + @pocket.to_s)
+    return ret if pbResolveBitmap(graphics_folder + ret)
+    return super
   end
 
   def index
@@ -247,27 +249,27 @@ class UI::BagVisuals < UI::BaseVisuals
   def set_filter_proc(filter_proc)
     @filter_proc = filter_proc
     # Create filtered pocket lists
-    @filtered_list = []
-    (1...@bag.pockets.length).each do |pckt|
+    all_pockets = GameData::BagPocket.all_pockets
+    @filtered_list = {}
+    all_pockets.each do |pckt|
       @filtered_list[pckt] = []
       @bag.pockets[pckt].length.times do |j|
         @filtered_list[pckt].push(@bag.pockets[pckt][j]) if @filter_proc.call(@bag.pockets[pckt][j][0])
       end
     end
     # Ensure current pocket is one that isn't empty
-    new_pocket = 1
+    new_pocket_index = 0
     if @mode == :choose_item_in_battle && !@filtered_list[@bag.last_viewed_pocket].empty?
-      new_pocket = @bag.last_viewed_pocket
+      new_pocket_index = all_pockets.index(@bag.last_viewed_pocket)
     end
-    num_pockets = PokemonBag.pocket_count
-    num_pockets.times do |i|
-      next_pocket = new_pocket + i
-      next_pocket -= num_pockets if next_pocket > num_pockets
-      next if @filtered_list[next_pocket].empty?
-      new_pocket = next_pocket
+    all_pockets.length.times do |i|
+      next_pocket_index = (new_pocket_index + i) % all_pockets.length
+      next if @filtered_list[all_pockets[next_pocket_index]].empty?
+      new_pocket_index = next_pocket_index
       break
     end
-    new_pocket = 1 if @filtered_list[new_pocket].empty?   # In case all pockets are empty
+    new_pocket_index = 0 if @filtered_list[all_pockets[new_pocket_index]].empty?   # In case all pockets are empty
+    new_pocket = all_pockets[new_pocket_index]
     # Set the new pocket
     set_pocket(new_pocket)
     @sprites[:item_list].index = 0
@@ -275,7 +277,7 @@ class UI::BagVisuals < UI::BaseVisuals
 
   def set_pocket(new_pocket)
     @pocket = new_pocket
-    @bag.last_viewed_pocket = @pocket
+    @bag.last_viewed_pocket = @pocket if @mode != :choose_item
     if @filtered_list
       @sprites[:item_list].items = @filtered_list[@pocket]
     else
@@ -287,8 +289,11 @@ class UI::BagVisuals < UI::BaseVisuals
 
   def go_to_next_pocket
     new_pocket = @pocket
+    all_pockets = GameData::BagPocket.all_pockets
+    new_pocket_index = all_pockets.index(new_pocket)
     loop do
-      new_pocket = (new_pocket >= PokemonBag.pocket_count) ? 1 : new_pocket + 1
+      new_pocket_index = (new_pocket_index + 1) % all_pockets.length
+      new_pocket = all_pockets[new_pocket_index]
       break if ![:choose_item, :choose_item_in_battle].include?(@mode)
       break if new_pocket == @pocket   # Bag is empty somehow
       if @filtered_list
@@ -304,8 +309,11 @@ class UI::BagVisuals < UI::BaseVisuals
 
   def go_to_previous_pocket
     new_pocket = @pocket
+    all_pockets = GameData::BagPocket.all_pockets
+    new_pocket_index = all_pockets.index(new_pocket)
     loop do
-      new_pocket = (new_pocket <= 1) ? PokemonBag.pocket_count : new_pocket - 1
+      new_pocket_index = (new_pocket_index - 1) % all_pockets.length
+      new_pocket = all_pockets[new_pocket_index]
       break if ![:choose_item, :choose_item_in_battle].include?(@mode)
       break if new_pocket == @pocket   # Bag is empty somehow
       if @filtered_list
@@ -327,7 +335,7 @@ class UI::BagVisuals < UI::BaseVisuals
     return false if @mode != :normal || @filtered_list
     return false if @bag.pockets[@pocket].length <= 1
     return false if index >= @bag.pockets[@pocket].length
-    return false if Settings::BAG_POCKET_AUTO_SORT[@pocket - 1]
+    return false if GameData::BagPocket.get(@pocket).auto_sort
     return true
   end
 
@@ -373,26 +381,41 @@ class UI::BagVisuals < UI::BaseVisuals
   end
 
   def refresh_pocket_icons
+    icon_size = [28, 28]
+    icon_overlap = 6
+    icon_x = 2
+    icon_y = 2
     @sprites[:pocket_icons].bitmap.clear
-    # Draw the pocket icons
+    all_pockets = GameData::BagPocket.all_pockets
+    # Draw regular pocket icons
+    all_pockets.each_with_index do |pckt, i|
+      icon_pos = GameData::BagPocket.get(pckt).icon_position
+      draw_image(@bitmaps[:pocket_icons], icon_x + (i * (icon_size[0] - icon_overlap)), icon_y,
+                icon_pos * icon_size[0], icon_size[1], *icon_size, overlay: :pocket_icons)
+    end
+    # Draw disabled pocket icons
     if [:choose_item, :choose_item_in_battle].include?(@mode) && @filtered_list
-      (1...@bag.pockets.length).each do |i|
-        next if @filtered_list[i].length > 0
-        draw_image(@bitmaps[:pocket_icons], 6 + ((i - 1) * 22), 6,
-                   (i - 1) * 20, 28, 20, 20, overlay: :pocket_icons)
+      all_pockets.each_with_index do |pckt, i|
+        next if @filtered_list[pckt].length > 0
+        icon_pos = GameData::BagPocket.get(pckt).icon_position
+        draw_image(@bitmaps[:pocket_icons], icon_x + (i * (icon_size[0] - icon_overlap)), icon_y,
+                   icon_pos * icon_size[0], icon_size[1] * 2, *icon_size, overlay: :pocket_icons)
       end
     end
-    draw_image(@bitmaps[:pocket_icons], 2 + ((@pocket - 1) * 22), 2,
-               (@pocket - 1) * 28, 0, 28, 28, overlay: :pocket_icons)
+    # Draw selected pocket's icon
+    pocket_number = GameData::BagPocket.index(@pocket)
+    icon_pos = GameData::BagPocket.get(@pocket).icon_position
+    draw_image(@bitmaps[:pocket_icons], icon_x + (pocket_number * (icon_size[0] - icon_overlap)), icon_y,
+               icon_pos * icon_size[0], 0, *icon_size, overlay: :pocket_icons)
     # TODO: Draw the left and right arrows, if @mode != :choose_item ||
     #       @filtered_list has 2+ non-empty pockets.
   end
 
   def refresh_pocket
     # Draw pocket's name
-    draw_text(PokemonBag.pocket_names[@pocket - 1], 94, 186, align: :center, theme: :black)
+    draw_text(GameData::BagPocket.get(@pocket).name, 94, 186, align: :center, theme: :black)
     # Set the bag sprite
-    bag_sprite_filename = graphics_folder + gendered_filename(sprintf("bag_%d", @pocket))
+    bag_sprite_filename = graphics_folder + gendered_filename(sprintf("bag_%s", @pocket.to_s))
     @sprites[:bag].setBitmap(bag_sprite_filename)
   end
 
@@ -482,7 +505,7 @@ class UI::BagVisuals < UI::BaseVisuals
       this_pocket.insert(index, this_pocket.delete_at(old_index))
       @sprites[:item_list].items = this_pocket
     end
-    @bag.set_last_viewed_index(@pocket, index)
+    @bag.set_last_viewed_index(@pocket, index) if @mode != :choose_item
     refresh_slider
     refresh_selected_item
   end
@@ -776,10 +799,10 @@ UIActionHandlers.add(UI::Bag::SCREEN_ID, :debug, {
         qty = screen.bag.quantity(screen.item.id)
         item_name_plural = screen.item.name_plural
         params = ChooseNumberParams.new
-        params.setRange(0, Settings::BAG_MAX_PER_SLOT)
+        params.setRange(0, PokemonBag::MAX_PER_SLOT)
         params.setDefaultValue(qty)
         new_qty = screen.choose_number(
-          _INTL("Choose new quantity of {1} (max. {2}).", item_name_plural, Settings::BAG_MAX_PER_SLOT), params
+          _INTL("Choose new quantity of {1} (max. {2}).", item_name_plural, PokemonBag::MAX_PER_SLOT), params
         )
         if new_qty > qty
           screen.bag.add(screen.item.id, new_qty - qty)

@@ -788,7 +788,7 @@ MenuHandlers.add(:debug_menu, :add_item, {
     pbListScreenBlock(_INTL("ADD ITEM"), ItemLister.new) do |button, item|
       if button == Input::USE && item
         params = ChooseNumberParams.new
-        params.setRange(1, Settings::BAG_MAX_PER_SLOT)
+        params.setRange(1, PokemonBag::MAX_PER_SLOT)
         params.setInitialValue(1)
         params.setCancelValue(0)
         qty = pbMessageChooseNumber(_INTL("Add how many {1}?",
@@ -808,7 +808,7 @@ MenuHandlers.add(:debug_menu, :fill_bag, {
   "description" => _INTL("Empties the Bag and then fills it with a certain number of every item."),
   "effect"      => proc {
     params = ChooseNumberParams.new
-    params.setRange(1, Settings::BAG_MAX_PER_SLOT)
+    params.setRange(1, PokemonBag::MAX_PER_SLOT)
     params.setInitialValue(1)
     params.setCancelValue(0)
     qty = pbMessageChooseNumber(_INTL("Choose the number of items."), params)
@@ -816,11 +816,13 @@ MenuHandlers.add(:debug_menu, :fill_bag, {
       $bag.clear
       # NOTE: This doesn't simply use $bag.add for every item in turn, because
       #       that's really slow when done in bulk.
-      pocket_sizes = Settings::BAG_MAX_POCKET_SIZE
+      pocket_sizes = {}
+      GameData::BagPocket.each { |pckt| pocket_sizes[pckt.id] = pckt.max_slots }
       bag = $bag.pockets   # Called here so that it only rearranges itself once
       GameData::Item.each do |i|
-        next if !pocket_sizes[i.pocket - 1] || pocket_sizes[i.pocket - 1] == 0
-        next if pocket_sizes[i.pocket - 1] > 0 && bag[i.pocket].length >= pocket_sizes[i.pocket - 1]
+        next if GameData::BagPocket.get(i.pocket).max_slots
+        next if !pocket_sizes[i.pocket] || pocket_sizes[i.pocket] == 0
+        next if pocket_sizes[i.pocket] > 0 && bag[i.pocket].length >= pocket_sizes[i.pocket]
         item_qty = (i.is_important?) ? 1 : qty
         bag[i.pocket].push([i.id, item_qty])
       end

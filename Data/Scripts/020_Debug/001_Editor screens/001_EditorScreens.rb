@@ -896,8 +896,8 @@ def pbItemEditorNew(default_name)
     return
   end
   # Choose a pocket
-  pocket = PocketProperty.set("", 0)
-  return if pocket == 0
+  pocket = PocketProperty.set("", :None)
+  return if pocket == :None
   # Choose a price
   price = LimitProperty.new(999_999).set(_INTL("Purchase price"), -1)
   return if price == -1

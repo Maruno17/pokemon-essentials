@@ -81,3 +81,34 @@ SaveData.register_conversion(:v22_add_primal_reversion_stat) do
     end
   end
 end
+
+#===============================================================================
+
+SaveData.register_conversion(:v22_convert_bag_object) do
+  essentials_version 22
+  display_title "Converting Bag's pockets"
+  to_value :bag do |bag|
+    bag.instance_eval do
+      all_pockets = GameData::BagPocket.all_pockets
+      if @last_viewed_pocket.is_a?(Integer)
+        @last_viewed_pocket = all_pockets[@last_viewed_pocket - 1]
+      end
+      if @last_pocket_selections.is_a?(Array)
+        new_sels = {}
+        @last_pocket_selections.each_with_index do |value, i|
+          next if i == 0
+          new_sels[all_pockets[i - 1]] = value
+        end
+        @last_pocket_selections = new_sels
+      end
+      if @pockets.is_a?(Array)
+        new_pockets = {}
+        @pockets.each_with_index do |value, i|
+          next if i == 0
+          new_pockets[all_pockets[i - 1]] = value
+        end
+        @pockets = new_pockets
+      end
+    end
+  end
+end

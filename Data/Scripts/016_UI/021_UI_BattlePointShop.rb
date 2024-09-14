@@ -462,8 +462,8 @@ class BattlePointShopScreen
                                  itemname, price.to_s_formatted))
         quantity = 1
       else
-        maxafford = (price <= 0) ? Settings::BAG_MAX_PER_SLOT : @adapter.getBP / price
-        maxafford = Settings::BAG_MAX_PER_SLOT if maxafford > Settings::BAG_MAX_PER_SLOT
+        maxafford = (price <= 0) ? PokemonBag::MAX_PER_SLOT : @adapter.getBP / price
+        maxafford = PokemonBag::MAX_PER_SLOT if maxafford > PokemonBag::MAX_PER_SLOT
         quantity = @scene.pbChooseNumber(
           _INTL("How many {1} would you like?", itemnameplural), item, maxafford
         )

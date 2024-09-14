@@ -260,31 +260,6 @@ module Settings
   ITEM_SELL_PRICE_DIVISOR              = (MECHANICS_GENERATION >= 9) ? 4 : 2
 
   #-----------------------------------------------------------------------------
-  # Bag
-  #-----------------------------------------------------------------------------
-
-  # The names of each pocket of the Bag.
-  def self.bag_pocket_names
-    return [
-      _INTL("Items"),
-      _INTL("Medicine"),
-      _INTL("Poké Balls"),
-      _INTL("TMs & HMs"),
-      _INTL("Berries"),
-      _INTL("Mail"),
-      _INTL("Battle Items"),
-      _INTL("Key Items")
-    ]
-  end
-  # The maximum number of slots per pocket (-1 means infinite number).
-  BAG_MAX_POCKET_SIZE  = [-1, -1, -1, -1, -1, -1, -1, -1]
-  # Whether each pocket in turn auto-sorts itself by the order items are defined
-  # in the PBS file items.txt.
-  BAG_POCKET_AUTO_SORT = [false, false, false, true, true, false, false, false]
-  # The maximum number of items each slot in the Bag can hold.
-  BAG_MAX_PER_SLOT     = 999
-
-  #-----------------------------------------------------------------------------
   # Pokédex
   #-----------------------------------------------------------------------------
 

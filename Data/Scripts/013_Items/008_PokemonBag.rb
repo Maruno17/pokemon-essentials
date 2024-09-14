@@ -8,38 +8,36 @@ class PokemonBag
   attr_reader   :registered_items
   attr_reader   :ready_menu_selection
 
-  def self.pocket_names
-    return Settings.bag_pocket_names
-  end
+  MAX_PER_SLOT = 999
 
   def self.pocket_count
-    return self.pocket_names.length
+    return GameData::BagPocket.count
   end
 
   def initialize
-    @pockets = []
-    (0..PokemonBag.pocket_count).each { |i| @pockets[i] = [] }
+    @pockets = {}
+    GameData::BagPocket.all_pockets.each { |pckt| @pockets[pckt] = [] }
     reset_last_selections
     @registered_items = []
     @ready_menu_selection = [0, 0, 1]   # Used by the Ready Menu to remember cursor positions
   end
 
   def reset_last_selections
-    @last_viewed_pocket = 1
-    @last_pocket_selections ||= []
-    (0..PokemonBag.pocket_count).each { |i| @last_pocket_selections[i] = 0 }
+    @last_viewed_pocket = GameData::BagPocket.all_pockets.first
+    @last_pocket_selections ||= {}
+    GameData::BagPocket.all_pockets.each { |pckt| @last_pocket_selections[pckt] = 0 }
   end
 
   def clear
-    @pockets.each { |pocket| pocket.clear }
-    (PokemonBag.pocket_count + 1).times { |i| @last_pocket_selections[i] = 0 }
+    @pockets.each_value { |pocket| pocket.clear }
+    GameData::BagPocket.all_pockets.each { |pckt| @last_pocket_selections[pckt] = 0 }
   end
 
   #-----------------------------------------------------------------------------
 
   # Gets the index of the current selected item in the pocket
   def last_viewed_index(pocket)
-    if pocket <= 0 || pocket > PokemonBag.pocket_count
+    if !GameData::BagPocket.exists?(pocket)
       raise ArgumentError.new(_INTL("Invalid pocket: {1}", pocket.inspect))
     end
     return [@last_pocket_selections[pocket], @pockets[pocket].length].min || 0
@@ -47,7 +45,7 @@ class PokemonBag
 
   # Sets the index of the current selected item in the pocket
   def set_last_viewed_index(pocket, value)
-    if pocket <= 0 || pocket > PokemonBag.pocket_count
+    if !GameData::BagPocket.exists?(pocket)
       raise ArgumentError.new(_INTL("Invalid pocket: {1}", pocket.inspect))
     end
     @last_pocket_selections[pocket] = value if value <= @pockets[pocket].length
@@ -74,7 +72,7 @@ class PokemonBag
     max_size = max_pocket_size(pocket)
     max_size = @pockets[pocket].length + 1 if max_size < 0   # Infinite size
     return ItemStorageHelper.can_add?(
-      @pockets[pocket], max_size, Settings::BAG_MAX_PER_SLOT, item_data.id, qty
+      @pockets[pocket], max_size, MAX_PER_SLOT, item_data.id, qty
     )
   end
 
@@ -85,8 +83,8 @@ class PokemonBag
     max_size = max_pocket_size(pocket)
     max_size = @pockets[pocket].length + 1 if max_size < 0   # Infinite size
     ret = ItemStorageHelper.add(@pockets[pocket],
-                                max_size, Settings::BAG_MAX_PER_SLOT, item_data.id, qty)
-    if ret && Settings::BAG_POCKET_AUTO_SORT[pocket - 1]
+                                max_size, MAX_PER_SLOT, item_data.id, qty)
+    if ret && GameData::BagPocket.get(pocket).auto_sort
       @pockets[pocket].sort! { |a, b| GameData::Item.keys.index(a[0]) <=> GameData::Item.keys.index(b[0]) }
     end
     return ret
@@ -160,7 +158,7 @@ class PokemonBag
   private
 
   def max_pocket_size(pocket)
-    return Settings::BAG_MAX_POCKET_SIZE[pocket - 1] || -1
+    return GameData::BagPocket.get(pocket).max_slots
   end
 end
 
