@@ -264,6 +264,7 @@ module PluginManager
         else
           self.error("Plugin '#{name}'s credits field must contain a string, or a string array.")
         end
+      when :disabled # Plugin disabled
       else
         self.error("Invalid plugin registry key '#{key}'.")
       end
@@ -448,6 +449,8 @@ module PluginManager
         meta[:credits] = data
       when "LINK", "WEBSITE"
         meta[:link] = data[0]
+      when "DISABLED"
+        meta[:disabled] = data[0] if data[0]
       else
         meta[property.downcase.to_sym] = data[0]
       end
@@ -558,6 +561,15 @@ module PluginManager
     return true if !FileTest.exist?("Data/PluginScripts.rxdata")
     Input.update
     return true if Input.press?(Input::SHIFT) || Input.press?(Input::CTRL)
+
+    # Get current plugins
+    scripts_aux = load_data("Data/PluginScripts.rxdata")
+    # Return true if the plugins in the Plugins folder is different than the ones in the
+    # Already compiled file.
+    # The current implementation has issues detecting when you add or remove folders
+    # Without changing the contents of the folder itself.
+    return true if scripts_aux.length != plugins.length
+
     # analyze whether or not to push recompile
     mtime = File.mtime("Data/PluginScripts.rxdata")
     order.each do |o|
@@ -613,9 +625,21 @@ module PluginManager
     # load plugins
     scripts = load_data("Data/PluginScripts.rxdata")
     echoed_plugins = []
+
+    # Skip disabled scripts
+    skipped_plugins = 0
+
     scripts.each do |plugin|
       # get the required data
       name, meta, script = plugin
+
+      # Skip disabled scripts
+      # Takes into account multiple thruth values both in english and spanish
+      if meta.key?(:disabled) && [true,'true','verdadero','si', 'x', 'yes'].include?(meta[:disabled].downcase)
+        skipped_plugins += 1
+        next
+      end
+
       if !meta[:essentials] || !meta[:essentials].include?(Essentials::VERSION)
         Console.echo_warn("Plugin '#{name}' may not be compatible with Essentials v#{Essentials::VERSION}. Trying to load anyway.")
       end
@@ -642,7 +666,7 @@ module PluginManager
       end
     end
     if scripts.length > 0
-      Console.echoln_li_done("Successfully loaded #{scripts.length} plugin(s)")
+      Console.echoln_li_done("Successfully loaded #{scripts.length - skipped_plugins} plugin(s)")
     else
       Console.echoln_li_done("No plugins found")
     end
