@@ -56,7 +56,7 @@ class PokemonBag
   def quantity(item)
     item_data = GameData::Item.try_get(item)
     return 0 if !item_data
-    pocket = item_data.pocket
+    pocket = item_data.bag_pocket
     return ItemStorageHelper.quantity(@pockets[pocket], item_data.id)
   end
 
@@ -68,7 +68,7 @@ class PokemonBag
   def can_add?(item, qty = 1)
     item_data = GameData::Item.try_get(item)
     return false if !item_data
-    pocket = item_data.pocket
+    pocket = item_data.bag_pocket
     max_size = max_pocket_size(pocket)
     max_size = @pockets[pocket].length + 1 if max_size < 0   # Infinite size
     return ItemStorageHelper.can_add?(
@@ -79,7 +79,7 @@ class PokemonBag
   def add(item, qty = 1)
     item_data = GameData::Item.try_get(item)
     return false if !item_data
-    pocket = item_data.pocket
+    pocket = item_data.bag_pocket
     max_size = max_pocket_size(pocket)
     max_size = @pockets[pocket].length + 1 if max_size < 0   # Infinite size
     ret = ItemStorageHelper.add(@pockets[pocket],
@@ -101,7 +101,7 @@ class PokemonBag
   def remove(item, qty = 1)
     item_data = GameData::Item.try_get(item)
     return false if !item_data
-    pocket = item_data.pocket
+    pocket = item_data.bag_pocket
     return ItemStorageHelper.remove(@pockets[pocket], item_data.id, qty)
   end
 
@@ -119,7 +119,7 @@ class PokemonBag
     old_item_data = GameData::Item.try_get(old_item)
     new_item_data = GameData::Item.try_get(new_item)
     return false if !old_item_data || !new_item_data
-    pocket = old_item_data.pocket
+    pocket = old_item_data.bag_pocket
     old_id = old_item_data.id
     new_id = new_item_data.id
     ret = false

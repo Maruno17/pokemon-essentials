@@ -684,7 +684,7 @@ def pbItemBall(item, quantity = 1)
   item = GameData::Item.get(item)
   return false if !item || quantity < 1
   itemname = (quantity > 1) ? item.portion_name_plural : item.portion_name
-  pocket = item.pocket
+  pocket = item.bag_pocket
   move = item.move
   if $bag.add(item, quantity)   # If item can be picked up
     meName = (item.is_key_item?) ? "Key item get" : "Item get"
@@ -734,7 +734,7 @@ def pbReceiveItem(item, quantity = 1)
   item = GameData::Item.get(item)
   return false if !item || quantity < 1
   itemname = (quantity > 1) ? item.portion_name_plural : item.portion_name
-  pocket = item.pocket
+  pocket = item.bag_pocket
   move = item.move
   meName = (item.is_key_item?) ? "Key item get" : "Item get"
   if item == :DNASPLICERS
@@ -769,7 +769,7 @@ def pbBuyPrize(item, quantity = 1)
   item = GameData::Item.get(item)
   return false if !item || quantity < 1
   item_name = (quantity > 1) ? item.portion_name_plural : item.portion_name
-  pocket = item.pocket
+  pocket = item.bag_pocket
   return false if !$bag.add(item, quantity)
   pbMessage("\\CN" + _INTL("You put the {1} in\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
                            item_name, pocket, GameData::BagPocket.get(pocket).name))

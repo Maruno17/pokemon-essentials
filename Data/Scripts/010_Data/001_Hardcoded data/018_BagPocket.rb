@@ -20,7 +20,9 @@ module GameData
 
     def self.all_pockets
       ret = []
-      DATA.each_value { |pocket| ret.push([pocket.id, pocket.order]) }
+      DATA.each_value { |pocket| ret.push([pocket.bag_pocket]) }
+      ret.uniq!
+      ret.each { |data| data.push(self.get(data[0]).order) }
       ret.sort_by! { |pckt| pckt[1] }
       ret.map! { |pckt| pckt[0] }
       return ret
@@ -61,17 +63,27 @@ module GameData
       @order         = hash[:order]         || 999
       @max_slots     = hash[:max_slots]     || -1
       @auto_sort     = hash[:auto_sort]     || false
+      @parent_pocket = hash[:parent_pocket]
     end
 
     # @return [String] the translated name of this nature
     def name
       return _INTL(@real_name)
     end
+
+    def bag_pocket
+      return @parent_pocket || @id
+    end
   end
 end
 
 #===============================================================================
-#
+# NOTE: If :parent_pocket is defined for a BagPocket below, that parent pocket
+#       is assumed to be one that appears in the Bag. They don't chain.
+#       i.e. You can't give "MegaStones" a :parent_pocket of "HeldItems", and
+#       "HeldItems" a :parent_pocket of "Items" (where "Items" is the only one
+#       of these pockets that appears in the Bag). Both "MegaStones" and
+#       "HeldItems" should have a :parent_pocket of "Items".
 #===============================================================================
 
 GameData::BagPocket.register({

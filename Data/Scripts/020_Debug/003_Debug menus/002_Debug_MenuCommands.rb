@@ -820,11 +820,12 @@ MenuHandlers.add(:debug_menu, :fill_bag, {
       GameData::BagPocket.each { |pckt| pocket_sizes[pckt.id] = pckt.max_slots }
       bag = $bag.pockets   # Called here so that it only rearranges itself once
       GameData::Item.each do |i|
-        next if GameData::BagPocket.get(i.pocket).max_slots
-        next if !pocket_sizes[i.pocket] || pocket_sizes[i.pocket] == 0
-        next if pocket_sizes[i.pocket] > 0 && bag[i.pocket].length >= pocket_sizes[i.pocket]
+        bag_pocket = i.bag_pocket
+        next if GameData::BagPocket.get(bag_pocket).max_slots
+        next if !pocket_sizes[bag_pocket] || pocket_sizes[bag_pocket] == 0
+        next if pocket_sizes[bag_pocket] > 0 && bag[bag_pocket].length >= pocket_sizes[bag_pocket]
         item_qty = (i.is_important?) ? 1 : qty
-        bag[i.pocket].push([i.id, item_qty])
+        bag[bag_pocket].push([i.id, item_qty])
       end
       # NOTE: Auto-sorting pockets don't need to be sorted afterwards, because
       #       items are added in the same order they would be sorted into.

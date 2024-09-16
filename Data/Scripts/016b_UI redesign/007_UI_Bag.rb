@@ -119,7 +119,7 @@ class UI::BagVisualsList < Window_DrawableCommand
       # Draw quantity
       if item_data.show_quantity? && !showing_register_icon
         qty = @items[index][1]
-        qtytext = _ISPRINTF("×{1: 3d}", qty)
+        qtytext = _ISPRINTF("× {1:d}", qty)
         xQty    = rect.x + rect.width - self.contents.text_size(qtytext).width - 16
         textpos.push([qtytext, xQty, rect.y + 2, :left, baseColor, shadowColor])
       end
@@ -154,11 +154,11 @@ class UI::BagVisuals < UI::BaseVisuals
     :default   => [Color.new(248, 248, 248), Color.new(104, 104, 104)],   # Base and shadow colour
 #    :white     => [Color.new(248, 248, 248), Color.new(104, 104, 104)],   # Summary screen's white
 #    :black     => [Color.new(64, 64, 64), Color.new(176, 176, 176)]       # Summary screen's black
-    :white     => [Color.new(248, 248, 248), Color.new(0, 0, 0)],
+    :white     => [Color.new(248, 248, 248), Color.new(56, 56, 56)],
     :black     => [Color.new(88, 88, 80), Color.new(168, 184, 184)],
     :switching => [Color.new(224, 0, 0), Color.new(248, 144, 144)]
   }
-  ITEMS_VISIBLE = 7
+  ITEMS_VISIBLE = 6
 
   def initialize(bag, mode = :normal)
     @bag = bag
@@ -168,44 +168,40 @@ class UI::BagVisuals < UI::BaseVisuals
   end
 
   def initialize_bitmaps
-    @bitmaps[:slider] = AnimatedBitmap.new(graphics_folder + "icon_slider")
+    @bitmaps[:slider]       = AnimatedBitmap.new(graphics_folder + "icon_slider")
     @bitmaps[:pocket_icons] = AnimatedBitmap.new(graphics_folder + "icon_pocket")
+    @bitmaps[:party_icons]  = AnimatedBitmap.new(graphics_folder + "icon_party")
   end
 
   def initialize_overlay
     super
-    add_overlay(:slider_overlay, 36, 470 + 38 + 38)
-    @sprites[:slider_overlay].x = 470
-    @sprites[:slider_overlay].y = 54 - 38
+    add_overlay(:slider_overlay, 24, 224)
+    @sprites[:slider_overlay].x = 484
+    @sprites[:slider_overlay].y = 46
   end
 
   def initialize_sprites
     initialize_pocket_sprites
+    initialize_party_sprites
     initialize_item_list
     initialize_item_sprites
   end
 
   def initialize_pocket_sprites
-    @sprites[:bag] = IconSprite.new(30, 20, @viewport)
-    @sprites[:pocket_icons] = BitmapSprite.new(186, 32, @viewport)
-    @sprites[:pocket_icons].x = 0
-    @sprites[:pocket_icons].y = 224
-    # TODO: I won't need these two animated arrows once new ones are put next to
-    #       the pocket icons.
-    # Arrow to indicate more ribbons are above the ones visible when navigating ribbons
-    add_animated_arrow(:left_arrow, -4, 76, :left)
-    @sprites[:left_arrow].z = 1700
-    # TODO: Set visibility.
-#    @sprites[:left_arrow].visible = (!@choosing || numfilledpockets > 1)
-    # Arrow to indicate more ribbons are below the ones visible when navigating ribbons
-    add_animated_arrow(:right_arrow, 150, 76, :right)
-    @sprites[:right_arrow].z = 1700
-    # TODO: Set visibility.
-#    @sprites[:right_arrow].visible = (!@choosing || numfilledpockets > 1)
+    @sprites[:bag] = IconSprite.new(28, 90, @viewport)
+    @sprites[:pocket_icons] = BitmapSprite.new(344, 28, @viewport)
+    @sprites[:pocket_icons].x = 160
+    @sprites[:pocket_icons].y = 2
+  end
+
+  def initialize_party_sprites
+    @sprites[:party_icons] = BitmapSprite.new(32 * Settings::MAX_PARTY_SIZE, 32, @viewport)
+    @sprites[:party_icons].x = 6
+    @sprites[:party_icons].y = 42
   end
 
   def initialize_item_list
-    @sprites[:item_list] = UI::BagVisualsList.new(@bag, 168, -8, 314, 40 + 32 + (ITEMS_VISIBLE * 32), @viewport)
+    @sprites[:item_list] = UI::BagVisualsList.new(@bag, 166, 28, 332, 40 + 28 + (ITEMS_VISIBLE * 32), @viewport)
     @sprites[:item_list].baseColor              = TEXT_COLOR_THEMES[:black][0]
     @sprites[:item_list].shadowColor            = TEXT_COLOR_THEMES[:black][1]
     @sprites[:item_list].switching_base_color   = TEXT_COLOR_THEMES[:switching][0]
@@ -220,7 +216,7 @@ class UI::BagVisuals < UI::BaseVisuals
     @sprites[:item_icon] = ItemIconSprite.new(48, Graphics.height - 48, nil, @viewport)
     # Selected item's description text box
     @sprites[:item_description] = Window_UnformattedTextPokemon.newWithSize(
-      "", 72, 272, Graphics.width - 96, 128, @viewport
+      "", 76, 272, Graphics.width - 100, 128, @viewport
     )
     @sprites[:item_description].baseColor   = TEXT_COLOR_THEMES[:white][0]
     @sprites[:item_description].shadowColor = TEXT_COLOR_THEMES[:white][1]
@@ -381,12 +377,12 @@ class UI::BagVisuals < UI::BaseVisuals
   end
 
   def refresh_pocket_icons
-    icon_size = [28, 28]
-    icon_overlap = 6
-    icon_x = 2
-    icon_y = 2
-    @sprites[:pocket_icons].bitmap.clear
     all_pockets = GameData::BagPocket.all_pockets
+    icon_size = [28, 28]
+    icon_overlap = 0
+    icon_x = 172 - ((icon_size[0] - icon_overlap) * all_pockets.length / 2)
+    icon_y = 0
+    @sprites[:pocket_icons].bitmap.clear
     # Draw regular pocket icons
     all_pockets.each_with_index do |pckt, i|
       icon_pos = GameData::BagPocket.get(pckt).icon_position
@@ -407,13 +403,18 @@ class UI::BagVisuals < UI::BaseVisuals
     icon_pos = GameData::BagPocket.get(@pocket).icon_position
     draw_image(@bitmaps[:pocket_icons], icon_x + (pocket_number * (icon_size[0] - icon_overlap)), icon_y,
                icon_pos * icon_size[0], 0, *icon_size, overlay: :pocket_icons)
-    # TODO: Draw the left and right arrows, if @mode != :choose_item ||
-    #       @filtered_list has 2+ non-empty pockets.
+    # Draw left/right arrows if there are multiple pockets that can be looked at
+    if @mode != :choose_item || !@filtered_list || @filtered_list.count { |pckt, contents| !contents.empty? } > 1
+      draw_image(@bitmaps[:pocket_icons], icon_x - (icon_size[0] - icon_overlap), icon_y,
+                 0, icon_size[1] * 3, *icon_size, overlay: :pocket_icons)
+      draw_image(@bitmaps[:pocket_icons], icon_x + (all_pockets.length * (icon_size[0] - icon_overlap)), icon_y,
+                icon_size[0], icon_size[1] * 3, *icon_size, overlay: :pocket_icons)
+    end
   end
 
   def refresh_pocket
     # Draw pocket's name
-    draw_text(GameData::BagPocket.get(@pocket).name, 94, 186, align: :center, theme: :black)
+    draw_text(GameData::BagPocket.get(@pocket).name, 16, 6, theme: :black)
     # Set the bag sprite
     bag_sprite_filename = graphics_folder + gendered_filename(sprintf("bag_%s", @pocket.to_s))
     @sprites[:bag].setBitmap(bag_sprite_filename)
@@ -430,15 +431,15 @@ class UI::BagVisuals < UI::BaseVisuals
     @sprites[:slider_overlay].bitmap.clear
     # Define useful values
     slider_rects = {
-      :up_arrow   => [0, 0, 36, 38],
-      :down_arrow => [0, 38, 36, 38],
-      :box_top    => [36, 0, 36, 4],
-      :box_middle => [36, 4, 36, 16],
-      :box_bottom => [36, 20, 36, 18]
+      :up_arrow   => [0, 0, 24, 28],
+      :down_arrow => [0, 28, 24, 28],
+      :box_top    => [24, 0, 24, 4],
+      :box_middle => [24, 4, 24, 8],
+      :box_bottom => [24, 12, 24, 18]
     }
     slider_x = 0
     slider_y = slider_rects[:up_arrow][3]
-    slider_height = 174
+    slider_height = 168
     min_box_height = slider_rects[:box_top][3] + slider_rects[:box_middle][3] + slider_rects[:box_bottom][3]
     # Draw things
     show_slider = false
@@ -491,6 +492,34 @@ class UI::BagVisuals < UI::BaseVisuals
       @sprites[:item_description].text = GameData::Item.get(selected_item).description
     else
       @sprites[:item_description].text = _INTL("Close bag.")
+    end
+    refresh_party_display
+  end
+
+  def refresh_party_display
+    @sprites[:party_icons].bitmap.clear
+    return if item.nil? || @mode == :choose_item
+    item_data = GameData::Item.get(item)
+    use_type = item_data.field_use
+    # TODO: If @mode == :choose_item_in_battle, also check for item usage on a
+    #       battler.
+    return if !pbCanUseOnPokemon?(item)
+    icon_x = 0
+    icon_y = 0
+    icon_size = [@bitmaps[:party_icons].height, @bitmaps[:party_icons].height]
+    icon_overlap = 4
+    Settings::MAX_PARTY_SIZE.times do |i|
+      pkmn = $player.party[i]
+      this_icon_x = (icon_size[0] - icon_overlap) * i
+      # TODO: If @mode == :choose_item_in_battle, also check for item usage on a
+      #       battler.
+      usable = pbItemHasEffectOnPokemon?(item, pkmn)
+      icon_offset = 2
+      if pkmn
+        icon_offset = (usable) ? 0 : 1
+      end
+      draw_image(@bitmaps[:party_icons], this_icon_x, icon_y,
+                 icon_offset * icon_size[0], 0, *icon_size, overlay: :party_icons)
     end
   end
 

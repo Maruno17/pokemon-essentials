@@ -177,6 +177,10 @@ module GameData
       return pbGetMessageFromHash(MessageTypes::ITEM_DESCRIPTIONS, @real_description)
     end
 
+    def bag_pocket
+      return GameData::BagPocket.get(@pocket).bag_pocket
+    end
+
     def has_flag?(flag)
       return @flags.any? { |f| f.downcase == flag.downcase }
     end
