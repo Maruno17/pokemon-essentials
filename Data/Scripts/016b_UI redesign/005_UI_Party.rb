@@ -1150,7 +1150,6 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :debug, {
   }
 })
 
-# Start switching.
 UIActionHandlers.add(UI::Party::SCREEN_ID, :switch_pokemon_start, {
   :effect => proc { |screen|
     screen.start_switching

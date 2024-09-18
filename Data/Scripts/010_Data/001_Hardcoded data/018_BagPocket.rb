@@ -107,6 +107,11 @@ GameData::BagPocket.register({
   :order         => 30
 })
 
+# This pocket is hardcoded to allow showing the details of a machine item in
+# this pocket in the Bag. The display of this information is toggled by pressing
+# the Action input. It is not possible to open the screen menu with the Action
+# input in this pocket (although you also can't open it if the pocket auto-sorts
+# so that's not a problem).
 GameData::BagPocket.register({
   :id            => :Machines,
   :name          => _INTL("TMs & HMs"),

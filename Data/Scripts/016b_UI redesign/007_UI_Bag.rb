@@ -9,12 +9,14 @@ class UI::BagVisualsList < Window_DrawableCommand
     @sorting = false
     super(x, y, width, height, viewport)
     @selarrow  = AnimatedBitmap.new(bag_folder + "cursor")
-    @swaparrow = AnimatedBitmap.new(bag_folder + "cursor_swap")
+    @swap_arrow = AnimatedBitmap.new(bag_folder + "cursor_swap")
+    @swapping_arrow = AnimatedBitmap.new(bag_folder + "cursor_swapping")
     self.windowskin = nil
   end
 
   def dispose
-    @swaparrow.dispose
+    @swap_arrow.dispose
+    @swapping_arrow.dispose
     super
   end
 
@@ -38,6 +40,15 @@ class UI::BagVisualsList < Window_DrawableCommand
 
   def item_id
     return (@items[self.index]) ? @items[self.index][0] : nil
+  end
+
+  def sort_mode=(value)
+    @sort_mode = value
+    refresh
+  end
+
+  def disable_sorting=(value)
+    @disable_sorting = value
   end
 
   #-----------------------------------------------------------------------------
@@ -129,7 +140,13 @@ class UI::BagVisualsList < Window_DrawableCommand
 
   def drawCursor(index, rect)
     if self.index == index
-      bmp = (@sorting) ? @swaparrow.bitmap : @selarrow.bitmap
+      if @sorting
+        bmp = @swapping_arrow.bitmap
+      elsif @sort_mode && !@disable_sorting
+        bmp = @swap_arrow.bitmap
+      else
+        bmp = @selarrow.bitmap
+      end
       pbCopyBitmap(self.contents, bmp, rect.x, rect.y + 2)
     end
   end
@@ -148,10 +165,11 @@ end
 #===============================================================================
 class UI::BagVisuals < UI::BaseVisuals
   attr_reader :sprites
+  attr_reader :pocket
 
   GRAPHICS_FOLDER   = "Bag/"   # Subfolder in Graphics/UI
   TEXT_COLOR_THEMES = {   # These color themes are added to @sprites[:overlay]
-    :default   => [Color.new(248, 248, 248), Color.new(104, 104, 104)],   # Base and shadow colour
+    :default   => [Color.new(248, 248, 248), Color.new(56, 56, 56)],   # Base and shadow colour
 #    :white     => [Color.new(248, 248, 248), Color.new(104, 104, 104)],   # Summary screen's white
 #    :black     => [Color.new(64, 64, 64), Color.new(176, 176, 176)]       # Summary screen's black
     :white     => [Color.new(248, 248, 248), Color.new(56, 56, 56)],
@@ -163,21 +181,31 @@ class UI::BagVisuals < UI::BaseVisuals
   def initialize(bag, mode = :normal)
     @bag = bag
     @mode = mode
+    @show_move_details = false
     @pocket = @bag.last_viewed_pocket
     super()
   end
 
   def initialize_bitmaps
+    @bitmaps[:input_icons]  = AnimatedBitmap.new(UI_FOLDER + "input_icons")
     @bitmaps[:slider]       = AnimatedBitmap.new(graphics_folder + "icon_slider")
     @bitmaps[:pocket_icons] = AnimatedBitmap.new(graphics_folder + "icon_pocket")
     @bitmaps[:party_icons]  = AnimatedBitmap.new(graphics_folder + "icon_party")
+    @bitmaps[:types]        = AnimatedBitmap.new(UI_FOLDER + _INTL("types"))
+    @bitmaps[:categories]   = AnimatedBitmap.new(UI_FOLDER + "category")
   end
 
   def initialize_overlay
     super
+    add_overlay(:pocket_name_overlay, 160, 32)
     add_overlay(:slider_overlay, 24, 224)
     @sprites[:slider_overlay].x = 484
     @sprites[:slider_overlay].y = 46
+    add_overlay(:move_details_overlay, 180, 170)
+    @sprites[:move_details_overlay].x = 0
+    @sprites[:move_details_overlay].y = 112
+    @sprites[:move_details_overlay].z = 1200
+    @sprites[:move_details_overlay].visible = false
   end
 
   def initialize_sprites
@@ -192,6 +220,11 @@ class UI::BagVisuals < UI::BaseVisuals
     @sprites[:pocket_icons] = BitmapSprite.new(344, 28, @viewport)
     @sprites[:pocket_icons].x = 160
     @sprites[:pocket_icons].y = 2
+    add_icon_sprite(:move_details_bg,
+                    @sprites[:move_details_overlay].x, sprites[:move_details_overlay].y,
+                    graphics_folder + "move_details_bg")
+    @sprites[:move_details_bg].z = 1100
+    @sprites[:move_details_bg].visible = false
   end
 
   def initialize_party_sprites
@@ -236,6 +269,11 @@ class UI::BagVisuals < UI::BaseVisuals
     return @sprites[:item_list].index
   end
 
+  def set_index(value)
+    @sprites[:item_list].index = value
+    refresh_on_index_changed(nil)
+  end
+
   def item
     return @sprites[:item_list].item_id
   end
@@ -274,6 +312,7 @@ class UI::BagVisuals < UI::BaseVisuals
   def set_pocket(new_pocket)
     @pocket = new_pocket
     @bag.last_viewed_pocket = @pocket if @mode != :choose_item
+    @sprites[:item_list].disable_sorting = !pocket_sortable?
     if @filtered_list
       @sprites[:item_list].items = @filtered_list[@pocket]
     else
@@ -323,6 +362,20 @@ class UI::BagVisuals < UI::BaseVisuals
     set_pocket(new_pocket)
   end
 
+  def set_sub_mode(sub_mode = :normal)
+    @sub_mode = sub_mode
+    @sprites[:item_list].sort_mode = (sub_mode == :rearrange_items)
+  end
+
+  # All screen menu options are related to sorting.
+  def can_access_screen_menu?
+    return false if @mode != :normal
+    return false if @bag.pockets[@pocket].length <= 1
+    return false if !pocket_sortable?
+    return false if switching?
+    return true
+  end
+
   def switch_index
     return @switch_index || -1
   end
@@ -331,8 +384,12 @@ class UI::BagVisuals < UI::BaseVisuals
     return false if @mode != :normal || @filtered_list
     return false if @bag.pockets[@pocket].length <= 1
     return false if index >= @bag.pockets[@pocket].length
-    return false if GameData::BagPocket.get(@pocket).auto_sort
+    return false if !pocket_sortable?
     return true
+  end
+
+  def pocket_sortable?
+    return !GameData::BagPocket.get(@pocket).auto_sort
   end
 
   def switching?
@@ -343,12 +400,14 @@ class UI::BagVisuals < UI::BaseVisuals
     @switch_index = sw_index
     @sprites[:item_list].sorting = true
     refresh_item_list
+    refresh_input_indicators
   end
 
   def end_switching
     @switch_index = -1
     @sprites[:item_list].sorting = false
     refresh_item_list
+    refresh_input_indicators
   end
 
   def cancel_switching
@@ -363,8 +422,8 @@ class UI::BagVisuals < UI::BaseVisuals
   #-----------------------------------------------------------------------------
 
   def refresh
-    super
     refresh_background
+    refresh_input_indicators
     refresh_pocket_icons
     refresh_pocket
     refresh_item_list
@@ -374,6 +433,31 @@ class UI::BagVisuals < UI::BaseVisuals
 
   def refresh_background
     @sprites[:background].setBitmap(graphics_folder + background_filename)
+  end
+
+  def refresh_input_indicators
+    @sprites[:overlay].bitmap.clear if @sprites[:overlay]
+    return if item.nil?
+    action_icon_x = 4
+    action_icon_y = 244
+    action_text_x = 42
+    action_text_y = 250
+    if @pocket == :Machines
+      action_text = _INTL("Show details")
+      if @show_move_details
+        action_icon_y = 78
+        action_text_y = 84
+        action_text = _INTL("Hide details")
+      end
+    elsif can_access_screen_menu?
+      action_text = _INTL("Sort pocket")
+    end
+    if action_text
+      draw_image(@bitmaps[:input_icons], action_icon_x, action_icon_y,
+                 2 * @bitmaps[:input_icons].height, 0,
+                 @bitmaps[:input_icons].height, @bitmaps[:input_icons].height)
+      draw_text(action_text, action_text_x, action_text_y)
+    end
   end
 
   def refresh_pocket_icons
@@ -414,7 +498,8 @@ class UI::BagVisuals < UI::BaseVisuals
 
   def refresh_pocket
     # Draw pocket's name
-    draw_text(GameData::BagPocket.get(@pocket).name, 16, 6, theme: :black)
+    @sprites[:pocket_name_overlay].bitmap.clear
+    draw_text(GameData::BagPocket.get(@pocket).name, 16, 6, theme: :black, overlay: :pocket_name_overlay)
     # Set the bag sprite
     bag_sprite_filename = graphics_folder + gendered_filename(sprintf("bag_%s", @pocket.to_s))
     @sprites[:bag].setBitmap(bag_sprite_filename)
@@ -494,6 +579,7 @@ class UI::BagVisuals < UI::BaseVisuals
       @sprites[:item_description].text = _INTL("Close bag.")
     end
     refresh_party_display
+    refresh_move_details
   end
 
   def refresh_party_display
@@ -523,6 +609,50 @@ class UI::BagVisuals < UI::BaseVisuals
     end
   end
 
+  def refresh_move_details
+    if @pocket != :Machines || !@show_move_details || item.nil?
+      @sprites[:bag].visible = true
+      @sprites[:move_details_bg].visible = false
+      @sprites[:move_details_overlay].visible = false
+      return
+    end
+    @sprites[:bag].visible = false
+    @sprites[:move_details_bg].visible = true
+    @sprites[:move_details_overlay].visible = true
+    @sprites[:move_details_overlay].bitmap.clear
+    move = GameData::Item.get(item).move
+    move_data = GameData::Move.get(move)
+    # Type
+    draw_text(_INTL("Type"), 4, 14, overlay: :move_details_overlay)
+    type_number = GameData::Type.get(move_data.type).icon_position
+    draw_image(@bitmaps[:types], 106, 10,
+               0, type_number * GameData::Type::ICON_SIZE[1], *GameData::Type::ICON_SIZE,
+               overlay: :move_details_overlay)
+    # Category
+    draw_text(_INTL("Category"), 4, 46, overlay: :move_details_overlay)
+    draw_image(@bitmaps[:categories], 106, 42,
+               0, move_data.category * GameData::Move::CATEGORY_ICON_SIZE[1], *GameData::Move::CATEGORY_ICON_SIZE,
+               overlay: :move_details_overlay)
+    # Power
+    draw_text(_INTL("Power"), 4, 78, overlay: :move_details_overlay)
+    power_text = move_data.power
+    power_text = "---" if power_text == 0   # Status move
+    power_text = "???" if power_text == 1   # Variable power move
+    draw_text(power_text, 156, 78, align: :right, overlay: :move_details_overlay)
+    # Accuracy
+    draw_text(_INTL("Accuracy"), 4, 110, overlay: :move_details_overlay)
+    accuracy = move_data.accuracy
+    if accuracy == 0
+      draw_text("---", 156, 110, align: :right, overlay: :move_details_overlay)
+    else
+      draw_text(accuracy, 156, 110, align: :right, overlay: :move_details_overlay)
+      draw_text("%", 156, 110, overlay: :move_details_overlay)
+    end
+    # PP
+    draw_text(_INTL("PP"), 4, 142, overlay: :move_details_overlay)
+    draw_text(move_data.total_pp, 156, 142, align: :right, overlay: :move_details_overlay)
+  end
+
   def refresh_on_index_changed(old_index)
     if switching?
       # Skip past "Cancel"
@@ -537,6 +667,7 @@ class UI::BagVisuals < UI::BaseVisuals
     @bag.set_last_viewed_index(@pocket, index) if @mode != :choose_item
     refresh_slider
     refresh_selected_item
+    refresh_input_indicators
   end
 
   #-----------------------------------------------------------------------------
@@ -555,8 +686,6 @@ class UI::BagVisuals < UI::BaseVisuals
       return update_interaction(Input::BACK)
     elsif Input.trigger?(Input::ACTION)
       return update_interaction(Input::ACTION)
-    elsif Input.trigger?(Input::SPECIAL)
-      return update_interaction(Input::SPECIAL)
     end
     return nil
   end
@@ -567,28 +696,37 @@ class UI::BagVisuals < UI::BaseVisuals
       if switching?
         pbPlayDecisionSE
         return :switch_item_end
-      end
-      if !item   # "CLOSE BAG"
+      elsif @sub_mode == :rearrange_items && item && pocket_sortable?
+        pbPlayDecisionSE
+        return :switch_item_start
+      elsif !item   # "CLOSE BAG"
         pbPlayCloseMenuSE
         return :quit
       end
       pbPlayDecisionSE
       return :interact_menu
     when Input::ACTION
-      if switching?
-        pbPlayDecisionSE
-        return :switch_item_end
-      elsif can_switch?
-        pbPlayDecisionSE
-        return :switch_item_start
+      if item
+        if switching?
+          pbPlayDecisionSE
+          return :switch_item_end
+        elsif @pocket == :Machines
+          pbPlayDecisionSE
+          @show_move_details = !@show_move_details
+          refresh_move_details
+          refresh_input_indicators
+        elsif can_access_screen_menu?
+          pbPlayDecisionSE
+          return :screen_menu
+        end
       end
-    when Input::SPECIAL
-      # TODO: May be unused. Originally toggled registering an item, but this
-      #       has been disabled for ages.
     when Input::BACK
       if switching?
         pbPlayCancelSE
         return :switch_item_cancel
+      elsif (@sub_mode || :normal) != :normal && pocket_sortable?
+        pbPlayCancelSE
+        return :clear_sub_mode
       end
       pbPlayCloseMenuSE
       return :quit
@@ -683,6 +821,10 @@ class UI::Bag < UI::BaseScreen
     @visuals.set_filter_proc(filter_proc)
   end
 
+  def set_sub_mode(sub_mode = :normal)
+    @visuals.set_sub_mode(sub_mode)
+  end
+
   def switch_index
     return @visuals.switch_index
   end
@@ -701,6 +843,19 @@ class UI::Bag < UI::BaseScreen
 
   def switch_items(index1, index2)
     @visuals.end_switching
+  end
+
+  def autosort_pocket(order)
+    pocket = @bag.pockets[@visuals.pocket]
+    item_id = @visuals.item
+    case order
+    when :alphabetical
+      pocket.sort! { |a, b| GameData::Item.get(a[0]).name <=> GameData::Item.get(b[0]).name }
+    when :definition
+      pocket.sort! { |a, b| GameData::Item.keys.index(a[0]) <=> GameData::Item.keys.index(b[0]) }
+    end
+    new_index = pocket.index { |slot| slot[0] == item_id }
+    @visuals.set_index(new_index)
   end
 
   #-----------------------------------------------------------------------------
@@ -734,6 +889,50 @@ end
 UIActionHandlers.add(UI::Bag::SCREEN_ID, :screen_menu, {
   :menu         => :bag_screen_menu,
   :menu_message => proc { |screen| _INTL("Choose an option.") }
+})
+
+#-------------------------------------------------------------------------------
+
+UIActionHandlers.add(UI::Bag::SCREEN_ID, :switch_item_start, {
+  :effect => proc { |screen|
+    screen.start_switching
+  }
+})
+
+UIActionHandlers.add(UI::Bag::SCREEN_ID, :switch_item_end, {
+  :effect => proc { |screen|
+    screen.switch_items(screen.switch_index, screen.index)
+  }
+})
+
+UIActionHandlers.add(UI::Bag::SCREEN_ID, :switch_item_cancel, {
+  :effect => proc { |screen|
+    screen.cancel_switching
+  }
+})
+
+UIActionHandlers.add(UI::Bag::SCREEN_ID, :rearrange_items_mode, {
+  :effect => proc { |screen|
+    screen.set_sub_mode(:rearrange_items)
+  }
+})
+
+UIActionHandlers.add(UI::Bag::SCREEN_ID, :clear_sub_mode, {
+  :effect => proc { |screen|
+    screen.set_sub_mode(:normal)
+  }
+})
+
+UIActionHandlers.add(UI::Bag::SCREEN_ID, :sort_alphabetically, {
+  :effect => proc { |screen|
+    screen.autosort_pocket(:alphabetical)
+  }
+})
+
+UIActionHandlers.add(UI::Bag::SCREEN_ID, :sort_by_definition, {
+  :effect => proc { |screen|
+    screen.autosort_pocket(:definition)
+  }
 })
 
 #-------------------------------------------------------------------------------
@@ -849,38 +1048,27 @@ UIActionHandlers.add(UI::Bag::SCREEN_ID, :debug, {
   }
 })
 
-#-------------------------------------------------------------------------------
-
-UIActionHandlers.add(UI::Bag::SCREEN_ID, :switch_item_start, {
-  :effect => proc { |screen|
-    screen.start_switching
-  }
-})
-
-UIActionHandlers.add(UI::Bag::SCREEN_ID, :switch_item_end, {
-  :effect => proc { |screen|
-    screen.switch_items(screen.switch_index, screen.index)
-  }
-})
-
-UIActionHandlers.add(UI::Bag::SCREEN_ID, :switch_item_cancel, {
-  :effect => proc { |screen|
-    screen.cancel_switching
-  }
-})
-
 #===============================================================================
 # Menu options for choice menus that exist in the party screen.
 #===============================================================================
-MenuHandlers.add(:bag_screen_menu, :open_storage, {
-  "name"      => _INTL("Access Pokémon Boxes"),
-  "order"     => 10,
-#  "condition" => proc { |screen| next screen.can_access_storage? }
+MenuHandlers.add(:bag_screen_menu, :rearrange_items_mode, {
+  "name"  => _INTL("Mode: Rearrange items"),
+  "order" => 10
+})
+
+MenuHandlers.add(:bag_screen_menu, :sort_by_definition, {
+  "name"  => _INTL("Sort by type"),
+  "order" => 20
+})
+
+MenuHandlers.add(:bag_screen_menu, :sort_alphabetically, {
+  "name"  => _INTL("Sort alphabetically"),
+  "order" => 30
 })
 
 MenuHandlers.add(:bag_screen_menu, :cancel, {
-  "name"      => _INTL("Cancel"),
-  "order"     => 9999
+  "name"  => _INTL("Cancel"),
+  "order" => 9999
 })
 
 #-------------------------------------------------------------------------------
