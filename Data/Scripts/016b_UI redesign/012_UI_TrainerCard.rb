@@ -55,11 +55,17 @@ class UI::TrainerCardVisuals < UI::BaseVisuals
     play_time_text = (hour > 0) ? _INTL("{1}h {2}m", hour, min) : _INTL("{1}m", min)
     # Create start date text
     $PokemonGlobal.startTime = Time.now if !$PokemonGlobal.startTime
-    # TODO: Put this date the proper way round for non-United States of Americans.
-    start_date_text = _INTL("{1} {2}, {3}",
-                            pbGetAbbrevMonthName($PokemonGlobal.startTime.mon),
-                            $PokemonGlobal.startTime.day,
-                            $PokemonGlobal.startTime.year)
+    if System.user_language[3..4] == "US"
+      start_date_text = _INTL("{1} {2}, {3}",
+                              pbGetAbbrevMonthName($PokemonGlobal.startTime.mon),
+                              $PokemonGlobal.startTime.day,
+                              $PokemonGlobal.startTime.year)
+    else
+      start_date_text = _INTL("{1} {2}, {3}",
+                              $PokemonGlobal.startTime.day,
+                              pbGetAbbrevMonthName($PokemonGlobal.startTime.mon),
+                              $PokemonGlobal.startTime.year)
+    end
     # Draw text
     draw_text(_INTL("Money"), 34, 118)
     draw_text(money_text, 302, 118, align: :right)

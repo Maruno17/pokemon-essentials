@@ -135,6 +135,66 @@ module UI
       end
     end
 
+    SLIDER_COORDS = {   # Size of elements in slider graphic
+      :arrow_size  => [24, 28],
+      :box_heights => [4, 8, 18]   # Heights of top, middle and bottom segments of slider box
+    }
+
+    # slider_height includes the heights of the arrows at either end.
+    def draw_slider(bitmap, slider_x, slider_y, slider_height, visible_top, visible_height, total_height, hide_if_inactive: :false, overlay: :overlay)
+      coords = self.class::SLIDER_COORDS
+      bar_y = slider_y + coords[:arrow_size][1]
+      bar_height = slider_height - (2 * coords[:arrow_size][1])
+      bar_segment_height = coords[:box_heights].sum   # Also minimum height of slider box
+      show_up_arrow = (visible_top > 0)
+      show_down_arrow = (visible_top + visible_height < total_height)
+      return if hide_if_inactive && !show_up_arrow && !show_down_arrow
+      # Draw up arrow
+      x_offset = (show_up_arrow) ? coords[:arrow_size][0] : 0
+      draw_image(bitmap, slider_x, slider_y,
+                 x_offset, 0, *coords[:arrow_size], overlay: overlay)
+      # Draw down arrow
+      x_offset = (show_down_arrow) ? coords[:arrow_size][0] : 0
+      draw_image(bitmap, slider_x, slider_y + slider_height - coords[:arrow_size][1],
+                 x_offset, coords[:arrow_size][1] + bar_segment_height, *coords[:arrow_size], overlay: overlay)
+      # Draw bar background
+      iterations = (bar_height / bar_segment_height.to_f).ceil
+      iterations.times do |i|
+        segment_y = bar_y + (i * bar_segment_height)
+        iteration_height = bar_segment_height
+        iteration_height = bar_height - (i * bar_segment_height) if i == iterations - 1   # Last part
+        draw_image(bitmap, slider_x, segment_y,
+                   0, coords[:arrow_size][1], coords[:arrow_size][0], iteration_height, overlay: overlay)
+      end
+      # Draw slider box
+      if show_up_arrow || show_down_arrow
+        box_height = (bar_height * visible_height / total_height).floor
+        box_height += [(bar_height - box_height) / 2, bar_height / 6].min   # Make it bigger than expected
+        box_height = [box_height.floor, bar_segment_height].max
+        box_y = bar_y
+        box_y += ((bar_height - box_height) * visible_top / (total_height - visible_height)).floor
+        # Draw slider box top
+        draw_image(bitmap, slider_x, box_y,
+                   coords[:arrow_size][0], coords[:arrow_size][1],
+                   coords[:arrow_size][0], coords[:box_heights][0], overlay: overlay)
+        # Draw slider box middle
+        middle_height = box_height - coords[:box_heights][0] - coords[:box_heights][2]
+        iterations = (middle_height / coords[:box_heights][1].to_f).ceil
+        iterations.times do |i|
+          segment_y = box_y + coords[:box_heights][0] + (i * coords[:box_heights][1])
+          iteration_height = coords[:box_heights][1]
+          iteration_height = middle_height - (i * coords[:box_heights][1]) if i == iterations - 1   # Last part
+          draw_image(bitmap, slider_x, segment_y,
+                     coords[:arrow_size][0], coords[:arrow_size][1] + coords[:box_heights][0],
+                     coords[:arrow_size][0], iteration_height, overlay: overlay)
+        end
+        # Draw slider box bottom
+        draw_image(bitmap, slider_x, box_y + box_height - coords[:box_heights][2],
+                   coords[:arrow_size][0], coords[:arrow_size][1] + coords[:box_heights][0] + coords[:box_heights][1],
+                   coords[:arrow_size][0], coords[:box_heights][2], overlay: overlay)
+      end
+    end
+
     #---------------------------------------------------------------------------
 
     # Redraw everything on the screen.
