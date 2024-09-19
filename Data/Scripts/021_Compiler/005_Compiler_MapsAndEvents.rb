@@ -40,11 +40,17 @@ module Compiler
     ["calcStats",                    "calc_stats"]
   ]
 
+  @@categories[:import_new_maps] = {
+    :should_compile => proc { |compiling| next !new_maps_to_import.nil? },
+    :header_text    => proc { next _INTL("Importing new maps") },
+    :skipped_text   => proc { next _INTL("None found") },
+    :compile        => proc { import_new_maps }
+  }
+
   @@categories[:map_data] = {
-    :should_compile => proc { |compiling| next import_new_maps },
-    :header_text    => proc { next _INTL("Modifying map data") },
-    :skipped_text   => proc { next _INTL("Not modified") },
-    :compile        => proc { compile_trainer_events }
+    :header_text  => proc { next _INTL("Modifying map data") },
+    :skipped_text => proc { next _INTL("Not modified") },
+    :compile      => proc { compile_trainer_events }
   }
 
   @@categories[:messages] = {
@@ -67,8 +73,9 @@ module Compiler
   #-----------------------------------------------------------------------------
   # Add new map files to the map tree.
   #-----------------------------------------------------------------------------
-  def import_new_maps
-    return false if !$DEBUG
+
+  def new_maps_to_import
+    return nil if !$DEBUG
     mapfiles = {}
     # Get IDs of all maps in the Data folder
     Dir.chdir("Data") do
@@ -83,6 +90,19 @@ module Compiler
     mapinfos.each_key do |id|
       next if !mapinfos[id]
       mapfiles.delete(id) if mapfiles[id]
+      maxOrder = [maxOrder, mapinfos[id].order].max
+    end
+    return (mapfiles.empty?) ? nil : mapfiles
+  end
+
+  def import_new_maps
+    mapfiles = new_maps_to_import
+    return false if !mapfiles
+    # Get maxOrder to add new maps at
+    maxOrder = 0
+    mapinfos = pbLoadMapInfos
+    mapinfos.each_key do |id|
+      next if !mapinfos[id]
       maxOrder = [maxOrder, mapinfos[id].order].max
     end
     # Import maps not found in mapinfos
@@ -102,7 +122,8 @@ module Compiler
     if imported
       save_data(mapinfos, "Data/MapInfos.rxdata")
       $game_temp.map_infos = nil
-      pbMessage(_INTL("{1} new map(s) copied to the Data folder were successfully imported.", count))
+      Console.echoln_li_done(_INTL("{1} map(s) imported", count))
+      Console.echo_warn(_INTL("RMXP data was altered. Close RMXP now without saving to ensure changes are applied."))
     end
     return imported
   end
@@ -1769,7 +1790,7 @@ module Compiler
     save_data(commonEvents, "Data/CommonEvents.rxdata") if changed
     Console.echo_done(true)
     if change_record.length > 0 || changed
-      Console.echo_warn(_INTL("RMXP data was altered. Close RMXP now to ensure changes are applied."))
+      Console.echo_warn(_INTL("RMXP data was altered. Close RMXP now without saving to ensure changes are applied."))
     end
   end
 end

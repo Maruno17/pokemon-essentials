@@ -72,11 +72,13 @@ end
 
 #===============================================================================
 
-SaveData.register_conversion(:v22_add_primal_reversion_stat) do
+SaveData.register_conversion(:v22_add_new_stats) do
   essentials_version 22
-  display_title "Adding a primal reversion stat"
+  display_title "Adding some more stats"
   to_value :stats do |stats|
     stats.instance_eval do
+      @wild_battles_fled = 0 if !@wild_battles_fled
+      @pokemon_release_count = 0 if !@pokemon_release_count
       @primal_reversion_count = 0 if !@primal_reversion_count
     end
   end

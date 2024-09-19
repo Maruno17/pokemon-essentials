@@ -118,7 +118,30 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
       end
     else
       name = $data_system.variables[index + 1]
-      status = $game_variables[index + 1].to_s
+      codeswitch = (name[/^s\:/])
+      if codeswitch
+        code = $~.post_match
+        code_parts = code.split(/[(\[=<>. ]/)
+        code_parts[0].strip!
+        code_parts[0].gsub!(/^\s*!/, "")
+        status = nil
+        if code_parts[0][0][/[a-z]/i]
+          if code_parts[0][0].upcase == code_parts[0][0] &&
+             (Kernel.const_defined?(code_parts[0]) rescue false)
+            status = (eval(code) rescue nil)   # Code starts with a class/method name
+          elsif code_parts[0][0].downcase == code_parts[0][0] &&
+                !(Interpreter.method_defined?(code_parts[0].to_sym) rescue false) &&
+                !(Game_Event.method_defined?(code_parts[0].to_sym) rescue false)
+            status = (eval(code) rescue nil)   # Code starts with a method name (that isn't in Interpreter/Game_Event)
+          end
+        else
+          # Code doesn't start with a letter, probably $, just evaluate it
+          status = (eval(code) rescue nil)
+        end
+      else
+        status = $game_variables[index + 1]
+      end
+      status = status.to_s
       status = "\"__\"" if nil_or_empty?(status)
     end
     name ||= ""
@@ -186,6 +209,8 @@ def pbDebugVariables(mode)
     current_id = right_window.index + 1
     case mode
     when 0   # Switches
+      name = $data_system.switches[current_id]
+      next if name && name[/^s\:/]
       if Input.trigger?(Input::USE)
         pbPlayDecisionSE
         $game_switches[current_id] = !$game_switches[current_id]
@@ -193,6 +218,8 @@ def pbDebugVariables(mode)
         $game_map.need_refresh = true
       end
     when 1   # Variables
+      name = $data_system.variables[current_id]
+      next if name && name[/^s\:/]
       if Input.repeat?(Input::LEFT)
         pbDebugSetVariable(current_id, -1)
         right_window.refresh
@@ -717,7 +744,7 @@ def pbDebugFixInvalidTiles
   else
     echoln ""
     Console.echo_h2(_INTL("Done. {1} errors found and fixed.", total_errors), text: :green)
-    Console.echo_warn(_INTL("RMXP data was altered. Close RMXP now to ensure changes are applied."))
+    Console.echo_warn(_INTL("RMXP data was altered. Close RMXP now without saving to ensure changes are applied."))
     echoln ""
     pbMessage(_INTL("{1} error(s) were found across {2} map(s) and fixed.", total_errors, num_error_maps))
     pbMessage(_INTL("Close RPG Maker XP to ensure the changes are applied properly."))
