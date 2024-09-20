@@ -1865,6 +1865,7 @@ class PokemonStorageScreen
     end
     command = pbShowCommands(_INTL("Release this Pokémon?"), [_INTL("No"), _INTL("Yes")])
     if command == 1
+      $bag.add(pokemon.item_id) if pokemon.hasItem?
       pkmnname = pokemon.name
       @scene.pbRelease(selected, heldpoke)
       if heldpoke
@@ -1875,6 +1876,7 @@ class PokemonStorageScreen
       @scene.pbRefresh
       pbDisplay(_INTL("{1} was released.", pkmnname))
       pbDisplay(_INTL("Bye-bye, {1}!", pkmnname))
+      $stats.pokemon_release_count += 1
       @scene.pbRefresh
     end
     return

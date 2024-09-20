@@ -79,13 +79,19 @@ class Game_Event < Game_Character
   end
 
   def switchIsOn?(id)
-    switchname = $data_system.switches[id]
-    return false if !switchname
-    if switchname[/^s\:/]
+    switch_name = $data_system.switches[id]
+    if switch_name && switch_name[/^s\:/]
       return eval($~.post_match)
-    else
-      return $game_switches[id]
     end
+    return $game_switches[id]
+  end
+
+  def variableIsLessThan?(id, value)
+    variable_name = $data_system.variables[id]
+    if variable_name && variable_name[/^s\:/]
+      return eval($~.post_match) < value
+    end
+    return $game_variables[id] < value
   end
 
   def variable
@@ -208,7 +214,7 @@ class Game_Event < Game_Character
         c = page.condition
         next if c.switch1_valid && !switchIsOn?(c.switch1_id)
         next if c.switch2_valid && !switchIsOn?(c.switch2_id)
-        next if c.variable_valid && $game_variables[c.variable_id] < c.variable_value
+        next if c.variable_valid && variableIsLessThan?(c.variable_id, c.variable_value)
         if c.self_switch_valid
           key = [@map_id, @event.id, c.self_switch_ch]
           next if $game_self_switches[key] != true

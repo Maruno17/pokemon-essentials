@@ -334,8 +334,11 @@ module BattleCreationHelperMethods
     when Battle::Outcome::WIN, Battle::Outcome::CATCH
       $stats.wild_battles_won += 1 if !trainer_battle
       $stats.trainer_battles_won += 1 if trainer_battle
-    when Battle::Outcome::LOSE, Battle::Outcome::FLEE, Battle::Outcome::DRAW
+    when Battle::Outcome::LOSE, Battle::Outcome::DRAW
       $stats.wild_battles_lost += 1 if !trainer_battle
+      $stats.trainer_battles_lost += 1 if trainer_battle
+    when Battle::Outcome::FLEE
+      $stats.wild_battles_fled += 1 if !trainer_battle
       $stats.trainer_battles_lost += 1 if trainer_battle
     end
     pbSet(outcome_variable, outcome)

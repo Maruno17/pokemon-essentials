@@ -556,8 +556,18 @@ module PluginManager
     return true if $full_compile
     return true if !FileTest.exist?("Data/PluginScripts.rxdata")
     Input.update
+    # Force compiling if holding Shift or Ctrl
     return true if Input.press?(Input::SHIFT) || Input.press?(Input::CTRL)
-    # analyze whether or not to push recompile
+    # Should compile if the number of plugins has changed
+    scripts = load_data("Data/PluginScripts.rxdata")
+    return true if scripts.length != plugins.length
+    # Should compile if any plugins have changed version or been replaced
+    found_plugins = []
+    plugins.each_pair { |name, meta| found_plugins.push([meta[:name], meta[:version]]) }
+    existing_plugins = []
+    scripts.each { |plugin| existing_plugins.push([plugin[1][:name], plugin[1][:version]]) }
+    return true if found_plugins != existing_plugins
+    # Should compile if any plugin files have been recently modified
     mtime = File.mtime("Data/PluginScripts.rxdata")
     order.each do |o|
       # go through all the registered plugin scripts

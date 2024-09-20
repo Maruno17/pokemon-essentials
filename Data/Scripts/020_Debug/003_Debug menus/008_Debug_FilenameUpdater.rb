@@ -81,7 +81,7 @@ module FilenameUpdater
     # Warn if any map data has been changed
     if !change_record.empty?
       change_record.each { |msg| Console.echo_warn(msg) }
-      Console.echo_warn(_INTL("RMXP data was altered. Close RMXP now to ensure changes are applied."))
+      Console.echo_warn(_INTL("RMXP data was altered. Close RMXP now without saving to ensure changes are applied."))
     end
     echoln ""
     Console.echo_h2(_INTL("Finished updating file names and locations"), text: :green)

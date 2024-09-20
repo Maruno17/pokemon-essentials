@@ -14,7 +14,8 @@ module Compiler
         rescue SystemCallError
         end
       end
-      compile_pbs_files
+      text_files = get_all_pbs_files_to_compile
+      compile_pbs_files(text_files)
     }
   }
 
@@ -97,8 +98,7 @@ module Compiler
     return (latest_text_edit_time >= latest_data_write_time)
   end
 
-  def compile_pbs_files
-    text_files = get_all_pbs_files_to_compile
+  def compile_pbs_files(text_files)
     modify_pbs_file_contents_before_compiling
     compile_town_map(*text_files[:TownMap][1])
     compile_connections(*text_files[:Connection][1])

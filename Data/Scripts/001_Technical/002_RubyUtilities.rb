@@ -60,8 +60,15 @@ end
 # class Numeric
 #===============================================================================
 class Numeric
-  # Turns a number into a string formatted like 12,345,678.
+  # Turns a number into a string formatted like 12,345,678. Some languages use
+  # different characters as the thousands separator.
   def to_s_formatted
+    case System.user_language[0..1]
+    when "fr", "es"
+      return self.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\1 ').reverse
+    when "it", "de"
+      return self.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\1.').reverse
+    end
     return self.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\1,').reverse
   end
 
@@ -72,8 +79,37 @@ class Numeric
            _INTL("twelve"), _INTL("thirteen"), _INTL("fourteen"), _INTL("fifteen"),
            _INTL("sixteen"), _INTL("seventeen"), _INTL("eighteen"), _INTL("nineteen"),
            _INTL("twenty")]
-    return ret[self] if self.is_a?(Integer) && self >= 0 && self <= ret.length
+    return ret[self] if self.is_a?(Integer) && self >= 0 && self <= ret.length - 1
     return self.to_s
+  end
+
+  def to_ordinal
+    ret = [_INTL("zeroth"), _INTL("first"), _INTL("second"), _INTL("third"),
+          _INTL("fourth"), _INTL("fifth"), _INTL("sixth"), _INTL("seventh"),
+          _INTL("eighth"), _INTL("ninth"), _INTL("tenth"), _INTL("eleventh"),
+          _INTL("twelfth"), _INTL("thirteenth"), _INTL("fourteenth"), _INTL("fifteenth"),
+          _INTL("sixteenth"), _INTL("seventeenth"), _INTL("eighteenth"), _INTL("nineteenth"),
+          _INTL("twentieth")]
+    return ret[self] if self.is_a?(Integer) && self >= 0 && self <= ret.length - 1
+    return self.to_ord
+  end
+
+  # Returns "1st", "2nd", "3rd", etc.
+  def to_ord
+    return self.to_s if !self.is_a?(Integer)
+    ret = self.to_s
+    if ((self % 100) / 10) == 1   # 10-19
+      ret += "th"
+    elsif (self % 10) == 1
+      ret += "st"
+    elsif (self % 10) == 2
+      ret += "nd"
+    elsif (self % 10) == 3
+      ret += "rd"
+    else
+      ret += "th"
+    end
+    return ret
   end
 end
 
