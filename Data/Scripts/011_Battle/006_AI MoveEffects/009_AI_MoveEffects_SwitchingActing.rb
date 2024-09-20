@@ -842,7 +842,8 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetHealingMove
 #===============================================================================
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DisableTargetSoundMoves",
   proc { |score, move, user, target, ai, battle|
-    next score if target.effects[PBEffects::ThroatChop] > 1
+    next score if target.effects[PBEffects::ThroatChop] >= 1
+    next score if target.effects[PBEffects::Substitute] > 0
     next score if !target.check_for_move { |m| m.soundMove? }
     # Check additional effect chance
     add_effect = move.get_score_change_for_additional_effect(user, target)

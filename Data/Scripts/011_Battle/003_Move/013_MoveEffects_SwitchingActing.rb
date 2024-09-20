@@ -897,16 +897,12 @@ class Battle::Move::DisableTargetHealingMoves < Battle::Move
 end
 
 #===============================================================================
-# Target cannot use sound-based moves for 2 more rounds. (Throat Chop)
+# Target cannot use sound-based moves for 2 rounds. (Throat Chop)
 #===============================================================================
 class Battle::Move::DisableTargetSoundMoves < Battle::Move
   def pbAdditionalEffect(user, target)
     return if target.fainted? || target.damageState.substitute
-    if target.effects[PBEffects::ThroatChop] == 0
-      @battle.pbDisplay(_INTL("The effects of {1} prevent {2} from using certain moves!",
-                              @name, target.pbThis(true)))
-    end
-    target.effects[PBEffects::ThroatChop] = 3
+    target.effects[PBEffects::ThroatChop] = 2 if target.effects[PBEffects::ThroatChop] == 0
   end
 end
 
