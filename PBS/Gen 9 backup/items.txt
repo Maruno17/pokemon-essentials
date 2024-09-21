@@ -339,7 +339,7 @@ Pocket = Items
 Price = 3000
 FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_30
-Description = A peculiar set of armor that can make a certain species of Pokémon evolve. Auspicious wishes live within it.
+Description = A peculiar set of armor that can make a certain species of Pokémon evolve. Auspicious wishes live in it.
 #-------------------------------
 [REDAPRICORN]
 Name = Red Apricorn
@@ -791,7 +791,7 @@ Pocket = Items
 Price = 300
 FieldUse = OnPokemon
 Flags = Fling_10
-Description = A flower nectar obtained at Ula'ula Meadow. It changes the form of certain species of Pokémon.
+Description = Flower nectar obtained from a red flower. It changes the form of a certain species of Pokémon.
 #-------------------------------
 [YELLOWNECTAR]
 Name = Yellow Nectar
@@ -802,7 +802,7 @@ Pocket = Items
 Price = 300
 FieldUse = OnPokemon
 Flags = Fling_10
-Description = A flower nectar obtained at Melemele Meadow. It changes the form of certain species of Pokémon.
+Description = Flower nectar obtained from a yellow flower. It changes the form of a certain species of Pokémon.
 #-------------------------------
 [PINKNECTAR]
 Name = Pink Nectar
@@ -813,7 +813,7 @@ Pocket = Items
 Price = 300
 FieldUse = OnPokemon
 Flags = Fling_10
-Description = A flower nectar obtained from shrubs on Royal Avenue. It changes the form of certain species of Pokémon.
+Description = Flower nectar obtained from a pink flower. It changes the form of a certain species of Pokémon.
 #-------------------------------
 [PURPLENECTAR]
 Name = Purple Nectar
@@ -824,7 +824,7 @@ Pocket = Items
 Price = 300
 FieldUse = OnPokemon
 Flags = Fling_10
-Description = A flower nectar obtained at Poni Meadow. It changes the form of certain species of Pokémon.
+Description = Flower nectar obtained from a purple flower. It changes the form of a certain species of Pokémon.
 #-------------------------------
 [GRASSMAIL]
 Name = Grass Mail
@@ -914,7 +914,7 @@ PortionNamePlural = pieces of Space Mail
 Pocket = Mail
 Price = 50
 Flags = IconMail
-Description = Stationery featuring a print depicting the huge expanse of space. Let a Pokémon hold it for delivery.
+Description = Stationery featuring a print showing the huge expanse of space. Let a Pokémon hold it for delivery.
 #-------------------------------
 [AIRMAIL]
 Name = Air Mail
@@ -1128,7 +1128,7 @@ Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Flags = Fling_30
-Description = A popular treat in Lumiose City. It can be used once to heal all the status conditions of a Pokémon.
+Description = A popular treat in Lumiose City. It can be used to heal all the status conditions of a Pokémon.
 #-------------------------------
 [SHALOURSABLE]
 Name = Shalour Sable
@@ -1138,7 +1138,7 @@ Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Flags = Fling_30
-Description = Shalour City's famous shortbread. It can be used once to heal all the status conditions of a Pokémon.
+Description = Shalour City's famous shortbread. It can be used to heal all the status conditions of a Pokémon.
 #-------------------------------
 [BIGMALASADA]
 Name = Big Malasada
@@ -1148,7 +1148,7 @@ Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Flags = Fling_30
-Description = The Alola region's specialty--fried bread. It can be used once to heal all the status conditions of a Pokémon.
+Description = The Alola region's specialty--fried bread. It can be used to heal all the status conditions of a Pokémon.
 #-------------------------------
 [REVIVE]
 Name = Revive
@@ -1489,7 +1489,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's HP stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's HP stat.
 #-------------------------------
 [MUSCLEMOCHI]
 Name = Muscle Mochi
@@ -1498,7 +1498,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Attack stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's Attack stat.
 #-------------------------------
 [RESISTMOCHI]
 Name = Resist Mochi
@@ -1507,7 +1507,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Defense stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's Defense stat.
 #-------------------------------
 [GENIUSMOCHI]
 Name = Genius Mochi
@@ -1516,7 +1516,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Atk stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's Sp. Atk stat.
 #-------------------------------
 [CLEVERMOCHI]
 Name = Clever Mochi
@@ -1525,7 +1525,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Def stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's Sp. Def stat.
 #-------------------------------
 [SWIFTMOCHI]
 Name = Swift Mochi
@@ -1534,7 +1534,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Speed stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's Speed stat.
 #-------------------------------
 [FRESHSTARTMOCHI]
 Name = Fresh-Start Mochi
@@ -2416,7 +2416,7 @@ NamePlural = Occa Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_FIRE_80
-Description = Weakens a supereffective Fire-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Fire-type attack.
 #-------------------------------
 [PASSHOBERRY]
 Name = Passho Berry
@@ -2424,7 +2424,7 @@ NamePlural = Passho Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_WATER_80
-Description = Weakens a supereffective Water-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Water-type attack.
 #-------------------------------
 [WACANBERRY]
 Name = Wacan Berry
@@ -2432,7 +2432,7 @@ NamePlural = Wacan Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_ELECTRIC_80
-Description = Weakens a supereffective Electric-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Electric attack.
 #-------------------------------
 [RINDOBERRY]
 Name = Rindo Berry
@@ -2440,7 +2440,7 @@ NamePlural = Rindo Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_GRASS_80
-Description = Weakens a supereffective Grass-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Grass-type attack.
 #-------------------------------
 [YACHEBERRY]
 Name = Yache Berry
@@ -2448,7 +2448,7 @@ NamePlural = Yache Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_ICE_80
-Description = Weakens a supereffective Ice-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Ice-type attack.
 #-------------------------------
 [CHOPLEBERRY]
 Name = Chople Berry
@@ -2456,7 +2456,7 @@ NamePlural = Chople Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_FIGHTING_80
-Description = Weakens a supereffective Fighting-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Fighting attack.
 #-------------------------------
 [KEBIABERRY]
 Name = Kebia Berry
@@ -2464,7 +2464,7 @@ NamePlural = Kebia Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_POISON_80
-Description = Weakens a supereffective Poison-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Poison-type attack.
 #-------------------------------
 [SHUCABERRY]
 Name = Shuca Berry
@@ -2472,7 +2472,7 @@ NamePlural = Shuca Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_GROUND_80
-Description = Weakens a supereffective Ground-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Ground-type attack.
 #-------------------------------
 [COBABERRY]
 Name = Coba Berry
@@ -2480,7 +2480,7 @@ NamePlural = Coba Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_FLYING_80
-Description = Weakens a supereffective Flying-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Flying-type attack.
 #-------------------------------
 [PAYAPABERRY]
 Name = Payapa Berry
@@ -2488,7 +2488,7 @@ NamePlural = Payapa Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_PSYCHIC_80
-Description = Weakens a supereffective Psychic-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Psychic attack.
 #-------------------------------
 [TANGABERRY]
 Name = Tanga Berry
@@ -2496,7 +2496,7 @@ NamePlural = Tanga Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_BUG_80
-Description = Weakens a supereffective Bug-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Bug-type attack.
 #-------------------------------
 [CHARTIBERRY]
 Name = Charti Berry
@@ -2504,7 +2504,7 @@ NamePlural = Charti Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_ROCK_80
-Description = Weakens a supereffective Rock-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Rock-type attack.
 #-------------------------------
 [KASIBBERRY]
 Name = Kasib Berry
@@ -2512,7 +2512,7 @@ NamePlural = Kasib Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_GHOST_80
-Description = Weakens a supereffective Ghost-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Ghost-type attack.
 #-------------------------------
 [HABANBERRY]
 Name = Haban Berry
@@ -2520,7 +2520,7 @@ NamePlural = Haban Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_DRAGON_80
-Description = Weakens a supereffective Dragon-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Dragon-type attack.
 #-------------------------------
 [COLBURBERRY]
 Name = Colbur Berry
@@ -2528,7 +2528,7 @@ NamePlural = Colbur Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_DARK_80
-Description = Weakens a supereffective Dark-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Dark-type attack.
 #-------------------------------
 [BABIRIBERRY]
 Name = Babiri Berry
@@ -2536,7 +2536,7 @@ NamePlural = Babiri Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_STEEL_80
-Description = Weakens a supereffective Steel-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Steel-type attack.
 #-------------------------------
 [ROSELIBERRY]
 Name = Roseli Berry
@@ -2552,7 +2552,7 @@ NamePlural = Chilan Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_NORMAL_80
-Description = Weakens a Normal-type attack against the Pokémon holding this berry.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one Normal-type attack.
 #-------------------------------
 [LIECHIBERRY]
 Name = Liechi Berry
@@ -2716,7 +2716,7 @@ Price = 3000
 SellPrice = 2000
 BPPrice = 10
 Flags = Fling_10
-Description = A long, thin, bright-red string to be held by a Pokémon. If the holder becomes infatuated, so does the foe.
+Description = A long, bright-red string to be held by a Pokémon. If the holder becomes infatuated, so does the foe.
 #-------------------------------
 [ROCKYHELMET]
 Name = Rocky Helmet
@@ -4568,7 +4568,7 @@ Description = A ribbon-shaped sweet. When a Milcery holds this, it spins around 
 [VENUSAURITE]
 Name = Venusaurite
 NamePlural = Venusaurites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4577,7 +4577,7 @@ Description = One of a variety of mysterious Mega Stones. Have Venusaur hold it,
 [CHARIZARDITEX]
 Name = Charizardite X
 NamePlural = Charizardite Xs
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4586,7 +4586,7 @@ Description = One of a variety of mysterious Mega Stones. Have Charizard hold it
 [CHARIZARDITEY]
 Name = Charizardite Y
 NamePlural = Charizardite Ys
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4595,7 +4595,7 @@ Description = One of a variety of mysterious Mega Stones. Have Charizard hold it
 [BLASTOISINITE]
 Name = Blastoisinite
 NamePlural = Blastoisinites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4604,7 +4604,7 @@ Description = One of a variety of mysterious Mega Stones. Have Blastoise hold it
 [BEEDRILLITE]
 Name = Beedrillite
 NamePlural = Beedrillites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4613,7 +4613,7 @@ Description = One of a variety of mysterious Mega Stones. Have Beedrill hold it,
 [PIDGEOTITE]
 Name = Pidgeotite
 NamePlural = Pidgeotites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4622,7 +4622,7 @@ Description = One of a variety of mysterious Mega Stones. Have Pidgeot hold it, 
 [ALAKAZITE]
 Name = Alakazite
 NamePlural = Alakazites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4631,7 +4631,7 @@ Description = One of a variety of mysterious Mega Stones. Have Alakazam hold it,
 [SLOWBRONITE]
 Name = Slowbronite
 NamePlural = Slowbronites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4640,7 +4640,7 @@ Description = One of a variety of mysterious Mega Stones. Have Slowbro hold it, 
 [GENGARITE]
 Name = Gengarite
 NamePlural = Gengarites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4649,7 +4649,7 @@ Description = One of a variety of mysterious Mega Stones. Have Gengar hold it, a
 [KANGASKHANITE]
 Name = Kangaskhanite
 NamePlural = Kangaskhanites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4658,7 +4658,7 @@ Description = One of a variety of mysterious Mega Stones. Have Kangaskhan hold i
 [PINSIRITE]
 Name = Pinsirite
 NamePlural = Pinsirites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4667,7 +4667,7 @@ Description = One of a variety of mysterious Mega Stones. Have Pinsir hold it, a
 [GYARADOSITE]
 Name = Gyaradosite
 NamePlural = Gyaradosites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4676,7 +4676,7 @@ Description = One of a variety of mysterious Mega Stones. Have Gyarados hold it,
 [AERODACTYLITE]
 Name = Aerodactylite
 NamePlural = Aerodactylites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4685,7 +4685,7 @@ Description = One of a variety of mysterious Mega Stones. Have Aerodactyl hold i
 [MEWTWONITEX]
 Name = Mewtwonite X
 NamePlural = Mewtwonite Xs
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4694,7 +4694,7 @@ Description = One of a variety of mysterious Mega Stones. Have Mewtwo hold it, a
 [MEWTWONITEY]
 Name = Mewtwonite Y
 NamePlural = Mewtwonite Ys
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4703,7 +4703,7 @@ Description = One of a variety of mysterious Mega Stones. Have Mewtwo hold it, a
 [AMPHAROSITE]
 Name = Ampharosite
 NamePlural = Ampharosites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4712,7 +4712,7 @@ Description = One of a variety of mysterious Mega Stones. Have Ampharos hold it,
 [STEELIXITE]
 Name = Steelixite
 NamePlural = Steelixites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4721,7 +4721,7 @@ Description = One of a variety of mysterious Mega Stones. Have Steelix hold it, 
 [SCIZORITE]
 Name = Scizorite
 NamePlural = Scizorites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4730,7 +4730,7 @@ Description = One of a variety of mysterious Mega Stones. Have Scizor hold it, a
 [HERACRONITE]
 Name = Heracronite
 NamePlural = Heracronites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4739,7 +4739,7 @@ Description = One of a variety of mysterious Mega Stones. Have Heracross hold it
 [HOUNDOOMINITE]
 Name = Houndoominite
 NamePlural = Houndoominites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4748,7 +4748,7 @@ Description = One of a variety of mysterious Mega Stones. Have Houndoom hold it,
 [TYRANITARITE]
 Name = Tyranitarite
 NamePlural = Tyranitarites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4757,7 +4757,7 @@ Description = One of a variety of mysterious Mega Stones. Have Tyranitar hold it
 [SCEPTILITE]
 Name = Sceptilite
 NamePlural = Sceptilites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4766,7 +4766,7 @@ Description = One of a variety of mysterious Mega Stones. Have Sceptile hold it,
 [BLAZIKENITE]
 Name = Blazikenite
 NamePlural = Blazikenites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4775,7 +4775,7 @@ Description = One of a variety of mysterious Mega Stones. Have Blaziken hold it,
 [SWAMPERTITE]
 Name = Swampertite
 NamePlural = Swampertites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4784,7 +4784,7 @@ Description = One of a variety of mysterious Mega Stones. Have Swampert hold it,
 [GARDEVOIRITE]
 Name = Gardevoirite
 NamePlural = Gardevoirites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4793,7 +4793,7 @@ Description = One of a variety of mysterious Mega Stones. Have Gardevoir hold it
 [SABLENITE]
 Name = Sablenite
 NamePlural = Sablenites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4802,7 +4802,7 @@ Description = One of a variety of mysterious Mega Stones. Have Sableye hold it, 
 [MAWILITE]
 Name = Mawilite
 NamePlural = Mawilites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4811,7 +4811,7 @@ Description = One of a variety of mysterious Mega Stones. Have Mawile hold it, a
 [AGGRONITE]
 Name = Aggronite
 NamePlural = Aggronites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4820,7 +4820,7 @@ Description = One of a variety of mysterious Mega Stones. Have Aggron hold it, a
 [MEDICHAMITE]
 Name = Medichamite
 NamePlural = Medichamites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4829,7 +4829,7 @@ Description = One of a variety of mysterious Mega Stones. Have Medicham hold it,
 [MANECTITE]
 Name = Manectite
 NamePlural = Manectites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4838,7 +4838,7 @@ Description = One of a variety of mysterious Mega Stones. Have Manectric hold it
 [SHARPEDONITE]
 Name = Sharpedonite
 NamePlural = Sharpedonites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4847,7 +4847,7 @@ Description = One of a variety of mysterious Mega Stones. Have Sharpedo hold it,
 [CAMERUPTITE]
 Name = Cameruptite
 NamePlural = Cameruptites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4856,7 +4856,7 @@ Description = One of a variety of mysterious Mega Stones. Have Camerupt hold it,
 [ALTARIANITE]
 Name = Altarianite
 NamePlural = Altarianites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4865,7 +4865,7 @@ Description = One of a variety of mysterious Mega Stones. Have Altaria hold it, 
 [BANETTITE]
 Name = Banettite
 NamePlural = Banettites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4874,7 +4874,7 @@ Description = One of a variety of mysterious Mega Stones. Have Banette hold it, 
 [ABSOLITE]
 Name = Absolite
 NamePlural = Absolites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4883,7 +4883,7 @@ Description = One of a variety of mysterious Mega Stones. Have Absol hold it, an
 [GLALITITE]
 Name = Glalitite
 NamePlural = Glalitites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4892,7 +4892,7 @@ Description = One of a variety of mysterious Mega Stones. Have Glalie hold it, a
 [SALAMENCITE]
 Name = Salamencite
 NamePlural = Salamencites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4901,7 +4901,7 @@ Description = One of a variety of mysterious Mega Stones. Have Salamence hold it
 [METAGROSSITE]
 Name = Metagrossite
 NamePlural = Metagrossites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4910,7 +4910,7 @@ Description = One of a variety of mysterious Mega Stones. Have Metagross hold it
 [LATIASITE]
 Name = Latiasite
 NamePlural = Latiasites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4919,7 +4919,7 @@ Description = One of a variety of mysterious Mega Stones. Have Latias hold it, a
 [LATIOSITE]
 Name = Latiosite
 NamePlural = Latiosites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4928,7 +4928,7 @@ Description = One of a variety of mysterious Mega Stones. Have Latios hold it, a
 [LOPUNNITE]
 Name = Lopunnite
 NamePlural = Lopunnites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4937,7 +4937,7 @@ Description = One of a variety of mysterious Mega Stones. Have Lopunny hold it, 
 [GARCHOMPITE]
 Name = Garchompite
 NamePlural = Garchompites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4946,7 +4946,7 @@ Description = One of a variety of mysterious Mega Stones. Have Garchomp hold it,
 [LUCARIONITE]
 Name = Lucarionite
 NamePlural = Lucarionites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4955,7 +4955,7 @@ Description = One of a variety of mysterious Mega Stones. Have Lucario hold it, 
 [ABOMASITE]
 Name = Abomasite
 NamePlural = Abomasites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4964,7 +4964,7 @@ Description = One of a variety of mysterious Mega Stones. Have Abomasnow hold it
 [GALLADITE]
 Name = Galladite
 NamePlural = Galladites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4973,7 +4973,7 @@ Description = One of a variety of mysterious Mega Stones. Have Gallade hold it, 
 [AUDINITE]
 Name = Audinite
 NamePlural = Audinites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -4982,7 +4982,7 @@ Description = One of a variety of mysterious Mega Stones. Have Audino hold it, a
 [DIANCITE]
 Name = Diancite
 NamePlural = Diancites
-Pocket = HeldItems
+Pocket = MegaStones
 Price = 0
 BPPrice = 50
 Flags = MegaStone,Fling_80
@@ -5984,7 +5984,7 @@ BPPrice = 32
 FieldUse = TR
 Flags = Fling_50
 Move = CHARGEBEAM
-Description = The user attacks the target with an electric charge. The user may use any remaining charge to raise its Sp. Atk.
+Description = The user attacks with an electric charge. The user may use any remaining charge to raise its Sp. Atk.
 #-------------------------------
 [TM58]
 Name = TM58
@@ -6083,7 +6083,7 @@ BPPrice = 32
 FieldUse = TR
 Flags = Fling_50
 Move = PAYBACK
-Description = The user stores power, then attacks. If the user moves after the target, this attack's power will be doubled.
+Description = The user stores power, then attacks. If the user goes after the target, this attack's power doubles.
 #-------------------------------
 [TM67]
 Name = TM67
@@ -6511,7 +6511,7 @@ Pocket = Machines
 Price = 0
 FieldUse = HM
 Move = DIVE
-Description = Diving on the first turn, the user floats up and attacks on the second. It can be used to dive underwater.
+Description = The user dives on the first turn, and floats up and attacks on the next. It can be used to dive underwater.
 #-------------------------------
 [BICYCLE]
 Name = Bicycle

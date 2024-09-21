@@ -339,7 +339,7 @@ Pocket = Items
 Price = 3000
 FieldUse = OnPokemon
 Flags = EvolutionStone,Fling_30
-Description = A peculiar set of armor that can make a certain species of Pokémon evolve. Auspicious wishes live within it.
+Description = A peculiar set of armor that can make a certain species of Pokémon evolve. Auspicious wishes live in it.
 #-------------------------------
 [REDAPRICORN]
 Name = Red Apricorn
@@ -791,7 +791,7 @@ Pocket = Items
 Price = 300
 FieldUse = OnPokemon
 Flags = Fling_10
-Description = A flower nectar obtained at Ula'ula Meadow. It changes the form of certain species of Pokémon.
+Description = Flower nectar obtained from a red flower. It changes the form of a certain species of Pokémon.
 #-------------------------------
 [YELLOWNECTAR]
 Name = Yellow Nectar
@@ -802,7 +802,7 @@ Pocket = Items
 Price = 300
 FieldUse = OnPokemon
 Flags = Fling_10
-Description = A flower nectar obtained at Melemele Meadow. It changes the form of certain species of Pokémon.
+Description = Flower nectar obtained from a yellow flower. It changes the form of a certain species of Pokémon.
 #-------------------------------
 [PINKNECTAR]
 Name = Pink Nectar
@@ -813,7 +813,7 @@ Pocket = Items
 Price = 300
 FieldUse = OnPokemon
 Flags = Fling_10
-Description = A flower nectar obtained from shrubs on Royal Avenue. It changes the form of certain species of Pokémon.
+Description = Flower nectar obtained from a pink flower. It changes the form of a certain species of Pokémon.
 #-------------------------------
 [PURPLENECTAR]
 Name = Purple Nectar
@@ -824,7 +824,7 @@ Pocket = Items
 Price = 300
 FieldUse = OnPokemon
 Flags = Fling_10
-Description = A flower nectar obtained at Poni Meadow. It changes the form of certain species of Pokémon.
+Description = Flower nectar obtained from a purple flower. It changes the form of a certain species of Pokémon.
 #-------------------------------
 [GRASSMAIL]
 Name = Grass Mail
@@ -914,7 +914,7 @@ PortionNamePlural = pieces of Space Mail
 Pocket = Mail
 Price = 50
 Flags = IconMail
-Description = Stationery featuring a print depicting the huge expanse of space. Let a Pokémon hold it for delivery.
+Description = Stationery featuring a print showing the huge expanse of space. Let a Pokémon hold it for delivery.
 #-------------------------------
 [AIRMAIL]
 Name = Air Mail
@@ -1128,7 +1128,7 @@ Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Flags = Fling_30
-Description = A popular treat in Lumiose City. It can be used once to heal all the status conditions of a Pokémon.
+Description = A popular treat in Lumiose City. It can be used to heal all the status conditions of a Pokémon.
 #-------------------------------
 [SHALOURSABLE]
 Name = Shalour Sable
@@ -1138,7 +1138,7 @@ Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Flags = Fling_30
-Description = Shalour City's famous shortbread. It can be used once to heal all the status conditions of a Pokémon.
+Description = Shalour City's famous shortbread. It can be used to heal all the status conditions of a Pokémon.
 #-------------------------------
 [BIGMALASADA]
 Name = Big Malasada
@@ -1148,7 +1148,7 @@ Price = 350
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Flags = Fling_30
-Description = The Alola region's specialty--fried bread. It can be used once to heal all the status conditions of a Pokémon.
+Description = The Alola region's specialty--fried bread. It can be used to heal all the status conditions of a Pokémon.
 #-------------------------------
 [REVIVE]
 Name = Revive
@@ -1489,7 +1489,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's HP stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's HP stat.
 #-------------------------------
 [MUSCLEMOCHI]
 Name = Muscle Mochi
@@ -1498,7 +1498,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Attack stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's Attack stat.
 #-------------------------------
 [RESISTMOCHI]
 Name = Resist Mochi
@@ -1507,7 +1507,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Defense stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's Defense stat.
 #-------------------------------
 [GENIUSMOCHI]
 Name = Genius Mochi
@@ -1516,7 +1516,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Atk stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's Sp. Atk stat.
 #-------------------------------
 [CLEVERMOCHI]
 Name = Clever Mochi
@@ -1525,7 +1525,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Sp. Def stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's Sp. Def stat.
 #-------------------------------
 [SWIFTMOCHI]
 Name = Swift Mochi
@@ -1534,7 +1534,7 @@ Pocket = Medicine
 Price = 500
 FieldUse = OnPokemon
 Flags = Fling_20
-Description = A mochi cake with Berries kneaded into its dough. It increases base points for a Pokémon's Speed stat.
+Description = A mochi cake with Berries kneaded into its dough. It increases base points of a Pokémon's Speed stat.
 #-------------------------------
 [FRESHSTARTMOCHI]
 Name = Fresh-Start Mochi
@@ -2416,7 +2416,7 @@ NamePlural = Occa Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_FIRE_80
-Description = Weakens a supereffective Fire-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Fire-type attack.
 #-------------------------------
 [PASSHOBERRY]
 Name = Passho Berry
@@ -2424,7 +2424,7 @@ NamePlural = Passho Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_WATER_80
-Description = Weakens a supereffective Water-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Water-type attack.
 #-------------------------------
 [WACANBERRY]
 Name = Wacan Berry
@@ -2432,7 +2432,7 @@ NamePlural = Wacan Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_ELECTRIC_80
-Description = Weakens a supereffective Electric-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Electric attack.
 #-------------------------------
 [RINDOBERRY]
 Name = Rindo Berry
@@ -2440,7 +2440,7 @@ NamePlural = Rindo Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_GRASS_80
-Description = Weakens a supereffective Grass-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Grass-type attack.
 #-------------------------------
 [YACHEBERRY]
 Name = Yache Berry
@@ -2448,7 +2448,7 @@ NamePlural = Yache Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_ICE_80
-Description = Weakens a supereffective Ice-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Ice-type attack.
 #-------------------------------
 [CHOPLEBERRY]
 Name = Chople Berry
@@ -2456,7 +2456,7 @@ NamePlural = Chople Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_FIGHTING_80
-Description = Weakens a supereffective Fighting-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Fighting attack.
 #-------------------------------
 [KEBIABERRY]
 Name = Kebia Berry
@@ -2464,7 +2464,7 @@ NamePlural = Kebia Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_POISON_80
-Description = Weakens a supereffective Poison-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Poison-type attack.
 #-------------------------------
 [SHUCABERRY]
 Name = Shuca Berry
@@ -2472,7 +2472,7 @@ NamePlural = Shuca Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_GROUND_80
-Description = Weakens a supereffective Ground-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Ground-type attack.
 #-------------------------------
 [COBABERRY]
 Name = Coba Berry
@@ -2480,7 +2480,7 @@ NamePlural = Coba Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_FLYING_80
-Description = Weakens a supereffective Flying-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Flying-type attack.
 #-------------------------------
 [PAYAPABERRY]
 Name = Payapa Berry
@@ -2488,7 +2488,7 @@ NamePlural = Payapa Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_PSYCHIC_80
-Description = Weakens a supereffective Psychic-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Psychic attack.
 #-------------------------------
 [TANGABERRY]
 Name = Tanga Berry
@@ -2496,7 +2496,7 @@ NamePlural = Tanga Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_BUG_80
-Description = Weakens a supereffective Bug-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Bug-type attack.
 #-------------------------------
 [CHARTIBERRY]
 Name = Charti Berry
@@ -2504,7 +2504,7 @@ NamePlural = Charti Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_ROCK_80
-Description = Weakens a supereffective Rock-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Rock-type attack.
 #-------------------------------
 [KASIBBERRY]
 Name = Kasib Berry
@@ -2512,7 +2512,7 @@ NamePlural = Kasib Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_GHOST_80
-Description = Weakens a supereffective Ghost-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Ghost-type attack.
 #-------------------------------
 [HABANBERRY]
 Name = Haban Berry
@@ -2520,7 +2520,7 @@ NamePlural = Haban Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_DRAGON_80
-Description = Weakens a supereffective Dragon-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Dragon-type attack.
 #-------------------------------
 [COLBURBERRY]
 Name = Colbur Berry
@@ -2528,7 +2528,7 @@ NamePlural = Colbur Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_DARK_80
-Description = Weakens a supereffective Dark-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Dark-type attack.
 #-------------------------------
 [BABIRIBERRY]
 Name = Babiri Berry
@@ -2536,7 +2536,7 @@ NamePlural = Babiri Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_STEEL_80
-Description = Weakens a supereffective Steel-type attack against the holding Pokémon.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Steel-type attack.
 #-------------------------------
 [ROSELIBERRY]
 Name = Roseli Berry
@@ -2552,7 +2552,7 @@ NamePlural = Chilan Berries
 Pocket = Berries
 Price = 20
 Flags = Berry,Fling_10,NaturalGift_NORMAL_80
-Description = Weakens a Normal-type attack against the Pokémon holding this berry.
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one Normal-type attack.
 #-------------------------------
 [LIECHIBERRY]
 Name = Liechi Berry
@@ -2716,7 +2716,7 @@ Price = 3000
 SellPrice = 2000
 BPPrice = 10
 Flags = Fling_10
-Description = A long, thin, bright-red string to be held by a Pokémon. If the holder becomes infatuated, so does the foe.
+Description = A long, bright-red string to be held by a Pokémon. If the holder becomes infatuated, so does the foe.
 #-------------------------------
 [ROCKYHELMET]
 Name = Rocky Helmet
@@ -5984,7 +5984,7 @@ BPPrice = 32
 FieldUse = TR
 Flags = Fling_50
 Move = CHARGEBEAM
-Description = The user attacks the target with an electric charge. The user may use any remaining charge to raise its Sp. Atk.
+Description = The user attacks with an electric charge. The user may use any remaining charge to raise its Sp. Atk.
 #-------------------------------
 [TM58]
 Name = TM58
@@ -6083,7 +6083,7 @@ BPPrice = 32
 FieldUse = TR
 Flags = Fling_50
 Move = PAYBACK
-Description = The user stores power, then attacks. If the user moves after the target, this attack's power will be doubled.
+Description = The user stores power, then attacks. If the user goes after the target, this attack's power doubles.
 #-------------------------------
 [TM67]
 Name = TM67
@@ -6511,7 +6511,7 @@ Pocket = Machines
 Price = 0
 FieldUse = HM
 Move = DIVE
-Description = Diving on the first turn, the user floats up and attacks on the second. It can be used to dive underwater.
+Description = The user dives on the first turn, and floats up and attacks on the next. It can be used to dive underwater.
 #-------------------------------
 [BICYCLE]
 Name = Bicycle

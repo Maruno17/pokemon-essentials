@@ -251,7 +251,7 @@ class UI::BagVisuals < UI::BaseVisuals
     @sprites[:item_icon] = ItemIconSprite.new(48, Graphics.height - 48, nil, @viewport)
     # Selected item's description text box
     @sprites[:item_description] = Window_UnformattedTextPokemon.newWithSize(
-      "", 76, 272, Graphics.width - 100, 128, @viewport
+      "", 76, 272, Graphics.width - 98, 128, @viewport
     )
     @sprites[:item_description].baseColor   = TEXT_COLOR_THEMES[:white][0]
     @sprites[:item_description].shadowColor = TEXT_COLOR_THEMES[:white][1]
