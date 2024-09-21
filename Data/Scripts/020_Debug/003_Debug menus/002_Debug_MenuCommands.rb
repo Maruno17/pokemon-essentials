@@ -821,7 +821,6 @@ MenuHandlers.add(:debug_menu, :fill_bag, {
       bag = $bag.pockets   # Called here so that it only rearranges itself once
       GameData::Item.each do |i|
         bag_pocket = i.bag_pocket
-        next if GameData::BagPocket.get(bag_pocket).max_slots
         next if !pocket_sizes[bag_pocket] || pocket_sizes[bag_pocket] == 0
         next if pocket_sizes[bag_pocket] > 0 && bag[bag_pocket].length >= pocket_sizes[bag_pocket]
         item_qty = (i.is_important?) ? 1 : qty

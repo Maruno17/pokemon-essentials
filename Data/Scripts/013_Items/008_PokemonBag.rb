@@ -30,7 +30,12 @@ class PokemonBag
 
   def clear
     @pockets.each_value { |pocket| pocket.clear }
-    GameData::BagPocket.all_pockets.each { |pckt| @last_pocket_selections[pckt] = 0 }
+    @pockets.clear
+    @last_pocket_selections.clear
+    GameData::BagPocket.all_pockets.each do |pckt|
+      @pockets[pckt] = []
+      @last_pocket_selections[pckt] = 0
+    end
   end
 
   #-----------------------------------------------------------------------------

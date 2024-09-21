@@ -88,7 +88,7 @@ end
 
 GameData::BagPocket.register({
   :id            => :Items,
-  :name          => _INTL("Items"),
+  :name          => _INTL("Other Items"),
   :icon_position => 0,
   :order         => 10
 })
@@ -107,6 +107,28 @@ GameData::BagPocket.register({
   :order         => 30
 })
 
+GameData::BagPocket.register({
+  :id            => :Berries,
+  :name          => _INTL("Berries"),
+  :icon_position => 3,
+  :order         => 40,
+  :auto_sort     => true
+})
+
+GameData::BagPocket.register({
+  :id            => :HeldItems,
+  :name          => _INTL("Held Items"),
+  :icon_position => 4,
+  :order         => 50
+})
+
+GameData::BagPocket.register({
+  :id            => :BattleItems,
+  :name          => _INTL("Battle Items"),
+  :icon_position => 5,
+  :order         => 60
+})
+
 # This pocket is hardcoded to allow showing the details of a machine item in
 # this pocket in the Bag. The display of this information is toggled by pressing
 # the Action input. It is not possible to open the screen menu with the Action
@@ -115,31 +137,9 @@ GameData::BagPocket.register({
 GameData::BagPocket.register({
   :id            => :Machines,
   :name          => _INTL("TMs & HMs"),
-  :icon_position => 3,
-  :order         => 40,
-  :auto_sort     => true
-})
-
-GameData::BagPocket.register({
-  :id            => :Berries,
-  :name          => _INTL("Berries"),
-  :icon_position => 4,
-  :order         => 50,
-  :auto_sort     => true
-})
-
-GameData::BagPocket.register({
-  :id            => :Mail,
-  :name          => _INTL("Mail"),
-  :icon_position => 5,
-  :order         => 60
-})
-
-GameData::BagPocket.register({
-  :id            => :BattleItems,
-  :name          => _INTL("Battle Items"),
   :icon_position => 6,
-  :order         => 70
+  :order         => 70,
+  :auto_sort     => true
 })
 
 GameData::BagPocket.register({

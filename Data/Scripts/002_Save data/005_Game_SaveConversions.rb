@@ -92,24 +92,30 @@ SaveData.register_conversion(:v22_convert_bag_object) do
   to_value :bag do |bag|
     bag.instance_eval do
       all_pockets = GameData::BagPocket.all_pockets
+      if @pockets.is_a?(Array)
+        new_pockets = {}
+        all_pockets.each { |pckt| new_pockets[pckt] = [] }
+        @pockets.each_with_index do |value, i|
+          next if i == 0
+          value.each do |item|
+            pckt = GameData::Item.get(item[0]).bag_pocket
+            new_pockets[pckt].push(item)
+          end
+        end
+        @pockets = new_pockets
+      end
       if @last_viewed_pocket.is_a?(Integer)
-        @last_viewed_pocket = all_pockets[@last_viewed_pocket - 1]
+        @last_viewed_pocket = all_pockets[@last_viewed_pocket - 1] || all_pockets.first
       end
       if @last_pocket_selections.is_a?(Array)
         new_sels = {}
+        all_pockets.each { |pckt| new_sels[pckt] = 0 }
         @last_pocket_selections.each_with_index do |value, i|
           next if i == 0
-          new_sels[all_pockets[i - 1]] = value
+          pckt = all_pockets[i - 1]
+          new_sels[pckt] = value if pckt && value <= @pockets[pckt].length - 1
         end
         @last_pocket_selections = new_sels
-      end
-      if @pockets.is_a?(Array)
-        new_pockets = {}
-        @pockets.each_with_index do |value, i|
-          next if i == 0
-          new_pockets[all_pockets[i - 1]] = value
-        end
-        @pockets = new_pockets
       end
     end
   end
