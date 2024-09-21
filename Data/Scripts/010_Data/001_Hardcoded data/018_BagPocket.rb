@@ -94,6 +94,11 @@ GameData::BagPocket.register({
 })
 
 GameData::BagPocket.register({
+  :id            => :Mail,
+  :parent_pocket => :Items
+})
+
+GameData::BagPocket.register({
   :id            => :Medicine,
   :name          => _INTL("Medicine"),
   :icon_position => 1,
@@ -120,6 +125,11 @@ GameData::BagPocket.register({
   :name          => _INTL("Held Items"),
   :icon_position => 4,
   :order         => 50
+})
+
+GameData::BagPocket.register({
+  :id            => :MegaStones,
+  :parent_pocket => :HeldItems
 })
 
 GameData::BagPocket.register({
