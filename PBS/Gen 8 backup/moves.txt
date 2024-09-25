@@ -3580,7 +3580,7 @@ TotalPP = 5
 Target = NearOther
 FunctionCode = LowerUserSpAtk2
 Flags = CanProtect,CanMirrorMove
-Description = A storm of sharp is whipped up. The attack's recoil harshly reduces the user's Sp. Atk stat.
+Description = A storm of sharp leaves is whipped up. The attack's recoil harshly reduces the user's Sp. Atk stat.
 #-------------------------------
 [SOLARBLADE]
 Name = Solar Blade
