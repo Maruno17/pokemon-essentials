@@ -385,6 +385,7 @@ module UI
       @sprites[:speech_box].visible = true
       @sprites[:speech_box].text = text
       pbBottomLeftLines(@sprites[:speech_box], 2)
+      yielded = false
       loop do
         Graphics.update
         Input.update
@@ -394,8 +395,12 @@ module UI
             pbPlayDecisionSE if @sprites[:speech_box].pausing?
             @sprites[:speech_box].resume
           end
-        elsif Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
-          break
+        else
+          yield if !yielded && block_given?
+          yielded = true
+          if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
+            break
+          end
         end
       end
       @sprites[:speech_box].visible = false
@@ -603,8 +608,8 @@ module UI
 
     #-----------------------------------------------------------------------------
 
-    def show_message(text)
-      @visuals.show_message(text)
+    def show_message(text, &block)
+      @visuals.show_message(text, &block)
     end
 
     alias pbDisplay show_message

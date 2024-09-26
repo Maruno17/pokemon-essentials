@@ -46,7 +46,7 @@ module Settings
   #-----------------------------------------------------------------------------
 
   # The maximum amount of money the player can have.
-  MAX_MONEY            = 999_999
+  MAX_MONEY            = 9_999_999
   # The maximum number of Game Corner coins the player can have.
   MAX_COINS            = 99_999
   # The maximum number of Battle Points the player can have.

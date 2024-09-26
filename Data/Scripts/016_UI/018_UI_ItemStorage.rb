@@ -16,7 +16,6 @@ class Window_PokemonItemStorage < Window_DrawableCommand
   def initialize(bag, x, y, width, height)
     @bag = bag
     @sortIndex = -1
-    @adapter = PokemonMartAdapter.new
     super(x, y, width, height)
     self.windowskin = nil
   end
@@ -37,7 +36,7 @@ class Window_PokemonItemStorage < Window_DrawableCommand
       textpos.push([_INTL("CANCEL"), rect.x, rect.y, :left, self.baseColor, self.shadowColor])
     else
       item     = @bag[index][0]
-      itemname = @adapter.getDisplayName(item)
+      itemname = GameData::Item.get(item).display_name
       baseColor = (index == @sortIndex) ? Color.new(248, 24, 24) : self.baseColor
       textpos.push([itemname, rect.x, rect.y, :left, self.baseColor, self.shadowColor])
       if GameData::Item.get(item).show_quantity?
@@ -78,7 +77,7 @@ class ItemStorage_Scene
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["background"].setBitmap("Graphics/UI/itemstorage_bg")
-    @sprites["icon"] = ItemIconSprite.new(50, 334, nil, @viewport)
+    @sprites["icon"] = ItemIconSprite.new(48, Graphics.height - 48, nil, @viewport)
     # Item list
     @sprites["itemwindow"] = Window_PokemonItemStorage.new(@bag, 98, 14, 334, 32 + (ITEMSVISIBLE * 32))
     @sprites["itemwindow"].viewport    = @viewport
@@ -92,7 +91,7 @@ class ItemStorage_Scene
     @sprites["pocketwindow"].y = 16
     pbSetNarrowFont(@sprites["pocketwindow"].bitmap)
     # Item description
-    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize("", 84, 272, Graphics.width - 84, 128, @viewport)
+    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize("", 76, 272, Graphics.width - 98, 128, @viewport)
     @sprites["itemtextwindow"].baseColor   = ITEMTEXTBASECOLOR
     @sprites["itemtextwindow"].shadowColor = ITEMTEXTSHADOWCOLOR
     @sprites["itemtextwindow"].windowskin  = nil

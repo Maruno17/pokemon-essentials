@@ -1,3 +1,4 @@
+=begin
 #===============================================================================
 # Abstraction layer for Pokemon Essentials.
 #===============================================================================
@@ -156,11 +157,8 @@ class SellAdapter
   end
 
   def getDisplayPrice(item)
-    if @adapter.showQuantity?(item)
-      return sprintf("×%d", @adapter.getQuantity(item))
-    else
-      return ""
-    end
+    return sprintf("×%d", @adapter.getQuantity(item)) if @adapter.showQuantity?(item)
+    return ""
   end
 
   def isSelling?
@@ -213,27 +211,6 @@ end
 #
 #===============================================================================
 class PokemonMart_Scene
-  def update
-    pbUpdateSpriteHash(@sprites)
-    @subscene&.pbUpdate
-  end
-
-  def pbRefresh
-    if @subscene
-      @subscene.pbRefresh
-    else
-      itemwindow = @sprites["itemwindow"]
-      @sprites["icon"].item = itemwindow.item
-      @sprites["itemtextwindow"].text =
-        (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
-      @sprites["qtywindow"].visible = !itemwindow.item.nil?
-      @sprites["qtywindow"].text    = _INTL("In Bag:<r>{1}", @adapter.getQuantity(itemwindow.item))
-      @sprites["qtywindow"].y       = Graphics.height - 102 - @sprites["qtywindow"].height
-      itemwindow.refresh
-    end
-    @sprites["moneywindow"].text = _INTL("Money:\n<r>{1}", @adapter.getMoneyString)
-  end
-
   def pbStartBuyOrSellScene(buying, stock, adapter)
     # Scroll right before showing screen
     pbScrollMap(6, 5, 5)
@@ -244,7 +221,7 @@ class PokemonMart_Scene
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     @sprites["background"].setBitmap("Graphics/UI/Mart/bg")
-    @sprites["icon"] = ItemIconSprite.new(36, Graphics.height - 50, nil, @viewport)
+    @sprites["icon"] = ItemIconSprite.new(48, Graphics.height - 48, nil, @viewport)
     winAdapter = buying ? BuyAdapter.new(adapter) : SellAdapter.new(adapter)
     @sprites["itemwindow"] = Window_PokemonMart.new(
       stock, winAdapter, Graphics.width - 316 - 16, 10, 330 + 16, Graphics.height - 124
@@ -253,7 +230,7 @@ class PokemonMart_Scene
     @sprites["itemwindow"].index = 0
     @sprites["itemwindow"].refresh
     @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize(
-      "", 64, Graphics.height - 96 - 16, Graphics.width - 64, 128, @viewport
+      "", 76, 272, Graphics.width - 98, 128, @viewport
     )
     pbPrepareWindow(@sprites["itemtextwindow"])
     @sprites["itemtextwindow"].baseColor = Color.new(248, 248, 248)
@@ -361,6 +338,8 @@ class PokemonMart_Scene
     pbScrollMap(4, 5, 5) if !@subscene
   end
 
+  #-----------------------------------------------------------------------------
+
   def pbPrepareWindow(window)
     window.visible = true
     window.letterbyletter = false
@@ -385,6 +364,8 @@ class PokemonMart_Scene
     pbRefresh
     @sprites["qtywindow"].visible = false
   end
+
+  #-----------------------------------------------------------------------------
 
   def pbDisplay(msg, brief = false)
     cw = @sprites["helpwindow"]
@@ -537,6 +518,31 @@ class PokemonMart_Scene
     return ret
   end
 
+  #-----------------------------------------------------------------------------
+
+  def pbRefresh
+    if @subscene
+      @subscene.pbRefresh
+    else
+      itemwindow = @sprites["itemwindow"]
+      @sprites["icon"].item = itemwindow.item
+      @sprites["itemtextwindow"].text =
+        (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
+      @sprites["qtywindow"].visible = !itemwindow.item.nil?
+      @sprites["qtywindow"].text    = _INTL("In Bag:<r>{1}", @adapter.getQuantity(itemwindow.item))
+      @sprites["qtywindow"].y       = Graphics.height - 102 - @sprites["qtywindow"].height
+      itemwindow.refresh
+    end
+    @sprites["moneywindow"].text = _INTL("Money:\n<r>{1}", @adapter.getMoneyString)
+  end
+
+  def update
+    pbUpdateSpriteHash(@sprites)
+    @subscene&.pbUpdate
+  end
+
+  #-----------------------------------------------------------------------------
+
   def pbChooseBuyItem
     itemwindow = @sprites["itemwindow"]
     @sprites["helpwindow"].visible = false
@@ -582,17 +588,21 @@ class PokemonMartScreen
     @adapter = PokemonMartAdapter.new
   end
 
-  def pbConfirm(msg)
-    return @scene.pbConfirm(msg)
-  end
+  #-----------------------------------------------------------------------------
 
   def pbDisplay(msg)
     return @scene.pbDisplay(msg)
   end
 
+  def pbConfirm(msg)
+    return @scene.pbConfirm(msg)
+  end
+
   def pbDisplayPaused(msg, &block)
     return @scene.pbDisplayPaused(msg, &block)
   end
+
+  #-----------------------------------------------------------------------------
 
   def pbBuyScreen
     @scene.pbStartBuyScene(@stock, @adapter)
@@ -714,34 +724,4 @@ class PokemonMartScreen
     @scene.pbEndSellScene
   end
 end
-
-#===============================================================================
-#
-#===============================================================================
-def pbPokemonMart(stock, speech = nil, cantsell = false)
-  stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
-  commands = []
-  cmdBuy  = -1
-  cmdSell = -1
-  cmdQuit = -1
-  commands[cmdBuy = commands.length]  = _INTL("I'm here to buy")
-  commands[cmdSell = commands.length] = _INTL("I'm here to sell") if !cantsell
-  commands[cmdQuit = commands.length] = _INTL("No, thanks")
-  cmd = pbMessage(speech || _INTL("Welcome! How may I help you?"), commands, cmdQuit + 1)
-  loop do
-    if cmdBuy >= 0 && cmd == cmdBuy
-      scene = PokemonMart_Scene.new
-      screen = PokemonMartScreen.new(scene, stock)
-      screen.pbBuyScreen
-    elsif cmdSell >= 0 && cmd == cmdSell
-      scene = PokemonMart_Scene.new
-      screen = PokemonMartScreen.new(scene, stock)
-      screen.pbSellScreen
-    else
-      pbMessage(_INTL("Do come again!"))
-      break
-    end
-    cmd = pbMessage(_INTL("Is there anything else I can do for you?"), commands, cmdQuit + 1)
-  end
-  $game_temp.clear_mart_prices
-end
+=end
