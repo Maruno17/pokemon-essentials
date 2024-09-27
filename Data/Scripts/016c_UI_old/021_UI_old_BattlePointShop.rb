@@ -1,3 +1,4 @@
+=begin
 #===============================================================================
 # Abstraction layer for Pokemon Essentials.
 #===============================================================================
@@ -504,22 +505,4 @@ class BattlePointShopScreen
     @scene.pbEndScene
   end
 end
-
-#===============================================================================
-#
-#===============================================================================
-def pbBattlePointShop(stock, speech = nil)
-  stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
-  if speech.nil?
-    pbMessage(_INTL("Welcome to the Exchange Service Corner!"))
-    pbMessage(_INTL("We can exchange your BP for fabulous items."))
-  else
-    pbMessage(speech)
-  end
-  scene = BattlePointShop_Scene.new
-  screen = BattlePointShopScreen.new(scene, stock)
-  screen.pbBuyScreen
-  pbMessage(_INTL("Thank you for visiting."))
-  pbMessage(_INTL("Please visit us again when you have saved up more BP."))
-  $game_temp.clear_mart_prices
-end
+=end

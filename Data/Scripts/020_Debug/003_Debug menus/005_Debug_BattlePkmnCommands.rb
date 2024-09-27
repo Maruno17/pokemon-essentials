@@ -632,8 +632,8 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_item, {
         end
       when 1   # Remove item
         if pkmn.hasItem?
-          (battler || pkmn).item = nil
-          pkmn.mail = nil
+          pkmn.item = nil
+          battler.item = nil if battler
         end
       else
         break

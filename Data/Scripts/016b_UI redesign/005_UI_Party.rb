@@ -519,13 +519,10 @@ class UI::PartyVisuals < UI::BaseVisuals
     return ret
   end
 
-  def show_choice_message(text, options, index = 0)
+  def show_menu(text, options, index = 0, cmd_side: :right)
     @sprites[:help_window].visible = false
-    old_letter_by_letter = @sprites[:speech_box].letterbyletter
-    @sprites[:speech_box].letterbyletter = false
-    cmd_menu_align = :right   # (@index.even? ? :right : :left)
-    ret = super(text, options, index, cmd_side: cmd_menu_align)
-    @sprites[:speech_box].letterbyletter = old_letter_by_letter
+#    cmd_side = (@index.even?) ? :right : :left
+    ret = super(text, options, index, cmd_side: cmd_side)
     @sprites[:help_window].visible = true
     return ret
   end
@@ -853,6 +850,10 @@ class UI::Party < UI::BaseScreen
 
   #-----------------------------------------------------------------------------
 
+  alias pbShowCommands show_menu
+
+  #-----------------------------------------------------------------------------
+
   def refresh
     super
     reset_help_text
@@ -1068,7 +1069,7 @@ class UI::Party < UI::BaseScreen
         commands[:not_enter] = _INTL("No Entry") if (statuses[index] || 0) > 2   # Already entered
         commands[:summary]   = _INTL("Summary")
         commands[:cancel]    = _INTL("Cancel")
-        chosen_command = show_choice_message(_INTL("Do what with {1}?", pokemon.name), commands)
+        chosen_command = show_menu(_INTL("Do what with {1}?", pokemon.name), commands)
         case chosen_command
         when :enter
           if real_order.length >= ruleset.number && ruleset.number > 0
@@ -1113,7 +1114,7 @@ class UI::Party < UI::BaseScreen
         move_names.push(_INTL("{1} (PP: {2}/{3})", move.name, move.pp, move.total_pp))
       end
     end
-    return show_choice_message(message, move_names)
+    return show_menu(message, move_names)
   end
 
   alias pbChooseMove choose_move
@@ -1188,7 +1189,7 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :item_use, {
       bag_screen = UI::Bag.new($bag, mode: :choose_item)
       bag_screen.set_filter_proc(proc { |itm|
         item_data = GameData::Item.get(itm)
-        next false if !pbCanUseOnPokemon?(itm)
+        next false if !pbCanUseItemOnPokemon?(itm)
         next false if pkmn.hyper_mode && !item_data&.is_scent?
         if item_data.is_machine?
           move = item_data.move
@@ -1282,6 +1283,12 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :item_move, {
     end
     screen.set_index(old_party_idx) if !moved
   }
+})
+
+# Shows a choice menu using the MenuHandlers options below.
+UIActionHandlers.add(UI::Party::SCREEN_ID, :mail_menu, {
+  :menu         => :party_screen_interact_mail,
+  :menu_message => proc { |screen| _INTL("Do what with the Mail?") }
 })
 
 UIActionHandlers.add(UI::Party::SCREEN_ID, :item_move_mode, {

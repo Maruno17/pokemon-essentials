@@ -565,12 +565,13 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
         elsif @textchars[@curchar] == "\1"
           @pausing = true if @curchar < @numtextchars - 1
           self.startPause
-          refresh
         end
+        refresh
       end
     end
   end
 
+  # TODO: Why is this called 4 times per loop in pbMessageDisplay?
   def update
     super
     @pausesprite.update if @pausesprite&.visible
@@ -602,8 +603,8 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       ret = true
       @curchar += 1
       break if @textchars[@curchar] == "\n" ||   # newline
-               @textchars[@curchar] == "\1" ||   # pause
-               @textchars[@curchar] == "\2" ||   # letter-by-letter break
+               @textchars[@curchar] == "\1" ||   # pause: "\!"
+               @textchars[@curchar] == "\2" ||   # letter-by-letter break: "\wt[]", "\wtnp[]", "\.", "\|"
                @textchars[@curchar].nil?
     end
     return ret

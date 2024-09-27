@@ -544,7 +544,7 @@ class UI::BagVisuals < UI::BaseVisuals
     use_type = item_data.field_use
     # TODO: If @mode == :choose_item_in_battle, also check for item usage on a
     #       battler.
-    return if !pbCanUseOnPokemon?(item)
+    return if !pbCanUseItemOnPokemon?(item)
     icon_x = 0
     icon_y = 0
     icon_size = [@bitmaps[:party_icons].height, @bitmaps[:party_icons].height]
@@ -710,6 +710,8 @@ class UI::BagVisuals < UI::BaseVisuals
       return update_interaction_choose_item(Input::USE)
     elsif Input.trigger?(Input::BACK)
       return update_interaction_choose_item(Input::BACK)
+    elsif Input.trigger?(Input::ACTION)
+      return update_interaction_choose_item(Input::ACTION)
     end
     return nil
   end
@@ -723,6 +725,13 @@ class UI::BagVisuals < UI::BaseVisuals
       end
       pbPlayDecisionSE
       return :chosen
+    when Input::ACTION
+      if item && @pocket == :Machines
+        pbPlayDecisionSE
+        @show_move_details = !@show_move_details
+        refresh_move_details
+        refresh_input_indicators
+      end
     when Input::BACK
       pbPlayCloseMenuSE
       return :quit
@@ -974,7 +983,7 @@ UIActionHandlers.add(UI::Bag::SCREEN_ID, :debug, {
   :effect => proc { |screen|
     command = 0
     loop do
-      command = screen.show_choice_message(
+      command = screen.show_menu(
         _INTL("Do what with {1}?", screen.item.name),
         [_INTL("Change quantity"), _INTL("Make Mystery Gift"), _INTL("Cancel")], command)
       case command
@@ -1076,3 +1085,38 @@ MenuHandlers.add(:bag_screen_interact, :cancel, {
   "name"      => _INTL("Cancel"),
   "order"     => 9999
 })
+
+#===============================================================================
+# Methods for choosing an item from the Bag.
+#===============================================================================
+def pbChooseItem(game_variable = 0, *args)
+  ret = nil
+  pbFadeOutIn do
+    bag_screen = UI::Bag.new($bag, mode: :choose_item)
+    ret = bag_screen.choose_item
+  end
+  $game_variables[game_variable] = ret || :NONE if game_variable > 0
+  return ret
+end
+
+def pbChooseApricorn(game_variable = 0)
+  ret = nil
+  pbFadeOutIn do
+    bag_screen = UI::Bag.new($bag, mode: :choose_item)
+    bag_screen.set_filter_proc(proc { |item| GameData::Item.get(item).is_apricorn? })
+    ret = bag_screen.choose_item
+  end
+  $game_variables[game_variable] = ret || :NONE if game_variable > 0
+  return ret
+end
+
+def pbChooseFossil(game_variable = 0)
+  ret = nil
+  pbFadeOutIn do
+    bag_screen = UI::Bag.new($bag, mode: :choose_item)
+    bag_screen.set_filter_proc(proc { |item| GameData::Item.get(item).is_fossil? })
+    ret = bag_screen.choose_item
+  end
+  $game_variables[game_variable] = ret || :NONE if game_variable > 0
+  return ret
+end

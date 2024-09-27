@@ -440,9 +440,10 @@ module UI
       return ret
     end
 
+    # Used for dialogue.
     # align: Where the command window is in relation to the message window.
     #        :horizontal is side by side, :vertical is command window above.
-    def show_choice_message(text, options, index = 0, align: :horizontal, cmd_side: :right)
+    def show_choice_message(text, options, index = 0, align: :vertical, cmd_side: :right)
       ret = -1
       commands = options
       commands = options.values if options.is_a?(Hash)
@@ -493,6 +494,14 @@ module UI
       return ret
     end
 
+    def show_menu(text, options, index = 0, cmd_side: :right)
+      old_letter_by_letter = @sprites[:speech_box].letterbyletter
+      @sprites[:speech_box].letterbyletter = false
+      ret = show_choice_message(text, options, index, align: :horizontal, cmd_side: cmd_side)
+      @sprites[:speech_box].letterbyletter = old_letter_by_letter
+      return ret
+    end
+
     def show_choice(options, index = 0)
       ret = -1
       commands = options
@@ -527,6 +536,72 @@ module UI
         return pbMessageChooseNumber(help_text, maximum) { update_visuals }
       end
       return UIHelper.pbChooseNumber(@sprites[:speech_box], help_text, maximum, init_value) { update_visuals }
+    end
+
+    def choose_number_as_money_multiplier(help_text, money_per_unit, maximum, init_value = 1)
+      @sprites[:speech_box].visible = true
+      @sprites[:speech_box].text = help_text
+      pbBottomLeftLines(@sprites[:speech_box], 2)
+      # Show the help text
+      loop do
+        Graphics.update
+        Input.update
+        update_visuals
+        if @sprites[:speech_box].busy?
+          if Input.trigger?(Input::USE)
+            pbPlayDecisionSE if @sprites[:speech_box].pausing?
+            @sprites[:speech_box].resume
+          end
+        else
+          break
+        end
+      end
+      # Choose a quantity
+      item_price = money_per_unit
+      quantity = init_value
+      using(num_window = Window_AdvancedTextPokemon.newWithSize(
+            _INTL("×{1}<r>${2}", quantity, (quantity * item_price).to_s_formatted),
+            0, 0, 224, 64, @viewport)) do
+        num_window.z              = 2000
+        num_window.visible        = true
+        num_window.letterbyletter = false
+        pbBottomRight(num_window)
+        num_window.y -= @sprites[:speech_box].height
+        loop do
+          Graphics.update
+          Input.update
+          update
+          num_window.update
+          # Change quantity
+          old_quantity = quantity
+          if Input.repeat?(Input::LEFT)
+            quantity = [quantity - 10, 1].max
+          elsif Input.repeat?(Input::RIGHT)
+            quantity = [quantity + 10, maximum].min
+          elsif Input.repeat?(Input::UP)
+            quantity += 1
+            quantity = 1 if quantity > maximum
+          elsif Input.repeat?(Input::DOWN)
+            quantity -= 1
+            quantity = maximum if quantity < 1
+          end
+          if quantity != old_quantity
+            num_window.text = _INTL("×{1}<r>${2}", quantity, (quantity * item_price).to_s_formatted)
+            pbPlayCursorSE
+          end
+          # Finish choosing a quantity
+          if Input.trigger?(Input::USE)
+            pbPlayDecisionSE
+            break
+          elsif Input.trigger?(Input::BACK)
+            pbPlayCancelSE
+            quantity = 0
+            break
+          end
+        end
+      end
+      @sprites[:speech_box].visible = false
+      return quantity
     end
 
     #---------------------------------------------------------------------------
@@ -626,6 +701,10 @@ module UI
 
     alias pbShowCommands show_choice_message
 
+    def show_menu(text, options, initial_index = 0, cmd_side: :right)
+      return @visuals.show_menu(text, options, initial_index, cmd_side: cmd_side)
+    end
+
     def show_choice(options, initial_index = 0)
       return @visuals.show_choice(options, initial_index)
     end
@@ -635,7 +714,7 @@ module UI
       MenuHandlers.each_available(menu_handler_id, self) do |option, _hash, name|
         commands[option] = name
       end
-      return show_choice_message(message, commands) if message
+      return show_menu(message, commands) if message
       return show_choice(commands)
     end
 
@@ -644,6 +723,10 @@ module UI
     end
 
     alias pbChooseNumber choose_number
+
+    def choose_number_as_money_multiplier(help_text, money_per_unit, maximum, init_value = 1)
+      return @visuals.choose_number_as_money_multiplier(help_text, money_per_unit, maximum, init_value)
+    end
 
     #-----------------------------------------------------------------------------
 

@@ -724,7 +724,7 @@ class PokemonParty_Scene
       screen = PokemonBagScreen.new(scene, bag)
       ret = screen.pbChooseItemScreen(proc { |item|
         itm = GameData::Item.get(item)
-        next false if !pbCanUseOnPokemon?(itm)
+        next false if !pbCanUseItemOnPokemon?(itm)
         next false if pokemon.hyper_mode && !GameData::Item.get(item)&.is_scent?
         if itm.is_machine?
           move = itm.move

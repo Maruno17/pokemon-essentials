@@ -76,6 +76,10 @@ class UI::MartVisualsList < Window_DrawableCommand
     @expensive_shadow_color = value
   end
 
+  def expensive?(this_item)
+    return @stock.buy_price(this_item) > $player.money
+  end
+
   #-----------------------------------------------------------------------------
 
   # This draws all the visible options first, and then draws the cursor.
@@ -106,7 +110,7 @@ class UI::MartVisualsList < Window_DrawableCommand
       price = @stock.buy_price_string(this_item)
       price_width = self.contents.text_size(price).width
       price_x = rect.x + rect.width - price_width - 2 - 16
-      expensive = @stock.buy_price(this_item) > $player.money
+      expensive = expensive?(this_item)
       price_base_color = (expensive) ? @expensive_base_color || self.baseColor : self.baseColor
       price_shadow_color = (expensive) ? @expensive_shadow_color || self.shadowColor : self.shadowColor
       textpos.push([price, price_x, ypos + 2, :left, price_base_color, price_shadow_color])
@@ -158,7 +162,7 @@ class UI::MartVisuals < UI::BaseVisuals
     @sprites[:item_icon] = ItemIconSprite.new(48, Graphics.height - 48, nil, @viewport)
     # Selected item's description text box
     @sprites[:item_description] = Window_UnformattedTextPokemon.newWithSize(
-      "", 76 + 4, 272, Graphics.width - 98, 128, @viewport
+      "", 80, 272, Graphics.width - 98, 128, @viewport
     )
     @sprites[:item_description].baseColor   = TEXT_COLOR_THEMES[:white][0]
     @sprites[:item_description].shadowColor = TEXT_COLOR_THEMES[:white][1]
@@ -216,76 +220,6 @@ class UI::MartVisuals < UI::BaseVisuals
 
   def hide_bag_quantity_window
     @sprites[:bag_quantity_window].visible = false
-  end
-
-  #-----------------------------------------------------------------------------
-
-  def choose_item_quantity(help_text, price_per_unit, maximum, init_value = 1)
-    @sprites[:speech_box].visible = true
-    @sprites[:speech_box].text = help_text
-    pbBottomLeftLines(@sprites[:speech_box], 2)
-    # Show the help text
-    loop do
-      Graphics.update
-      Input.update
-      update_visuals
-      if @sprites[:speech_box].busy?
-        if Input.trigger?(Input::USE)
-          pbPlayDecisionSE if @sprites[:speech_box].pausing?
-          @sprites[:speech_box].resume
-        end
-      else
-        break
-      end
-    end
-    # Choose a quantity
-    item_price = price_per_unit
-    quantity = init_value
-    using(num_window = Window_AdvancedTextPokemon.newWithSize(
-          _INTL("×{1}<r>${2}", quantity, (quantity * item_price).to_s_formatted),
-          0, 0, 224, 64, @viewport)) do
-      num_window.z              = 2000
-      num_window.visible        = true
-      num_window.letterbyletter = false
-      num_window.baseColor      = TEXT_COLOR_THEMES[:black][0]
-      num_window.shadowColor    = TEXT_COLOR_THEMES[:black][1]
-      pbBottomRight(num_window)
-      num_window.y -= @sprites[:speech_box].height
-      loop do
-        Graphics.update
-        Input.update
-        update
-        num_window.update
-        # Change quantity
-        old_quantity = quantity
-        if Input.repeat?(Input::LEFT)
-          quantity = [quantity - 10, 1].max
-        elsif Input.repeat?(Input::RIGHT)
-          quantity = [quantity + 10, maximum].min
-        elsif Input.repeat?(Input::UP)
-          quantity += 1
-          quantity = 1 if quantity > maximum
-        elsif Input.repeat?(Input::DOWN)
-          quantity -= 1
-          quantity = maximum if quantity < 1
-        end
-        if quantity != old_quantity
-          num_window.text = _INTL("×{1}<r>${2}", quantity, (quantity * item_price).to_s_formatted)
-          pbPlayCursorSE
-        end
-        # Finish choosing a quantity
-        if Input.trigger?(Input::USE)
-          pbPlayDecisionSE
-          break
-        elsif Input.trigger?(Input::BACK)
-          pbPlayCancelSE
-          quantity = 0
-          break
-        end
-      end
-    end
-    @sprites[:speech_box].visible = false
-    return quantity
   end
 
   #-----------------------------------------------------------------------------
@@ -372,9 +306,13 @@ class UI::Mart < UI::BaseScreen
 
   def initialize(stock, bag)
     pbScrollMap(6, 5, 5)   # Direction 6 (right), 5 tiles, speed 5 (cycling speed, 10 tiles/second)
-    @stock = UI::MartStockWrapper.new(stock)
     @bag = bag
+    initialize_stock(stock)
     super()
+  end
+
+  def initialize_stock(stock)
+    @stock = UI::MartStockWrapper.new(stock)
   end
 
   def initialize_visuals
@@ -398,12 +336,6 @@ class UI::Mart < UI::BaseScreen
     return nil if @visuals.item.nil?
     return GameData::Item.get(@visuals.item)
   end
-
-  #-----------------------------------------------------------------------------
-
-  def choose_item_quantity(help_text, price_per_unit, maximum, init_value = 1)
-    return @visuals.choose_item_quantity(help_text, price_per_unit, maximum, init_value)
-  end
 end
 
 #===============================================================================
@@ -423,26 +355,26 @@ UIActionHandlers.add(UI::Mart::SCREEN_ID, :interact, {
     if item.is_important?
       quantity = 1
       next if !screen.show_confirm_message(
-        _INTL("So you want the {1}?\nIt'll be {2}. All right?",
-              item.portion_name, screen.stock.buy_price_string(item.id))
+        _INTL("So you want the {1}?\nIt'll be ${2}. All right?",
+              item.portion_name, item_price.to_s_formatted)
       )
     else
       max_quantity = (item_price <= 0) ? PokemonBag::MAX_PER_SLOT : $player.money / item_price
       max_quantity = [max_quantity, PokemonBag::MAX_PER_SLOT].min
-      quantity = screen.choose_item_quantity(
-        _INTL("So how many {1}?", item.portion_name_plural), item_price, max_quantity
+      quantity = screen.choose_number_as_money_multiplier(
+        _INTL("How many {1} would you like?", item.portion_name_plural), item_price, max_quantity
       )
       next if quantity == 0
       item_price *= quantity
       if quantity > 1
         next if !screen.show_confirm_message(
-          _INTL("So you want {1} {2}?\nThey'll be {3}. All right?",
-                quantity, item.portion_name_plural, screen.stock.buy_price_string(item.id))
+          _INTL("So you want {1} {2}?\nThey'll be ${3}. All right?",
+                quantity, item.portion_name_plural, item_price.to_s_formatted)
         )
       elsif quantity > 0
         next if !screen.show_confirm_message(
-          _INTL("So you want {1} {2}?\nIt'll be {3}. All right?",
-                quantity, item.portion_name, screen.stock.buy_price_string(item.id))
+          _INTL("So you want {1} {2}?\nIt'll be ${3}. All right?",
+                quantity, item.portion_name, item_price.to_s_formatted)
         )
       end
     end
@@ -514,74 +446,6 @@ class UI::BagSellVisuals < UI::BagVisuals
     @sprites[:unit_price_window].visible        = true
   end
 
-  def choose_item_quantity(help_text, price_per_unit, maximum, init_value = 1)
-    @sprites[:speech_box].visible = true
-    @sprites[:speech_box].text = help_text
-    pbBottomLeftLines(@sprites[:speech_box], 2)
-    # Show the help text
-    loop do
-      Graphics.update
-      Input.update
-      update_visuals
-      if @sprites[:speech_box].busy?
-        if Input.trigger?(Input::USE)
-          pbPlayDecisionSE if @sprites[:speech_box].pausing?
-          @sprites[:speech_box].resume
-        end
-      else
-        break
-      end
-    end
-    # Choose a quantity
-    item_price = price_per_unit
-    quantity = init_value
-    using(num_window = Window_AdvancedTextPokemon.newWithSize(
-          _INTL("×{1}<r>${2}", quantity, (quantity * item_price).to_s_formatted),
-          0, 0, 224, 64, @viewport)) do
-      num_window.z              = 2000
-      num_window.visible        = true
-      num_window.letterbyletter = false
-      num_window.baseColor      = TEXT_COLOR_THEMES[:black][0]
-      num_window.shadowColor    = TEXT_COLOR_THEMES[:black][1]
-      pbBottomRight(num_window)
-      num_window.y -= @sprites[:speech_box].height
-      loop do
-        Graphics.update
-        Input.update
-        update
-        num_window.update
-        # Change quantity
-        old_quantity = quantity
-        if Input.repeat?(Input::LEFT)
-          quantity = [quantity - 10, 1].max
-        elsif Input.repeat?(Input::RIGHT)
-          quantity = [quantity + 10, maximum].min
-        elsif Input.repeat?(Input::UP)
-          quantity += 1
-          quantity = 1 if quantity > maximum
-        elsif Input.repeat?(Input::DOWN)
-          quantity -= 1
-          quantity = maximum if quantity < 1
-        end
-        if quantity != old_quantity
-          num_window.text = _INTL("×{1}<r>${2}", quantity, (quantity * item_price).to_s_formatted)
-          pbPlayCursorSE
-        end
-        # Finish choosing a quantity
-        if Input.trigger?(Input::USE)
-          pbPlayDecisionSE
-          break
-        elsif Input.trigger?(Input::BACK)
-          pbPlayCancelSE
-          quantity = 0
-          break
-        end
-      end
-    end
-    @sprites[:speech_box].visible = false
-    return quantity
-  end
-
   def refresh
     super
     @sprites[:money_window].text = _INTL("Money:\n<r>${1}", $player.money.to_s_formatted)
@@ -619,10 +483,6 @@ class UI::BagSell < UI::Bag
     @visuals = UI::BagSellVisuals.new(@bag, @stock, mode: @mode)
   end
 
-  def choose_item_quantity(help_text, price_per_unit, maximum, init_value = 1)
-    return @visuals.choose_item_quantity(help_text, price_per_unit, maximum, init_value)
-  end
-
   def sell_items
     choose_item do |item|
       item_data = GameData::Item.get(item)
@@ -637,7 +497,7 @@ class UI::BagSell < UI::Bag
       # Choose a quantity of the item to sell
       quantity = @bag.quantity(item)
       if quantity > 1
-        quantity = choose_item_quantity(
+        quantity = choose_number_as_money_multiplier(
           _INTL("How many {1} would you like to sell?", item_name_plural), price, quantity
         )
       end
@@ -663,24 +523,22 @@ end
 #
 #===============================================================================
 def pbPokemonMart(stock, speech = nil, cannot_sell = false)
-  commands = []
-  cmdBuy  = -1
-  cmdSell = -1
-  cmdQuit = -1
-  commands[cmdBuy = commands.length]  = _INTL("I'm here to buy")
-  commands[cmdSell = commands.length] = _INTL("I'm here to sell") if !cannot_sell
-  commands[cmdQuit = commands.length] = _INTL("No, thanks")
-  cmd = pbMessage(speech || _INTL("Welcome! How may I help you?"), commands, cmdQuit + 1)
+  commands = {}
+  commands[:buy]    = _INTL("I'm here to buy")
+  commands[:sell]   = _INTL("I'm here to sell") if !cannot_sell
+  commands[:cancel] = _INTL("No, thanks")
+  cmd = pbMessage(speech || _INTL("Welcome! How may I help you?"), commands.values, commands.length)
   loop do
-    if cmdBuy >= 0 && cmd == cmdBuy
+    case commands.keys[cmd]
+    when :buy
       UI::Mart.new(stock, $bag).main
-    elsif cmdSell >= 0 && cmd == cmdSell
+    when :sell
       pbFadeOutIn { UI::BagSell.new($bag).sell_items }
     else
       pbMessage(_INTL("Do come again!"))
       break
     end
-    cmd = pbMessage(_INTL("Is there anything else I can do for you?"), commands, cmdQuit + 1)
+    cmd = pbMessage(_INTL("Is there anything else I can do for you?"), commands.values, commands.length, nil, cmd)
   end
   $game_temp.clear_mart_prices
 end

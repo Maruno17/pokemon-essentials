@@ -163,7 +163,7 @@ class Battle::Scene
       commands[:send_to_boxes] = _INTL("Send to Boxes") if mode == 1
       commands[:summary]       = _INTL("Summary")
       commands[:cancel]        = _INTL("Cancel")
-      choice = screen.show_choice_message(_INTL("Do what with {1}?", pkmn.name), commands)
+      choice = screen.show_menu(_INTL("Do what with {1}?", pkmn.name), commands)
       next canCancel if choice.nil?
       case choice
       when :switch_in, :send_to_boxes
@@ -220,7 +220,7 @@ class Battle::Scene
         commands = []
         commands[cmdUse = commands.length] = _INTL("Use") if useType && useType != 0
         commands[commands.length]          = _INTL("Cancel")
-        command = bag_screen.show_choice_message(_INTL("{1} is selected.", itemName), commands)
+        command = bag_screen.show_menu(_INTL("{1} is selected.", itemName), commands)
         next unless cmdUse >= 0 && command == cmdUse   # Use
         # Use types:
         # 0 = not usable in battle

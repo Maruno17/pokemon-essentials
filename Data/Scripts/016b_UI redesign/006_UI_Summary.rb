@@ -1407,7 +1407,7 @@ class UI::PokemonSummary < UI::BaseScreen
   end
 
   def choose_move
-    pbSEPlay("GUI menu open")
+    pbSEPlay("GUI summary change page")
     start_screen
     @result = perform_action(:navigate_moves)
     end_screen

@@ -575,6 +575,7 @@ class Pokemon
   def item=(value)
     return if value && !GameData::Item.exists?(value)
     @item = (value) ? GameData::Item.get(value).id : value
+    @mail = nil if @item.nil?
   end
 
   # Returns whether this Pokémon is holding an item. If an item id is passed,
@@ -608,6 +609,7 @@ class Pokemon
       raise ArgumentError, _INTL("Invalid value {1} given", mail.inspect)
     end
     @mail = mail
+    @item = mail&.item
   end
 
   #-----------------------------------------------------------------------------

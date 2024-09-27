@@ -605,7 +605,6 @@ MenuHandlers.add(:pokemon_debug_menu, :set_item, {
       when 1   # Remove item
         if pkmn.hasItem?
           pkmn.item = nil
-          pkmn.mail = nil
           screen.pbRefreshSingle(pkmnid)
         end
       else

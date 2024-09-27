@@ -445,6 +445,9 @@ def pbMoveTutorAnnotations(move, movelist = nil)
   return ret
 end
 
+# TODO: The Bag screen needs passing into this method (if using a machine). If
+#       it exists, refresh it before finishing pbFadeOutIn to update the party
+#       compatibility icons.
 def pbMoveTutorChoose(move, movelist = nil, by_machine = false, one_use_machine = false)
   ret = false
   move = GameData::Move.get(move).id

@@ -91,7 +91,7 @@ class ItemStorage_Scene
     @sprites["pocketwindow"].y = 16
     pbSetNarrowFont(@sprites["pocketwindow"].bitmap)
     # Item description
-    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize("", 76, 272, Graphics.width - 98, 128, @viewport)
+    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize("", 80, 272, Graphics.width - 98, 128, @viewport)
     @sprites["itemtextwindow"].baseColor   = ITEMTEXTBASECOLOR
     @sprites["itemtextwindow"].shadowColor = ITEMTEXTSHADOWCOLOR
     @sprites["itemtextwindow"].windowskin  = nil
