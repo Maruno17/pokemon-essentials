@@ -785,17 +785,17 @@ class Battle
     when :HarshSun
       if !pbCheckGlobalAbility(:DESOLATELAND)
         @field.weather = :None
-        pbDisplay("The harsh sunlight faded!")
+        pbDisplay(_INTL("The harsh sunlight faded!"))
       end
     when :HeavyRain
       if !pbCheckGlobalAbility(:PRIMORDIALSEA)
         @field.weather = :None
-        pbDisplay("The heavy rain has lifted!")
+        pbDisplay(_INTL("The heavy rain has lifted!"))
       end
     when :StrongWinds
       if !pbCheckGlobalAbility(:DELTASTREAM)
         @field.weather = :None
-        pbDisplay("The mysterious air current has dissipated!")
+        pbDisplay(_INTL("The mysterious air current has dissipated!"))
       end
     end
     if @field.weather != oldWeather

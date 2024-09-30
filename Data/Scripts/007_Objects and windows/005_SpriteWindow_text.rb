@@ -571,7 +571,6 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     end
   end
 
-  # TODO: Why is this called 4 times per loop in pbMessageDisplay?
   def update
     super
     @pausesprite.update if @pausesprite&.visible

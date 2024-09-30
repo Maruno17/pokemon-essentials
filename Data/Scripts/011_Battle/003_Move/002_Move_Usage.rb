@@ -209,23 +209,21 @@ class Battle::Move
       elsif target.effects[PBEffects::Endure]
         target.damageState.endured = true
         damage -= 1
-      elsif damage == target.totalhp
-        if target.hasActiveAbility?(:STURDY) && !target.beingMoldBroken?
-          target.damageState.sturdy = true
+      elsif target.hasActiveAbility?(:STURDY) && !target.beingMoldBroken? && target.hp == target.totalhp
+        target.damageState.sturdy = true
+        damage -= 1
+      elsif target.hasActiveItem?(:FOCUSSASH) && target.hp == target.totalhp
+        target.damageState.focusSash = true
+        damage -= 1
+      elsif target.hasActiveItem?(:FOCUSBAND) && @battle.pbRandom(100) < 10
+        target.damageState.focusBand = true
+        damage -= 1
+      elsif Settings::AFFECTION_EFFECTS && @battle.internalBattle &&
+            target.pbOwnedByPlayer? && !target.mega?
+        chance = [0, 0, 0, 10, 15, 25][target.affection_level]
+        if chance > 0 && @battle.pbRandom(100) < chance
+          target.damageState.affection_endured = true
           damage -= 1
-        elsif target.hasActiveItem?(:FOCUSSASH) && target.hp == target.totalhp
-          target.damageState.focusSash = true
-          damage -= 1
-        elsif target.hasActiveItem?(:FOCUSBAND) && @battle.pbRandom(100) < 10
-          target.damageState.focusBand = true
-          damage -= 1
-        elsif Settings::AFFECTION_EFFECTS && @battle.internalBattle &&
-              target.pbOwnedByPlayer? && !target.mega?
-          chance = [0, 0, 0, 10, 15, 25][target.affection_level]
-          if chance > 0 && @battle.pbRandom(100) < chance
-            target.damageState.affection_endured = true
-            damage -= 1
-          end
         end
       end
     end
