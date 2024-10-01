@@ -358,10 +358,13 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       break if i == @party_index
       @visible_index += 1
     end
-    # Want to stay on the nth page, or the closest available one
+    # Want to stay on the same page, or the nth page if that no longer exists,
+    # or the closest available one
     pages = all_pages
-    new_page_index = old_page_index.clamp(0, pages.length - 1)
-    @page = pages[new_page_index]
+    if !pages.include?(@page)
+      new_page_index = old_page_index.clamp(0, pages.length - 1)
+      @page = pages[new_page_index]
+    end
     # Set the Pokémon's sprite
     @sprites[:pokemon].setPokemonBitmap(@pokemon)
     @ribbon_offset = 0
@@ -568,6 +571,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     bar_total_width = 128
     bar_width = [@pokemon.hp * bar_total_width / @pokemon.totalhp.to_f, 1.0].max
     bar_width = ((bar_width / 2).round) * 2   # Make the bar's length a multiple of 2 pixels
+    bar_width -= 2 if bar_width == bar_total_width && @pokemon.hp < @pokemon.totalhp
     hp_zone = 0                                                  # Green
     hp_zone = 1 if @pokemon.hp <= (@pokemon.totalhp / 2).floor   # Yellow
     hp_zone = 2 if @pokemon.hp <= (@pokemon.totalhp / 4).floor   # Red
@@ -1075,13 +1079,9 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
         pbPlayDecisionSE
         return :navigate_moves
       when :ribbons
-        pbPlayDecisionSE
         return :navigate_ribbons
       else
-        if @mode != :in_battle
-          pbPlayDecisionSE
-          return :interact_menu
-        end
+        return :interact_menu if @mode != :in_battle
       end
     when Input::ACTION
       @pokemon.play_cry if !@pokemon.egg?
@@ -1459,6 +1459,8 @@ UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :go_to_next_pokemon, {
 UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :navigate_moves, {
   :returns_value => true,
   :effect => proc { |screen|
+    # NOTE: Doesn't have pbPlayDecisionSE here because this is also called by
+    #       def choose_move, which plays its own SE at the same time.
     move_index = screen.visuals.navigate_moves
     next move_index if screen.mode == :choose_move
     screen.refresh
@@ -1468,6 +1470,7 @@ UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :navigate_moves, {
 
 UIActionHandlers.add(UI::PokemonSummary::SCREEN_ID, :navigate_ribbons, {
   :effect => proc { |screen|
+    pbPlayDecisionSE
     screen.visuals.navigate_ribbons
     screen.refresh
   }

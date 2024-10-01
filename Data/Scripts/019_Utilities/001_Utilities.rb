@@ -60,6 +60,11 @@ def pbGetLanguage
   return 2 # Use 'English' by default
 end
 
+def pbChooseLanguage
+  commands = Settings::LANGUAGES.map { |val| val[0] }
+  return pbShowCommands(nil, commands)
+end
+
 # Converts a Celsius temperature to Fahrenheit.
 def toFahrenheit(celsius)
   return (celsius * 9.0 / 5.0).round + 32
@@ -593,14 +598,6 @@ def pbLoadRpgxpScene(scene)
   $scene.createSpritesets
   pbShowObjects(visibleObjects)
   Graphics.transition
-end
-
-def pbChooseLanguage
-  commands = []
-  Settings::LANGUAGES.each do |lang|
-    commands.push(lang[0])
-  end
-  return pbShowCommands(nil, commands)
 end
 
 def pbScreenCapture

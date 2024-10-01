@@ -59,6 +59,14 @@ class Pokemon
       @gender = new_gender
     end
 
+    def male?
+      return @gender == 0
+    end
+
+    def female?
+      return @gender == 1
+    end
+
     # @param new_language [Integer] new owner language
     def language=(new_language)
       validate new_language => Integer

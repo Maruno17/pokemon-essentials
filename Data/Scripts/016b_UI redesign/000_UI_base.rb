@@ -361,11 +361,15 @@ module UI
     #---------------------------------------------------------------------------
 
     def fade_in
-      pbFadeInAndShow(@sprites)# { update_visuals }
+      # TODO: pbFadeInAndShow changes the colour of all sprites. Make it instead
+      #       change the opacity of @viewport like def pbFadeOutIn.
+      pbFadeInAndShow(@sprites)
     end
 
     def fade_out
-      pbFadeOutAndHide(@sprites)# { update_visuals }
+      # TODO: pbFadeOutAndHide changes the colour of all sprites. Make it
+      #       instead change the opacity of @viewport like def pbFadeOutIn.
+      pbFadeOutAndHide(@sprites)
     end
 
     def dispose
@@ -490,7 +494,9 @@ module UI
         end
       end
       @sprites[:speech_box].visible = false
-      ret = options.keys[ret] if options.is_a?(Hash)
+      if options.is_a?(Hash)
+        ret = (ret < 0) ? nil : options.keys[ret]
+      end
       return ret
     end
 

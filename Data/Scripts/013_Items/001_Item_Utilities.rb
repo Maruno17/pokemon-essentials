@@ -248,23 +248,23 @@ def pbUseItem(bag, item, bag_screen = nil)
 end
 
 # Only called when in the party screen and having chosen an item to be used on
-# the selected Pokémon.
-# TODO: Replace all pbMessage and so on in here. scene is the party screen.
-def pbUseItemOnPokemon(item, pkmn, scene)
+# the selected Pokémon. screen is the party screen.
+def pbUseItemOnPokemon(item, pkmn, screen)
   item_data = GameData::Item.get(item)
   # TM or HM
   if item_data.is_machine?
-    machine = item_data.move
-    return false if !machine
-    movename = GameData::Move.get(machine).name
+    move = item_data.move
+    return false if !move
+    move_name = GameData::Move.get(move).name
     if pkmn.shadowPokemon?
-      pbMessage(_INTL("Shadow Pokémon can't be taught any moves.")) { scene.pbUpdate }
-    elsif !pkmn.compatible_with_move?(machine)
-      pbMessage(_INTL("{1} can't learn {2}.", pkmn.name, movename)) { scene.pbUpdate }
+      screen.show_message(_INTL("Shadow Pokémon can't be taught any moves."))
+    elsif !pkmn.compatible_with_move?(move)
+      screen.show_message(_INTL("{1} can't learn {2}.", pkmn.name, move_name))
     else
-      pbMessage("\\se[PC access]" + _INTL("You booted up the {1}.", item_data.portion_name) + "\1") { scene.pbUpdate }
-      if pbConfirmMessage(_INTL("Do you want to teach {1} to {2}?", movename, pkmn.name)) { scene.pbUpdate }
-        if pbLearnMove(pkmn, machine, false, true) { scene.pbUpdate }
+      pbSEPlay("PC access")
+      screen.show_message(_INTL("You booted up the {1}.", item_data.portion_name) + "\1")
+      if screen.show_confirm_message(_INTL("Do you want to teach {1} to {2}?", move_name, pkmn.name))
+        if pbLearnMove(pkmn, move, false, true) { screen.update }
           $bag.remove(item) if item_data.consumed_after_use?
           return true
         end
@@ -277,19 +277,19 @@ def pbUseItemOnPokemon(item, pkmn, scene)
   max_at_once = ItemHandlers.triggerUseOnPokemonMaximum(item, pkmn)
   max_at_once = [max_at_once, $bag.quantity(item)].min
   if max_at_once > 1
-    qty = scene.scene.pbChooseNumber(
+    qty = screen.choose_number(
       _INTL("How many {1} do you want to use?", item_data.portion_name_plural), max_at_once
     )
-    scene.set_help_text("") if scene.is_a?(UI::Party)
+    screen.set_help_text("")
   end
   return false if qty <= 0
-  ret = ItemHandlers.triggerUseOnPokemon(item, qty, pkmn, scene)
-  scene.clear_annotations
-  scene.refresh
+  ret = ItemHandlers.triggerUseOnPokemon(item, qty, pkmn, screen)
+  screen.clear_annotations
+  screen.refresh
   if ret && item_data.consumed_after_use?
     $bag.remove(item, qty)
     if !$bag.has?(item)
-      pbMessage(_INTL("You used your last {1}.", item_data.portion_name)) { scene.pbUpdate }
+      screen.show_message(_INTL("You used your last {1}.", item_data.portion_name))
     end
   end
   return ret
@@ -317,80 +317,91 @@ end
 #===============================================================================
 # Give an item to a Pokémon to hold, and take a held item from a Pokémon.
 #===============================================================================
-# TODO: Replace all pbDisplay and so on in here.
-def pbGiveItemToPokemon(item, pkmn, scene, pkmnid = 0)
+# screen is either the party screen or the summary screen.
+def pbGiveItemToPokemon(item, pkmn, screen, pkmnid = 0)
   return false if item.nil?
-  newitemname = GameData::Item.get(item).portion_name
+  # Check if the Pokémon can hold the item, or have its item removed if it's
+  # already holding one
   if pkmn.egg?
-    scene.pbDisplay(_INTL("Eggs can't hold items."))
+    screen.show_message(_INTL("Eggs can't hold items."))
     return false
   elsif pkmn.mail
-    scene.pbDisplay(_INTL("{1}'s mail must be removed before giving it an item.", pkmn.name))
-    return false if !pbTakeItemFromPokemon(pkmn, scene)
+    screen.show_message(_INTL("{1}'s mail must be removed before giving it an item.", pkmn.name))
+    return false if !pbTakeItemFromPokemon(pkmn, screen)
   end
+  new_item_name = GameData::Item.get(item).portion_name
   if pkmn.hasItem?
-    olditemname = pkmn.item.portion_name
-    if olditemname.starts_with_vowel?
-      scene.pbDisplay(_INTL("{1} is already holding an {2}.", pkmn.name, olditemname) + "\1")
+    # Swap existing held item with the new item
+    old_item_name = pkmn.item.portion_name
+    if old_item_name.starts_with_vowel?
+      screen.show_message(_INTL("{1} is already holding an {2}.", pkmn.name, old_item_name) + "\1")
     else
-      scene.pbDisplay(_INTL("{1} is already holding a {2}.", pkmn.name, olditemname) + "\1")
+      screen.show_message(_INTL("{1} is already holding a {2}.", pkmn.name, old_item_name) + "\1")
     end
-    if scene.pbConfirm(_INTL("Would you like to switch the two items?"))
+    if screen.show_confirm_message(_INTL("Would you like to switch the two items?"))
       $bag.remove(item)
       if !$bag.add(pkmn.item)
         raise _INTL("Couldn't re-store deleted item in Bag somehow") if !$bag.add(item)
-        scene.pbDisplay(_INTL("The Bag is full. The Pokémon's item could not be removed."))
+        screen.show_message(_INTL("The Bag is full. The Pokémon's item could not be removed."))
       elsif GameData::Item.get(item).is_mail?
-        if pbWriteMail(item, pkmn, pkmnid, scene)
+        if pbWriteMail(item, pkmn, pkmnid, screen)
           pkmn.item = item
-          scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.", olditemname, pkmn.name, newitemname))
+          screen.show_message(_INTL("Took the {1} from {2} and gave it the {3}.", old_item_name, pkmn.name, new_item_name))
           return true
         elsif !$bag.add(item)
           raise _INTL("Couldn't re-store deleted item in Bag somehow")
         end
       else
         pkmn.item = item
-        scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.", olditemname, pkmn.name, newitemname))
+        screen.show_message(_INTL("Took the {1} from {2} and gave it the {3}.", old_item_name, pkmn.name, new_item_name))
         return true
       end
     end
-  elsif !GameData::Item.get(item).is_mail? || pbWriteMail(item, pkmn, pkmnid, scene)
+  elsif !GameData::Item.get(item).is_mail? || pbWriteMail(item, pkmn, pkmnid, screen)
+    # Give the new item
     $bag.remove(item)
     pkmn.item = item
-    scene.pbDisplay(_INTL("{1} is now holding the {2}.", pkmn.name, newitemname))
+    screen.show_message(_INTL("{1} is now holding the {2}.", pkmn.name, new_item_name))
     return true
   end
   return false
 end
 
-# TODO: Replace all pbDisplay and so on in here.
-def pbTakeItemFromPokemon(pkmn, scene)
+# screen is either the party screen or the summary screen.
+def pbTakeItemFromPokemon(pkmn, screen)
   ret = false
+  # Check if the Pokémon has an item to remove, and whether the item can be put
+  # in the Bag
   if !pkmn.hasItem?
-    scene.pbDisplay(_INTL("{1} isn't holding anything.", pkmn.name))
+    screen.show_message(_INTL("{1} isn't holding anything.", pkmn.name))
+    return false
   elsif !$bag.can_add?(pkmn.item)
-    scene.pbDisplay(_INTL("The Bag is full. The Pokémon's item could not be removed."))
-  elsif pkmn.mail
-    if scene.pbConfirm(_INTL("Save the removed mail in your PC?"))
+    screen.show_message(_INTL("The Bag is full. The Pokémon's item could not be removed."))
+    return false
+  end
+  if pkmn.mail
+    # Remove a mail item
+    if screen.show_confirm_message(_INTL("Save the removed mail in your PC?"))
       if pbMoveToMailbox(pkmn)
         pkmn.item = nil
-        scene.pbDisplay(_INTL("The mail was saved in your PC."))
+        screen.show_message(_INTL("The mail was saved in your PC."))
         ret = true
       else
-        scene.pbDisplay(_INTL("Your PC's Mailbox is full."))
+        screen.show_message(_INTL("Your PC's Mailbox is full."))
       end
-    elsif scene.pbConfirm(_INTL("If the mail is removed, its message will be lost. OK?"))
+    elsif screen.show_confirm_message(_INTL("If the mail is removed, its message will be lost. OK?"))
       item_name = pkmn.item.portion_name
       $bag.add(pkmn.item)
       pkmn.item = nil
-      scene.pbDisplay(_INTL("Received the {1} from {2}.", item_name, pkmn.name))
+      screen.show_message(_INTL("Received the {1} from {2}.", item_name, pkmn.name))
       ret = true
     end
   else
+    # Remove a regular item
     item_name = pkmn.item.portion_name
     $bag.add(pkmn.item)
     pkmn.item = nil
-    scene.pbDisplay(_INTL("Received the {1} from {2}.", item_name, pkmn.name))
+    screen.show_message(_INTL("Received the {1} from {2}.", item_name, pkmn.name))
     ret = true
   end
   return ret

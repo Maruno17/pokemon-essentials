@@ -648,13 +648,9 @@ class UI::BagVisuals < UI::BaseVisuals
   def update_interaction(input)
     case input
     when Input::USE
-      if switching?
-        pbPlayDecisionSE
-        return :switch_item_end
-      elsif @sub_mode == :rearrange_items && item && pocket_sortable?
-        pbPlayDecisionSE
-        return :switch_item_start
-      elsif !item   # "CLOSE BAG"
+      return :switch_item_end if switching?
+      return :switch_item_start if @sub_mode == :rearrange_items && item && pocket_sortable?
+      if !item   # "CLOSE BAG"
         pbPlayCloseMenuSE
         return :quit
       end
@@ -662,10 +658,8 @@ class UI::BagVisuals < UI::BaseVisuals
       return :interact_menu
     when Input::ACTION
       if item
-        if switching?
-          pbPlayDecisionSE
-          return :switch_item_end
-        elsif @pocket == :Machines
+        return :switch_item_end if switching?
+        if @pocket == :Machines
           pbPlayDecisionSE
           @show_move_details = !@show_move_details
           refresh_move_details
@@ -676,13 +670,8 @@ class UI::BagVisuals < UI::BaseVisuals
         end
       end
     when Input::BACK
-      if switching?
-        pbPlayCancelSE
-        return :switch_item_cancel
-      elsif (@sub_mode || :normal) != :normal && pocket_sortable?
-        pbPlayCancelSE
-        return :clear_sub_mode
-      end
+      return :switch_item_cancel if switching?
+      return :clear_sub_mode if (@sub_mode || :normal) != :normal && pocket_sortable?
       pbPlayCloseMenuSE
       return :quit
     end
@@ -719,12 +708,9 @@ class UI::BagVisuals < UI::BaseVisuals
   def update_interaction_choose_item(input)
     case input
     when Input::USE
-      if !item   # "CLOSE BAG"
-        pbPlayCloseMenuSE
-        return :quit
-      end
-      pbPlayDecisionSE
-      return :chosen
+      return :chosen if item
+      pbPlayCloseMenuSE
+      return :quit
     when Input::ACTION
       if item && @pocket == :Machines
         pbPlayDecisionSE
@@ -829,8 +815,12 @@ class UI::Bag < UI::BaseScreen
     loop do
       on_start_main_loop
       chosen_item = choose_item_core
-      if chosen_item && block_given?
-        next if !yield chosen_item
+      if chosen_item
+        if block_given?
+          next if !yield chosen_item
+        else
+          pbPlayDecisionSE
+        end
       end
       @result = chosen_item
       break
@@ -859,18 +849,21 @@ UIActionHandlers.add(UI::Bag::SCREEN_ID, :screen_menu, {
 
 UIActionHandlers.add(UI::Bag::SCREEN_ID, :switch_item_start, {
   :effect => proc { |screen|
+    pbPlayDecisionSE
     screen.start_switching
   }
 })
 
 UIActionHandlers.add(UI::Bag::SCREEN_ID, :switch_item_end, {
   :effect => proc { |screen|
+    pbPlayDecisionSE
     screen.switch_items(screen.switch_index, screen.index)
   }
 })
 
 UIActionHandlers.add(UI::Bag::SCREEN_ID, :switch_item_cancel, {
   :effect => proc { |screen|
+    pbPlayCancelSE
     screen.cancel_switching
   }
 })
@@ -883,6 +876,7 @@ UIActionHandlers.add(UI::Bag::SCREEN_ID, :rearrange_items_mode, {
 
 UIActionHandlers.add(UI::Bag::SCREEN_ID, :clear_sub_mode, {
   :effect => proc { |screen|
+    pbPlayCancelSE
     screen.set_sub_mode(:normal)
   }
 })

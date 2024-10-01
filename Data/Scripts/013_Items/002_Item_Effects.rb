@@ -368,7 +368,8 @@ ItemHandlers::UseFromBag.addIf(:move_machines,
     item_data = GameData::Item.get(item)
     move = item_data.move
     next 0 if !move
-    pbMessage("\\se[PC access]" + _INTL("You booted up the {1}.", item_data.name) + "\1")
+    pbSEPlay("PC access")
+    pbMessage(_INTL("You booted up the {1}.", item_data.portion_name) + "\1")
     next 0 if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?",
                                       GameData::Move.get(move).name))
     next 1 if pbMoveTutorChoose(move, nil, true, item_data.is_TR?)

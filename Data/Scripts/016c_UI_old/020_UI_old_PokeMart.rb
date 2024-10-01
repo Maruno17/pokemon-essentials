@@ -281,10 +281,6 @@ class PokemonMart_Scene
   end
 
   def pbStartSellScene2(bag, adapter)
-    # TODO: Don't have a subscene. Make a new BagVisuals class for choosing an
-    #       item to sell, and open that. It can inherit from class
-    #       UI::BagVisuals and add the money window (that may be all that needs
-    #       adding).
     @subscene = PokemonBag_Scene.new
     @adapter = adapter
     @viewport2 = Viewport.new(0, 0, Graphics.width, Graphics.height)

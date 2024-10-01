@@ -1,6 +1,6 @@
-# TODO: Rewrite def pbUseItemOnPokemon and all the ItemHandlers to stop using
-#       pbDisplay and whatnot, and ensure they do whatever is appropriate when
-#       being called with a screen of UI::Party.
+# TODO: Rewrite all the ItemHandlers to stop using pbDisplay and whatnot, and
+#       ensure they do whatever is appropriate when being called with a screen
+#       of UI::Party.
 #===============================================================================
 #
 #===============================================================================
@@ -223,6 +223,7 @@ class UI::PartyVisualsPanel < UI::SpriteContainer
     bar_total_width = 96
     bar_width = [@pokemon.hp * bar_total_width / @pokemon.totalhp.to_f, 1.0].max
     bar_width = ((bar_width / 2).round) * 2   # Make the bar's length a multiple of 2 pixels
+    bar_width -= 2 if bar_width == bar_total_width && @pokemon.hp < @pokemon.totalhp
     hp_zone = 0                                                  # Green
     hp_zone = 1 if @pokemon.hp <= (@pokemon.totalhp / 2).floor   # Yellow
     hp_zone = 2 if @pokemon.hp <= (@pokemon.totalhp / 4).floor   # Red
@@ -344,8 +345,8 @@ class UI::PartyVisuals < UI::BaseVisuals
   def initialize_message_box
     super
     @sprites[:help_window] = Window_AdvancedTextPokemon.new("")
-    @sprites[:help_window].viewport       = @viewport
-    @sprites[:help_window].z              = 1500
+    @sprites[:help_window].viewport = @viewport
+    @sprites[:help_window].z        = 1500
     @sprites[:help_window].setSkin(MessageConfig.pbGetSpeechFrame)
     pbBottomLeftLines(@sprites[:help_window], 1, 396)
   end
@@ -657,13 +658,9 @@ class UI::PartyVisuals < UI::BaseVisuals
         pbPlayCloseMenuSE
         return :quit
       elsif @sub_mode == :switch_pokemon
-        pbPlayDecisionSE
         return :switch_pokemon_start
       elsif @sub_mode == :switch_items
-        if @party[@index].hasItem?
-          pbPlayDecisionSE
-          return :item_move
-        end
+        return :item_move if @party[@index].hasItem?
       end
       pbPlayDecisionSE
       return :interact_menu
@@ -673,13 +670,8 @@ class UI::PartyVisuals < UI::BaseVisuals
         return :screen_menu
       end
     when Input::BACK
-      if switching?
-        pbPlayCancelSE
-        return :switch_pokemon_cancel
-      elsif (@sub_mode || :normal) != :normal
-        pbPlayCancelSE
-        return :clear_sub_mode
-      end
+      return :switch_pokemon_cancel if switching?
+      return :clear_sub_mode if (@sub_mode || :normal) != :normal
       pbPlayCloseMenuSE
       return :quit
     end
@@ -714,13 +706,9 @@ class UI::PartyVisuals < UI::BaseVisuals
     case input
     when Input::USE
       if @index == Settings::MAX_PARTY_SIZE
-        if @multi_select   # Confirm
-          pbPlayDecisionSE
-          return :confirm
-        else   # Cancel
-          (switching?) ? pbPlayCancelSE : pbPlayCloseMenuSE
-          return :quit
-        end
+        return :confirm if @multi_select   # Confirm
+        (switching?) ? pbPlayCancelSE : pbPlayCloseMenuSE
+        return :quit
       elsif @index == Settings::MAX_PARTY_SIZE + 1   # Cancel
         (switching?) ? pbPlayCancelSE : pbPlayCloseMenuSE
         return :quit
@@ -764,8 +752,6 @@ class UI::Party < UI::BaseScreen
   #   :battle_use_item         For battle.
   #   :use_item                Like :choose_pokemon but with a different help text
   #   :teach_pokemon           Like :choose_pokemon but with a different help text
-
-
   #  :choose_entry_order       Battle Frontier thing
   def initialize(party, mode: :normal)
     @party = (party.is_a?(Array)) ? party : [party]
@@ -1002,7 +988,6 @@ class UI::Party < UI::BaseScreen
       end
       if (@able_proc && !@able_proc.call(pokemon)) ||
          (@able_proc2 && !@able_proc2.call(pokemon))
-        pbPlayDecisionSE
         if pokemon.egg?
           show_message(_INTL("This egg can't be chosen."))
         else
@@ -1063,7 +1048,6 @@ class UI::Party < UI::BaseScreen
       command = @visuals.navigate_choose_pokemon
       case command
       when :chosen
-        pbPlayDecisionSE
         commands = {}
         commands[:enter]     = _INTL("Entry") if (statuses[index] || 0) == 1   # Not entered yet
         commands[:not_enter] = _INTL("No Entry") if (statuses[index] || 0) > 2   # Already entered
@@ -1153,6 +1137,7 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :debug, {
 
 UIActionHandlers.add(UI::Party::SCREEN_ID, :switch_pokemon_start, {
   :effect => proc { |screen|
+    pbPlayDecisionSE
     screen.start_switching
   }
 })
@@ -1165,6 +1150,7 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :switch_pokemon_end, {
 
 UIActionHandlers.add(UI::Party::SCREEN_ID, :switch_pokemon_cancel, {
   :effect => proc { |screen|
+    pbPlayCancelSE
     screen.end_switching
   }
 })
@@ -1225,8 +1211,7 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :item_give, {
 UIActionHandlers.add(UI::Party::SCREEN_ID, :item_take, {
   :effect => proc { |screen|
     pkmn = screen.pokemon
-    next if !pbTakeItemFromPokemon(pkmn, screen)
-    screen.refresh
+    screen.refresh if pbTakeItemFromPokemon(pkmn, screen)
   }
 })
 
@@ -1234,6 +1219,7 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :item_take, {
 #       (here) has the whole switching process in this handler. Be consistent.
 UIActionHandlers.add(UI::Party::SCREEN_ID, :item_move, {
   :effect => proc { |screen|
+    pbPlayDecisionSE
     old_pkmn = screen.pokemon
     old_item = old_pkmn.item
     old_item_name = old_item.name
@@ -1248,7 +1234,6 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :item_move, {
         screen.end_switching
         break
       end
-      pbPlayDecisionSE
       new_pkmn = screen.party[new_party_idx]
       if new_pkmn.egg?
         screen.show_message(_INTL("Eggs can't hold items."))
@@ -1307,14 +1292,13 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :mail_read, {
 
 UIActionHandlers.add(UI::Party::SCREEN_ID, :mail_take, {
   :effect => proc { |screen|
-    if pbTakeItemFromPokemon(screen.pokemon, screen)
-      screen.refresh
-    end
+    screen.refresh if pbTakeItemFromPokemon(screen.pokemon, screen)
   }
 })
 
 UIActionHandlers.add(UI::Party::SCREEN_ID, :clear_sub_mode, {
   :effect => proc { |screen|
+    pbPlayCancelSE
     screen.set_sub_mode(:normal)
   }
 })
