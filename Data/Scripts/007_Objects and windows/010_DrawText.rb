@@ -147,7 +147,7 @@ def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheig
     elsif isspace
       hadspace = true
     end
-    texty = (lineheight * y) + yDst + yStart
+    texty = (lineheight * y) + yDst + yStart - 2   # TEXT OFFSET
     # Push character
     if heightDst < 0 || yStart < yDst + heightDst
       havenl = true if isWaitChar(textchars[position])

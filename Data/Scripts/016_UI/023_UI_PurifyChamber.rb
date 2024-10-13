@@ -1267,13 +1267,19 @@ class PurifyChamberScene
     pbRefresh
   end
 
+  # TODO: Depending on which position is selected, make Shadow Pokémon/non-Shadow
+  #       Pokémon in UI::PokemonStorage semi-transparent and don't let them be
+  #       selected.
+  # TODO: Don't let eggs be selected.
+  # TODO: Don't let the last able Pokémon in the party be selected.
   def pbChoosePokemon
-    visible = pbFadeOutAndHide(@sprites)
-    scene = PokemonStorageScene.new
-    screen = PokemonStorageScreen.new(scene, $PokemonStorage)
-    pos = screen.pbChoosePokemon
-    pbRefresh
-    pbFadeInAndShow(@sprites, visible)
+    pos = nil
+    pbFadeOutInWithUpdate(@sprites) do
+      screen = UI::PokemonStorage.new($PokemonStorage, mode: :choose_pokemon)
+      screen.main
+      pos = screen.result
+      pbRefresh
+    end
     return pos
   end
 end

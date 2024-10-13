@@ -221,33 +221,33 @@ MenuHandlers.add(:debug_menu, :storage_wallpapers, {
   "description" => _INTL("Unlock and lock special wallpapers used in Pokémon storage."),
   "effect"      => proc {
     w = $PokemonStorage.allWallpapers
-    if w.length <= PokemonStorage::BASICWALLPAPERQTY
+    if w.length <= PokemonStorage::BASIC_WALLPAPER_COUNT
       pbMessage(_INTL("There are no special wallpapers defined."))
-    else
-      paperscmd = 0
-      unlockarray = $PokemonStorage.unlockedWallpapers
-      loop do
-        paperscmds = []
-        paperscmds.push(_INTL("Unlock all"))
-        paperscmds.push(_INTL("Lock all"))
-        (PokemonStorage::BASICWALLPAPERQTY...w.length).each do |i|
-          paperscmds.push((unlockarray[i] ? "[Y]" : "[  ]") + " " + w[i])
+      next
+    end
+    paperscmd = 0
+    unlockarray = $PokemonStorage.unlockedWallpapers
+    loop do
+      paperscmds = []
+      paperscmds.push(_INTL("Unlock all"))
+      paperscmds.push(_INTL("Lock all"))
+      (PokemonStorage::BASIC_WALLPAPER_COUNT...w.length).each do |i|
+        paperscmds.push((unlockarray[i] ? "[Y]" : "[  ]") + " " + w[i])
+      end
+      paperscmd = pbShowCommands(nil, paperscmds, -1, paperscmd)
+      break if paperscmd < 0
+      case paperscmd
+      when 0   # Unlock all
+        (PokemonStorage::BASIC_WALLPAPER_COUNT...w.length).each do |i|
+          unlockarray[i] = true
         end
-        paperscmd = pbShowCommands(nil, paperscmds, -1, paperscmd)
-        break if paperscmd < 0
-        case paperscmd
-        when 0   # Unlock all
-          (PokemonStorage::BASICWALLPAPERQTY...w.length).each do |i|
-            unlockarray[i] = true
-          end
-        when 1   # Lock all
-          (PokemonStorage::BASICWALLPAPERQTY...w.length).each do |i|
-            unlockarray[i] = false
-          end
-        else
-          paperindex = paperscmd - 2 + PokemonStorage::BASICWALLPAPERQTY
-          unlockarray[paperindex] = !$PokemonStorage.unlockedWallpapers[paperindex]
+      when 1   # Lock all
+        (PokemonStorage::BASIC_WALLPAPER_COUNT...w.length).each do |i|
+          unlockarray[i] = false
         end
+      else
+        paperindex = paperscmd - 2 + PokemonStorage::BASIC_WALLPAPER_COUNT
+        unlockarray[paperindex] = !$PokemonStorage.unlockedWallpapers[paperindex]
       end
     end
   }
@@ -355,7 +355,7 @@ MenuHandlers.add(:debug_menu, :test_wild_battle_advanced, {
       else                                   # Edit a Pokémon
         if pbConfirmMessage(_INTL("Change this Pokémon?"))
           scr = UI::PartyDebug.new
-          scr.pokemon_debug_menu(pkmn[pkmnCmd], -1, nil, true)
+          scr.pokemon_debug_menu(pkmn[pkmnCmd], -1, true)
           scr.silent_end_screen
         elsif pbConfirmMessage(_INTL("Delete this Pokémon?"))
           pkmn.delete_at(pkmnCmd)
@@ -711,9 +711,7 @@ MenuHandlers.add(:debug_menu, :open_storage, {
   "description" => _INTL("Opens the Pokémon storage boxes in Organize Boxes mode."),
   "effect"      => proc {
     pbFadeOutIn do
-      scene = PokemonStorageScene.new
-      screen = PokemonStorageScreen.new(scene, $PokemonStorage)
-      screen.pbStartScreen(0)
+      UI::PokemonStorage.new($PokemonStorage, mode: :organize).main
     end
   }
 })

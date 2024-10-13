@@ -60,13 +60,13 @@ class PokemonStorage
   attr_accessor :currentBox
   attr_writer   :unlockedWallpapers
 
-  BASICWALLPAPERQTY = 16
+  BASIC_WALLPAPER_COUNT = 16
 
   def initialize(maxBoxes = Settings::NUM_STORAGE_BOXES, maxPokemon = PokemonBox::BOX_SIZE)
     @boxes = []
     maxBoxes.times do |i|
       @boxes[i] = PokemonBox.new(_INTL("Box {1}", i + 1), maxPokemon)
-      @boxes[i].background = i % BASICWALLPAPERQTY
+      @boxes[i].background = i % BASIC_WALLPAPER_COUNT
     end
     @currentBox = 0
     @boxmode = -1
@@ -76,6 +76,11 @@ class PokemonStorage
     end
   end
 
+  # NOTE: These wallpaper names are shown in a list in the storage screen that
+  #       is a fixed width. The names should be kept relatively short; longer
+  #       names will get shrunk to fit the width of the list, and that looks bad.
+  # NOTE: The order these wallpapers are listed determines the number in their
+  #       filenames.
   def allWallpapers
     return [
       # Basic wallpapers
@@ -85,9 +90,9 @@ class PokemonStorage
       _INTL("Poké Center"), _INTL("Machine"), _INTL("Checks"), _INTL("Simple"),
       # Special wallpapers
       _INTL("Space"), _INTL("Backyard"), _INTL("Nostalgic 1"), _INTL("Torchic"),
-      _INTL("Trio 1"), _INTL("PikaPika 1"), _INTL("Legend 1"), _INTL("Team Galactic 1"),
+      _INTL("Trio 1"), _INTL("PikaPika 1"), _INTL("Legend 1"), _INTL("Galactic 1"),
       _INTL("Distortion"), _INTL("Contest"), _INTL("Nostalgic 2"), _INTL("Croagunk"),
-      _INTL("Trio 2"), _INTL("PikaPika 2"), _INTL("Legend 2"), _INTL("Team Galactic 2"),
+      _INTL("Trio 2"), _INTL("PikaPika 2"), _INTL("Legend 2"), _INTL("Galactic 2"),
       _INTL("Heart"), _INTL("Soul"), _INTL("Big Brother"), _INTL("Pokéathlon"),
       _INTL("Trio 3"), _INTL("Spiky Pika"), _INTL("Kimono Girl"), _INTL("Revival")
     ]
@@ -100,25 +105,22 @@ class PokemonStorage
 
   def isAvailableWallpaper?(i)
     @unlockedWallpapers = [] if !@unlockedWallpapers
-    return true if i < BASICWALLPAPERQTY
+    return true if i < BASIC_WALLPAPER_COUNT
     return true if @unlockedWallpapers[i]
     return false
   end
 
   def availableWallpapers
-    ret = [[], []]   # Names, IDs
-    papers = allWallpapers
     @unlockedWallpapers = [] if !@unlockedWallpapers
-    papers.length.times do |i|
-      next if !isAvailableWallpaper?(i)
-      ret[0].push(papers[i])
-      ret[1].push(i)
+    ret = {}
+    allWallpapers.each_with_index do |paper, i|
+      ret[i] = paper if isAvailableWallpaper?(i)
     end
     return ret
   end
 
   def party
-    $player.party
+    return $player.party
   end
 
   def party=(_value)

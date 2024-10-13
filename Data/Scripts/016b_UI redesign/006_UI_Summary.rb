@@ -181,6 +181,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       :draw_page_icons,
       :draw_poke_ball,
       :draw_pokemon_name,
+      :draw_party_icons,
       :draw_markings,
       :draw_egg_memo
     ]

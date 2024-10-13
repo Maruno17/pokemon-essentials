@@ -779,6 +779,8 @@ def pbEnterNPCName(helptext, minlength, maxlength, initialText = "", id = 0, nof
   return pbEnterText(helptext, minlength, maxlength, initialText, 3, id, nofadeout)
 end
 
+# TODO: maxlength for this is 16, so the entry screen should support showing 16
+#       characters.
 def pbEnterBoxName(helptext, minlength, maxlength, initialText = "", nofadeout = false)
   return pbEnterText(helptext, minlength, maxlength, initialText, 4, nil, nofadeout)
 end

@@ -766,16 +766,16 @@ class UI::Party < UI::BaseScreen
 
   #-----------------------------------------------------------------------------
 
-  def set_index(new_index)
-    @visuals.set_index(new_index)
-  end
-
   def pokemon
     return (index < @party.length) ? @party[index] : nil
   end
 
   def can_access_storage?
     return @visuals.can_access_storage?
+  end
+
+  def set_index(new_index)
+    @visuals.set_index(new_index)
   end
 
   def set_help_text(text)
@@ -1306,9 +1306,7 @@ UIActionHandlers.add(UI::Party::SCREEN_ID, :clear_sub_mode, {
 UIActionHandlers.add(UI::Party::SCREEN_ID, :open_storage, {
   :effect => proc { |screen|
     pbFadeOutInWithUpdate(screen.sprites) do
-      storage_scene = PokemonStorageScene.new
-      storage_screen = PokemonStorageScreen.new(storage_scene, $PokemonStorage)
-      storage_screen.pbStartScreen(0)
+      UI::PokemonStorage.new($PokemonStorage, mode: :organize).main
       screen.refresh_party
       screen.refresh
     end

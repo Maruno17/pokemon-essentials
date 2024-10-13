@@ -231,7 +231,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     dims = [0, 0]
     cwidth = (maxwidth < 0) ? Graphics.width : maxwidth
     chars = getFormattedTextForDims(self.contents, 0, 0,
-                                    cwidth - self.borderX - 2 - 6, -1, text, @lineHeight, true)
+                                    cwidth - self.borderX - SpriteWindow_Base::TEXT_PADDING, -1, text, @lineHeight, true)
     chars.each do |ch|
       dims[0] = [dims[0], ch[1] + ch[3]].max
       dims[1] = [dims[1], ch[2] + ch[4]].max
@@ -244,7 +244,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     oldstarting = @starting
     @starting = true
     self.width  = (width < 0) ? Graphics.width : width
-    self.height = dims[1] + self.borderY
+    self.height = dims[1] + self.borderY + 2   # TEXT OFFSET
     @starting = oldstarting
     redrawText
   end
@@ -953,7 +953,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
     new_top_row = [[new_top_row, self.row_max - self.page_row_max].min, 0].max
     if self.top_row != new_top_row
       self.top_row = new_top_row
-#      dorefresh = true
+      dorefresh = true
     end
     # End of code
     cursor_width = (self.width - self.borderX) / @column_max

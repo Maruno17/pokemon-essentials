@@ -340,6 +340,7 @@ module UI
     end
 
     def initialize_message_box
+      # TODO: It looks like :message_box isn't used anywhere.
       @sprites[:message_box] = Window_AdvancedTextPokemon.new("")
       @sprites[:message_box].viewport       = @viewport
       @sprites[:message_box].z              = 2000
@@ -385,10 +386,14 @@ module UI
 
     #---------------------------------------------------------------------------
 
+    def position_speech_box(text = "")
+      pbBottomLeftLines(@sprites[:speech_box], 2)
+    end
+
     def show_message(text)
       @sprites[:speech_box].visible = true
       @sprites[:speech_box].text = text
-      pbBottomLeftLines(@sprites[:speech_box], 2)
+      position_speech_box(text)
       yielded = false
       loop do
         Graphics.update
@@ -414,7 +419,7 @@ module UI
       ret = false
       @sprites[:speech_box].visible = true
       @sprites[:speech_box].text    = text
-      pbBottomLeftLines(@sprites[:speech_box], 2)
+      position_speech_box(text)
       using(cmd_window = Window_CommandPokemon.new([_INTL("Yes"), _INTL("No")])) do
         cmd_window.z       = @viewport.z + 1
         cmd_window.visible = false
@@ -435,6 +440,40 @@ module UI
             elsif Input.trigger?(Input::USE) && @sprites[:speech_box].resume
               pbPlayDecisionSE
               ret = (cmd_window.index == 0)
+              break
+            end
+          end
+        end
+      end
+      @sprites[:speech_box].visible = false
+      return ret
+    end
+
+    def show_confirm_serious_message(text)
+      ret = false
+      @sprites[:speech_box].visible = true
+      @sprites[:speech_box].text    = text
+      position_speech_box(text)
+      using(cmd_window = Window_CommandPokemon.new([_INTL("No"), _INTL("Yes")])) do
+        cmd_window.z       = @viewport.z + 1
+        cmd_window.visible = false
+        pbBottomRight(cmd_window)
+        cmd_window.y -= @sprites[:speech_box].height
+        cmd_window.visible = true if !@sprites[:speech_box].busy?
+        loop do
+          Graphics.update
+          Input.update
+          update_visuals
+          cmd_window.visible = true if !@sprites[:speech_box].busy?
+          cmd_window.update
+          if !@sprites[:speech_box].busy?
+            if Input.trigger?(Input::BACK)
+              pbPlayCancelSE
+              ret = false
+              break
+            elsif Input.trigger?(Input::USE) && @sprites[:speech_box].resume
+              pbPlayDecisionSE
+              ret = (cmd_window.index == 1)
               break
             end
           end
@@ -547,7 +586,7 @@ module UI
     def choose_number_as_money_multiplier(help_text, money_per_unit, maximum, init_value = 1)
       @sprites[:speech_box].visible = true
       @sprites[:speech_box].text = help_text
-      pbBottomLeftLines(@sprites[:speech_box], 2)
+      position_speech_box(text)
       # Show the help text
       loop do
         Graphics.update
@@ -700,6 +739,10 @@ module UI
     end
 
     alias pbConfirm show_confirm_message
+
+    def show_confirm_serious_message(text)
+      return @visuals.show_confirm_serious_message(text)
+    end
 
     def show_choice_message(text, options, initial_index = 0)
       return @visuals.show_choice_message(text, options, initial_index)

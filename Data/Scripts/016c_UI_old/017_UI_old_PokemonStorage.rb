@@ -501,6 +501,13 @@ class PokemonBoxPartySprite < Sprite
     refresh
   end
 
+  def z=(value)
+    super
+    Settings::MAX_PARTY_SIZE.times do |i|
+      @pokemonsprites[i].z = value + 1 if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
+    end
+  end
+
   def color=(value)
     super
     Settings::MAX_PARTY_SIZE.times do |i|
@@ -565,7 +572,7 @@ class PokemonBoxPartySprite < Sprite
       sprite.viewport = self.viewport
       sprite.x = self.x + xvalues[j]
       sprite.y = self.y + yvalues[j]
-      sprite.z = 1
+      sprite.z = self.z + 1
     end
   end
 
@@ -1254,8 +1261,7 @@ class PokemonStorageScene
       pbPartySetArrow(@sprites["arrow"], @selection)
       pbUpdateOverlay(@selection, @storage.party)
     else
-      screen = UI::PokemonSummary.new(@storage.boxes[selected[0]].pokemon, selected[1]).main
-      @selection = screen.result
+      @selection = UI::PokemonSummary.new(@storage.boxes[selected[0]].pokemon, selected[1]).main
       pbSetArrow(@sprites["arrow"], @selection)
       pbUpdateOverlay(@selection)
     end

@@ -24,10 +24,7 @@ module UI::PC
     command = 0
     loop do
       choice = pbMessage(_INTL("Which PC should be accessed?"), command_list, -1, nil, command)
-      if choice < 0
-        pbPlayCloseMenuSE
-        break
-      end
+      break if choice < 0
       break if commands[choice]["effect"].call
     end
     pbSEPlay("PC close")
@@ -220,9 +217,7 @@ MenuHandlers.add(:pc_menu, :pokemon_storage, {
       when :organize
         pbPlayDecisionSE
         pbFadeOutIn do
-          scene = PokemonStorageScene.new
-          screen = PokemonStorageScreen.new(scene, $PokemonStorage)
-          screen.pbStartScreen(0)
+          UI::PokemonStorage.new($PokemonStorage, mode: :organize).main
         end
       when :withdraw
         if $PokemonStorage.party_full?
@@ -231,9 +226,7 @@ MenuHandlers.add(:pc_menu, :pokemon_storage, {
         end
         pbPlayDecisionSE
         pbFadeOutIn do
-          scene = PokemonStorageScene.new
-          screen = PokemonStorageScreen.new(scene, $PokemonStorage)
-          screen.pbStartScreen(1)
+          UI::PokemonStorage.new($PokemonStorage, mode: :withdraw).main
         end
       when :deposit
         if $player.able_pokemon_count <= 1
@@ -242,9 +235,7 @@ MenuHandlers.add(:pc_menu, :pokemon_storage, {
         end
         pbPlayDecisionSE
         pbFadeOutIn do
-          scene = PokemonStorageScene.new
-          screen = PokemonStorageScreen.new(scene, $PokemonStorage)
-          screen.pbStartScreen(2)
+          UI::PokemonStorage.new($PokemonStorage, mode: :deposit).main
         end
       else
         break
