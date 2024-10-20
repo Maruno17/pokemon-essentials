@@ -243,17 +243,15 @@ end
 def pbRepositionMessageWindow(msgwindow, linecount = 2)
   msgwindow.height = (32 * linecount) + msgwindow.borderY
   msgwindow.y = (Graphics.height) - (msgwindow.height)
-  if $game_system
-    case $game_system.message_position
-    when 0  # up
-      msgwindow.y = 0
-    when 1  # middle
-      msgwindow.y = (Graphics.height / 2) - (msgwindow.height / 2)
-    when 2
-      msgwindow.y = (Graphics.height) - (msgwindow.height)
-    end
-    msgwindow.opacity = 0 if $game_system.message_frame != 0
+  case $game_system&.message_position || 2
+  when 0   # top
+    msgwindow.y = 0
+  when 1   # middle
+    msgwindow.y = (Graphics.height - msgwindow.height) / 2
+  when 2   # bottom
+    msgwindow.y = Graphics.height - msgwindow.height
   end
+  msgwindow.opacity = 0 if ($game_system&.message_frame || 0) != 0
 end
 
 # internal function

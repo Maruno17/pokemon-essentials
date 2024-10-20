@@ -23,16 +23,12 @@ module Game
   # Loads bootup data from save file (if it exists) or creates bootup data (if
   # it doesn't).
   def set_up_system
-    save_data = (SaveData.exists?) ? SaveData.read_from_file(SaveData::FILE_PATH) : {}
-    if save_data.empty?
-      SaveData.initialize_bootup_values
-    else
-      SaveData.load_bootup_values(save_data)
-    end
-    # Set resize factor
+    SaveData.initialize_bootup_values
     pbSetResizeFactor([$PokemonSystem.screensize, 4].min)
     # Set language (and choose language if there is no save file)
     if !Settings::LANGUAGES.empty?
+      # TODO: Change this to check for any save file.
+      save_data = (SaveData.exists?) ? SaveData.read_from_file(SaveData::FILE_PATH) : {}
       $PokemonSystem.language = pbChooseLanguage if save_data.empty? && Settings::LANGUAGES.length >= 2
       MessageTypes.load_message_files(Settings::LANGUAGES[$PokemonSystem.language][1])
     end

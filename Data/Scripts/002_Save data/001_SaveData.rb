@@ -6,6 +6,8 @@
 # @see SaveData.register_conversion
 #===============================================================================
 module SaveData
+  DIRECTORY      = (File.directory?(System.data_directory)) ? System.data_directory : "./"
+  FILENAME_REGEX = /Game(\d*)\.rxdata$/
   # Contains the file path of the save file.
   FILE_PATH = if File.directory?(System.data_directory)
                 System.data_directory + "/Game.rxdata"
@@ -16,6 +18,19 @@ module SaveData
   # @return [Boolean] whether the save file exists
   def self.exists?
     return File.file?(FILE_PATH)
+  end
+
+  # @return[Array] array of filenames in the save folder that are save files
+  def self.all_save_files
+    files = Dir.get(DIRECTORY, "*", false)
+    ret = []
+    files.each do |file|
+      next if !file[FILENAME_REGEX]
+      ret.push([$~[1].to_i, file])
+    end
+    ret.sort! { |a, b| a[0] <=> b[0] }
+    ret.map! { |val| val[1] }
+    return ret
   end
 
   # Fetches the save data from the given file.
@@ -64,9 +79,9 @@ module SaveData
 
   # Deletes the save file (and a possible .bak backup file if one exists)
   # @raise [Error::ENOENT]
-  def self.delete_file
-    File.delete(FILE_PATH)
-    File.delete(FILE_PATH + ".bak") if File.file?(FILE_PATH + ".bak")
+  def self.delete_file(filename)
+    File.delete(DIRECTORY + filename)
+    File.delete(DIRECTORY + filename + ".bak") if File.file?(DIRECTORY + filename + ".bak")
   end
 
   # Converts the pre-v19 format data to the new format.

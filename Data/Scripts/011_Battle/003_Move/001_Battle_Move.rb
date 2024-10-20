@@ -159,6 +159,7 @@ class Battle::Move
       if battler.isSpecies?(:MORPEKO) || battler.effects[PBEffects::TransformSpecies] == :MORPEKO
         return pbBaseType(battler)
       end
+      # TODO: Make the below depend on a Setting rather than quoting it out.
 =begin
     when "TypeDependsOnUserPlate", "TypeDependsOnUserMemory",
          "TypeDependsOnUserDrive", "TypeAndPowerDependOnUserBerry",
@@ -170,6 +171,7 @@ class Battle::Move
     return @realMove.display_type(battler.pokemon)
   end
 
+  # TODO: Make the below depend on a Setting rather than quoting it out.
   def display_damage(battler)
 =begin
     case @function_code
@@ -185,6 +187,7 @@ class Battle::Move
     return @realMove.display_damage(battler.pokemon)
   end
 
+  # TODO: Make the below depend on a Setting rather than quoting it out.
   def display_category(battler)
 =begin
     case @function_code

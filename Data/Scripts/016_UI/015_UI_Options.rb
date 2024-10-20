@@ -392,7 +392,7 @@ MenuHandlers.add(:options_menu, :bgm_volume, {
   "set_proc"    => proc { |value, scene|
     next if $PokemonSystem.bgmvolume == value
     $PokemonSystem.bgmvolume = value
-    next if scene.in_load_screen || $game_system.playing_bgm.nil?
+    next if scene.in_load_screen || !$game_system || $game_system.playing_bgm.nil?
     playingBGM = $game_system.getPlayingBGM
     $game_system.bgm_pause
     $game_system.bgm_resume(playingBGM)
@@ -409,7 +409,7 @@ MenuHandlers.add(:options_menu, :se_volume, {
   "set_proc"    => proc { |value, _scene|
     next if $PokemonSystem.sevolume == value
     $PokemonSystem.sevolume = value
-    if $game_system.playing_bgs
+    if $game_system && $game_system.playing_bgs
       $game_system.playing_bgs.volume = value
       playingBGS = $game_system.getPlayingBGS
       $game_system.bgs_pause

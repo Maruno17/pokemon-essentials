@@ -10,16 +10,17 @@ SaveData.register(:player) do
 end
 
 SaveData.register(:game_system) do
-  load_in_bootup
+  # TODO: Am I sure this doesn't need to be loaded in bootup?
+#  load_in_bootup
   ensure_class :Game_System
   save_value { $game_system }
   load_value { |value| $game_system = value }
   new_game_value { Game_System.new }
-  reset_on_new_game
+#  reset_on_new_game
 end
 
 SaveData.register(:pokemon_system) do
-  load_in_bootup
+  load_in_bootup   # Because this contains values for the Options screen
   ensure_class :PokemonSystem
   save_value { $PokemonSystem }
   load_value { |value| $PokemonSystem = value }
@@ -96,7 +97,6 @@ SaveData.register(:storage_system) do
 end
 
 SaveData.register(:essentials_version) do
-  load_in_bootup
   ensure_class :String
   save_value { Essentials::VERSION }
   load_value { |value| $save_engine_version = value }
@@ -104,7 +104,6 @@ SaveData.register(:essentials_version) do
 end
 
 SaveData.register(:game_version) do
-  load_in_bootup
   ensure_class :String
   save_value { Settings::GAME_VERSION }
   load_value { |value| $save_game_version = value }
@@ -112,10 +111,8 @@ SaveData.register(:game_version) do
 end
 
 SaveData.register(:stats) do
-  load_in_bootup
   ensure_class :GameStats
   save_value { $stats }
   load_value { |value| $stats = value }
   new_game_value { GameStats.new }
-  reset_on_new_game
 end

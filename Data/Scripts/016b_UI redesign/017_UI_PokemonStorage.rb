@@ -701,7 +701,6 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
   # 0+ = box number
   attr_reader :box
   attr_reader :sub_mode
-  attr_reader :sprites
 
   GRAPHICS_FOLDER   = "Storage/"   # Subfolder in Graphics/UI
   TEXT_COLOR_THEMES = {   # These color themes are added to @sprites[:overlay]
@@ -1352,9 +1351,9 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
       return update_interaction(Input::BACK)
     elsif Input.trigger?(Input::ACTION)
       return update_interaction(Input::ACTION)
-    elsif Input.trigger?(Input::JUMPUP)
+    elsif Input.repeat?(Input::JUMPUP)
       return update_interaction(Input::JUMPUP)
-    elsif Input.trigger?(Input::JUMPDOWN)
+    elsif Input.repeat?(Input::JUMPDOWN)
       return update_interaction(Input::JUMPDOWN)
     end
     return nil

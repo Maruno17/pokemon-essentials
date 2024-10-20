@@ -327,7 +327,6 @@ end
 #
 #===============================================================================
 class UI::PartyVisuals < UI::BaseVisuals
-  attr_reader :sprites
   attr_reader :index
   attr_reader :sub_mode
 

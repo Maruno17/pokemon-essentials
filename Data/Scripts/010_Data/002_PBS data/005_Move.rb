@@ -102,6 +102,7 @@ module GameData
       return false
     end
 
+    # TODO: Make the below depend on a Setting rather than quoting it out.
     def display_type(pkmn, move = nil)
 =begin
       case @function_code
@@ -187,6 +188,7 @@ module GameData
       return @type
     end
 
+    # TODO: Make the below depend on a Setting rather than quoting it out.
     def display_damage(pkmn, move = nil)
 =begin
       case @function_code

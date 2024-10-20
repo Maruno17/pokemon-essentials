@@ -65,7 +65,7 @@ module UI
     end
 
     def gendered_filename(base_filename)
-      return filename_with_appendix(base_filename, "_f") if $player.female?
+      return filename_with_appendix(base_filename, "_f") if $player&.female?
       return base_filename
     end
 
@@ -306,6 +306,8 @@ module UI
   # The visuals class.
   #=============================================================================
   class BaseVisuals
+    attr_reader :sprites
+
     BACKGROUND_FILENAME = "bg"
 
     include SpriteContainerMixin
@@ -800,6 +802,7 @@ module UI
     end
 
     def main
+      return if @disposed
       start_screen
       loop do
         on_start_main_loop

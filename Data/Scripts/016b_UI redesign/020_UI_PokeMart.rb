@@ -125,7 +125,6 @@ end
 #
 #===============================================================================
 class UI::MartVisuals < UI::BaseVisuals
-  attr_reader :sprites
   attr_reader :pocket
 
   GRAPHICS_FOLDER   = "Mart/"   # Subfolder in Graphics/UI

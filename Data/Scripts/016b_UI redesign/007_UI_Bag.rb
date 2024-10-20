@@ -164,7 +164,6 @@ end
 #
 #===============================================================================
 class UI::BagVisuals < UI::BaseVisuals
-  attr_reader :sprites
   attr_reader :pocket
 
   GRAPHICS_FOLDER   = "Bag/"   # Subfolder in Graphics/UI
