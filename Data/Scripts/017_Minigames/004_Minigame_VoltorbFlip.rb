@@ -217,9 +217,18 @@ class VoltorbFlip
       pbMessage(_INTL("You've gathered {1} Coins. You cannot gather any more.", Settings::MAX_COINS.to_s_formatted))
       $player.coins = Settings::MAX_COINS   # As a precaution
       @quit = true
-#    elsif !pbConfirmMessage(_INTL("Play Voltorb Flip Lv. {1}?", @level)) && $player.coins < Settings::MAX_COINS
-#      @quit = true
     else
+      loop do 
+        case pbMessage(_INTL("Play Voltorb Flip Lv. {1}?", @level), [_INTL("Play"), _INTL("Game Info"), _INTL("Quit")], 3)
+        when 0 # Play
+          break 
+        when 1 # Game Info
+          display_game_info
+        else # Quit
+          @quit = true
+          return
+        end
+      end
       @sprites["curtain"].opacity = 0
       # Erase 0s to prepare to replace with values
       @sprites["numbers"].bitmap.clear
@@ -250,6 +259,39 @@ class VoltorbFlip
           voltorbs += 1 if val == 0
         end
         pbUpdateColumnNumbers(num, voltorbs, i)
+      end
+    end
+  end
+
+  def display_game_info
+    loop do
+      case pbMessage(_INTL("Which set of info?"), [_INTL("How to Play"), _INTL("Hint!"),_INTL("About Memos"),_INTL("Return")], 4)
+      when 0
+        pbMessage(_INTL("Voltorb Flip is a game in which you flip over cards to find numbers hidden beneath them."))
+        pbMessage(_INTL("The cards are hiding the numbers 1 through 3...and Voltorb as well."))
+        pbMessage(_INTL("The first number you flip over will give you that many Coins."))
+        pbMessage(_INTL("From then on, the next number you find will multiply the total amount of Coins you've collected by that number."))
+        pbMessage(_INTL("If it's a 2, your total will be multiplied by \"x2\"."))
+        pbMessage(_INTL("If it's a 3, your total will be multiplied by \"x3\"."))
+        pbMessage(_INTL("But if you flip over a Voltorb, it's game over."))
+        pbMessage(_INTL("When that happens, you'll lose all the Coins you've collected in the current game."))
+        pbMessage(_INTL("If you select \"Quit\", you'll withdraw from the game."))
+        pbMessage(_INTL("If you get to a difficult spot, you might want to end the game early."))
+        pbMessage(_INTL("Once you've found all the hidden 2 and 3 cards, you've cleared the game."))
+        pbMessage(_INTL("Once you've flipped over all these cards, then you'll advance to the next level."))
+        pbMessage(_INTL("As you move up in levels, you will be able to receive more Coins."))
+        pbMessage(_INTL("Do your best!"))
+      when 1
+        pbMessage(_INTL("The numbers at the side of the board give you a clue about the numbers hidden on the backs of the panels."))
+        pbMessage(_INTL("The larger the number, the more likely it is that there are many large numbers hidden in that row or column."))
+        pbMessage(_INTL("In the same way, you can tell how many Voltorb are hidden in the row or column."))
+        pbMessage(_INTL("Consider the hidden number totals and the Voltorb totals carefully as you flip over panels."))
+      when 2
+        pbMessage(_INTL("Use action button to mark the cards."))
+        pbMessage(_INTL("When you have an idea of the Voltorb or number 1 hidden on the back of the cards, mark the cards."))
+        pbMessage(_INTL("If you want to remove a mark, select the mark again, and it will disappear."))
+      else
+        return
       end
     end
   end
