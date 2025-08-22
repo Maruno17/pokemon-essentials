@@ -3203,6 +3203,17 @@ Battle::AbilityEffects::OnSwitchIn.add(:SNOWWARNING,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:SUPERSWEETSYRUP,
+  proc { |ability, battler, battle, switch_in|
+    battle.pbShowAbilitySplash(battler)
+    battle.allOtherSideBattlers(battler.index).each do |b|
+      next if !b.near?(battler)
+      b.pbLowerStatStageByAbility(:EVASION, 1, battler, false)
+    end
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:TERAVOLT,
   proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
