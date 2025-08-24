@@ -15,6 +15,7 @@ module Battle::AbilityEffects
   StatusImmunityNonIgnorable       = AbilityHandlerHash.new
   StatusImmunityFromAlly           = AbilityHandlerHash.new
   OnStatusInflicted                = AbilityHandlerHash.new   # Synchronize
+  OnDealingStatus                  = AbilityHandlerHash.new   # Poison Puppeteer
   StatusCure                       = AbilityHandlerHash.new
   # Battler's stat stages
   StatLossImmunity                 = AbilityHandlerHash.new
@@ -111,6 +112,10 @@ module Battle::AbilityEffects
 
   def self.triggerOnStatusInflicted(ability, battler, user, status)
     OnStatusInflicted.trigger(ability, battler, user, status)
+  end
+
+  def self.triggerOnDealingStatus(ability, user, target, status)
+    OnDealingStatus.trigger(ability, user, target, status)
   end
 
   def self.triggerStatusCure(ability, battler)
@@ -617,6 +622,19 @@ Battle::AbilityEffects::OnStatusInflicted.add(:SYNCHRONIZE,
         battler.battle.pbHideAbilitySplash(battler)
       end
     end
+  }
+)
+
+#===============================================================================
+# OnDealingStatus handlers
+#===============================================================================
+
+Battle::AbilityEffects::OnDealingStatus.add(:POISONPUPPETEER,
+  proc { |ability, user, target, status|
+    next if target.fainted? || status!=:POISON || !user.isSpecies?(:PECHARUNT)
+    user.battle.pbShowAbilitySplash(user)
+    target.pbConfuse if target.pbCanConfuse?(user)
+    user.battle.pbHideAbilitySplash(user)
   }
 )
 

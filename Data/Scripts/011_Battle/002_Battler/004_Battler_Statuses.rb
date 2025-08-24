@@ -260,6 +260,10 @@ class Battle::Battler
     if abilityActive?
       Battle::AbilityEffects.triggerOnStatusInflicted(self.ability, self, user, newStatus)
     end
+    # Poison Puppeteer
+    if !user.nil? && user.abilityActive?
+      Battle::AbilityEffects.triggerOnDealingStatus(user.ability, user, self, newStatus)
+    end
     # Status cures
     pbItemStatusCureCheck
     pbAbilityStatusCureCheck
