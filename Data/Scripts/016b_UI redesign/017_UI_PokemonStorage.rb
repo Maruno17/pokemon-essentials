@@ -611,7 +611,7 @@ class UI::PokemonStorageVisualsCursor < UI::SpriteContainer
   def quick_swap_mode=(value)
     return if @quick_swap_mode == value
     @quick_swap_mode = value
-    refresh_cursor
+    @sprites[:cursor].change_bitmap((@quick_swap_mode) ? :fistq : :fist) if holding_pokemon?
   end
 
   #-----------------------------------------------------------------------------
