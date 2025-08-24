@@ -3203,6 +3203,48 @@ Battle::AbilityEffects::OnSwitchIn.add(:SNOWWARNING,
   }
 )
 
+# NOTE: This is triggering in Switch in. Technically this should only trigger
+#       once per battle.
+Battle::AbilityEffects::OnSwitchIn.add(:TERAFORMZERO,
+  proc { |ability, battler, battle, switch_in|
+    next if (battle.field.weather == :None || battle.field.weather == battle.field.defaultWeather) &&
+            battle.field.terrain == :None
+    battle.pbShowAbilitySplash(battler)
+    if battle.field.weather != :None && battle.field.weather != battle.field.defaultWeather
+      case battle.field.weather
+      when :Sun         then battle.pbDisplay(_INTL("The sunlight faded."))
+      when :Rain        then battle.pbDisplay(_INTL("The rain stopped."))
+      when :Sandstorm   then battle.pbDisplay(_INTL("The sandstorm subsided."))
+      when :Hail        then battle.pbDisplay(_INTL("The hail stopped."))
+      when :Snowstorm   then battle.pbDisplay(_INTL("The snow stopped."))
+      when :HarshSun    then battle.pbDisplay(_INTL("The harsh sunlight faded!"))
+      when :HeavyRain   then battle.pbDisplay(_INTL("The heavy rain has lifted!"))
+      when :StrongWinds then battle.pbDisplay(_INTL("The mysterious air current has dissipated!"))
+      when :ShadowSky   then battle.pbDisplay(_INTL("The shadow sky faded."))
+      end
+      battle.field.weather = :None
+      # Check for form changes caused by the weather changing
+      battle.allBattlers.each { |b| b.pbCheckFormOnWeatherChange }
+      # Start up the default weather
+      pbStartWeather(nil, battle.field.defaultWeather) if battle.field.defaultWeather != :None
+    end
+    if battle.field.terrain != :None
+      case battle.field.terrain
+      when :Electric
+        battle.pbDisplay(_INTL("The electricity disappeared from the battlefield."))
+      when :Grassy
+        battle.pbDisplay(_INTL("The grass disappeared from the battlefield."))
+      when :Misty
+        battle.pbDisplay(_INTL("The mist disappeared from the battlefield."))
+      when :Psychic
+        battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield."))
+      end
+      battle.field.terrain = :None
+    end
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:TERAVOLT,
   proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
