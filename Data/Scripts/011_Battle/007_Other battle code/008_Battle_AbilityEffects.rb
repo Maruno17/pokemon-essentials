@@ -3203,12 +3203,12 @@ Battle::AbilityEffects::OnSwitchIn.add(:SNOWWARNING,
   }
 )
 
-# NOTE: This is triggering in Switch in. Technically this should only trigger
+# TODO: This is triggering in Switch in. Technically this should only trigger
 #       once per battle.
 Battle::AbilityEffects::OnSwitchIn.add(:TERAFORMZERO,
   proc { |ability, battler, battle, switch_in|
     next if (battle.field.weather == :None || battle.field.weather == battle.field.defaultWeather) &&
-            battle.field.terrain == :None
+            (battle.field.terrain == :None || battle.field.terrain == battle.field.defaultTerrain) 
     battle.pbShowAbilitySplash(battler)
     if battle.field.weather != :None && battle.field.weather != battle.field.defaultWeather
       case battle.field.weather
@@ -3228,7 +3228,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:TERAFORMZERO,
       # Start up the default weather
       pbStartWeather(nil, battle.field.defaultWeather) if battle.field.defaultWeather != :None
     end
-    if battle.field.terrain != :None
+    if battle.field.terrain != :None && battle.field.terrain != battle.field.defaultTerrain
       case battle.field.terrain
       when :Electric
         battle.pbDisplay(_INTL("The electricity disappeared from the battlefield."))
@@ -3240,6 +3240,13 @@ Battle::AbilityEffects::OnSwitchIn.add(:TERAFORMZERO,
         battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield."))
       end
       battle.field.terrain = :None
+      battle.allBattlers.each { |battler| battler.pbAbilityOnTerrainChange }
+      # Start up the default terrain
+      if battle.field.defaultTerrain != :None
+        battle.pbStartTerrain(nil, battle.field.defaultTerrain, false)
+        battle.allBattlers.each { |battler| battler.pbAbilityOnTerrainChange }
+        battle.allBattlers.each { |battler| battler.pbItemTerrainStatBoostCheck }
+      end
     end
     battle.pbHideAbilitySplash(battler)
   }
