@@ -167,6 +167,8 @@ class Battle::Battler
     @effects[PBEffects::ChoiceBand]          = nil
     @effects[PBEffects::Counter]             = -1
     @effects[PBEffects::CounterTarget]       = -1
+    @effects[PBEffects::CudChewBerry]        = nil
+    @effects[PBEffects::CudChewCounter]      = 0
     @effects[PBEffects::Dancer]              = false
     @effects[PBEffects::DefenseCurl]         = false
     @effects[PBEffects::DestinyBond]         = false

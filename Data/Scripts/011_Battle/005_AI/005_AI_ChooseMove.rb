@@ -211,10 +211,10 @@ class Battle::AI
     else
       return true if @move.move.pbImmunityByAbility(@user.battler, @target.battler, false)
     end
-    # Immunity because of Dazzling/Queenly Majesty
+    # Immunity because of Dazzling/Queenly Majesty/Armor Tail
     if @move.rough_priority(@user) > 0 && @target.opposes?(@user)
       each_same_side_battler(@target.side) do |b, i|
-        return true if b.has_active_ability?([:DAZZLING, :QUEENLYMAJESTY])
+        return true if b.has_active_ability?([:DAZZLING, :QUEENLYMAJESTY, :ARMORTAIL])
       end
     end
     # Type immunity

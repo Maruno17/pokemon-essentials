@@ -18,6 +18,8 @@ module Battle::DebugVariables
     PBEffects::Confusion      => {name: "Confusion number of rounds remaining",            default: 0},
 #    PBEffects::Counter - not suitable for setting via debug
 #    PBEffects::CounterTarget - not suitable for setting via debug
+    PBEffects::CudChewBerry   => {name: "Item to be eaten by Cud Chew",                    default: nil, type: :item},
+    PBEffects::CudChewCounter => {name: "Cud Chew number of rounds remaining",             default: 0},
     PBEffects::Curse          => {name: "Curse damaging applies",                          default: false},
 #    PBEffects::Dancer - only used while Dancer is running, not suitable for setting via debug
     PBEffects::DefenseCurl    => {name: "Used Defense Curl",                               default: false},

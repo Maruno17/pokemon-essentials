@@ -123,7 +123,7 @@ class Player < Trainer
       ret = 0
       @seen_forms[species_id] ||= [[[], []], [[], []]]
       array = @seen_forms[species_id]
-      [array[0].length, array[1].length].max.times do |i|
+      [array[0][0].length, array[0][1].length, array[1][0].length, array[1][1].length].max.times do |i|
         ret += 1 if array[0][0][i] || array[0][1][i] ||   # male or genderless shiny/non-shiny
                     array[1][0][i] || array[1][1][i]      # female shiny/non-shiny
       end

@@ -189,6 +189,10 @@ class Battle::Battler
         @battle.pbSetSeen(self)
       end
     end
+    if self.ability != :CUDCHEW
+      @effects[PBEffects::CudChewBerry]   = nil
+      @effects[PBEffects::CudChewCounter] = 0
+    end
     @effects[PBEffects::GastroAcid] = false if unstoppableAbility?
     @effects[PBEffects::SlowStart]  = 0 if self.ability != :SLOWSTART
     @effects[PBEffects::Truant]     = false if self.ability != :TRUANT
@@ -245,7 +249,13 @@ class Battle::Battler
       @effects[PBEffects::PickupItem] = @item_id
       @effects[PBEffects::PickupUse]  = @battle.nextPickupUse
     end
-    setBelched if belch && self.item.is_berry?
+    if self.item.is_berry?
+      setBelched if belch
+      if hasActiveAbility?(:CUDCHEW)
+        @effects[PBEffects::CudChewBerry]   = @item_id
+        @effects[PBEffects::CudChewCounter] = 2
+      end
+    end
     pbRemoveItem
     pbSymbiosis if symbiosis
   end

@@ -968,7 +968,7 @@ Battle::AbilityEffects::MoveBlocking.add(:DAZZLING,
   }
 )
 
-Battle::AbilityEffects::MoveBlocking.copy(:DAZZLING, :QUEENLYMAJESTY)
+Battle::AbilityEffects::MoveBlocking.copy(:DAZZLING, :QUEENLYMAJESTY, :ARMORTAIL)
 
 #===============================================================================
 # MoveImmunity handlers
@@ -1020,6 +1020,12 @@ Battle::AbilityEffects::MoveImmunity.add(:FLASHFIRE,
       battle.pbHideAbilitySplash(target)
     end
     next true
+  }
+)
+
+Battle::AbilityEffects::MoveImmunity.add(:GOODASGOLD,
+  proc { |ability, user, target, move, type, battle, show_message|
+    next move.statusMove?
   }
 )
 
@@ -1389,6 +1395,14 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:GUTS,
   }
 )
 
+Battle::AbilityEffects::DamageCalcFromUser.add(:HADRONENGINE,
+  proc { |ability, user, target, move, mults, power, type|
+    if move.specialMove? && user.battle.field.terrain == :Electric
+      mults[:attack_multiplier] *= 4 / 3.0
+    end
+  }
+)
+
 Battle::AbilityEffects::DamageCalcFromUser.add(:HUGEPOWER,
   proc { |ability, user, target, move, mults, power, type|
     mults[:attack_multiplier] *= 2 if move.physicalMove?
@@ -1430,6 +1444,16 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:NEUROFORCE,
   proc { |ability, user, target, move, mults, power, type|
     if Effectiveness.super_effective?(target.damageState.typeMod)
       mults[:final_damage_multiplier] *= 1.25
+    end
+  }
+)
+
+Battle::AbilityEffects::DamageCalcFromUser.add(:ORICHALCUMPULSE,
+  proc { |ability, user, target, move, mults, power, type|
+    # NOTE: Utility Umbrella prevents this boost even though the official games
+    #       may show messages to the contrary.
+    if move.physicalMove? && [:Sun, :HarshSun].include?(user.effectiveWeather)
+      mults[:attack_multiplier] *= 4 / 3.0
     end
   }
 )
@@ -1534,6 +1558,12 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:STEELYSPIRIT,
 Battle::AbilityEffects::DamageCalcFromUser.add(:STRONGJAW,
   proc { |ability, user, target, move, mults, power, type|
     mults[:power_multiplier] *= 1.5 if move.bitingMove?
+  }
+)
+
+Battle::AbilityEffects::DamageCalcFromUser.add(:SUPREMEOVERLORD,
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.0 + (0.1 * [user.effects[PBEffects::SupremeOverlord], 5].min)
   }
 )
 
@@ -2988,6 +3018,17 @@ Battle::AbilityEffects::OnSwitchIn.add(:GRASSYSURGE,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:HADRONENGINE,
+  proc { |ability, battler, battle, switch_in|
+    next if battle.field.defaultTerrain != :None && battle.field.terrain == battle.field.defaultTerrain
+    next if battle.field.terrain == :Electric
+    battle.pbShowAbilitySplash(battler)
+    battle.pbStartTerrain(battler, :Electric, true,
+       _INTL("{1} turned the ground into Electric Terrain, energizing its futuristic engine!", battler.pbThis))
+    # NOTE: The ability splash is hidden again in def pbStartTerrain.
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:ICEFACE,
   proc { |ability, battler, battle, switch_in|
     next if !battler.isSpecies?(:EISCUE) || battler.form != 1
@@ -3102,6 +3143,14 @@ Battle::AbilityEffects::OnSwitchIn.add(:NEUTRALIZINGGAS,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:ORICHALCUMPULSE,
+  proc { |ability, battler, battle, switch_in|
+    next if battle.field.defaultWeather != :None && battle.field.weather == battle.field.defaultWeather
+    battle.pbStartWeatherAbility(:Sun, battler, false,
+       _INTL("{1} turned the sunlight harsh, sending its ancient pulse into a frenzy!", battler.pbThis))
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:PASTELVEIL,
   proc { |ability, battler, battle, switch_in|
     next if battler.allAllies.none? { |ally| ally.status == :POISON }
@@ -3200,6 +3249,17 @@ Battle::AbilityEffects::OnSwitchIn.add(:SLOWSTART,
 Battle::AbilityEffects::OnSwitchIn.add(:SNOWWARNING,
   proc { |ability, battler, battle, switch_in|
     battle.pbStartWeatherAbility((Settings::USE_SNOWSTORM_WEATHER_INSTEAD_OF_HAIL ? :Snowstorm : :Hail), battler)
+  }
+)
+
+Battle::AbilityEffects::OnSwitchIn.add(:SUPREMEOVERLORD,
+  proc { |ability, battler, battle, switch_in|
+    battler.effects[PBEffects::SupremeOverlord] = [battle.sideFaintCounts[battler.idxOwnSide], 5].min
+    if battler.effects[PBEffects::SupremeOverlord] > 0
+      battle.pbShowAbilitySplash(battler)
+      battle.pbDisplay(_INTL("{1} gained strength from the fallen!", battler.pbThis))
+      battle.pbHideAbilitySplash(battler)
+    end
   }
 )
 
