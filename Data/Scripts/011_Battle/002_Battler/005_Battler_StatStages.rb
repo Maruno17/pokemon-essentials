@@ -380,6 +380,54 @@ class Battle::Battler
     return pbLowerStatStageByCause(:ATTACK, 1, user, user.abilityName)
   end
 
+  def pbLowerEvasionStatStageSupersweetSyrup(user)
+    return false if fainted?
+    # NOTE: Substitute intentionally blocks Supersweet Syrup even if self has
+    #       Contrary.
+    if @effects[PBEffects::Substitute] > 0
+      if Battle::Scene::USE_ABILITY_SPLASH
+        @battle.pbDisplay(_INTL("{1} is protected by its substitute!", pbThis))
+      else
+        @battle.pbDisplay(_INTL("{1}'s substitute protected it from {2}'s {3}!",
+                                pbThis, user.pbThis(true), user.abilityName))
+      end
+      return false
+    end
+    # NOTE: These checks exist to ensure appropriate messages are shown if
+    #       Supersweet Syrup is blocked somehow (i.e. the messages should 
+    #       mention the Supersweet Syrup ability by name).
+    if !hasActiveAbility?(:CONTRARY)
+      if pbOwnSide.effects[PBEffects::Mist] > 0
+        @battle.pbDisplay(_INTL("{1} is protected from {2}'s {3} by Mist!",
+                                pbThis, user.pbThis(true), user.abilityName))
+        return false
+      end
+      if abilityActive? &&
+         (Battle::AbilityEffects.triggerStatLossImmunity(self.ability, self, :EVASION, @battle, false) ||
+          Battle::AbilityEffects.triggerStatLossImmunityNonIgnorable(self.ability, self, :EVASION, @battle, false))
+        @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
+                                pbThis, abilityName, user.pbThis(true), user.abilityName))
+        return false
+      end
+      allAllies.each do |b|
+        next if !b.abilityActive?
+        if Battle::AbilityEffects.triggerStatLossImmunityFromAlly(b.ability, b, self, :EVASION, @battle, false)
+          @battle.pbDisplay(_INTL("{1} is protected from {2}'s {3} by {4}'s {5}!",
+                                  pbThis, user.pbThis(true), user.abilityName, b.pbThis(true), b.abilityName))
+          return false
+        end
+      end
+      if itemActive? &&
+         Battle::ItemEffects.triggerStatLossImmunity(self.item, self, :EVASION, @battle, false)
+        @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
+                                pbThis, itemName, user.pbThis(true), user.abilityName))
+        return false
+      end
+    end
+    return false if !pbCanLowerStatStage?(:EVASION, user)
+    return pbLowerStatStageByCause(:EVASION, 1, user, user.abilityName)
+  end
+
   #-----------------------------------------------------------------------------
   # Reset stat stages.
   #-----------------------------------------------------------------------------

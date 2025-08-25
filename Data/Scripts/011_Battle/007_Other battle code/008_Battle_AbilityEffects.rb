@@ -3208,7 +3208,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:SUPERSWEETSYRUP,
     battle.pbShowAbilitySplash(battler)
     battle.allOtherSideBattlers(battler.index).each do |b|
       next if !b.near?(battler)
-      b.pbLowerStatStageByAbility(:EVASION, 1, battler, false)
+      b.pbLowerEvasionStatStageSupersweetSyrup(battler)
     end
     battle.pbHideAbilitySplash(battler)
   }
