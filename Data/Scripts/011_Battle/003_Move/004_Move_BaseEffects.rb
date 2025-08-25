@@ -537,6 +537,30 @@ class Battle::Move::WeatherMove < Battle::Move
 end
 
 #===============================================================================
+# Terrain-inducing move.
+#===============================================================================
+class Battle::Move::TerrainMove < Battle::Move
+  attr_reader :terrainType
+
+  def initialize(battle, move)
+    super
+    @terrainType = :None
+  end
+
+  def pbMoveFailed?(user, targets)
+    if @battle.field.terrain == @terrainType
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
+  end
+
+  def pbEffectGeneral(user)
+    @battle.pbStartTerrain(user, @terrainType)
+  end
+end
+
+#===============================================================================
 # Pledge move.
 #===============================================================================
 class Battle::Move::PledgeMove < Battle::Move

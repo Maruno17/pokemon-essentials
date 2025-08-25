@@ -1449,18 +1449,19 @@ end
 
 #===============================================================================
 # This move's type is the same as the user's second type, only if the user is
-# Ogerpon. (Ivy Cudgel)
+# Tauros. It also ends the opposing side's Light Screen, Reflect and 
+# Aurora Break. (Raging Bull) 
 #===============================================================================
 class Battle::Move::TypeDependsOnUserTaurosFormRemoveScreens < Battle::Move::RemoveScreens
   def pbBaseType(user)
     if user.isSpecies?(:TAUROS)
       case user.form
       when 1
-        return :FIGHTING if GameData::Type.exists?(:WATER)
+        return :FIGHTING if GameData::Type.exists?(:FIGHTING)
       when 2
         return :FIRE if GameData::Type.exists?(:FIRE)
       when 3
-        return :WATER if GameData::Type.exists?(:ROCK)
+        return :WATER if GameData::Type.exists?(:WATER)
       end
     end
     return @type

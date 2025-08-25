@@ -286,7 +286,7 @@ class Battle::Battler
         end
       end
     end
-    # Dazzling/Queenly Majesty make the move fail here
+    # Dazzling/Queenly Majesty/Armor Tail make the move fail here
     @battle.pbPriority(true).each do |b|
       next if !b || !b.abilityActive?
       if Battle::AbilityEffects.triggerMoveBlocking(b.ability, b, user, targets, move, @battle)

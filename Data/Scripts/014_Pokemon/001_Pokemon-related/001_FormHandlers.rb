@@ -778,7 +778,7 @@ MultipleForms.register(:SQUAWKABILLY, {
 MultipleForms.register(:PALAFIN, {
   "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
     next 0 if endBattle
-    next 1 if pkmn.able? && usedInBattle && !endBattle   # Switched out while unfainted
+    next 1 if pkmn.able? && pkmn.hasAbility?(:ZEROTOHERO) && usedInBattle && !endBattle   # Switched out while unfainted
     next pkmn.form
   }
 })

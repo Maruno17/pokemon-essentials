@@ -408,7 +408,7 @@ class VoltorbFlip
               if @level > 1
                 # Determine how many levels to reduce by
                 newLevel = @squares.count { |tile| tile[3] && tile[2] > 0 }
-                newLevel = newLevel.clamp(@level, 1)
+                newLevel = newLevel.clamp(1, @level)
                 if newLevel < @level
                   @level = newLevel
                   pbMessage("\\se[Voltorb Flip level down]" + _INTL("Dropped to Game Lv. {1}!", @level.to_s))

@@ -1174,7 +1174,8 @@ class Battle::Move::SetUserAbilityToTargetAbility < Battle::Move
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    if target.ungainableAbility?
+    if target.ungainableAbility? ||
+       [:HADRONENGINE, :ORICHALCUMPULSE].include?(target.ability_id)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -1220,7 +1221,8 @@ class Battle::Move::SetUserAndAlliesAbilityToTargetAbility < Battle::Move
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    if target.ungainableAbility?
+    if target.ungainableAbility? ||
+       [:HADRONENGINE, :ORICHALCUMPULSE].include?(target.ability_id)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -1259,7 +1261,7 @@ class Battle::Move::SetTargetAbilityToUserAbility < Battle::Move
       return true
     end
     if user.ungainableAbility? ||
-       [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(user.ability_id)
+       [:HADRONENGINE, :ORICHALCUMPULSE, :POWEROFALCHEMY, :RECEIVER, :TRACE].include?(user.ability_id)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1301,7 +1303,8 @@ class Battle::Move::UserTargetSwapAbilities < Battle::Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    if user.ungainableAbility? || user.ability == :WONDERGUARD
+    if user.ungainableAbility? ||
+       [:HADRONENGINE, :ORICHALCUMPULSE, :WONDERGUARD].include?(user.ability_id)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1318,7 +1321,8 @@ class Battle::Move::UserTargetSwapAbilities < Battle::Move
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    if target.ungainableAbility? || target.ability == :WONDERGUARD
+    if target.ungainableAbility? ||
+       [:HADRONENGINE, :ORICHALCUMPULSE, :WONDERGUARD].include?(target.ability_id)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end

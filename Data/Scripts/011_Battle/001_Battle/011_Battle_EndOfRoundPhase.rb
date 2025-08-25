@@ -362,6 +362,19 @@ class Battle
   end
 
   def pbEOREndBattlerEffects(priority)
+    # Cud Chew
+    pbEORCountDownBattlerEffect(priority, PBEffects::CudChewCounter) do |battler|
+      if battler.effects[PBEffects::CudChewBerry] &&
+         GameData::Item.get(battler.effects[PBEffects::CudChewBerry]).is_berry?
+        item = battler.effects[PBEffects::CudChewBerry]
+        item_name = GameData::Item.get(battler.effects[PBEffects::CudChewBerry]).name
+        battler.setBelched
+        pbDisplay(_INTL("{1} stole and ate its target's {2}!", battler.pbThis, item_name))
+        battler.pbHeldItemTriggerCheck(item)
+        battler.pbSymbiosis
+      end
+      battler.effects[PBEffects::CudChewBerry] = nil
+    end
     # Taunt
     pbEORCountDownBattlerEffect(priority, PBEffects::Taunt) do |battler|
       pbDisplay(_INTL("{1}'s taunt wore off!", battler.pbThis))
