@@ -631,9 +631,15 @@ Battle::AbilityEffects::OnStatusInflicted.add(:SYNCHRONIZE,
 
 Battle::AbilityEffects::OnDealingStatus.add(:POISONPUPPETEER,
   proc { |ability, user, target, status|
-    next if target.fainted? || status!=:POISON || !user.isSpecies?(:PECHARUNT)
+    next if status != :POISON
+    next if !target.pbCanConfuse?(user)
+    next if !user.isSpecies?(:PECHARUNT)
     user.battle.pbShowAbilitySplash(user)
-    target.pbConfuse if target.pbCanConfuse?(user)
+    msg = nil
+    if !Battle::Scene::USE_ABILITY_SPLASH
+      msg = _INTL("{1} became confused due to {2}'s {3}!", target.pbThis, user.pbThis(true), user.abilityName)
+    end
+    target.pbConfuse(msg)
     user.battle.pbHideAbilitySplash(user)
   }
 )
