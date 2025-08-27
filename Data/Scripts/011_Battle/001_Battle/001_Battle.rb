@@ -91,7 +91,8 @@ class Battle
   attr_reader   :initialItems
   attr_reader   :recycleItems
   attr_reader   :belch
-  attr_reader   :battleBond
+  attr_reader   :abilitiesUsedPerSwitchIn   # Records use of abilities that can only be used once per switch in
+  attr_reader   :abilitiesUsedOnce          # Records use of abilities that can only be used once per battle
   attr_reader   :corrosiveGas
   attr_reader   :usedInBattle     # Whether each Pokémon was used in battle (for Burmy)
   attr_reader   :hitsTakenCounts  # For Rage Fist
@@ -163,7 +164,8 @@ class Battle
     ]
     @recycleItems      = [Array.new(@party1.length, nil),   Array.new(@party2.length, nil)]
     @belch             = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
-    @battleBond        = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
+    @abilitiesUsedPerSwitchIn = [Array.new(@party1.length) { |i| [] },   Array.new(@party2.length) { |i| [] }]
+    @abilitiesUsedOnce        = [Array.new(@party1.length) { |i| [] },   Array.new(@party2.length) { |i| [] }]
     @corrosiveGas      = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
     @usedInBattle      = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
     @hitsTakenCounts   = [Array.new(@party1.length, 0),     Array.new(@party2.length, 0)]

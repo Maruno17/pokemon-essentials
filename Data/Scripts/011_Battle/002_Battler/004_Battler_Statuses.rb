@@ -66,12 +66,12 @@ class Battle::Battler
       when :Electric
         if newStatus == :SLEEP
           if showMessages
-            @battle.pbDisplay(_INTL("{1} surrounds itself with electrified terrain!", pbThis(true)))
+            @battle.pbDisplay(_INTL("{1} surrounds itself with electrified terrain!", pbThis))
           end
           return false
         end
       when :Misty
-        @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!", pbThis(true))) if showMessages
+        @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!", pbThis)) if showMessages
         return false
       end
     end
@@ -464,7 +464,7 @@ class Battle::Battler
     end
     # Terrains immunity
     if affectedByTerrain? && @battle.field.terrain == :Misty && Settings::MECHANICS_GENERATION >= 7
-      @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!", pbThis(true))) if showMessages
+      @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!", pbThis)) if showMessages
       return false
     end
     if (selfInflicted || !beingMoldBroken?) && hasActiveAbility?(:OWNTEMPO)

@@ -431,6 +431,8 @@ class Battle::Scene
     anims = find_move_animation_for_move(move_id, version, user_index)
     return anims if anims
     # Get information to decide which default animation to try
+    # TODO: This is going to crash if the animation is for Struggle which isn't
+    #       a defined move.
     move_data = GameData::Move.get(move_id)
     target_data = GameData::Target.get(move_data.target)
     move_type = move_data.type
