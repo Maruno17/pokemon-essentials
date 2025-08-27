@@ -3315,10 +3315,10 @@ Battle::AbilityEffects::OnSwitchIn.add(:SUPREMEOVERLORD,
   }
 )
 
-# TODO: This is triggering in Switch in. Technically this should only trigger
-#       once per battle.
 Battle::AbilityEffects::OnSwitchIn.add(:TERAFORMZERO,
   proc { |ability, battler, battle, switch_in|
+    next if battler.abilityUsedOnce?
+    battler.markAbilityUsedOnce
     next if (battle.field.weather == :None || battle.field.weather == battle.field.defaultWeather) &&
             (battle.field.terrain == :None || battle.field.terrain == battle.field.defaultTerrain) 
     battle.pbShowAbilitySplash(battler)
