@@ -2857,6 +2857,40 @@ Battle::AbilityEffects::OnSwitchIn.add(:COMATOSE,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:COSTAR,
+  proc { |ability, battler, battle, switch_in|
+    allies = battler.allAllies
+    next if allies.empty?
+    # Determine which ally to copy the stats of
+    if allies.length > 1
+      target = nil
+      target_stages = 0
+      allies.each do |ally|
+        if target.nil?
+          target = ally
+          GameData::Stat.each_battle { |s| target_stages += ally.stages[s.id] }
+          target_stages += ally.effects[PBEffects::FocusEnergy]
+        else
+          stages = 0
+          GameData::Stat.each_battle { |s| stages += ally.stages[s.id] }
+          stages += ally.effects[PBEffects::FocusEnergy]
+          next if stages < target_stages
+          target = ally
+          target_stages = stages
+        end
+      end
+    else
+      target = allies[0]
+    end
+    # Copy the stats
+    battle.pbShowAbilitySplash(battler)
+    GameData::Stat.each_battle { |s| battler.stages[s.id] = target.stages[s.id] }
+    battler.effects[PBEffects::FocusEnergy] = target.effects[PBEffects::FocusEnergy]
+    battle.pbDisplay(_INTL("{1} copied {2}'s stat changes!", battler.pbThis, target.pbThis(true)))
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:CURIOUSMEDICINE,
   proc { |ability, battler, battle, switch_in|
     next if battler.allAllies.none? { |b| b.hasAlteredStatStages? }
@@ -2885,7 +2919,9 @@ Battle::AbilityEffects::OnSwitchIn.add(:DARKAURA,
 
 Battle::AbilityEffects::OnSwitchIn.add(:DAUNTLESSSHIELD,
   proc { |ability, battler, battle, switch_in|
+    next if battler.abilityUsedOnce?
     battler.pbRaiseStatStageByAbility(:DEFENSE, 1, battler)
+    battler.markAbilityUsedOnce
   }
 )
 
@@ -3029,6 +3065,20 @@ Battle::AbilityEffects::OnSwitchIn.add(:HADRONENGINE,
   }
 )
 
+Battle::AbilityEffects::OnSwitchIn.add(:HOSPITALITY,
+  proc { |ability, battler, battle, switch_in|
+    allies = battler.allAllies
+    allies.reject! { |ally| !ally.near?(battler) || !ally.canHeal? }
+    next if allies.empty?
+    battle.pbShowAbilitySplash(battler)
+    allies.each do |ally|
+      next if ally.pbRecoverHP(ally.totalhp / 4) == 0
+      battle.pbDisplay(_INTL("{1} drank down all the matcha that {2} made!", ally.pbThis, battler.pbThis(true)))
+    end
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
 Battle::AbilityEffects::OnSwitchIn.add(:ICEFACE,
   proc { |ability, battler, battle, switch_in|
     next if !battler.isSpecies?(:EISCUE) || battler.form != 1
@@ -3081,7 +3131,9 @@ Battle::AbilityEffects::OnSwitchIn.add(:INTIMIDATE,
 
 Battle::AbilityEffects::OnSwitchIn.add(:INTREPIDSWORD,
   proc { |ability, battler, battle, switch_in|
+    next if battler.abilityUsedOnce?
     battler.pbRaiseStatStageByAbility(:ATTACK, 1, battler)
+    battler.markAbilityUsedOnce
   }
 )
 

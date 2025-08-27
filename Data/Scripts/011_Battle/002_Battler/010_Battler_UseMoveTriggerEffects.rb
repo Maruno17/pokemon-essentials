@@ -116,17 +116,14 @@ class Battle::Battler
     if !user.fainted? && !user.effects[PBEffects::Transform] &&
        !@battle.pbAllFainted?(user.idxOpposingSide)
       # Greninja - Battle Bond
-      if user.isSpecies?(:GRENINJA) && user.ability == :BATTLEBOND &&
-         !@battle.battleBond[user.index & 1][user.pokemonIndex]
-        numFainted = 0
-        targets.each { |b| numFainted += 1 if b.damageState.fainted }
-        if numFainted > 0 && user.form == 1
-          @battle.battleBond[user.index & 1][user.pokemonIndex] = true
-          @battle.pbDisplay(_INTL("{1} became fully charged due to its bond with its Trainer!", user.pbThis))
-          @battle.pbShowAbilitySplash(user, true)
-          @battle.pbHideAbilitySplash(user)
-          user.pbChangeForm(2, _INTL("{1} became Ash-Greninja!", user.pbThis))
-        end
+      if user.isSpecies?(:GRENINJA) && user.form == 1 &&
+         user.ability == :BATTLEBOND && !user.abilityUsedOnce? &&
+         targets.any? { |target| target.damageState.fainted }
+        user.markAbilityUsedOnce
+        @battle.pbDisplay(_INTL("{1} became fully charged due to its bond with its Trainer!", user.pbThis))
+        @battle.pbShowAbilitySplash(user, true)
+        @battle.pbHideAbilitySplash(user)
+        user.pbChangeForm(2, _INTL("{1} became Ash-Greninja!", user.pbThis))
       end
       # Cramorant = Gulp Missile
       if user.isSpecies?(:CRAMORANT) && user.ability == :GULPMISSILE && user.form == 0 &&

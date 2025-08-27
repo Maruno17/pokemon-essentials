@@ -151,6 +151,7 @@ class Battle::Battler
     @lastRoundMoveFailed     = false
     @movesUsed               = []
     @turnCount               = 0
+    @battle.abilitiesUsedPerSwitchIn[idxOwnSide][@pokemonIndex].clear
     @effects[PBEffects::AllySwitchRate]      = 1
     @effects[PBEffects::Attract]             = -1
     @battle.allBattlers.each do |b|   # Other battlers no longer attracted to self
