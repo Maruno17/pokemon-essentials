@@ -30,7 +30,7 @@
 
     // Enable F1 to open the keybinding menu.
     //
-    // "enableSettings": true,
+    "enableSettings": false,
 
     // The names of each input, as seen in the F1 keybinding menu. The names
     // have no other use.
