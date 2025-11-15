@@ -711,7 +711,7 @@ class UI::OptionsVisuals < UI::BaseVisuals
       Graphics.update
       Input.update
       # Cancel
-      if Input::DEFAULT_INPUT_MAPPINGS[Input::BACK].any? { |key| Input.pressex?(key) }
+      if Input::DEFAULT_INPUT_MAPPINGS[Input::BACK].flatten.any? { |key| Input.pressex?(key) }
         pbPlayCancelSE
         break
       end
@@ -723,6 +723,11 @@ class UI::OptionsVisuals < UI::BaseVisuals
       break if pressed_key
       Input::REMAP_GAMEPAD_BUTTONS.keys.each do |key|
         pressed_button = key if Input::Controller.triggerex?(key)
+        break if pressed_button
+      end
+      break if pressed_button
+      Input::REMAP_GAMEPAD_AXIS.keys.each do |key|
+        pressed_button = key if Input.axis_triggerex?(key)
         break if pressed_button
       end
       break if pressed_button
