@@ -268,11 +268,11 @@ class VoltorbFlip
       case pbMessage(_INTL("Which set of info?"), [_INTL("How to Play"), _INTL("Hint!"),_INTL("About Memos"),_INTL("Return")], 4)
       when 0
         pbMessage(_INTL("Voltorb Flip is a game in which you flip over cards to find numbers hidden beneath them."))
-        pbMessage(_INTL("The cards are hiding the numbers 1 through 3...and Voltorb as well."))
+        pbMessage(_INTL("The cards are hiding the numbers 1 through 3... and Voltorb as well."))
         pbMessage(_INTL("The first number you flip over will give you that many Coins."))
         pbMessage(_INTL("From then on, the next number you find will multiply the total amount of Coins you've collected by that number."))
-        pbMessage(_INTL("If it's a 2, your total will be multiplied by \"x2\"."))
-        pbMessage(_INTL("If it's a 3, your total will be multiplied by \"x3\"."))
+        pbMessage(_INTL("If it's a 2, your total will be multiplied by \"×2\"."))
+        pbMessage(_INTL("If it's a 3, your total will be multiplied by \"×3\"."))
         pbMessage(_INTL("But if you flip over a Voltorb, it's game over."))
         pbMessage(_INTL("When that happens, you'll lose all the Coins you've collected in the current game."))
         pbMessage(_INTL("If you select \"Quit\", you'll withdraw from the game."))
@@ -287,9 +287,9 @@ class VoltorbFlip
         pbMessage(_INTL("In the same way, you can tell how many Voltorb are hidden in the row or column."))
         pbMessage(_INTL("Consider the hidden number totals and the Voltorb totals carefully as you flip over panels."))
       when 2
-        pbMessage(_INTL("Use action button to mark the cards."))
-        pbMessage(_INTL("When you have an idea of the Voltorb or number 1 hidden on the back of the cards, mark the cards."))
-        pbMessage(_INTL("If you want to remove a mark, select the mark again, and it will disappear."))
+        pbMessage(_INTL("Use the Action button to mark the cards with a Voltorb symbol."))
+        pbMessage(_INTL("When you have an idea of whether a Voltorb is hidden on the back of a card, mark the card."))
+        pbMessage(_INTL("If you want to remove a mark, mark the card again and it will disappear."))
       else
         return
       end
