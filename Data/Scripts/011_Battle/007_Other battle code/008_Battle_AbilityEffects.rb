@@ -3307,13 +3307,13 @@ Battle::AbilityEffects::OnSwitchIn.add(:SNOWWARNING,
 Battle::AbilityEffects::OnSwitchIn.add(:SUPERSWEETSYRUP,
   proc { |ability, battler, battle, switch_in|
     next if battler.abilityUsedOnce?
+    battler.markAbilityUsedOnce
     battle.pbShowAbilitySplash(battler)
     battle.allOtherSideBattlers(battler.index).each do |b|
       next if !b.near?(battler)
       b.pbLowerEvasionStatStageSupersweetSyrup(battler)
     end
     battle.pbHideAbilitySplash(battler)
-    battler.markAbilityUsedOnce
   }
 )
 
