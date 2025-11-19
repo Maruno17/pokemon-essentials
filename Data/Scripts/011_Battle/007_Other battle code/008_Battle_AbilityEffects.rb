@@ -3322,6 +3322,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:TERAFORMZERO,
     next if (battle.field.weather == :None || battle.field.weather == battle.field.defaultWeather) &&
             (battle.field.terrain == :None || battle.field.terrain == battle.field.defaultTerrain) 
     battle.pbShowAbilitySplash(battler)
+    # End weather
     if battle.field.weather != :None && battle.field.weather != battle.field.defaultWeather
       case battle.field.weather
       when :Sun         then battle.pbDisplay(_INTL("The sunlight faded."))
@@ -3337,9 +3338,8 @@ Battle::AbilityEffects::OnSwitchIn.add(:TERAFORMZERO,
       battle.field.weather = :None
       # Check for form changes caused by the weather changing
       battle.allBattlers.each { |b| b.pbCheckFormOnWeatherChange }
-      # Start up the default weather
-      pbStartWeather(nil, battle.field.defaultWeather) if battle.field.defaultWeather != :None
     end
+    # End terrain
     if battle.field.terrain != :None && battle.field.terrain != battle.field.defaultTerrain
       case battle.field.terrain
       when :Electric
@@ -3353,14 +3353,16 @@ Battle::AbilityEffects::OnSwitchIn.add(:TERAFORMZERO,
       end
       battle.field.terrain = :None
       battle.allBattlers.each { |battler| battler.pbAbilityOnTerrainChange }
-      # Start up the default terrain
-      if battle.field.defaultTerrain != :None
-        battle.pbStartTerrain(nil, battle.field.defaultTerrain, false)
-        battle.allBattlers.each { |battler| battler.pbAbilityOnTerrainChange }
-        battle.allBattlers.each { |battler| battler.pbItemTerrainStatBoostCheck }
-      end
     end
     battle.pbHideAbilitySplash(battler)
+    # Start up the default weather
+    pbStartWeather(nil, battle.field.defaultWeather) if battle.field.defaultWeather != :None
+    # Start up the default terrain
+    if battle.field.defaultTerrain != :None
+      battle.pbStartTerrain(nil, battle.field.defaultTerrain, false)
+      battle.allBattlers.each { |battler| battler.pbAbilityOnTerrainChange }
+      battle.allBattlers.each { |battler| battler.pbItemTerrainStatBoostCheck }
+    end
   }
 )
 
