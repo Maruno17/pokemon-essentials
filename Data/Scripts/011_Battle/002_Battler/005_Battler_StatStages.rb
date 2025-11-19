@@ -393,6 +393,9 @@ class Battle::Battler
       end
       return false
     end
+    if Battle::Scene::USE_ABILITY_SPLASH
+      return pbLowerStatStageByAbility(:EVASION, 1, user, false)
+    end
     # NOTE: These checks exist to ensure appropriate messages are shown if
     #       Supersweet Syrup is blocked somehow (i.e. the messages should 
     #       mention the Supersweet Syrup ability by name).
