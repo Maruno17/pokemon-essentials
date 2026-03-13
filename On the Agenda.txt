@@ -7,6 +7,13 @@ Glossary of terms
  - #(NR)#: Negative Route. The story heads towards this based on gained points based on various negative choices.
  - #(FR)#: Friendship Route. The story heads towards this based on gained points based on various neutral choices, or a mix of positive/negative.
 #=======================================================================
+Current NPC trigger points
+StoryW1=2
+StoryW1=3
+StoryW1=9
+StoryW1=11
+StoryW1=21
+#=======================================================================
 Solgira is a subset of a slightly larger settlement, Marigola, connected to it by trainline. 
  - Marigola houses spots like a museum and a pool. 
 It boasts beautful nature walks, including a local mountain, vibrant orchards and clear white salt beaches.
@@ -15,10 +22,68 @@ It used to be a retirement spot but has become more of a school town with Floral
 In the town itself is a a locally run cafe and one medium sized apartment building (which Cleo lives in), that help students stay close to school and can allow guardians to stay nearby should they need to.
 There's been talk about integrating a Pokemon Gym in the area but it hasn't gotten out of the planning phase yet.
 #=======================================================================
+Week 7:
+#==========================
+ - Mira will not show up to school on Monday.
+  - #(CR)#, Cleo will worry she's scared her off.
+  - #(NR)#, Cleo will be expressionless.
+  - #(FR)#, Cleo will be confused since she'd seen her recently and she'd seemed fine.
+#==========================
+ - Mira will not show up to school on Tuesday.
+  - Iris and Lana will ask about her.
+   - #(CR)#, Cleo tells them about it. They reassure her it's probably not anything to do with that.
+   - #(NR)#, Cleo doesn't really know what to tell them. She sits thinking about everything, before sighing and saying she's sad that she's lost another person. (GAME ENDS HERE FOR NR)
+   - #(FR)#, Cleo tells them she has no idea what's going on, though comments on her sad expression at the end.
+#==========================
+ - Mira will not show up to school on Wednesday.
+ - The teacher himself is also getting confused now and comments how he's not been getting through to her phone.
+ - Cleo hears this and without saying a word, leaves the classroom despite her teacher's calls.
+ - The scene cuts to her running through town and encountering Shima. She confronts him.
+  - Though initially confused, he starts putting things together.
+  - He tells her that whilst he isn't directly involved, he has an idea of where she went.
+  - He reiterates the fact that he was here to find and keep an eye on an anomaly, which is where it clicks in Cleo's head that he's only been hanging around town since Mira appeared.
+  - Seeing her look of realisation, he states that she's probably gone back to the place where she came from initially. He asks her to remember if she'd taken any interest in anywhere recently.
+   - If you'd gone to the Forgotten Pool with her prior to this, it will spark inspiration.
+   - Otherwise, you'll have to find out on your own.
+  - Shima offers to come with her since he feels responsible for not doing his job better, and stating that time is of the essence if it's been two days already.
+#==========================
+ - Arriving at the Forgotten Pool, there's a portal on top of the water.
+ - Shima despairs that he didn't notice the disturbance on his radar, blaming the cave walls blocking it, and that he was going to have a word with the tech sector later.
+ - Cleo doesn't understand what he's talking about and asks if that's where Mira is, to which he states it is.
+ - Without saying anything in response, she steps into the portal, with Shima commenting that teenage girls are so rash.
+#==========================
+ - She ends up in an identical cave, initially confusing her.
+ - When she leaves, she finds herself in a floating version of Blossom Peak, and ventures forward.
+ - After making her way through it, she ends up in a split version of the Tournesol Path.
+ - The only available way forward is towards where the Calillie Orchard equivalent would be.
+ - On the other side of that is the Cosmos Quietlands equivalent, which opens up into the Gilded Floweryard one.
+ - Emerging into the Saltweed Highway variant, Cleo heads back up to the Tournesol path one.
+ - At the end of this long trip, Cleo arrives in a destroyed town called Lunegira, that she discovers with a surviving signpost.
+#==========================
+ - It's at this point that Shima catches up with her. He comments on the dire state of the town.
+ - She asks him if he can find Mira, but he says he can only pinpoint her anomaly in her world, since the presence is distinct there.
+ - She gets exasperated, tells him he's useless and wanders off to find a way through to the other side of town.
+ - After a bit of manoeuvring around the ruins, Cleo makes her way to her objective.
+  - You can pass by where her house is in the normal world and get some additional dialogue.
+ - At the pier-side, there's a way down to the beach below that she decides to follow.
+#==========================
+ - After a bit of a walk along the beachside, Cleo finally catches up with Mira, who she finds staring out at the horizon.
+ - Mira initially thinks she's dreaming.
+  - In the confession route, she says she's sorry for running off like she did.
+  - In the friendship route, she says she's sorry for leaving without saying anything.
+ - Cleo says that doesn't matter since she's found her, which is all that counts.
+  - Mira muses that if she's here she knows that she's not from her world.
+ - Cleo suggests they should go back without asking about anything, to which Mira agrees. (GAME ENDS HERE FOR FR)
+ - Cleo asks what brought her back here, and Mira admits it's a personal problem. #(CR)#
+  - Cleo reiterates that's she's there for her if she needs her.
+  - Mira relents and talks a bit about her rocky relationship with her dad and how she ran away.
+#========================== 
+
+#=======================================================================
 Every lunch break has activities:
 #==========================
  - A lunch break in the library:
-   - Cleo reads a book, but two other students start having a loud conversation. They eventually get kicked out of the room. [Day4, forced]
+   - Cleo reads a book, but two other students start having a loud conversation. They eventually get kicked out of the room. [Day3+]
    - Cleo decides to rent a book to read later, and strikes up a conversation with the librarian, Lana.
    - Cleo returns the book, and sits down to read another. She starts daydreaming, though.
    - Cleo finds Mira studying, and the two start doing some work together.
@@ -34,7 +99,7 @@ Every lunch break has activities:
    - The two chat about dreams.
 #==========================
  - A lunch break in the art room:
-   - Cleo thinks about what art means to her, and tries to think about what piece to do next. [Day3, forced]
+   - Cleo thinks about what art means to her, and tries to think about what piece to do next. [Day3+]
    - Cleo uses Marie as a model, but she won't sit still.
    - Cleo tries to use Marie as a model again, hiding her amongst a bowl of fruit, but she just starts snacking on them.
    - Cleo stares blankly at the canvas for a while, before being discovered by Mira, who offers her a little advice.
@@ -153,7 +218,7 @@ Cleo's Team
   - Obtained at the Saltweed Highway.
   - Evolves at lv24.
   - BST is 305; 75,55,75,25,35,40 as Nacli.
-  - BST is 440; 100,100,100,35,35,70 as Naclstack.
+  - BST is 410; 85,85,100,35,35,70 as Naclstack.
   - Learns Rocky Rubble (60bp, 10pp, 50% flinch).
 #==========================
  - Sally's Quest:
@@ -188,56 +253,3 @@ Cleo's Team
  - Mella's Quest:
   -
 #=======================================================================
-Week 7:
-#==========================
- - Mira will not show up to school on Monday.
-  - #(CR)#, Cleo will worry she's scared her off.
-  - #(NR)#, Cleo will be expressionless.
-  - #(FR)#, Cleo will be confused since she'd seen her recently and she'd seemed fine.
-#==========================
- - Mira will not show up to school on Tuesday.
-  - Iris and Lana will ask about her.
-   - #(CR)#, Cleo tells them about it. They reassure her it's probably not anything to do with that.
-   - #(NR)#, Cleo doesn't really know what to tell them. She sits thinking about everything, before sighing and saying she's sad that she's lost another person. (GAME ENDS HERE FOR NR)
-   - #(FR)#, Cleo tells them she has no idea what's going on, though comments on her sad expression at the end.
-#==========================
- - Mira will not show up to school on Wednesday.
- - The teacher himself is also getting confused now and comments how he's not been getting through to her phone.
- - Cleo hears this and without saying a word, leaves the classroom despite her teacher's calls.
- - The scene cuts to her running through town and encountering Shima. She confronts him.
-  - Though initially confused, he starts putting things together.
-  - He tells her that whilst he isn't directly involved, he has an idea of where she went.
-  - He reiterates the fact that he was here to find and keep an eye on an anomaly, which is where it clicks in Cleo's head that he's only been hanging around town since Mira appeared.
-  - Seeing her look of realisation, he states that she's probably gone back to the place where she came from initially. He asks her to remember if she'd taken any interest in anywhere recently.
-   - If you'd gone to the Forgotten Pool with her prior to this, it will spark inspiration.
-   - Otherwise, you'll have to find out on your own.
-  - Shima offers to come with her since he feels responsible for not doing his job better, and stating that time is of the essence if it's been two days already.
-#==========================
- - Arriving at the Forgotten Pool, there's a portal on top of the water.
- - Shima despairs that he didn't notice the disturbance on his radar, blaming the cave walls blocking it, and that he was going to have a word with the tech sector later.
- - Cleo doesn't understand what he's talking about and asks if that's where Mira is, to which he states it is.
- - Without saying anything in response, she steps into the portal, with Shima commenting that teenage girls are so rash.
-#==========================
- - She ends up in an identical cave, initially confusing her.
- - When she leaves, she finds herself in a floating version of Blossom Peak, and ventures forward.
- - After making her way through it, she ends up in a split version of the Tournesol Path.
- - The only available way forward is towards where the Calillie Orchard equivalent would be.
- - On the other side of that is the Cosmos Quietlands equivalent, which opens up into the Gilded Floweryard one.
- - Emerging into the Saltweed Highway variant, Cleo heads back up to the Tournesol path one.
- - At the end of this long trip, Cleo arrives in a destroyed town called Lunegira, that she discovers with a surviving signpost.
-#==========================
- - It's at this point that Shima catches up with her. He comments on the dire state of the town.
- - She asks him if he can find Mira, but he says he can only pinpoint her anomaly in her world, since the presence is distinct there.
- - She gets exasperated, tells him he's useless and wanders off to find a way through to the other side of town.
- - After a bit of manoeuvring around the ruins, Cleo makes her way to her objective.
-  - You can pass by where her house is in the normal world and get some additional dialogue.
- - At the pier-side, there's a way down to the beach below that she decides to follow.
-#==========================
- - After a bit of a walk along the beachside, Cleo finally catches up with Mira, who she finds staring out at the horizon.
- - Mira initially thinks she's dreaming.
-  - In the confession route, she says she's sorry for running off like she did.
-  - In the friendship route, she says she's sorry for leaving without saying anything.
- - Cleo says that doesn't matter since she's found her, which is all that counts.
-  - Mira muses that if she's here she knows that she's not from her world.
- -
-#========================== 

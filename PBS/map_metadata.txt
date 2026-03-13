@@ -98,6 +98,12 @@ Outdoor = false
 ShowArea = true
 SnapEdges = true
 #-------------------------------
+[013]   # Apartments
+Name = Solgira Apartments
+Outdoor = false
+ShowArea = true
+SnapEdges = true
+#-------------------------------
 [010]   # Room
 Name = Cleo's Room
 Outdoor = false
