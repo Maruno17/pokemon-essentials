@@ -444,7 +444,7 @@ class Battle::Scene
       status = move_data.status?
     end
     # Check for a default animation
-    if move_type
+    if move_type && ANIMATION_DEFAULTS_FOR_TYPE_CATEGORY[move_type]
       default_idx += 3 if target_data.num_targets > 1 ||
                           (target_data.num_targets > 0 && status)
       wanted_move = ANIMATION_DEFAULTS_FOR_TYPE_CATEGORY[move_type][default_idx]
