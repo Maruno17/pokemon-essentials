@@ -586,7 +586,7 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
     super
   end
 
-  # Set sprite's origin to bottom middle
+  # Set sprite's origin to bottom middle.
   def pbSetOrigin
     return if !@_iconBitmap
     self.ox = @_iconBitmap.width / 2
@@ -602,10 +602,10 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
       self.z = 1000 - (100 * (@index + 1) / 2)
     end
     # Set original position
-    p = Battle::Scene.pbBattlerPosition(@index, @sideSize)
-    @spriteX = p[0]
-    @spriteY = p[1]
-    # Apply metrics
+    pos = Battle::Scene.pbBattlerPosition(@index, @sideSize)
+    @spriteX = pos[0]
+    @spriteY = pos[1]
+    # Apply metrics (also modifies ox/oy)
     @pkmn.species_data.apply_metrics_to_sprite(self, @index)
   end
 

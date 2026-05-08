@@ -30,7 +30,7 @@ def pbAutoPositionAll
       metrics.front_sprite[1] = (bitmap2.height - (findBottom(bitmap2.bitmap) + 1)) / 2
       metrics.front_sprite[1] += 4   # Just because
     end
-    metrics.front_sprite_altitude = 0   # Shouldn't be used
+    metrics.front_sprite_altitude = 0
     metrics.shadow_x              = 0
     metrics.shadow_size           = 2
     bitmap1&.dispose
@@ -118,6 +118,7 @@ class SpritePositioner
     end
     metrics_data = GameData::SpeciesMetrics.get_species_form(@species, @form)
     2.times do |i|
+      @sprites["pokemon_#{i}"].setOffset(PictureOrigin::BOTTOM)
       pos = Battle::Scene.pbBattlerPosition(i, 1)
       @sprites["pokemon_#{i}"].x = pos[0]
       @sprites["pokemon_#{i}"].y = pos[1]
@@ -223,8 +224,8 @@ class SpritePositioner
 
   def pbSetParameter(param)
     return if !@species
-    return pbShadowSize if param == 2
-    if param == 4
+    return pbShadowSize if param == 3
+    if param == 5
       pbAutoPosition
       return false
     end
@@ -238,7 +239,10 @@ class SpritePositioner
       sprite = @sprites["pokemon_1"]
       xpos = metrics_data.front_sprite[0]
       ypos = metrics_data.front_sprite[1]
-    when 3
+    when 2
+      sprite = @sprites["pokemon_1"]
+      ypos = metrics_data.front_sprite_altitude
+    when 4
       sprite = @sprites["shadow_1"]
       xpos = metrics_data.shadow_x
       ypos = 0
@@ -255,13 +259,19 @@ class SpritePositioner
       case param
       when 0 then @sprites["info"].setTextToFit("Ally Position = #{xpos},#{ypos}")
       when 1 then @sprites["info"].setTextToFit("Enemy Position = #{xpos},#{ypos}")
-      when 3 then @sprites["info"].setTextToFit("Shadow Position = #{xpos}")
+      when 2 then @sprites["info"].setTextToFit("Enemy Altitude = #{ypos}")
+      when 4 then @sprites["info"].setTextToFit("Shadow Position = #{xpos}")
       end
-      if (Input.repeat?(Input::UP) || Input.repeat?(Input::DOWN)) && param != 3
-        ypos += (Input.repeat?(Input::DOWN)) ? 1 : -1
+      if (Input.repeat?(Input::UP) || Input.repeat?(Input::DOWN)) && param != 4
+        if param == 2
+          ypos += (Input.repeat?(Input::DOWN)) ? -1 : 1
+        else
+          ypos += (Input.repeat?(Input::DOWN)) ? 1 : -1
+        end
         case param
-        when 0 then metrics_data.back_sprite[1]  = ypos
-        when 1 then metrics_data.front_sprite[1] = ypos
+        when 0 then metrics_data.back_sprite[1]        = ypos
+        when 1 then metrics_data.front_sprite[1]       = ypos
+        when 2 then metrics_data.front_sprite_altitude = ypos
         end
         refresh
       end
@@ -270,11 +280,11 @@ class SpritePositioner
         case param
         when 0 then metrics_data.back_sprite[0]  = xpos
         when 1 then metrics_data.front_sprite[0] = xpos
-        when 3 then metrics_data.shadow_x        = xpos
+        when 4 then metrics_data.shadow_x        = xpos
         end
         refresh
       end
-      if Input.repeat?(Input::ACTION) && param != 3   # Cycle to next option
+      if Input.repeat?(Input::ACTION) && param != 4   # Cycle to next option
         @metricsChanged = true if xpos != oldxpos || ypos != oldypos
         ret = true
         pbPlayDecisionSE
@@ -287,14 +297,16 @@ class SpritePositioner
         when 1
           metrics_data.front_sprite[0] = oldxpos
           metrics_data.front_sprite[1] = oldypos
-        when 3
+        when 2
+          metrics_data.front_sprite_altitude = oldypos
+        when 4
           metrics_data.shadow_x = oldxpos
         end
         pbPlayCancelSE
         refresh
         break
       elsif Input.repeat?(Input::USE)
-        @metricsChanged = true if xpos != oldxpos || (param != 3 && ypos != oldypos)
+        @metricsChanged = true if xpos != oldxpos || (param != 4 && ypos != oldypos)
         pbPlayDecisionSE
         break
       end
@@ -309,6 +321,7 @@ class SpritePositioner
     cw = Window_CommandPokemon.new(
       [_INTL("Set Ally Position"),
        _INTL("Set Enemy Position"),
+       _INTL("Set Enemy Altitude"),
        _INTL("Set Shadow Size"),
        _INTL("Set Shadow Position"),
        _INTL("Auto-Position Sprites")]
@@ -402,7 +415,7 @@ class SpritePositionerScreen
         loop do
           par = @scene.pbSetParameter(command)
           break if !par
-          command = (command + 1) % 3
+          command = (command + 1) % 4
         end
       end
     end

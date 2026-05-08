@@ -29,7 +29,7 @@ class Battle::Scene::Animation::Intro < Battle::Scene::Animation
     else   # Wild battle
       @battle.pbParty(1).each_with_index do |_pkmn, i|
         idxBattler = (2 * i) + 1
-        makeSlideSprite("pokemon_#{idxBattler}", -1, appearTime, PictureOrigin::BOTTOM)
+        makeSlideSprite("pokemon_#{idxBattler}", -1, appearTime, nil)
       end
     end
     # Shadows
@@ -71,7 +71,7 @@ class Battle::Scene::Animation::Intro2 < Battle::Scene::Animation
     @sideSize.times do |i|
       idxBattler = (2 * i) + 1
       next if !@sprites["pokemon_#{idxBattler}"]
-      battler = addSprite(@sprites["pokemon_#{idxBattler}"], PictureOrigin::BOTTOM)
+      battler = addSprite(@sprites["pokemon_#{idxBattler}"], nil)
       battler.moveTone(0, 4, Tone.new(0, 0, 0, 0))
       battler.setCallback(10 * i, [@sprites["pokemon_#{idxBattler}"], :pbPlayIntroAnimation])
     end
@@ -437,7 +437,7 @@ class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
     ballBurst(delay, ball, battlerStartX, battlerStartY - 18, poke_ball)
     ball.moveOpacity(delay + 2, 2, 0)
     # Set up battler sprite
-    battler = addSprite(batSprite, PictureOrigin::BOTTOM)
+    battler = addSprite(batSprite, nil)
     battler.setXY(0, battlerStartX, battlerStartY)
     battler.setZoom(0, 0)
     battler.setColor(0, col)
@@ -499,7 +499,7 @@ class Battle::Scene::Animation::PokeballTrainerSendOut < Battle::Scene::Animatio
     ballBurst(delay, ball, battlerStartX, battlerStartY - 18, poke_ball)
     ball.moveOpacity(delay + 2, 2, 0)
     # Set up battler sprite
-    battler = addSprite(batSprite, PictureOrigin::BOTTOM)
+    battler = addSprite(batSprite, nil)
     battler.setXY(0, battlerStartX, battlerStartY)
     battler.setZoom(0, 0)
     battler.setColor(0, col)
@@ -548,7 +548,7 @@ class Battle::Scene::Animation::BattlerRecall < Battle::Scene::Animation
     battlerEndX = ballPos[0]
     battlerEndY = ballPos[1]
     # Set up battler sprite
-    battler = addSprite(batSprite, PictureOrigin::BOTTOM)
+    battler = addSprite(batSprite, nil)
     battler.setVisible(0, true)
     battler.setColor(0, col)
     # Set up Poké Ball sprite
@@ -585,7 +585,7 @@ class Battle::Scene::Animation::BattlerDamage < Battle::Scene::Animation
     batSprite = @sprites["pokemon_#{@idxBattler}"]
     shaSprite = @sprites["shadow_#{@idxBattler}"]
     # Set up battler/shadow sprite
-    battler = addSprite(batSprite, PictureOrigin::BOTTOM)
+    battler = addSprite(batSprite, nil)
     shadow  = addSprite(shaSprite, PictureOrigin::CENTER)
     # Animation
     delay = 0
@@ -621,10 +621,10 @@ class Battle::Scene::Animation::BattlerFaint < Battle::Scene::Animation
     batSprite = @sprites["pokemon_#{@idxBattler}"]
     shaSprite = @sprites["shadow_#{@idxBattler}"]
     # Set up battler/shadow sprite
-    battler = addSprite(batSprite, PictureOrigin::BOTTOM)
+    battler = addSprite(batSprite, nil)
     shadow  = addSprite(shaSprite, PictureOrigin::CENTER)
     # Get approx duration depending on sprite's position/size. Min 20 frames.
-    battlerTop = batSprite.y - batSprite.height
+    battlerTop = batSprite.y - batSprite.oy
     cropY = Battle::Scene.pbBattlerPosition(@idxBattler, @battle.pbSideSize(@idxBattler))[1]
     cropY += 8
     duration = (cropY - battlerTop) / 8
@@ -714,7 +714,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     delay = ball.totalDuration + 6
     ballOpenUp(ball, delay, @poke_ball, true, false)
     # Set up battler sprite
-    battler = addSprite(batSprite, PictureOrigin::BOTTOM)
+    battler = addSprite(batSprite, nil)
     # Poké Ball absorbs battler
     delay = ball.totalDuration
     ballBurstCapture(delay, ball, ballEndX, ballEndY, @poke_ball)

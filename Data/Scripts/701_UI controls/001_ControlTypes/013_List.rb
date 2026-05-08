@@ -4,6 +4,7 @@
 #===============================================================================
 class UIControls::List < UIControls::BaseControl
   attr_reader :options
+  attr_reader :selected
 
   LIST_FRAME_THICKNESS = 2
   ROW_HEIGHT           = 24

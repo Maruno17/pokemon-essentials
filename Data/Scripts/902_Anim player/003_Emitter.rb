@@ -222,6 +222,16 @@ class AnimationPlayer::Emitter
       @particle, @user&.index, target_idx, @user_coords, @target_coords[target_idx], @side_sizes
     )
     offset_xy = AnimationPlayer::Helper.get_xy_offset(@particle, (particle_sprite.sprite) ? particle_sprite.sprite[0] : nil)
+    case @particle[:graphic]
+    when "USER", "USER_OPP", "USER_FRONT", "USER_BACK"
+      sprite = @sprites["pokemon_#{@user.index}"]
+      offset_xy[0] += sprite.ox - (sprite.bitmap.width / 2)
+      offset_xy[1] += sprite.oy - sprite.bitmap.height
+    when "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
+      sprite = @sprites["pokemon_#{target_idx}"]
+      offset_xy[0] += sprite.ox - (sprite.bitmap.width / 2)
+      offset_xy[1] += sprite.oy - sprite.bitmap.height
+    end
     focus_z = AnimationPlayer::Helper.get_z_focus(@particle, @user&.index, target_idx)
     particle_sprite.focus_xy = focus_xy
     particle_sprite.offset_xy = offset_xy

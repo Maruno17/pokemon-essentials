@@ -675,23 +675,37 @@ class Battle::Scene
     userSprite   = (user) ? @sprites["pokemon_#{user.index}"] : nil
     targetSprite = (target) ? @sprites["pokemon_#{target.index}"] : nil
     # Remember the original positions of Pokémon sprites
-    oldUserX = (userSprite) ? userSprite.x : 0
-    oldUserY = (userSprite) ? userSprite.y : 0
-    oldTargetX = (targetSprite) ? targetSprite.x : oldUserX
-    oldTargetY = (targetSprite) ? targetSprite.y : oldUserY
+    user_pos = nil   # Where the user sprite actually is
+    user_bottom = [0, 0]
+    if userSprite
+      user_pos = [userSprite.x, userSprite.y, userSprite.ox, userSprite.oy]
+      userSprite.x += (userSprite.bitmap.width / 2) - userSprite.ox
+      userSprite.y += userSprite.bitmap.height - userSprite.oy
+      userSprite.ox = userSprite.bitmap.width / 2
+      userSprite.oy = userSprite.bitmap.height
+      user_bottom = [userSprite.x, userSprite.y]
+    end
+    target_pos = nil   # Where the target sprite actually is
+    target_bottom = user_bottom.clone
+    if targetSprite
+      target_pos = [targetSprite.x, targetSprite.y, targetSprite.ox, targetSprite.oy]
+      targetSprite.x += (targetSprite.bitmap.width / 2) - targetSprite.ox
+      targetSprite.y += targetSprite.bitmap.height - targetSprite.oy
+      targetSprite.ox = targetSprite.bitmap.width / 2
+      targetSprite.oy = targetSprite.bitmap.height
+      target_bottom = [targetSprite.x, targetSprite.y]
+    end
     # Create the animation player
     animPlayer = PBAnimationPlayerX.new(animation, user, target, self, oppMove)
     # Apply a transformation to the animation based on where the user and target
     # actually are. Get the centres of each sprite.
-    userHeight = (userSprite&.bitmap && !userSprite.bitmap.disposed?) ? userSprite.bitmap.height : 128
-    if targetSprite
-      targetHeight = (targetSprite.bitmap && !targetSprite.bitmap.disposed?) ? targetSprite.bitmap.height : 128
-    else
-      targetHeight = userHeight
-    end
+    userHeight = 128
+    userHeight = userSprite.bitmap.height if userSprite&.bitmap && !userSprite.bitmap.disposed?
+    targetHeight = userHeight
+    targetHeight = targetSprite.bitmap.height if targetSprite&.bitmap && !targetSprite.bitmap.disposed?
     animPlayer.setLineTransform(
       FOCUSUSER_X, FOCUSUSER_Y, FOCUSTARGET_X, FOCUSTARGET_Y,
-      oldUserX, oldUserY - (userHeight / 2), oldTargetX, oldTargetY - (targetHeight / 2)
+      user_bottom[0], user_bottom[1] - (userHeight / 2), target_bottom[0], target_bottom[1] - (targetHeight / 2)
     )
     # Play the animation
     animPlayer.start
@@ -703,14 +717,16 @@ class Battle::Scene
     animPlayer.dispose
     # Return Pokémon sprites to their original positions
     if userSprite
-      userSprite.x = oldUserX
-      userSprite.y = oldUserY
-      userSprite.pbSetOrigin
+      userSprite.x = user_pos[0]
+      userSprite.y = user_pos[1]
+      userSprite.ox = user_pos[2]
+      userSprite.oy = user_pos[3]
     end
     if targetSprite
-      targetSprite.x = oldTargetX
-      targetSprite.y = oldTargetY
-      targetSprite.pbSetOrigin
+      targetSprite.x = target_pos[0]
+      targetSprite.y = target_pos[1]
+      targetSprite.ox = target_pos[2]
+      targetSprite.oy = target_pos[3]
     end
   end
 end

@@ -142,7 +142,7 @@ class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
     ball.moveOpacity(delay + 8, 2, 0)
     ball.setVisible(delay + 10, false)
     # Set up battler sprite
-    battler = addSprite(batSprite, PictureOrigin::BOTTOM)
+    battler = addSprite(batSprite, nil)
     # Show Pokémon jumping before eating the bait
     delay = ball.totalDuration + 3
     2.times do
