@@ -1399,7 +1399,8 @@ module Compiler
   def validate_compiled_map_metadata(hash)
     # Give the map its RMXP map name if it doesn't define its own
     if nil_or_empty?(hash[:real_name])
-      hash[:real_name] = pbLoadMapInfos[hash[:id]].name
+      map_infos = pbLoadMapInfos
+      hash[:real_name] = map_infos[hash[:id]].name if map_infos[hash[:id]]
     end
   end
 

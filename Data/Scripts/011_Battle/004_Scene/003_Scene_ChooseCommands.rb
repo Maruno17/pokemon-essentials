@@ -137,8 +137,12 @@ class Battle::Scene
     party_mode = :battle_choose_to_box if mode == 1
     party_mode = :battle_choose_to_revive if mode == 3
     screen = UI::Party.new(modParty, mode: party_mode)
+    screen.cannot_cancel = !canCancel
     screen.choose_pokemon do |pkmn, party_index|
-      next canCancel if party_index < 0
+      if party_index < 0
+        screen.show_message(_INTL("You have to choose a Pokémon!")) if !canCancel
+        next canCancel
+      end
       # Choose a command for the selected Pokémon
       commands = {}
       commands[:switch_in]     = _INTL("Switch In") if mode == 0 && pkmn.able? &&
