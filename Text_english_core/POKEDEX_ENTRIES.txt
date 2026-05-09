@@ -2180,6 +2180,8 @@ While chanting strange spells, this Pokémon combines its internal toxins with w
 While chanting strange spells, this Pokémon combines its internal toxins with what it's eaten, creating strange potions.
 It absorbs toxins from the food it eats. The distinct purple spikes on its body are evidence of its potent poison.
 It absorbs toxins from the food it eats. The distinct purple spikes on its body are evidence of its potent poison.
+To protect itself from opponents' attacks, it uses magnetism to control pieces of its hard outer shell that have flaked off.
+To protect itself from opponents' attacks, it uses magnetism to control pieces of its hard outer shell that have flaked off.
 It's better at beating things than grasping them. When it battles for a long time, the weight of its pincers becomes too much to bear.
 It's better at beating things than grasping them. When it battles for a long time, the weight of its pincers becomes too much to bear.
 A tremendous influx of energy builds it up, but when Mega Evolution ends, Heracross is bothered by terrible soreness in its muscles.
@@ -2194,18 +2196,34 @@ Its red claws and the tips of its tail are melting from high internal temperatur
 Its red claws and the tips of its tail are melting from high internal temperatures that are painful to Houndoom itself.
 Due to the colossal power poured into it, this Pokémon's back split right open. Its destructive instincts are the only thing keeping it moving.
 Due to the colossal power poured into it, this Pokémon's back split right open. Its destructive instincts are the only thing keeping it moving.
+The seeds on its back are filled with energy from Mega Evolution. The Pokémon detonates these seeds to launch the tip of its tail.
+The seeds on its back are filled with energy from Mega Evolution. The Pokémon detonates these seeds to launch the tip of its tail.
+Boiling-hot blood courses through its entire body, doubling the sharpness of its moves. It subdues opponents in the blink of an eye.
+Boiling-hot blood courses through its entire body, doubling the sharpness of its moves. It subdues opponents in the blink of an eye.
+The water within its body further strengthens its already enlarged muscles, using the same principles as a hydraulic pump.
+The water within its body further strengthens its already enlarged muscles, using the same principles as a hydraulic pump.
 Its restlessness has it constantly running around. If it sees another Pokémon, it will purposely run into them in order to start a fight.
 Its restlessness has it constantly running around. If it sees another Pokémon, it will purposely run into them in order to start a fight.
 It uses its long tongue to taunt opponents. Once the opposition is enraged, this Pokémon hurls itself at the opponent, tackling them forcefully.
 It uses its long tongue to taunt opponents. Once the opposition is enraged, this Pokémon hurls itself at the opponent, tackling them forcefully.
+When it opens the red plate on its chest and unleashes its heart, its strongest psychic power is released.
+When it opens the red plate on its chest and unleashes its heart, its strongest psychic power is released.
 Supporting a giant heavy jewel, it can't change direction very nimbly and is vulnerable to attack from behind.
 Supporting a giant heavy jewel, it can't change direction very nimbly and is vulnerable to attack from behind.
 Its two sets of jaws thrash about violently as if they each had a will of their own. One gnash from them can turn a boulder to dust.
 Its two sets of jaws thrash about violently as if they each had a will of their own. One gnash from them can turn a boulder to dust.
+Energy from Mega Evolution has turned the iron inside this Pokémon into steel armor that covers Mega Aggron's whole body.
+Energy from Mega Evolution has turned the iron inside this Pokémon into steel armor that covers Mega Aggron's whole body.
+Thanks to Mega Evolution, its mental power is limitless. It conjures up arms imbued with malice to defeat its enemies.
+Thanks to Mega Evolution, its mental power is limitless. It conjures up arms imbued with malice to defeat its enemies.
 Too much electricity has built up in its body, irritating Manectric. Its explosive speed is equal to that of a lightning bolt.
 Too much electricity has built up in its body, irritating Manectric. Its explosive speed is equal to that of a lightning bolt.
 The yellow patterns it bears are old scars. The energy from Mega Evolution runs through them, causing it sharp pain and suffering.
 The yellow patterns it bears are old scars. The energy from Mega Evolution runs through them, causing it sharp pain and suffering.
+When this Pokémon's rage reaches a boiling point, the huge volcano in the hump on its back erupts violently, spewing molten lava.
+When this Pokémon's rage reaches a boiling point, the huge volcano in the hump on its back erupts violently, spewing molten lava.
+Its down is so soft, it seems as if a touch could melt it. But it's strong enough that just a few strands could be used to hoist a dump truck.
+Its down is so soft, it seems as if a touch could melt it. But it's strong enough that just a few strands could be used to hoist a dump truck.
 This is the form Castform takes on the brightest of days. Its skin is unexpectedly hot to the touch, so approach with care.
 This is the form Castform takes on the brightest of days. Its skin is unexpectedly hot to the touch, so approach with care.
 This is the form Castform takes when soaked with rain. When its body is compressed, water will seep out as if from a sponge.
@@ -2226,6 +2244,16 @@ It puts its forelegs inside its shell to streamline itself for flight. Salamence
 It puts its forelegs inside its shell to streamline itself for flight. Salamence flies at high speeds over all kinds of topographical features.
 Its intellect surpasses its previous level, resulting in battles so cruel, they'll make you want to cover your eyes.
 Its intellect surpasses its previous level, resulting in battles so cruel, they'll make you want to cover your eyes.
+Both its flying capabilities and its attack power have increased. It scatters transparent down to confuse its enemies.
+Both its flying capabilities and its attack power have increased. It scatters transparent down to confuse its enemies.
+It flies at speeds exceeding Mach 4. It is among the top tier of all Pokémon in terms of aerial combat capability.
+It flies at speeds exceeding Mach 4. It is among the top tier of all Pokémon in terms of aerial combat capability.
+Kyogre reverted to this state via the Blue Orb, which contains the energy of the primordial world. Kyogre's body resembles seawater.
+Kyogre reverted to this state via the Blue Orb, which contains the energy of the primordial world. Kyogre's body resembles seawater.
+This is Groudon's true form, restored using the Red Orb. Energy spills from its body in the form of magma.
+This is Groudon's true form, restored using the Red Orb. Energy spills from its body in the form of magma.
+A shooting star streaking across the night sky may, in fact, be Mega Rayquaza flying gracefully after a meteoroid.
+A shooting star streaking across the night sky may, in fact, be Mega Rayquaza flying gracefully after a meteoroid.
 Mega Staraptor is a top-class flier. It can easily soar through the sky while gripping a Steelix that weighs more than 880 lbs.
 Mega Staraptor is a top-class flier. It can easily soar through the sky while gripping a Steelix that weighs more than 880 lbs.
 After absorbing plenty of sunlight, Cherrim takes this form. It's full of energy while it's like this, and its liveliness will go on until sundown.
@@ -2244,6 +2272,10 @@ It readies itself to face its enemies by focusing its mental energies. Its fight
 It readies itself to face its enemies by focusing its mental energies. Its fighting style can be summed up in a single word: heartless.
 By completely cloaking itself in its aura, Mega Lucario Z can parry all manner of attacks, battling as if it were gracefully dancing.
 By completely cloaking itself in its aura, Mega Lucario Z can parry all manner of attacks, battling as if it were gracefully dancing.
+The buds on its back have sprouted into impressive icicles that can whip up massive blizzards of -22 degrees Fahrenheit.
+The buds on its back have sprouted into impressive icicles that can whip up massive blizzards of -22 degrees Fahrenheit.
+It gets power from the bond it has with its Trainer. Mega Evolution has given it plates to slice its enemies and a cape to protect its body.
+It gets power from the bond it has with its Trainer. Mega Evolution has given it plates to slice its enemies and a cape to protect its body.
 This Pokémon can use eerie cold air imbued with ghost energy to freeze even insubstantial things, such as flames or the wind.
 This Pokémon can use eerie cold air imbued with ghost energy to freeze even insubstantial things, such as flames or the wind.
 This Rotom has possessed a convection microwave oven that uses a special motor. It also has a flair for manipulating flames.
@@ -2270,6 +2302,8 @@ Hard of heart and deft of blade, this rare form of Samurott's turbulent blows cr
 Hard of heart and deft of blade, this rare form of Samurott's turbulent blows crash into foes like ceaseless pounding waves.
 If this Pokémon brings its arms and head together to form a streamlined shape and spins at high speeds, it can destroy anything.
 If this Pokémon brings its arms and head together to form a streamlined shape and spins at high speeds, it can destroy anything.
+Anyone who touches the secondary feelers that have sprouted from the base of its throat will fall into a deep sleep.
+Anyone who touches the secondary feelers that have sprouted from the base of its throat will fall into a deep sleep.
 Its deadly venom gives off a faint glow. The venom affects Scolipede's mind, honing its viciousness.
 Its deadly venom gives off a faint glow. The venom affects Scolipede's mind, honing its viciousness.
 Its well-developed legs are the result of a life spent on mountains covered in deep snow. The scent it exudes from its flower crown heartens those in proximity.
@@ -2360,6 +2394,10 @@ This is Zygarde's perfected form. From the orifice on its chest, it radiates hig
 This is Zygarde's perfected form. From the orifice on its chest, it radiates high-powered energy that eliminates everything.
 In response to people's emotions during an unprecedented crisis, Zygarde Mega Evolves and calms the situation with its unmatched power.
 In response to people's emotions during an unprecedented crisis, Zygarde Mega Evolves and calms the situation with its unmatched power.
+This Pokémon is also known as the Royal Pink Princess. The dazzling, sparkling diamond on its forehead is a whopping 2,000 carats.
+This Pokémon is also known as the Royal Pink Princess. The dazzling, sparkling diamond on its forehead is a whopping 2,000 carats.
+This is Hoopa's true form, in which it has regained its sealed powers. The hole in its chest is said to connect to another dimension.
+This is Hoopa's true form, in which it has regained its sealed powers. The hole in its chest is said to connect to another dimension.
 Decidueye's feathers insulates the Pokémon against extreme cold. This is firm proof that evolution can be influenced by environment.
 Decidueye's feathers insulates the Pokémon against extreme cold. This is firm proof that evolution can be influenced by environment.
 It can pulverize reinforced concrete with a light swing of one of its fists, each of which is covered in a thick layer of ice.

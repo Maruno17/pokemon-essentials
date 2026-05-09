@@ -18342,7 +18342,7 @@ Generation = 6
 #-------------------------------
 [PUMPKABOO]
 Name = Pumpkaboo
-FormName = Small Size
+FormName = Small Variety
 Types = GHOST,GRASS
 BaseStats = 44,66,70,56,44,55
 GenderRatio = Female50Percent
@@ -18369,7 +18369,7 @@ Evolution = GOURGEIST,Trade
 #-------------------------------
 [GOURGEIST]
 Name = Gourgeist
-FormName = Small Size
+FormName = Small Variety
 Types = GHOST,GRASS
 BaseStats = 55,85,122,99,58,75
 GenderRatio = Female50Percent

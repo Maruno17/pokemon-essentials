@@ -936,6 +936,7 @@ Abilities = SANDFORCE
 HiddenAbilities = SANDFORCE
 Height = 10.5
 Weight = 740.0
+Pokedex = To protect itself from opponents' attacks, it uses magnetism to control pieces of its hard outer shell that have flaked off.
 Generation = 6
 #-------------------------------
 [QWILFISH,1]
@@ -1047,6 +1048,7 @@ Abilities = LIGHTNINGROD
 HiddenAbilities = LIGHTNINGROD
 Height = 1.9
 Weight = 55.2
+Pokedex = The seeds on its back are filled with energy from Mega Evolution. The Pokémon detonates these seeds to launch the tip of its tail.
 Generation = 6
 #-------------------------------
 [BLAZIKEN,1]
@@ -1055,6 +1057,7 @@ MegaStone = BLAZIKENITE
 BaseStats = 80,160,80,100,130,80
 BaseExp = 315
 Abilities = SPEEDBOOST
+Pokedex = Boiling-hot blood courses through its entire body, doubling the sharpness of its moves. It subdues opponents in the blink of an eye.
 Generation = 6
 #-------------------------------
 [SWAMPERT,1]
@@ -1066,6 +1069,7 @@ Abilities = SWIFTSWIM
 HiddenAbilities = SWIFTSWIM
 Height = 1.9
 Weight = 102.0
+Pokedex = The water within its body further strengthens its already enlarged muscles, using the same principles as a hydraulic pump.
 Generation = 6
 #-------------------------------
 [ZIGZAGOON,1]
@@ -1096,6 +1100,7 @@ BaseStats = 68,85,65,100,165,135
 BaseExp = 309
 Abilities = PIXILATE
 HiddenAbilities = PIXILATE
+Pokedex = When it opens the red plate on its chest and unleashes its heart, its strongest psychic power is released.
 Generation = 6
 #-------------------------------
 [SABLEYE,1]
@@ -1130,6 +1135,7 @@ Abilities = FILTER
 HiddenAbilities = FILTER
 Height = 2.2
 Weight = 395.0
+Pokedex = Energy from Mega Evolution has turned the iron inside this Pokémon into steel armor that covers Mega Aggron's whole body.
 Generation = 6
 #-------------------------------
 [MEDICHAM,1]
@@ -1138,6 +1144,7 @@ MegaStone = MEDICHAMITE
 BaseStats = 60,100,85,100,80,85
 BaseExp = 179
 HiddenAbilities = PUREPOWER
+Pokedex = Thanks to Mega Evolution, its mental power is limitless. It conjures up arms imbued with malice to defeat its enemies.
 Generation = 6
 #-------------------------------
 [MANECTRIC,1]
@@ -1173,6 +1180,7 @@ Abilities = SHEERFORCE
 HiddenAbilities = SHEERFORCE
 Height = 2.5
 Weight = 320.5
+Pokedex = When this Pokémon's rage reaches a boiling point, the huge volcano in the hump on its back erupts violently, spewing molten lava.
 Generation = 6
 #-------------------------------
 [ALTARIA,1]
@@ -1184,6 +1192,7 @@ BaseExp = 207
 Abilities = PIXILATE
 HiddenAbilities = PIXILATE
 Height = 1.5
+Pokedex = Its down is so soft, it seems as if a touch could melt it. But it's strong enough that just a few strands could be used to hoist a dump truck.
 Generation = 6
 #-------------------------------
 [CASTFORM,1]
@@ -1293,6 +1302,7 @@ BaseExp = 350
 Height = 1.8
 Weight = 52.0
 Color = Purple
+Pokedex = Both its flying capabilities and its attack power have increased. It scatters transparent down to confuse its enemies.
 Generation = 6
 #-------------------------------
 [LATIOS,1]
@@ -1303,6 +1313,7 @@ BaseExp = 350
 Height = 2.3
 Weight = 70.0
 Color = Purple
+Pokedex = It flies at speeds exceeding Mach 4. It is among the top tier of all Pokémon in terms of aerial combat capability.
 Generation = 6
 #-------------------------------
 [KYOGRE,1]
@@ -1312,6 +1323,7 @@ BaseExp = 385
 Abilities = PRIMORDIALSEA
 Height = 9.8
 Weight = 430.0
+Pokedex = Kyogre reverted to this state via the Blue Orb, which contains the energy of the primordial world. Kyogre's body resembles seawater.
 Generation = 6
 #-------------------------------
 [GROUDON,1]
@@ -1322,6 +1334,7 @@ BaseExp = 385
 Abilities = DESOLATELAND
 Height = 5.0
 Weight = 999.7
+Pokedex = This is Groudon's true form, restored using the Red Orb. Energy spills from its body in the form of magma.
 Generation = 6
 #-------------------------------
 [RAYQUAZA,1]
@@ -1334,6 +1347,7 @@ Abilities = DELTASTREAM
 HiddenAbilities = DELTASTREAM
 Height = 10.8
 Weight = 392.0
+Pokedex = A shooting star streaking across the night sky may, in fact, be Mega Rayquaza flying gracefully after a meteoroid.
 Generation = 6
 #-------------------------------
 [DEOXYS,1]
@@ -1472,6 +1486,7 @@ BaseExp = 208
 HiddenAbilities = SNOWWARNING
 Height = 2.7
 Weight = 185.0
+Pokedex = The buds on its back have sprouted into impressive icicles that can whip up massive blizzards of -22 degrees Fahrenheit.
 Generation = 6
 #-------------------------------
 [GALLADE,1]
@@ -1482,6 +1497,7 @@ BaseExp = 309
 Abilities = INNERFOCUS
 HiddenAbilities = INNERFOCUS
 Weight = 56.4
+Pokedex = It gets power from the bond it has with its Trainer. Mega Evolution has given it plates to slice its enemies and a cape to protect its body.
 Generation = 6
 #-------------------------------
 [FROSLASS,1]
@@ -1709,6 +1725,7 @@ HiddenAbilities = HEALER
 Height = 1.5
 Weight = 32.0
 Color = White
+Pokedex = Anyone who touches the secondary feelers that have sprouted from the base of its throat will fall into a deep sleep.
 Generation = 6
 #-------------------------------
 [SCOLIPEDE,1]
@@ -2334,7 +2351,7 @@ Pokedex = Able to freely control the hardness of its metallic shell. It loathes 
 Generation = 8
 #-------------------------------
 [PUMPKABOO,1]
-FormName = Average Size
+FormName = Medium Variety
 BaseStats = 49,66,70,51,44,55
 HiddenAbilities = INSOMNIA
 Height = 0.4
@@ -2342,14 +2359,14 @@ Weight = 5.0
 Pokedex = Spirits that wander this world are placed into Pumpkaboo's body. They're then moved on to the afterlife.
 #-------------------------------
 [PUMPKABOO,2]
-FormName = Large Size
+FormName = Large Variety
 BaseStats = 54,66,70,46,44,55
 Height = 0.5
 Weight = 7.5
 Pokedex = When taking spirits to the afterlife, large Pumpkaboo prefer the spirits of adults to those of children.
 #-------------------------------
 [PUMPKABOO,3]
-FormName = Super Size
+FormName = Jumbo Variety
 BaseStats = 59,66,70,41,44,55
 HiddenAbilities = INSOMNIA
 Height = 0.8
@@ -2360,7 +2377,7 @@ WildItemUncommon = MIRACLESEED
 WildItemRare = MIRACLESEED
 #-------------------------------
 [GOURGEIST,1]
-FormName = Average Size
+FormName = Medium Variety
 BaseStats = 65,90,122,84,58,75
 HiddenAbilities = INSOMNIA
 Height = 0.9
@@ -2368,14 +2385,14 @@ Weight = 12.5
 Pokedex = Eerie cries emanate from its body in the dead of night. The sounds are said to be the wails of spirits who are suffering in the afterlife.
 #-------------------------------
 [GOURGEIST,2]
-FormName = Large Size
+FormName = Large Variety
 BaseStats = 75,95,122,69,58,75
 Height = 1.1
 Weight = 14.0
 Pokedex = Large Gourgeist put on the guise of adults, taking the hands of children to lead them to the afterlife.
 #-------------------------------
 [GOURGEIST,3]
-FormName = Super Size
+FormName = Jumbo Variety
 BaseStats = 85,100,122,54,58,75
 HiddenAbilities = INSOMNIA
 Height = 1.7
@@ -2473,6 +2490,7 @@ Abilities = MAGICBOUNCE
 HiddenAbilities = MAGICBOUNCE
 Height = 1.1
 Weight = 27.8
+Pokedex = This Pokémon is also known as the Royal Pink Princess. The dazzling, sparkling diamond on its forehead is a whopping 2,000 carats.
 #-------------------------------
 [HOOPA,1]
 FormName = Hoopa Unbound
@@ -2483,6 +2501,7 @@ Moves = 1,DESTINYBOND,1,ALLYSWITCH,1,CONFUSION,6,ASTONISH,10,TRICK,15,LIGHTSCREE
 Height = 6.5
 Weight = 490.0
 Shape = BipedalTail
+Pokedex = This is Hoopa's true form, in which it has regained its sealed powers. The hole in its chest is said to connect to another dimension.
 #-------------------------------
 [DECIDUEYE,1]
 FormName = Hisuian
