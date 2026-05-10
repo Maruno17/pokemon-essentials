@@ -1028,7 +1028,7 @@ class Battle::Move::RaiseTargetAtk2LowerTargetDef2 < Battle::Move
 
   def pbMoveFailed?(user, targets)
     failed = true
-    targets.each do |b|
+    targets.each do |target|
       (@statUp.length / 2).times do |i|
         next if !target.pbCanRaiseStatStage?(@statUp[i * 2], user, self)
         failed = false
