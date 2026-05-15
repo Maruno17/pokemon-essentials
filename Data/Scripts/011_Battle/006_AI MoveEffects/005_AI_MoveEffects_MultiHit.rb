@@ -114,7 +114,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.copy("HitTwoTimes",
 Battle::AI::Handlers::MoveBasePower.add("HitTwoToFiveTimes",
   proc { |power, move, user, target, ai, battle|
     next power * 5 if user.has_active_ability?(:SKILLLINK)
-    next power * 41 / 10 if user.has_active_item?(:LOADEDDICE)
+    next power * 45 / 10 if user.has_active_item?(:LOADEDDICE)
     next power * 31 / 10   # Average damage dealt
   }
 )
