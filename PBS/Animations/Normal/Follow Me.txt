@@ -1,0 +1,138 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FOLLOWME]
+Name = DB Animation
+NoTarget = true
+Credit = Dawn Bronze
+<User>
+    MoveZoomX = 61,1,85
+    MoveZoomY = 61,1,120
+    MoveZoomX = 66,2,100
+    MoveZoomY = 66,2,100
+<Finger>
+    Graphic = hand point 2
+    Focus = User
+    MoveX = 2,7,100
+    SetZ = 9,-10
+    MoveX = 9,14,-100
+    SetZ = 23,10
+    MoveX = 23,7,0
+    MoveAngle = 37,3,-40
+    MoveAngle = 40,3,0
+    MoveAngle = 43,3,-40
+    MoveAngle = 46,3,0
+    MoveAngle = 49,3,-40
+    MoveAngle = 52,3,0
+    MoveAngle = 57,1,30
+    MoveY = 57,3,-100,EaseIn
+    MoveZoomX = 60,2,130
+    MoveZoomY = 60,2,130
+    MoveY = 60,3,-80
+    MoveZoomX = 62,5,100
+    MoveZoomY = 62,5,100
+    MoveY = 63,2,-60
+    MoveOpacity = 72,7,0
+<Shine>
+    Graphic = hit
+    Focus = User
+    SetY = 60,-60
+    SetZ = 60,10
+    SetZoomX = 60,0
+    SetZoomY = 60,0
+    SetOpacity = 60,0
+    MoveOpacity = 60,1,180
+    MoveZoomX = 60,6,300
+    MoveZoomY = 60,6,300
+    SetFrame = 61,1
+    SetColor = 62,FFFFFFFF
+    MoveColor = 62,2,FFFF48DC
+    MoveOpacity = 62,5,0
+<Sparkle Emitter>
+    Graphic = shine 1
+    Focus = User
+    Emitter = Projectile
+    EmitterRate = 40
+    SetZ = 59,20
+    SetOpacity = 59,0
+    SetColor = 59,FFE480E0
+    SetEmitting = 59,true
+    SetEmitY = 59,-60
+    SetEmitSpeed = 59,300
+    SetEmitSpeedRange = 59,50
+    SetEmitAngle = 59,90
+    SetEmitAngleRange = 59,100
+    MoveOpacity = 59,2,150
+    SetEmitting = 62,false
+    MoveOpacity = 65,4,0
+<SE>
+    Play = 3,Normal/Follow Me
+    Play = 62,Shiny,50
+#-------------------------------
+[OppMove,FOLLOWME]
+Name = DB Animation
+NoTarget = true
+Credit = Dawn Bronze
+<User>
+    MoveZoomX = 61,1,85
+    MoveZoomY = 61,1,120
+    MoveZoomX = 66,2,100
+    MoveZoomY = 66,2,100
+<Finger>
+    Graphic = hand point 2
+    Focus = User
+    SetFrame = 2,1
+    MoveX = 2,7,100
+    SetZ = 9,-10
+    MoveX = 9,14,-100
+    SetZ = 23,10
+    MoveX = 23,7,0
+    MoveAngle = 37,3,40
+    MoveAngle = 40,3,0
+    MoveAngle = 43,3,40
+    MoveAngle = 46,3,0
+    MoveAngle = 49,3,40
+    MoveAngle = 52,3,0
+    MoveAngle = 57,1,-20
+    MoveY = 57,3,-120,EaseIn
+    MoveZoomX = 60,2,130
+    MoveZoomY = 60,2,130
+    MoveY = 60,3,-60
+    MoveZoomX = 62,5,100
+    MoveZoomY = 62,5,100
+    MoveY = 63,2,-80
+    MoveOpacity = 72,7,0
+<Shine>
+    Graphic = hit
+    Focus = User
+    SetY = 60,-60
+    SetZ = 60,10
+    SetZoomX = 60,0
+    SetZoomY = 60,0
+    SetOpacity = 60,0
+    MoveOpacity = 60,1,180
+    MoveZoomX = 60,6,300
+    MoveZoomY = 60,6,300
+    SetFrame = 61,1
+    SetColor = 62,FFFFFFFF
+    MoveColor = 62,2,FFFF48DC
+    MoveOpacity = 62,5,0
+<Sparkle Emitter>
+    Graphic = shine 1
+    Focus = User
+    Emitter = Projectile
+    EmitterRate = 40
+    SetZ = 59,20
+    SetOpacity = 59,0
+    SetColor = 59,FFE480E0
+    SetEmitting = 59,true
+    SetEmitY = 59,-60
+    SetEmitSpeed = 59,300
+    SetEmitSpeedRange = 59,50
+    SetEmitAngle = 59,90
+    SetEmitAngleRange = 59,140
+    MoveOpacity = 59,2,150
+    SetEmitting = 62,false
+    MoveOpacity = 65,4,0
+<SE>
+    Play = 2,Normal/Follow Me
+    Play = 63,Shiny,50

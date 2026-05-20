@@ -1,0 +1,72 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Sleep]
+Name = DB Animation
+NoTarget = true
+Credit = Dawn Bronze
+<User>
+<Z 1>
+    Graphic = sleep 1
+    Focus = User
+    SetX = 5,-33
+    SetY = 5,-38
+    SetZ = 5,10
+    SetZoomX = 5,10
+    SetZoomY = 5,10
+    SetAngle = 5,45
+    SetOpacity = 5,0
+    SetColor = 5,FFFFFFFF
+    MoveOpacity = 5,2,250
+    MoveZoomX = 5,10,100
+    MoveZoomY = 5,10,100
+    MoveX = 5,25,-89
+    MoveY = 5,25,-113
+    MoveAngle = 5,25,5
+    MoveColor = 12,8,D4C4FFFF
+    MoveColor = 20,5,9878B4FF
+    MoveOpacity = 22,5,0
+    SetVisible = 27,false
+<Z 2>
+    Graphic = sleep 1
+    Focus = User
+    SetX = 15,-33
+    SetY = 15,-38
+    SetZ = 15,10
+    SetZoomX = 15,10
+    SetZoomY = 15,10
+    SetAngle = 15,45
+    SetOpacity = 15,0
+    SetColor = 15,FFFFFFFF
+    MoveOpacity = 15,2,250
+    MoveZoomX = 15,10,100
+    MoveZoomY = 15,10,100
+    MoveX = 15,25,-89
+    MoveY = 15,25,-113
+    MoveAngle = 15,25,5
+    MoveColor = 22,8,D4C4FFFF
+    MoveColor = 30,5,9878B4FF
+    MoveOpacity = 32,5,0
+    SetVisible = 37,false
+<Z 3>
+    Graphic = sleep 1
+    Focus = User
+    SetX = 25,-33
+    SetY = 25,-38
+    SetZ = 25,10
+    SetZoomX = 25,10
+    SetZoomY = 25,10
+    SetAngle = 25,45
+    SetOpacity = 25,0
+    SetColor = 25,FFFFFFFF
+    MoveOpacity = 25,2,250
+    MoveZoomX = 25,10,100
+    MoveZoomY = 25,10,100
+    MoveX = 25,25,-89
+    MoveY = 25,25,-113
+    MoveAngle = 25,25,5
+    MoveColor = 32,8,D4C4FFFF
+    MoveColor = 40,5,9878B4FF
+    MoveOpacity = 42,5,0
+    SetVisible = 47,false
+<SE>
+    Play = 3,Common/Status Sleep

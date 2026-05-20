@@ -334,7 +334,6 @@ class AnimationPlayer::ParticleSprite
     when :angle
       if @angle_override == :always_point_at_focus
         apply_sprite_property_override(:angle)
-        @sprite[0].angle += value
       else
         @sprite[0].angle = value + (@property_offsets[property] || 0)
       end
@@ -415,6 +414,7 @@ class AnimationPlayer::ParticleSprite
       # Recalculate angle
       @sprite[0].angle = AnimationPlayer::Helper.angle_between(sprite_x, sprite_y, target_x, target_y)
       @sprite[0].angle += (@property_offsets[property] || 0)
+      @sprite[0].angle += @values[:angle]
       apply_sprite_property(:angle2, @values[:angle2])
     end
   end

@@ -242,10 +242,14 @@ class AnimationPlayer
     case particle[:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK"
       sprite = @sprites["pokemon_#{@user.index}"]
+      particle_sprite.sprite.each { |spr| spr.ox = sprite.ox }
+      particle_sprite.sprite.each { |spr| spr.oy = sprite.oy }
       offset_xy[0] += sprite.ox - (sprite.bitmap.width / 2)
       offset_xy[1] += sprite.oy - sprite.bitmap.height
     when "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
       sprite = @sprites["pokemon_#{target_idx}"]
+      particle_sprite.sprite.each { |spr| spr.ox = sprite.ox }
+      particle_sprite.sprite.each { |spr| spr.oy = sprite.oy }
       offset_xy[0] += sprite.ox - (sprite.bitmap.width / 2)
       offset_xy[1] += sprite.oy - sprite.bitmap.height
     end

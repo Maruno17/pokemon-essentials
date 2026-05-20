@@ -1,0 +1,50 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,WORKUP]
+Name = DB Animation
+NoTarget = true
+Credit = Dawn Bronze
+<User>
+    MoveColor = 5,10,C854007C
+    MoveZoomX = 10,4,110
+    MoveZoomY = 10,4,92
+    MoveZoomY = 14,1,100
+    MoveZoomY = 15,1,92
+    MoveZoomY = 16,1,100
+    MoveZoomY = 17,1,92
+    MoveZoomY = 18,1,100
+    MoveZoomY = 19,1,92
+    MoveZoomY = 20,1,100
+    MoveZoomY = 21,1,92
+    MoveZoomY = 22,1,100
+    MoveZoomY = 23,1,92
+    MoveZoomY = 24,1,100
+    MoveZoomX = 24,2,100
+    MoveColor = 51,10,C8540000
+<Steam Emitter>
+    Graphic = smog 2
+    Focus = UserPosition
+    Emitter = Projectile
+    EmitterRate = 10
+    SetZ = 28,10
+    SetZoomX = 28,10
+    SetZoomY = 28,10
+    SetOpacity = 28,0
+    SetColor = 28,E4300018
+    SetEmitting = 28,true
+    SetEmitXRange = 28,10
+    SetEmitY = 28,-35
+    SetEmitYRange = 28,2
+    SetEmitSpeed = 28,50
+    SetEmitAngle = 28,90
+    SetEmitAngleRange = 28,4
+    MoveColor = 28,2,E4480064
+    MoveZoomX = 28,3,80
+    MoveZoomY = 28,3,80
+    MoveOpacity = 28,3,120
+    MoveEmitXRange = 28,3,40
+    SetEmitting = 38,false
+    SetOpacity = 47,150
+    MoveOpacity = 47,2,0
+<SE>
+    Play = 12,Normal/Work Up
