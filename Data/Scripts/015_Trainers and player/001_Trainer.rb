@@ -53,15 +53,33 @@ class Trainer
 
   #-----------------------------------------------------------------------------
 
-  def trainer_type_name; return GameData::TrainerType.get(self.trainer_type).name;            end
-  def base_money;        return GameData::TrainerType.get(self.trainer_type).base_money;      end
-  def gender;            return GameData::TrainerType.get(self.trainer_type).gender;          end
-  def male?;             return GameData::TrainerType.get(self.trainer_type).male?;           end
-  def female?;           return GameData::TrainerType.get(self.trainer_type).female?;         end
-  def skill_level;       return GameData::TrainerType.get(self.trainer_type).skill_level;     end
-  def default_poke_ball; return GameData::TrainerType.get(self.trainer_type).poke_ball;       end
-  def flags;             return GameData::TrainerType.get(self.trainer_type).flags;           end
-  def has_flag?(flag);   return GameData::TrainerType.get(self.trainer_type).has_flag?(flag); end
+  def trainer_type_data
+    tr_type = self.trainer_type
+    return (tr_type) ? GameData::TrainerType.get(tr_type) : nil
+  end
+
+  def trainer_type_name; return trainer_type_data&.name         || "???";    end
+  def base_money;        return trainer_type_data&.base_money   || 32;       end
+  def gender;            return trainer_type_data&.gender       || 0;        end
+
+  def male?
+    tr_type_data = trainer_type_data
+    return (tr_type_data) ? tr_type_data.male? : true
+  end
+
+  def female?
+    tr_type_data = trainer_type_data
+    return (tr_type_data) ? tr_type_data.female? : false
+  end
+
+  def skill_level;       return trainer_type_data&.skill_level || 32;        end
+  def default_poke_ball; return trainer_type_data&.poke_ball   || :POKEBALL; end
+  def flags;             return trainer_type_data&.flags       || [];        end
+
+  def has_flag?(flag)
+    tr_type_data = trainer_type_data
+    return (tr_type_data) ? tr_type_data.has_flag?(flag) : false
+  end
 
   #-----------------------------------------------------------------------------
 

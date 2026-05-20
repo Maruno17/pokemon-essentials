@@ -35,7 +35,7 @@ class Player < Trainer
   # @return [Array<Array>] downloaded Mystery Gift data
   attr_accessor :mystery_gifts
 
-  def initialize(name, trainer_type)
+  def initialize(name, tr_type)
     super
     @character_ID          = 0
     @outfit                = 0
@@ -70,7 +70,7 @@ class Player < Trainer
   end
 
   def trainer_type
-    return GameData::PlayerMetadata.get(@character_ID || 1).trainer_type
+    return GameData::PlayerMetadata.get(@character_ID || 1)&.trainer_type
   end
 
   # Sets the player's money. It can not exceed {Settings::MAX_MONEY}.
