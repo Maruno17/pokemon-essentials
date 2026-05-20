@@ -244,7 +244,14 @@ module GameData
       return @power
     end
 
-    def display_category(pkmn, move = nil); return @category; end
+    def display_category(pkmn, move = nil)
+      if !Settings::MOVE_CATEGORY_PER_MOVE
+        return 2 if status?
+        return (GameData::Type.get(@type).special_type) ? 1 : 0
+      end
+      return @category
+    end
+
     def display_accuracy(pkmn, move = nil); return @accuracy; end
 
     alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
