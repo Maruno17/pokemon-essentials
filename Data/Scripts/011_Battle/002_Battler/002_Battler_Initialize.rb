@@ -282,7 +282,7 @@ class Battle::Battler
     @effects[PBEffects::SyrupBomb]           = 0
     @effects[PBEffects::SyrupBombUser]       = -1
     @battle.allBattlers(true).each do |b|   # Other battlers no longer syruped by self
-      next if b.effects[PBEffects::SyrupBomb] != @index
+      next if b.effects[PBEffects::SyrupBombUser] != @index
       b.effects[PBEffects::SyrupBomb]     = 0
       b.effects[PBEffects::SyrupBombUser] = -1
     end
