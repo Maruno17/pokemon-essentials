@@ -63,9 +63,7 @@ class UIControls::TextBoxDropdownList < UIControls::TextBox
     # Create menu
     shown_options = @options
     if @value && @value != ""
-      shown_options = @options.select do |key, val|
-        key.downcase.include?(@value.downcase) || val.downcase.include?(@value.downcase)
-      end
+      shown_options = @options.select { |val| val.downcase.include?(@value.downcase) }
     end
     @dropdown_menu = UIControls::List.new(@text_box_rect.width + @button_rect.width, menu_height,
                                           @dropdown_menu_viewport, shown_options, TEXT_BOX_HEIGHT)
@@ -211,10 +209,7 @@ class UIControls::TextBoxDropdownList < UIControls::TextBox
     super
     # Filter the dropdown menu options based on @value if it changes
     if @dropdown_menu && @initial_value && @value != @initial_value
-      filtered_options = @options.select do |key, val|
-        key.downcase.include?(@value.downcase) || val.downcase.include?(@value.downcase)
-      end
-      @dropdown_menu.options = filtered_options
+      @dropdown_menu.options = @options.select { |val| val.downcase.include?(@value.downcase) }
     end
   end
 end

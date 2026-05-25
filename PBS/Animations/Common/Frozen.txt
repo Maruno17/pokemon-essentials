@@ -1,0 +1,49 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Frozen]
+Name = Essentials
+NoTarget = true
+Credit = Maruno
+<User>
+<Ice emitter>
+    Graphic = ice mist
+    Focus = User
+    SecondLayer = true
+    Emitter = NoMovement
+    EmitterRate = 20
+    RandomInvertAngle = true
+    SetZ = 0,20
+    SetFrame2 = 0,1
+    SetZ2 = 0,-10
+    SetEmitting = 0,true
+    SetEmitXRange = 0,64
+    SetEmitYRange = 0,64
+    MoveOpacity = 0,2,64
+    MoveOpacity2 = 0,2,192
+    MoveX2 = 0,10,16
+    MoveAngle2 = 0,12,15
+    MoveZoomX2 = 0,17,150
+    MoveZoomY2 = 0,17,150
+    MoveOpacity = 2,2,255
+    MoveOpacity2 = 2,2,0
+    MoveOpacity = 4,2,64
+    MoveOpacity2 = 4,2,160
+    SetEmitting = 6,false
+    MoveOpacity = 6,2,255
+    MoveOpacity2 = 6,2,-64
+    MoveOpacity = 8,2,64
+    MoveOpacity2 = 8,2,96
+    MoveOpacity = 10,2,255
+    MoveOpacity2 = 10,2,-128
+    MoveX2 = 10,7,24,EaseOut
+    MoveOpacity = 12,2,64
+    MoveOpacity2 = 12,2,32
+    MoveOpacity = 14,2,255
+    MoveOpacity2 = 14,3,-255
+    MoveOpacity = 16,2,64
+    MoveOpacity = 18,2,255
+    MoveOpacity = 20,2,0
+    SetVisible = 22,false
+<SE>
+    Play = 0,Common/Frozen,80
+    Play = 7,Common/Frozen,80
