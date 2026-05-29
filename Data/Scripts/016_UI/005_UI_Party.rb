@@ -711,6 +711,7 @@ class UI::PartyVisuals < UI::BaseVisuals
         (switching? || @cannot_cancel) ? pbPlayCancelSE : pbPlayCloseMenuSE
         return :quit
       else
+        pbPlayDecisionSE
         return :chosen   # A Pokémon
       end
     when Input::BACK

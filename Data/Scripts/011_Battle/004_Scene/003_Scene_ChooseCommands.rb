@@ -152,7 +152,7 @@ class Battle::Scene
       commands[:summary]       = _INTL("Summary")
       commands[:cancel]        = _INTL("Cancel")
       choice = screen.show_menu(_INTL("Do what with {1}?", pkmn.name), commands)
-      next canCancel if choice.nil?
+      next false if choice.nil?
       case choice
       when :select, :switch_in, :send_to_boxes
         real_party_index = -1
