@@ -211,13 +211,13 @@ class AnimationPlayer::ParticleSprite
       if @emitter_params[:period_x] != 0
         new_angle = @emitter_params[:angle]
         new_angle += (360 * delta_t / @emitter_params[:period_x]) * (@emitter_params[:clockwise] ? -1 : 1)
-        new_x = @values[:radius_x] * @emitter_params[:radius_x_mult] * Math.sin(new_angle * Math::PI / 180)
+        new_x = @values[:radius_x] * @emitter_params[:radius_x_mult] * Math.cos(new_angle * Math::PI / 180)
         @values[:base_x] = new_x
         changed_properties.push(:x)
       end
       if @emitter_params[:period_y] != 0
         new_angle = @emitter_params[:angle] + (360 * delta_t / @emitter_params[:period_y])
-        new_y = @values[:radius_y] * @emitter_params[:radius_y_mult] * Math.cos(new_angle * Math::PI / 180)
+        new_y = -@values[:radius_y] * @emitter_params[:radius_y_mult] * Math.sin(new_angle * Math::PI / 180)
         @values[:base_y] = new_y
         changed_properties.push(:y)
       end

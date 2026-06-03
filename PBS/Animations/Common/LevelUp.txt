@@ -1,0 +1,68 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,LevelUp]
+Name = Essentials
+NoTarget = true
+Credit = Maruno
+<User>
+    SetColor = 0,FFFFFF00
+    MoveColor = 0,7,FFFFFF80
+    MoveColor = 7,5,FFFFFF00
+<Circle>
+    Graphic = circle 1
+    Focus = User
+    SetY = 0,16
+    SetZ = 0,20
+    SetZoomX = 0,125
+    SetZoomY = 0,125
+    SetOpacity = 0,0
+    SetColor = 0,6080E0FF
+    MoveOpacity = 0,4,192
+    MoveColor = 0,4,6080E000
+    MoveZoomX = 0,5,225,EaseOut
+    MoveZoomY = 0,5,225,EaseOut
+    MoveOpacity = 4,3,0
+    MoveColor = 4,3,6080E0FF
+    SetVisible = 7,false
+<Glow>
+    Graphic = spark
+    Focus = User
+    SetY = 3,16
+    SetZ = 3,10
+    SetZoomX = 3,350
+    SetZoomY = 3,350
+    SetColor = 3,6080E040
+    MoveColor = 3,1,6080E000
+    MoveOpacity = 3,7,0
+    SetVisible = 10,false
+<Spark emitter>
+    Graphic = spark
+    Focus = User
+    Emitter = Polar
+    EmitterRate = 80
+    EmitterIntensity = 4
+    SetZ = 4,15
+    SetZoomX = 4,20
+    SetZoomY = 4,20
+    SetColor = 4,40C0C060
+    SetEmitting = 4,true
+    SetEmitY = 4,16
+    SetEmitAngle = 4,90
+    SetEmitAngleRange = 4,120
+    SetPeriodX = 4,9999
+    SetPeriodY = 4,9999
+    SetRadiusXRange = 4,10
+    SetRadiusYRange = 4,10
+    SetZoomRange = 4,20
+    SetRadiusX = 4,96
+    SetRadiusY = 4,96
+    MoveColor = 4,4,0060E080,EaseOut
+    MoveZoomX = 4,7,5
+    MoveZoomY = 4,7,5
+    MoveRadiusX = 4,7,144
+    MoveRadiusY = 4,7,144
+    SetEmitting = 7,false
+    MoveOpacity = 9,2,0
+    SetVisible = 11,false
+<SE>
+    Play = 0,Common/LevelUp,80
