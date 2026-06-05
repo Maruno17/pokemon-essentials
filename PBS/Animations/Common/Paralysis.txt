@@ -1,0 +1,41 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Paralysis]
+Name = Essentials
+NoTarget = true
+Credit = Maruno
+<User>
+    MoveColor = 0,10,000000FF
+    MoveColor = 12,10,00000000
+<Zap emitter>
+    Graphic = electricity 1
+    Focus = User
+    Emitter = NoMovement
+    EmitterRate = 40
+    RandomAngleRange = 180
+    RandomInvertFlip = true
+    SetFrame = 0,1
+    SetZ = 0,10
+    SetZoomX = 0,150
+    SetZoomY = 0,150
+    SetColor = 0,F8F840FF
+    SetEmitting = 0,true
+    SetEmitXRange = 0,32
+    SetEmitYRange = 0,32
+    SetZoomRange = 0,40
+    MoveZoomX = 0,7,50
+    MoveZoomY = 0,7,50
+    SetFlip = 1,true
+    SetFlip = 2,false
+    SetAngle = 2,180
+    SetFlip = 3,true
+    SetFlip = 4,false
+    SetAngle = 4,0
+    MoveOpacity = 4,3,0
+    SetFlip = 5,true
+    SetFlip = 6,false
+    SetFlip = 7,true
+    SetVisible = 7,false
+    SetEmitting = 8,false
+<SE>
+    Play = 0,Common/Paralysis,80,90
