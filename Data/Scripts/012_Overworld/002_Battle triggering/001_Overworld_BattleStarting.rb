@@ -77,12 +77,8 @@ class Game_Temp
   }
 
   def add_battle_rule(rule, var = nil)
-    rules = self.battle_rules
-    if BATTLE_RULES.keys.include?(rule.to_s.downcase)
-      BATTLE_RULES[rule.to_s.downcase][1].call(rules)
-    else
-      raise _INTL("Battle rule \"{1}\" does not exist.", rule)
-    end
+    raise _INTL("Battle rule \"{1}\" does not exist.", rule) if !BATTLE_RULES.keys.include?(rule.to_s.downcase)
+    BATTLE_RULES[rule.to_s.downcase][1].call(self.battle_rules, var)
   end
 end
 
