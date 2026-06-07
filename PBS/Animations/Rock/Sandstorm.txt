@@ -1,0 +1,77 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SANDSTORM]
+Name = Essentials
+NoUser = true
+NoTarget = true
+Credit = Maruno
+<Overlay>
+    Graphic = mist 1
+    Focus = Foreground
+    SetX = 0,392
+    SetY = 0,176
+    SetZ = 0,30
+    SetZoomX = 0,600
+    SetZoomY = 0,600
+    SetOpacity = 0,0
+    SetColor = 0,E0A840C0
+    MoveOpacity = 0,5,224
+    MoveX = 0,23,224
+    MoveY = 0,23,144
+    MoveOpacity = 18,5,0
+    SetVisible = 23,false
+<Grit emitter>
+    Graphic = grit
+    Focus = Foreground
+    Emitter = Helix
+    EmitterRate = 40
+    RandomAngleRange = 180
+    RandomInvertFlip = true
+    SetZ = 1,40
+    SetZoomX = 1,150
+    SetZoomY = 1,150
+    SetOpacity = 1,160
+    SetColor = 1,903000C0
+    SetEmitting = 1,true
+    SetEmitX = 1,384
+    SetEmitXRange = 1,80
+    SetEmitY = 1,144
+    SetEmitYRange = 1,144
+    SetEmitAngleRange = 1,180
+    SetPeriodX = 1,50
+    SetRadiusXRange = 1,20
+    SetZoomRange = 1,20
+    SetRadiusX = 1,200
+    MoveEmitX = 1,11,128
+    MoveOpacity = 11,2,0
+    SetEmitting = 12,false
+    SetVisible = 13,false
+<Dust emitter>
+    Graphic = smog 1
+    Focus = Foreground
+    Emitter = Helix
+    EmitterRate = 80
+    RandomAngleRange = 180
+    RandomInvertFlip = true
+    SetZ = 18,40
+    SetZoomX = 18,50
+    SetZoomY = 18,50
+    SetOpacity = 18,0
+    SetColor = 18,E0A840F8
+    SetEmitting = 18,true
+    SetEmitX = 18,320
+    SetEmitXRange = 18,80
+    SetEmitY = 18,144
+    SetEmitYRange = 18,144
+    SetEmitAngleRange = 18,180
+    SetPeriodX = 18,70
+    SetRadiusXRange = 18,20
+    SetZoomRange = 18,20
+    SetRadiusX = 18,320
+    MoveOpacity = 18,1,96
+    MoveEmitX = 18,7,192
+    MoveOpacity = 21,2,0
+    SetVisible = 23,false
+    SetEmitting = 25,false
+<SE>
+    Play = 0,Rock/Sandstorm,80
