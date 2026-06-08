@@ -4,6 +4,7 @@
 Name = Essentials
 NoUser = true
 NoTarget = true
+HidesDataBoxes = true
 Credit = Maruno
 <Overlay>
     Graphic = mist 1
