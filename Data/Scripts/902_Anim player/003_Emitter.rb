@@ -252,7 +252,7 @@ class AnimationPlayer::Emitter
   def create_particle_sprite_set_movement_values(particle_sprite, target_idx = -1)
     [
       [:emit_speed, :speed],
-      [:emit_angle, :angle],
+      [:emit_direction, :angle],
       [:emit_gravity, :gravity],
       [:emit_period_x, :period_x],
       [:emit_period_y, :period_y],

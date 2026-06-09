@@ -150,7 +150,7 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
          :mask_opacity, :mask_x, :mask_y, :mask_zoom_x, :mask_zoom_y,
          :emit_x, :emit_y, :emit_x_range, :emit_y_range,
          :emit_speed, :emit_speed_range,
-         :emit_angle, :emit_angle_range,
+         :emit_direction, :emit_direction_range,
          :emit_gravity, :emit_gravity_range,
          :emit_period_x, :emit_period_x_range,
          :emit_period_y, :emit_period_y_range,
