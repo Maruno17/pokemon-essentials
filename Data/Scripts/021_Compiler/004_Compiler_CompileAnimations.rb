@@ -201,6 +201,29 @@ module Compiler
                       particle[:name]) + "\n" + FileLineData.linereport
         end
       end
+      # Ensure the particle's coordinate system is correct
+      if particle[:polar_coordinates]
+        if particle[:x] || particle[:y]
+          raise _INTL("Particle \"{1}\" uses polar coordinates but has an X/Y command.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+      else
+        if particle[:r] || particle[:theta]
+          raise _INTL("Particle \"{1}\" doesn't use polar coordinates but has an R/Theta command.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+      end
+      if particle[:emitter_polar_coordinates]
+        if particle[:emit_x] || particle[:emit_x_range] || particle[:emit_y] || particle[:emit_y_range]
+          raise _INTL("Emitter \"{1}\" uses polar coordinates but has an EmitX/EmitY command.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+      else
+        if particle[:emit_r] || particle[:emit_r_range] || particle[:emit_theta] || particle[:emit_theta_range]
+          raise _INTL("Emitter \"{1}\" doesn't use polar coordinates but has an EmitR/EmitTheta command.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+      end
       # Ensure the "Play"-type commands are exclusive to the "SE" particle, and
       # that the "SE" particle has no other commands
       if particle[:name] == "SE"

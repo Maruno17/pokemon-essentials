@@ -281,6 +281,8 @@ class AnimationEditor
       GameData::Animation::PARTICLE_DEFAULT_VALUES[:focus])
     part_properties.add_labelled_checkbox(:second_layer, _INTL("Second layer"),
       GameData::Animation::PARTICLE_DEFAULT_VALUES[:second_layer])
+    part_properties.add_labelled_checkbox(:polar_coordinates, _INTL("Use polar coordinates"),
+      GameData::Animation::PARTICLE_DEFAULT_VALUES[:polar_coordinates])
     # OppMove replacements
     part_properties.add_underlined_label(:opposing_label, _INTL("If on opposing side..."))
     part_properties.add_labelled_checkbox(:foe_invert_x, _INTL("Invert X"),
@@ -319,6 +321,8 @@ class AnimationEditor
       GameData::Animation::PARTICLE_DEFAULT_VALUES[:emitter_rate])
     part_properties.add_labelled_number_text_box(:emitter_intensity, _INTL("Sprites/emission"), 1, 20,
       GameData::Animation::PARTICLE_DEFAULT_VALUES[:emitter_intensity])
+    part_properties.add_labelled_checkbox(:emitter_polar_coordinates, _INTL("Use polar coordinates"),
+      GameData::Animation::PARTICLE_DEFAULT_VALUES[:emitter_polar_coordinates])
     # Particle existence
     part_properties.add_fitted_button(:duplicate, _INTL("Duplicate this particle"))
     part_properties.add_fitted_button(:delete, _INTL("Delete this particle"))

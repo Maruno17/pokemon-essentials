@@ -145,10 +145,11 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
       ctrl.set_interactive_rects
       @rows[row][LIST_CONTROL] = ctrl
       return
-    when :x, :y, :z, :zoom_x, :zoom_y, :angle, :opacity, :frame,
+    when :x, :y, :r, :theta, :z, :zoom_x, :zoom_y, :angle, :opacity, :frame,
          :x2, :y2, :z2, :zoom_x2, :zoom_y2, :angle2, :opacity2, :frame2,
          :mask_opacity, :mask_x, :mask_y, :mask_zoom_x, :mask_zoom_y,
-         :emit_x, :emit_y, :emit_x_range, :emit_y_range,
+         :emit_x, :emit_y, :emit_r, :emit_theta,
+         :emit_x_range, :emit_y_range, :emit_r_range, :emit_theta_range,
          :emit_speed, :emit_speed_range,
          :emit_direction, :emit_direction_range,
          :emit_gravity, :emit_gravity_range,

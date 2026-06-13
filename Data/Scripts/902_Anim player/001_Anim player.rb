@@ -302,6 +302,8 @@ class AnimationPlayer
     # Add all commands
     particle.each_pair do |property, cmds|
       next if !cmds.is_a?(Array) || cmds.empty?
+      next if [:x, :y].include?(property) && particle[:polar_coordinates]
+      next if [:r, :theta].include?(property) && !particle[:polar_coordinates]
       cmds.each do |cmd|
         if cmd[1] > 0
           particle_sprite.add_move_process(property, cmd[0] * @slowdown / @fps.to_f, cmd[1] * @slowdown / @fps.to_f, cmd[2], cmd[3] || :linear)
@@ -340,7 +342,12 @@ class AnimationPlayer
     emitter.set_battler_filenames(@battler_filenames)
     emitter.set_focus_coords(@user_coords, @target_coords)
     emitter.set_side_sizes(@side_sizes)
+    set_up_emitter_parameters(emitter, particle)
     add_emitter_commands(emitter, particle)
+  end
+
+  def set_up_emitter_parameters(emitter, particle)
+    emitter.emitter_polar_coordinates = particle[:emitter_polar_coordinates]
   end
 
   def add_emitter_commands(emitter, particle)
@@ -352,6 +359,8 @@ class AnimationPlayer
     # Add all commands
     particle.each_pair do |property, cmds|
       next if !cmds.is_a?(Array) || cmds.empty?
+      next if [:x, :y].include?(property) && particle[:polar_coordinates]
+      next if [:r, :theta].include?(property) && !particle[:polar_coordinates]
       cmds.each do |cmd|
         if AnimationPlayer::Emitter::PARTICLE_PROPERTIES.include?(property)
           if cmd[1] > 0

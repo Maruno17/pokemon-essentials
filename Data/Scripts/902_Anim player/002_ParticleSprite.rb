@@ -306,6 +306,46 @@ class AnimationPlayer::ParticleSprite
       apply_sprite_property_override(:angle)
     when :y2
       @sprite[1].y = @sprite[0].y + value if @sprite[1]
+    when :r, :theta
+      dist = @values[:r]
+      dir = @values[:theta]
+      base_x = dist * Math.cos(dir * Math::PI / 180)
+      base_y = -dist * Math.sin(dir * Math::PI / 180)
+      base_x = base_x.round + (@property_offsets[:x] || 0)
+      base_x += @values[:base_x] || 0   # Used by emitters
+      base_x *= -1 if @foe_invert_x
+      base_y = base_y.round + (@property_offsets[:y] || 0)
+      base_y += @values[:base_y] || 0   # Used by emitters
+      base_y *= -1 if @foe_invert_y
+      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :x, base_x, @focus_xy)
+      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :y, base_y, @focus_xy)
+      @sprite[0].x += @offset_xy[0]
+      @sprite[0].y += @offset_xy[1]
+      apply_sprite_property(:x2, @values[:x2])
+      apply_sprite_property(:y2, @values[:y2])
+      if @tiled_sprites
+        while @sprite[0].x < 0
+          @sprite[0].x += @sprite[0].src_rect.width
+        end
+        while @sprite[0].x >= @sprite[0].src_rect.width
+          @sprite[0].x -= @sprite[0].src_rect.width
+        end
+        @tiled_sprites.each_with_index do |spr, i|
+          spr.x = @sprite[0].x
+          spr.x -= @sprite[0].src_rect.width if i.even?
+        end
+        while @sprite[0].y < 0
+          @sprite[0].y += @sprite[0].src_rect.height
+        end
+        while @sprite[0].y >= @sprite[0].src_rect.height
+          @sprite[0].y -= @sprite[0].src_rect.height
+        end
+        @tiled_sprites.each_with_index do |spr, i|
+          spr.y = @sprite[0].y
+          spr.y -= @sprite[0].src_rect.height if i > 0
+        end
+      end
+      apply_sprite_property_override(:angle)
     when :z
       value += (@property_offsets[property] || 0)
       AnimationPlayer::Helper.apply_z_focus_to_sprite(@sprite[0], value, @focus_z)

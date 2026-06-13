@@ -75,7 +75,7 @@ class AnimationEditor
     when :particle_index
       @components[:timeline].particle_index = value
       refresh
-    when :x, :y, :emit_x, :emit_y, :angle
+    when :x, :y, :r, :theta, :emit_x, :emit_y, :emit_r, :emit_theta, :angle
       particle = @anim[:particles][particle_index]
       before_all = particle[property] && particle[property].none? { |cmd| cmd[0] <= keyframe }
       after_all = particle[property] && particle[property].none? { |cmd| cmd[0] + cmd[1] >= keyframe }

@@ -3,13 +3,14 @@
 #===============================================================================
 class AnimationPlayer::Emitter
   attr_accessor :slowdown
+  attr_accessor :emitter_polar_coordinates
 
   # These properties are used by individual ParticleSprites spawned by this
   # emitter, and aren't used by the emitter itself so don't need updating here.
   PARTICLE_PROPERTIES = [:frame, :frame2,
                          :blending, :blending2,
                          :flip, :flip2,
-                         :x, :x2, :y, :y2, :z, :z2,
+                         :x, :x2, :y, :y2, :r, :theta, :z, :z2,
                          :radius_x, :radius_y, :radius_z,
                          :zoom_x, :zoom_x2, :zoom_y, :zoom_y2,
                          :angle, :angle2,
@@ -293,13 +294,24 @@ class AnimationPlayer::Emitter
 
   def create_particle_sprite_set_base_property_offsets(particle_sprite, target_idx = -1)
     # X, Y
-    start_x = @values[:emit_x]
-    start_x_range = @values[:emit_x_range]
-    start_x += rand(-start_x_range, start_x_range) if start_x_range > 0
+    if @emitter_polar_coordinates
+      start_r = @values[:emit_r]
+      start_r_range = @values[:emit_r_range]
+      start_r += rand(-start_r_range, start_r_range) if start_r_range > 0
+      start_theta = @values[:emit_theta]
+      start_theta_range = @values[:emit_theta_range]
+      start_theta += rand(-start_theta_range, start_theta_range) if start_theta_range > 0
+      start_x = (start_r * Math.cos(start_theta * Math::PI / 180)).round
+      start_y = (-start_r * Math.sin(start_theta * Math::PI / 180)).round
+    else
+      start_x = @values[:emit_x]
+      start_x_range = @values[:emit_x_range]
+      start_x += rand(-start_x_range, start_x_range) if start_x_range > 0
+      start_y = @values[:emit_y]
+      start_y_range = @values[:emit_y_range]
+      start_y += rand(-start_y_range, start_y_range) if start_y_range > 0
+    end
     particle_sprite.set_base_property_offset(:x, start_x)
-    start_y = @values[:emit_y]
-    start_y_range = @values[:emit_y_range]
-    start_y += rand(-start_y_range, start_y_range) if start_y_range > 0
     particle_sprite.set_base_property_offset(:y, start_y)
     # Angle
     relative_to_index = index_of_particle_focus(target_idx)
@@ -328,7 +340,7 @@ class AnimationPlayer::Emitter
     # randomness added above
     if !particle_sprite.is_battler_sprite?
       if AnimationPlayer::Helper.get_first_command_frame(@particle, PARTICLE_PROPERTIES) >= 0
-        [:x, :y, :priority, :zoom_x, :zoom_y, :angle, :flip, :opacity].each do |property|
+        [:x, :y, :r, :theta, :priority, :zoom_x, :zoom_y, :angle, :flip, :opacity].each do |property|
           particle_sprite.add_set_process(property, @next_emission, GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[property])
         end
         particle_sprite.add_set_process(:visible, @next_emission, true)
