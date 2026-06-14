@@ -283,6 +283,9 @@ class AnimationPlayer::Emitter
     end
     # Clockwise
     particle_sprite.emitter_params[:clockwise] = @values[:emit_clockwise]
+    # Multipliers
+    particle_sprite.emitter_params[:zoom_multiplier] = @values[:emit_zoom_multiplier] / 100.0
+    particle_sprite.emitter_params[:opacity_multiplier] = @values[:emit_opacity_multiplier] / 100.0
     # X/Y speed
     speed = particle_sprite.emitter_params[:speed]
     angle = particle_sprite.emitter_params[:angle]

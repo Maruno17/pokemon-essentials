@@ -357,6 +357,7 @@ class AnimationPlayer::ParticleSprite
       @sprite[1].z = @sprite[0].z + value if @sprite[1]
     when :zoom_x
       value += (@property_offsets[property] || 0)
+      value *= @emitter_params[:zoom_multiplier] || 1
       value *= @emitter_params[:zoom_mult] || 1
       value *= @emitter_params[:zoom_x_mult] || 1
       @sprite[0].zoom_x = value / 100.0
@@ -365,6 +366,7 @@ class AnimationPlayer::ParticleSprite
       @sprite[1].zoom_x = @sprite[0].zoom_x * value / 100.0 if @sprite[1]
     when :zoom_y
       value += (@property_offsets[property] || 0)
+      value *= @emitter_params[:zoom_multiplier] || 1
       value *= @emitter_params[:zoom_mult] || 1
       value *= @emitter_params[:zoom_y_mult] || 1
       @sprite[0].zoom_y = value / 100.0
@@ -391,13 +393,17 @@ class AnimationPlayer::ParticleSprite
         @tiled_sprites.each { |spr| spr.visible = value }
       end
     when :opacity
-      @sprite[0].opacity = value + (@property_offsets[property] || 0)
+      value += (@property_offsets[property] || 0)
+      value *= @emitter_params[:opacity_multiplier] || 1
+      @sprite[0].opacity = value
       apply_sprite_property(:opacity2, @values[:opacity2]) if @sprite[1]
       if @tiled_sprites
         @tiled_sprites.each { |spr| spr.opacity = @sprite[0].opacity }
       end
     when :opacity2
-      @sprite[1].opacity = @sprite[0].opacity + value if @sprite[1]
+      if @sprite[1]
+        @sprite[1].opacity = @sprite[0].opacity + (value * (@emitter_params[:opacity_multiplier] || 1))
+      end
     when :color
       @sprite[0].color = Color.new_from_rgb(value)
       if @tiled_sprites
