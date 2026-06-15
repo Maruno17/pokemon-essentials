@@ -434,8 +434,8 @@ class Battle::Move
     if user.effects[PBEffects::MeFirst]
       multipliers[:power_multiplier] *= 1.5
     end
-    if user.effects[PBEffects::HelpingHand]
-      multipliers[:power_multiplier] *= 1.5
+    if user.effects[PBEffects::HelpingHand] > 0
+      user.effects[PBEffects::HelpingHand].times { multipliers[:power_multiplier] *= 1.5 }
     end
     if user.effects[PBEffects::Charge] > 0 && type == :ELECTRIC
       multipliers[:power_multiplier] *= 2

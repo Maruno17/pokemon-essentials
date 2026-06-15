@@ -363,7 +363,7 @@ class Battle::Move::UserConsumeTargetBerry < Battle::Move
   end
 
   def pbEffectAfterAllHits(user, target)
-    return if user.fainted? || target.fainted?
+    return if user.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
     return if !target.item || !target.item.is_berry? || target.unlosableItem?(target.item)
     return if target.hasActiveAbility?(:STICKYHOLD) && !target.beingMoldBroken?

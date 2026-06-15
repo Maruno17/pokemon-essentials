@@ -202,7 +202,7 @@ class Battle::Battler
     @effects[PBEffects::GemConsumed]         = nil
     @effects[PBEffects::GigatonHammer]       = false
     @effects[PBEffects::Grudge]              = false
-    @effects[PBEffects::HelpingHand]         = false
+    @effects[PBEffects::HelpingHand]         = 0
     @effects[PBEffects::HyperBeam]           = 0
     @effects[PBEffects::Illusion]            = nil
     if hasActiveAbility?(:ILLUSION)

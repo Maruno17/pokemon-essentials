@@ -767,7 +767,7 @@ class Battle
       battler.effects[PBEffects::Flinch]           = false
       battler.effects[PBEffects::FocusPunch]       = false
       battler.effects[PBEffects::FollowMe]         = 0
-      battler.effects[PBEffects::HelpingHand]      = false
+      battler.effects[PBEffects::HelpingHand]      = 0
       battler.effects[PBEffects::HyperBeam]        -= 1 if battler.effects[PBEffects::HyperBeam] > 0
       battler.effects[PBEffects::KingsShield]      = false
       battler.effects[PBEffects::LaserFocus]       -= 1 if battler.effects[PBEffects::LaserFocus] > 0

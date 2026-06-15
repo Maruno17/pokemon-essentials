@@ -39,7 +39,9 @@ class Battle::Scene
   def pbCommandMenuEx(idxBattler, commands)
     pbShowWindow(COMMAND_BOX)
     cw = @sprites["commandWindow"]
-    cw.set_index_and_commands(@lastCmd[idxBattler], commands)
+    last_cmd = @lastCmd[idxBattler]
+    last_cmd = commands.first if !commands.include?(last_cmd)
+    cw.set_index_and_commands(last_cmd, commands)
     cw.active = true
     pbSelectBattler(idxBattler)
     ret = :cancel

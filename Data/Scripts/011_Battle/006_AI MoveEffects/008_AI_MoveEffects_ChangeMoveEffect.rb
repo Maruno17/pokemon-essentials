@@ -237,11 +237,6 @@ Battle::AI::Handlers::MoveEffectScore.add("DoublePowerAfterFusionBolt",
 #===============================================================================
 #
 #===============================================================================
-Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("PowerUpAllyMove",
-  proc { |move, user, target, ai, battle|
-    next target.effects[PBEffects::HelpingHand]
-  }
-)
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PowerUpAllyMove",
   proc { |score, move, user, target, ai, battle|
     next Battle::AI::MOVE_USELESS_SCORE if !target.check_for_move { |m| m.damagingMove? }
