@@ -163,7 +163,7 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
          :radius_x, :radius_y, :radius_z
       vals = AnimationEditor::PROPERTY_RANGES[row] || [0, 0]
       default = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[row] || 0
-      ctrl = UIControls::NumberTextBox.new(ctrl_width, ctrl_height, @list_viewport, *vals, default)
+      ctrl = UIControls::FittedNumberTextBox.new(ctrl_width, ctrl_height, @list_viewport, *vals, default)
     when :flip, :flip2, :invert_color, :invert_color2, :emitting, :emit_clockwise
       default = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[row] || false
       ctrl = UIControls::Checkbox.new(ctrl_width, ctrl_height, @list_viewport, default)

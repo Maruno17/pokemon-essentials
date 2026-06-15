@@ -508,7 +508,8 @@ class AnimationEditor
         start_frame, end_frame = end_frame, start_frame
       end
       properties = []
-      AnimationEditor::ListedParticle::PROPERTY_GROUPS.each_value do |props|
+      AnimationEditor::ListedParticle::PROPERTY_GROUPS.each_pair do |key, props|
+        next if [:mask_group, :second_layer_group].include?(key)
         props.each do |prop|
           next if [:color, :tone].include?(prop)
           properties.push(prop) if GameData::Animation.property_can_interpolate?(prop)

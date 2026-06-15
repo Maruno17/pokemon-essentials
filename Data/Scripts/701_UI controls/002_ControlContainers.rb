@@ -263,6 +263,15 @@ class UIControls::ListedContainer < UIControls::BaseContainer
     add_number_text_box(id, min_value, max_value, value, true)
   end
 
+  def add_fitted_number_text_box(id, min_value, max_value, value, has_label = false)
+    add_control(id, UIControls::FittedNumberTextBox.new(*control_size(has_label), @viewport, min_value, max_value, value), has_label)
+  end
+
+  def add_labelled_fitted_number_text_box(id, label, min_value, max_value, value)
+    add_label(id, label)
+    add_number_text_box(id, min_value, max_value, value, true)
+  end
+
   def add_button(id, button_text, has_label = false)
     add_control(id, UIControls::Button.new(*control_size(has_label, true), @viewport, button_text), has_label)
   end

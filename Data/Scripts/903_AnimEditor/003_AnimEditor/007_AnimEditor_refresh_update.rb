@@ -205,13 +205,14 @@ class AnimationEditor
     editor.get_control(:end_keyframe).value = @components[:timeline].duration
     # Set all value boxes to 0
     properties = []
-    AnimationEditor::ListedParticle::PROPERTY_GROUPS.each_value do |props|
+    AnimationEditor::ListedParticle::PROPERTY_GROUPS.each_pair do |key, props|
+      next if [:mask_group, :second_layer_group].include?(key)
       props.each do |prop|
         next if [:color, :tone].include?(prop)
         properties.push(prop) if GameData::Animation.property_can_interpolate?(prop)
       end
     end
-    properties.each { |property| editor.get_control(property).value = 0 }
+    properties.each { |property| editor.get_control(property)&.value = 0 }
   end
 
   def refresh_component_values(component_sym, extra_value = nil)

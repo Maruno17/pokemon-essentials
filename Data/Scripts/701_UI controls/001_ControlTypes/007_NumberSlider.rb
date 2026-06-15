@@ -111,12 +111,14 @@ class UIControls::NumberSlider < UIControls::BaseControl
     when :minus
       # Constant decrement of value while pressing the minus button
       if @hover_area == @captured_area && Input.repeat?(Input::MOUSELEFT)
-        self.value -= 1
+        increment = (Input.pressex?(:LCTRL) || Input.pressex?(:RCTRL)) ? 10 : 1
+        self.value -= increment
       end
     when :plus
       # Constant incrementing of value while pressing the plus button
       if @hover_area == @captured_area && Input.repeat?(Input::MOUSELEFT)
-        self.value += 1
+        increment = (Input.pressex?(:LCTRL) || Input.pressex?(:RCTRL)) ? 10 : 1
+        self.value += increment
       end
     when :slider
       # Constant updating of value depending on mouse's x position

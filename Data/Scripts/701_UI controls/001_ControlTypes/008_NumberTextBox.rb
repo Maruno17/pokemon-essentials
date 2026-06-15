@@ -5,9 +5,10 @@ class UIControls::NumberTextBox < UIControls::TextBox
   attr_reader :min_value
   attr_reader :max_value
 
-  TEXT_BOX_X  = 0
-  ARROW_WIDTH = 12
-  ARROW_GRAPHIC = %w(
+  TEXT_BOX_X     = 0
+  TEXT_BOX_WIDTH = 65
+  ARROW_WIDTH    = 12
+  ARROW_GRAPHIC  = %w(
     . . . . . . . . . . . .
     . . . . . . . . . . . .
     . . . . . X X . . . . .
@@ -61,9 +62,9 @@ class UIControls::NumberTextBox < UIControls::TextBox
 
   def set_interactive_rects
     @text_box_rect = Rect.new(TEXT_BOX_X, (height - TEXT_BOX_HEIGHT) / 2,
-                              width - (TEXT_BOX_X * 2) - ARROW_WIDTH, TEXT_BOX_HEIGHT)
-    @plus_rect = Rect.new(width - ARROW_WIDTH, @text_box_rect.y, ARROW_WIDTH, TEXT_BOX_HEIGHT / 2)
-    @minus_rect = Rect.new(width - ARROW_WIDTH, @text_box_rect.y + (TEXT_BOX_HEIGHT / 2), ARROW_WIDTH, TEXT_BOX_HEIGHT / 2)
+                              TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT)
+    @plus_rect = Rect.new(TEXT_BOX_WIDTH, @text_box_rect.y, ARROW_WIDTH, TEXT_BOX_HEIGHT / 2)
+    @minus_rect = Rect.new(TEXT_BOX_WIDTH, @text_box_rect.y + (TEXT_BOX_HEIGHT / 2), ARROW_WIDTH, TEXT_BOX_HEIGHT / 2)
     @interactions = {
       :text_box => @text_box_rect,
       :plus => @plus_rect,
@@ -147,12 +148,14 @@ class UIControls::NumberTextBox < UIControls::TextBox
     when :minus
       # Constant decrement of value while pressing the minus button
       if @hover_area == @captured_area && Input.repeat?(Input::MOUSELEFT)
-        self.value -= 1
+        increment = (Input.pressex?(:LCTRL) || Input.pressex?(:RCTRL)) ? 10 : 1
+        self.value -= increment
       end
     when :plus
       # Constant incrementing of value while pressing the plus button
       if @hover_area == @captured_area && Input.repeat?(Input::MOUSELEFT)
-        self.value += 1
+        increment = (Input.pressex?(:LCTRL) || Input.pressex?(:RCTRL)) ? 10 : 1
+        self.value += increment
       end
     end
   end

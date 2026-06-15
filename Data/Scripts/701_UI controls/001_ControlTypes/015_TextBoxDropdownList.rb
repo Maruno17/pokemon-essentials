@@ -173,7 +173,7 @@ class UIControls::TextBoxDropdownList < UIControls::TextBox
     if @dropdown_menu
       if @dropdown_menu.changed?
         new_val = @dropdown_menu.value
-        new_val = @options[new_val] if new_val.is_a?(Integer)
+        new_val = @dropdown_menu.options[new_val] if new_val.is_a?(Integer)
         if new_val && new_val != @value
           self.value = new_val
           set_changed
