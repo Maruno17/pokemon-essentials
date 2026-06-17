@@ -521,7 +521,7 @@ class Battle::Battler
     # Airborne-based immunity to Ground moves
     if move.damagingMove? && move.calcType == :GROUND &&
        target.airborne? && !move.hitsFlyingTargets?
-      if target.hasActiveAbility?(:LEVITATE) && !target.beingMoldBroken?
+      if (target.hasActiveAbility?(:LEVITATE) || target.hasActiveAbility?(:EELEVATE)) && !target.beingMoldBroken?
         if show_message
           @battle.pbShowAbilitySplash(target)
           if Battle::Scene::USE_ABILITY_SPLASH

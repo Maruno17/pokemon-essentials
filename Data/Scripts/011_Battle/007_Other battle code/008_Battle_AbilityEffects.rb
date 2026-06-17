@@ -1448,6 +1448,12 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:DRAGONSMAW,
   }
 )
 
+Battle::AbilityEffects::DamageCalcFromUser.add(:FIREMANE,
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:attack_multiplier] *= 1.5 if type == :FIRE
+  }
+)
+
 Battle::AbilityEffects::DamageCalcFromUser.add(:FLAREBOOST,
   proc { |ability, user, target, move, mults, power, type|
     mults[:power_multiplier] *= 1.5 if user.burned? && move.specialMove?
@@ -2479,6 +2485,8 @@ Battle::AbilityEffects::OnEndOfUsingMove.add(:BEASTBOOST,
     end
   }
 )
+
+Battle::AbilityEffects::OnEndOfUsingMove.copy(:BEASTBOOST, :EELEVATE)
 
 Battle::AbilityEffects::OnEndOfUsingMove.add(:CHILLINGNEIGH,
   proc { |ability, user, targets, move, battle|

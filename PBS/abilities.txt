@@ -1251,9 +1251,17 @@ Description = The Pokémon's moves that make contact ignore the target's protect
 Name = Dragonize
 Description = The Pokémon's Normal-type moves become Dragon-type and are powered up a little.
 #-------------------------------
+[EELEVATE]
+Name = Eelevate
+Description = The Pokémon is immune to Ground-type moves. Dealing a KO raises its best stat.
+#-------------------------------
 [MEGASOL]
 Name = Mega Sol
 Description = The Pokémon can use its moves as if the weather were harsh sunlight.
+#-------------------------------
+[FIREMANE]
+Name = Fire Mane
+Description = Powers up the Pokémon's Fire-type moves.
 #-------------------------------
 [SPICYSPRAY]
 Name = Spicy Spray
