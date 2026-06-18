@@ -328,6 +328,14 @@ def pbReplaceMessageText(text, msg_window)
     main_color, shadow_color = get_text_colors_for_windowskin(msg_window&.windowskin, $1.to_i, isDarkSkin)
     next shadowc3tag(main_color, shadow_color)
   end
+  # Dark version of icon
+  if isDarkSkin
+    text.gsub!(/<icon=([^>\n\r]+)>/i) do
+      filename = $1
+      next "<icon=" + filename + "_dark>" if pbResolveBitmap("Graphics/Icons/" + filename + "_dark")
+      next "<icon=" + filename + ">"
+    end
+  end
 end
 
 #===============================================================================
