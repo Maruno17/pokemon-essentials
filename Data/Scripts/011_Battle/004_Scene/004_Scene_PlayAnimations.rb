@@ -426,7 +426,7 @@ class Battle::Scene
 
   # Returns an array of GameData::Animation if a new animation(s) is found.
   # Return [animation index, shouldn't be flipped] if an old animation is found.
-  def find_move_animation(move_id, version, user_index)
+  def find_move_animation(move_id, version, user_index, targets)
     # Get animation
     anims = find_move_animation_for_move(move_id, version, user_index)
     return anims if anims
@@ -443,10 +443,12 @@ class Battle::Scene
       default_idx = move_data.category
       status = move_data.status?
     end
+    default_idx = 2 if targets.nil? || targets.empty?   # Treat as non-targeting status move
     # Check for a default animation
     if move_type
-      default_idx += 3 if target_data.num_targets > 1 ||
-                          (target_data.num_targets > 0 && status)
+      default_idx += 3 if targets && !targets.empty? &&
+                          (target_data.num_targets > 1 ||
+                           (target_data.num_targets > 0 && status))
       wanted_move = ANIMATION_DEFAULTS_FOR_TYPE_CATEGORY[move_type][default_idx]
       anims = find_move_animation_for_move(wanted_move, 0, user_index)
       return anims if anims
@@ -458,7 +460,7 @@ class Battle::Scene
       end
     end
     # Use Tackle or Defense Curl's animation
-    if target_data.num_targets == 0 && target_data.id != :None
+    if (target_data.num_targets == 0 || targets.nil? || targets.empty?) && target_data.id != :None
       return find_move_animation_for_move(ANIMATION_DEFAULTS[1], 0, user_index)
     end
     return find_move_animation_for_move(ANIMATION_DEFAULTS[0], 0, user_index)
@@ -577,7 +579,7 @@ class Battle::Scene
 
   # Plays a move animation.
   def pbAnimation(move_id, user, targets, version = 0)
-    anims = find_move_animation(move_id, version, user&.index)
+    anims = find_move_animation(move_id, version, user&.index, targets)
     return if !anims || anims.empty?
     if anims[0].is_a?(GameData::Animation)   # New format animation
       pbSaveShadows do
