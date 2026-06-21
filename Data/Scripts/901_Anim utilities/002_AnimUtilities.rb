@@ -106,7 +106,18 @@ class AnimationEditor
       ret.push([file.sub(File.extname(file), ""), file])
     end
     ret.delete_if { |f| blacklist.any? { |add| add.upcase == f[0].upcase } }
-    ret.sort! { |a, b| a[0].downcase <=> b[0].downcase }
+    ret.sort! do |a, b|   # Sorts files in subfolders above ones in main folder
+      if a[0][/\//]
+        if b[0][/\//]
+          next a[0].downcase <=> b[0].downcase
+        else
+          next -1
+        end
+      elsif b[0][/\//]
+        next 1
+      end
+      next a[0].downcase <=> b[0].downcase
+    end
     return ret
   end
 end
