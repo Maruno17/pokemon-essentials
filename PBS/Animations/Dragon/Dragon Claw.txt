@@ -1,0 +1,121 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,DRAGONCLAW]
+Name = Essentials
+HidesDataBoxes = true
+Credit = Maruno
+<User>
+    FoeInvertX = true
+    SetColor = 0,F8000000
+    MoveColor = 0,7,F80000A0
+    MoveColor = 8,7,F8000000
+    MoveColor = 16,7,F80000A0
+    MoveX = 21,1,48
+    MoveColor = 24,7,F8000000
+    MoveX = 25,1,0
+    MoveX = 29,1,48
+    MoveX = 33,1,0
+<Target>
+    FoeInvertX = true
+    MoveX = 21,1,-4
+    MoveX = 22,2,4
+    MoveX = 24,2,-4
+    MoveX = 26,1,0
+    MoveX = 29,1,-4
+    MoveX = 30,2,4
+    MoveX = 32,2,-4
+    MoveX = 34,2,4
+    MoveX = 36,1,0
+<Thin strobe emitter>
+    Graphic = strobe 1
+    Focus = User
+    Emitter = Straight
+    EmitterRate = 30
+    SetZ = 0,10
+    SetZoomX = 0,15
+    SetZoomY = 0,250
+    SetOpacity = 0,0
+    SetEmitting = 0,true
+    SetEmitXRange = 0,96
+    SetEmitY = 0,96
+    SetEmitYRange = 0,32
+    SetEmitSpeed = 0,1000
+    SetEmitDirection = 0,90
+    SetZoomXRange = 0,5
+    SetZoomYRange = 0,20
+    MoveOpacity = 0,3,192
+    MoveOpacity = 5,4,0
+    SetEmitting = 23,false
+<Thick strobe emitter>
+    Graphic = strobe 1
+    Focus = User
+    SecondLayer = true
+    Emitter = Straight
+    EmitterRate = 20
+    SetZ = 0,20
+    SetZoomX = 0,70
+    SetOpacity = 0,0
+    SetZoomX2 = 0,70
+    SetOpacity2 = 0,-255
+    SetEmitting = 0,true
+    SetEmitXRange = 0,96
+    SetEmitY = 0,96
+    SetEmitYRange = 0,32
+    SetEmitSpeed = 0,800
+    SetEmitDirection = 0,90
+    SetZoomRange = 0,20
+    MoveOpacity = 0,2,192
+    MoveZoomY = 0,9,200
+    SetColor = 2,E0608000
+    SetColor2 = 2,E0608000
+    MoveOpacity2 = 2,2,-64
+    MoveColor = 2,5,E06080FF
+    MoveY2 = 2,7,96
+    MoveZoomY2 = 2,7,150
+    MoveColor2 = 2,7,E06080FF
+    MoveOpacity2 = 4,2,32
+    MoveOpacity = 5,4,0
+    SetVisible = 9,false
+    SetEmitting = 23,false
+<Slash left upper>
+    Graphic = slash
+    Focus = Target
+    SetFlip = 21,true
+    SetX = 21,-64
+    SetY = 21,32
+    SetZ = 21,10
+    MoveFrame = 21,4,4
+    MoveOpacity = 44,1,0
+    SetVisible = 45,false
+<Slash left lower>
+    Graphic = slash
+    Focus = Target
+    SetFlip = 21,true
+    SetX = 21,-64
+    SetY = 21,-32
+    SetZ = 21,10
+    MoveFrame = 21,4,4
+    MoveOpacity = 44,1,0
+    SetVisible = 45,false
+<Slash right upper>
+    Graphic = slash
+    Focus = Target
+    SetX = 29,64
+    SetY = 29,32
+    SetZ = 29,10
+    MoveFrame = 29,4,4
+    MoveOpacity = 44,1,0
+    SetVisible = 45,false
+<Slash right lower>
+    Graphic = slash
+    Focus = Target
+    SetX = 29,64
+    SetY = 29,-32
+    SetZ = 29,10
+    MoveFrame = 29,4,4
+    MoveOpacity = 44,1,0
+    SetVisible = 45,false
+<SE>
+    Play = 0,Dragon/Dragon Claw charge,80
+    Play = 21,Dragon/Dragon Claw slash,80
+    Play = 29,Dragon/Dragon Claw slash,80

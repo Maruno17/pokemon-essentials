@@ -124,7 +124,7 @@ class AnimationPlayer::ParticleSprite
     end
     # MoveXYZ
     case process[0]
-    when :color
+    when :color, :color2
       new_val = []
       4.times do |i|   # R, G, B, A
         start_val = process[6][2 * i, 2].to_i(16)
@@ -136,7 +136,7 @@ class AnimationPlayer::ParticleSprite
         new_val.push(sprintf("%02X", val))
       end
       @values[process[0]] = new_val.join
-    when :tone
+    when :tone, :tone2
       new_val = []
       4.times do |i|   # R, G, B, G
         start_val = process[6][3 * i, 3].to_i(16)

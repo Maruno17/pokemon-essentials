@@ -128,7 +128,7 @@ class UIControls::TonePicker < UIControls::BaseControl
       when :blue  then ton = this_tone.blue
       when :gray  then ton = this_tone.gray
       end
-      ctrl = UIControls::NumberTextBox.new(
+      ctrl = UIControls::FittedNumberTextBox.new(
         PICKER_BOX_SLIDER_CONTROL_WIDTH, PICKER_BOX_ROW_HEIGHT, @picker_box_viewport,
         (id == :gray) ? 0 : -255, 255, ton
       )

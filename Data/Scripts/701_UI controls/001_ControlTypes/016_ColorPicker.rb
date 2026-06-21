@@ -124,7 +124,7 @@ class UIControls::ColorPicker < UIControls::BaseControl
       when :blue  then col = this_color.blue
       when :alpha then col = this_color.alpha
       end
-      ctrl = UIControls::NumberTextBox.new(
+      ctrl = UIControls::FittedNumberTextBox.new(
         PICKER_BOX_SLIDER_CONTROL_WIDTH, PICKER_BOX_ROW_HEIGHT, @picker_box_viewport,
         0, 255, col
       )
@@ -135,7 +135,7 @@ class UIControls::ColorPicker < UIControls::BaseControl
       @picker_controls[id] = ctrl
     end
     # TextBox for RGBA value
-    ctrl = UIControls::HexNumberTextBox.new(
+    ctrl = UIControls::FittedHexNumberTextBox.new(
       PICKER_BOX_HEX_BOX_WIDTH, PICKER_BOX_ROW_HEIGHT, @picker_box_viewport, @value[0, 6]
     )
     ctrl.x = PICKER_BOX_SLIDER_CONTROL_X + PICKER_BOX_SLIDER_CONTROL_WIDTH - PICKER_BOX_HEX_BOX_WIDTH
