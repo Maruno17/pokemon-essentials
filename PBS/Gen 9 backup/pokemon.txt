@@ -16258,6 +16258,7 @@ Shape = Bipedal
 Category = Sword Blade
 Pokedex = Bisharp pursues prey in the company of a large group of Pawniard. Then Bisharp finishes off the prey.
 Generation = 5
+WildItemUncommon = LEADERSCREST
 Evolution = KINGAMBIT,Counter,3
 #-------------------------------
 [BOUFFALANT]
