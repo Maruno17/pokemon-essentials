@@ -131,6 +131,7 @@ class Battle
       pkmn.species_data.evolutions&.each do |evo|
         evo_data = GameData::Evolution.try_get(evo[1])
         next if !evo_data || evo_data.level_up_proc.nil? || evo_data.any_level_up
+        next if pkmn.level < evo[2]
         exp = (exp * 1.2).floor
         break
       end
