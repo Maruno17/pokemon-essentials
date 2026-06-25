@@ -569,13 +569,15 @@ class AnimationEditor::Canvas < Sprite
     return if !spr.visible
     # Set position, graphic and ox/oy for emitter
     if (particle[:emitter_type] || :none) != :none
+      spr.bitmap = @emitter_bitmap
       SPRITE_PROPERTIES_TO_SET.each do |property|
         val = ([:x, :y, :r, :theta].include?(property)) ? values[property] : GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[property]
         apply_sprite_property(particle, index, property, val, target_idx, spr, spr2)
       end
-      # Emitter
+      offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, spr)
+      spr.x -= offset_xy[0]
+      spr.y -= offset_xy[1]
       spr.z = 99997
-      spr.bitmap = @emitter_bitmap
       spr.opacity = 255
       spr.ox = spr.bitmap.width / 2
       spr.oy = spr.bitmap.height / 2

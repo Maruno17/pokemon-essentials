@@ -96,7 +96,7 @@ module AnimationPlayer::Helper
     case particle[:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
-      ret[1] += sprite.bitmap.height / 2 if sprite
+      ret[1] += sprite.bitmap.height / 2 if sprite&.bitmap
     end
     return ret
   end
