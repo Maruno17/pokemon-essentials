@@ -1480,14 +1480,12 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
       elsif @index == -3   # Exit button
         pbPlayDecisionSE
         return :exit_screen
-      else
-        if pokemon
-          return :rearrange_pokemon if @sub_mode == :rearrange_pokemon
-          return :rearrange_items if @sub_mode == :rearrange_items
-          pbPlayDecisionSE
-          select_pokemon
-          return :interact_menu
-        end
+      elsif pokemon
+        return :rearrange_pokemon if @sub_mode == :rearrange_pokemon
+        return :rearrange_items if @sub_mode == :rearrange_items
+        pbPlayDecisionSE
+        select_pokemon
+        return :interact_menu
       end
     when Input::ACTION
       if can_access_screen_menu?
@@ -1502,11 +1500,15 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
       return :clear_sub_mode if (@sub_mode || :none) != :none
       return :exit_screen
     when Input::QUICK_UP
-      pbPlayCursorSE
-      go_to_previous_box
+      if !showing_party_panel?
+        pbPlayCursorSE
+        go_to_previous_box
+      end
     when Input::QUICK_DOWN
-      pbPlayCursorSE
-      go_to_next_box
+      if !showing_party_panel?
+        pbPlayCursorSE
+        go_to_next_box
+      end
     end
     return nil
   end
@@ -1879,8 +1881,9 @@ class UI::PokemonStorage < UI::BaseScreen
       if screen.show_confirm_serious_message(_INTL("Do you really want to release this Pokémon?"))
         $bag.add(pkmn.item_id) if pkmn.hasItem?
         pkmn_name = pkmn.name
-        screen.visuals.release_pokemon
-        screen.storage.pbDelete(screen.box, screen.index) if !screen.holding_pokemon?
+        pkmn_being_held = screen.holding_pokemon?
+        screen.visuals.release_pokemon   # Also deletes the Pokémon if it's held
+        screen.storage.pbDelete(screen.box, screen.index) if !pkmn_being_held
         screen.refresh
         screen.show_message(_INTL("{1} was released.", pkmn_name))
         screen.show_message(_INTL("Bye-bye, {1}!", pkmn_name))
