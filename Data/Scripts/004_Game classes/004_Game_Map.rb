@@ -12,6 +12,7 @@ class Game_Map
   attr_reader   :priorities               # priority table
   attr_reader   :terrain_tags             # terrain tag table
   attr_reader   :events                   # events
+  attr_reader   :active_events            # events that need an update
   attr_accessor :panorama_name            # panorama file name
   attr_accessor :panorama_hue             # panorama hue
   attr_accessor :fog_name                 # fog file name
@@ -27,6 +28,10 @@ class Game_Map
   attr_accessor :battleback_name          # battleback file name
   attr_reader   :display_x                # display x-coordinate * 128
   attr_reader   :display_y                # display y-coordinate * 128
+  attr_reader   :display_x_tiles
+  attr_reader   :display_y_tiles
+  attr_reader   :screen_width_tiles
+  attr_reader   :screen_height_tiles
   attr_accessor :need_refresh             # refresh request flag
 
   TILE_WIDTH  = 32
@@ -58,9 +63,15 @@ class Game_Map
     @fog_opacity_timer_start = nil
     self.display_x           = 0
     self.display_y           = 0
+    @display_x_tiles         = 0
+    @display_y_tiles         = 0
+    @screen_width_tiles      = Graphics.width / TILE_WIDTH
+    @screen_height_tiles     = Graphics.height / TILE_HEIGHT
     @need_refresh            = false
     EventHandlers.trigger(:on_game_map_setup, map_id, @map, tileset)
     @events                  = {}
+    @active_events           = []
+    @display_changed         = true
     @map.events.each_key do |i|
       @events[i]             = Game_Event.new(@map_id, @map.events[i], self)
     end
@@ -323,6 +334,7 @@ class Game_Map
   def display_x=(value)
     return if @display_x == value
     @display_x = value
+    @display_changed = true
     if metadata&.snap_edges
       max_x = (self.width - (Graphics.width.to_f / TILE_WIDTH)) * REAL_RES_X
       @display_x = [0, [@display_x, max_x].min].max
@@ -333,6 +345,7 @@ class Game_Map
   def display_y=(value)
     return if @display_y == value
     @display_y = value
+    @display_changed = true
     if metadata&.snap_edges
       max_y = (self.height - (Graphics.height.to_f / TILE_HEIGHT)) * REAL_RES_Y
       @display_y = [0, [@display_y, max_y].min].max
@@ -436,6 +449,18 @@ class Game_Map
     @need_refresh = false
   end
 
+  def register_event(event)
+    return if event.active
+    @active_events.push(event)
+    event.active = true
+  end
+
+  def unregister_event(event)
+    return if !event.active
+    @active_events.delete(event)
+    event.active = false
+  end
+
   def update
     uptime_now = System.uptime
     play_now = $stats.play_time
@@ -459,7 +484,18 @@ class Game_Map
     end
     # Only update events that are on-screen
     if !$game_temp.in_menu
-      @events.each_value { |event| event.update }
+      if @display_changed
+        @display_x_tiles = @display_x / REAL_RES_X
+        @display_y_tiles = @display_y / REAL_RES_Y
+      end
+      @active_events.dup.each { |event| event.update }
+      if @display_changed
+        @events.each_value do |event|
+          next if event.active
+          register_event(event) if event.should_update?(true)
+        end
+        @display_changed = false
+      end
     end
     # Update common events
     @common_events.each_value { |common_event| common_event.update }
