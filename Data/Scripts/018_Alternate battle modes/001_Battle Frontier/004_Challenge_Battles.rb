@@ -61,9 +61,9 @@ def pbOrganizedBattleEx(opponent, challengedata)
   # Set various other properties in the battle class
   BattleCreationHelperMethods.prepare_battle(battle)
   # Perform the battle itself
-  decision = 0
+  outcome = Battle::Outcome::UNDECIDED
   pbBattleAnimation(pbGetTrainerBattleBGM(opponent)) do
-    pbSceneStandby { decision = battle.pbStartBattle }
+    pbSceneStandby { outcome = battle.pbStartBattle }
   end
   Input.update
   # Restore both parties to their original levels
@@ -83,17 +83,17 @@ def pbOrganizedBattleEx(opponent, challengedata)
   end
   # Save the record of the battle
   $game_temp.last_battle_record = nil
-  if [1, 2, 5].include?(decision)   # if win, loss or draw
+  if [Battle::Outcome::WIN, Battle::Outcome::LOSE, Battle::Outcome::DRAW].include?(outcome)
     $game_temp.last_battle_record = battle.pbDumpRecord
   end
-  case decision
-  when 1   # Won
+  case outcome
+  when Battle::Outcome::WIN   # Won
     $stats.trainer_battles_won += 1
-  when 2, 3, 5   # Lost, fled, draw
+  when Battle::Outcome::LOSE, Battle::Outcome::FLEE, Battle::Outcome::DRAW
     $stats.trainer_battles_lost += 1
   end
   # Return true if the player won the battle, and false if any other result
-  return (decision == 1)
+  return (outcome == Battle::Outcome::WIN)
 end
 
 #===============================================================================

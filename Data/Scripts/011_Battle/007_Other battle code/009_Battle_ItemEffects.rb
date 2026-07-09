@@ -9,6 +9,8 @@ module Battle::ItemEffects
   OnStatLoss                      = ItemHandlerHash.new
   # Battler's status problem
   StatusCure                      = ItemHandlerHash.new
+  # Battler's stat stages
+  StatLossImmunity                = ItemHandlerHash.new
   # Priority and turn order
   PriorityBracketChange           = ItemHandlerHash.new
   PriorityBracketUse              = ItemHandlerHash.new
@@ -48,14 +50,14 @@ module Battle::ItemEffects
   # Running from battle
   CertainEscapeFromBattle         = ItemHandlerHash.new   # Smoke Ball
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.trigger(hash, *args, ret: false)
     new_ret = hash.trigger(*args)
     return (!new_ret.nil?) ? new_ret : ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerSpeedCalc(item, battler, mult)
     return trigger(SpeedCalc, item, battler, mult, ret: mult)
@@ -65,7 +67,7 @@ module Battle::ItemEffects
     return trigger(WeightCalc, item, battler, w, ret: w)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerHPHeal(item, battler, battle, forced)
     return trigger(HPHeal, item, battler, battle, forced)
@@ -75,13 +77,19 @@ module Battle::ItemEffects
     return trigger(OnStatLoss, item, user, move_user, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerStatusCure(item, battler, battle, forced)
     return trigger(StatusCure, item, battler, battle, forced)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
+  def self.triggerStatLossImmunity(item, battler, stat, battle, show_messages)
+    return trigger(StatLossImmunity, item, battler, stat, battle, show_messages)
+  end
+
+  #-----------------------------------------------------------------------------
 
   def self.triggerPriorityBracketChange(item, battler, battle)
     return trigger(PriorityBracketChange, item, battler, battle, ret: 0)
@@ -91,13 +99,13 @@ module Battle::ItemEffects
     PriorityBracketUse.trigger(item, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerOnMissingTarget(item, user, target, move, hit_num, battle)
     OnMissingTarget.trigger(item, user, target, move, hit_num, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerAccuracyCalcFromUser(item, mods, user, target, move, type)
     AccuracyCalcFromUser.trigger(item, mods, user, target, move, type)
@@ -107,7 +115,7 @@ module Battle::ItemEffects
     AccuracyCalcFromTarget.trigger(item, mods, user, target, move, type)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerDamageCalcFromUser(item, user, target, move, mults, power, type)
     DamageCalcFromUser.trigger(item, user, target, move, mults, power, type)
@@ -117,15 +125,15 @@ module Battle::ItemEffects
     DamageCalcFromTarget.trigger(item, user, target, move, mults, power, type)
   end
 
-  def self.triggerCriticalCalcFromUser(item, user, target, crit_stage)
-    return trigger(CriticalCalcFromUser, item, user, target, crit_stage, ret: crit_stage)
+  def self.triggerCriticalCalcFromUser(item, user, target, move, crit_stage)
+    return trigger(CriticalCalcFromUser, item, user, target, move, crit_stage, ret: crit_stage)
   end
 
-  def self.triggerCriticalCalcFromTarget(item, user, target, crit_stage)
-    return trigger(CriticalCalcFromTarget, item, user, target, crit_stage, ret: crit_stage)
+  def self.triggerCriticalCalcFromTarget(item, user, target, move, crit_stage)
+    return trigger(CriticalCalcFromTarget, item, user, target, move, crit_stage, ret: crit_stage)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerOnBeingHit(item, user, target, move, battle)
     OnBeingHit.trigger(item, user, target, move, battle)
@@ -135,7 +143,7 @@ module Battle::ItemEffects
     return trigger(OnBeingHitPositiveBerry, item, battler, battle, forced)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerAfterMoveUseFromTarget(item, battler, user, move, switched_battlers, battle)
     AfterMoveUseFromTarget.trigger(item, battler, user, move, switched_battlers, battle)
@@ -153,7 +161,7 @@ module Battle::ItemEffects
     return trigger(OnEndOfUsingMoveStatRestore, item, battler, battle, forced)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerExpGainModifier(item, battler, exp)
     return trigger(ExpGainModifier, item, battler, exp, ret: -1)
@@ -165,7 +173,7 @@ module Battle::ItemEffects
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerWeatherExtender(item, weather, duration, battler, battle)
     return trigger(WeatherExtender, item, weather, duration, battler, battle, ret: duration)
@@ -179,7 +187,7 @@ module Battle::ItemEffects
     return trigger(TerrainStatBoost, item, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerEndOfRoundHealing(item, battler, battle)
     EndOfRoundHealing.trigger(item, battler, battle)
@@ -189,7 +197,7 @@ module Battle::ItemEffects
     EndOfRoundEffect.trigger(item, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerCertainSwitching(item, switcher, battle)
     return trigger(CertainSwitching, item, switcher, battle)
@@ -207,7 +215,7 @@ module Battle::ItemEffects
     return trigger(OnIntimidated, item, battler, battle)
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def self.triggerCertainEscapeFromBattle(item, battler)
     return trigger(CertainEscapeFromBattle, item, battler)
@@ -346,7 +354,7 @@ Battle::ItemEffects::HPHeal.add(:MAGOBERRY,
 Battle::ItemEffects::HPHeal.add(:MICLEBERRY,
   proc { |item, battler, battle, forced|
     next false if !forced && !battler.canConsumePinchBerry?
-    next false if !battler.effects[PBEffects::MicleBerry]
+    next false if battler.effects[PBEffects::MicleBerry]
     battle.pbCommonAnimation("EatBerry", battler) if !forced
     battler.effects[PBEffects::MicleBerry] = true
     itemName = GameData::Item.get(item).name
@@ -628,6 +636,18 @@ Battle::ItemEffects::StatusCure.add(:RAWSTBERRY,
 )
 
 #===============================================================================
+# StatLossImmunity handlers
+#===============================================================================
+
+Battle::ItemEffects::StatLossImmunity.add(:CLEARAMULET,
+  proc { |item, battler, stat, battle, showMessages|
+    battle.pbDisplay(_INTL("The effects of {1}'s {2} prevent its stats from being lowered!",
+                           battler.pbThis, GameData::Item.get(item).name)) if showMessages
+    next true
+  }
+)
+
+#===============================================================================
 # PriorityBracketChange handlers
 #===============================================================================
 
@@ -730,6 +750,8 @@ Battle::ItemEffects::DamageCalcFromUser.add(:ADAMANTORB,
   }
 )
 
+Battle::ItemEffects::DamageCalcFromUser.copy(:ADAMANTORB, :ADAMANTCRYSTAL)
+
 Battle::ItemEffects::DamageCalcFromUser.add(:BLACKBELT,
   proc { |item, user, target, move, mults, power, type|
     mults[:power_multiplier] *= 1.2 if type == :FIGHTING
@@ -771,6 +793,14 @@ Battle::ItemEffects::DamageCalcFromUser.add(:CHOICESPECS,
     mults[:power_multiplier] *= 1.5 if move.specialMove?
   }
 )
+
+Battle::ItemEffects::DamageCalcFromUser.add(:CORNERSTONEMASK,
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.2 if user.isSpecies?(:OGERPON)
+  }
+)
+
+Battle::ItemEffects::DamageCalcFromUser.copy(:CORNERSTONEMASK, :HEARTHFLAMEEMASK, :WELLSPRINGMASK)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:DARKGEM,
   proc { |item, user, target, move, mults, power, type|
@@ -858,6 +888,8 @@ Battle::ItemEffects::DamageCalcFromUser.add(:GRISEOUSORB,
   }
 )
 
+Battle::ItemEffects::DamageCalcFromUser.copy(:GRISEOUSORB, :GRISEOUSCORE)
+
 Battle::ItemEffects::DamageCalcFromUser.add(:GROUNDGEM,
   proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:GROUND, move, type, mults)
@@ -899,6 +931,8 @@ Battle::ItemEffects::DamageCalcFromUser.add(:LUSTROUSORB,
     end
   }
 )
+
+Battle::ItemEffects::DamageCalcFromUser.copy(:LUSTROUSORB, :LUSTROUSGLOBE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:MAGNET,
   proc { |item, user, target, move, mults, power, type|
@@ -959,11 +993,13 @@ Battle::ItemEffects::DamageCalcFromUser.add(:NORMALGEM,
   }
 )
 
-Battle::ItemEffects::DamageCalcFromUser.add(:PIXIEPLATE,
+Battle::ItemEffects::DamageCalcFromUser.add(:FAIRYFEATHER,
   proc { |item, user, target, move, mults, power, type|
     mults[:power_multiplier] *= 1.2 if type == :FAIRY
   }
 )
+
+Battle::ItemEffects::DamageCalcFromUser.copy(:FAIRYFEATHER, :PIXIEPLATE)
 
 Battle::ItemEffects::DamageCalcFromUser.add(:POISONBARB,
   proc { |item, user, target, move, mults, power, type|
@@ -982,6 +1018,12 @@ Battle::ItemEffects::DamageCalcFromUser.add(:POISONGEM,
 Battle::ItemEffects::DamageCalcFromUser.add(:PSYCHICGEM,
   proc { |item, user, target, move, mults, power, type|
     user.pbMoveTypePoweringUpGem(:PSYCHIC, move, type, mults)
+  }
+)
+
+Battle::ItemEffects::DamageCalcFromUser.add(:PUNCHINGGLOVE,
+  proc { |item, user, target, move, mults, power, type|
+    mults[:power_multiplier] *= 1.1 if move.punchingMove?
   }
 )
 
@@ -1238,13 +1280,13 @@ Battle::ItemEffects::DamageCalcFromTarget.add(:YACHEBERRY,
 #===============================================================================
 
 Battle::ItemEffects::CriticalCalcFromUser.add(:LUCKYPUNCH,
-  proc { |item, user, target, c|
+  proc { |item, user, target, move, c|
     next c + 2 if user.isSpecies?(:CHANSEY)
   }
 )
 
 Battle::ItemEffects::CriticalCalcFromUser.add(:RAZORCLAW,
-  proc { |item, user, target, c|
+  proc { |item, user, target, move, c|
     next c + 1
   }
 )
@@ -1252,7 +1294,7 @@ Battle::ItemEffects::CriticalCalcFromUser.add(:RAZORCLAW,
 Battle::ItemEffects::CriticalCalcFromUser.copy(:RAZORCLAW, :SCOPELENS)
 
 Battle::ItemEffects::CriticalCalcFromUser.add(:LEEK,
-  proc { |item, user, target, c|
+  proc { |item, user, target, move, c|
     next c + 2 if user.isSpecies?(:FARFETCHD) || user.isSpecies?(:SIRFETCHD)
   }
 )
@@ -1549,7 +1591,7 @@ Battle::ItemEffects::AfterMoveUseFromTarget.add(:REDCARD,
     battle.pbDisplay(_INTL("{1} held up its {2} against {3}!",
        battler.pbThis, battler.itemName, user.pbThis(true)))
     battler.pbConsumeItem
-    if user.hasActiveAbility?(:SUCTIONCUPS) && !battle.moldBreaker
+    if user.hasActiveAbility?(:SUCTIONCUPS) && !user.being_mold_broken?
       battle.pbShowAbilitySplash(user)
       if Battle::Scene::USE_ABILITY_SPLASH
         battle.pbDisplay(_INTL("{1} anchors itself!", user.pbThis))
@@ -1763,7 +1805,7 @@ Battle::ItemEffects::WeatherExtender.add(:HEATROCK,
 
 Battle::ItemEffects::WeatherExtender.add(:ICYROCK,
   proc { |item, weather, duration, battler, battle|
-    next 8 if weather == :Hail
+    next 8 if [:Hail, :Snowstorm].include?(weather)
   }
 )
 

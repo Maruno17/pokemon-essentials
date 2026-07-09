@@ -1,9 +1,11 @@
+#===============================================================================
 # NOTE: "Graphics/UI/statuses.png" also contains icons for being fainted and for
 #       having Pokérus, in that order, at the bottom of the graphic.
 #       "Graphics/UI/Battle/icon_statuses.png" also contains an icon for bad
 #       poisoning (toxic), at the bottom of the graphic.
 #       Both graphics automatically handle varying numbers of defined statuses,
 #       as long as their extra icons remain at the bottom of them.
+#===============================================================================
 module GameData
   class Status
     attr_reader :id
@@ -13,11 +15,15 @@ module GameData
 
     DATA = {}
 
+    ICON_SIZE = [44, 16]
+
     extend ClassMethodsSymbols
     include InstanceMethods
 
     def self.load; end
     def self.save; end
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id            = hash[:id]
@@ -33,6 +39,8 @@ module GameData
   end
 end
 
+#===============================================================================
+#
 #===============================================================================
 
 GameData::Status.register({

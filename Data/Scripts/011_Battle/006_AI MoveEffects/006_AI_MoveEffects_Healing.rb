@@ -126,7 +126,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CureTargetStatusHealUser
 #===============================================================================
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("HealUserByTargetAttackLowerTargetAttack1",
   proc { |move, user, target, ai, battle|
-    if !battle.moldBreaker && target.has_active_ability?(:CONTRARY)
+    if target.has_active_ability?(:CONTRARY) && !target.being_mold_broken?
       next target.statStageAtMax?(:ATTACK)
     end
     next target.statStageAtMin?(:ATTACK)
@@ -148,11 +148,11 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealUserByTargetAttackLo
         heal_amt = target.rough_stat(:ATTACK)
         heal_amt *= 1.3 if user.has_active_item?(:BIGROOT)
         heal_amt = [heal_amt, user.totalhp - user.hp].min
-        if heal_amt > user.totalhp * 0.3   # Only modify the score if it'll heal a decent amount
+        if heal_amt > user.totalhp * 0.2   # Only modify the score if it'll heal a decent amount
           if user.hp < user.totalhp * 0.5
             score += 20 * (user.totalhp - user.hp) / user.totalhp   # +10 to +20
           end
-          score += 20 * heal_amt / user.totalhp   # +6 to +20
+          score += 20 * heal_amt / user.totalhp   # +4 to +20
         end
       end
     end
@@ -175,11 +175,11 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealUserByHalfOfDamageDo
         heal_amt = rough_dmg / 2
         heal_amt *= 1.3 if user.has_active_item?(:BIGROOT)
         heal_amt = [heal_amt, user.totalhp - user.hp].min
-        if heal_amt > user.totalhp * 0.3   # Only modify the score if it'll heal a decent amount
+        if heal_amt > user.totalhp * 0.2   # Only modify the score if it'll heal a decent amount
           if user.hp < user.totalhp * 0.5
             score += 20 * (user.totalhp - user.hp) / user.totalhp   # +10 to +20
           end
-          score += 20 * heal_amt / user.totalhp   # +6 to +20
+          score += 20 * heal_amt / user.totalhp   # +4 to +20
         end
       end
     end
@@ -213,11 +213,11 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealUserByThreeQuartersO
         heal_amt = rough_dmg * 0.75
         heal_amt *= 1.3 if user.has_active_item?(:BIGROOT)
         heal_amt = [heal_amt, user.totalhp - user.hp].min
-        if heal_amt > user.totalhp * 0.3   # Only modify the score if it'll heal a decent amount
+        if heal_amt > user.totalhp * 0.2   # Only modify the score if it'll heal a decent amount
           if user.hp < user.totalhp * 0.5
             score += 20 * (user.totalhp - user.hp) / user.totalhp   # +10 to +20
           end
-          score += 20 * heal_amt / user.totalhp   # +6 to +20
+          score += 20 * heal_amt / user.totalhp   # +4 to +20
         end
       end
     end
@@ -456,7 +456,7 @@ Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfOfTotalHP",
 #===============================================================================
 Battle::AI::Handlers::MoveFailureCheck.add("UserLosesHalfOfTotalHPExplosive",
   proc { |move, user, ai, battle|
-    next !battle.moldBreaker && battle.pbCheckGlobalAbility(:DAMP)
+    next !battle.pbCheckGlobalAbility(:DAMP, true).nil?
   }
 )
 Battle::AI::Handlers::MoveEffectScore.copy("UserLosesHalfOfTotalHP",

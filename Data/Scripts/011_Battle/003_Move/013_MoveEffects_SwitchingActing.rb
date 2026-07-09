@@ -12,7 +12,7 @@ class Battle::Move::FleeFromBattle < Battle::Move
 
   def pbEffectGeneral(user)
     @battle.pbDisplay(_INTL("{1} fled from battle!", user.pbThis))
-    @battle.decision = 3   # Escaped
+    @battle.decision = Battle::Outcome::FLEE
   end
 end
 
@@ -52,7 +52,7 @@ class Battle::Move::SwitchOutUserStatusMove < Battle::Move
   def pbEffectGeneral(user)
     if user.wild?
       @battle.pbDisplay(_INTL("{1} fled from battle!", user.pbThis))
-      @battle.decision = 3   # Escaped
+      @battle.decision = Battle::Outcome::FLEE
     end
   end
 end
@@ -155,7 +155,7 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
   def canMagicCoat?;            return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
+    if target.hasActiveAbility?(:SUCTIONCUPS) && !target.beingMoldBroken?
       if show_message
         @battle.pbShowAbilitySplash(target)
         if Battle::Scene::USE_ABILITY_SPLASH
@@ -196,7 +196,7 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
   end
 
   def pbEffectAgainstTarget(user, target)
-    @battle.decision = 3 if target.wild?   # Escaped from battle
+    @battle.decision = Battle::Outcome::FLEE if target.wild?
   end
 
   def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers)
@@ -206,7 +206,7 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
       next if b.fainted? || b.damageState.unaffected
       next if b.wild?
       next if b.effects[PBEffects::Ingrain]
-      next if b.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
+      next if b.hasActiveAbility?(:SUCTIONCUPS) && !b.beingMoldBroken?
       newPkmn = @battle.pbGetReplacementPokemonIndex(b.index, true)   # Random
       next if newPkmn < 0
       @battle.pbRecallAndReplace(b.index, newPkmn, true)
@@ -230,7 +230,7 @@ class Battle::Move::SwitchOutTargetDamagingMove < Battle::Move
     if target.wild? && target.allAllies.length == 0 && @battle.canRun &&
        target.level <= user.level &&
        (target.effects[PBEffects::Substitute] == 0 || ignoresSubstitute?(user))
-      @battle.decision = 3   # Escaped from battle
+      @battle.decision = Battle::Outcome::FLEE
     end
   end
 
@@ -241,7 +241,7 @@ class Battle::Move::SwitchOutTargetDamagingMove < Battle::Move
       next if b.fainted? || b.damageState.unaffected || b.damageState.substitute
       next if b.wild?
       next if b.effects[PBEffects::Ingrain]
-      next if b.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
+      next if b.hasActiveAbility?(:SUCTIONCUPS) && !b.beingMoldBroken?
       newPkmn = @battle.pbGetReplacementPokemonIndex(b.index, true)   # Random
       next if newPkmn < 0
       @battle.pbRecallAndReplace(b.index, newPkmn, true)
@@ -868,7 +868,7 @@ class Battle::Move::DisableTargetStatusMoves < Battle::Move
     end
     return true if pbMoveFailedAromaVeil?(user, target, show_message)
     if Settings::MECHANICS_GENERATION >= 6 && target.hasActiveAbility?(:OBLIVIOUS) &&
-       !@battle.moldBreaker
+       !target.beingMoldBroken?
       if show_message
         @battle.pbShowAbilitySplash(target)
         if Battle::Scene::USE_ABILITY_SPLASH

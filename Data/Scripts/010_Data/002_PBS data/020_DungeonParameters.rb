@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class DungeonParameters
     attr_reader :id, :area, :version
@@ -29,7 +32,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "dungeon_parameters.dat"
     PBS_BASE_FILENAME = "dungeon_parameters"
-
     SCHEMA = {
       "SectionName"      => [:id,                      "mV"],
       "DungeonSize"      => [:dungeon_size,            "vv"],
@@ -64,6 +66,8 @@ module GameData
       area_version = (DATA[trial].nil?) ? area : trial
       return (DATA.has_key?(area_version)) ? DATA[area_version] : self.new({})
     end
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id                             = hash[:id]

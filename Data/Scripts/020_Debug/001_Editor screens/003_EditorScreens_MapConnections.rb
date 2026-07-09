@@ -1,5 +1,5 @@
 #===============================================================================
-# Miniature game map drawing
+# Miniature game map drawing.
 #===============================================================================
 class MapSprite
   def initialize(map, viewport = nil)
@@ -134,7 +134,7 @@ class RegionMapSprite
 end
 
 #===============================================================================
-# Visual Editor (map connections)
+# Visual Editor (map connections).
 #===============================================================================
 class MapScreenScene
   def getMapSprite(id)

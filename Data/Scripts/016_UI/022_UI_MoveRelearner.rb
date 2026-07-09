@@ -1,5 +1,5 @@
 #===============================================================================
-# Scene class for handling appearance of the screen
+# Scene class for handling appearance of the screen.
 #===============================================================================
 class MoveRelearner_Scene
   VISIBLEMOVES = 4
@@ -54,8 +54,8 @@ class MoveRelearner_Scene
     overlay.clear
     @pokemon.types.each_with_index do |type, i|
       type_number = GameData::Type.get(type).icon_position
-      type_rect = Rect.new(0, type_number * 28, 64, 28)
-      type_x = (@pokemon.types.length == 1) ? 400 : 366 + (70 * i)
+      type_rect = Rect.new(0, type_number * GameData::Type::ICON_SIZE[1], *GameData::Type::ICON_SIZE)
+      type_x = (@pokemon.types.length == 1) ? 400 : 366 + ((GameData::Type::ICON_SIZE[0] + 6) * i)
       overlay.blt(type_x, 70, @typebitmap.bitmap, type_rect)
     end
     textpos = [
@@ -68,7 +68,7 @@ class MoveRelearner_Scene
       if moveobject
         moveData = GameData::Move.get(moveobject)
         type_number = GameData::Type.get(moveData.display_type(@pokemon)).icon_position
-        imagepos.push([_INTL("Graphics/UI/types"), 12, yPos - 4, 0, type_number * 28, 64, 28])
+        imagepos.push([_INTL("Graphics/UI/types"), 12, yPos - 4, 0, type_number * GameData::Type::ICON_SIZE[1], *GameData::Type::ICON_SIZE])
         textpos.push([moveData.name, 80, yPos, :left, Color.new(248, 248, 248), Color.black])
         textpos.push([_INTL("PP"), 112, yPos + 32, :left, Color.new(64, 64, 64), Color.new(176, 176, 176)])
         if moveData.total_pp > 0
@@ -95,7 +95,7 @@ class MoveRelearner_Scene
     textpos.push([accuracy == 0 ? "---" : "#{accuracy}%", 468, 184, :center,
                   Color.new(64, 64, 64), Color.new(176, 176, 176)])
     pbDrawTextPositions(overlay, textpos)
-    imagepos.push(["Graphics/UI/category", 436, 116, 0, category * 28, 64, 28])
+    imagepos.push(["Graphics/UI/category", 436, 116, 0, category * CATEGORY_ICON_SIZE[1], *CATEGORY_ICON_SIZE])
     if @sprites["commands"].index < @moves.length - 1
       imagepos.push(["Graphics/UI/Move Reminder/buttons", 48, 350, 0, 0, 76, 32])
     end
@@ -107,7 +107,7 @@ class MoveRelearner_Scene
                Color.new(64, 64, 64), Color.new(176, 176, 176))
   end
 
-  # Processes the scene
+  # Processes the scene.
   def pbChooseMove
     oldcmd = -1
     pbActivateWindow(@sprites, "commands") do
@@ -130,7 +130,7 @@ class MoveRelearner_Scene
     end
   end
 
-  # End the scene here
+  # End the scene here.
   def pbEndScene
     pbFadeOutAndHide(@sprites) { pbUpdate }
     pbDisposeSpriteHash(@sprites)
@@ -140,7 +140,7 @@ class MoveRelearner_Scene
 end
 
 #===============================================================================
-# Screen class for handling game logic
+# Screen class for handling game logic.
 #===============================================================================
 class MoveRelearnerScreen
   def initialize(scene)

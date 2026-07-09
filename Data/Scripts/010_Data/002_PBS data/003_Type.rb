@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class Type
     attr_reader :id
@@ -14,7 +17,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "types.dat"
     PBS_BASE_FILENAME = "types"
-
     SCHEMA = {
       "SectionName"   => [:id,            "m"],
       "Name"          => [:real_name,     "s"],
@@ -26,9 +28,12 @@ module GameData
       "Immunities"    => [:immunities,    "*m"],
       "Flags"         => [:flags,         "*s"]
     }
+    ICON_SIZE = [64, 28]
 
     extend ClassMethodsSymbols
     include InstanceMethods
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id              = hash[:id]
@@ -69,7 +74,8 @@ module GameData
 end
 
 #===============================================================================
-
+#
+#===============================================================================
 module Effectiveness
   INEFFECTIVE                   = 0
   NOT_VERY_EFFECTIVE            = 1

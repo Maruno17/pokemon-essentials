@@ -1,7 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 module PBEffects
-  #===========================================================================
-  # These effects apply to a battler
-  #===========================================================================
+  #-----------------------------------------------------------------------------
+  # These effects apply to a battler.
+  #-----------------------------------------------------------------------------
+
   AquaRing            = 0
   Attract             = 1
   BanefulBunker       = 2
@@ -9,6 +13,7 @@ module PBEffects
   Bide                = 4
   BideDamage          = 5
   BideTarget          = 6
+  BurningBulwark      = 1107
   BurnUp              = 7
   Charge              = 8
   ChoiceBand          = 9
@@ -23,6 +28,7 @@ module PBEffects
   DestinyBondTarget   = 18
   Disable             = 19
   DisableMove         = 20
+  DoubleShock         = 9922
   Electrify           = 21
   Embargo             = 22
   Encore              = 23
@@ -91,6 +97,7 @@ module PBEffects
   Rollout             = 86
   Roost               = 87
   ShellTrap           = 88
+  SilkTrap            = 1189
   SkyDrop             = 89
   SlowStart           = 90
   SmackDown           = 91
@@ -120,9 +127,10 @@ module PBEffects
   WeightChange        = 115
   Yawn                = 116
 
-  #=============================================================================
-  # These effects apply to a battler position
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # These effects apply to a battler position.
+  #-----------------------------------------------------------------------------
+
   FutureSightCounter        = 700
   FutureSightMove           = 701
   FutureSightUserIndex      = 702
@@ -133,9 +141,10 @@ module PBEffects
   WishAmount                = 707
   WishMaker                 = 708
 
-  #=============================================================================
-  # These effects apply to a side
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # These effects apply to a side.
+  #-----------------------------------------------------------------------------
+
   AuroraVeil         = 800
   CraftyShield       = 801
   EchoedVoiceCounter = 802
@@ -159,9 +168,10 @@ module PBEffects
   ToxicSpikes        = 820
   WideGuard          = 821
 
-  #=============================================================================
-  # These effects apply to the battle (i.e. both sides)
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # These effects apply to the battle (i.e. both sides).
+  #-----------------------------------------------------------------------------
+
   AmuletCoin      = 900
   FairyLock       = 901
   FusionBolt      = 902

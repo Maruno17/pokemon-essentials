@@ -14,7 +14,7 @@ module Settings
   # Note that this isn't perfect. Essentials doesn't accurately replicate every
   # single generation's mechanics. It's considered to be good enough. Only
   # generations 5 and later are reasonably supported.
-  MECHANICS_GENERATION = 8
+  MECHANICS_GENERATION = 9
 
   #-----------------------------------------------------------------------------
   # Credits
@@ -134,7 +134,7 @@ module Settings
   # The odds of a newly generated Pokémon being shiny (out of 65536).
   SHINY_POKEMON_CHANCE                = (MECHANICS_GENERATION >= 6) ? 16 : 8
   # Whether super shininess is enabled (uses a different shiny animation).
-  SUPER_SHINY                         = (MECHANICS_GENERATION >= 8)
+  SUPER_SHINY                         = (MECHANICS_GENERATION == 8)
   # Whether Pokémon with the "Legendary", "Mythical" or "Ultra Beast" flags will
   # have at least 3 perfect IVs.
   LEGENDARIES_HAVE_SOME_PERFECT_IVS   = (MECHANICS_GENERATION >= 6)
@@ -255,6 +255,9 @@ module Settings
   # from a Mart at once (true), or 1 Premier Ball for buying 10+ regular Poké
   # Balls (false).
   MORE_BONUS_PREMIER_BALLS             = (MECHANICS_GENERATION >= 8)
+  # The default sell price of an item to a Poké Mart is its buy price divided by
+  # this number.
+  ITEM_SELL_PRICE_DIVISOR              = (MECHANICS_GENERATION >= 9) ? 4 : 2
 
   #-----------------------------------------------------------------------------
   # Bag
@@ -397,6 +400,9 @@ module Settings
   # ID of the animation played when the player lands on the ground after hopping
   # over a ledge (shows a dust impact).
   DUST_ANIMATION_ID            = 2
+  # ID of the animation played when the player finishes taking a step onto still
+  # water (shows a water ripple).
+  WATER_RIPPLE_ANIMATION_ID    = 8
   # ID of the animation played when a trainer notices the player (an exclamation
   # bubble).
   EXCLAMATION_ANIMATION_ID     = 3
@@ -508,6 +514,10 @@ module Settings
   # start the game (in Debug mode). You will not need to hold Ctrl/Shift to
   # compile anything.
   PROMPT_TO_COMPILE    = false
+  # Whether the game will skip the intro splash screens and title screen, and go
+  # straight to the Continue/New Game screen. Only applies to playing in Debug
+  # mode.
+  SKIP_TITLE_SCREEN    = true
   # Whether the game will skip the Continue/New Game screen and go straight into
   # a saved game (if there is one) or start a new game (if there isn't). Only
   # applies to playing in Debug mode.

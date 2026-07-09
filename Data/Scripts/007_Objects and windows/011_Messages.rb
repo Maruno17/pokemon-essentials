@@ -305,7 +305,7 @@ def pbCsvPosInt!(str)
 end
 
 #===============================================================================
-# Money and coins windows
+# Money and coins windows.
 #===============================================================================
 def pbGetGoldString
   return _INTL("${1}", $player.money.to_s_formatted)
@@ -400,7 +400,7 @@ def pbDisposeMessageWindow(msgwindow)
 end
 
 #===============================================================================
-# Main message-displaying function
+# Main message-displaying function.
 #===============================================================================
 def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = nil)
   return if !msgwindow
@@ -452,7 +452,8 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   end
   isDarkSkin = isDarkWindowskin(msgwindow.windowskin)
   text.gsub!(/\\c\[([0-9]+)\]/i) do
-    next getSkinColor(msgwindow.windowskin, $1.to_i, isDarkSkin)
+    main_color, shadow_color = get_text_colors_for_windowskin(msgwindow.windowskin, $1.to_i, isDarkSkin)
+    next shadowc3tag(main_color, shadow_color)
   end
   loop do
     last_text = text.clone
@@ -469,9 +470,11 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
   end
   colortag = ""
   if $game_system && $game_system.message_frame != 0
-    colortag = getSkinColor(msgwindow.windowskin, 0, true)
+    main_color, shadow_color = get_text_colors_for_windowskin(msgwindow.windowskin, 0, true)
+    colortag = shadowc3tag(main_color, shadow_color)
   else
-    colortag = getSkinColor(msgwindow.windowskin, 0, isDarkSkin)
+    main_color, shadow_color = get_text_colors_for_windowskin(msgwindow.windowskin, 0, isDarkSkin)
+    colortag = shadowc3tag(main_color, shadow_color)
   end
   text = colortag + text
   ### Controls
@@ -682,7 +685,7 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
 end
 
 #===============================================================================
-# Message-displaying functions
+# Message-displaying functions.
 #===============================================================================
 def pbMessage(message, commands = nil, cmdIfCancel = 0, skin = nil, defaultCmd = 0, &block)
   ret = 0

@@ -665,7 +665,7 @@ def pbSpriteSetAnimFrame(sprite, frame, user = nil, target = nil, inEditor = fal
 end
 
 #===============================================================================
-# Animation player
+# Animation player.
 #===============================================================================
 class PBAnimationPlayerX
   attr_accessor :looping

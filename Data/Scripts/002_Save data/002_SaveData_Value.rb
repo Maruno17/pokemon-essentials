@@ -1,15 +1,21 @@
+#===============================================================================
+#
+#===============================================================================
 module SaveData
   # Contains Value objects for each save element.
   # Populated during runtime by SaveData.register calls.
   # @type [Array<Value>]
   @values = []
 
+  #=============================================================================
   # An error raised if an invalid save value is being saved or loaded.
+  #=============================================================================
   class InvalidValueError < RuntimeError; end
 
   #=============================================================================
   # Represents a single value in save data.
   # New values are added using {SaveData.register}.
+  #=============================================================================
   class Value
     # @return [Symbol] the value id
     attr_reader :id
@@ -160,7 +166,8 @@ module SaveData
     # @!endgroup
   end
 
-  #=============================================================================
+  #---------------------------------------------------------------------------
+
   # Registers a {Value} to be saved into save data.
   # Takes a block which defines the value's saving ({Value#save_value})
   # and loading ({Value#load_value}) procedures.

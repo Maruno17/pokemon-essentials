@@ -212,17 +212,17 @@ def pbRoamingPokemonBattle(pkmn, level = 1)
   setBattleRule("single")
   setBattleRule("roamerFlees")
   # Perform the battle
-  decision = WildBattle.start_core($PokemonGlobal.roamPokemon[idxRoamer])
+  outcome = WildBattle.start_core($PokemonGlobal.roamPokemon[idxRoamer])
   # Update Roaming Pokémon data based on result of battle
-  if [1, 4].include?(decision)   # Defeated or caught
+  if [Battle::Outcome::WIN, Battle::Outcome::CATCH].include?(outcome)   # Defeated or caught
     $PokemonGlobal.roamPokemon[idxRoamer]       = true
-    $PokemonGlobal.roamPokemonCaught[idxRoamer] = (decision == 4)
+    $PokemonGlobal.roamPokemonCaught[idxRoamer] = (outcome == Battle::Outcome::CATCH)
   end
   $PokemonGlobal.roamEncounter = nil
   $PokemonGlobal.roamedAlready = true
   $game_temp.roamer_index_for_encounter = nil
   # Used by the Poké Radar to update/break the chain
-  EventHandlers.trigger(:on_wild_battle_end, pkmn.species_data.id, pkmn.level, decision)
+  EventHandlers.trigger(:on_wild_battle_end, pkmn.species_data.id, pkmn.level, outcome)
   # Return false if the player lost or drew the battle, and true if any other result
-  return (decision != 2 && decision != 5)
+  return !Battle::Outcome.should_black_out?(outcome)
 end

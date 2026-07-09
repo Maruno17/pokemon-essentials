@@ -20,32 +20,32 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("SleepTarget",
       next useless_score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference
-      score += 15
+      score += 8
       # Prefer if the user or an ally has a move/ability that is better if the target is asleep
       ai.each_same_side_battler(user.side) do |b, i|
-        score += 5 if b.has_move_with_function?("DoublePowerIfTargetAsleepCureTarget",
+        score += 4 if b.has_move_with_function?("DoublePowerIfTargetAsleepCureTarget",
                                                 "DoublePowerIfTargetStatusProblem",
                                                 "HealUserByHalfOfDamageDoneIfTargetAsleep",
                                                 "StartDamageTargetEachTurnIfTargetAsleep")
-        score += 10 if b.has_active_ability?(:BADDREAMS)
+        score += 8 if b.has_active_ability?(:BADDREAMS)
       end
       # Don't prefer if target benefits from having the sleep status problem
       # NOTE: The target's Guts/Quick Feet will benefit from the target being
       #       asleep, but the target won't (usually) be able to make use of
       #       them, so they're not worth considering.
-      score -= 10 if target.has_active_ability?(:EARLYBIRD)
-      score -= 8 if target.has_active_ability?(:MARVELSCALE)
+      score -= 5 if target.has_active_ability?(:EARLYBIRD)
+      score -= 4 if target.has_active_ability?(:MARVELSCALE)
       # Don't prefer if target has a move it can use while asleep
-      score -= 8 if target.check_for_move { |m| m.usableWhenAsleep? }
+      score -= 4 if target.check_for_move { |m| m.usableWhenAsleep? }
       # Don't prefer if the target can heal itself (or be healed by an ally)
       if target.has_active_ability?(:SHEDSKIN)
-        score -= 8
+        score -= 5
       elsif target.has_active_ability?(:HYDRATION) &&
             [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
-        score -= 15
+        score -= 8
       end
       ai.each_same_side_battler(target.side) do |b, i|
-        score -= 8 if i != target.index && b.has_active_ability?(:HEALER)
+        score -= 5 if i != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -109,38 +109,38 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
       next useless_score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference
-      score += 15
-      # Prefer if the target is at high HP
       if ai.trainer.has_skill_flag?("HPAware")
-        score += 15 * target.hp / target.totalhp
+        score += 8 * target.hp / target.totalhp
+      else
+        score += 8
       end
       # Prefer if the user or an ally has a move/ability that is better if the target is poisoned
       ai.each_same_side_battler(user.side) do |b, i|
-        score += 5 if b.has_move_with_function?("DoublePowerIfTargetPoisoned",
+        score += 4 if b.has_move_with_function?("DoublePowerIfTargetPoisoned",
                                                 "DoublePowerIfTargetStatusProblem")
-        score += 10 if b.has_active_ability?(:MERCILESS)
+        score += 5 if b.has_active_ability?(:MERCILESS)
       end
       # Don't prefer if target benefits from having the poison status problem
-      score -= 8 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :TOXICBOOST])
-      score -= 25 if target.has_active_ability?(:POISONHEAL)
-      score -= 20 if target.has_active_ability?(:SYNCHRONIZE) &&
+      score -= 5 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET, :TOXICBOOST])
+      score -= 15 if target.has_active_ability?(:POISONHEAL)
+      score -= 15 if target.has_active_ability?(:SYNCHRONIZE) &&
                      user.battler.pbCanPoisonSynchronize?(target.battler)
-      score -= 5 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
+      score -= 4 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
                                                    "CureUserBurnPoisonParalysis")
-      score -= 15 if target.check_for_move { |m|
+      score -= 8 if target.check_for_move { |m|
         m.function_code == "GiveUserStatusToTarget" && user.battler.pbCanPoison?(target.battler, false, m)
       }
       # Don't prefer if the target won't take damage from the poison
-      score -= 20 if !target.battler.takesIndirectDamage?
+      score -= 10 if !target.battler.takesIndirectDamage?
       # Don't prefer if the target can heal itself (or be healed by an ally)
       if target.has_active_ability?(:SHEDSKIN)
-        score -= 8
+        score -= 5
       elsif target.has_active_ability?(:HYDRATION) &&
             [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
-        score -= 15
+        score -= 8
       end
       ai.each_same_side_battler(target.side) do |b, i|
-        score -= 8 if i != target.index && b.has_active_ability?(:HEALER)
+        score -= 5 if i != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -195,40 +195,40 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeTarget",
       next useless_score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference (because of the chance of full paralysis)
-      score += 10
+      score += 8
       # Prefer if the target is faster than the user but will become slower if
       # paralysed
       if target.faster_than?(user)
         user_speed = user.rough_stat(:SPEED)
         target_speed = target.rough_stat(:SPEED)
-        score += 15 if target_speed < user_speed * ((Settings::MECHANICS_GENERATION >= 7) ? 2 : 4)
+        score += 8 if target_speed < user_speed * ((Settings::MECHANICS_GENERATION >= 7) ? 2 : 4)
       end
       # Prefer if the target is confused or infatuated, to compound the turn skipping
-      score += 7 if target.effects[PBEffects::Confusion] > 1
-      score += 7 if target.effects[PBEffects::Attract] >= 0
+      score += 4 if target.effects[PBEffects::Confusion] > 1
+      score += 4 if target.effects[PBEffects::Attract] >= 0
       # Prefer if the user or an ally has a move/ability that is better if the target is paralysed
       ai.each_same_side_battler(user.side) do |b, i|
-        score += 5 if b.has_move_with_function?("DoublePowerIfTargetParalyzedCureTarget",
+        score += 4 if b.has_move_with_function?("DoublePowerIfTargetParalyzedCureTarget",
                                                 "DoublePowerIfTargetStatusProblem")
       end
       # Don't prefer if target benefits from having the paralysis status problem
-      score -= 8 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET])
-      score -= 20 if target.has_active_ability?(:SYNCHRONIZE) &&
+      score -= 5 if target.has_active_ability?([:GUTS, :MARVELSCALE, :QUICKFEET])
+      score -= 15 if target.has_active_ability?(:SYNCHRONIZE) &&
                      user.battler.pbCanParalyzeSynchronize?(target.battler)
-      score -= 5 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
+      score -= 4 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
                                                    "CureUserBurnPoisonParalysis")
-      score -= 15 if target.check_for_move { |m|
+      score -= 8 if target.check_for_move { |m|
         m.function_code == "GiveUserStatusToTarget" && user.battler.pbCanParalyze?(target.battler, false, m)
       }
       # Don't prefer if the target can heal itself (or be healed by an ally)
       if target.has_active_ability?(:SHEDSKIN)
-        score -= 8
+        score -= 5
       elsif target.has_active_ability?(:HYDRATION) &&
             [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
-        score -= 15
+        score -= 8
       end
       ai.each_same_side_battler(target.side) do |b, i|
-        score -= 8 if i != target.index && b.has_active_ability?(:HEALER)
+        score -= 5 if i != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -295,37 +295,37 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnTarget",
       next useless_score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference
-      score += 15
+      score += 8
       # Prefer if the target knows any physical moves that will be weaked by a burn
       if !target.has_active_ability?(:GUTS) && target.check_for_move { |m| m.physicalMove? }
-        score += 8
-        score += 8 if !target.check_for_move { |m| m.specialMove? }
+        score += 4
+        score += 4 if !target.check_for_move { |m| m.specialMove? }
       end
       # Prefer if the user or an ally has a move/ability that is better if the target is burned
       ai.each_same_side_battler(user.side) do |b, i|
-        score += 5 if b.has_move_with_function?("DoublePowerIfTargetStatusProblem")
+        score += 4 if b.has_move_with_function?("DoublePowerIfTargetStatusProblem")
       end
       # Don't prefer if target benefits from having the burn status problem
-      score -= 8 if target.has_active_ability?([:FLAREBOOST, :GUTS, :MARVELSCALE, :QUICKFEET])
-      score -= 5 if target.has_active_ability?(:HEATPROOF)
-      score -= 20 if target.has_active_ability?(:SYNCHRONIZE) &&
+      score -= 4 if target.has_active_ability?([:FLAREBOOST, :GUTS, :MARVELSCALE, :QUICKFEET])
+      score -= 4 if target.has_active_ability?(:HEATPROOF)
+      score -= 15 if target.has_active_ability?(:SYNCHRONIZE) &&
                      user.battler.pbCanBurnSynchronize?(target.battler)
-      score -= 5 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
+      score -= 4 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
                                                    "CureUserBurnPoisonParalysis")
-      score -= 15 if target.check_for_move { |m|
+      score -= 8 if target.check_for_move { |m|
         m.function_code == "GiveUserStatusToTarget" && user.battler.pbCanBurn?(target.battler, false, m)
       }
       # Don't prefer if the target won't take damage from the burn
-      score -= 20 if !target.battler.takesIndirectDamage?
+      score -= 10 if !target.battler.takesIndirectDamage?
       # Don't prefer if the target can heal itself (or be healed by an ally)
       if target.has_active_ability?(:SHEDSKIN)
-        score -= 8
+        score -= 5
       elsif target.has_active_ability?(:HYDRATION) &&
             [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
-        score -= 15
+        score -= 8
       end
       ai.each_same_side_battler(target.side) do |b, i|
-        score -= 8 if i != target.index && b.has_active_ability?(:HEALER)
+        score -= 5 if i != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -377,27 +377,27 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FreezeTarget",
       next useless_score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference
-      score += 15
+      score += 8
       # Prefer if the user or an ally has a move/ability that is better if the target is frozen
       ai.each_same_side_battler(user.side) do |b, i|
-        score += 5 if b.has_move_with_function?("DoublePowerIfTargetStatusProblem")
+        score += 4 if b.has_move_with_function?("DoublePowerIfTargetStatusProblem")
       end
       # Don't prefer if target benefits from having the frozen status problem
       # NOTE: The target's Guts/Quick Feet will benefit from the target being
       #       frozen, but the target won't be able to make use of them, so
       #       they're not worth considering.
-      score -= 8 if target.has_active_ability?(:MARVELSCALE)
+      score -= 5 if target.has_active_ability?(:MARVELSCALE)
       # Don't prefer if the target knows a move that can thaw it
-      score -= 15 if target.check_for_move { |m| m.thawsUser? }
+      score -= 8 if target.check_for_move { |m| m.thawsUser? }
       # Don't prefer if the target can heal itself (or be healed by an ally)
       if target.has_active_ability?(:SHEDSKIN)
-        score -= 8
+        score -= 5
       elsif target.has_active_ability?(:HYDRATION) &&
             [:Rain, :HeavyRain].include?(target.battler.effectiveWeather)
-        score -= 15
+        score -= 8
       end
       ai.each_same_side_battler(target.side) do |b, i|
-        score -= 8 if i != target.index && b.has_active_ability?(:HEALER)
+        score -= 5 if i != target.index && b.has_active_ability?(:HEALER)
       end
     end
     next score
@@ -532,11 +532,11 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CureTargetBurn",
     add_effect = move.get_score_change_for_additional_effect(user, target)
     next score if add_effect == -999   # Additional effect will be negated
     if target.status == :BURN
-      score -= add_effect
+      score += add_effect
       if target.wants_status_problem?(:BURN)
-        score += 15
+        score += 10
       else
-        score -= 10
+        score -= 8
       end
     end
     next score
@@ -576,15 +576,15 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserSideImmunityToInflictedStatu
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("FlinchTarget",
   proc { |score, move, user, target, ai, battle|
     next score if target.faster_than?(user) || target.effects[PBEffects::Substitute] > 0
-    next score if target.has_active_ability?(:INNERFOCUS) && !battle.moldBreaker
+    next score if target.has_active_ability?(:INNERFOCUS) && !target.being_mold_broken?
     add_effect = move.get_score_change_for_additional_effect(user, target)
     next score if add_effect == -999   # Additional effect will be negated
     score += add_effect
     # Inherent preference
-    score += 15
+    score += 8
     # Prefer if the target is paralysed, confused or infatuated, to compound the
     # turn skipping
-    score += 8 if target.status == :PARALYSIS ||
+    score += 5 if target.status == :PARALYSIS ||
                   target.effects[PBEffects::Confusion] > 1 ||
                   target.effects[PBEffects::Attract] >= 0
     next score
@@ -636,15 +636,15 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ConfuseTarget",
       next score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference
-      score += 10
-      # Prefer if the target is at high HP
       if ai.trainer.has_skill_flag?("HPAware")
-        score += 20 * target.hp / target.totalhp
+        score += 8 * target.hp / target.totalhp
+      else
+        score += 8
       end
       # Prefer if the target is paralysed or infatuated, to compound the turn skipping
-      score += 8 if target.status == :PARALYSIS || target.effects[PBEffects::Attract] >= 0
+      score += 5 if target.status == :PARALYSIS || target.effects[PBEffects::Attract] >= 0
       # Don't prefer if target benefits from being confused
-      score -= 15 if target.has_active_ability?(:TANGLEDFEET)
+      score -= 8 if target.has_active_ability?(:TANGLEDFEET)
     end
     next score
   }
@@ -671,14 +671,14 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("AttractTarget",
       next score if add_effect == -999   # Additional effect will be negated
       score += add_effect
       # Inherent preference
-      score += 15
+      score += 8
       # Prefer if the target is paralysed or confused, to compound the turn skipping
-      score += 8 if target.status == :PARALYSIS || target.effects[PBEffects::Confusion] > 1
+      score += 5 if target.status == :PARALYSIS || target.effects[PBEffects::Confusion] > 1
       # Don't prefer if the target can infatuate the user because of this move
-      score -= 15 if target.has_active_item?(:DESTINYKNOT) &&
+      score -= 10 if target.has_active_item?(:DESTINYKNOT) &&
                      user.battler.pbCanAttract?(target.battler, false)
       # Don't prefer if the user has another way to infatuate the target
-      score -= 15 if move.statusMove? && user.has_active_ability?(:CUTECHARM)
+      score -= 8 if move.statusMove? && user.has_active_ability?(:CUTECHARM)
     end
     next score
   }

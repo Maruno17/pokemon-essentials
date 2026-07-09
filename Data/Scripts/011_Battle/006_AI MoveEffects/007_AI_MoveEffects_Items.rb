@@ -7,7 +7,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserTakesTargetItem",
     next score if !target.item || target.battler.unlosableItem?(target.item)
     next score if user.battler.unlosableItem?(target.item)
     next score if target.effects[PBEffects::Substitute] > 0
-    next score if target.has_active_ability?(:STICKYHOLD) && !battle.moldBreaker
+    next score if target.has_active_ability?(:STICKYHOLD) && !target.being_mold_broken?
     # User can steal the target's item; score it
     user_item_preference = user.wants_item?(target.item_id)
     user_no_item_preference = user.wants_item?(:NONE)
@@ -58,7 +58,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UserTargetSwapItems",
     next true if !user.item && !target.item
     next true if user.battler.unlosableItem?(user.item) || user.battler.unlosableItem?(target.item)
     next true if target.battler.unlosableItem?(target.item) || target.battler.unlosableItem?(user.item)
-    next true if target.has_active_ability?(:STICKYHOLD) && !battle.moldBreaker
+    next true if target.has_active_ability?(:STICKYHOLD) && !target.being_mold_broken?
     next false
   }
 )
@@ -113,7 +113,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RemoveTargetItem",
     next score if user.wild?
     next score if !target.item || target.battler.unlosableItem?(target.item)
     next score if target.effects[PBEffects::Substitute] > 0
-    next score if target.has_active_ability?(:STICKYHOLD) && !battle.moldBreaker
+    next score if target.has_active_ability?(:STICKYHOLD) && !target.being_mold_broken?
     next score if !target.item_active?
     # User can knock off the target's item; score it
     item_preference = target.wants_item?(target.item_id)
@@ -132,7 +132,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("DestroyTargetBerryOrGem"
                   !(Settings::MECHANICS_GENERATION >= 6 && target.item.is_gem?))
     next score if user.battler.unlosableItem?(target.item)
     next score if target.effects[PBEffects::Substitute] > 0
-    next score if target.has_active_ability?(:STICKYHOLD) && !battle.moldBreaker
+    next score if target.has_active_ability?(:STICKYHOLD) && !target.being_mold_broken?
     next score if !target.item_active?
     # User can incinerate the target's item; score it
     item_preference = target.wants_item?(target.item_id)
@@ -302,7 +302,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserConsumeTargetBerry",
     next score if !target.item || !target.item.is_berry?
     next score if user.battler.unlosableItem?(target.item)
     next score if target.effects[PBEffects::Substitute] > 0
-    next score if target.has_active_ability?(:STICKYHOLD) && !battle.moldBreaker
+    next score if target.has_active_ability?(:STICKYHOLD) && !target.being_mold_broken?
     # Score the user gaining the item's effect
     score += user.get_score_change_for_consuming_item(target.item_id)
     # Score for other results of consuming the berry

@@ -1,6 +1,8 @@
+#===============================================================================
 # All weather particles are assumed to start at the top/right and move to the
 # bottom/left. Particles are only reset if they are off-screen to the left or
 # bottom.
+#===============================================================================
 module RPG
   class Weather
     attr_reader   :type

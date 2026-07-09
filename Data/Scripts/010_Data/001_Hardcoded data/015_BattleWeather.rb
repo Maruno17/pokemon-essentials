@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class BattleWeather
     attr_reader :id
@@ -12,6 +15,8 @@ module GameData
     def self.load; end
     def self.save; end
 
+    #---------------------------------------------------------------------------
+
     def initialize(hash)
       @id        = hash[:id]
       @real_name = hash[:name] || "Unnamed"
@@ -25,6 +30,8 @@ module GameData
   end
 end
 
+#===============================================================================
+#
 #===============================================================================
 
 GameData::BattleWeather.register({
@@ -54,6 +61,12 @@ GameData::BattleWeather.register({
   :id        => :Hail,
   :name      => _INTL("Hail"),
   :animation => "Hail"
+})
+
+GameData::BattleWeather.register({
+  :id        => :Snowstorm,
+  :name      => _INTL("Snowstorm"),
+  :animation => "Snowstorm"
 })
 
 GameData::BattleWeather.register({

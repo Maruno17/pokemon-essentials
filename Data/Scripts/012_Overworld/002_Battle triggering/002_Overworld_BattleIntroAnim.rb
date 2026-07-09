@@ -42,7 +42,7 @@ module SpecialBattleIntroAnimations
 end
 
 #===============================================================================
-# Battle intro animation
+# Battle intro animation.
 #===============================================================================
 class Game_Temp
   attr_accessor :transition_animation_data

@@ -76,7 +76,7 @@ class Battle::AI::AIBattler
       ret += [self.totalhp / 8, 1].max if [:Sun, :HarshSun].include?(weather) && battler.takesIndirectDamage?
       ret -= [self.totalhp / 8, 1].max if [:Rain, :HeavyRain].include?(weather) && battler.canHeal?
     when :ICEBODY
-      ret -= [self.totalhp / 16, 1].max if weather == :Hail && battler.canHeal?
+      ret -= [self.totalhp / 16, 1].max if [:Hail, :Snowstorm].include?(weather) && battler.canHeal?
     when :RAINDISH
       ret -= [self.totalhp / 16, 1].max if [:Rain, :HeavyRain].include?(weather) && battler.canHeal?
     when :SOLARPOWER
@@ -272,6 +272,10 @@ class Battle::AI::AIBattler
 
   def has_mold_breaker?
     return battler.hasMoldBreaker?
+  end
+
+  def being_mold_broken?
+    return battler.beingMoldBroken?
   end
 
   #-----------------------------------------------------------------------------
@@ -499,7 +503,7 @@ class Battle::AI::AIBattler
     when :ASPEARBERRY, :CHERIBERRY, :CHESTOBERRY, :PECHABERRY, :RAWSTBERRY
       # Status cure
       cured_status = {
-        :ASPEAR      => :FROZEN,
+        :ASPEARBERRY => :FROZEN,
         :CHERIBERRY  => :PARALYSIS,
         :CHESTOBERRY => :SLEEP,
         :PECHABERRY  => :POISON,

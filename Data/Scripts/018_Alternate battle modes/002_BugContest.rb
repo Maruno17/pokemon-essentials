@@ -310,6 +310,7 @@ end
 #===============================================================================
 #
 #===============================================================================
+
 EventHandlers.add(:on_map_or_spriteset_change, :show_bug_contest_timer,
   proc { |scene, _map_changed|
     next if !pbInBugContest? || pbBugContestState.decision != 0 || BugContestState::TIME_ALLOWED == 0
@@ -347,6 +348,7 @@ EventHandlers.add(:on_leave_map, :end_bug_contest,
 #===============================================================================
 #
 #===============================================================================
+
 EventHandlers.add(:on_calling_wild_battle, :bug_contest_battle,
   proc { |pkmn, handled|
     # handled is an array: [nil]. If [true] or [false], the battle has already
@@ -378,11 +380,11 @@ def pbBugContestBattle(pkmn, level = 1)
   setBattleRule("single")
   BattleCreationHelperMethods.prepare_battle(battle)
   # Perform the battle itself
-  decision = 0
+  outcome = Battle::Outcome::UNDECIDED
   pbBattleAnimation(pbGetWildBattleBGM(foeParty), 0, foeParty) do
-    decision = battle.pbStartBattle
-    BattleCreationHelperMethods.after_battle(decision, true)
-    if [2, 5].include?(decision)   # Lost or drew
+    outcome = battle.pbStartBattle
+    BattleCreationHelperMethods.after_battle(outcome, true)
+    if Battle::Outcome.should_black_out?(outcome)
       $game_system.bgm_unpause
       $game_system.bgs_unpause
       pbBugContestStartOver
@@ -392,15 +394,15 @@ def pbBugContestBattle(pkmn, level = 1)
   # Update Bug Contest game data based on result of battle
   pbBugContestState.ballcount = battle.ballCount
   if pbBugContestState.ballcount == 0
-    pbMessage(_INTL("ANNOUNCER:  The Bug-Catching Contest is over!"))
+    pbMessage(_INTL("ANNOUNCER: The Bug-Catching Contest is over!"))
     pbBugContestState.pbStartJudging
   end
   # Save the result of the battle in Game Variable 1
-  BattleCreationHelperMethods.set_outcome(decision, 1)
+  BattleCreationHelperMethods.set_outcome(outcome, 1)
   # Used by the Poké Radar to update/break the chain
-  EventHandlers.trigger(:on_wild_battle_end, pkmn.species_data.id, pkmn.level, decision)
+  EventHandlers.trigger(:on_wild_battle_end, pkmn.species_data.id, pkmn.level, outcome)
   # Return false if the player lost or drew the battle, and true if any other result
-  return (decision != 2 && decision != 5)
+  return !Battle::Outcome.should_black_out?(outcome)
 end
 
 #===============================================================================
@@ -422,6 +424,10 @@ class PokemonPauseMenu
     end
   end
 end
+
+#===============================================================================
+#
+#===============================================================================
 
 MenuHandlers.add(:pause_menu, :quit_bug_contest, {
   "name"      => _INTL("Quit Contest"),

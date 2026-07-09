@@ -1,7 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
-  #=============================================================================
-  # Turn processing
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Turn processing.
+  #-----------------------------------------------------------------------------
+
   def pbProcessTurn(choice, tryFlee = true)
     return false if fainted?
     # Wild roaming Pokémon always flee if possible
@@ -10,7 +14,7 @@ class Battle::Battler
       pbBeginTurn(choice)
       pbSEPlay("Battle flee")
       @battle.pbDisplay(_INTL("{1} fled from battle!", pbThis))
-      @battle.decision = 3
+      @battle.decision = Battle::Outcome::FLEE
       pbEndTurn(choice)
       return true
     end
@@ -55,9 +59,10 @@ class Battle::Battler
     return true
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   #
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def pbBeginTurn(_choice)
     # Cancel some lingering effects which only apply until the user next moves
     @effects[PBEffects::DestinyBondPrevious] = @effects[PBEffects::DestinyBond]
@@ -106,7 +111,9 @@ class Battle::Battler
       end
     end
     @effects[PBEffects::BeakBlast]   = false
-    @effects[PBEffects::Charge]      = 0 if @effects[PBEffects::Charge] == 1
+    if Settings::MECHANICS_GENERATION < 9 || @lastMoveUsedType == :ELECTRIC
+      @effects[PBEffects::Charge]    = 0 if @effects[PBEffects::Charge] == 1
+    end
     @effects[PBEffects::GemConsumed] = nil
     @effects[PBEffects::ShellTrap]   = false
     @battle.allBattlers.each { |b| b.pbContinualAbilityChecks }   # Trace, end primordial weathers
@@ -129,10 +136,11 @@ class Battle::Battler
     pbItemHPHealCheck
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Simple "use move" method, used when a move calls another move and for Future
-  # Sight's attack
-  #=============================================================================
+  # Sight's attack.
+  #-----------------------------------------------------------------------------
+
   def pbUseMoveSimple(moveID, target = -1, idxMove = -1, specialUsage = true)
     choice = []
     choice[0] = :UseMove   # "Use move"
@@ -148,9 +156,10 @@ class Battle::Battler
     pbUseMove(choice, specialUsage)
   end
 
-  #=============================================================================
-  # Master "use move" method
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Master "use move" method.
+  #-----------------------------------------------------------------------------
+
   def pbUseMove(choice, specialUsage = false)
     # NOTE: This is intentionally determined before a multi-turn attack can
     #       set specialUsage to true.
@@ -238,6 +247,9 @@ class Battle::Battler
     # Record move as having been used
     @lastMoveUsed     = move.id
     @lastMoveUsedType = move.calcType   # For Conversion 2
+    if @pokemon.isSpecies?(:PRIMEAPE) && @lastMoveUsed == :RAGEFIST
+      @pokemon.evolution_counter += 1
+    end
     if !specialUsage
       @lastRegularMoveUsed   = move.id   # For Disable, Encore, Instruct, Mimic, Mirror Move, Sketch, Spite
       @lastRegularMoveTarget = choice[3]   # For Instruct (remembering original target is fine)
@@ -392,7 +404,7 @@ class Battle::Battler
             magicCoater = b.index
             b.effects[PBEffects::MagicCoat] = false
             break
-          elsif b.hasActiveAbility?(:MAGICBOUNCE) && !@battle.moldBreaker &&
+          elsif b.hasActiveAbility?(:MAGICBOUNCE) && !b.beingMoldBroken? &&
                 !b.effects[PBEffects::MagicBounce]
             magicBouncer = b.index
             b.effects[PBEffects::MagicBounce] = true
@@ -534,7 +546,7 @@ class Battle::Battler
         end
         b.lastRoundMoved = oldLastRoundMoved
         @battle.pbJudge
-        return if @battle.decision > 0
+        return if @battle.decided?
       end
       b.effects[PBEffects::Instructed] = false
     end
@@ -570,16 +582,17 @@ class Battle::Battler
           nextUser.effects[PBEffects::Outrage] = oldOutrage
           nextUser.currentMove = oldCurrentMove
           @battle.pbJudge
-          return if @battle.decision > 0
+          return if @battle.decided?
         end
         nextUser.effects[PBEffects::Dancer] = false
       end
     end
   end
 
-  #=============================================================================
-  # Attack a single target
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Attack a single target.
+  #-----------------------------------------------------------------------------
+
   def pbProcessMoveHit(move, user, targets, hitNum, skipAccuracyCheck)
     return false if user.fainted?
     # For two-turn attacks being used in a single turn
@@ -707,7 +720,13 @@ class Battle::Battler
       move.pbEffectAgainstTarget(user, b)
     end
     move.pbEffectGeneral(user)
-    targets.each { |b| b.pbFaint if b&.fainted? }
+    targets.each do |b|
+      next if !b&.fainted?
+      b.pbFaint
+      if user.pokemon.isSpecies?(:BISHARP) && b.isSpecies?(:BISHARP) && b.item == :LEADERSCREST
+        user.pokemon.evolution_counter += 1
+      end
+    end
     user.pbFaint if user.fainted?
     # Additional effect
     if !user.hasActiveAbility?(:SHEERFORCE)
@@ -736,6 +755,7 @@ class Battle::Battler
     targets.each do |b|
       next if b.damageState.unaffected
       next if !b.damageState.berryWeakened
+      b.damageState.berryWeakened = false   # Weakening only applies for one hit
       @battle.pbDisplay(_INTL("The {1} weakened the damage to {2}!", b.itemName, b.pbThis(true)))
       b.pbConsumeItem
     end

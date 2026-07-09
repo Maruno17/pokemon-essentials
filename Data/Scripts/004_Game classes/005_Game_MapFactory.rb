@@ -1,5 +1,5 @@
 #===============================================================================
-# Map Factory (allows multiple maps to be loaded at once and connected)
+# Map Factory (allows multiple maps to be loaded at once and connected).
 #===============================================================================
 class PokemonMapFactory
   attr_reader :maps
@@ -93,7 +93,7 @@ class PokemonMapFactory
   # Detects whether the player has moved onto a connected map, and if so, causes
   # their transfer to that map.
   def setCurrentMap
-    return if $game_player.moving?
+    return if $game_player.moving? || $game_player.jumping?
     return if $game_map.valid?($game_player.x, $game_player.y)
     newmap = getNewMap($game_player.x, $game_player.y)
     return if !newmap
@@ -154,14 +154,14 @@ class PokemonMapFactory
   end
 
   # Similar to Game_Player#passable?, but supports map connections
-  def isPassableFromEdge?(x, y)
+  def isPassableFromEdge?(x, y, dir = 0)
     return true if $game_map.valid?(x, y)
     newmap = getNewMap(x, y, $game_map.map_id)
     return false if !newmap
-    return isPassable?(newmap[0].map_id, newmap[1], newmap[2])
+    return isPassable?(newmap[0].map_id, newmap[1], newmap[2], dir)
   end
 
-  def isPassable?(mapID, x, y, thisEvent = nil)
+  def isPassable?(mapID, x, y, dir = 0, thisEvent = nil)
     thisEvent = $game_player if !thisEvent
     map = getMapNoAdd(mapID)
     return false if !map
@@ -169,7 +169,7 @@ class PokemonMapFactory
     return true if thisEvent.through
     # Check passability of tile
     return true if $DEBUG && Input.press?(Input::CTRL) && thisEvent.is_a?(Game_Player)
-    return false if !map.passable?(x, y, 0, thisEvent)
+    return false if !map.passable?(x, y, dir, thisEvent)
     # Check passability of event(s) in that spot
     map.events.each_value do |event|
       next if event == thisEvent || !event.at_coordinate?(x, y)
@@ -384,12 +384,14 @@ module MapFactoryHelper
   @@MapConnections = nil
   @@MapDims        = nil
 
-  def self.clear
+  module_function
+
+  def clear
     @@MapConnections = nil
     @@MapDims        = nil
   end
 
-  def self.getMapConnections
+  def getMapConnections
     if !@@MapConnections
       @@MapConnections = []
       conns = load_data("Data/map_connections.dat")
@@ -427,26 +429,26 @@ module MapFactoryHelper
     return @@MapConnections
   end
 
-  def self.hasConnections?(id)
+  def hasConnections?(id)
     conns = MapFactoryHelper.getMapConnections
     return conns[id] ? true : false
   end
 
-  def self.mapsConnected?(id1, id2)
+  def mapsConnected?(id1, id2)
     MapFactoryHelper.eachConnectionForMap(id1) do |conn|
       return true if conn[0] == id2 || conn[3] == id2
     end
     return false
   end
 
-  def self.eachConnectionForMap(id)
+  def eachConnectionForMap(id)
     conns = MapFactoryHelper.getMapConnections
     return if !conns[id]
     conns[id].each { |conn| yield conn }
   end
 
-  # Gets the height and width of the map with id
-  def self.getMapDims(id)
+  # Gets the height and width of the map with id.
+  def getMapDims(id)
     # Create cache if doesn't exist
     @@MapDims = [] if !@@MapDims
     # Add map to cache if can't be found
@@ -464,7 +466,7 @@ module MapFactoryHelper
 
   # Returns the X or Y coordinate of an edge on the map with id.
   # Considers the special strings "N","W","E","S"
-  def self.getMapEdge(id, edge)
+  def getMapEdge(id, edge)
     return 0 if ["N", "W"].include?(edge)
     dims = getMapDims(id)   # Get dimensions
     return dims[0] if edge == "E"
@@ -472,7 +474,7 @@ module MapFactoryHelper
     return dims[0]   # real dimension (use width)
   end
 
-  def self.mapInRange?(map)
+  def mapInRange?(map)
     range = 6   # Number of tiles
     dispx = map.display_x
     dispy = map.display_y
@@ -483,7 +485,7 @@ module MapFactoryHelper
     return true
   end
 
-  def self.mapInRangeById?(id, dispx, dispy)
+  def mapInRangeById?(id, dispx, dispy)
     range = 6   # Number of tiles
     dims = MapFactoryHelper.getMapDims(id)
     return false if dispx >= (dims[0] + range) * Game_Map::REAL_RES_X

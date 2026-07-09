@@ -1,6 +1,7 @@
 #===============================================================================
-# CanUseInBattle handlers
+# CanUseInBattle handlers.
 #===============================================================================
+
 ItemHandlers::CanUseInBattle.add(:GUARDSPEC, proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
   if !battler || battler.pbOwnSide.effects[PBEffects::Mist] > 0
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
@@ -52,11 +53,7 @@ ItemHandlers::CanUseInBattle.addIf(:poke_balls,
     #       this case, but only in trainer battles, and the trainer will deflect
     #       them if they are trying to catch a non-Shadow Pokémon.)
     if battle.pbOpposingBattlerCount > 1 && !(GameData::Item.get(item).is_snag_ball? && battle.trainerBattle?)
-      if battle.pbOpposingBattlerCount == 2
-        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are two Pokémon!")) if showMessages
-      elsif showMessages
-        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there is more than one Pokémon!"))
-      end
+      scene.pbDisplay(_INTL("It's no good! It's impossible to aim unless there is only one Pokémon!")) if showMessages
       next false
     end
     next true
@@ -296,9 +293,10 @@ ItemHandlers::CanUseInBattle.add(:POKEFLUTE, proc { |item, pokemon, battler, mov
 })
 
 #===============================================================================
-# UseInBattle handlers
-# For items used directly or on an opposing battler
+# UseInBattle handlers.
+# For items used directly or on an opposing battler.
 #===============================================================================
+
 ItemHandlers::UseInBattle.add(:GUARDSPEC, proc { |item, battler, battle|
   battler.pbOwnSide.effects[PBEffects::Mist] = 5
   battle.pbDisplay(_INTL("{1} became shrouded in mist!", battler.pbTeam))
@@ -306,7 +304,7 @@ ItemHandlers::UseInBattle.add(:GUARDSPEC, proc { |item, battler, battle|
 })
 
 ItemHandlers::UseInBattle.add(:POKEDOLL, proc { |item, battler, battle|
-  battle.decision = 3
+  battle.decision = Battle::Outcome::FLEE
   battle.pbDisplayPaused(_INTL("You got away safely!"))
 })
 
@@ -327,9 +325,10 @@ ItemHandlers::UseInBattle.addIf(:poke_balls,
 )
 
 #===============================================================================
-# BattleUseOnPokemon handlers
-# For items used on Pokémon or on a Pokémon's move
+# BattleUseOnPokemon handlers.
+# For items used on Pokémon or on a Pokémon's move.
 #===============================================================================
+
 ItemHandlers::BattleUseOnPokemon.add(:POTION, proc { |item, pokemon, battler, choices, scene|
   pbBattleHPItem(pokemon, battler, 20, scene)
 })
@@ -531,8 +530,8 @@ ItemHandlers::BattleUseOnPokemon.add(:MAXELIXIR, proc { |item, pokemon, battler,
 })
 
 #===============================================================================
-# BattleUseOnBattler handlers
-# For items used on a Pokémon in battle
+# BattleUseOnBattler handlers.
+# For items used on a Pokémon in battle.
 #===============================================================================
 
 ItemHandlers::BattleUseOnBattler.add(:REDFLUTE, proc { |item, battler, scene|

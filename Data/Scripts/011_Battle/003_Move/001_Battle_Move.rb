@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Move
   attr_reader   :battle
   attr_reader   :realMove
@@ -20,17 +23,10 @@ class Battle::Move
 
   CRITICAL_HIT_RATIOS = (Settings::NEW_CRITICAL_HIT_RATE_MECHANICS) ? [24, 8, 2, 1] : [16, 8, 4, 3, 2]
 
-  def to_int; return @id; end
+  #-----------------------------------------------------------------------------
+  # Creating a move.
+  #-----------------------------------------------------------------------------
 
-  # @deprecated This method is slated to be removed in v22.
-  def baseDamage
-    Deprecation.warn_method("baseDamage", "v22", "power")
-    return @power
-  end
-
-  #=============================================================================
-  # Creating a move
-  #=============================================================================
   def initialize(battle, move)
     @battle        = battle
     @realMove      = move
@@ -68,9 +64,10 @@ class Battle::Move
     return Battle::Move::Unimplemented.new(battle, move)
   end
 
-  #=============================================================================
-  # About the move
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # About the move.
+  #-----------------------------------------------------------------------------
+
   def pbTarget(_user); return GameData::Target.get(@target); end
 
   def total_pp
@@ -139,6 +136,8 @@ class Battle::Move
   def pulseMove?;         return @flags.any? { |f| f[/^Pulse$/i] };               end
   def bombMove?;          return @flags.any? { |f| f[/^Bomb$/i] };                end
   def danceMove?;         return @flags.any? { |f| f[/^Dance$/i] };               end
+  def slicingMove?;       return @flags.any? { |f| f[/^Slicing$/i] };             end
+  def windMove?;          return @flags.any? { |f| f[/^Wind$/i] };                end
   # Causes perfect accuracy and double damage if target used Minimize. Perfect accuracy only with Gen 6+ mechanics.
   def tramplesMinimize?;  return @flags.any? { |f| f[/^TramplesMinimize$/i] };    end
 

@@ -1,0 +1,74 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#
+	string output = File.ReadAllText(this.Host.ResolvePath("AssemblyInfo.cs"));
+	//Regex pattern = new Regex(@"AssemblyFileVersion\(""(?<major>\d+)\.(?<minor>\d+)\.(?<build>\d+)\.(?<revision>\d+)""\)");
+	//MatchCollection matches = pattern.Matches(output);
+	//if (matches.Count == 1)
+	//{
+		string[] date = DateTime.Now.ToString("yy-MM-dd-HHmm").Split('-');
+		major		= date[0];	//Convert.ToInt32(matches[0].Groups["major"].Value);		// Year		(20YY)
+		minor		= date[1];	//Convert.ToInt32(matches[0].Groups["minor"].Value);		// Month	(MM)
+		build		= date[2];	//Convert.ToInt32(matches[0].Groups["build"].Value) + 1;	// Day		(DD)
+		revision	= date[3];	//Convert.ToInt32(matches[0].Groups["revision"].Value);		// Time		(HHMM)
+		//if( this.Host.ResolveParameterValue("-","-","BuildConfiguration") == "Release" )
+		//	revision++;
+	//}
+	string[] text = output.Split('\n');
+	string _branch = text[text.Length - 3]; //File.ReadAllText(this.Host.ResolvePath("AssemblyInfo.cs"));
+	string _hash = text[text.Length - 2]; //File.ReadAllText(this.Host.ResolvePath("AssemblyInfo.cs"));
+	//pattern = new Regex(@"AssemblyInformationalVersion\("".+""\)");
+	//matches = pattern.Matches(output);
+	if (_hash.Length < 15){ //if (matches.Count == 1){
+		branch = _branch.Trim();
+		hash = _hash.Trim();
+	}
+#>
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Resources;
+
+// General Information about an assembly is controlled through the following
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+[assembly: AssemblyTitle("PokemonEssentials")]
+[assembly: AssemblyDescription("Pokemon Essentials as a C-Sharp Port")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("PokemonEssentials")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+// Setting ComVisible to false makes the types in this assembly not visible
+// to COM components.  If you need to access a type in this assembly from
+// COM, set the ComVisible attribute to true on that type.
+[assembly: ComVisible(false)]
+
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("f2dd1008-519d-4f6a-ba3c-06a9e9306aa2")]
+
+// Version information for an assembly consists of the following four values:
+//
+//		Major Version	| Year	(20YY)
+//		Minor Version	| Month (MM)
+//		Build Number	| Day	(DD)
+//		Revision		| Time	(HHMM)
+//
+// You can specify all the values or you can default the Build and Revision Numbers
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")] => major.minor.build.revision
+[assembly: AssemblyVersion("22.0")] //Pokemon Essentials Version
+[assembly: AssemblyFileVersion("<#= this.major #>.<#= this.minor #>.<#= this.build #>.<#= this.revision #>")] //Pokemon Framework Version
+[assembly: AssemblyInformationalVersion("<#= this.major #>.<#= this.minor #>.<#= this.build #>.<#= this.revision #>.<#= this.hash #>-<#= this.branch #>")] //Github Branch Source
+<#+
+	string major	= "22";
+	string minor	= "0";
+	string build	= "0";
+	string revision = "0";
+	string branch	= "Dev";
+	string hash		= "00000";
+#>

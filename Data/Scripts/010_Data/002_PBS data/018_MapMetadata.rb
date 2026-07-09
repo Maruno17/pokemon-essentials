@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class MapMetadata
     attr_reader :id
@@ -29,7 +32,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "map_metadata.dat"
     PBS_BASE_FILENAME = "map_metadata"
-
     SCHEMA = {
       "SectionName"       => [:id,                   "u"],
       "Name"              => [:real_name,            "s"],
@@ -88,6 +90,8 @@ module GameData
         ["Flags",             StringListProperty,      _INTL("Words/phrases that distinguish this map from others.")]
       ]
     end
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id                   = hash[:id]

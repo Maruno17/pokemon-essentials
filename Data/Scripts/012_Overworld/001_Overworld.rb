@@ -1,5 +1,5 @@
 #===============================================================================
-# Constant checks
+# Constant checks.
 #===============================================================================
 # Pokérus check
 EventHandlers.add(:on_frame_update, :pokerus_counter,
@@ -64,7 +64,7 @@ EventHandlers.add(:on_frame_update, :cue_bgm_after_delay,
 )
 
 #===============================================================================
-# Checks per step
+# Checks per step.
 #===============================================================================
 # Party Pokémon gain happiness from walking
 EventHandlers.add(:on_player_step_taken, :gain_happiness,
@@ -97,7 +97,7 @@ EventHandlers.add(:on_player_step_taken_can_transfer, :poison_party,
       pkmn.hp -= 1 if pkmn.hp > 1 || Settings::POISON_FAINT_IN_FIELD
       if pkmn.hp == 1 && !Settings::POISON_FAINT_IN_FIELD
         pkmn.status = :NONE
-        pbMessage(_INTL("{1} survived the poisoning.\\nThe poison faded away!", pkmn.name))
+        pbMessage(_INTL("{1} survived the poisoning.\nThe poison faded away!", pkmn.name))
         next
       elsif pkmn.hp == 0
         pkmn.changeHappiness("faint")
@@ -122,7 +122,7 @@ def pbCheckAllFainted
   end
 end
 
-# Gather soot from soot grass
+# Gather soot from soot grass.
 EventHandlers.add(:on_step_taken, :pick_up_soot,
   proc { |event|
     thistile = $map_factory.getRealTilePos(event.map.map_id, event.x, event.y)
@@ -142,10 +142,11 @@ EventHandlers.add(:on_step_taken, :pick_up_soot,
   }
 )
 
-# Show grass rustle animation
+# Show grass rustle animation.
 EventHandlers.add(:on_step_taken, :grass_rustling,
   proc { |event|
     next if !$scene.is_a?(Scene_Map)
+    next if event.respond_to?("name") && event.name[/airborne/i]
     event.each_occupied_tile do |x, y|
       next if !$map_factory.getTerrainTagFromCoords(event.map.map_id, x, y, true).shows_grass_rustle
       spriteset = $scene.spriteset(event.map_id)
@@ -154,7 +155,20 @@ EventHandlers.add(:on_step_taken, :grass_rustling,
   }
 )
 
-# Auto-move the player over waterfalls and ice
+# Show water ripple animation.
+EventHandlers.add(:on_step_taken, :still_water_ripple,
+  proc { |event|
+    next if !$scene.is_a?(Scene_Map)
+    next if event.respond_to?("name") && event.name[/airborne/i]
+    event.each_occupied_tile do |x, y|
+      next if !$map_factory.getTerrainTagFromCoords(event.map.map_id, x, y, true).shows_water_ripple
+      spriteset = $scene.spriteset(event.map_id)
+      spriteset&.addUserAnimation(Settings::WATER_RIPPLE_ANIMATION_ID, x, y, true, -1)
+    end
+  }
+)
+
+# Auto-move the player over waterfalls and ice.
 EventHandlers.add(:on_step_taken, :auto_move_player,
   proc { |event|
     next if !$scene.is_a?(Scene_Map)
@@ -165,6 +179,17 @@ EventHandlers.add(:on_step_taken, :auto_move_player,
       pbTraverseWaterfall
     elsif currentTag.ice || $PokemonGlobal.ice_sliding
       pbSlideOnIce
+    end
+  }
+)
+
+# Certain species of Pokémon record the distance travelled while they were in
+# the party. Those species use this information to evolve.
+EventHandlers.add(:on_step_taken, :party_pokemon_distance_tracker,
+  proc { |event|
+    $player.pokemon_party.each do |pkmn|
+      next if ![:PAWMO, :BRAMBLIN, :RELLOR].include?(pkmn.species)
+      pkmn.evolution_counter += 1
     end
   }
 )
@@ -186,7 +211,7 @@ def pbOnStepTaken(eventTriggered)
   $game_temp.encounter_triggered = false   # This info isn't needed here
 end
 
-# Start wild encounters while turning on the spot
+# Start wild encounters while turning on the spot.
 EventHandlers.add(:on_player_change_direction, :trigger_encounter,
   proc {
     repel_active = ($PokemonGlobal.repel > 0)
@@ -195,7 +220,7 @@ EventHandlers.add(:on_player_change_direction, :trigger_encounter,
 )
 
 def pbBattleOnStepTaken(repel_active)
-  return if $player.able_pokemon_count == 0
+  return if $player.able_pokemon_count == 0 && !pbInSafari?
   return if !$PokemonEncounters.encounter_possible_here?
   encounter_type = $PokemonEncounters.encounter_type
   return if !encounter_type
@@ -218,7 +243,7 @@ def pbBattleOnStepTaken(repel_active)
 end
 
 #===============================================================================
-# Checks when moving between maps
+# Checks when moving between maps.
 #===============================================================================
 # Set up various data related to the new map.
 EventHandlers.add(:on_enter_map, :setup_new_map,
@@ -315,7 +340,7 @@ EventHandlers.add(:on_map_or_spriteset_change, :show_location_window,
 )
 
 #===============================================================================
-# Event locations, terrain tags
+# Event locations, terrain tags.
 #===============================================================================
 # NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
 def pbFacingTile(direction = nil, event = nil)
@@ -370,6 +395,7 @@ end
 
 # Returns whether event is able to walk up to the player.
 def pbEventCanReachPlayer?(event, player, distance)
+  return false if event.map_id != player.map_id
   return false if !pbEventFacesPlayer?(event, player, distance)
   delta_x = (event.direction == 6) ? 1 : (event.direction == 4) ? -1 : 0
   delta_y = (event.direction == 2) ? 1 : (event.direction == 8) ? -1 : 0
@@ -394,11 +420,12 @@ end
 # Returns whether the two events are standing next to each other and facing each
 # other.
 def pbFacingEachOther(event1, event2)
+  return false if event1.map_id != event2.map_id
   return pbEventFacesPlayer?(event1, event2, 1) && pbEventFacesPlayer?(event2, event1, 1)
 end
 
 #===============================================================================
-# Audio playing
+# Audio playing.
 #===============================================================================
 def pbCueBGM(bgm, seconds, volume = nil, pitch = nil)
   return if !bgm
@@ -435,7 +462,7 @@ def pbAutoplayOnSave
 end
 
 #===============================================================================
-# Event movement
+# Event movement.
 #===============================================================================
 module PBMoveRoute
   DOWN                  = 1
@@ -523,7 +550,7 @@ def pbMoveRoute(event, commands, waitComplete = false)
   return route
 end
 
-# duration is in seconds
+# duration is in seconds.
 def pbWait(duration)
   timer_start = System.uptime
   until System.uptime - timer_start >= duration
@@ -535,7 +562,7 @@ def pbWait(duration)
 end
 
 #===============================================================================
-# Player/event movement in the field
+# Player/event movement in the field.
 #===============================================================================
 def pbSlideOnIce
   if !$DEBUG || !Input.press?(Input::CTRL)
@@ -589,7 +616,7 @@ def pbMoveTowardPlayer(event)
 end
 
 #===============================================================================
-# Bridges, cave escape points, and setting the heal point
+# Bridges, cave escape points, and setting the heal point.
 #===============================================================================
 def pbBridgeOn(height = 2)
   $PokemonGlobal.bridge = height
@@ -632,7 +659,7 @@ def pbSetPokemonCenter
 end
 
 #===============================================================================
-# Partner trainer
+# Partner trainer.
 #===============================================================================
 def pbRegisterPartner(tr_type, tr_name, tr_id = 0)
   tr_type = GameData::TrainerType.get(tr_type).id
@@ -651,7 +678,7 @@ def pbDeregisterPartner
 end
 
 #===============================================================================
-# Picking up an item found on the ground
+# Picking up an item found on the ground.
 #===============================================================================
 def pbItemBall(item, quantity = 1)
   item = GameData::Item.get(item)
@@ -678,7 +705,7 @@ def pbItemBall(item, quantity = 1)
     else
       pbMessage("\\me[#{meName}]" + _INTL("You found a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
     end
-    pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+    pbMessage(_INTL("You put the {1} in\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
                     itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
     return true
   end
@@ -701,7 +728,7 @@ def pbItemBall(item, quantity = 1)
 end
 
 #===============================================================================
-# Being given an item
+# Being given an item.
 #===============================================================================
 def pbReceiveItem(item, quantity = 1)
   item = GameData::Item.get(item)
@@ -728,7 +755,7 @@ def pbReceiveItem(item, quantity = 1)
     pbMessage("\\me[#{meName}]" + _INTL("You obtained a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
   end
   if $bag.add(item, quantity)   # If item can be added
-    pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+    pbMessage(_INTL("You put the {1} in\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
                     itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
     return true
   end
@@ -736,7 +763,7 @@ def pbReceiveItem(item, quantity = 1)
 end
 
 #===============================================================================
-# Buying a prize item from the Game Corner
+# Buying a prize item from the Game Corner.
 #===============================================================================
 def pbBuyPrize(item, quantity = 1)
   item = GameData::Item.get(item)
@@ -744,7 +771,7 @@ def pbBuyPrize(item, quantity = 1)
   item_name = (quantity > 1) ? item.portion_name_plural : item.portion_name
   pocket = item.pocket
   return false if !$bag.add(item, quantity)
-  pbMessage("\\CN" + _INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+  pbMessage("\\CN" + _INTL("You put the {1} in\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
                            item_name, pocket, PokemonBag.pocket_names[pocket - 1]))
   return true
 end

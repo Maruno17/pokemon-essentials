@@ -386,7 +386,9 @@ def pbGenerateWildPokemon(species, level, isRoamer = false)
   items = genwildpoke.wildHoldItems
   first_pkmn = $player.first_pokemon
   chances = [50, 5, 1]
-  if first_pkmn
+  if Settings::MECHANICS_GENERATION >= 9
+    chances[0] = 30
+  elsif first_pkmn
     case first_pkmn.ability_id
     when :COMPOUNDEYES
       chances = [60, 20, 5]

@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
   # Fundamental to this object
   attr_reader   :battle
@@ -52,9 +55,10 @@ class Battle::Battler
   ACC_EVA_STAGE_DIVISORS    = [9, 8, 7, 6, 5, 4, 3, 3, 3, 3, 3, 3, 3]
   STAT_STAGE_MAXIMUM        = 6   # Is also the minimum (-6)
 
-  #=============================================================================
-  # Complex accessors
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Complex accessors.
+  #-----------------------------------------------------------------------------
+
   attr_reader :level
 
   def level=(value)
@@ -66,7 +70,7 @@ class Battle::Battler
 
   def form=(value)
     @form = value
-    @pokemon.form = value if @pokemon
+    @pokemon.form = value if @pokemon && !@effects[PBEffects::Transform]
   end
 
   def ability
@@ -130,18 +134,20 @@ class Battle::Battler
     @battle.scene.pbRefreshOne(@index)
   end
 
-  #=============================================================================
-  # Properties from Pokémon
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Properties from Pokémon.
+  #-----------------------------------------------------------------------------
+
   def happiness;       return @pokemon ? @pokemon.happiness : 0;       end
   def affection_level; return @pokemon ? @pokemon.affection_level : 2; end
   def gender;          return @pokemon ? @pokemon.gender : 0;          end
   def nature;          return @pokemon ? @pokemon.nature : nil;        end
   def pokerusStage;    return @pokemon ? @pokemon.pokerusStage : 0;    end
 
-  #=============================================================================
-  # Mega Evolution, Primal Reversion, Shadow Pokémon
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Mega Evolution, Primal Reversion, Shadow Pokémon.
+  #-----------------------------------------------------------------------------
+
   def hasMega?
     return false if @effects[PBEffects::Transform]
     return @pokemon&.hasMegaForm?
@@ -160,9 +166,10 @@ class Battle::Battler
 
   def inHyperMode?; return false; end
 
-  #=============================================================================
-  # Display-only properties
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Display-only properties.
+  #-----------------------------------------------------------------------------
+
   def name
     return @effects[PBEffects::Illusion].name if @effects[PBEffects::Illusion]
     return @name
@@ -242,9 +249,10 @@ class Battle::Battler
     return lowerCase ? _INTL("the opposing team") : _INTL("The opposing team")
   end
 
-  #=============================================================================
-  # Calculated properties
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Calculated properties.
+  #-----------------------------------------------------------------------------
+
   def pbSpeed
     return 1 if fainted?
     stage = @stages[:SPEED] + STAT_STAGE_MAXIMUM
@@ -278,7 +286,7 @@ class Battle::Battler
     ret = (@pokemon) ? @pokemon.weight : 500
     ret += @effects[PBEffects::WeightChange]
     ret = 1 if ret < 1
-    if abilityActive? && !@battle.moldBreaker
+    if abilityActive? && !beingMoldBroken?
       ret = Battle::AbilityEffects.triggerWeightCalc(self.ability, self, ret)
     end
     if itemActive?
@@ -287,9 +295,10 @@ class Battle::Battler
     return [ret, 1].max
   end
 
-  #=============================================================================
-  # Queries about what the battler has
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Queries about what the battler has.
+  #-----------------------------------------------------------------------------
+
   def plainStats
     ret = {}
     ret[:ATTACK]          = self.attack
@@ -308,15 +317,17 @@ class Battle::Battler
   # same type more than once, and should not include any invalid types.
   def pbTypes(withExtraType = false)
     ret = @types.uniq
-    # Burn Up erases the Fire-type.
+    # Burn Up erases the Fire-type
     ret.delete(:FIRE) if @effects[PBEffects::BurnUp]
-    # Roost erases the Flying-type. If there are no types left, adds the Normal-
-    # type.
+    # Double Shock erases the Electric-type
+    ret.delete(:ELECTRIC) if @effects[PBEffects::DoubleShock]
+    # Roost erases the Flying-type (if there are no types left, adds the Normal-
+    # type)
     if @effects[PBEffects::Roost]
       ret.delete(:FLYING)
       ret.push(:NORMAL) if ret.length == 0
     end
-    # Add the third type specially.
+    # Add the third type specially
     if withExtraType && @effects[PBEffects::ExtraType] && !ret.include?(@effects[PBEffects::ExtraType])
       ret.push(@effects[PBEffects::ExtraType])
     end
@@ -382,7 +393,9 @@ class Battle::Battler
       :COMATOSE,
       :RKSSYSTEM
     ]
-    return ability_blacklist.include?(abil.id)
+    return true if ability_blacklist.include?(abil.id)
+    return true if hasActiveItem?(:ABILITYSHIELD)
+    return false
   end
 
   # Applies to gaining the ability.
@@ -492,6 +505,11 @@ class Battle::Battler
     return hasActiveAbility?([:MOLDBREAKER, :TERAVOLT, :TURBOBLAZE])
   end
 
+  def beingMoldBroken?
+    return false if hasActiveItem?(:ABILITYSHIELD)
+    return @battle.moldBreaker
+  end
+
   def canChangeType?
     return ![:MULTITYPE, :RKSSYSTEM].include?(@ability_id)
   end
@@ -502,7 +520,7 @@ class Battle::Battler
     return false if @effects[PBEffects::SmackDown]
     return false if @battle.field.effects[PBEffects::Gravity] > 0
     return true if pbHasType?(:FLYING)
-    return true if hasActiveAbility?(:LEVITATE) && !@battle.moldBreaker
+    return true if hasActiveAbility?(:LEVITATE) && !beingMoldBroken?
     return true if hasActiveItem?(:AIRBALLOON)
     return true if @effects[PBEffects::MagnetRise] > 0
     return true if @effects[PBEffects::Telekinesis] > 0
@@ -571,7 +589,7 @@ class Battle::Battler
       return false
     end
     if Settings::MECHANICS_GENERATION >= 6
-      if hasActiveAbility?(:OVERCOAT) && !@battle.moldBreaker
+      if hasActiveAbility?(:OVERCOAT) && !beingMoldBroken?
         if showMsg
           @battle.pbShowAbilitySplash(self)
           if Battle::Scene::USE_ABILITY_SPLASH
@@ -689,9 +707,10 @@ class Battle::Battler
     @battle.belch[@index & 1][@pokemonIndex] = true
   end
 
-  #=============================================================================
-  # Methods relating to this battler's position on the battlefield
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Methods relating to this battler's position on the battlefield.
+  #-----------------------------------------------------------------------------
+
   # Returns whether the given position belongs to the opposing Pokémon's side.
   def opposes?(i = 0)
     i = i.index if i.respond_to?("index")

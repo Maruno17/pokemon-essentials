@@ -1,5 +1,7 @@
+#===============================================================================
 # The Deprecation module is used to warn game & plugin creators of deprecated
 # methods.
+#===============================================================================
 module Deprecation
   module_function
 
@@ -19,7 +21,10 @@ module Deprecation
   end
 end
 
-# The Module class is extended to allow easy deprecation of instance and class methods.
+#===============================================================================
+# The Module class is extended to allow easy deprecation of instance and class
+# methods.
+#===============================================================================
 class Module
   private
 

@@ -628,7 +628,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetAttack2Confu
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetAttack2ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
-    if !target.has_active_ability?(:CONTRARY) || battle.moldBreaker
+    if !target.has_active_ability?(:CONTRARY) || target.being_mold_broken?
       next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanConfuse?(user.battler, false, move.move)
     end
     # Score for stat raise
@@ -650,7 +650,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetSpAtk1Confus
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetSpAtk1ConfuseTarget",
   proc { |score, move, user, target, ai, battle|
-    if !target.has_active_ability?(:CONTRARY) || battle.moldBreaker
+    if !target.has_active_ability?(:CONTRARY) || target.being_mold_broken?
       next Battle::AI::MOVE_USELESS_SCORE if !target.battler.pbCanConfuse?(user.battler, false, move.move)
     end
     # Score for stat raise
@@ -690,7 +690,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("RaiseTargetRandomStat2"
 )
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("RaiseTargetRandomStat2",
   proc { |score, move, user, target, ai, battle|
-    next Battle::AI::MOVE_USELESS_SCORE if !battle.moldBreaker && target.has_active_ability?(:CONTRARY)
+    next Battle::AI::MOVE_USELESS_SCORE if target.has_active_ability?(:CONTRARY) && !target.being_mold_broken?
     next Battle::AI::MOVE_USELESS_SCORE if target.rough_end_of_round_damage >= target.hp
     score -= 7 if target.index != user.index   # Less likely to use on ally
     score += 10 if target.has_active_ability?(:SIMPLE)
@@ -831,7 +831,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("LowerTargetSpAtk2IfCanA
     next true if move.statusMove? &&
                  !target.battler.pbCanLowerStatStage?(move.move.statDown[0], user.battler, move.move)
     next true if user.gender == 2 || target.gender == 2 || user.gender == target.gender
-    next true if !battle.moldBreaker && target.has_active_ability?(:OBLIVIOUS)
+    next true if target.has_active_ability?(:OBLIVIOUS) && !target.being_mold_broken?
     next false
   }
 )

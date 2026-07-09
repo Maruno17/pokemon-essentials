@@ -1,6 +1,7 @@
 #===============================================================================
-# UseText handlers
+# UseText handlers.
 #===============================================================================
+
 ItemHandlers::UseText.add(:BICYCLE, proc { |item|
   next ($PokemonGlobal.bicycle) ? _INTL("Walk") : _INTL("Use")
 })
@@ -16,7 +17,7 @@ ItemHandlers::UseText.add(:EXPALL, proc { |item|
 })
 
 #===============================================================================
-# UseFromBag handlers
+# UseFromBag handlers.
 # Return values: 0 = not used
 #                1 = used
 #                2 = close the Bag to use
@@ -91,7 +92,7 @@ ItemHandlers::UseFromBag.addIf(:move_machines,
 )
 
 #===============================================================================
-# ConfirmUseInField handlers
+# ConfirmUseInField handlers.
 # Return values: true/false
 # Called when an item is used from the Ready Menu.
 # If an item does not have this handler, it is treated as returning true.
@@ -112,7 +113,7 @@ ItemHandlers::ConfirmUseInField.add(:ESCAPEROPE, proc { |item|
 })
 
 #===============================================================================
-# UseInField handlers
+# UseInField handlers.
 # Return values: false = not used
 #                true = used
 # Called if an item is used from the Bag (not on a Pokémon and not a TM/HM) and
@@ -378,7 +379,7 @@ ItemHandlers::UseInField.add(:EXPALLOFF, proc { |item|
 })
 
 #===============================================================================
-# UseOnPokemon handlers
+# UseOnPokemon handlers.
 #===============================================================================
 
 # Applies to all items defined as an evolution stone.
@@ -408,6 +409,30 @@ ItemHandlers::UseOnPokemon.addIf(:evolution_stones,
     next false
   }
 )
+
+ItemHandlers::UseOnPokemon.add(:SCROLLOFWATERS, proc { |item, qty, pkmn, scene|
+  if pkmn.shadowPokemon?
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
+  end
+  newspecies = pkmn.check_evolution_on_use_item(item)
+  if newspecies
+    pkmn.form = 1   # NOTE: This is the only difference to the generic evolution stone code.
+    pbFadeOutInWithMusic do
+      evo = PokemonEvolutionScene.new
+      evo.pbStartScreen(pkmn, newspecies)
+      evo.pbEvolution(false)
+      evo.pbEndScreen
+      if scene.is_a?(PokemonPartyScreen)
+        scene.pbRefreshAnnotations(proc { |p| !p.check_evolution_on_use_item(item).nil? })
+        scene.pbRefresh
+      end
+    end
+    next true
+  end
+  scene.pbDisplay(_INTL("It won't have any effect."))
+  next false
+})
 
 ItemHandlers::UseOnPokemon.add(:POTION, proc { |item, qty, pkmn, scene|
   next pbHPItem(pkmn, 20, scene)
@@ -715,49 +740,73 @@ ItemHandlers::UseOnPokemonMaximum.add(:HPUP, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:HP, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:HPUP, :HEALTHMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:HPUP, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:HP, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:HPUP, :HEALTHMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:PROTEIN, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:ATTACK, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:PROTEIN, :MUSCLEMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:PROTEIN, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:ATTACK, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:PROTEIN, :MUSCLEMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:IRON, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:DEFENSE, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:IRON, :RESISTMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:IRON, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:DEFENSE, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:IRON, :RESISTMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:CALCIUM, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:SPECIAL_ATTACK, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:CALCIUM, :GENIUSMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:CALCIUM, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:SPECIAL_ATTACK, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:CALCIUM, :GENIUSMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:ZINC, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:SPECIAL_DEFENSE, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:ZINC, :CLEVERMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:ZINC, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:SPECIAL_DEFENSE, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:ZINC, :CLEVERMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:CARBOS, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:SPEED, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
 })
 
+ItemHandlers::UseOnPokemonMaximum.copy(:CARBOS, :SWIFTMOCHI)
+
 ItemHandlers::UseOnPokemon.add(:CARBOS, proc { |item, qty, pkmn, scene|
   next pbUseEVRaisingItem(:SPEED, 10, qty, pkmn, "vitamin", scene, Settings::NO_VITAMIN_EV_CAP)
 })
+
+ItemHandlers::UseOnPokemon.copy(:CARBOS, :SWIFTMOCHI)
 
 ItemHandlers::UseOnPokemonMaximum.add(:HEALTHFEATHER, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:HP, 1, pkmn, true)
@@ -830,6 +879,16 @@ ItemHandlers::UseOnPokemon.add(:SWIFTFEATHER, proc { |item, qty, pkmn, scene|
 })
 
 ItemHandlers::UseOnPokemon.copy(:SWIFTFEATHER, :SWIFTWING)
+
+ItemHandlers::UseOnPokemon.add(:FRESHSTARTMOCHI, proc { |item, qty, pkmn, scene|
+  if !pkmn.ev.any? { |stat, value| value > 0 }
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
+  end
+  GameData::Stat.each_main { |s| pkmn.ev[s.id] = 0 }
+  scene.pbDisplay(_INTL("{1}'s base points were all reset to zero!", pkmn.name))
+  next true
+})
 
 ItemHandlers::UseOnPokemon.add(:LONELYMINT, proc { |item, qty, pkmn, scene|
   pbNatureChangingMint(:LONELY, item, pkmn, scene)
@@ -1104,8 +1163,12 @@ ItemHandlers::UseOnPokemon.add(:ABILITYPATCH, proc { |item, qty, pkmn, scene|
   if scene.pbConfirm(_INTL("Do you want to change {1}'s Ability?", pkmn.name))
     abils = pkmn.getAbilityList
     new_ability_id = nil
-    abils.each { |a| new_ability_id = a[0] if a[1] == 2 }
-    if !new_ability_id || pkmn.hasHiddenAbility? || pkmn.isSpecies?(:ZYGARDE)
+    if pkmn.hasHiddenAbility?
+      new_ability_id = 0 if Settings::MECHANICS_GENERATION >= 9   # First regular ability
+    else
+      abils.each { |a| new_ability_id = a[0] if a[1] == 2 }   # Hidden ability
+    end
+    if !new_ability_id || pkmn.isSpecies?(:ZYGARDE)
       scene.pbDisplay(_INTL("It won't have any effect."))
       next false
     end
@@ -1117,6 +1180,22 @@ ItemHandlers::UseOnPokemon.add(:ABILITYPATCH, proc { |item, qty, pkmn, scene|
     next true
   end
   next false
+})
+
+ItemHandlers::UseOnPokemon.add(:METEORITE, proc { |item, qty, pkmn, scene|
+  if !pkmn.isSpecies?(:DEOXYS)
+    scene.pbDisplay(_INTL("It had no effect."))
+    next false
+  elsif pkmn.fainted?
+    scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
+  end
+  new_form = (pkmn.form + 1) % 4   # Normal, Attack, Defense, Speed
+  pkmn.setForm(new_form) do
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} transformed!", pkmn.name))
+  end
+  next true
 })
 
 ItemHandlers::UseOnPokemon.add(:GRACIDEA, proc { |item, qty, pkmn, scene|
@@ -1198,7 +1277,8 @@ ItemHandlers::UseOnPokemon.add(:PURPLENECTAR, proc { |item, qty, pkmn, scene|
 ItemHandlers::UseOnPokemon.add(:REVEALGLASS, proc { |item, qty, pkmn, scene|
   if !pkmn.isSpecies?(:TORNADUS) &&
      !pkmn.isSpecies?(:THUNDURUS) &&
-     !pkmn.isSpecies?(:LANDORUS)
+     !pkmn.isSpecies?(:LANDORUS) &&
+     !pkmn.isSpecies?(:ENAMORUS)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   elsif pkmn.fainted?

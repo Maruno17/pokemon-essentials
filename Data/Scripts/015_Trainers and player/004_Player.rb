@@ -55,7 +55,7 @@ class Player < Trainer
     @mystery_gifts         = []
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def character_ID=(value)
     return if @character_ID == value
@@ -107,7 +107,7 @@ class Player < Trainer
     return @badges.count { |badge| badge == true }
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   # (see Pokedex#seen?)
   # Shorthand for +self.pokedex.seen?+.

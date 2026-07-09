@@ -102,7 +102,6 @@
 #------------------------------------------------------------------------------#
 #                     Please give credit when using this.                      #
 #==============================================================================#
-
 module PluginManager
   # Holds all registered plugin data.
   @@Plugins = {}

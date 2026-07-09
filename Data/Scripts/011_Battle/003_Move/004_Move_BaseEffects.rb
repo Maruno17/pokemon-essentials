@@ -155,8 +155,14 @@ end
 class Battle::Move::StatDownMove < Battle::Move
   attr_reader :statDown
 
+  def pbOnStartUse(user, targets)
+    @stats_lowered = false
+  end
+
   def pbEffectWhenDealingDamage(user, target)
+    return if @stats_lowered
     return if @battle.pbAllFainted?(target.idxOwnSide)
+    @stats_lowered = true
     showAnim = true
     (@statDown.length / 2).times do |i|
       next if !user.pbCanLowerStatStage?(@statDown[i * 2], user, self)
@@ -212,7 +218,7 @@ class Battle::Move::TargetMultiStatDownMove < Battle::Move
       # NOTE: It's a bit of a faff to make sure the appropriate failure message
       #       is shown here, I know.
       canLower = false
-      if target.hasActiveAbility?(:CONTRARY) && !@battle.moldBreaker
+      if target.hasActiveAbility?(:CONTRARY) && !target.beingMoldBroken?
         (@statDown.length / 2).times do |i|
           next if target.statStageAtMax?(@statDown[i * 2])
           canLower = true
@@ -424,6 +430,9 @@ class Battle::Move::RecoilMove < Battle::Move
     return if user.hasActiveAbility?(:ROCKHEAD)
     amt = pbRecoilDamage(user, target)
     amt = 1 if amt < 1
+    if user.pokemon.isSpecies?(:BASCULIN) && [2, 3].include?(user.pokemon.form)
+      user.pokemon.evolution_counter += amt
+    end
     user.pbReduceHP(amt, false)
     @battle.pbDisplay(_INTL("{1} is damaged by recoil!", user.pbThis))
     user.pbItemHPHealCheck

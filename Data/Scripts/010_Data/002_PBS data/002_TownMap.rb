@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class TownMap
     attr_reader :id
@@ -10,7 +13,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "town_map.dat"
     PBS_BASE_FILENAME = "town_map"
-
     SCHEMA = {
       "SectionName" => [:id,        "u"],
       "Name"        => [:real_name, "s"],
@@ -21,6 +23,8 @@ module GameData
 
     extend ClassMethodsIDNumbers
     include InstanceMethods
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id              = hash[:id]

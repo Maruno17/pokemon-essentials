@@ -1,7 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle
-  #=============================================================================
+  #-----------------------------------------------------------------------------
   # Running from battle
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def pbCanRun?(idxBattler)
     return false if trainerBattle?
     battler = @battlers[idxBattler]
@@ -32,19 +36,19 @@ class Battle
     commands.push(_INTL("Treat as a capture")) if wildBattle?
     commands.push(_INTL("Cancel"))
     case pbShowCommands(_INTL("Choose the outcome of this battle."), commands)
-    when 0   # Win
-      @decision = 1
-    when 1   # Loss
-      @decision = 2
-    when 2   # Draw
-      @decision = 5
-    when 3   # Run away/forfeit
+    when 0
+      @decision = Outcome::WIN
+    when 1
+      @decision = Outcome::LOSE
+    when 2
+      @decision = Outcome::DRAW
+    when 3
       pbSEPlay("Battle flee")
       pbDisplayPaused(_INTL("You got away safely!"))
-      @decision = 3
-    when 4   # Capture
+      @decision = Outcome::FLEE
+    when 4
       return -1 if trainerBattle?
-      @decision = 4
+      @decision = Outcome::CATCH
     else
       return -1
     end
@@ -72,11 +76,19 @@ class Battle
     # Running from trainer battles
     if trainerBattle?
       if @internalBattle
-        pbDisplayPaused(_INTL("No! There's no running from a Trainer battle!"))
+        if Settings::CAN_FORFEIT_TRAINER_BATTLES
+          pbDisplayPaused(_INTL("Would you like to give up on this battle and quit now?"))
+          if pbDisplayConfirm(_INTL("Quitting the battle is the same as losing the battle."))
+            @decision = Outcome::LOSE   # Treated as a loss
+            return 1
+          end
+        else
+          pbDisplayPaused(_INTL("No! There's no running from a Trainer battle!"))
+        end
       elsif pbDisplayConfirm(_INTL("Would you like to forfeit the match and quit now?"))
         pbSEPlay("Battle flee")
         pbDisplay(_INTL("{1} forfeited the match!", self.pbPlayer.name))
-        @decision = 3
+        @decision = Outcome::FLEE
         return 1
       end
       return 0
@@ -89,7 +101,7 @@ class Battle
       if battler.pbHasType?(:GHOST) && Settings::MORE_TYPE_EFFECTS
         pbSEPlay("Battle flee")
         pbDisplayPaused(_INTL("You got away safely!"))
-        @decision = 3
+        @decision = Outcome::FLEE
         return 1
       end
       # Abilities that guarantee escape
@@ -99,7 +111,7 @@ class Battle
         pbHideAbilitySplash(battler)
         pbSEPlay("Battle flee")
         pbDisplayPaused(_INTL("You got away safely!"))
-        @decision = 3
+        @decision = Outcome::FLEE
         return 1
       end
       # Held items that guarantee escape
@@ -107,7 +119,7 @@ class Battle
          Battle::ItemEffects.triggerCertainEscapeFromBattle(battler.item, battler)
         pbSEPlay("Battle flee")
         pbDisplayPaused(_INTL("{1} fled using its {2}!", battler.pbThis, battler.itemName))
-        @decision = 3
+        @decision = Outcome::FLEE
         return 1
       end
       # Other certain trapping effects
@@ -151,7 +163,7 @@ class Battle
     if rate >= 256 || @battleAI.pbAIRandom(256) < rate
       pbSEPlay("Battle flee")
       pbDisplayPaused(_INTL("You got away safely!"))
-      @decision = 3
+      @decision = Outcome::FLEE
       return 1
     end
     pbDisplayPaused(_INTL("You couldn't get away!"))

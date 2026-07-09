@@ -278,13 +278,13 @@ class Battle::Move::EffectDependsOnEnvironment < Battle::Move
     return if @battle.pbRandom(100) >= chance
     case @secretPower
     when 2
-      target.pbSleep if target.pbCanSleep?(user, false, self)
+      target.pbSleep(user) if target.pbCanSleep?(user, false, self)
     when 10
       target.pbBurn(user) if target.pbCanBurn?(user, false, self)
     when 0, 1
       target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
     when 9
-      target.pbFreeze if target.pbCanFreeze?(user, false, self)
+      target.pbFreeze(user) if target.pbCanFreeze?(user, false, self)
     when 5
       if target.pbCanLowerStatStage?(:ATTACK, user, self)
         target.pbLowerStatStage(:ATTACK, 1, user)
@@ -505,9 +505,12 @@ end
 class Battle::Move::CounterDamagePlusHalf < Battle::Move::FixedDamageMove
   def pbAddTarget(targets, user)
     return if user.lastFoeAttacker.length == 0
-    lastAttacker = user.lastFoeAttacker.last
-    return if lastAttacker < 0 || !user.opposes?(lastAttacker)
-    user.pbAddTarget(targets, user, @battle.battlers[lastAttacker], self, false)
+    user.lastFoeAttacker.reverse_each do |party_index|
+      battler = @battle.pbFindBattler(party_index, user.index + 1)
+      next if !battler
+      user.pbAddTarget(targets, user, battler, self, false)
+      break
+    end
   end
 
   def pbMoveFailed?(user, targets)
@@ -724,6 +727,8 @@ class Battle::Move::UseLastMoveUsed < Battle::Move
       "ProtectUserFromDamagingMovesObstruct",              # Obstruct           # Not listed on Bulbapedia
       "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
       "ProtectUserBanefulBunker",                          # Baneful Bunker
+      "ProtectUserFromDamagingMovesSilkTrap",              # Silk Trap
+      "ProtectUserFromDamagingMovesBurningBulwark",        # Burning Bulwark
       # Moves that call other moves
       "UseLastMoveUsedByTarget",                           # Mirror Move
       "UseLastMoveUsed",                                   # Copycat (this move)
@@ -957,6 +962,8 @@ class Battle::Move::UseRandomMove < Battle::Move
       "ProtectUserFromDamagingMovesObstruct",              # Obstruct
       "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
       "ProtectUserBanefulBunker",                          # Baneful Bunker
+      "ProtectUserFromDamagingMovesSilkTrap",              # Silk Trap
+      "ProtectUserFromDamagingMovesBurningBulwark",        # Burning Bulwark
       # Moves that call other moves
       "UseLastMoveUsedByTarget",                           # Mirror Move
       "UseLastMoveUsed",                                   # Copycat
@@ -1049,6 +1056,8 @@ class Battle::Move::UseRandomMoveFromUserParty < Battle::Move
       "ProtectUserFromDamagingMovesObstruct",              # Obstruct           # Not listed on Bulbapedia
       "ProtectUserFromTargetingMovesSpikyShield",          # Spiky Shield
       "ProtectUserBanefulBunker",                          # Baneful Bunker
+      "ProtectUserFromDamagingMovesSilkTrap",              # Silk Trap
+      "ProtectUserFromDamagingMovesBurningBulwark",        # Burning Bulwark
       # Moves that call other moves
       "UseLastMoveUsedByTarget",                           # Mirror Move
       "UseLastMoveUsed",                                   # Copycat

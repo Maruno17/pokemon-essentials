@@ -235,15 +235,15 @@ class Game_Player < Game_Character
   #     y : y-coordinate
   #     d : direction (0, 2, 4, 6, 8)
   #         * 0 = Determines if all directions are impassable (for jumping)
-  def passable?(x, y, d, strict = false)
+  def passable?(x, y, dir, strict = false)
     # Get new coordinates
-    new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
-    new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
+    new_x = x + (dir == 6 ? 1 : dir == 4 ? -1 : 0)
+    new_y = y + (dir == 2 ? 1 : dir == 8 ? -1 : 0)
     # If coordinates are outside of map
     return false if !$game_map.validLax?(new_x, new_y)
     if !$game_map.valid?(new_x, new_y)
       return false if !$map_factory
-      return $map_factory.isPassableFromEdge?(new_x, new_y)
+      return $map_factory.isPassableFromEdge?(new_x, new_y, 10 - dir)
     end
     # If debug mode is ON and Ctrl key was pressed
     return true if $DEBUG && Input.press?(Input::CTRL)

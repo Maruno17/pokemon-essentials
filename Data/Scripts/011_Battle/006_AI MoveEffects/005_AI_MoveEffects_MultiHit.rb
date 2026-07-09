@@ -234,7 +234,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttack",
           #       user's first turn in battle, so it can't be used in response
           #       to this move charging up.
           if target.has_move_with_function?("ProtectUserFromDamagingMovesKingsShield",
-                                            "ProtectUserFromDamagingMovesObstruct")
+                                            "ProtectUserFromDamagingMovesObstruct",
+                                            "ProtectUserFromDamagingMovesSilkTrap",
+                                            "ProtectUserFromDamagingMovesBurningBulwark")
             has_protect_move = true
           end
         end

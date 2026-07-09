@@ -1,0 +1,364 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F2DD1008-519D-4F6A-BA3C-06A9E9306AA3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PokemonEssentials</RootNamespace>
+    <AssemblyName>PokemonEssentials.Interface</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;INTERNAL</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>CS0162;VSSpell001</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\Scripts\000_Application_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Settings_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\001_Debugging\000_Debug_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\001_Debugging\001_PBDebug_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\001_Debugging\002_DebugConsole_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\001_Debugging\003_Errors_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\001_Debugging\004_Validation_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\001_Debugging\005_Deprecation_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\001_MKXP_Compatibility_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\002_Files\001_FileTests_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\002_Files\002_FileMixins_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\002_Files\003_HTTP_Utilities_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\002_RubyUtilities_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\003_Intl_Messages_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\004_Input_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\005_PluginManager_Interface.cs" />
+    <Compile Include="Data\Scripts\001_Technical\006_RPG_Sprite_Interface.cs" />
+    <Compile Include="Data\Scripts\002_BattleSettings_Interface.cs" />
+    <Compile Include="Data\Scripts\002_Save data\000_SaveData_Interface.cs" />
+    <Compile Include="Data\Scripts\002_Save data\001_SaveData_Interface.cs" />
+    <Compile Include="Data\Scripts\002_Save data\002_SaveData_Value_Interface.cs" />
+    <Compile Include="Data\Scripts\002_Save data\003_SaveData_Conversion_Interface.cs" />
+    <Compile Include="Data\Scripts\002_Save data\004_Game_SaveValues_Interface.cs" />
+    <Compile Include="Data\Scripts\002_Save data\005_Game_SaveConversions_Interface.cs" />
+    <Compile Include="Data\Scripts\003_Game processing\000_Game_Interface.cs" />
+    <Compile Include="Data\Scripts\003_Game processing\001_StartGame_Interface.cs" />
+    <Compile Include="Data\Scripts\003_Game processing\002_Scene_Map_Interface.cs" />
+    <Compile Include="Data\Scripts\003_Game processing\003_Interpreter_Interface.cs" />
+    <Compile Include="Data\Scripts\003_Game processing\004_Interpreter_Commands_Interface.cs" />
+    <Compile Include="Data\Scripts\003_Game processing\005_Event_Handlers_Interface.cs" />
+    <Compile Include="Data\Scripts\003_Game processing\006_Event_HandlerCollections_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\001_Game_Screen_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\001_Switches and Variables\001_Game_Temp_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\001_Switches and Variables\002_Game_Switches_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\001_Switches and Variables\003_Game_Variables_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\001_Switches and Variables\004_Game_SelfSwitches_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\002_Game_System_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\003_Game_Picture_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\004_Game_Map_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\005_Game_MapFactory_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\006_Game_Character_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\007_Game_Event_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\008_Game_Player_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\009_Game_CommonEvent_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\010_Game_Follower_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\011_Game_FollowerFactory_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\012_Game_Stats_Interface.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\Structs, Enums, and DTOs\000_Choice.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\Structs, Enums, and DTOs\000_SeriV2.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\Structs, Enums, and DTOs\000_SeriV3.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\Structs, Enums, and DTOs\000_SeriV4.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\Structs, Enums, and DTOs\000_TextPosition.cs" />
+    <Compile Include="Data\Scripts\004_Game classes\Structs, Enums, and DTOs\000_TilePosition.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\001_Sprite_Picture_Interface.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\002_Sprite_Timer_Interface.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\003_Sprite_Character_Interface.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\004_Sprite_Reflection_Interface.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\005_Sprite_SurfBase_Interface.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\006_Spriteset_Global_Interface.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\007_Spriteset_Map_Interface.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\008_Sprite_AnimationSprite_Interface.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\009_Sprite_DynamicShadows_Interface.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\010_PictureEx_Interface.cs" />
+    <Compile Include="Data\Scripts\005_Sprites\011_ScreenPosHelper_Interface.cs" />
+    <Compile Include="Data\Scripts\006_Map renderer\001_TilemapRenderer_Interface.cs" />
+    <Compile Include="Data\Scripts\006_Map renderer\002_TilesetWrapper_Interface.cs" />
+    <Compile Include="Data\Scripts\006_Map renderer\003_AutotileExpander_Interface.cs" />
+    <Compile Include="Data\Scripts\006_Map renderer\004_TileDrawingHelper_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\001_RPG_Cache_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\002_MessageConfig_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\003_Window_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\004_SpriteWindow_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\005_SpriteWindow_text_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\006_SpriteWindow_pictures_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\007_BitmapSprite_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\008_AnimatedBitmap_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\009_Planes_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\010_DrawText_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\011_Messages_Interface.cs" />
+    <Compile Include="Data\Scripts\007_Objects and windows\012_TextEntry_Interface.cs" />
+    <Compile Include="Data\Scripts\008_Audio\001_Audio_Interface.cs" />
+    <Compile Include="Data\Scripts\008_Audio\002_Audio_Play_Interface.cs" />
+    <Compile Include="Data\Scripts\009_Scenes\001_Transitions_Interface.cs" />
+    <Compile Include="Data\Scripts\009_Scenes\002_EventScene_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_GameData_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\001_GrowthRate_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\002_GenderRatio_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\003_EggGroup_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\004_BodyShape_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\005_BodyColor_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\006_Habitat_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\007_Evolution_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\008_Stat_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\009_Nature_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\010_Status_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\011_TerrainTag_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\012_Weather_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\013_EncounterType_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\014_Environment_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\015_BattleWeather_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\016_BattleTerrain_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\001_Hardcoded data\017_Target_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\001_MiscPBSData_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\002_TownMap_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\003_Type_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\004_Ability_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\005_Move_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\006_Item_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\007_BerryPlant_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\008_Species_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\009_Species_files_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\010_SpeciesMetrics_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\011_ShadowPokemon_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\012_Ribbon_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\013_Encounter_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\014_TrainerType_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\015_Trainer_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\016_Metadata_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\017_PlayerMetadata_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\018_MapMetadata_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\019_DungeonTileset_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\020_DungeonParameters_Interface.cs" />
+    <Compile Include="Data\Scripts\010_Data\002_PBS data\021_PhoneMessage_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\001_Battle_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\002_Battle_StartAndEnd_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\003_Battle_ExpAndMoveLearning_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\004_Battle_ActionAttacksPriority_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\005_Battle_ActionSwitching_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\006_Battle_ActionUseItem_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\007_Battle_ActionRunning_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\008_Battle_ActionOther_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\009_Battle_CommandPhase_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\010_Battle_AttackPhase_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\001_Battle\011_Battle_EndOfRoundPhase_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\002_Battler\001_Battle_Battler_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\002_Battler\002_Battler_Initialize_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\002_Battler\003_Battler_ChangeSelf_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\002_Battler\004_Battler_Statuses_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\002_Battler\005_Battler_StatStages_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\002_Battler\006_Battler_AbilityAndItem_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\002_Battler\007_Battler_UseMove_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\002_Battler\008_Battler_UseMoveTargeting_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\002_Battler\009_Battler_UseMoveSuccessChecks_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\002_Battler\010_Battler_UseMoveTriggerEffects_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\001_Battle_Move_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\002_Move_Usage_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\003_Move_UsageCalculations_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\004_Move_BaseEffects_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\005_MoveEffects_Misc_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\006_MoveEffects_BattlerStats_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\007_MoveEffects_BattlerOther_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\008_MoveEffects_MoveAttributes_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\009_MoveEffects_MultiHit_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\010_MoveEffects_Healing_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\011_MoveEffects_Items_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\012_MoveEffects_ChangeMoveEffect_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\003_Move\013_MoveEffects_SwitchingActing_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\004_Scene\001_Battle_Scene_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\004_Scene\002_Scene_Initialize_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\004_Scene\003_Scene_ChooseCommands_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\004_Scene\004_Scene_PlayAnimations_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\004_Scene\005_Battle_Scene_Menus_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\004_Scene\006_Battle_Scene_Objects_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\004_Scene\007_Battle_Scene_BaseAnimation_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\004_Scene\008_Battle_Scene_Animations_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\004_Scene\009_Battle_DebugScene_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\001_Battle_AI_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\002_AI_Switch_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\003_AI_UseItem_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\004_AI_MegaEvolve_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\005_AI_ChooseMove_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\006_AI_ChooseMove_GenericEffects_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\007_AI_ChooseMove_OtherScores_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\008_AI_Utilities_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\009_AITrainer_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\010_AIBattler_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\005_AI\011_AIMove_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\007_Other battle code\001_PBEffects_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\007_Other battle code\002_Battle_ActiveField_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\007_Other battle code\003_Battle_DamageState_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\007_Other battle code\004_Battle_Peers_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\007_Other battle code\005_Battle_CatchAndStoreMixin_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\007_Other battle code\006_Battle_Clauses_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\007_Other battle code\007_BattleAnimationPlayer_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\007_Other battle code\008_Battle_AbilityEffects_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\007_Other battle code\009_Battle_ItemEffects_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\007_Other battle code\010_Battle_PokeBallEffects_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\008_Other battle types\001_SafariBattle_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\008_Other battle types\002_BugContestBattle_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\008_Other battle types\003_BattlePalaceBattle_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\008_Other battle types\004_BattleArenaBattle_Interface.cs" />
+    <Compile Include="Data\Scripts\011_Battle\008_Other battle types\005_RecordedBattle_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\001_Overworld visuals\001_Overworld_Weather_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\001_Overworld visuals\002_Overworld_Overlays_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\001_Overworld visuals\003_Overworld_MapTransitionAnims_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\001_Overworld_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\002_Battle triggering\001_Overworld_BattleStarting_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\002_Battle triggering\002_Overworld_BattleIntroAnim_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\002_Battle triggering\003_Overworld_WildEncounters_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\002_Battle triggering\004_Overworld_EncounterModifiers_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\002_Battle triggering\005_Overworld_RoamingPokemon_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\002_Overworld_Metadata_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\003_Overworld_Time_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\004_Overworld_FieldMoves_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\005_Overworld_Fishing_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\006_Overworld_BerryPlants_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\007_Overworld_DayCare_Interface.cs" />
+    <Compile Include="Data\Scripts\012_Overworld\008_Overworld_RandomDungeons_Interface.cs" />
+    <Compile Include="Data\Scripts\013_Items\001_Item_Utilities_Interface.cs" />
+    <Compile Include="Data\Scripts\013_Items\002_Item_Effects_Interface.cs" />
+    <Compile Include="Data\Scripts\013_Items\003_Item_BattleEffects_Interface.cs" />
+    <Compile Include="Data\Scripts\013_Items\004_Item_Phone_Interface.cs" />
+    <Compile Include="Data\Scripts\013_Items\005_Item_PokeRadar_interface.cs" />
+    <Compile Include="Data\Scripts\013_Items\006_Item_Mail_Interface.cs" />
+    <Compile Include="Data\Scripts\013_Items\007_Item_Sprites_Interface.cs" />
+    <Compile Include="Data\Scripts\013_Items\008_PokemonBag_Interface.cs" />
+    <Compile Include="Data\Scripts\014_Pokemon\001_Pokemon-related\001_FormHandlers_Interface.cs" />
+    <Compile Include="Data\Scripts\014_Pokemon\001_Pokemon-related\002_ShadowPokemon_Other_Interface.cs" />
+    <Compile Include="Data\Scripts\014_Pokemon\001_Pokemon-related\003_Pokemon_Sprites_Interface.cs" />
+    <Compile Include="Data\Scripts\014_Pokemon\001_Pokemon-related\004_PokemonStorage_Interface.cs" />
+    <Compile Include="Data\Scripts\014_Pokemon\001_Pokemon_Interface.cs" />
+    <Compile Include="Data\Scripts\014_Pokemon\002_Pokemon_MegaEvolution_Interface.cs" />
+    <Compile Include="Data\Scripts\014_Pokemon\003_Pokemon_ShadowPokemon_Interface.cs" />
+    <Compile Include="Data\Scripts\014_Pokemon\004_Pokemon_Move_Interface.cs" />
+    <Compile Include="Data\Scripts\014_Pokemon\005_Pokemon_Owner_Interface.cs" />
+    <Compile Include="Data\Scripts\015_Trainers and player\001_Trainer_Interface.cs" />
+    <Compile Include="Data\Scripts\015_Trainers and player\002_Trainer_LoadAndNew_Interface.cs" />
+    <Compile Include="Data\Scripts\015_Trainers and player\003_Trainer_Sprites_Interface.cs" />
+    <Compile Include="Data\Scripts\015_Trainers and player\004_Player_Interface.cs" />
+    <Compile Include="Data\Scripts\015_Trainers and player\005_Player_Pokedex_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\000_UI_Core_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\001_Non-interactive UI\001_UI_SplashesAndTitleScreen_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\001_Non-interactive UI\002_UI_Controls_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\001_Non-interactive UI\003_UI_EggHatching_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\001_Non-interactive UI\004_UI_Evolution_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\001_Non-interactive UI\005_UI_Trading_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\001_Non-interactive UI\006_UI_HallOfFame_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\001_Non-interactive UI\007_UI_Credits_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\001_UI_PauseMenu_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\002_UI_Pokedex_Menu_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\003_UI_Pokedex_Main_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\004_UI_Pokedex_Entry_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\005_UI_Party_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\006_UI_Summary_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\007_UI_Bag_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\008_UI_Pokegear_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\009_UI_RegionMap_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\010_UI_Phone_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\011_UI_Jukebox_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\012_UI_TrainerCard_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\013_UI_Load_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\014_UI_Save_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\015_UI_Options_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\016_UI_ReadyMenu_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\017_UI_PokemonStorage_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\018_UI_ItemStorage_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\019_UI_PC_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\020_UI_PokeMart_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\021_UI_BattlePointShop_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\022_UI_MoveRelearner_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\023_UI_PurifyChamber_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\024_UI_MysteryGift_Interface.cs" />
+    <Compile Include="Data\Scripts\016_UI\025_UI_TextEntry_Interface.cs" />
+    <Compile Include="Data\Scripts\017_Minigames\000_Minigames_Interface.cs" />
+    <Compile Include="Data\Scripts\017_Minigames\001_Minigame_Duel_Interface.cs" />
+    <Compile Include="Data\Scripts\017_Minigames\002_Minigame_TripleTriad_Interface.cs" />
+    <Compile Include="Data\Scripts\017_Minigames\003_Minigame_SlotMachine_Interface.cs" />
+    <Compile Include="Data\Scripts\017_Minigames\004_Minigame_VoltorbFlip_Interface.cs" />
+    <Compile Include="Data\Scripts\017_Minigames\005_Minigame_Lottery_Interface.cs" />
+    <Compile Include="Data\Scripts\017_Minigames\006_Minigame_Mining_Interface.cs" />
+    <Compile Include="Data\Scripts\017_Minigames\007_Minigame_TilePuzzles_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\001_Battle Frontier\001_Challenge_BattleChallenge_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\001_Battle Frontier\002_Challenge_Data_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\001_Battle Frontier\003_Challenge_ChooseFoes_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\001_Battle Frontier\004_Challenge_Battles_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\001_Battle Frontier\005_UI_BattleSwap_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\001_SafariZone_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\002_Battle Frontier rules\001_Challenge_ChallengeRules_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\002_Battle Frontier rules\002_Challenge_Rulesets_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\002_Battle Frontier rules\003_Challenge_EntryRestrictions_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\002_Battle Frontier rules\004_Challenge_LevelAdjustment_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\002_Battle Frontier rules\005_Challenge_BattleRules_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\002_BugContest_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\003_Battle Frontier generator\001_ChallengeGenerator_Data_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\003_Battle Frontier generator\002_ChallengeGenerator_Pokemon_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\003_Battle Frontier generator\003_ChallengeGenerator_Trainers_Interface.cs" />
+    <Compile Include="Data\Scripts\018_Alternate battle modes\003_Battle Frontier generator\004_ChallengeGenerator_BattleSim_Interface.cs" />
+    <Compile Include="Data\Scripts\019_Utilities\001_Utilities_Interface.cs" />
+    <Compile Include="Data\Scripts\019_Utilities\002_Utilities_Pokemon_Interface.cs" />
+    <Compile Include="Data\Scripts\019_Utilities\003_Utilities_BattleAudio_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\000_Debug_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\001_Editor screens\001_EditorScreens_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\001_Editor screens\002_EditorScreens_TerrainTags_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\001_Editor screens\003_EditorScreens_MapConnections_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\001_Editor screens\004_EditorScreens_SpritePositioning_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\001_Editor_Utilities_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\002_Animation editor\001_AnimEditor_SceneElements_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\002_Animation editor\002_AnimEditor_ControlsButtons_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\002_Animation editor\003_AnimEditor_Interpolation_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\002_Animation editor\004_AnimEditor_ExportImport_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\002_Animation editor\005_AnimEditor_Functions_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\002_Editor_DataTypes_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\003_Debug menus\001_Debug_Menus_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\003_Debug menus\002_Debug_MenuCommands_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\003_Debug menus\003_Debug_MenuExtraCode_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\003_Debug menus\004_Debug_BattleCommands_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\003_Debug menus\005_Debug_BattlePkmnCommands_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\003_Debug menus\006_Debug_BattleExtraCode_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\003_Debug menus\007_Debug_PokemonCommands_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\003_Debug menus\008_Debug_FilenameUpdater_Interface.cs" />
+    <Compile Include="Data\Scripts\020_Debug\003_Editor_Listers_Interface.cs" />
+    <Compile Include="Data\Scripts\021_Compiler\001_Compiler_Interface.cs" />
+    <Compile Include="Data\Scripts\021_Compiler\002_Compiler_CompilePBS_Interface.cs" />
+    <Compile Include="Data\Scripts\021_Compiler\003_Compiler_WritePBS_Interface.cs" />
+    <Compile Include="Data\Scripts\021_Compiler\004_Compiler_Animations_Interface.cs" />
+    <Compile Include="Data\Scripts\021_Compiler\005_Compiler_MapsAndEvents_Interface.cs" />
+    <Compile Include="Data\Scripts\999_Main\999_Main_Interface.cs" />
+    <Compile Include="IEngine.RpgMaker.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

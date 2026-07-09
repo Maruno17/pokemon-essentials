@@ -1,5 +1,5 @@
 #===============================================================================
-# Pokémon icons
+# Pokémon icons.
 #===============================================================================
 class PokemonBoxIcon < IconSprite
   def initialize(pokemon, viewport = nil)
@@ -44,7 +44,7 @@ class PokemonBoxIcon < IconSprite
 end
 
 #===============================================================================
-# Pokémon sprite
+# Pokémon sprite.
 #===============================================================================
 class MosaicPokemonSprite < PokemonSprite
   attr_reader :mosaic
@@ -140,7 +140,7 @@ class AutoMosaicPokemonSprite < MosaicPokemonSprite
 end
 
 #===============================================================================
-# Cursor
+# Cursor.
 #===============================================================================
 class PokemonBoxArrow < Sprite
   attr_accessor :quickswap
@@ -306,7 +306,7 @@ class PokemonBoxArrow < Sprite
 end
 
 #===============================================================================
-# Box
+# Box.
 #===============================================================================
 class PokemonBoxSprite < Sprite
   attr_accessor :refreshBox
@@ -461,7 +461,7 @@ class PokemonBoxSprite < Sprite
 end
 
 #===============================================================================
-# Party pop-up panel
+# Party pop-up panel.
 #===============================================================================
 class PokemonBoxPartySprite < Sprite
   def initialize(party, viewport = nil)
@@ -578,7 +578,7 @@ class PokemonBoxPartySprite < Sprite
 end
 
 #===============================================================================
-# Pokémon storage visuals
+# Pokémon storage visuals.
 #===============================================================================
 class PokemonStorageScene
   attr_reader :quickswap
@@ -1467,10 +1467,11 @@ class PokemonStorageScene
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/UI/types"))
       pokemon.types.each_with_index do |type, i|
         type_number = GameData::Type.get(type).icon_position
-        type_rect = Rect.new(0, type_number * 28, 64, 28)
-        type_x = (pokemon.types.length == 1) ? 52 : 18 + (70 * i)
+        type_rect = Rect.new(0, type_number * GameData::Type::ICON_SIZE[1], *GameData::Type::ICON_SIZE)
+        type_x = (pokemon.types.length == 1) ? 52 : 18 + ((GameData::Type::ICON_SIZE[0] + 6) * i)
         overlay.blt(type_x, 272, typebitmap.bitmap, type_rect)
       end
+      typebitmap.dispose
       drawMarkings(overlay, 70, 240, 128, 20, pokemon.markings)
       pbDrawImagePositions(overlay, imagepos)
     end
@@ -1484,7 +1485,7 @@ class PokemonStorageScene
 end
 
 #===============================================================================
-# Pokémon storage mechanics
+# Pokémon storage mechanics.
 #===============================================================================
 class PokemonStorageScreen
   attr_reader :scene

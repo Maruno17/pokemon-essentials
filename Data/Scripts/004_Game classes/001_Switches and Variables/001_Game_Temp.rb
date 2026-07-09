@@ -47,9 +47,6 @@ class Game_Temp
   attr_accessor :darkness_sprite          # DarknessSprite or nil
   attr_accessor :mart_prices
 
-  #-----------------------------------------------------------------------------
-  # * Object Initialization
-  #-----------------------------------------------------------------------------
   def initialize
     # Flags requesting something to happen
     @menu_calling           = false

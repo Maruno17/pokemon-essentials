@@ -1,7 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
-  #=============================================================================
-  # Change HP
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Change HP.
+  #-----------------------------------------------------------------------------
+
   def pbReduceHP(amt, anim = true, registerDamage = true, anyAnim = true)
     amt = amt.round
     amt = @hp if amt > @hp
@@ -87,20 +91,16 @@ class Battle::Battler
     # Do other things
     @battle.pbClearChoice(@index)   # Reset choice
     pbOwnSide.effects[PBEffects::LastRoundFainted] = @battle.turnCount
-    if $game_temp.party_direct_damage_taken &&
-       $game_temp.party_direct_damage_taken[@pokemonIndex] &&
-       pbOwnedByPlayer?
-      $game_temp.party_direct_damage_taken[@pokemonIndex] = 0
-    end
     # Check other battlers' abilities that trigger upon a battler fainting
     pbAbilitiesOnFainting
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
   end
 
-  #=============================================================================
-  # Move PP
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Move PP.
+  #-----------------------------------------------------------------------------
+
   def pbSetPP(move, pp)
     move.pp = pp
     # No need to care about @effects[PBEffects::Mimic], since Mimic can't copy
@@ -123,9 +123,10 @@ class Battle::Battler
     pbSetPP(move, move.pp - 1) if move.pp > 0
   end
 
-  #=============================================================================
-  # Change type
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Change type.
+  #-----------------------------------------------------------------------------
+
   def pbChangeTypes(newType)
     if newType.is_a?(Battle::Battler)
       newTypes = newType.pbTypes
@@ -140,6 +141,7 @@ class Battle::Battler
       @effects[PBEffects::ExtraType] = nil
     end
     @effects[PBEffects::BurnUp] = false
+    @effects[PBEffects::DoubleShock] = false
     @effects[PBEffects::Roost]  = false
   end
 
@@ -147,12 +149,14 @@ class Battle::Battler
     @types = @pokemon.types
     @effects[PBEffects::ExtraType] = nil
     @effects[PBEffects::BurnUp] = false
+    @effects[PBEffects::DoubleShock] = false
     @effects[PBEffects::Roost]  = false
   end
 
-  #=============================================================================
-  # Forms
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+  # Forms.
+  #-----------------------------------------------------------------------------
+
   def pbChangeForm(newForm, msg)
     return if fainted? || @effects[PBEffects::Transform] || @form == newForm
     oldForm = @form
@@ -195,7 +199,7 @@ class Battle::Battler
         case effectiveWeather
         when :Sun, :HarshSun   then newForm = 1
         when :Rain, :HeavyRain then newForm = 2
-        when :Hail             then newForm = 3
+        when :Hail, :Snowstorm then newForm = 3
         end
         if @form != newForm
           @battle.pbShowAbilitySplash(self, true)
@@ -222,7 +226,7 @@ class Battle::Battler
     end
     # Eiscue - Ice Face
     if !ability_changed && isSpecies?(:EISCUE) && self.ability == :ICEFACE &&
-       @form == 1 && effectiveWeather == :Hail
+       @form == 1 && [:Hail, :Snowstorm].include?(effectiveWeather)
       @canRestoreIceFace = true   # Changed form at end of round
     end
   end
@@ -298,6 +302,7 @@ class Battle::Battler
     oldAbil = @ability_id
     @effects[PBEffects::Transform]        = true
     @effects[PBEffects::TransformSpecies] = target.species
+    self.form = target.form
     pbChangeTypes(target)
     self.ability = target.ability
     @attack  = target.attack

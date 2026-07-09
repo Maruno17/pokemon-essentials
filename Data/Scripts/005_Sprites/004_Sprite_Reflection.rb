@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Sprite_Reflection
   attr_reader :visible
 
@@ -63,7 +66,8 @@ class Sprite_Reflection
       @sprite.ox       = width / 2
       @sprite.oy       = (height / 2) - 2   # Hard-coded 2 pixel shift up
       @sprite.oy       -= event.bob_height * 2
-      @sprite.z        = -50   # Still water is -100, map is 0 and above
+      @sprite.z        = @parent_sprite.groundY - (Graphics.height / 2)
+      @sprite.z        -= 1000   # Still water is -2000, map is 0 and above
       @sprite.z        += 1 if event == $game_player
       @sprite.zoom_x   = @parent_sprite.zoom_x
       if Settings::ANIMATE_REFLECTIONS && !GameData::MapMetadata.try_get(event.map_id)&.still_reflections

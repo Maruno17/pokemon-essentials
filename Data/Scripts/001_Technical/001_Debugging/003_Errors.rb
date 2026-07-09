@@ -4,6 +4,9 @@
 class Reset < Exception
 end
 
+#===============================================================================
+#
+#===============================================================================
 class EventScriptError < Exception
   attr_accessor :event_message
 
@@ -13,6 +16,9 @@ class EventScriptError < Exception
   end
 end
 
+#===============================================================================
+#
+#===============================================================================
 def pbGetExceptionMessage(e, _script = "")
   return e.event_message.dup if e.is_a?(EventScriptError)   # Message with map/event ID generated elsewhere
   emessage = e.message.dup

@@ -1,5 +1,5 @@
 #===============================================================================
-# This script modifies the battle system to implement battle rules
+# This script modifies the battle system to implement battle rules.
 #===============================================================================
 class Battle
   unless @__clauses__aliased
@@ -12,11 +12,11 @@ class Battle
     if @rules["selfkoclause"]
       if self.lastMoveUser < 0
         # in extreme cases there may be no last move user
-        return 5   # game is a draw
+        return Outcome::DRAW
       elsif opposes?(self.lastMoveUser)
-        return 2   # loss
+        return Outcome::LOSE
       else
-        return 1   # win
+        return Outcome::WIN
       end
     end
     return __clauses__pbDecisionOnDraw
@@ -27,11 +27,11 @@ class Battle
       if @rules["drawclause"]   # NOTE: Also includes Life Orb (not implemented)
         if !(move && move.function_code == "HealUserByHalfOfDamageDone")
           # Not a draw if fainting occurred due to Liquid Ooze
-          @decision = (user.opposes?) ? 1 : 2   # win / loss
+          @decision = (user.opposes?) ? Outcome::WIN : Outcome::LOSE
         end
       elsif @rules["modifiedselfdestructclause"]
         if move && move.function_code == "UserFaintsExplosive"   # Self-Destruct
-          @decision = (user.opposes?) ? 1 : 2   # win / loss
+          @decision = (user.opposes?) ? Outcome::WIN : Outcome::LOSE
         end
       end
     end
@@ -39,13 +39,13 @@ class Battle
 
   def pbEndOfRoundPhase
     __clauses__pbEndOfRoundPhase
-    if @rules["suddendeath"] && @decision == 0
+    if @rules["suddendeath"] && !decided?
       p1able = pbAbleCount(0)
       p2able = pbAbleCount(1)
       if p1able > p2able
-        @decision = 1   # loss
+        @decision = Outcome::WIN
       elsif p1able < p2able
-        @decision = 2   # win
+        @decision = Outcome::LOSE
       end
     end
   end
@@ -102,7 +102,7 @@ class Battle::Battler
 end
 
 #===============================================================================
-# Double Team
+# Double Team.
 #===============================================================================
 class Battle::Move::RaiseUserEvasion1
   unless method_defined?(:__clauses__pbMoveFailed?)
@@ -119,7 +119,7 @@ class Battle::Move::RaiseUserEvasion1
 end
 
 #===============================================================================
-# Minimize
+# Minimize.
 #===============================================================================
 class Battle::Move::RaiseUserEvasion2MinimizeUser
   unless method_defined?(:__clauses__pbMoveFailed?)
@@ -136,7 +136,7 @@ class Battle::Move::RaiseUserEvasion2MinimizeUser
 end
 
 #===============================================================================
-# Skill Swap
+# Skill Swap.
 #===============================================================================
 class Battle::Move::UserTargetSwapAbilities
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
@@ -153,7 +153,7 @@ class Battle::Move::UserTargetSwapAbilities
 end
 
 #===============================================================================
-# Sonic Boom
+# Sonic Boom.
 #===============================================================================
 class Battle::Move::FixedDamage20
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
@@ -170,7 +170,7 @@ class Battle::Move::FixedDamage20
 end
 
 #===============================================================================
-# Dragon Rage
+# Dragon Rage.
 #===============================================================================
 class Battle::Move::FixedDamage40
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
@@ -238,7 +238,7 @@ class Battle::Move::OHKOHitsUndergroundTarget
 end
 
 #===============================================================================
-# Self-Destruct
+# Self-Destruct.
 #===============================================================================
 class Battle::Move::UserFaintsExplosive
   unless method_defined?(:__clauses__pbMoveFailed?)
@@ -261,7 +261,7 @@ class Battle::Move::UserFaintsExplosive
       count += @battle.pbAbleNonActiveCount(user.idxOpposingSide)
       if count == 0
         @battle.pbDisplay(_INTL("{1}'s team was disqualified!", user.pbThis))
-        @battle.decision = (user.opposes?) ? 1 : 2
+        @battle.decision = (user.opposes?) ? Outcome::WIN : Outcome::LOSE
         return false
       end
     end
@@ -270,7 +270,7 @@ class Battle::Move::UserFaintsExplosive
 end
 
 #===============================================================================
-# Perish Song
+# Perish Song.
 #===============================================================================
 class Battle::Move::StartPerishCountsForAllBattlers
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)
@@ -288,7 +288,7 @@ class Battle::Move::StartPerishCountsForAllBattlers
 end
 
 #===============================================================================
-# Destiny Bond
+# Destiny Bond.
 #===============================================================================
 class Battle::Move::AttackerFaintsIfUserFaints
   unless method_defined?(:__clauses__pbFailsAgainstTarget?)

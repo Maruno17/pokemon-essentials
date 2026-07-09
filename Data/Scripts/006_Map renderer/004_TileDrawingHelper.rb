@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class TileDrawingHelper
   attr_accessor :tileset
   attr_accessor :autotiles
@@ -80,6 +83,8 @@ class TileDrawingHelper
     end
     return self.new(bmtileset, bmautotiles)
   end
+
+  #-----------------------------------------------------------------------------
 
   def initialize(tileset, autotiles)
     if tileset.mega?

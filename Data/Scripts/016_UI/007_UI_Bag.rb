@@ -127,7 +127,7 @@ class Window_PokemonBag < Window_DrawableCommand
 end
 
 #===============================================================================
-# Bag visuals
+# Bag visuals.
 #===============================================================================
 class PokemonBag_Scene
   ITEMLISTBASECOLOR     = Color.new(88, 88, 80)
@@ -453,7 +453,7 @@ class PokemonBag_Scene
 end
 
 #===============================================================================
-# Bag mechanics
+# Bag mechanics.
 #===============================================================================
 class PokemonBagScreen
   def initialize(scene, bag)

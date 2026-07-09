@@ -1,5 +1,5 @@
 #===============================================================================
-# Fishing
+# Fishing.
 #===============================================================================
 def pbFishingBegin
   $PokemonGlobal.fishing = true
@@ -46,7 +46,9 @@ def pbFishing(hasEncounter, rodType = 1)
       break
     end
     if hasEncounter && rand(100) < biteChance
-      $scene.spriteset.addUserAnimation(Settings::EXCLAMATION_ANIMATION_ID, $game_player.x, $game_player.y, true, 3)
+      $game_player.animation_id = Settings::EXCLAMATION_ANIMATION_ID
+      $game_player.animation_height = 3
+      $game_player.animation_regular_tone = true
       duration = rand(5..10) / 10.0   # 0.5-1 seconds
       if !pbWaitForInput(msgWindow, message + "\n" + _INTL("Oh! A bite!"), duration)
         pbFishingEnd { pbMessageDisplay(msgWindow, _INTL("The Pokémon got away...")) }

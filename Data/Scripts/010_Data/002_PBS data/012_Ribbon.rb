@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class Ribbon
     attr_reader :id
@@ -10,7 +13,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "ribbons.dat"
     PBS_BASE_FILENAME = "ribbons"
-
     SCHEMA = {
       "SectionName"  => [:id,               "m"],
       "Name"         => [:real_name,        "s"],
@@ -21,6 +23,8 @@ module GameData
 
     extend ClassMethodsSymbols
     include InstanceMethods
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id               = hash[:id]

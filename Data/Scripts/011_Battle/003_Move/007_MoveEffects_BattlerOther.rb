@@ -11,12 +11,12 @@ class Battle::Move::SleepTarget < Battle::Move
 
   def pbEffectAgainstTarget(user, target)
     return if damagingMove?
-    target.pbSleep
+    target.pbSleep(user)
   end
 
   def pbAdditionalEffect(user, target)
     return if target.damageState.substitute
-    target.pbSleep if target.pbCanSleep?(user, false, self)
+    target.pbSleep(user) if target.pbCanSleep?(user, false, self)
   end
 end
 
@@ -127,6 +127,44 @@ class Battle::Move::PoisonTargetLowerTargetSpeed1 < Battle::Move
 end
 
 #===============================================================================
+# Removes trapping moves, entry hazards and Leech Seed on user/user's side.
+# Poisons the target. (Mortal Spin)
+#===============================================================================
+class Battle::Move::PoisonTargetRemoveUserBindingAndEntryHazards < Battle::Move::PoisonTarget
+  def pbEffectAfterAllHits(user, target)
+    return if user.fainted? || target.damageState.unaffected
+    if user.effects[PBEffects::Trapping] > 0
+      trapMove = GameData::Move.get(user.effects[PBEffects::TrappingMove]).name
+      trapUser = @battle.battlers[user.effects[PBEffects::TrappingUser]]
+      @battle.pbDisplay(_INTL("{1} got free of {2}'s {3}!", user.pbThis, trapUser.pbThis(true), trapMove))
+      user.effects[PBEffects::Trapping]     = 0
+      user.effects[PBEffects::TrappingMove] = nil
+      user.effects[PBEffects::TrappingUser] = -1
+    end
+    if user.effects[PBEffects::LeechSeed] >= 0
+      user.effects[PBEffects::LeechSeed] = -1
+      @battle.pbDisplay(_INTL("{1} shed Leech Seed!", user.pbThis))
+    end
+    if user.pbOwnSide.effects[PBEffects::StealthRock]
+      user.pbOwnSide.effects[PBEffects::StealthRock] = false
+      @battle.pbDisplay(_INTL("{1} blew away stealth rocks!", user.pbThis))
+    end
+    if user.pbOwnSide.effects[PBEffects::Spikes] > 0
+      user.pbOwnSide.effects[PBEffects::Spikes] = 0
+      @battle.pbDisplay(_INTL("{1} blew away spikes!", user.pbThis))
+    end
+    if user.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
+      user.pbOwnSide.effects[PBEffects::ToxicSpikes] = 0
+      @battle.pbDisplay(_INTL("{1} blew away poison spikes!", user.pbThis))
+    end
+    if user.pbOwnSide.effects[PBEffects::StickyWeb]
+      user.pbOwnSide.effects[PBEffects::StickyWeb] = false
+      @battle.pbDisplay(_INTL("{1} blew away sticky webs!", user.pbThis))
+    end
+  end
+end
+
+#===============================================================================
 # Badly poisons the target. (Poison Fang, Toxic)
 #===============================================================================
 class Battle::Move::BadPoisonTarget < Battle::Move::PoisonTarget
@@ -172,6 +210,16 @@ class Battle::Move::ParalyzeTargetIfNotTypeImmune < Battle::Move::ParalyzeTarget
       @battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true))) if show_message
       return true
     end
+    return super
+  end
+end
+
+#===============================================================================
+# Paralyzes the target. Accuracy perfect in rain. (Wildbolt Storm)
+#===============================================================================
+class Battle::Move::ParalyzeTargetAlwaysHitsInRain < Battle::Move::ParalyzeTarget
+  def pbBaseAccuracy(user, target)
+    return 0 if [:Rain, :HeavyRain].include?(target.effectiveWeather)
     return super
   end
 end
@@ -234,6 +282,16 @@ class Battle::Move::BurnTarget < Battle::Move
 end
 
 #===============================================================================
+# Burns the target. Accuracy perfect in rain. (Sandsear Storm)
+#===============================================================================
+class Battle::Move::BurnTargetAlwaysHitsInRain < Battle::Move::BurnTarget
+  def pbBaseAccuracy(user, target)
+    return 0 if [:Rain, :HeavyRain].include?(target.effectiveWeather)
+    return super
+  end
+end
+
+#===============================================================================
 # Burns the target if any of its stats were increased this round.
 # (Burning Jealousy)
 #===============================================================================
@@ -273,12 +331,12 @@ class Battle::Move::FreezeTarget < Battle::Move
 
   def pbEffectAgainstTarget(user, target)
     return if damagingMove?
-    target.pbFreeze
+    target.pbFreeze(user)
   end
 
   def pbAdditionalEffect(user, target)
     return if target.damageState.substitute
-    target.pbFreeze if target.pbCanFreeze?(user, false, self)
+    target.pbFreeze(user) if target.pbCanFreeze?(user, false, self)
   end
 end
 
@@ -297,7 +355,7 @@ end
 #===============================================================================
 class Battle::Move::FreezeTargetAlwaysHitsInHail < Battle::Move::FreezeTarget
   def pbBaseAccuracy(user, target)
-    return 0 if target.effectiveWeather == :Hail
+    return 0 if [:Hail, :Snowstorm].include?(target.effectiveWeather)
     return super
   end
 end
@@ -313,7 +371,7 @@ class Battle::Move::FreezeFlinchTarget < Battle::Move
     chance = pbAdditionalEffectChance(user, target, 10)
     return if chance == 0
     if target.pbCanFreeze?(user, false, self) && @battle.pbRandom(100) < chance
-      target.pbFreeze
+      target.pbFreeze(user)
     end
     target.pbFlinch(user) if @battle.pbRandom(100) < chance
   end
@@ -327,8 +385,22 @@ class Battle::Move::ParalyzeBurnOrFreezeTarget < Battle::Move
     return if target.damageState.substitute
     case @battle.pbRandom(3)
     when 0 then target.pbBurn(user) if target.pbCanBurn?(user, false, self)
-    when 1 then target.pbFreeze if target.pbCanFreeze?(user, false, self)
+    when 1 then target.pbFreeze(user) if target.pbCanFreeze?(user, false, self)
     when 2 then target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
+    end
+  end
+end
+
+#===============================================================================
+# Poisons, paralyzes or puts to sleep the target. (Dire Claw)
+#===============================================================================
+class Battle::Move::PoisonParalyzeOrSleepTarget < Battle::Move
+  def pbAdditionalEffect(user, target)
+    return if target.damageState.substitute
+    case @battle.pbRandom(3)
+    when 0 then target.pbPoison(user) if target.pbCanPoison?(user, false, self)
+    when 1 then target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
+    when 2 then target.pbSleep(user) if target.pbCanSleep?(user, false, self)
     end
   end
 end
@@ -357,7 +429,7 @@ class Battle::Move::GiveUserStatusToTarget < Battle::Move
     msg = ""
     case user.status
     when :SLEEP
-      target.pbSleep
+      target.pbSleep(user)
       msg = _INTL("{1} woke up.", user.pbThis)
     when :POISON
       target.pbPoison(user, nil, user.statusCount != 0)
@@ -369,7 +441,7 @@ class Battle::Move::GiveUserStatusToTarget < Battle::Move
       target.pbParalyze(user)
       msg = _INTL("{1} was cured of paralysis.", user.pbThis)
     when :FROZEN
-      target.pbFreeze
+      target.pbFreeze(user)
       msg = _INTL("{1} was thawed out.", user.pbThis)
     end
     if msg != ""
@@ -626,6 +698,23 @@ class Battle::Move::ConfuseTargetAlwaysHitsInRainHitsTargetInSky < Battle::Move:
       return 0
     end
     return super
+  end
+end
+
+#===============================================================================
+# Confuses the target. If attack misses, user takes crash damage of 1/2 of max
+# HP. (Axe Kick)
+#===============================================================================
+class Battle::Move::ConfuseTargetCrashDamageIfFails < Battle::Move::ConfuseTarget
+  def recoilMove?; return true; end
+
+  def pbCrashDamage(user)
+    return if !user.takesIndirectDamage?
+    @battle.pbDisplay(_INTL("{1} kept going and crashed!", user.pbThis))
+    @battle.scene.pbDamageAnimation(user)
+    user.pbReduceHP(user.totalhp / 2, false)
+    user.pbItemHPHealCheck
+    user.pbFaint if user.fainted?
   end
 end
 
@@ -929,6 +1018,27 @@ class Battle::Move::UserLosesFireType < Battle::Move
     if !user.effects[PBEffects::BurnUp]
       user.effects[PBEffects::BurnUp] = true
       @battle.pbDisplay(_INTL("{1} burned itself out!", user.pbThis))
+    end
+  end
+end
+
+#===============================================================================
+# User loses their Electric type. Fails if user is not Electric-type.
+# (Double Shock)
+#===============================================================================
+class Battle::Move::UserLosesElectricType < Battle::Move
+  def pbMoveFailed?(user, targets)
+    if !user.pbHasType?(:ELECTRIC)
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
+  end
+
+  def pbEffectAfterAllHits(user, target)
+    if !user.effects[PBEffects::DoubleShock]
+      user.effects[PBEffects::DoubleShock] = true
+      @battle.pbDisplay(_INTL("{1} used up all its electricity!", user.pbThis))
     end
   end
 end

@@ -1,7 +1,7 @@
 #===============================================================================
-# "Tile Puzzle" mini-games
-# By Maruno
-# Graphics by the__end
+# "Tile Puzzle" mini-games.
+# By Maruno.
+# Graphics by the__end.
 #-------------------------------------------------------------------------------
 # Run with:      pbTilePuzzle(game,board,width,height)
 # game = 1 (Ruins of Alph puzzle),

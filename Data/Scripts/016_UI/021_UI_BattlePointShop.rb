@@ -1,5 +1,5 @@
 #===============================================================================
-# Abstraction layer for Pokemon Essentials
+# Abstraction layer for Pokemon Essentials.
 #===============================================================================
 class BattlePointShopAdapter
   def getBP
@@ -89,7 +89,7 @@ class BattlePointShopAdapter
 end
 
 #===============================================================================
-# Battle Point Shop
+# Battle Point Shop.
 #===============================================================================
 class Window_BattlePointShop < Window_DrawableCommand
   def initialize(stock, adapter, x, y, width, height, viewport = nil)

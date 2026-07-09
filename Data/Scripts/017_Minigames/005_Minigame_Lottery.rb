@@ -1,6 +1,6 @@
 #===============================================================================
-# "Lottery" mini-game
-# By Maruno
+# "Lottery" mini-game.
+# By Maruno.
 #===============================================================================
 def pbSetLotteryNumber(variable = 1)
   t = pbGetTimeNow

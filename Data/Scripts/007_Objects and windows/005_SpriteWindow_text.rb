@@ -30,9 +30,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     pbSetSystemFont(self.contents)
     @text = text
     @letterbyletter = false # Not supported in this class
-    colors = getDefaultTextColors(self.windowskin)
-    @baseColor = colors[0]
-    @shadowColor = colors[1]
+    @baseColor, @shadowColor = getDefaultTextColors(self.windowskin)
     resizeToFit(text)
   end
 
@@ -88,9 +86,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     oldshadowg = @shadowColor.green
     oldshadowb = @shadowColor.blue
     oldshadowa = @shadowColor.alpha
-    colors = getDefaultTextColors(self.windowskin)
-    @baseColor   = colors[0]
-    @shadowColor = colors[1]
+    @baseColor, @shadowColor = getDefaultTextColors(self.windowskin)
     if oldbaser != @baseColor.red || oldbaseg != @baseColor.green ||
        oldbaseb != @baseColor.blue || oldbasea != @baseColor.alpha ||
        oldshadowr != @shadowColor.red || oldshadowg != @shadowColor.green ||
@@ -142,9 +138,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     self.contents = Bitmap.new(1, 1)
     pbSetSystemFont(self.contents)
     self.resizeToFit(text, Graphics.width)
-    colors = getDefaultTextColors(self.windowskin)
-    @baseColor          = colors[0]
-    @shadowColor        = colors[1]
+    @baseColor, @shadowColor = getDefaultTextColors(self.windowskin)
     self.text           = text
     @starting           = false
   end
@@ -266,9 +260,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     oldshadowg = @shadowColor.green
     oldshadowb = @shadowColor.blue
     oldshadowa = @shadowColor.alpha
-    colors = getDefaultTextColors(self.windowskin)
-    @baseColor   = colors[0]
-    @shadowColor = colors[1]
+    @baseColor, @shadowColor = getDefaultTextColors(self.windowskin)
     if redrawText &&
        (oldbaser != @baseColor.red || oldbaseg != @baseColor.green ||
        oldbaseb != @baseColor.blue || oldbasea != @baseColor.alpha ||
@@ -634,9 +626,7 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     super(0, 0, 32, 32)
     self.width = (digits_max * 24) + 8 + self.borderX
     self.height = 32 + self.borderY
-    colors = getDefaultTextColors(self.windowskin)
-    @baseColor = colors[0]
-    @shadowColor = colors[1]
+    @baseColor, @shadowColor = getDefaultTextColors(self.windowskin)
     @index = digits_max - 1
     self.active = true
     refresh
@@ -1068,9 +1058,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
       RPG::Cache.retain("Graphics/UI/sel_arrow")
     end
     @index = 0
-    colors = getDefaultTextColors(self.windowskin)
-    @baseColor   = colors[0]
-    @shadowColor = colors[1]
+    @baseColor, @shadowColor = getDefaultTextColors(self.windowskin)
     refresh
   end
 
@@ -1118,9 +1106,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
   def setSkin(skin)
     super(skin)
     privRefresh(true)
-    colors = getDefaultTextColors(self.windowskin)
-    @baseColor   = colors[0]
-    @shadowColor = colors[1]
+    @baseColor, @shadowColor = getDefaultTextColors(self.windowskin)
   end
 
   def drawCursor(index, rect)
@@ -1173,9 +1159,7 @@ class Window_CommandPokemon < Window_DrawableCommand
     self.height = dims[1]
     @commands = commands
     self.active = true
-    colors = getDefaultTextColors(self.windowskin)
-    self.baseColor = colors[0]
-    self.shadowColor = colors[1]
+    @baseColor, @shadowColor = getDefaultTextColors(self.windowskin)
     refresh
     @starting = false
   end
@@ -1282,9 +1266,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     self.height = dims[1]
     @commands = commands
     self.active = true
-    colors = getDefaultTextColors(self.windowskin)
-    self.baseColor = colors[0]
-    self.shadowColor = colors[1]
+    @baseColor, @shadowColor = getDefaultTextColors(self.windowskin)
     refresh
     @starting = false
   end

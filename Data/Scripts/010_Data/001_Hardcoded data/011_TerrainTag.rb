@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class TerrainTag
     attr_reader :id
@@ -10,6 +13,7 @@ module GameData
     attr_reader :can_dive
     attr_reader :deep_bush
     attr_reader :shows_grass_rustle
+    attr_reader :shows_water_ripple
     attr_reader :land_wild_encounters
     attr_reader :double_wild_encounters
     attr_reader :battle_environment
@@ -39,6 +43,8 @@ module GameData
     def self.load; end
     def self.save; end
 
+    #---------------------------------------------------------------------------
+
     def initialize(hash)
       @id                     = hash[:id]
       @id_number              = hash[:id_number]
@@ -50,6 +56,7 @@ module GameData
       @can_dive               = hash[:can_dive]               || false
       @deep_bush              = hash[:deep_bush]              || false
       @shows_grass_rustle     = hash[:shows_grass_rustle]     || false
+      @shows_water_ripple     = hash[:shows_water_ripple]     || false
       @land_wild_encounters   = hash[:land_wild_encounters]   || false
       @double_wild_encounters = hash[:double_wild_encounters] || false
       @battle_environment     = hash[:battle_environment]
@@ -70,6 +77,8 @@ module GameData
   end
 end
 
+#===============================================================================
+#
 #===============================================================================
 
 GameData::TerrainTag.register({
@@ -118,7 +127,8 @@ GameData::TerrainTag.register({
   :can_surf               => true,
   :can_fish               => true,
   :battle_environment     => :StillWater,
-  :shows_reflections      => true
+  :shows_reflections      => true,
+  :shows_water_ripple     => true
 })
 
 GameData::TerrainTag.register({
@@ -195,7 +205,8 @@ GameData::TerrainTag.register({
   :id                     => :Puddle,
   :id_number              => 16,
   :battle_environment     => :Puddle,
-  :shows_reflections      => true
+  :shows_reflections      => true,
+  :shows_water_ripple     => true
 })
 
 GameData::TerrainTag.register({

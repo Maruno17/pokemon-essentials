@@ -268,9 +268,9 @@ class BerryPlantSprite
       end
       if berry_plant.new_mechanics && @old_stage != berry_plant.growth_stage &&
          @old_stage > 0 && berry_plant.growth_stage <= GameData::BerryPlant::NUMBER_OF_GROWTH_STAGES + 1
-        spriteset = $scene.spriteset(@map.map_id)
-        spriteset&.addUserAnimation(Settings::PLANT_SPARKLE_ANIMATION_ID,
-                                    @event.x, @event.y, false, 1)
+        @event.animation_id = Settings::PLANT_SPARKLE_ANIMATION_ID
+        @event.animation_height = 1
+        @event.animation_regular_tone = true
       end
     end
     @old_stage = berry_plant.growth_stage
@@ -458,7 +458,7 @@ def pbPickBerry(berry, qty = 1)
     pbMessage("\\me[Berry get]" + _INTL("You picked the \\c[1]{1}\\c[0].", berry_name) + "\\wtnp[30]")
   end
   pocket = berry.pocket
-  pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+  pbMessage(_INTL("You put the {1} in\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
                   berry_name, pocket, PokemonBag.pocket_names[pocket - 1]) + "\1")
   if Settings::NEW_BERRY_PLANTS
     pbMessage(_INTL("The soil returned to its soft and earthy state."))

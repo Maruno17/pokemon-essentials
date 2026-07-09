@@ -13,7 +13,7 @@ class Game_Temp
 end
 
 #===============================================================================
-# Using the Poke Radar
+# Using the Poke Radar.
 #===============================================================================
 def pbCanUsePokeRadar?
   # Can't use Radar if not in tall grass
@@ -156,8 +156,9 @@ def pbPokeRadarGetEncounter(rarity = 0)
 end
 
 #===============================================================================
-# Event handlers
+# Event handlers.
 #===============================================================================
+
 EventHandlers.add(:on_wild_species_chosen, :poke_radar_chain,
   proc { |encounter|
     if GameData::EncounterType.get($game_temp.encounter_type).type != :land ||
@@ -221,14 +222,14 @@ EventHandlers.add(:on_wild_pokemon_created, :poke_radar_shiny,
 )
 
 EventHandlers.add(:on_wild_battle_end, :poke_radar_continue_chain,
-  proc { |species, level, decision|
-    if $game_temp.poke_radar_data && [1, 4].include?(decision)   # Defeated/caught
+  proc { |species, level, outcome|
+    if $game_temp.poke_radar_data && [Battle::Outcome::WIN, Battle::Outcome::CATCH].include?(outcome)
       $game_temp.poke_radar_data[0] = species
       $game_temp.poke_radar_data[1] = level
       $game_temp.poke_radar_data[2] += 1
       $stats.poke_radar_longest_chain = [$game_temp.poke_radar_data[2], $stats.poke_radar_longest_chain].max
       # Catching makes the next Radar encounter more likely to continue the chain
-      $game_temp.poke_radar_data[4] = (decision == 4)
+      $game_temp.poke_radar_data[4] = (outcome == Battle::Outcome::CATCH)
       pbPokeRadarHighlightGrass(false)
     else
       pbPokeRadarCancel
@@ -256,8 +257,9 @@ EventHandlers.add(:on_enter_map, :cancel_poke_radar,
 )
 
 #===============================================================================
-# Item handlers
+# Item handlers.
 #===============================================================================
+
 ItemHandlers::UseInField.add(:POKERADAR, proc { |item|
   next pbUsePokeRadar
 })

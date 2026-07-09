@@ -139,9 +139,9 @@ class Game_Map
     return x >= -10 && x <= width + 10 && y >= -10 && y <= height + 10
   end
 
-  def passable?(x, y, d, self_event = nil)
+  def passable?(x, y, dir, self_event = nil)
     return false if !valid?(x, y)
-    bit = (1 << ((d / 2) - 1)) & 0x0f
+    bit = (1 << ((dir / 2) - 1)) & 0x0f
     events.each_value do |event|
       next if event.tile_id <= 0
       next if event == self_event
@@ -153,11 +153,11 @@ class Game_Map
       return false if passage & 0x0f == 0x0f
       return true if @priorities[event.tile_id] == 0
     end
-    return playerPassable?(x, y, d, self_event) if self_event == $game_player
+    return playerPassable?(x, y, dir, self_event) if self_event == $game_player
     # All other events
     newx = x
     newy = y
-    case d
+    case dir
     when 1
       newx -= 1
       newy += 1
@@ -219,8 +219,8 @@ class Game_Map
     return true
   end
 
-  def playerPassable?(x, y, d, self_event = nil)
-    bit = (1 << ((d / 2) - 1)) & 0x0f
+  def playerPassable?(x, y, dir, self_event = nil)
+    bit = (1 << ((dir / 2) - 1)) & 0x0f
     [2, 1, 0].each do |i|
       tile_id = data[x, y, i]
       next if tile_id == 0

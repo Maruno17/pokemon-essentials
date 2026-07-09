@@ -16,8 +16,6 @@ class PokemonGlobalMetadata
   attr_accessor :stepcount
   attr_accessor :pcItemStorage
   attr_accessor :mailbox
-  attr_accessor :phoneNumbers   # Deprecated - to be removed in v22
-  attr_accessor :phoneTime   # Deprecated - to be removed in v22
   attr_accessor :phone
   attr_accessor :partner
   attr_accessor :creditsPlayed

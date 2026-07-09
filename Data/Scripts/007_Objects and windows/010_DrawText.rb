@@ -1,5 +1,5 @@
 #===============================================================================
-# Text colors
+# Text colors.
 #===============================================================================
 # Unused
 def ctag(color)
@@ -39,38 +39,8 @@ def shadowctagFromRgb(param)
   return shadowctagFromColor(Color.new_from_rgb(param))
 end
 
-# @deprecated This method is slated to be removed in v22.
-def colorToRgb32(color)
-  Deprecation.warn_method("colorToRgb32", "v22", "color.to_rgb32")
-  return color.to_rgb32
-end
-
-# @deprecated This method is slated to be removed in v22.
-def colorToRgb16(color)
-  Deprecation.warn_method("colorToRgb16", "v22", "color.to_rgb15")
-  return color.to_rgb15
-end
-
-# @deprecated This method is slated to be removed in v22.
-def rgbToColor(param)
-  Deprecation.warn_method("rgbToColor", "v22", "Color.new_from_rgb(param)")
-  return Color.new_from_rgb(param)
-end
-
-# @deprecated This method is slated to be removed in v22.
-def rgb15ToColor(param)
-  Deprecation.warn_method("rgb15ToColor", "v22", "Color.new_from_rgb(param)")
-  return Color.new_from_rgb(param)
-end
-
-# @deprecated This method is slated to be removed in v22.
-def getContrastColor(color)
-  Deprecation.warn_method("getContrastColor", "v22", "color.get_contrast_color")
-  return color.get_contrast_color
-end
-
 #===============================================================================
-# Format text
+# Format text.
 #===============================================================================
 FORMATREGEXP = /<(\/?)(c|c2|c3|o|fn|br|fs|i|b|r|pg|pog|u|s|icon|img|ac|ar|al|outln|outln2)(\s*\=\s*([^>]*))?>/i
 
@@ -420,7 +390,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   hadnonspace = false
   havenl = false
   position = 0
-  while position < textchars.length
+  while position <= textchars.length
     nextline = 0
     graphic = nil
     graphicX = 0
@@ -565,7 +535,10 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     else
       xStart = 0
       yStart = 0
-      width = isWaitChar(textchars[position]) ? 0 : bitmap.text_size(textchars[position]).width
+      width = 0
+      if textchars[position]
+        width = isWaitChar(textchars[position]) ? 0 : bitmap.text_size(textchars[position]).width
+      end
       width += 2 if width > 0 && outline2count > 0
     end
     if rightalign == 1 && nextline == 0
@@ -608,7 +581,10 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
         end
       end
     end
-    isspace = (textchars[position][/\s/] || isWaitChar(textchars[position])) ? true : false
+    isspace = false
+    if textchars[position]
+      isspace = (textchars[position][/\s/] || isWaitChar(textchars[position])) ? true : false
+    end
     if hadspace && !isspace
       # set last word to here
       lastword[0] = characters.length
@@ -630,7 +606,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
                        (boldcount > 0), (italiccount > 0), colors[0], colors[1],
                        (underlinecount > 0), (strikecount > 0), fontname, fontsize,
                        position, graphicRect,
-                       ((outlinecount > 0) ? 1 : 0) + ((outline2count > 0) ? 2 : 0)])
+                       ((outlinecount > 0) ? 1 : 0) + ((outline2count > 0) ? 2 : 0)]) if graphic || textchars[position]
       charactersInternal.push([alignment, y, xStart, textchars[position], extraspace])
     end
     x += width
@@ -784,7 +760,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
 end
 
 #===============================================================================
-# Draw text and images on a bitmap
+# Draw text and images on a bitmap.
 #===============================================================================
 def getLineBrokenText(bitmap, value, width, dims)
   x = 0
@@ -1128,7 +1104,7 @@ def pbDrawTextPositions(bitmap, textpos)
 end
 
 #===============================================================================
-# Draw images on a bitmap
+# Draw images on a bitmap.
 #===============================================================================
 def pbCopyBitmap(dstbm, srcbm, x, y, opacity = 255)
   rc = Rect.new(0, 0, srcbm.width, srcbm.height)

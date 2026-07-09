@@ -1,5 +1,5 @@
 #===============================================================================
-# General purpose utilities
+# General purpose utilities.
 #===============================================================================
 def _pbNextComb(comb, length)
   i = comb.length - 1
@@ -98,7 +98,7 @@ class AntiRandom
 end
 
 #===============================================================================
-# Constants utilities
+# Constants utilities.
 #===============================================================================
 # Unused
 def isConst?(val, mod, constant)
@@ -152,7 +152,7 @@ def getConstantNameOrValue(mod, value)
 end
 
 #===============================================================================
-# Event utilities
+# Event utilities.
 #===============================================================================
 def pbTimeEvent(variableNumber, secs = 86_400)
   return if !$game_variables
@@ -191,25 +191,21 @@ def pbTimeEventValid(variableNumber)
   return ret
 end
 
-def pbExclaim(event, id = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
-  if event.is_a?(Array)
-    sprite = nil
-    done = []
-    event.each do |i|
-      next if done.include?(i.id)
-      spriteset = $scene.spriteset(i.map_id)
-      sprite ||= spriteset&.addUserAnimation(id, i.x, i.y, tinting, 2)
-      done.push(i.id)
-    end
-  else
-    spriteset = $scene.spriteset(event.map_id)
-    sprite = spriteset&.addUserAnimation(id, event.x, event.y, tinting, 2)
+def pbExclaim(events, anim = Settings::EXCLAMATION_ANIMATION_ID, tinting = false)
+  events = [events] if !events.is_a?(Array)
+  events.each do |ev|
+    ev.animation_id = anim
+    ev.animation_height = 3
+    ev.animation_regular_tone = !tinting
   end
-  until sprite.disposed?
-    Graphics.update
-    Input.update
-    pbUpdateSceneMap
+  anim_data = $data_animations[anim]
+  frame_count = anim_data.frame_max
+  frame_rate = 20
+  if anim_data.name[/\[\s*(\d+?)\s*\]\s*$/]
+    frame_rate = $~[1].to_i
   end
+  pbWait(frame_count / frame_rate.to_f)
+  events.each { |i| i.animation_id = 0 }
 end
 
 def pbNoticePlayer(event, always_show_exclaim = false)
@@ -221,7 +217,7 @@ def pbNoticePlayer(event, always_show_exclaim = false)
 end
 
 #===============================================================================
-# Player-related utilities, random name generator
+# Player-related utilities, random name generator.
 #===============================================================================
 # Unused
 def pbGetPlayerGraphic
@@ -373,7 +369,7 @@ def getRandomName(maxLength = 100)
 end
 
 #===============================================================================
-# Regional and National Pokédexes utilities
+# Regional and National Pokédexes utilities.
 #===============================================================================
 # Returns the ID number of the region containing the player's current location,
 # as determined by the current map's metadata.
@@ -419,7 +415,7 @@ def pbGetRegionalDexLength(region_dex)
 end
 
 #===============================================================================
-# Other utilities
+# Other utilities.
 #===============================================================================
 def pbTextEntry(helptext, minlength, maxlength, variableNumber)
   $game_variables[variableNumber] = pbEnterText(helptext, minlength, maxlength)
@@ -620,5 +616,5 @@ def pbScreenCapture
     capturefile = RTP.getSaveFileName(sprintf("%s.png", filestart))
     Graphics.screenshot(capturefile)
   end
-  pbSEPlay("Pkmn exp full") if FileTest.audio_exist?("Audio/SE/Pkmn exp full")
+  pbSEPlay("Screenshot") if FileTest.audio_exist?("Audio/SE/Screenshot")
 end

@@ -63,7 +63,7 @@ Battle::AI::Handlers::MoveBasePower.add("LowerTargetHPToUserHP",
 Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("OHKO",
   proc { |move, user, target, ai, battle|
     next true if target.level > user.level
-    next true if !battle.moldBreaker && target.has_active_ability?(:STURDY)
+    next true if target.has_active_ability?(:STURDY) && !target.being_mold_broken?
     next false
   }
 )
@@ -144,7 +144,8 @@ Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
 #
 #===============================================================================
 Battle::AI::Handlers::MoveBasePower.copy("PowerHigherWithUserHP",
-                                         "PowerHigherWithTargetHP")
+                                         "PowerHigherWithTargetHP100",
+                                         "PowerHigherWithTargetHP120")
 
 #===============================================================================
 #
@@ -447,11 +448,11 @@ Battle::AI::Handlers::MoveEffectScore.add("EnsureNextCriticalHit",
     crit_stage = -1 if user.battler.pbOwnSide.effects[PBEffects::LuckyChant] > 0
     if crit_stage >= 0 && user.ability_active? && ![:MERCILESS].include?(user.ability_id)
       crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromUser(user.battler.ability,
-         user.battler, user.battler, crit_stage)
+         user.battler, user.battler, move.move, crit_stage)
     end
     if crit_stage >= 0 && user.item_active?
       crit_stage = Battle::ItemEffects.triggerCriticalCalcFromUser(user.battler.item,
-         user.battler, user.battler, crit_stage)
+         user.battler, user.battler, move.move, crit_stage)
     end
     if crit_stage >= 0 && crit_stage < 50
       crit_stage += user.effects[PBEffects::FocusEnergy]
@@ -486,12 +487,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPreventCriticalHitsAgainstUserSi
       crit_stage = 0
       if b.ability_active?
         crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromTarget(b.battler.ability,
-           b.battler, b.battler, crit_stage)
+           b.battler, b.battler, move.move, crit_stage)
         next if crit_stage < 0
       end
       if b.item_active?
         crit_stage = Battle::ItemEffects.triggerCriticalCalcFromTarget(b.battler.item,
-           b.battler, b.battler, crit_stage)
+           b.battler, b.battler, move.move, crit_stage)
         next if crit_stage < 0
       end
       user_side_immune = false
@@ -504,12 +505,12 @@ Battle::AI::Handlers::MoveEffectScore.add("StartPreventCriticalHitsAgainstUserSi
       crit_stage = 0
       if crit_stage >= 0 && b.ability_active?
         crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromUser(b.battler.ability,
-           b.battler, user.battler, crit_stage)
+           b.battler, user.battler, move.move, crit_stage)
         next if crit_stage < 0
       end
       if crit_stage >= 0 && b.item_active?
         crit_stage = Battle::ItemEffects.triggerCriticalCalcFromUser(b.battler.item,
-           b.battler, user.battler, crit_stage)
+           b.battler, user.battler, move.move, crit_stage)
         next if crit_stage < 0
       end
       if crit_stage >= 0 && crit_stage < 50
@@ -647,6 +648,8 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenPhysicalDamageAgainstUserS
   proc { |score, move, user, ai, battle|
     # Doesn't stack with Aurora Veil
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+    # Prefer if the user is newly in battle
+    score += 15 if user.turnCount < 2
     # Don't prefer the lower the user's HP is
     if ai.trainer.has_skill_flag?("HPAware") && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       if user.hp <= user.totalhp / 2
@@ -677,6 +680,8 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenSpecialDamageAgainstUserSi
   proc { |score, move, user, ai, battle|
     # Doesn't stack with Aurora Veil
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+    # Prefer if the user is newly in battle
+    score += 15 if user.turnCount < 2
     # Don't prefer the lower the user's HP is
     if ai.trainer.has_skill_flag?("HPAware") && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       if user.hp <= user.totalhp / 2
@@ -701,7 +706,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenSpecialDamageAgainstUserSi
 Battle::AI::Handlers::MoveFailureCheck.add("StartWeakenDamageAgainstUserSideIfHail",
   proc { |move, user, ai, battle|
     next true if user.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
-    next true if user.battler.effectiveWeather != :Hail
+    next true if ![:Hail, :Snowstorm].include?(user.battler.effectiveWeather)
     next false
   }
 )
@@ -710,6 +715,8 @@ Battle::AI::Handlers::MoveEffectScore.add("StartWeakenDamageAgainstUserSideIfHai
     # Doesn't stack with Reflect/Light Screen
     next Battle::AI::MOVE_USELESS_SCORE if user.pbOwnSide.effects[PBEffects::Reflect] > 0 &&
                                            user.pbOwnSide.effects[PBEffects::LightScreen] > 0
+    # Prefer if the user is newly in battle
+    score += 15 if user.turnCount < 2
     # Don't prefer the lower the user's HP is
     if ai.trainer.has_skill_flag?("HPAware") && battle.pbAbleNonActiveCount(user.idxOwnSide) == 0
       if user.hp <= user.totalhp / 2

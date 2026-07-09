@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class Ability
     attr_reader :id
@@ -9,16 +12,17 @@ module GameData
     DATA = {}
     DATA_FILENAME = "abilities.dat"
     PBS_BASE_FILENAME = "abilities"
-
-    extend ClassMethodsSymbols
-    include InstanceMethods
-
     SCHEMA = {
       "SectionName" => [:id,               "m"],
       "Name"        => [:real_name,        "s"],
       "Description" => [:real_description, "q"],
       "Flags"       => [:flags,            "*s"]
     }
+
+    extend ClassMethodsSymbols
+    include InstanceMethods
+
+    #---------------------------------------------------------------------------
 
     def initialize(hash)
       @id               = hash[:id]

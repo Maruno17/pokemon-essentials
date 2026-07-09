@@ -1,7 +1,8 @@
+#===============================================================================
+#
+#===============================================================================
 class Battle::Battler
-  #=============================================================================
-  # Effect per hit
-  #=============================================================================
+  # Effect per hit.
   def pbEffectsOnMakingHit(move, user, target)
     if target.damageState.calcDamage > 0 && !target.damageState.substitute
       # Target's ability
@@ -18,12 +19,13 @@ class Battle::Battler
         #       target Cramorant attacking the user) and the ability splash
         #       shouldn't be shown.
         @battle.pbShowAbilitySplash(target)
+        target_form = target.form
         target.pbChangeForm(0, nil)
         if user.takesIndirectDamage?(Battle::Scene::USE_ABILITY_SPLASH)
           @battle.scene.pbDamageAnimation(user)
           user.pbReduceHP(user.totalhp / 4, false)
         end
-        case target.form
+        case target_form
         when 1   # Gulping Form
           user.pbLowerStatStageByAbility(:DEFENSE, 1, target, false)
         when 2   # Gorging Form
@@ -81,9 +83,7 @@ class Battle::Battler
     end
   end
 
-  #=============================================================================
-  # Effects after all hits (i.e. at end of move usage)
-  #=============================================================================
+  # Effects after all hits (i.e. at end of move usage).
   def pbEffectsAfterMove(user, targets, move, numHits)
     # Defrost
     if move.damagingMove?

@@ -1,5 +1,5 @@
 #===============================================================================
-# Used when generating new trainers for battle challenges
+# Used when generating new trainers for battle challenges.
 #===============================================================================
 class Battle::DebugSceneNoVisuals
   def initialize(log_messages = false)

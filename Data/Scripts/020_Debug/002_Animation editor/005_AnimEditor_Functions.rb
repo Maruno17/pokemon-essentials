@@ -1,8 +1,11 @@
+#===============================================================================
+#
+#===============================================================================
 module BattleAnimationEditor
   module_function
 
   #=============================================================================
-  # Mini battle scene
+  # Mini battle scene.
   #=============================================================================
   class MiniBattler
     attr_accessor :index
@@ -24,7 +27,7 @@ module BattleAnimationEditor
   end
 
   #=============================================================================
-  # Pop-up menus for buttons in bottom menu
+  # Pop-up menus for buttons in bottom menu.
   #=============================================================================
   def pbSelectAnim(canvas, animwin)
     animfiles = []
@@ -183,7 +186,7 @@ module BattleAnimationEditor
   end
 
   #=============================================================================
-  # Pop-up menus for individual cels
+  # Pop-up menus for individual cels.
   #=============================================================================
   def pbChooseNum(cel)
     ret = cel
@@ -371,7 +374,7 @@ module BattleAnimationEditor
   end
 
   #=============================================================================
-  # Pop-up menus for buttons in right hand menu
+  # Pop-up menus for buttons in right hand menu.
   #=============================================================================
   def pbTimingList(canvas)
     commands = []
@@ -946,7 +949,7 @@ module BattleAnimationEditor
   end
 
   #=============================================================================
-  # Main
+  # Main.
   #=============================================================================
   def animationEditorMain(animation)
     viewport = Viewport.new(0, 0, Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
@@ -1152,7 +1155,7 @@ module BattleAnimationEditor
 end
 
 #===============================================================================
-# Start
+# Start.
 #===============================================================================
 def pbAnimationEditor
   pbBGMStop

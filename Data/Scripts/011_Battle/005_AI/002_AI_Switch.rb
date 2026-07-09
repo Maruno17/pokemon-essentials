@@ -192,13 +192,14 @@ Battle::AI::Handlers::ShouldSwitch.add(:perish_song,
 Battle::AI::Handlers::ShouldSwitch.add(:significant_eor_damage,
   proc { |battler, reserves, ai, battle|
     eor_damage = battler.rough_end_of_round_damage
+    next false if eor_damage <= 0
     # Switch if battler will take significant EOR damage
     if eor_damage >= battler.hp / 2 || eor_damage >= battler.totalhp / 4
       PBDebug.log_ai("#{battler.name} wants to switch because it will take a lot of EOR damage")
       next true
     end
     # Switch to remove certain effects that cause the battler EOR damage
-    if ai.trainer.high_skill? && eor_damage > 0
+    if ai.trainer.high_skill?
       if battler.effects[PBEffects::LeechSeed] >= 0 && ai.pbAIRandom(100) < 50
         PBDebug.log_ai("#{battler.name} wants to switch to get rid of its Leech Seed")
         next true

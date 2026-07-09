@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Scene_DebugIntro
   def main
     Graphics.transition(0)
@@ -8,8 +11,11 @@ class Scene_DebugIntro
   end
 end
 
+#===============================================================================
+#
+#===============================================================================
 def pbCallTitle
-  return Scene_DebugIntro.new if $DEBUG
+  return Scene_DebugIntro.new if $DEBUG && Settings::SKIP_TITLE_SCREEN
   return Scene_Intro.new
 end
 
@@ -47,6 +53,9 @@ def mainFunctionDebug
   end
 end
 
+#===============================================================================
+#
+#===============================================================================
 loop do
   retval = mainFunction
   case retval

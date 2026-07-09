@@ -1,5 +1,10 @@
+#===============================================================================
+#
+#===============================================================================
 class Player < Trainer
+  #===============================================================================
   # Represents the player's Pokédex.
+  #===============================================================================
   class Pokedex
     # @return [Array<Integer>] an array of accessible Dexes
     # @see #refresh_accessible_dexes
@@ -33,7 +38,7 @@ class Player < Trainer
       self.refresh_accessible_dexes
     end
 
-    #===========================================================================
+    #---------------------------------------------------------------------------
 
     # Sets the given species as seen in the Pokédex.
     # @param species [Symbol, GameData::Species] species to set as seen

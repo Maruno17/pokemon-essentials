@@ -1,4 +1,6 @@
+#===============================================================================
 # Contains the save values defined in Essentials by default.
+#===============================================================================
 
 SaveData.register(:player) do
   ensure_class :Player
@@ -7,21 +9,13 @@ SaveData.register(:player) do
   new_game_value { Player.new("Unnamed", GameData::TrainerType.keys.first) }
 end
 
-# @deprecated This save data is slated to be removed in v22, as its use is
-# replaced by $stats.play_time.
-SaveData.register(:frame_count) do
-  ensure_class :Integer
-  save_value { Graphics.frame_count }
-  load_value { |value| Graphics.frame_count = value }
-  new_game_value { 0 }
-end
-
 SaveData.register(:game_system) do
   load_in_bootup
   ensure_class :Game_System
   save_value { $game_system }
   load_value { |value| $game_system = value }
   new_game_value { Game_System.new }
+  reset_on_new_game
 end
 
 SaveData.register(:pokemon_system) do

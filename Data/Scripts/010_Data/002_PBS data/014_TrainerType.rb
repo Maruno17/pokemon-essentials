@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 module GameData
   class TrainerType
     attr_reader :id
@@ -5,6 +8,7 @@ module GameData
     attr_reader :gender
     attr_reader :base_money
     attr_reader :skill_level
+    attr_reader :poke_ball
     attr_reader :flags
     attr_reader :intro_BGM
     attr_reader :battle_BGM
@@ -14,7 +18,6 @@ module GameData
     DATA = {}
     DATA_FILENAME = "trainer_types.dat"
     PBS_BASE_FILENAME = "trainer_types"
-
     SCHEMA = {
       "SectionName" => [:id,          "m"],
       "Name"        => [:real_name,   "s"],
@@ -24,6 +27,7 @@ module GameData
                                             "Mixed" => 2, "mixed" => 2, "X" => 2, "x" => 2, "2" => 2}],
       "BaseMoney"   => [:base_money,  "u"],
       "SkillLevel"  => [:skill_level, "u"],
+      "PokeBall"    => [:poke_ball,   "e", :Item],
       "Flags"       => [:flags,       "*s"],
       "IntroBGM"    => [:intro_BGM,   "s"],
       "BattleBGM"   => [:battle_BGM,  "s"],
@@ -42,6 +46,7 @@ module GameData
         ["Gender",     EnumProperty.new(gender_array), _INTL("Gender of this Trainer Type.")],
         ["BaseMoney",  LimitProperty.new(9999),        _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
         ["SkillLevel", LimitProperty2.new(9999),       _INTL("Skill level of this Trainer Type.")],
+        ["PokeBall",   ItemProperty,                   _INTL("Default Poké Ball that all Pokémon of trainers of this Trainer Type are in.")],
         ["Flags",      StringListProperty,             _INTL("Words/phrases that can be used to make trainers of this type behave differently to others.")],
         ["IntroBGM",   BGMProperty,                    _INTL("BGM played before battles against trainers of this type.")],
         ["BattleBGM",  BGMProperty,                    _INTL("BGM played in battles against trainers of this type.")],
@@ -98,12 +103,15 @@ module GameData
       return self.check_file(tr_type, "Graphics/UI/Town Map/player_", sprintf("_%d", outfit))
     end
 
+    #---------------------------------------------------------------------------
+
     def initialize(hash)
       @id              = hash[:id]
       @real_name       = hash[:real_name]       || "Unnamed"
       @gender          = hash[:gender]          || 2
       @base_money      = hash[:base_money]      || 30
       @skill_level     = hash[:skill_level]     || @base_money
+      @poke_ball       = hash[:poke_ball]
       @flags           = hash[:flags]           || []
       @intro_BGM       = hash[:intro_BGM]
       @battle_BGM      = hash[:battle_BGM]

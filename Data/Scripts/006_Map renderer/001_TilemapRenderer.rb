@@ -259,9 +259,8 @@ class TilemapRenderer
     end
   end
 
-  #=============================================================================
-  #
-  #=============================================================================
+  #-----------------------------------------------------------------------------
+
   def initialize(viewport)
     @tilesets               = TilesetBitmaps.new
     @autotiles              = AutotileBitmaps.new
@@ -319,7 +318,7 @@ class TilemapRenderer
     return @disposed
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def add_tileset(filename)
     @tilesets.add(filename)
@@ -351,7 +350,7 @@ class TilemapRenderer
     end
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def refresh
     @need_refresh = true
@@ -420,7 +419,7 @@ class TilemapRenderer
 
   def refresh_tile_z(tile, map, y, layer, tile_id)
     if tile.shows_reflection
-      tile.z = -100
+      tile.z = -2000
     elsif tile.bridge && $PokemonGlobal.bridge > 0
       tile.z = 0
     else
@@ -436,7 +435,7 @@ class TilemapRenderer
     tile.need_refresh = false
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def check_if_screen_moved
     ret = false
@@ -522,7 +521,7 @@ class TilemapRenderer
     return ret
   end
 
-  #=============================================================================
+  #-----------------------------------------------------------------------------
 
   def update
     # Update tone

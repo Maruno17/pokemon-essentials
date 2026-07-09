@@ -1,5 +1,5 @@
 #===============================================================================
-# Phone list of contacts
+# Phone list of contacts.
 #===============================================================================
 class Window_PhoneList < Window_CommandPokemon
   attr_accessor :switching

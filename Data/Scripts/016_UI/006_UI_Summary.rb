@@ -328,7 +328,8 @@ class PokemonSummary_Scene
       status = GameData::Status.count
     end
     if status >= 0
-      imagepos.push([_INTL("Graphics/UI/statuses"), 124, 100, 0, 16 * status, 44, 16])
+      imagepos.push([_INTL("Graphics/UI/statuses"), 124, 100,
+                     0, status * GameData::Status::ICON_SIZE[1], *GameData::Status::ICON_SIZE])
     end
     # Show Pokérus cured icon
     if @pokemon.pokerusStage == 2
@@ -465,8 +466,8 @@ class PokemonSummary_Scene
     # Draw Pokémon type(s)
     @pokemon.types.each_with_index do |type, i|
       type_number = GameData::Type.get(type).icon_position
-      type_rect = Rect.new(0, type_number * 28, 64, 28)
-      type_x = (@pokemon.types.length == 1) ? 402 : 370 + (66 * i)
+      type_rect = Rect.new(0, type_number * GameData::Type::ICON_SIZE[1], *GameData::Type::ICON_SIZE)
+      type_x = (@pokemon.types.length == 1) ? 402 : 370 + ((GameData::Type::ICON_SIZE[0] + 2) * i)
       overlay.blt(type_x, 146, @typebitmap.bitmap, type_rect)
     end
     # Draw Exp bar
@@ -712,7 +713,7 @@ class PokemonSummary_Scene
       move = @pokemon.moves[i]
       if move
         type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
-        imagepos.push([_INTL("Graphics/UI/types"), 248, yPos - 4, 0, type_number * 28, 64, 28])
+        imagepos.push([_INTL("Graphics/UI/types"), 248, yPos - 4, 0, type_number * GameData::Type::ICON_SIZE[1], *GameData::Type::ICON_SIZE])
         textpos.push([move.name, 316, yPos, :left, moveBase, moveShadow])
         if move.total_pp > 0
           textpos.push([_INTL("PP"), 342, yPos + 32, :left, moveBase, moveShadow])
@@ -778,7 +779,7 @@ class PokemonSummary_Scene
       end
       if move
         type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
-        imagepos.push([_INTL("Graphics/UI/types"), 248, yPos - 4, 0, type_number * 28, 64, 28])
+        imagepos.push([_INTL("Graphics/UI/types"), 248, yPos - 4, 0, type_number * GameData::Type::ICON_SIZE[1], *GameData::Type::ICON_SIZE])
         textpos.push([move.name, 316, yPos, :left, moveBase, moveShadow])
         if move.total_pp > 0
           textpos.push([_INTL("PP"), 342, yPos + 32, :left, moveBase, moveShadow])
@@ -805,8 +806,8 @@ class PokemonSummary_Scene
     # Draw Pokémon's type icon(s)
     @pokemon.types.each_with_index do |type, i|
       type_number = GameData::Type.get(type).icon_position
-      type_rect = Rect.new(0, type_number * 28, 64, 28)
-      type_x = (@pokemon.types.length == 1) ? 130 : 96 + (70 * i)
+      type_rect = Rect.new(0, type_number * GameData::Type::ICON_SIZE[1], *GameData::Type::ICON_SIZE)
+      type_x = (@pokemon.types.length == 1) ? 130 : 96 + ((GameData::Type::ICON_SIZE[0] + 6) * i)
       overlay.blt(type_x, 78, @typebitmap.bitmap, type_rect)
     end
   end
@@ -837,7 +838,8 @@ class PokemonSummary_Scene
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
     # Draw selected move's damage category icon
-    imagepos = [["Graphics/UI/category", 166, 124, 0, selected_move.display_category(@pokemon) * 28, 64, 28]]
+    imagepos = [["Graphics/UI/category", 166, 124,
+                 0, selected_move.display_category(@pokemon) * CATEGORY_ICON_SIZE[1], *CATEGORY_ICON_SIZE]]
     pbDrawImagePositions(overlay, imagepos)
     # Draw selected move's description
     drawTextEx(overlay, 4, 224, 230, 5, selected_move.description, base, shadow)

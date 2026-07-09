@@ -1,28 +1,3 @@
-def pbEmergencySave
-  oldscene = $scene
-  $scene = nil
-  pbMessage(_INTL("The script is taking too long. The game will restart."))
-  return if !$player
-  if SaveData.exists?
-    File.open(SaveData::FILE_PATH, "rb") do |r|
-      File.open(SaveData::FILE_PATH + ".bak", "wb") do |w|
-        loop do
-          s = r.read(4096)
-          break if !s
-          w.write(s)
-        end
-      end
-    end
-  end
-  if Game.save
-    pbMessage("\\se[]" + _INTL("The game was saved.") + "\\me[GUI save game]\\wtnp[20]")
-    pbMessage("\\se[]" + _INTL("The previous save file has been backed up.") + "\\wtnp[20]")
-  else
-    pbMessage("\\se[]" + _INTL("Save failed.") + "\\wtnp[30]")
-  end
-  $scene = oldscene
-end
-
 #===============================================================================
 #
 #===============================================================================
@@ -136,4 +111,29 @@ def pbSaveScreen
   screen = PokemonSaveScreen.new(scene)
   ret = screen.pbSaveScreen
   return ret
+end
+
+def pbEmergencySave
+  oldscene = $scene
+  $scene = nil
+  pbMessage(_INTL("The script is taking too long. The game will restart."))
+  return if !$player
+  if SaveData.exists?
+    File.open(SaveData::FILE_PATH, "rb") do |r|
+      File.open(SaveData::FILE_PATH + ".bak", "wb") do |w|
+        loop do
+          s = r.read(4096)
+          break if !s
+          w.write(s)
+        end
+      end
+    end
+  end
+  if Game.save
+    pbMessage("\\se[]" + _INTL("The game was saved.") + "\\me[GUI save game]\\wtnp[20]")
+    pbMessage("\\se[]" + _INTL("The previous save file has been backed up.") + "\\wtnp[20]")
+  else
+    pbMessage("\\se[]" + _INTL("Save failed.") + "\\wtnp[30]")
+  end
+  $scene = oldscene
 end

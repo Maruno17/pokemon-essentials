@@ -39,6 +39,30 @@ class Game_System
     @bgs_position       = 0
   end
 
+  def battle_bgm
+    return (@battle_bgm) ? @battle_bgm : $data_system.battle_bgm
+  end
+
+  attr_writer :battle_bgm
+
+  def battle_end_me
+    return (@battle_end_me) ? @battle_end_me : $data_system.battle_end_me
+  end
+
+  attr_writer :battle_end_me
+
+  def windowskin_name
+    return $data_system.windowskin_name if @windowskin_name.nil?
+    return @windowskin_name
+  end
+
+  attr_writer :windowskin_name
+
+  def timer
+    return 0 if !@timer_start || !$stats
+    return @timer_duration - $stats.play_time + @timer_start
+  end
+
   #-----------------------------------------------------------------------------
 
   def bgm_play(bgm, track = nil)
@@ -249,32 +273,6 @@ class Game_System
   end
 
   #-----------------------------------------------------------------------------
-
-  def battle_bgm
-    return (@battle_bgm) ? @battle_bgm : $data_system.battle_bgm
-  end
-
-  attr_writer :battle_bgm
-
-  def battle_end_me
-    return (@battle_end_me) ? @battle_end_me : $data_system.battle_end_me
-  end
-
-  attr_writer :battle_end_me
-
-  #-----------------------------------------------------------------------------
-
-  def windowskin_name
-    return $data_system.windowskin_name if @windowskin_name.nil?
-    return @windowskin_name
-  end
-
-  attr_writer :windowskin_name
-
-  def timer
-    return 0 if !@timer_start || !$stats
-    return @timer_duration - $stats.play_time + @timer_start
-  end
 
   def update
     if Input.trigger?(Input::SPECIAL) && pbCurrentEventCommentInput(1, "Cut Scene")

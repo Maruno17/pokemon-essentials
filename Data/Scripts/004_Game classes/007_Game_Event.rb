@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Game_Event < Game_Character
   attr_reader   :map_id
   attr_reader   :trigger
@@ -127,10 +130,11 @@ class Game_Event < Game_Character
   end
 
   def onEvent?
-    return @map_id == $game_map.map_id && at_coordinate?($game_player.x, $game_player.y)
+    return @map_id == $game_player.map_id && at_coordinate?($game_player.x, $game_player.y)
   end
 
   def over_trigger?
+    return false if @map_id != $game_player.map_id
     return false if @character_name != "" && !@through
     return false if @event.name[/hiddenitem/i]
     each_occupied_tile do |i, j|
@@ -140,8 +144,9 @@ class Game_Event < Game_Character
   end
 
   def check_event_trigger_touch(dir)
-    return if $game_system.map_interpreter.running?
+    return if @map_id != $game_player.map_id
     return if @trigger != 2   # Event touch
+    return if $game_system.map_interpreter.running?
     case dir
     when 2
       return if $game_player.y != @y + 1
@@ -158,8 +163,9 @@ class Game_Event < Game_Character
   end
 
   def check_event_trigger_after_turning
-    return if $game_system.map_interpreter.running? || @starting
+    return if @map_id != $game_player.map_id
     return if @trigger != 2   # Not Event Touch
+    return if $game_system.map_interpreter.running? || @starting
     return if !self.name[/(?:sight|trainer)\((\d+)\)/i]
     distance = $~[1].to_i
     return if !pbEventCanReachPlayer?(self, $game_player, distance)
@@ -168,8 +174,9 @@ class Game_Event < Game_Character
   end
 
   def check_event_trigger_after_moving
-    return if $game_system.map_interpreter.running? || @starting
+    return if @map_id != $game_player.map_id
     return if @trigger != 2   # Not Event Touch
+    return if $game_system.map_interpreter.running? || @starting
     if self.name[/(?:sight|trainer)\((\d+)\)/i]
       distance = $~[1].to_i
       return if !pbEventCanReachPlayer?(self, $game_player, distance)
