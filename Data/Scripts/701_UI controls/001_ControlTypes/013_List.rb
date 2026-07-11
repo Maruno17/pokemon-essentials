@@ -105,6 +105,13 @@ class UIControls::List < UIControls::BaseControl
     invalidate
   end
 
+  def show_selection
+    return if !@options || @options.length == 0 || @selected < 0
+    new_top_row = @selected - (@rows_count / 2)
+    proportion = new_top_row.to_f / (@options.length - @rows_count - 1)
+    @scrollbar.slider_top = proportion * (@scrollbar.tray_size - @scrollbar.slider_size - 1)
+  end
+
   #-----------------------------------------------------------------------------
 
   def mouse_in_control?

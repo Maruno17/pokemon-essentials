@@ -4,10 +4,13 @@
 # highlights when hovered over or clicked on.
 #===============================================================================
 class UIControls::ClickableArea < UIControls::BaseControl
+  attr_accessor :changed_upon_click
+
   def initialize(width, height, viewport, highlight = true, can_right_click = false)
     super(width, height, viewport)
     @highlight = highlight
     @can_right_click = can_right_click
+    @changed_upon_click = false
   end
 
   #-----------------------------------------------------------------------------
@@ -41,10 +44,18 @@ class UIControls::ClickableArea < UIControls::BaseControl
 
   #-----------------------------------------------------------------------------
 
+  def on_mouse_press
+    was_captured = busy?
+    super
+    if !was_captured && busy? && @changed_upon_click
+      set_changed
+    end
+  end
+
   def on_mouse_release
     return if !@captured_area   # Wasn't captured to begin with
     # Change this control's value
-    if @captured_area == :area
+    if @captured_area == :area && !@changed_upon_click
       mouse_x, mouse_y = mouse_pos
       if mouse_x && mouse_y && @interactions[@captured_area].contains?(mouse_x, mouse_y)
         set_changed

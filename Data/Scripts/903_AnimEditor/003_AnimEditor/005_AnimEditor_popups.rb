@@ -326,13 +326,13 @@ class AnimationEditor
       if ["USER", "USER_BACK", "USER_FRONT", "USER_OPP",
           "TARGET", "TARGET_FRONT", "TARGET_BACK", "TARGET_OPP"].include?(filename)
         chunks = filename.split("_")
-        fname = (chunks[0] == "USER") ? @settings[:user_sprite_name].to_s : @settings[:target_sprite_name].to_s
+        fname = (chunks[0] == "USER") ? @settings[:anim_editor][:user_sprite_name].to_s : @settings[:anim_editor][:target_sprite_name].to_s
         case chunks[1] || ""
         when "", "OPP"
           if (chunks[0] == "USER") ^ (chunks[1] == "OPP")   # xor
-            folder = (@settings[:user_opposes]) ? "Graphics/Pokemon/Front/" : "Graphics/Pokemon/Back/"
+            folder = (@settings[:anim_editor][:user_opposes]) ? "Graphics/Pokemon/Front/" : "Graphics/Pokemon/Back/"
           else
-            folder = (@settings[:user_opposes]) ? "Graphics/Pokemon/Back/" : "Graphics/Pokemon/Front/"
+            folder = (@settings[:anim_editor][:user_opposes]) ? "Graphics/Pokemon/Back/" : "Graphics/Pokemon/Front/"
           end
         when "FRONT"
           folder = "Graphics/Pokemon/Front/"
@@ -480,9 +480,9 @@ class AnimationEditor
             ptch = audio_chooser.get_control(:pitch).value
             case list.value
             when "USER"
-              Pokemon.play_cry(@settings[:user_sprite_name])
+              Pokemon.play_cry(@settings[:anim_editor][:user_sprite_name])
             when "TARGET"
-              Pokemon.play_cry(@settings[:target_sprite_name])
+              Pokemon.play_cry(@settings[:anim_editor][:target_sprite_name])
             else
               pbSEPlay(RPG::AudioFile.new("Anim/" + list.value, vol, ptch)) if list.value
             end

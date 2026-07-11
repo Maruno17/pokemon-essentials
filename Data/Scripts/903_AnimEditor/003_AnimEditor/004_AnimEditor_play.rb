@@ -10,21 +10,21 @@ class AnimationEditor
     # Set up fake battlers for the animation player
     user_battler = nil
     if !@anim[:no_user]
-      idx_user = @settings[:user_index]
-      if @settings[:user_opposes] || [:opp_move, :opp_common].include?(@anim[:type])
+      idx_user = @settings[:anim_editor][:user_index]
+      if @settings[:anim_editor][:user_opposes] || [:opp_move, :opp_common].include?(@anim[:type])
         idx_user += 1
       end
-      user_battler = AnimationPlayer::FakeBattler.new(idx_user, @settings[:user_sprite_name])
+      user_battler = AnimationPlayer::FakeBattler.new(idx_user, @settings[:anim_editor][:user_sprite_name])
     end
     target_battlers = nil
     if !@anim[:no_target]
       target_battlers = []
-      @settings[:target_indices].each do |idx|
+      @settings[:anim_editor][:target_indices].each do |idx|
         idx_target = idx
-        if @settings[:user_opposes] || [:opp_move, :opp_common].include?(@anim[:type])
+        if @settings[:anim_editor][:user_opposes] || [:opp_move, :opp_common].include?(@anim[:type])
           idx_target += (idx_target.even?) ? 1 : -1
         end
-        target_battlers.push(AnimationPlayer::FakeBattler.new(idx_target, @settings[:target_sprite_name]))
+        target_battlers.push(AnimationPlayer::FakeBattler.new(idx_target, @settings[:anim_editor][:target_sprite_name]))
       end
     end
     # Create animation player

@@ -2,7 +2,7 @@
 #
 #===============================================================================
 class UIControls::Scrollbar < UIControls::BaseControl
-  attr_reader :slider_top
+  attr_reader :tray_size, :range, :slider_top, :slider_size
 
   SLIDER_WIDTH    = 16
   WIDTH_PADDING   = 0
@@ -37,7 +37,7 @@ class UIControls::Scrollbar < UIControls::BaseControl
       @slider.height = @slider_size
     end
     self.slider_top = @slider_top
-    self.visible = (@always_visible || @range > @tray_size)
+    self.visible = (@always_visible || can_scroll?)
     invalidate
   end
 
@@ -63,6 +63,10 @@ class UIControls::Scrollbar < UIControls::BaseControl
 
   def maximum?
     return @slider_top >= @tray_size - @slider_size
+  end
+
+  def can_scroll?
+    return @range > @tray_size
   end
 
   #-----------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 #-------------------------------
 [0]
 Name = Essen
-Filename = mapRegion0.png
+Filename = mapRegion0
 PointSize = 16,16
 Size = 30,20
 Point = 13,12,Lappet Town
@@ -73,7 +73,7 @@ Point = 22,16,Faraday Island
 #-------------------------------
 [1]
 Name = Tiall
-Filename = mapRegion1.png
+Filename = mapRegion1
 PointSize = 16,16
 Size = 30,20
 Point = 13,16,Here

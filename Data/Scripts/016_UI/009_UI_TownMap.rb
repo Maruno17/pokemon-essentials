@@ -531,7 +531,7 @@ class UI::TownMapVisuals < UI::BaseVisuals
     Settings::REGION_MAP_EXTRAS.each do |graphic|
       next if graphic[0] != @region
       next if !graphic[5] && @mode == :wall_map
-      return if graphic[1] <= 0 || !$game_switches[graphic[1]]
+      next if graphic[1] <= 0 || !$game_switches[graphic[1]]
       draw_image(graphics_folder + graphic[4],
                  (graphic[2] * @map_data.point_size[0]) + @map_data.margins[0],
                  (graphic[3] * @map_data.point_size[1]) + @map_data.margins[1],

@@ -191,24 +191,24 @@ class AnimationEditor::Canvas < Sprite
 
   # Returns whether the user is on the foe's (non-player's) side.
   def sides_swapped?
-    return @settings[:user_opposes] || [:opp_move, :opp_common].include?(@anim[:type])
+    return @settings[:anim_editor][:user_opposes] || [:opp_move, :opp_common].include?(@anim[:type])
   end
 
   # index is a battler index (even for player's side, odd for foe's side)
   def side_size(index)
     side = index % 2
     side = (side + 1) % 2 if sides_swapped?
-    return @settings[:side_sizes][side]
+    return @settings[:anim_editor][:side_sizes][side]
   end
 
   def user_index
-    ret = @settings[:user_index]
+    ret = @settings[:anim_editor][:user_index]
     ret += 1 if sides_swapped?
     return ret
   end
 
   def target_indices
-    ret = @settings[:target_indices].clone
+    ret = @settings[:anim_editor][:target_indices].clone
     if sides_swapped?
       ret.length.times do |i|
         ret[i] += (ret[i].even?) ? 1 : -1
@@ -340,8 +340,8 @@ class AnimationEditor::Canvas < Sprite
   #-----------------------------------------------------------------------------
 
   def refresh_bg_graphics
-    return if @bg_name && @bg_name == @settings[:canvas_bg]
-    @bg_name = @settings[:canvas_bg]
+    return if @bg_name && @bg_name == @settings[:anim_editor][:canvas_bg]
+    @bg_name = @settings[:anim_editor][:canvas_bg]
     core_name = @bg_name.sub(/_eve$/, "").sub(/_night$/, "")
     if pbResolveBitmap("Graphics/Battlebacks/" + @bg_name + "_bg")
       self.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", @bg_name + "_bg")
@@ -401,8 +401,8 @@ class AnimationEditor::Canvas < Sprite
 
   def ensure_battler_sprites
     should_ensure = @sides_swapped.nil? || @sides_swapped != sides_swapped? ||
-                    @settings_user_index.nil? || @settings_user_index != @settings[:user_index] ||
-                    @settings_target_indices.nil? || @settings_target_indices != @settings[:target_indices]
+                    @settings_user_index.nil? || @settings_user_index != @settings[:anim_editor][:user_index] ||
+                    @settings_target_indices.nil? || @settings_target_indices != @settings[:anim_editor][:target_indices]
     if should_ensure || !@side_size0 || @side_size0 != side_size(0)
       @battler_sprites.each_with_index { |s, i| s.dispose if i.even? && s && !s.disposed? }
       @battler_frame_sprites.each_with_index { |s, i| s.dispose if i.even? && s && !s.disposed? }
@@ -435,14 +435,14 @@ class AnimationEditor::Canvas < Sprite
     end
     if should_ensure
       @sides_swapped = sides_swapped?
-      @settings_user_index = @settings[:user_index]
-      @settings_target_indices = @settings[:target_indices].clone
+      @settings_user_index = @settings[:anim_editor][:user_index]
+      @settings_target_indices = @settings[:anim_editor][:target_indices].clone
     end
   end
 
   def refresh_battler_graphics
-    if !@user_sprite_name || !@user_sprite_name || @user_sprite_name != @settings[:user_sprite_name]
-      @user_sprite_name = @settings[:user_sprite_name]
+    if !@user_sprite_name || !@user_sprite_name || @user_sprite_name != @settings[:anim_editor][:user_sprite_name]
+      @user_sprite_name = @settings[:anim_editor][:user_sprite_name]
       @user_bitmap_front_name = GameData::Species.front_sprite_filename(@user_sprite_name)
       @user_bitmap_back_name = GameData::Species.back_sprite_filename(@user_sprite_name)
       @user_bitmap_front&.dispose
@@ -450,8 +450,8 @@ class AnimationEditor::Canvas < Sprite
       @user_bitmap_front = RPG::Cache.load_bitmap("", @user_bitmap_front_name)
       @user_bitmap_back = RPG::Cache.load_bitmap("", @user_bitmap_back_name)
     end
-    if !@target_bitmap_front || !@target_sprite_name || @target_sprite_name != @settings[:target_sprite_name]
-      @target_sprite_name = @settings[:target_sprite_name]
+    if !@target_bitmap_front || !@target_sprite_name || @target_sprite_name != @settings[:anim_editor][:target_sprite_name]
+      @target_sprite_name = @settings[:anim_editor][:target_sprite_name]
       @target_bitmap_front_name = GameData::Species.front_sprite_filename(@target_sprite_name)
       @target_bitmap_back_name = GameData::Species.back_sprite_filename(@target_sprite_name)
       @target_bitmap_front&.dispose

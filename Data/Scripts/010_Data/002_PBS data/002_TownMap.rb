@@ -67,6 +67,16 @@ module GameData
       return @flags.any? { |f| f.downcase == flag.downcase }
     end
 
+    alias __orig__get_property_for_PBS get_property_for_PBS unless method_defined?(:__orig__get_property_for_PBS)
+    def get_property_for_PBS(key)
+      ret = __orig__get_property_for_PBS(key)
+      case key
+      when "Margins"
+        ret = nil if ret == [0, 0]
+      end
+      return ret
+    end
+
     def get_point_property_for_PBS(key, index = 0)
       return [*@points[index][:position], @points[index][:real_name]] if key == "Point"
       ret = @points[index][SUB_SCHEMA[key][0]]

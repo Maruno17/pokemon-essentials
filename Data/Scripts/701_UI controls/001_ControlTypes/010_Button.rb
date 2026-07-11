@@ -46,6 +46,10 @@ class UIControls::Button < UIControls::BaseControl
     return @highlight
   end
 
+  def set_highlight(value)
+    (value) ? set_highlighted : set_not_highlighted
+  end
+
   def set_highlighted
     return if highlighted?
     @highlight = true
