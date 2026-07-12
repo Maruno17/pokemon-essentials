@@ -807,16 +807,12 @@ class AnimationEditor::Canvas < Sprite
       sprite2.zoom_y = sprite1.zoom_y * value / 100.0 if sprite2
     when :angle
       case particle[:angle_override]
-      when :initial_angle_to_focus
+      when :initial_angle_to_focus, :initial_emitter_angle_to_focus
         focus_xy = AnimationPlayer::Helper.get_xy_focus(
           particle, user_index, target_idx,
           @user_coords, @target_coords[target_idx], [side_size(0), side_size(1)]
         )
         offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, sprite1)
-        target_x = (focus_xy.length == 2) ? focus_xy[1][0] : focus_xy[0][0]
-        target_x += offset_xy[0]
-        target_y = (focus_xy.length == 2) ? focus_xy[1][1] : focus_xy[0][1]
-        target_y += offset_xy[1]
         sprite1.angle = AnimationPlayer::Helper.initial_angle_between(particle, focus_xy, offset_xy)
       when :always_point_at_focus
         focus_xy = AnimationPlayer::Helper.get_xy_focus(

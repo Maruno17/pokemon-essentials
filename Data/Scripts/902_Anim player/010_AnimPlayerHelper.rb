@@ -194,7 +194,9 @@ module AnimationPlayer::Helper
     if particle.is_a?(Array)
       x1, x2 = particle
     else
-      [:x, :y].each do |property|
+      coords = [:x, :y]
+      coords = [:emit_x, :emit_y] if (particle[:emitter_type] || :none) != :none
+      coords.each do |property|
         next if !particle[property]
         particle[property].each do |cmd|
           break if cmd[1] > 0

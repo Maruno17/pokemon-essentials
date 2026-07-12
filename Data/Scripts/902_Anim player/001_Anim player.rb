@@ -273,7 +273,8 @@ class AnimationPlayer
   def create_particle_sprite_set_base_property_offsets(particle_sprite, particle, target_idx = -1)
     relative_to_index = index_of_particle_focus(particle, target_idx)
     if relative_to_index >= 0
-      if (particle[:angle_override] || :none) == :initial_angle_to_focus
+      case particle[:angle_override] || :none
+      when :initial_angle_to_focus, :initial_emitter_angle_to_focus
         particle_sprite.property_offsets[:angle] = AnimationPlayer::Helper.initial_angle_between(
           particle, particle_sprite.focus_xy, particle_sprite.offset_xy
         )

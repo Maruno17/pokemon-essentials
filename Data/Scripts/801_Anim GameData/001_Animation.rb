@@ -69,9 +69,10 @@ module GameData
       "Polar"      => :polar          # Sine movement in x/y
     }
     ANGLE_OVERRIDES = {
-      "None"                => :none,
-      "InitialAngleToFocus" => :initial_angle_to_focus,
-      "AlwaysPointAtFocus"  => :always_point_at_focus
+      "None"                       => :none,
+      "InitialAngleToFocus"        => :initial_angle_to_focus,
+      "InitialEmitterAngleToFocus" => :initial_emitter_angle_to_focus,
+      "AlwaysPointAtFocus"         => :always_point_at_focus
     }
     # NOTE: These are all the same properties as the base layer, minus :visible.
     #       :frame2, :blending2, :color2 and :tone2 are standalone and are not
