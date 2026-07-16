@@ -3680,17 +3680,34 @@ Battle::AbilityEffects::OnBattlerFainting.add(:SOULHEART,
 Battle::AbilityEffects::OnWeatherChange.add(:PROTOSYNTHESIS,
   proc { |ability, battler, battle, old_weather, ability_changed|
     next if battler.effects[PBEffects::BoosterEnergy]
-    if [:Sun, :HarshSun].include?(battle.pbWeather) && !battler.effects[PBEffects::Transform]
+    triggered = false
+    consume_item = false
+    if !battler.effects[PBEffects::Transform]
+      if [:Sun, :HarshSun].include?(battle.pbWeather)
+        triggered = true
+      elsif battler.hasActiveItem?(:BOOSTERENERGY)
+        triggered = true
+        battle.pbCommonAnimation("UseItem", battler)
+        consume_item = true
+      end
+    end
+    if triggered
       best = nil
-      [:ATTACK, :DEFENSE, :SPECIAL_ATTACK, :SPECIAL_DEFENSE, :SPEED].each do |stat|
-        value = battler.stat_with_stages(stat)
-        best = [stat, value] if !best || value > best[1]
+      GameData::Stat.each_main_battle do |stat|
+        value = battler.stat_with_stages(stat.id)
+        best = [stat.id, value] if !best || value > best[1]
       end
       battler.effects[PBEffects::ProtosynthesisStat] = best[0]
       battle.pbShowAbilitySplash(battler)
-      battle.pbDisplay(_INTL("The harsh sunlight activated {1} {2}!", battler.pbOfThis(true), battler.abilityName))
+      if consume_item
+        battle.pbDisplay(_INTL("{1} used its {2} to activate {3}!",
+                               battler.pbThis, battler.itemName, battler.abilityName))
+      else
+        battle.pbDisplay(_INTL("The harsh sunlight activated {1} {2}!", battler.pbOfThis(true), battler.abilityName))
+      end
       battle.pbDisplay(_INTL("{1} {2} was heightened!", battler.pbOfThis, GameData::Stat.get(best[0]).name))
       battle.pbHideAbilitySplash(battler)
+      battler.pbHeldItemTriggered if consume_item
     elsif battler.effects[PBEffects::ProtosynthesisStat]
       battler.effects[PBEffects::ProtosynthesisStat] = nil
       battle.pbDisplay(_INTL("The effects of {1} have worn off...", battler.abilityName))
@@ -3737,17 +3754,35 @@ Battle::AbilityEffects::OnTerrainChange.add(:MIMICRY,
 Battle::AbilityEffects::OnTerrainChange.add(:QUARKDRIVE,
   proc { |ability, battler, battle, old_terrain, ability_changed|
     next if battler.effects[PBEffects::BoosterEnergy]
-    if battle.field.terrain == :Electric && !battler.effects[PBEffects::Transform]
+    triggered = false
+    consume_item = false
+    if !battler.effects[PBEffects::Transform]
+      if battle.field.terrain == :Electric
+        triggered = true
+      elsif battler.hasActiveItem?(:BOOSTERENERGY)
+        triggered = true
+        battle.pbCommonAnimation("UseItem", battler)
+        consume_item = true
+      end
+    end
+    if triggered
       best = nil
-      [:ATTACK, :DEFENSE, :SPECIAL_ATTACK, :SPECIAL_DEFENSE, :SPEED].each do |stat|
-        value = battler.stat_with_stages(stat)
-        best = [stat, value] if !best || value > best[1]
+      GameData::Stat.each_main_battle do |stat|
+        value = battler.stat_with_stages(stat.id)
+        best = [stat.id, value] if !best || value > best[1]
       end
       battler.effects[PBEffects::ProtosynthesisStat] = best[0]
+      battler.effects[PBEffects::BoosterEnergy] = true if consume_item
       battle.pbShowAbilitySplash(battler)
-      battle.pbDisplay(_INTL("The Electric Terrain activated {1} {2}!", battler.pbOfThis(true), battler.abilityName))
+      if consume_item
+        battle.pbDisplay(_INTL("{1} used its {2} to activate {3}!",
+                               battler.pbThis, battler.itemName, battler.abilityName))
+      else
+        battle.pbDisplay(_INTL("The Electric Terrain activated {1} {2}!", battler.pbOfThis(true), battler.abilityName))
+      end
       battle.pbDisplay(_INTL("{1} {2} was heightened!", battler.pbOfThis, GameData::Stat.get(best[0]).name))
       battle.pbHideAbilitySplash(battler)
+      battler.pbHeldItemTriggered if consume_item
     elsif battler.effects[PBEffects::ProtosynthesisStat]
       battler.effects[PBEffects::ProtosynthesisStat] = nil
       battle.pbDisplay(_INTL("The effects of {1} have worn off...", battler.abilityName))

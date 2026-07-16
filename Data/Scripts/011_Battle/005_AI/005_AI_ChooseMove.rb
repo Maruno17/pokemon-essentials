@@ -355,7 +355,7 @@ class Battle::AI
         badMoves = user.can_attack?
         badMoves = true if !badMoves && pbAIRandom(100) < 25
       elsif max_score < MOVE_BASE_SCORE * move_score_threshold && user_battler.turnCount > 2
-        badMoves = true if pbAIRandom(100) < 80
+        badMoves = true if pbAIRandom(100) < 40
       end
       if badMoves
         PBDebug.log_ai("#{@user.name} wants to switch due to terrible moves")

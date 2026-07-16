@@ -520,7 +520,7 @@ class Battle
           other_i = i
           @initialItems.each_with_index do |side_items, this_side|
             side_items.each_with_index do |pkmn_item, this_i|
-              next if !pbParty(this_side)[this_i].nil?
+              next if pbParty(this_side)[this_i].nil?
               next if pkmn_item[1] != side || pkmn_item[2] != i
               other_side = this_side
               other_i = this_i

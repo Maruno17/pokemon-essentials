@@ -1493,11 +1493,10 @@ ItemHandlers::UseOnPokemon.add(:ABILITYPATCH, proc { |item, qty, pkmn, screen|
       screen.show_message(_INTL("It won't have any effect."))
       next false
     end
-    new_ability_name = GameData::Ability.get(new_ability_id).name
     pkmn.ability_index = 2
     pkmn.ability = nil
     screen.refresh
-    screen.show_message(_INTL("{1}'s Ability changed! Its Ability is now {2}!", pkmn.name, new_ability_name))
+    screen.show_message(_INTL("{1}'s Ability changed! Its Ability is now {2}!", pkmn.name, pkmn.ability.name))
     next true
   end
   next false

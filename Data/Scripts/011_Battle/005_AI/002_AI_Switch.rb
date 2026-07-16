@@ -9,6 +9,7 @@ class Battle::AI
     return false if @battle.rules[:cannot_switch]
     return false if @user.wild?
     return false if !@battle.pbCanSwitchOut?(@user.index)
+    return false if !@trainer.has_skill_flag?("ConsiderSwitching")
     # Don't switch if all foes are unable to do anything, e.g. resting after
     # Hyper Beam, will Truant (i.e. free turn)
     if @trainer.high_skill?
@@ -21,10 +22,7 @@ class Battle::AI
       return false if !foe_can_act
     end
     # Various calculations to decide whether to switch
-    if terrible_moves
-      PBDebug.log_ai("#{@user.name} is being forced to switch out")
-    else
-      return false if !@trainer.has_skill_flag?("ConsiderSwitching")
+    if !terrible_moves
       reserves = get_non_active_party_pokemon(@user.index)
       return false if reserves.empty?
       should_switch = Battle::AI::Handlers.should_switch?(@user, reserves, self, @battle)

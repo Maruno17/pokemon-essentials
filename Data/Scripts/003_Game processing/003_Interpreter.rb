@@ -166,7 +166,7 @@ class Interpreter
       if $game_map
         map_name = (pbGetBasicMapNameFromId($game_map.map_id) rescue nil) || "???"
         if event
-          err = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{$game_map.map_id} (#{map_name})\r\n"
+          err = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{event.map.map_id} (#{map_name})\r\n"
         else
           err = "Script error in Common Event, map #{$game_map.map_id} (#{map_name})\r\n"
         end
@@ -185,10 +185,10 @@ class Interpreter
     when -1   # player
       return $game_player
     when 0    # this event
-      events = $game_map.events
+      events = $map_factory.getMapNoAdd(@map_id)&.events
       return (events) ? events[@event_id] : nil
     else      # specific event
-      events = $game_map.events
+      events = $map_factory.getMapNoAdd(@map_id)&.events
       return (events) ? events[parameter] : nil
     end
   end
