@@ -1,0 +1,91 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CONFUSION]
+Name = DB Animation
+Credit = Dawn Bronze
+<User>
+    MoveX = 12,1,5
+    MoveX = 13,2,-5
+    MoveColor = 14,3,FFFFFF88
+    MoveX = 15,2,5
+    MoveX = 17,2,-5
+    MoveX = 19,2,5
+    MoveColor = 19,3,FFFFFF00
+    MoveX = 21,1,0
+<Target>
+    MoveZoomX = 24,2,90
+    MoveZoomX = 26,2,100
+    MoveZoomX = 28,2,90
+    MoveZoomX = 30,2,100
+    MoveZoomX = 32,2,90
+    MoveZoomX = 34,2,100
+<Target Afterimage>
+    Graphic = TARGET_FRONT
+    Focus = TargetPosition
+    SetY = 24,-55
+    SetZ = 24,10
+    SetOpacity = 24,0
+    SetColor = 24,FFFFFFA8
+    MoveOpacity = 24,1,150
+    MoveY = 24,2,-25
+    MoveZoomX = 24,2,135
+    MoveZoomY = 24,2,135
+    MoveY = 26,2,-55
+    MoveZoomX = 26,3,70
+    MoveZoomY = 26,6,100
+    MoveZoomX = 29,3,100
+    SetOpacity = 33,100
+    MoveOpacity = 33,4,0
+<Background>
+    Graphic = Screens/black
+    Focus = Background
+    SetOpacity = 0,0
+    MoveOpacity = 0,12,240
+    MoveOpacity = 41,9,0
+<SE>
+    Play = 16,Psychic/Confusion
+#-------------------------------
+[OppMove,CONFUSION]
+Name = DB Animation
+Credit = Dawn Bronze
+<User>
+    MoveX = 12,1,5
+    MoveX = 13,2,-5
+    MoveColor = 14,3,FFFFFF88
+    MoveX = 15,2,5
+    MoveX = 17,2,-5
+    MoveX = 19,2,5
+    MoveColor = 19,3,FFFFFF00
+    MoveX = 21,1,0
+<Target>
+    MoveZoomX = 24,2,90
+    MoveZoomX = 26,2,100
+    MoveZoomX = 28,2,90
+    MoveZoomX = 30,2,100
+    MoveZoomX = 32,2,90
+    MoveZoomX = 34,2,100
+<Target Afterimage>
+    Graphic = TARGET_BACK
+    Focus = TargetPosition
+    SetY = 24,-55
+    SetZ = 24,10
+    SetOpacity = 24,0
+    SetColor = 24,FFFFFFA8
+    MoveOpacity = 24,1,150
+    MoveY = 24,2,-70
+    MoveZoomX = 24,2,135
+    MoveZoomY = 24,2,135
+    MoveZoomX = 26,3,70
+    MoveY = 26,4,-75
+    MoveZoomY = 26,6,100
+    MoveZoomX = 29,3,100
+    SetOpacity = 33,100
+    MoveOpacity = 33,4,0
+<Background>
+    Graphic = Screens/black
+    Focus = Background
+    SetOpacity = 0,0
+    MoveOpacity = 0,12,240
+    MoveOpacity = 41,9,0
+<SE>
+    Play = 16,Psychic/Confusion

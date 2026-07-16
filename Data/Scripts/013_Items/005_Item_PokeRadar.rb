@@ -10,6 +10,7 @@ end
 #===============================================================================
 class Game_Temp
   attr_accessor :poke_radar_data   # [species, level, chain count, grasses (x,y,ring,rarity)]
+  attr_accessor :poke_radar_new_chain_species
 end
 
 #===============================================================================
@@ -201,6 +202,7 @@ EventHandlers.add(:on_wild_species_chosen, :poke_radar_chain,
         encounter[0] = new_encounter[0]
         encounter[1] = new_encounter[1]
         $game_temp.force_single_battle = true
+        $game_temp.poke_radar_new_chain_species = encounter[0]
       end
     elsif encounter   # Encounter triggered by stepping in non-rustling grass
       pbPokeRadarCancel
@@ -224,7 +226,7 @@ EventHandlers.add(:on_wild_pokemon_created, :poke_radar_shiny,
 EventHandlers.add(:on_wild_battle_end, :poke_radar_continue_chain,
   proc { |species, level, outcome|
     if $game_temp.poke_radar_data && [Battle::Outcome::WIN, Battle::Outcome::CATCH].include?(outcome)
-      $game_temp.poke_radar_data[0] = species
+      $game_temp.poke_radar_data[0] = $game_temp.poke_radar_new_chain_species || species
       $game_temp.poke_radar_data[1] = level
       $game_temp.poke_radar_data[2] += 1
       $stats.poke_radar_longest_chain = [$game_temp.poke_radar_data[2], $stats.poke_radar_longest_chain].max

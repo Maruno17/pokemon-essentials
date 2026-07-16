@@ -1,0 +1,113 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,HYPNOSIS]
+Name = DB Animation
+Credit = Dawn Bronze
+<User>
+<Target>
+    SetColor = 26,28123721
+    MoveColor = 26,6,FF70DD84
+    MoveColor = 47,8,00000000
+<Circle Ray Emitter>
+    Graphic = circle 1
+    Focus = UserAndTarget
+    Emitter = Straight
+    EmitterRate = 6
+    SetZ = 5,-40
+    SetZoomX = 5,20
+    SetZoomY = 5,20
+    SetOpacity = 5,0
+    SetColor = 5,FFE440FF
+    SetEmitting = 5,true
+    SetEmitX = 5,31
+    SetEmitY = 5,37
+    SetEmitSpeed = 5,400
+    SetEmitDirection = 5,55
+    MoveOpacity = 5,1,170
+    MoveZ = 5,19,-120
+    MoveZoomX = 5,31,175
+    MoveZoomY = 5,31,175
+    MoveColor = 18,2,E5B406FF
+    MoveOpacity = 23,3,0
+    SetEmitting = 25,false
+    SetVisible = 31,false
+<Circle Pulse>
+    Graphic = circle 1
+    Focus = Target
+    Emitter = NoMovement
+    EmitterRate = 8
+    SetZ = 29,10
+    SetZoomX = 29,10
+    SetZoomY = 29,10
+    SetOpacity = 29,180
+    SetColor = 29,FF50C8A0
+    SetEmitting = 29,true
+    MoveZoomX = 29,13,200
+    MoveZoomY = 29,13,200
+    MoveOpacity = 36,8,0
+    SetEmitting = 37,false
+<Z 1>
+    Graphic = sleep 1
+    Focus = Target
+    SetX = 29,-33
+    SetY = 29,-38
+    SetZ = 29,40
+    SetZoomX = 29,10
+    SetZoomY = 29,10
+    SetAngle = 29,45
+    SetOpacity = 29,0
+    SetColor = 29,FFFFFFFF
+    MoveOpacity = 29,2,250
+    MoveZoomX = 29,10,100
+    MoveZoomY = 29,10,100
+    MoveX = 29,25,-89
+    MoveY = 29,25,-113
+    MoveAngle = 29,25,5
+    MoveColor = 36,8,D4C4FFFF
+    MoveColor = 44,5,9878B4FF
+    MoveOpacity = 46,5,0
+    SetVisible = 51,false
+<Z 2>
+    Graphic = sleep 1
+    Focus = Target
+    SetX = 39,-33
+    SetY = 39,-38
+    SetZ = 39,40
+    SetZoomX = 39,10
+    SetZoomY = 39,10
+    SetAngle = 39,45
+    SetOpacity = 39,0
+    SetColor = 39,FFFFFFFF
+    MoveOpacity = 39,2,250
+    MoveZoomX = 39,10,100
+    MoveZoomY = 39,10,100
+    MoveX = 39,25,-89
+    MoveY = 39,25,-113
+    MoveAngle = 39,25,5
+    MoveColor = 46,8,D4C4FFFF
+    MoveColor = 54,5,9878B4FF
+    MoveOpacity = 56,5,0
+    SetVisible = 61,false
+<Z 3>
+    Graphic = sleep 1
+    Focus = Target
+    SetX = 49,-33
+    SetY = 49,-38
+    SetZ = 49,40
+    SetZoomX = 49,10
+    SetZoomY = 49,10
+    SetAngle = 49,45
+    SetOpacity = 49,0
+    SetColor = 49,FFFFFFFF
+    MoveOpacity = 49,2,250
+    MoveZoomX = 49,10,100
+    MoveZoomY = 49,10,100
+    MoveX = 49,25,-89
+    MoveY = 49,25,-113
+    MoveAngle = 49,25,5
+    MoveColor = 56,8,D4C4FFFF
+    MoveColor = 64,5,9878B4FF
+    MoveOpacity = 66,5,0
+    SetVisible = 71,false
+<SE>
+    Play = 4,Psychic/Hypnosis

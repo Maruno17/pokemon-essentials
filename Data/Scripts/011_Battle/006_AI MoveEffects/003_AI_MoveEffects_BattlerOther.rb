@@ -1300,6 +1300,7 @@ Battle::AI::Handlers::MoveEffectScore.add("StartUserAirborne",
     # Move is useless if user is already airborne
     if user.has_type?(:FLYING) ||
        user.has_active_ability?(:LEVITATE) ||
+       user.has_active_ability?(:EELEVATE) ||
        user.has_active_item?(:AIRBALLOON) ||
        user.effects[PBEffects::Telekinesis] > 0
       next Battle::AI::MOVE_USELESS_SCORE
@@ -1333,6 +1334,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartTargetAirborneAndAl
     # Move is useless if the target is already airborne
     if target.has_type?(:FLYING) ||
        target.has_active_ability?(:LEVITATE) ||
+       target.has_active_ability?(:EELEVATE) ||
        target.has_active_item?(:AIRBALLOON)
       next Battle::AI::MOVE_USELESS_SCORE
     end

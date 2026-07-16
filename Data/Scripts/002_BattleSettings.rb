@@ -156,20 +156,24 @@ module Settings
 
   # Whether the Exp gained from beating a Pokémon should be scaled depending on
   # the gainer's level.
-  SCALED_EXP_FORMULA            = (MECHANICS_GENERATION == 5 || MECHANICS_GENERATION >= 7)
+  SCALED_EXP_FORMULA                    = (MECHANICS_GENERATION == 5 || MECHANICS_GENERATION >= 7)
   # Whether the Exp gained from beating a Pokémon should be divided equally
   # between each participant (true), or whether each participant should gain
   # that much Exp (false). This also applies to Exp gained via the Exp Share
   # (held item version) being distributed to all Exp Share holders.
-  SPLIT_EXP_BETWEEN_GAINERS     = (MECHANICS_GENERATION <= 5)
+  SPLIT_EXP_BETWEEN_GAINERS             = (MECHANICS_GENERATION <= 5)
   # Whether the Exp gained from beating a Pokémon is multiplied by 1.5 if that
   # Pokémon is owned by another trainer.
-  MORE_EXP_FROM_TRAINER_POKEMON = (MECHANICS_GENERATION <= 6)
+  MORE_EXP_FROM_TRAINER_POKEMON         = (MECHANICS_GENERATION <= 6)
+  # Whether the Exp gained from beating a Pokémon is multiplied by 1.2 if that
+  # Pokémon evolves by levelling up at/above a specific level and is at/above
+  # that level.
+  MORE_EXP_AT_EVOLUTION_LEVEL_OR_HIGHER = (MECHANICS_GENERATION >= 6)
   # Whether a Pokémon holding a Power item gains 8 (true) or 4 (false) EVs in
   # the relevant stat.
-  MORE_EVS_FROM_POWER_ITEMS     = (MECHANICS_GENERATION >= 7)
+  MORE_EVS_FROM_POWER_ITEMS             = (MECHANICS_GENERATION >= 7)
   # Whether Pokémon gain Exp for capturing a Pokémon.
-  GAIN_EXP_FOR_CAPTURE          = (MECHANICS_GENERATION >= 6)
+  GAIN_EXP_FOR_CAPTURE                  = (MECHANICS_GENERATION >= 6)
 
   #-----------------------------------------------------------------------------
   # End of battle.

@@ -2,14 +2,19 @@
 #
 #===============================================================================
 module MessageConfig
-  LIGHT_TEXT_MAIN_COLOR    = Color.new(248, 248, 248)
-  LIGHT_TEXT_SHADOW_COLOR  = Color.new(72, 80, 88)
-  DARK_TEXT_MAIN_COLOR     = Color.new(80, 80, 88)
-  DARK_TEXT_SHADOW_COLOR   = Color.new(160, 160, 168)
-  MALE_TEXT_MAIN_COLOR     = Color.new(48, 80, 200)   # Used by message tag "\b"
-  MALE_TEXT_SHADOW_COLOR   = Color.new(208, 208, 200)
-  FEMALE_TEXT_MAIN_COLOR   = Color.new(224, 8, 8)   # Used by message tag "\r"
-  FEMALE_TEXT_SHADOW_COLOR = Color.new(208, 208, 200)
+  DARK_TEXT_MAIN_COLOR           = Color.new(80, 80, 88)
+  DARK_TEXT_SHADOW_COLOR         = Color.new(160, 160, 168)
+  LIGHT_TEXT_MAIN_COLOR          = Color.new(248, 248, 248)
+  LIGHT_TEXT_SHADOW_COLOR        = Color.new(72, 80, 88)
+  MALE_TEXT_MAIN_COLOR           = Color.new(48, 80, 200)   # Used by message tag "\b"
+  MALE_TEXT_SHADOW_COLOR         = Color.new(208, 208, 200)
+  FEMALE_TEXT_MAIN_COLOR         = Color.new(224, 8, 8)   # Used by message tag "\r"
+  FEMALE_TEXT_SHADOW_COLOR       = MALE_TEXT_SHADOW_COLOR
+  LIGHT_MALE_TEXT_MAIN_COLOR     = Color.new(128, 160, 248)   # Used by message tag "\b"
+  LIGHT_MALE_TEXT_SHADOW_COLOR   = LIGHT_TEXT_SHADOW_COLOR
+  LIGHT_FEMALE_TEXT_MAIN_COLOR   = Color.new(248, 128, 160)   # Used by message tag "\r"
+  LIGHT_FEMALE_TEXT_SHADOW_COLOR = Color.new(88, 80, 72)
+
   FONT_NAME                = "Power Green"
   FONT_SIZE                = 27
   FONT_Y_OFFSET            = 8

@@ -68,13 +68,15 @@ class AnimationPlayer
     @user_coords = nil
     if @user
       sprite = @sprites["pokemon_#{@user.index}"]
-      @user_coords = [sprite.x, sprite.y - (sprite.bitmap.height / 2)]
+      @user_coords = [sprite.x - sprite.ox + (sprite.bitmap.width / 2),
+                      sprite.y - sprite.oy + (sprite.bitmap.height / 2)]
     end
     @target_coords = []
     if @targets
       @targets.each do |target|
         sprite = @sprites["pokemon_#{target.index}"]
-        @target_coords[target.index] = [sprite.x, sprite.y - (sprite.bitmap.height / 2)]
+        @target_coords[target.index] = [sprite.x - sprite.ox + (sprite.bitmap.width / 2),
+                                        sprite.y - sprite.oy + (sprite.bitmap.height / 2)]
       end
     end
   end
@@ -237,6 +239,20 @@ class AnimationPlayer
       particle, @user&.index, target_idx, @user_coords, @target_coords[target_idx], @side_sizes
     )
     offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, (particle_sprite.sprite) ? particle_sprite.sprite[0] : nil)
+    case particle[:graphic]
+    when "USER", "USER_OPP", "USER_FRONT", "USER_BACK"
+      sprite = @sprites["pokemon_#{@user.index}"]
+      particle_sprite.sprite.each { |spr| spr.ox = sprite.ox }
+      particle_sprite.sprite.each { |spr| spr.oy = sprite.oy }
+      offset_xy[0] += sprite.ox - (sprite.bitmap.width / 2)
+      offset_xy[1] += sprite.oy - sprite.bitmap.height
+    when "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
+      sprite = @sprites["pokemon_#{target_idx}"]
+      particle_sprite.sprite.each { |spr| spr.ox = sprite.ox }
+      particle_sprite.sprite.each { |spr| spr.oy = sprite.oy }
+      offset_xy[0] += sprite.ox - (sprite.bitmap.width / 2)
+      offset_xy[1] += sprite.oy - sprite.bitmap.height
+    end
     focus_z = AnimationPlayer::Helper.get_z_focus(particle, @user&.index, target_idx)
     particle_sprite.focus_xy = focus_xy
     particle_sprite.offset_xy = offset_xy
@@ -257,7 +273,8 @@ class AnimationPlayer
   def create_particle_sprite_set_base_property_offsets(particle_sprite, particle, target_idx = -1)
     relative_to_index = index_of_particle_focus(particle, target_idx)
     if relative_to_index >= 0
-      if (particle[:angle_override] || :none) == :initial_angle_to_focus
+      case particle[:angle_override] || :none
+      when :initial_angle_to_focus, :initial_emitter_angle_to_focus
         particle_sprite.property_offsets[:angle] = AnimationPlayer::Helper.initial_angle_between(
           particle, particle_sprite.focus_xy, particle_sprite.offset_xy
         )
@@ -286,6 +303,8 @@ class AnimationPlayer
     # Add all commands
     particle.each_pair do |property, cmds|
       next if !cmds.is_a?(Array) || cmds.empty?
+      next if [:x, :y].include?(property) && particle[:polar_coordinates]
+      next if [:r, :theta].include?(property) && !particle[:polar_coordinates]
       cmds.each do |cmd|
         if cmd[1] > 0
           particle_sprite.add_move_process(property, cmd[0] * @slowdown / @fps.to_f, cmd[1] * @slowdown / @fps.to_f, cmd[2], cmd[3] || :linear)
@@ -324,7 +343,12 @@ class AnimationPlayer
     emitter.set_battler_filenames(@battler_filenames)
     emitter.set_focus_coords(@user_coords, @target_coords)
     emitter.set_side_sizes(@side_sizes)
+    set_up_emitter_parameters(emitter, particle)
     add_emitter_commands(emitter, particle)
+  end
+
+  def set_up_emitter_parameters(emitter, particle)
+    emitter.emitter_polar_coordinates = particle[:emitter_polar_coordinates]
   end
 
   def add_emitter_commands(emitter, particle)
@@ -336,6 +360,8 @@ class AnimationPlayer
     # Add all commands
     particle.each_pair do |property, cmds|
       next if !cmds.is_a?(Array) || cmds.empty?
+      next if [:x, :y].include?(property) && particle[:polar_coordinates]
+      next if [:r, :theta].include?(property) && !particle[:polar_coordinates]
       cmds.each do |cmd|
         if AnimationPlayer::Emitter::PARTICLE_PROPERTIES.include?(property)
           if cmd[1] > 0

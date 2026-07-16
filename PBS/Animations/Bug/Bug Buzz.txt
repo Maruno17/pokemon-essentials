@@ -1,0 +1,111 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,BUGBUZZ]
+Name = DB Animation
+Credit = Dawn Bronze
+<User>
+<Target>
+    MoveX = 11,1,5
+    MoveX = 12,2,-5
+    MoveX = 14,2,5
+    MoveX = 16,2,-5
+    MoveX = 18,2,5
+    MoveX = 20,2,-5
+    MoveX = 22,1,0
+<Soundwave L>
+    Graphic = soundwave 1
+    Focus = UserPosition
+    Emitter = Straight
+    EmitterRate = 5
+    SetZ = 0,10
+    SetZoomX = 0,130
+    SetAngle = 0,45
+    SetOpacity = 0,0
+    SetColor = 0,FFA40054
+    SetEmitting = 0,true
+    SetEmitX = 0,-50
+    SetEmitY = 0,-80
+    SetEmitSpeed = 0,230
+    SetEmitDirection = 0,135
+    MoveZoomX = 0,3,156
+    MoveZoomY = 0,3,120
+    MoveOpacity = 0,3,200
+    MoveColor = 0,8,FF480084
+    SetEmitting = 10,false
+    MoveOpacity = 10,5,0
+<Inner Soundwave L>
+    Graphic = soundwave 2 [bottom]
+    Focus = UserPosition
+    Emitter = Straight
+    EmitterRate = 15
+    SetZ = 0,10
+    SetZoomX = 0,120
+    SetZoomY = 0,110
+    SetAngle = 0,45
+    SetOpacity = 0,0
+    SetColor = 0,FFE8E4E4
+    SetEmitting = 0,true
+    SetEmitX = 0,-30
+    SetEmitY = 0,-57
+    SetEmitSpeed = 0,230
+    SetEmitDirection = 0,135
+    MoveOpacity = 0,1,255
+    MoveOpacity = 2,2,0
+    SetEmitting = 13,false
+<Soundwave R>
+    Graphic = soundwave 1
+    Focus = UserPosition
+    Emitter = Straight
+    EmitterRate = 5
+    SetZ = 0,10
+    SetZoomX = 0,130
+    SetAngle = 0,-45
+    SetOpacity = 0,0
+    SetColor = 0,FFA40054
+    SetEmitting = 0,true
+    SetEmitX = 0,50
+    SetEmitY = 0,-80
+    SetEmitSpeed = 0,230
+    SetEmitDirection = 0,45
+    MoveZoomX = 0,3,156
+    MoveZoomY = 0,3,120
+    MoveOpacity = 0,3,200
+    MoveColor = 0,8,FF480084
+    SetEmitting = 10,false
+    MoveOpacity = 10,5,0
+<Inner Soundwave R>
+    Graphic = soundwave 2 [bottom]
+    Focus = UserPosition
+    Emitter = Straight
+    EmitterRate = 15
+    SetZ = 0,10
+    SetZoomX = 0,120
+    SetZoomY = 0,110
+    SetAngle = 0,-45
+    SetOpacity = 0,0
+    SetColor = 0,FFE8E4E4
+    SetEmitting = 0,true
+    SetEmitX = 0,30
+    SetEmitY = 0,-57
+    SetEmitSpeed = 0,230
+    SetEmitDirection = 0,45
+    MoveOpacity = 0,1,255
+    MoveOpacity = 2,2,0
+    SetEmitting = 13,false
+<Circle Emitter>
+    Graphic = circle 1
+    Focus = User
+    Emitter = Straight
+    EmitterRate = 5
+    SetZ = 4,10
+    SetZoomX = 4,120
+    SetOpacity = 4,0
+    SetColor = 4,FF5000C0
+    SetEmitting = 4,true
+    MoveOpacity = 4,2,200
+    MoveZoomX = 4,11,12
+    MoveZoomY = 4,11,10
+    SetEmitting = 13,false
+    MoveOpacity = 13,2,0
+<SE>
+    Play = 3,Bug/Bug Buzz

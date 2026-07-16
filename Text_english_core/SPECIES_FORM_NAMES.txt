@@ -46,8 +46,8 @@ Male
 Male
 Shield Forme
 Shield Forme
-Small Size
-Small Size
+Small Variety
+Small Variety
 Neutral Mode
 Neutral Mode
 50% Forme
@@ -510,12 +510,12 @@ Mega Dragalge
 Mega Dragalge
 Mega Hawlucha
 Mega Hawlucha
-Average Size
-Average Size
-Large Size
-Large Size
-Super Size
-Super Size
+Medium Variety
+Medium Variety
+Large Variety
+Large Variety
+Jumbo Variety
+Jumbo Variety
 Active Mode
 Active Mode
 10% Forme

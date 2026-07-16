@@ -28,7 +28,7 @@ class Battle::Scene::Animation
     picture.visible = s.visible
     picture.color   = s.color.clone
     picture.tone    = s.tone.clone
-    picture.setOrigin(0, origin)
+    picture.setOrigin(0, origin) if origin
     @pictureEx[num] = picture
     @pictureSprites[num] = s
     return picture

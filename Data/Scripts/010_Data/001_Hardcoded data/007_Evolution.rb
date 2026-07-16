@@ -223,6 +223,7 @@ GameData::Evolution.register({
 GameData::Evolution.register({
   :id            => :LevelCoins,
   :parameter     => Integer,
+  :any_level_up  => true,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
     next $player.coins >= parameter
   },

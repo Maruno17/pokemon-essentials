@@ -1151,6 +1151,8 @@ class UI::PokedexVisuals < UI::BaseVisuals
     # (only needed for filters which have a blank/nil option that is part of a
     # grid of buttons)
     case new_page
+    when :sort_by
+      @sprites[:search_cursor].options = order_texts.keys
     when :first_letter
       @sprites[:search_cursor].options = first_letter_texts
     when :type

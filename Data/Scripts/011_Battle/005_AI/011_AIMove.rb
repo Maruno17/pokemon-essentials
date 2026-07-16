@@ -414,22 +414,22 @@ class Battle::AI::AIMove
     if @ai.trainer.medium_skill? && !@move.ignoresReflect? && !is_critical &&
        !user.has_active_ability?(:INFILTRATOR)
       if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
-        if @ai.battle.pbSideBattlerCount(target.battler) > 1
-          multipliers[:final_damage_multiplier] *= 2 / 3.0
-        else
+        if @ai.battle.singleBattle?
           multipliers[:final_damage_multiplier] /= 2
+        else
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
         end
       elsif target.pbOwnSide.effects[PBEffects::Reflect] > 0 && physicalMove?(calc_type)
-        if @ai.battle.pbSideBattlerCount(target.battler) > 1
-          multipliers[:final_damage_multiplier] *= 2 / 3.0
-        else
+        if @ai.battle.singleBattle?
           multipliers[:final_damage_multiplier] /= 2
+        else
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
         end
       elsif target.pbOwnSide.effects[PBEffects::LightScreen] > 0 && specialMove?(calc_type)
-        if @ai.battle.pbSideBattlerCount(target.battler) > 1
-          multipliers[:final_damage_multiplier] *= 2 / 3.0
-        else
+        if @ai.battle.singleBattle?
           multipliers[:final_damage_multiplier] /= 2
+        else
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
         end
       end
     end

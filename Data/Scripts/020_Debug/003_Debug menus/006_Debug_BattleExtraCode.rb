@@ -51,7 +51,7 @@ module Battle::DebugVariables
     PBEffects::GigatonHammer  => {name: "Gigaton Hammer/Blood Moon is the last used move", default: false},
     PBEffects::Grudge         => {name: "Grudge will apply if self faints",                default: false},
     PBEffects::HealBlock      => {name: "Heal Block number of rounds remaining",           default: 0},
-    PBEffects::HelpingHand    => {name: "Helping Hand will power up self's move",          default: false},
+    PBEffects::HelpingHand    => {name: "Helping Hand will power up self's move",          default: 0},
     PBEffects::HyperBeam      => {name: "Hyper Beam recharge rounds remaining",            default: 0},
 #    PBEffects::Illusion - is a Pokémon object, too complex to be worth bothering with
     PBEffects::Imprison       => {name: "Imprison disables others' moves known by self",   default: false},

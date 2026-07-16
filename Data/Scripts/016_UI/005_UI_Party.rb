@@ -321,7 +321,8 @@ end
 #
 #===============================================================================
 class UI::PartyVisuals < UI::BaseVisuals
-  attr_reader :index
+  attr_reader   :index
+  attr_accessor :cannot_cancel
 
   GRAPHICS_FOLDER = "Party/"   # Subfolder in Graphics/UI
   TEXT_COLOR_THEMES = {   # Themes not in DEFAULT_TEXT_COLOR_THEMES
@@ -333,6 +334,7 @@ class UI::PartyVisuals < UI::BaseVisuals
     @mode  = mode
     @index = (@party.length == 0) ? Settings::MAX_PARTY_SIZE : 0
     @multi_select = (@mode == :choose_entry_order)
+    @cannot_cancel = false   # Used in battle when forced to switch in a Pokémon
     super()
     set_index(@index)
   end
@@ -703,16 +705,17 @@ class UI::PartyVisuals < UI::BaseVisuals
     when Input::USE
       if @index == Settings::MAX_PARTY_SIZE
         return :confirm if @multi_select   # Confirm
-        (switching?) ? pbPlayCancelSE : pbPlayCloseMenuSE
-        return :quit
-      elsif @index == Settings::MAX_PARTY_SIZE + 1   # Cancel
-        (switching?) ? pbPlayCancelSE : pbPlayCloseMenuSE
+        (switching? || @cannot_cancel) ? pbPlayCancelSE : pbPlayCloseMenuSE
+        return :quit   # Cancel
+      elsif @index == Settings::MAX_PARTY_SIZE + 1   # Cancel (if Confirm is also a button)
+        (switching? || @cannot_cancel) ? pbPlayCancelSE : pbPlayCloseMenuSE
         return :quit
       else
-        return :chosen
+        pbPlayDecisionSE
+        return :chosen   # A Pokémon
       end
     when Input::BACK
-      (switching?) ? pbPlayCancelSE : pbPlayCloseMenuSE
+      (switching? || @cannot_cancel) ? pbPlayCancelSE : pbPlayCloseMenuSE
       return :quit
     end
     return nil
@@ -765,6 +768,10 @@ class UI::Party < UI::BaseScreen
 
   def pokemon
     return (index < @party.length) ? @party[index] : nil
+  end
+
+  def cannot_cancel=(value)
+    @visuals.cannot_cancel = value
   end
 
   def can_access_storage?
@@ -1184,7 +1191,7 @@ class UI::Party < UI::BaseScreen
     loop do
       on_start_main_loop
       chosen_index = choose_pokemon_core
-      if chosen_index >= 0 && block_given?
+      if block_given?
         next if !yield @party[chosen_index], chosen_index
       end
       @result = chosen_index
@@ -1204,16 +1211,10 @@ class UI::Party < UI::BaseScreen
       end
       if @use_proc2 || @use_proc22
         usability = @use_proc&.call(pokemon)
-        echoln pokemon.name
-        echoln usability
         if @use_proc2
           usability2 = @use_proc2.call(pokemon)
-          echoln usability2
           usability = usability2 if usability.nil? || !@valid_values2.include?(usability2)
-          echoln usability
         end
-        echoln @valid_values
-        echoln @valid_values2
         if !(@valid_values&.include?(usability) || @valid_values2&.include?(usability))
           if pokemon.egg?
             show_message(_INTL("This egg can't be chosen."))

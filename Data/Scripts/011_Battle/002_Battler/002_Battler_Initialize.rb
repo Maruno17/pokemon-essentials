@@ -202,7 +202,7 @@ class Battle::Battler
     @effects[PBEffects::GemConsumed]         = nil
     @effects[PBEffects::GigatonHammer]       = false
     @effects[PBEffects::Grudge]              = false
-    @effects[PBEffects::HelpingHand]         = false
+    @effects[PBEffects::HelpingHand]         = 0
     @effects[PBEffects::HyperBeam]           = 0
     @effects[PBEffects::Illusion]            = nil
     if hasActiveAbility?(:ILLUSION)
@@ -282,7 +282,7 @@ class Battle::Battler
     @effects[PBEffects::SyrupBomb]           = 0
     @effects[PBEffects::SyrupBombUser]       = -1
     @battle.allBattlers(true).each do |b|   # Other battlers no longer syruped by self
-      next if b.effects[PBEffects::SyrupBomb] != @index
+      next if b.effects[PBEffects::SyrupBombUser] != @index
       b.effects[PBEffects::SyrupBomb]     = 0
       b.effects[PBEffects::SyrupBombUser] = -1
     end

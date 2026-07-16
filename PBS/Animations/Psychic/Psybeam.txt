@@ -1,0 +1,75 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,PSYBEAM]
+Name = DB Animation
+Credit = Dawn Bronze
+<User>
+    SetZ = 0,-10
+<Target>
+    SetZ = 0,-10
+    MoveX = 10,4,-10
+    MoveColor = 10,4,A04ADD84
+    MoveX = 14,8,10
+    MoveColor = 18,4,00000000
+    MoveX = 22,8,-10
+    SetColor = 26,28123721
+    MoveColor = 26,4,A04ADD84
+    MoveX = 30,8,10
+    MoveColor = 34,4,00000000
+    MoveX = 38,4,0
+<Outer Circle Emitter>
+    Graphic = circle multiple 1
+    Focus = UserAndTarget
+    Emitter = Straight
+    EmitterRate = 20
+    SetZ = 5,50
+    SetZoomX = 5,10
+    SetZoomY = 5,10
+    SetOpacity = 5,0
+    SetColor = 5,EF377FFF
+    SetEmitting = 5,true
+    SetEmitSpeed = 5,550
+    SetEmitDirection = 5,45
+    MoveOpacity = 5,1,170
+    MoveZ = 5,11,-110
+    MoveZoomX = 5,31,140
+    MoveZoomY = 5,31,140
+    SetColor = 7,744ADDFF
+    SetColor = 9,5BA8A0FF
+    SetColor = 11,E59B06FF
+    SetColor = 13,EF377FFF
+    SetColor = 15,744ADDFF
+    SetColor = 17,5BA8A0FF
+    SetColor = 19,E59B06FF
+    MoveOpacity = 19,3,0
+    SetEmitting = 25,false
+    SetVisible = 31,false
+<Inner Circle Emitter>
+    Graphic = circle multiple 1
+    Focus = UserAndTarget
+    Emitter = Straight
+    EmitterRate = 20
+    SetZ = 5,50
+    SetZoomX = 5,5
+    SetZoomY = 5,5
+    SetOpacity = 5,0
+    SetColor = 5,EF377FFF
+    SetEmitting = 5,true
+    SetEmitSpeed = 5,550
+    SetEmitDirection = 5,45
+    MoveOpacity = 5,1,170
+    MoveZ = 5,10,-110
+    MoveZoomX = 5,31,70
+    MoveZoomY = 5,31,70
+    SetColor = 7,744ADDFF
+    SetColor = 9,5BA8A0FF
+    SetColor = 11,E59B06FF
+    SetColor = 13,EF377FFF
+    SetColor = 15,744ADDFF
+    SetColor = 17,5BA8A0FF
+    SetColor = 19,E59B06FF
+    MoveOpacity = 19,3,0
+    SetEmitting = 25,false
+    SetVisible = 31,false
+<SE>
+    Play = 4,Psychic/Psybeam

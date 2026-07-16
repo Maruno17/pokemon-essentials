@@ -26,7 +26,7 @@ Credit = Maruno
     SetEmitXRange = 0,256
     SetEmitY = 0,-80
     SetEmitSpeed = 0,1200
-    SetEmitAngle = 0,-80
+    SetEmitDirection = 0,-80
     SetVisible = 7,false
     SetEmitting = 28,false
 <SE>

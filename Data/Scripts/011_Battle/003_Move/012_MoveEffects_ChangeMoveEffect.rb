@@ -432,7 +432,7 @@ class Battle::Move::PowerUpAllyMove < Battle::Move
   def ignoresSubstitute?(user); return true; end
 
   def pbFailsAgainstTarget?(user, target, show_message)
-    if target.fainted? || target.effects[PBEffects::HelpingHand]
+    if target.fainted?
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
@@ -441,7 +441,7 @@ class Battle::Move::PowerUpAllyMove < Battle::Move
   end
 
   def pbEffectAgainstTarget(user, target)
-    target.effects[PBEffects::HelpingHand] = true
+    target.effects[PBEffects::HelpingHand] += 1
     @battle.pbDisplay(_INTL("{1} is ready to help {2}!", user.pbThis, target.pbThis(true)))
   end
 end

@@ -39,7 +39,9 @@ class Battle::Scene
   def pbCommandMenuEx(idxBattler, commands)
     pbShowWindow(COMMAND_BOX)
     cw = @sprites["commandWindow"]
-    cw.set_index_and_commands(@lastCmd[idxBattler], commands)
+    last_cmd = @lastCmd[idxBattler]
+    last_cmd = commands.first if !commands.include?(last_cmd)
+    cw.set_index_and_commands(last_cmd, commands)
     cw.active = true
     pbSelectBattler(idxBattler)
     ret = :cancel
@@ -137,8 +139,12 @@ class Battle::Scene
     party_mode = :battle_choose_to_box if mode == 1
     party_mode = :battle_choose_to_revive if mode == 3
     screen = UI::Party.new(modParty, mode: party_mode)
+    screen.cannot_cancel = !canCancel
     screen.choose_pokemon do |pkmn, party_index|
-      next canCancel if party_index < 0
+      if party_index < 0
+        screen.show_message(_INTL("You have to choose a Pokémon!")) if !canCancel
+        next canCancel
+      end
       # Choose a command for the selected Pokémon
       commands = {}
       commands[:switch_in]     = _INTL("Switch In") if mode == 0 && pkmn.able? &&
@@ -148,7 +154,7 @@ class Battle::Scene
       commands[:summary]       = _INTL("Summary")
       commands[:cancel]        = _INTL("Cancel")
       choice = screen.show_menu(_INTL("Do what with {1}?", pkmn.name), commands)
-      next canCancel if choice.nil?
+      next false if choice.nil?
       case choice
       when :select, :switch_in, :send_to_boxes
         real_party_index = -1

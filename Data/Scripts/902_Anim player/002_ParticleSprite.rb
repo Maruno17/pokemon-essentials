@@ -124,7 +124,7 @@ class AnimationPlayer::ParticleSprite
     end
     # MoveXYZ
     case process[0]
-    when :color
+    when :color, :color2
       new_val = []
       4.times do |i|   # R, G, B, A
         start_val = process[6][2 * i, 2].to_i(16)
@@ -136,7 +136,7 @@ class AnimationPlayer::ParticleSprite
         new_val.push(sprintf("%02X", val))
       end
       @values[process[0]] = new_val.join
-    when :tone
+    when :tone, :tone2
       new_val = []
       4.times do |i|   # R, G, B, G
         start_val = process[6][3 * i, 3].to_i(16)
@@ -211,13 +211,13 @@ class AnimationPlayer::ParticleSprite
       if @emitter_params[:period_x] != 0
         new_angle = @emitter_params[:angle]
         new_angle += (360 * delta_t / @emitter_params[:period_x]) * (@emitter_params[:clockwise] ? -1 : 1)
-        new_x = @values[:radius_x] * @emitter_params[:radius_x_mult] * Math.sin(new_angle * Math::PI / 180)
+        new_x = @values[:radius_x] * @emitter_params[:radius_x_mult] * Math.cos(new_angle * Math::PI / 180)
         @values[:base_x] = new_x
         changed_properties.push(:x)
       end
       if @emitter_params[:period_y] != 0
         new_angle = @emitter_params[:angle] + (360 * delta_t / @emitter_params[:period_y])
-        new_y = @values[:radius_y] * @emitter_params[:radius_y_mult] * Math.cos(new_angle * Math::PI / 180)
+        new_y = -@values[:radius_y] * @emitter_params[:radius_y_mult] * Math.sin(new_angle * Math::PI / 180)
         @values[:base_y] = new_y
         changed_properties.push(:y)
       end
@@ -306,6 +306,46 @@ class AnimationPlayer::ParticleSprite
       apply_sprite_property_override(:angle)
     when :y2
       @sprite[1].y = @sprite[0].y + value if @sprite[1]
+    when :r, :theta
+      dist = @values[:r]
+      dir = @values[:theta]
+      base_x = dist * Math.cos(dir * Math::PI / 180)
+      base_y = -dist * Math.sin(dir * Math::PI / 180)
+      base_x = base_x.round + (@property_offsets[:x] || 0)
+      base_x += @values[:base_x] || 0   # Used by emitters
+      base_x *= -1 if @foe_invert_x
+      base_y = base_y.round + (@property_offsets[:y] || 0)
+      base_y += @values[:base_y] || 0   # Used by emitters
+      base_y *= -1 if @foe_invert_y
+      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :x, base_x, @focus_xy)
+      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :y, base_y, @focus_xy)
+      @sprite[0].x += @offset_xy[0]
+      @sprite[0].y += @offset_xy[1]
+      apply_sprite_property(:x2, @values[:x2])
+      apply_sprite_property(:y2, @values[:y2])
+      if @tiled_sprites
+        while @sprite[0].x < 0
+          @sprite[0].x += @sprite[0].src_rect.width
+        end
+        while @sprite[0].x >= @sprite[0].src_rect.width
+          @sprite[0].x -= @sprite[0].src_rect.width
+        end
+        @tiled_sprites.each_with_index do |spr, i|
+          spr.x = @sprite[0].x
+          spr.x -= @sprite[0].src_rect.width if i.even?
+        end
+        while @sprite[0].y < 0
+          @sprite[0].y += @sprite[0].src_rect.height
+        end
+        while @sprite[0].y >= @sprite[0].src_rect.height
+          @sprite[0].y -= @sprite[0].src_rect.height
+        end
+        @tiled_sprites.each_with_index do |spr, i|
+          spr.y = @sprite[0].y
+          spr.y -= @sprite[0].src_rect.height if i > 0
+        end
+      end
+      apply_sprite_property_override(:angle)
     when :z
       value += (@property_offsets[property] || 0)
       AnimationPlayer::Helper.apply_z_focus_to_sprite(@sprite[0], value, @focus_z)
@@ -317,6 +357,7 @@ class AnimationPlayer::ParticleSprite
       @sprite[1].z = @sprite[0].z + value if @sprite[1]
     when :zoom_x
       value += (@property_offsets[property] || 0)
+      value *= @emitter_params[:zoom_multiplier] || 1
       value *= @emitter_params[:zoom_mult] || 1
       value *= @emitter_params[:zoom_x_mult] || 1
       @sprite[0].zoom_x = value / 100.0
@@ -325,6 +366,7 @@ class AnimationPlayer::ParticleSprite
       @sprite[1].zoom_x = @sprite[0].zoom_x * value / 100.0 if @sprite[1]
     when :zoom_y
       value += (@property_offsets[property] || 0)
+      value *= @emitter_params[:zoom_multiplier] || 1
       value *= @emitter_params[:zoom_mult] || 1
       value *= @emitter_params[:zoom_y_mult] || 1
       @sprite[0].zoom_y = value / 100.0
@@ -334,7 +376,6 @@ class AnimationPlayer::ParticleSprite
     when :angle
       if @angle_override == :always_point_at_focus
         apply_sprite_property_override(:angle)
-        @sprite[0].angle += value
       else
         @sprite[0].angle = value + (@property_offsets[property] || 0)
       end
@@ -352,13 +393,17 @@ class AnimationPlayer::ParticleSprite
         @tiled_sprites.each { |spr| spr.visible = value }
       end
     when :opacity
-      @sprite[0].opacity = value + (@property_offsets[property] || 0)
+      value += (@property_offsets[property] || 0)
+      value *= @emitter_params[:opacity_multiplier] || 1
+      @sprite[0].opacity = value
       apply_sprite_property(:opacity2, @values[:opacity2]) if @sprite[1]
       if @tiled_sprites
         @tiled_sprites.each { |spr| spr.opacity = @sprite[0].opacity }
       end
     when :opacity2
-      @sprite[1].opacity = @sprite[0].opacity + value if @sprite[1]
+      if @sprite[1]
+        @sprite[1].opacity = @sprite[0].opacity + (value * (@emitter_params[:opacity_multiplier] || 1))
+      end
     when :color
       @sprite[0].color = Color.new_from_rgb(value)
       if @tiled_sprites
@@ -415,6 +460,7 @@ class AnimationPlayer::ParticleSprite
       # Recalculate angle
       @sprite[0].angle = AnimationPlayer::Helper.angle_between(sprite_x, sprite_y, target_x, target_y)
       @sprite[0].angle += (@property_offsets[property] || 0)
+      @sprite[0].angle += @values[:angle]
       apply_sprite_property(:angle2, @values[:angle2])
     end
   end

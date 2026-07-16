@@ -167,13 +167,15 @@ end
 #===============================================================================
 #
 #===============================================================================
-def createMinimap(mapid)
-  map = load_data(sprintf("Data/Map%03d.rxdata", mapid)) rescue nil
+def createMapBitmap(map_id, tile_width = Game_Map::TILE_WIDTH, tile_height = Game_Map::TILE_HEIGHT, with_outline = false)
+  map_file = sprintf("Data/Map%03d.rxdata", map_id)
+  map = nil
+  if pbRgssExists?(map_file)
+    map = load_data(map_file) rescue nil
+  end
   return Bitmap.new(32, 32) if !map
-  bitmap = Bitmap.new(map.width * 4, map.height * 4)
-  black = Color.black
-  tilesets = $data_tilesets
-  tileset = tilesets[map.tileset_id]
+  bitmap = Bitmap.new(map.width * tile_width, map.height * tile_height)
+  tileset = $data_tilesets[map.tileset_id]
   return bitmap if !tileset
   helper = TileDrawingHelper.fromTileset(tileset)
   map.height.times do |y|
@@ -181,15 +183,24 @@ def createMinimap(mapid)
       3.times do |z|
         id = map.data[x, y, z]
         id = 0 if !id
-        helper.bltSmallTile(bitmap, x * 4, y * 4, 4, 4, id)
+        helper.bltSmallTile(bitmap, x * tile_width, y * tile_height, tile_width, tile_height, id)
       end
     end
   end
-  bitmap.fill_rect(0, 0, bitmap.width, 1, black)
-  bitmap.fill_rect(0, bitmap.height - 1, bitmap.width, 1, black)
-  bitmap.fill_rect(0, 0, 1, bitmap.height, black)
-  bitmap.fill_rect(bitmap.width - 1, 0, 1, bitmap.height, black)
+  if with_outline
+    black = Color.black
+    bitmap.fill_rect(0, 0, bitmap.width, 1, black)
+    bitmap.fill_rect(0, bitmap.height - 1, bitmap.width, 1, black)
+    bitmap.fill_rect(0, 0, 1, bitmap.height, black)
+    bitmap.fill_rect(bitmap.width - 1, 0, 1, bitmap.height, black)
+  end
   return bitmap
+end
+
+# Creates a bitmap of a map, with each tile being 4x4 pixels (0.125x zoom). It
+# has a black outline around it.
+def createMinimap(map_id)
+  return createMapBitmap(map_id, 4, 4, true)
 end
 
 def bltMinimapAutotile(dstBitmap, x, y, srcBitmap, id)

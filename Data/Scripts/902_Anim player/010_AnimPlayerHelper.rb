@@ -95,8 +95,8 @@ module AnimationPlayer::Helper
     ret = [0, 0]
     case particle[:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
-        "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
-      ret[1] += sprite.bitmap.height / 2 if sprite
+         "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
+      ret[1] += sprite.bitmap.height / 2 if sprite&.bitmap
     end
     return ret
   end
@@ -194,7 +194,9 @@ module AnimationPlayer::Helper
     if particle.is_a?(Array)
       x1, x2 = particle
     else
-      [:x, :y].each do |property|
+      coords = [:x, :y]
+      coords = [:emit_x, :emit_y] if (particle[:emitter_type] || :none) != :none
+      coords.each do |property|
         next if !particle[property]
         particle[property].each do |cmd|
           break if cmd[1] > 0
@@ -272,6 +274,25 @@ module AnimationPlayer::Helper
         sprite.oy = sprite.bitmap.height
       end
     end
+  end
+
+  def adjust_origin_by_battler_metrics(particle, sprite, index, filename)
+    return if sprite.nil?
+    # Origin is already [sprite.bitmap.width / 2, sprite.bitmap.height], so just
+    # need to apply metrics
+    back_sprite = false
+    back_sprite = true if ["USER_BACK", "TARGET_BACK"].include?(particle[:graphic])
+    back_sprite = true if index.odd? && ["USER_OPP", "TARGET_OPP"].include?(particle[:graphic])
+    back_sprite = true if index.even? && ["USER", "TARGET"].include?(particle[:graphic])
+    species = filename.gsub("_female", "").gsub("_shadow", "")
+    form = 0
+    if species[/^(\w+)_(\d+)$/]
+      species = $~[1]
+      form = $~[2].to_i
+    end
+    metrics = GameData::SpeciesMetrics.get_species_form(species, form)
+    return if metrics.nil?
+    metrics.apply_metrics_to_sprite(sprite, (back_sprite) ? 0 : 1, false, true)
   end
 
   #-----------------------------------------------------------------------------

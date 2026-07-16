@@ -1,0 +1,100 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,WATERGUN]
+Name = DB Animation
+Credit = Dawn Bronze
+<User>
+<Target>
+    MoveX = 17,1,3
+    MoveX = 18,2,-5
+    MoveX = 20,2,5
+    MoveX = 22,2,-5
+    MoveX = 24,2,5
+    MoveX = 26,2,-5
+    MoveX = 28,2,5
+    MoveX = 30,2,-5
+    MoveX = 32,2,5
+    MoveX = 34,2,-5
+    MoveX = 36,2,5
+    MoveX = 38,1,0
+<Water Stream Emitter>
+    Graphic = smog 2
+    Focus = UserAndTarget
+    Emitter = Straight
+    EmitterRate = 10
+    RandomAngleRange = 45
+    RandomInvertAngle = true
+    RandomInvertFlip = true
+    SetZ = 1,10
+    SetZoomX = 1,10
+    SetZoomY = 1,10
+    SetOpacity = 1,0
+    SetColor = 1,906B4400
+    MoveZoomX = 1,5,100
+    MoveZoomY = 1,5,100
+    MoveZ = 1,13,-110
+    MoveOpacity = 2,3,225
+    MoveColor = 5,8,0098FF68
+    SetEmitting = 6,true
+    SetEmitY = 6,39
+    SetEmitSpeed = 6,500
+    SetEmitDirection = 6,50
+    SetZoomRange = 6,45
+    MoveZoomX = 6,2,150
+    MoveOpacity = 14,3,0
+    SetEmitting = 32,false
+<Water Burst Emitter Target>
+    Graphic = smog 1
+    Focus = Target
+    Emitter = Projectile
+    EmitterRate = 5
+    EmitterIntensity = 5
+    RandomAngleRange = 45
+    RandomInvertAngle = true
+    RandomInvertFlip = true
+    SetZ = 0,10
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetOpacity = 0,0
+    MoveZoomX = 0,5,150
+    MoveZoomY = 0,5,150
+    MoveOpacity = 1,3,90
+    SetEmitX = 5,1
+    SetEmitXRange = 5,20
+    SetEmitY = 5,52
+    SetEmitYRange = 5,20
+    SetEmitSpeed = 5,220
+    SetEmitDirection = 5,90
+    SetEmitDirectionRange = 5,25
+    SetEmitGravity = 5,500
+    MoveOpacity = 9,3,0
+    SetEmitting = 10,true
+    SetEmitting = 35,false
+<Spray Burst Emitter Target>
+    Graphic = grit
+    Focus = Target
+    Emitter = Straight
+    EmitterRate = 5
+    EmitterIntensity = 5
+    RandomAngleRange = 45
+    RandomInvertAngle = true
+    RandomInvertFlip = true
+    SetY = 0,-30
+    SetZ = 0,10
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetOpacity = 0,0
+    MoveOpacity = 0,2,255
+    MoveZoomX = 0,5,70
+    MoveZoomY = 0,5,70
+    SetEmitX = 5,1
+    SetEmitY = 5,52
+    SetEmitSpeed = 5,150
+    SetEmitDirection = 5,90
+    SetEmitDirectionRange = 5,180
+    SetEmitGravity = 5,460
+    MoveOpacity = 9,3,0
+    SetEmitting = 10,true
+    SetEmitting = 35,false
+<SE>
+    Play = 9,Water/Water Gun

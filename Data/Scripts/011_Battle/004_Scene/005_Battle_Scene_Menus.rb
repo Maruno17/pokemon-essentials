@@ -105,7 +105,7 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
     @commands = []
     row = 0
     row_widths = [0]
-    cmds.each_with_index do |cmd|
+    cmds.each do |cmd|
       if cmd.nil?
         row += 1
         row_widths[row] = 0
@@ -572,16 +572,18 @@ class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
       sel_sprite = @sprites["button_#{@index}".to_sym]
       old_x = sel_sprite.x + (sel_sprite.src_rect.width / 2)   # Middle of button
       difference = 999   # Very high to begin with
+      new_index = @index
       (@max_index + 1).times do |i|
         next if (i % 2) == (@index % 2) || @texts[i].nil?
         this_sprite = @sprites["button_#{i}".to_sym]
         next if !this_sprite
-        this_x = sel_sprite.x + (sel_sprite.src_rect.width / 2)   # Middle of button
+        this_x = this_sprite.x + (this_sprite.src_rect.width / 2)   # Middle of button
         if (this_x - old_x).abs < difference
           difference = (this_x - old_x).abs
-          @index = i
+          new_index = i
         end
       end
+      @index = new_index
     end
     if @index != old_index
       pbPlayCursorSE

@@ -43,17 +43,17 @@ class AnimationEditor
     files.delete_if { |file| !pbResolveBitmap("Graphics/Battlebacks/" + file.sub(/_eve$/, "").sub(/_night$/, "") + "_message") }
     files.map! { |file| [file, file] }
     ctrls.get_control(:canvas_bg).options = files.to_h
-    ctrls.get_control(:canvas_bg).value = @settings[:canvas_bg]
+    ctrls.get_control(:canvas_bg).value = @settings[:anim_editor][:canvas_bg]
     # User and target sprite graphics
     files = get_all_files_in_folder("Graphics/Pokemon/Front", [".png", ".jpg", ".jpeg"])
     files.delete_if { |file| !GameData::Species.exists?(file[0]) }
     files.map! { |file| [file[0], file[0]] }
     ctrls.get_control(:user_sprite_name).options = files.to_h
-    ctrls.get_control(:user_sprite_name).value = @settings[:user_sprite_name]
+    ctrls.get_control(:user_sprite_name).value = @settings[:anim_editor][:user_sprite_name]
     ctrls.get_control(:target_sprite_name).options = files.to_h
-    ctrls.get_control(:target_sprite_name).value = @settings[:target_sprite_name]
+    ctrls.get_control(:target_sprite_name).value = @settings[:anim_editor][:target_sprite_name]
     # Default interpolation
-    ctrls.get_control(:default_interpolation).value = @settings[:default_interpolation] || :linear
+    ctrls.get_control(:default_interpolation).value = @settings[:anim_editor][:default_interpolation] || :linear
   end
 
   def refresh_animation_property_options
@@ -205,28 +205,29 @@ class AnimationEditor
     editor.get_control(:end_keyframe).value = @components[:timeline].duration
     # Set all value boxes to 0
     properties = []
-    AnimationEditor::ListedParticle::PROPERTY_GROUPS.each_value do |props|
+    AnimationEditor::ListedParticle::PROPERTY_GROUPS.each_pair do |key, props|
+      next if [:mask_group, :second_layer_group].include?(key)
       props.each do |prop|
         next if [:color, :tone].include?(prop)
         properties.push(prop) if GameData::Animation.property_can_interpolate?(prop)
       end
     end
-    properties.each { |property| editor.get_control(property).value = 0 }
+    properties.each { |property| editor.get_control(property)&.value = 0 }
   end
 
   def refresh_component_values(component_sym, extra_value = nil)
     component = @components[component_sym]
     case component_sym
     when :battlers_layout
-      component.get_control(:side_size_1).value = @settings[:side_sizes][0]
-      component.get_control(:side_size_2).value = @settings[:side_sizes][1]
+      component.get_control(:side_size_1).value = @settings[:anim_editor][:side_sizes][0]
+      component.get_control(:side_size_2).value = @settings[:anim_editor][:side_sizes][1]
       user_indices = { 0 => "0" }
-      user_indices[2] = "2" if @settings[:side_sizes][0] >= 2
-      user_indices[4] = "4" if @settings[:side_sizes][0] >= 3
+      user_indices[2] = "2" if @settings[:anim_editor][:side_sizes][0] >= 2
+      user_indices[4] = "4" if @settings[:anim_editor][:side_sizes][0] >= 3
       component.get_control(:user_index).options = user_indices
-      component.get_control(:user_index).value = @settings[:user_index]
-      component.get_control(:target_indices).value = @settings[:target_indices].join(",")
-      component.get_control(:user_opposes).value = @settings[:user_opposes]
+      component.get_control(:user_index).value = @settings[:anim_editor][:user_index]
+      component.get_control(:target_indices).value = @settings[:anim_editor][:target_indices].join(",")
+      component.get_control(:user_opposes).value = @settings[:anim_editor][:user_opposes]
     when :play_controls
       component.duration = @components[:timeline].duration
     when :canvas
@@ -293,7 +294,7 @@ class AnimationEditor
           new_cmds = AnimationEditor::ParticleDataHelper.add_command(particle, property, keyframe, value)
           if new_cmds
             particle[property] = new_cmds
-            # NOTE: Intentionally not adding @settings[:default_interpolation]
+            # NOTE: Intentionally not adding @settings[:anim_editor][:default_interpolation]
             #       here, because the inserted command will have the same value as
             #       the one before it and won't need interpolating anyway.
           else

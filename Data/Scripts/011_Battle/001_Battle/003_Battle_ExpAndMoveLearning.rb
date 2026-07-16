@@ -126,6 +126,16 @@ class Battle
     return if exp <= 0
     # Pokémon gain more Exp from trainer battles
     exp = (exp * 1.5).floor if Settings::MORE_EXP_FROM_TRAINER_POKEMON && trainerBattle?
+    # Pokémon gain more Exp if it's at or above its evolution level
+    if Settings::MORE_EXP_AT_EVOLUTION_LEVEL_OR_HIGHER
+      pkmn.species_data.evolutions&.each do |evo|
+        evo_data = GameData::Evolution.try_get(evo[1])
+        next if !evo_data || evo_data.level_up_proc.nil? || evo_data.any_level_up
+        next if pkmn.level < evo[2]
+        exp = (exp * 1.2).floor
+        break
+      end
+    end
     # Scale the gained Exp based on the gainer's level (or not)
     if Settings::SCALED_EXP_FORMULA
       exp /= 5
@@ -256,7 +266,7 @@ class Battle
     if pbDisplayConfirm(_INTL("Should {1} forget a move to learn {2}?", pkmnName, moveName))
       loop do
         forgetMove = @scene.pbForgetMove(pkmn, newMove)
-        if forgetMove >= 0
+        if forgetMove >= 0 && pkmn.moves[forgetMove]
           oldMoveName = pkmn.moves[forgetMove].name
           pkmn.moves[forgetMove] = Pokemon::Move.new(newMove)   # Replaces current/total PP
           battler.moves[forgetMove] = Move.from_pokemon_move(self, pkmn.moves[forgetMove]) if battler

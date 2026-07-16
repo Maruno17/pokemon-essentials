@@ -10,7 +10,7 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
 
   # TODO: Add crop properties.
   PROPERTY_GROUPS = {
-    :position_group       => [:x, :y, :z],
+    :position_group       => [:x, :y, :r, :theta, :z],
     :transformation_group => [:zoom_x, :zoom_y, :angle, :flip],
     :appearance_group     => [:visible, :opacity, :color, :tone, :invert_color, :frame, :blending],
     :mask_group           => [:mask_opacity, :mask_x, :mask_y, :mask_zoom_x, :mask_zoom_y, :mask_blending],
@@ -21,18 +21,20 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
   # NOTE: Any property in here that is also in PROPERTY_GROUPS above should be
   #       in the same group.
   EMITTER_PROPERTY_GROUPS = {
-    :emitter_group         => [:emit_x, :emit_y, :emitting],
-    :emit_parameters_group => [:emit_x_range, :emit_y_range,
+    :emitter_group         => [:emit_x, :emit_y, :emit_r, :emit_theta, :emitting],
+    :emit_parameters_group => [:emit_x_range, :emit_y_range, :emit_r_range, :emit_theta_range,
                                :emit_speed, :emit_speed_range,
-                               :emit_angle, :emit_angle_range,
+                               :emit_direction, :emit_direction_range,
                                :emit_gravity, :emit_gravity_range,
                                :emit_period_x, :emit_period_x_range,
                                :emit_period_y, :emit_period_y_range,
                                :emit_period_z, :emit_period_z_range,
                                :emit_radius_x_range, :emit_radius_y_range, :emit_radius_z_range,
                                :emit_clockwise,
-                               :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range],
-    :position_group        => [:x, :y, :z, :radius_x, :radius_y, :radius_z],
+                               :emit_zoom_multiplier,
+                               :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range,
+                               :emit_opacity_multiplier],
+    :position_group        => [:x, :y, :r, :theta, :z, :radius_x, :radius_y, :radius_z],
     :transformation_group  => [:zoom_x, :zoom_y, :angle, :flip],
     :appearance_group      => [:visible, :opacity, :color, :tone, :invert_color, :frame, :blending],
     :mask_group            => [:mask_opacity, :mask_x, :mask_y, :mask_zoom_x, :mask_zoom_y, :mask_blending],
@@ -44,33 +46,43 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
   # that are used for each emitter type. Parameters in :emitter_group are all
   # assumed to be used by all emitters.
   USED_EMITTER_PARAMETERS = {
-    :no_movement          => [:emit_x_range, :emit_y_range,
-                              :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range],
-    :straight             => [:emit_x_range, :emit_y_range,
+    :no_movement          => [:emit_x_range, :emit_y_range, :emit_r_range, :emit_theta_range,
+                              :emit_zoom_multiplier,
+                              :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range,
+                              :emit_opacity_multiplier],
+    :straight             => [:emit_x_range, :emit_y_range, :emit_r_range, :emit_theta_range,
                               :emit_speed, :emit_speed_range,
-                              :emit_angle, :emit_angle_range,
-                              :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range],
-    :projectile           => [:emit_x_range, :emit_y_range,
+                              :emit_direction, :emit_direction_range,
+                              :emit_zoom_multiplier,
+                              :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range,
+                              :emit_opacity_multiplier],
+    :projectile           => [:emit_x_range, :emit_y_range, :emit_r_range, :emit_theta_range,
                               :emit_speed, :emit_speed_range,
-                              :emit_angle, :emit_angle_range,
+                              :emit_direction, :emit_direction_range,
                               :emit_gravity, :emit_gravity_range,
-                              :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range],
-    :helix                => [:emit_x_range, :emit_y_range,
+                              :emit_zoom_multiplier,
+                              :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range,
+                              :emit_opacity_multiplier],
+    :helix                => [:emit_x_range, :emit_y_range, :emit_r_range, :emit_theta_range,
                               :emit_speed, :emit_speed_range,
-                              :emit_angle, :emit_angle_range,
+                              :emit_direction, :emit_direction_range,
                               :emit_period_x, :emit_period_x_range,
                               :emit_period_z, :emit_period_z_range,
                               :emit_radius_x_range, :emit_radius_z_range,
                               :emit_clockwise,
+                              :emit_zoom_multiplier,
                               :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range,
+                              :emit_opacity_multiplier,
                               :radius_x, :radius_z],
-    :polar                => [:emit_x_range, :emit_y_range,
-                              :emit_angle, :emit_angle_range,
+    :polar                => [:emit_x_range, :emit_y_range, :emit_r_range, :emit_theta_range,
+                              :emit_direction, :emit_direction_range,
                               :emit_period_x, :emit_period_x_range,
                               :emit_period_y, :emit_period_y_range,
                               :emit_radius_x_range, :emit_radius_y_range,
                               :emit_clockwise,
+                              :emit_zoom_multiplier,
                               :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range,
+                              :emit_opacity_multiplier,
                               :radius_x, :radius_y]
   }
 
@@ -308,6 +320,16 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
   #       isn't a spritesheet (determined elsewhere). I don't think any other
   #       properties would need this.
   def row_always_hidden?(row)
+    if @particle[:polar_coordinates]
+      return true if [:x, :y].include?(row)
+    else
+      return true if [:r, :theta].include?(row)
+    end
+    if @particle[:emitter_polar_coordinates]
+      return true if [:emit_x, :emit_y, :emit_x_range, :emit_y_range].include?(row)
+    else
+      return true if [:emit_r, :emit_theta, :emit_r_range, :emit_theta_range].include?(row)
+    end
     if (@particle[:mask_graphic] || "") == "" &&
        (row == :mask_group || PROPERTY_GROUPS[:mask_group].include?(row))
       return true

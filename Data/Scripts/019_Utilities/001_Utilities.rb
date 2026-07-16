@@ -477,6 +477,7 @@ def pbMoveTutorChoose(move, movelist = nil, by_machine = false, one_use_machine 
         $stats.moves_taught_by_item += 1 if by_machine
         $stats.moves_taught_by_tutor += 1 if !by_machine
         pkmn.add_first_move(move) if one_use_machine
+        ret = true
         next true
       end
       next false

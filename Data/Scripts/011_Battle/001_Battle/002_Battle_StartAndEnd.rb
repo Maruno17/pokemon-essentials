@@ -173,7 +173,26 @@ class Battle
   #-----------------------------------------------------------------------------
 
   def pbStartBattleSendOut(sendOuts)
-    # "Want to battle" messages
+    pbStartBattleFirstMessage
+    # Send out Pokémon (opposing trainers first)
+    [1, 0].each do |side|
+      next if side == 1 && wildBattle?
+      # Message about all the Pokémon being sent out on side
+      pbStartBattleSendOutMessage(sendOuts, side)
+      # The actual sending out of Pokémon
+      animSendOuts = []
+      trainers = (side == 0) ? @player : @opponent
+      trainers.length.times do |trainer_index|
+        animSendOuts.concat(sendOuts[side][trainer_index]) if side != 0 || trainer_index != 0   # Not the player's Pokémon
+      end
+      animSendOuts.concat(sendOuts[side][0]) if side == 0
+      animSendOuts.map! { |idxBattler| [idxBattler, @battlers[idxBattler].pokemon] }
+      pbSendOut(animSendOuts, true)
+    end
+  end
+
+  # "Want to battle" message at the start of battle.
+  def pbStartBattleFirstMessage
     if wildBattle?
       foeParty = pbParty(1)
       case foeParty.length
@@ -198,52 +217,57 @@ class Battle
                               @opponent[0].full_name, @opponent[1].full_name, @opponent[2].full_name))
       end
     end
-    # Send out Pokémon (opposing trainers first)
-    [1, 0].each do |side|
-      next if side == 1 && wildBattle?
-      msg = ""
-      toSendOut = []
-      trainers = (side == 0) ? @player : @opponent
-      # Opposing trainers and partner trainers's messages about sending out Pokémon
-      trainers.each_with_index do |t, i|
-        next if side == 0 && i == 0   # The player's message is shown last
-        msg += "\n" if msg.length > 0
-        sent = sendOuts[side][i]
-        case sent.length
-        when 1
-          msg += _INTL("{1} sent out {2}!", t.full_name, @battlers[sent[0]].name)
-        when 2
-          msg += _INTL("{1} sent out {2} and {3}!", t.full_name,
-                       @battlers[sent[0]].name, @battlers[sent[1]].name)
-        when 3
-          msg += _INTL("{1} sent out {2}, {3} and {4}!", t.full_name,
-                       @battlers[sent[0]].name, @battlers[sent[1]].name, @battlers[sent[2]].name)
-        end
-        toSendOut.concat(sent)
-      end
-      # The player's message about sending out Pokémon
-      if side == 0
-        msg += "\n" if msg.length > 0
-        sent = sendOuts[side][0]
-        case sent.length
-        when 1
-          msg += _INTL("Go! {1}!", @battlers[sent[0]].name)
-        when 2
-          msg += _INTL("Go! {1} and {2}!", @battlers[sent[0]].name, @battlers[sent[1]].name)
-        when 3
-          msg += _INTL("Go! {1}, {2} and {3}!", @battlers[sent[0]].name,
-                       @battlers[sent[1]].name, @battlers[sent[2]].name)
-        end
-        toSendOut.concat(sent)
-      end
-      pbDisplayBrief(msg) if msg.length > 0
-      # The actual sending out of Pokémon
-      animSendOuts = []
-      toSendOut.each do |idxBattler|
-        animSendOuts.push([idxBattler, @battlers[idxBattler].pokemon])
-      end
-      pbSendOut(animSendOuts, true)
+  end
+
+  # Constructs and shows the full "sent out" messages for both sides at the
+  # start of battle.
+  def pbStartBattleSendOutMessage(sendOuts, side)
+    msg = ""
+    trainers = (side == 0) ? @player : @opponent
+    # Opposing trainers and partner trainers's messages about sending out Pokémon
+    trainers.each_with_index do |t, i|
+      next if side == 0 && i == 0   # The player's message is shown last
+      msg += "\n" if msg.length > 0
+      msg += pbStartBattleSendOutMessageSingle(sendOuts, side, i)
     end
+    # The player's message about sending out Pokémon
+    if side == 0
+      msg += "\n" if msg.length > 0
+      msg += pbStartBattleSendOutMessageSingle(sendOuts, side, 0)
+    end
+    pbDisplayBrief(msg) if msg.length > 0
+  end
+
+  def pbStartBattleSendOutMessageSingle(sendOuts, side, trainer_index)
+    trainers = (side == 0) ? @player : @opponent
+    trainer = trainers[trainer_index]
+    sent_out_indices = sendOuts[side][trainer_index]
+    ret = ""
+    if side == 0 && trainer_index == 0   # Player
+      case sent_out_indices.length
+      when 1
+        ret += _INTL("Go! {1}!", @battlers[sent_out_indices[0]].name)
+      when 2
+        ret += _INTL("Go! {1} and {2}!", @battlers[sent_out_indices[0]].name,
+                     @battlers[sent_out_indices[1]].name)
+      when 3
+        ret += _INTL("Go! {1}, {2} and {3}!", @battlers[sent_out_indices[0]].name,
+                     @battlers[sent_out_indices[1]].name, @battlers[sent_out_indices[2]].name)
+      end
+    else   # NPC trainer
+      case sent_out_indices.length
+      when 1
+        ret += _INTL("{1} sent out {2}!", trainer.full_name, @battlers[sent_out_indices[0]].name)
+      when 2
+        ret += _INTL("{1} sent out {2} and {3}!", trainer.full_name,
+                     @battlers[sent_out_indices[0]].name, @battlers[sent_out_indices[1]].name)
+      when 3
+        ret += _INTL("{1} sent out {2}, {3} and {4}!", trainer.full_name,
+                     @battlers[sent_out_indices[0]].name, @battlers[sent_out_indices[1]].name,
+                     @battlers[sent_out_indices[2]].name)
+      end
+    end
+    return ret
   end
 
   #-----------------------------------------------------------------------------

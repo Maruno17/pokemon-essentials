@@ -25,7 +25,7 @@ module AnimationEditor::ParticleDataHelper
           next
         end
         # In a "MoveXYZ" command; need to interpolate
-        if property == :color
+        if [:color, :color2].include?(property)
           new_val = []
           4.times do |i|   # R, G, B, A
             start_val = ret[0][2 * i, 2].to_i(16)
@@ -36,7 +36,7 @@ module AnimationEditor::ParticleDataHelper
             new_val.push(sprintf("%02X", val))
           end
           ret[0] = new_val.join
-        elsif property == :tone
+        elsif [:tone, :tone2].include?(property)
           new_val = []
           4.times do |i|   # R, G, B, G
             start_val = ret[0][3 * i, 3].to_i(16)

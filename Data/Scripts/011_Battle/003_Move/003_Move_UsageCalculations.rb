@@ -434,8 +434,8 @@ class Battle::Move
     if user.effects[PBEffects::MeFirst]
       multipliers[:power_multiplier] *= 1.5
     end
-    if user.effects[PBEffects::HelpingHand]
-      multipliers[:power_multiplier] *= 1.5
+    if user.effects[PBEffects::HelpingHand] > 0
+      user.effects[PBEffects::HelpingHand].times { multipliers[:power_multiplier] *= 1.5 }
     end
     if user.effects[PBEffects::Charge] > 0 && type == :ELECTRIC
       multipliers[:power_multiplier] *= 2
@@ -507,22 +507,22 @@ class Battle::Move
     if !ignoresReflect? && !target.damageState.critical &&
        !user.hasActiveAbility?(:INFILTRATOR)
       if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
-        if @battle.pbSideBattlerCount(target) > 1
-          multipliers[:final_damage_multiplier] *= 2 / 3.0
-        else
+        if @battle.singleBattle?
           multipliers[:final_damage_multiplier] /= 2
+        else
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
         end
       elsif target.pbOwnSide.effects[PBEffects::Reflect] > 0 && physicalMove?
-        if @battle.pbSideBattlerCount(target) > 1
-          multipliers[:final_damage_multiplier] *= 2 / 3.0
-        else
+        if @battle.singleBattle?
           multipliers[:final_damage_multiplier] /= 2
+        else
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
         end
       elsif target.pbOwnSide.effects[PBEffects::LightScreen] > 0 && specialMove?
-        if @battle.pbSideBattlerCount(target) > 1
-          multipliers[:final_damage_multiplier] *= 2 / 3.0
-        else
+        if @battle.singleBattle?
           multipliers[:final_damage_multiplier] /= 2
+        else
+          multipliers[:final_damage_multiplier] *= 2 / 3.0
         end
       end
     end

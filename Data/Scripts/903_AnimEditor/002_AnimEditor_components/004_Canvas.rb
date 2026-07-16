@@ -23,6 +23,8 @@ class AnimationEditor::Canvas < Sprite
   SPRITE_PROPERTIES_TO_SET = [
     :x, :x2,
     :y, :y2,
+    :r,
+    :theta,
     :opacity, :opacity2,
     :frame, :frame2,
     :z, :z2,
@@ -189,24 +191,24 @@ class AnimationEditor::Canvas < Sprite
 
   # Returns whether the user is on the foe's (non-player's) side.
   def sides_swapped?
-    return @settings[:user_opposes] || [:opp_move, :opp_common].include?(@anim[:type])
+    return @settings[:anim_editor][:user_opposes] || [:opp_move, :opp_common].include?(@anim[:type])
   end
 
   # index is a battler index (even for player's side, odd for foe's side)
   def side_size(index)
     side = index % 2
     side = (side + 1) % 2 if sides_swapped?
-    return @settings[:side_sizes][side]
+    return @settings[:anim_editor][:side_sizes][side]
   end
 
   def user_index
-    ret = @settings[:user_index]
+    ret = @settings[:anim_editor][:user_index]
     ret += 1 if sides_swapped?
     return ret
   end
 
   def target_indices
-    ret = @settings[:target_indices].clone
+    ret = @settings[:anim_editor][:target_indices].clone
     if sides_swapped?
       ret.length.times do |i|
         ret[i] += (ret[i].even?) ? 1 : -1
@@ -304,29 +306,22 @@ class AnimationEditor::Canvas < Sprite
     particle_idx = @anim[:particles].index { |particle| particle[:name] == "User" }
     if particle_idx
       @sprites["pokemon_#{idx}"] = @battler_sprites[idx]
-      @battler_sprites[idx].x = @user_coords[0]
-      @battler_sprites[idx].y = @user_coords[1]
-      offset_xy = AnimationPlayer::Helper.get_xy_offset(@anim[:particles][particle_idx], @battler_sprites[idx])
+      @battler_sprites[idx].x = @user_coords[0] - (@battler_sprites[idx].bitmap.width / 2) + @battler_sprites[idx].ox
+      @battler_sprites[idx].y = @user_coords[1] - (@battler_sprites[idx].bitmap.height / 2) + @battler_sprites[idx].oy
       focus_z = AnimationPlayer::Helper.get_z_focus(@anim[:particles][particle_idx], idx, idx)
-      @battler_sprites[idx].x += offset_xy[0]
-      @battler_sprites[idx].y += offset_xy[1]
       AnimationPlayer::Helper.apply_z_focus_to_sprite(@battler_sprites[idx], 0, focus_z)
     end
     particle_idx = @anim[:particles].index { |particle| particle[:name] == "Target" }
     if particle_idx
       target_indices.each do |idx|
         @sprites["pokemon_#{idx}"] = @battler_sprites[idx]
-        @battler_sprites[idx].x = @target_coords[idx][0]
-        @battler_sprites[idx].y = @target_coords[idx][1]
+        @battler_sprites[idx].x = @target_coords[idx][0] - (@battler_sprites[idx].bitmap.width / 2) + @battler_sprites[idx].ox
+        @battler_sprites[idx].y = @target_coords[idx][1] - (@battler_sprites[idx].bitmap.height / 2) + @battler_sprites[idx].oy
         if particle_idx
-          offset_xy = AnimationPlayer::Helper.get_xy_offset(@anim[:particles][particle_idx], @battler_sprites[idx])
           focus_z = AnimationPlayer::Helper.get_z_focus(@anim[:particles][particle_idx], idx, idx)
         else
-          offset_xy = [0, @battler_sprites[idx].bitmap.height / 2]
           focus_z = 1000 + ((100 * ((idx / 2) + 1)) * (idx.even? ? 1 : -1))
         end
-        @battler_sprites[idx].x += offset_xy[0]
-        @battler_sprites[idx].y += offset_xy[1]
         AnimationPlayer::Helper.apply_z_focus_to_sprite(@battler_sprites[idx], 0, focus_z)
       end
     end
@@ -345,8 +340,8 @@ class AnimationEditor::Canvas < Sprite
   #-----------------------------------------------------------------------------
 
   def refresh_bg_graphics
-    return if @bg_name && @bg_name == @settings[:canvas_bg]
-    @bg_name = @settings[:canvas_bg]
+    return if @bg_name && @bg_name == @settings[:anim_editor][:canvas_bg]
+    @bg_name = @settings[:anim_editor][:canvas_bg]
     core_name = @bg_name.sub(/_eve$/, "").sub(/_night$/, "")
     if pbResolveBitmap("Graphics/Battlebacks/" + @bg_name + "_bg")
       self.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", @bg_name + "_bg")
@@ -406,8 +401,8 @@ class AnimationEditor::Canvas < Sprite
 
   def ensure_battler_sprites
     should_ensure = @sides_swapped.nil? || @sides_swapped != sides_swapped? ||
-                    @settings_user_index.nil? || @settings_user_index != @settings[:user_index] ||
-                    @settings_target_indices.nil? || @settings_target_indices != @settings[:target_indices]
+                    @settings_user_index.nil? || @settings_user_index != @settings[:anim_editor][:user_index] ||
+                    @settings_target_indices.nil? || @settings_target_indices != @settings[:anim_editor][:target_indices]
     if should_ensure || !@side_size0 || @side_size0 != side_size(0)
       @battler_sprites.each_with_index { |s, i| s.dispose if i.even? && s && !s.disposed? }
       @battler_frame_sprites.each_with_index { |s, i| s.dispose if i.even? && s && !s.disposed? }
@@ -440,14 +435,14 @@ class AnimationEditor::Canvas < Sprite
     end
     if should_ensure
       @sides_swapped = sides_swapped?
-      @settings_user_index = @settings[:user_index]
-      @settings_target_indices = @settings[:target_indices].clone
+      @settings_user_index = @settings[:anim_editor][:user_index]
+      @settings_target_indices = @settings[:anim_editor][:target_indices].clone
     end
   end
 
   def refresh_battler_graphics
-    if !@user_sprite_name || !@user_sprite_name || @user_sprite_name != @settings[:user_sprite_name]
-      @user_sprite_name = @settings[:user_sprite_name]
+    if !@user_sprite_name || !@user_sprite_name || @user_sprite_name != @settings[:anim_editor][:user_sprite_name]
+      @user_sprite_name = @settings[:anim_editor][:user_sprite_name]
       @user_bitmap_front_name = GameData::Species.front_sprite_filename(@user_sprite_name)
       @user_bitmap_back_name = GameData::Species.back_sprite_filename(@user_sprite_name)
       @user_bitmap_front&.dispose
@@ -455,8 +450,8 @@ class AnimationEditor::Canvas < Sprite
       @user_bitmap_front = RPG::Cache.load_bitmap("", @user_bitmap_front_name)
       @user_bitmap_back = RPG::Cache.load_bitmap("", @user_bitmap_back_name)
     end
-    if !@target_bitmap_front || !@target_sprite_name || @target_sprite_name != @settings[:target_sprite_name]
-      @target_sprite_name = @settings[:target_sprite_name]
+    if !@target_bitmap_front || !@target_sprite_name || @target_sprite_name != @settings[:anim_editor][:target_sprite_name]
+      @target_sprite_name = @settings[:anim_editor][:target_sprite_name]
       @target_bitmap_front_name = GameData::Species.front_sprite_filename(@target_sprite_name)
       @target_bitmap_back_name = GameData::Species.back_sprite_filename(@target_sprite_name)
       @target_bitmap_front&.dispose
@@ -466,6 +461,8 @@ class AnimationEditor::Canvas < Sprite
     end
   end
 
+  # Determines the coordinates of the centers of every battler sprite. This is
+  # the exact geometric middle of the graphic, not where the sprites' ox/oy are.
   def refresh_battler_positions
     user_idx = user_index
     @user_coords = recalculate_battler_position(
@@ -480,12 +477,21 @@ class AnimationEditor::Canvas < Sprite
     end
   end
 
+  # Returns the coordinates of the center of the battler sprite at index.
   def recalculate_battler_position(index, size, sprite_name, btmp)
     spr = Sprite.new(self.viewport)
     spr.x, spr.y = Battle::Scene.pbBattlerPosition(index, size)
-    data = GameData::Species.get_species_form(sprite_name, 0)   # Form 0
+    species = sprite_name.gsub("_female", "").gsub("_shadow", "")
+    form = 0
+    if species[/^(\w+)_(\d+)$/]
+      species = $~[1]
+      form = $~[2].to_i
+    end
+    data = GameData::SpeciesMetrics.get_species_form(species, form)
     data.apply_metrics_to_sprite(spr, index) if data
-    return [spr.x, spr.y - (btmp.height / 2)]
+    ret = [spr.x - spr.ox, spr.y - spr.oy - (btmp.height / 2)]
+    spr.dispose
+    return ret
   end
 
   def create_particle_sprite(index, target_idx = -1)
@@ -563,15 +569,20 @@ class AnimationEditor::Canvas < Sprite
     return if !spr.visible
     # Set position, graphic and ox/oy for emitter
     if (particle[:emitter_type] || :none) != :none
+      spr.bitmap = @emitter_bitmap
       SPRITE_PROPERTIES_TO_SET.each do |property|
-        val = ([:x, :y].include?(property)) ? values[property] : GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[property]
+        val = ([:x, :y, :r, :theta].include?(property)) ? values[property] : GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[property]
         apply_sprite_property(particle, index, property, val, target_idx, spr, spr2)
       end
-      # Emitter
+      offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, spr)
+      spr.x -= offset_xy[0]
+      spr.y -= offset_xy[1]
       spr.z = 99997
-      spr.bitmap = @emitter_bitmap
+      spr.opacity = 255
       spr.ox = spr.bitmap.width / 2
       spr.oy = spr.bitmap.height / 2
+      frame.x = spr.x
+      frame.y = spr.y
       return
     end
     # Set graphic and ox/oy
@@ -598,14 +609,28 @@ class AnimationEditor::Canvas < Sprite
     SPRITE_PROPERTIES_TO_SET.each do |property|
       apply_sprite_property(particle, index, property, values[property], target_idx, spr, spr2)
     end
+    # Adjust ox/oy for sprites that use a battler graphic (intentionally after
+    # calling apply_sprite_property for SPRITE_PROPERTIES_TO_SET because this
+    # also changes a sprite's x/y) - this keeps the sprite in the same part of
+    # the screen, but gives the sprite its proper ox/oy
+    case particle[:graphic]
+    when "USER", "USER_OPP", "USER_FRONT", "USER_BACK"
+      AnimationPlayer::Helper.adjust_origin_by_battler_metrics(particle, spr, user_index, @user_sprite_name)
+      AnimationPlayer::Helper.adjust_origin_by_battler_metrics(particle, spr2, user_index, @user_sprite_name) if spr2
+    when "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
+      AnimationPlayer::Helper.adjust_origin_by_battler_metrics(particle, spr, target_idx, @target_sprite_name)
+      AnimationPlayer::Helper.adjust_origin_by_battler_metrics(particle, spr2, target_idx, @target_sprite_name) if spr2
+    end
     # Position frame over sprite
     frame.x = spr.x
     frame.y = spr.y
     case particle[:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
-      # Offset battler frames because they aren't around the battler's position
-      frame.y -= spr.bitmap.height / 2
+      # Offset battler frames because their x/y is where their feet are rather
+      # than the middle of their graphic
+      frame.x += (spr.bitmap.width / 2) - spr.ox
+      frame.y += (spr.bitmap.height / 2) - spr.oy
     end
   end
 
@@ -642,6 +667,8 @@ class AnimationEditor::Canvas < Sprite
         sprite2.mirror = !sprite2.mirror if value
       end
     when :x
+      polar = ((particle[:emitter_type] || :none) == :none) ? particle[:polar_coordinates] : particle[:emitter_polar_coordinates]
+      return if polar
       relative_to_index = -1
       if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
         if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
@@ -676,6 +703,8 @@ class AnimationEditor::Canvas < Sprite
     when :x2
       sprite2.x = sprite1.x + value if sprite2
     when :y
+      polar = ((particle[:emitter_type] || :none) == :none) ? particle[:polar_coordinates] : particle[:emitter_polar_coordinates]
+      return if polar
       relative_to_index = -1
       if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
         if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
@@ -709,6 +738,57 @@ class AnimationEditor::Canvas < Sprite
       end
     when :y2
       sprite2.y = sprite1.y + value if sprite2
+    when :r, :theta
+      polar = ((particle[:emitter_type] || :none) == :none) ? particle[:polar_coordinates] : particle[:emitter_polar_coordinates]
+      return if !polar
+      relative_to_index = -1
+      if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
+        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+          relative_to_index = user_index
+        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+          relative_to_index = target_idx
+        end
+      end
+      dist_property = ((particle[:emitter_type] || :none) == :none) ? :r : :emit_r
+      dir_property = ((particle[:emitter_type] || :none) == :none) ? :theta : :emit_theta
+      dist = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, dist_property, @display_keyframe)[0]
+      dir = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, dir_property, @display_keyframe)[0]
+      base_x = (dist * Math.cos(dir * Math::PI / 180)).round
+      base_y = (-dist * Math.sin(dir * Math::PI / 180)).round
+      if relative_to_index >= 0 && relative_to_index.odd?
+        base_x *= -1 if particle[:foe_invert_x]
+        base_y *= -1 if particle[:foe_invert_y]
+      end
+      focus_xy = AnimationPlayer::Helper.get_xy_focus(particle, user_index, target_idx,
+                                                      @user_coords, @target_coords[target_idx],
+                                                      [side_size(0), side_size(1)])
+      AnimationPlayer::Helper.apply_xy_focus_to_sprite(sprite1, :x, base_x, focus_xy)
+      AnimationPlayer::Helper.apply_xy_focus_to_sprite(sprite1, :y, base_y, focus_xy)
+      offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, sprite1)
+      sprite1.x += offset_xy[0]
+      sprite1.y += offset_xy[1]
+      if @particle_tiled_sprites[index]
+        while sprite1.x < 0
+          sprite1.x += sprite1.src_rect.width
+        end
+        while sprite1.x >= sprite1.src_rect.width
+          sprite1.x -= sprite1.src_rect.width
+        end
+        @particle_tiled_sprites[index].each_with_index do |ts, i|
+          ts.x = sprite1.x
+          ts.x -= sprite1.src_rect.width if i.even?
+        end
+        while sprite1.y < 0
+          sprite1.y += sprite1.src_rect.height
+        end
+        while sprite1.y >= sprite1.src_rect.height
+          sprite1.y -= sprite1.src_rect.height
+        end
+        @particle_tiled_sprites[index].each_with_index do |ts, i|
+          ts.y = sprite1.y
+          ts.y -= sprite1.src_rect.height if i > 0
+        end
+      end
     when :z
       focus_z = AnimationPlayer::Helper.get_z_focus(particle, user_index, target_idx)
       AnimationPlayer::Helper.apply_z_focus_to_sprite(sprite1, value, focus_z)
@@ -727,16 +807,12 @@ class AnimationEditor::Canvas < Sprite
       sprite2.zoom_y = sprite1.zoom_y * value / 100.0 if sprite2
     when :angle
       case particle[:angle_override]
-      when :initial_angle_to_focus
+      when :initial_angle_to_focus, :initial_emitter_angle_to_focus
         focus_xy = AnimationPlayer::Helper.get_xy_focus(
           particle, user_index, target_idx,
           @user_coords, @target_coords[target_idx], [side_size(0), side_size(1)]
         )
         offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, sprite1)
-        target_x = (focus_xy.length == 2) ? focus_xy[1][0] : focus_xy[0][0]
-        target_x += offset_xy[0]
-        target_y = (focus_xy.length == 2) ? focus_xy[1][1] : focus_xy[0][1]
-        target_y += offset_xy[1]
         sprite1.angle = AnimationPlayer::Helper.initial_angle_between(particle, focus_xy, offset_xy)
       when :always_point_at_focus
         focus_xy = AnimationPlayer::Helper.get_xy_focus(
@@ -991,7 +1067,12 @@ class AnimationEditor::Canvas < Sprite
       else
         sprite, frame = get_sprite_and_frame(@selected_particle)
       end
-      property = ((particle[:emitter_type] || :none) == :none) ? :x : :emit_x
+      x_move *= -1 if particle[:polar_coordinates]
+      if (particle[:emitter_type] || :none) == :none
+        property = (particle[:polar_coordinates]) ? :theta : :x
+      else
+        property = (particle[:emitter_polar_coordinates]) ? :emit_theta : :emit_x
+      end
       new_pos = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, property, @display_keyframe)[0] + x_move
       @changed_controls ||= {}
       @changed_controls[property] = new_pos
@@ -1009,7 +1090,12 @@ class AnimationEditor::Canvas < Sprite
       else
         sprite, frame = get_sprite_and_frame(@selected_particle)
       end
-      property = ((particle[:emitter_type] || :none) == :none) ? :y : :emit_y
+      y_move *= -1 if particle[:polar_coordinates]
+      if (particle[:emitter_type] || :none) == :none
+        property = (particle[:polar_coordinates]) ? :r : :y
+      else
+        property = (particle[:emitter_polar_coordinates]) ? :emit_r : :emit_y
+      end
       new_pos = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, property, @display_keyframe)[0] + y_move
       @changed_controls ||= {}
       @changed_controls[property] = new_pos
@@ -1057,29 +1143,52 @@ class AnimationEditor::Canvas < Sprite
       sprite, frame = get_sprite_and_frame(@selected_particle)
     end
     spr2 = get_second_sprite(@selected_particle, first_target_index)
-    # Check if moved horizontally
-    if @captured[0] != new_canvas_x
-      new_pos = new_canvas_x
+    # Check if moved at all (in polar coordinates)
+    if (particle[:polar_coordinates] && (particle[:emitter_type] || :none) == :none) ||
+       (particle[:emitter_polar_coordinates] && (particle[:emitter_type] || :none) != :none)
+      new_pos_x = new_canvas_x
+      new_pos_y = new_canvas_y
       case particle[:focus]
       when :foreground, :midground, :background
-      when :user, :user_position
-        new_pos -= @user_coords[0]
-      when :target, :target_position
-        new_pos -= @target_coords[first_target_index][0]
+      when :user
+        new_pos_x -= @user_coords[0]
+        new_pos_y -= @user_coords[1]
+      when :user_position
+        new_pos_x -= @user_coords[0]
+        base_coords = Battle::Scene.pbBattlerPosition(user_index, side_size(user_index))
+        new_pos_y -= base_coords[1]
+      when :target
+        new_pos_x -= @target_coords[first_target_index][0]
+        new_pos_y -= @target_coords[first_target_index][1]
+      when :target_position
+        new_pos_x -= @target_coords[first_target_index][0]
+        base_coords = Battle::Scene.pbBattlerPosition(first_target_index, side_size(first_target_index))
+        new_pos_y -= base_coords[1]
       when :user_and_target, :user_position_and_target, :user_and_target_position,
            :user_position_and_target_position
         user_pos = @user_coords
+        if [:user_position_and_target, :user_position_and_target_position].include?(particle[:focus])
+          user_pos = [user_pos[0], Battle::Scene.pbBattlerPosition(user_index, side_size(user_index))[1]]
+        end
         target_pos = @target_coords[first_target_index]
+        if [:user_and_target_position, :user_position_and_target_position].include?(particle[:focus])
+          target_pos = [target_pos[0], Battle::Scene.pbBattlerPosition(first_target_index, side_size(first_target_index))[1]]
+        end
         distance = GameData::Animation::USER_AND_TARGET_SEPARATION
-        new_pos -= user_pos[0]
-        new_pos *= distance[0]
-        new_pos /= target_pos[0] - user_pos[0]
+        new_pos_x -= user_pos[0]
+        new_pos_x *= distance[0]
+        new_pos_x /= target_pos[0] - user_pos[0]
+        new_pos_y -= user_pos[1]
+        new_pos_y *= distance[1]
+        new_pos_y /= target_pos[1] - user_pos[1]
       when :user_side_foreground, :user_side_background
         base_coords = Battle::Scene.pbBattlerPosition(user_index)
-        new_pos -= base_coords[0]
+        new_pos_x -= base_coords[0]
+        new_pos_y -= base_coords[1]
       when :target_side_foreground, :target_side_background
         base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
-        new_pos -= base_coords[0]
+        new_pos_x -= base_coords[0]
+        new_pos_y -= base_coords[1]
       end
       relative_to_index = -1
       if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
@@ -1089,10 +1198,70 @@ class AnimationEditor::Canvas < Sprite
           relative_to_index = first_target_index
         end
       end
-      new_pos *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_x]
+      new_pos_x *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_x]
+      new_pos_y *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_y]
+      @changed_controls ||= {}
+      property_r = ((particle[:emitter_type] || :none) == :none) ? :r : :emit_r
+      property_theta = ((particle[:emitter_type] || :none) == :none) ? :theta : :emit_theta
+      if new_pos_x == 0
+        new_r = new_pos_y.abs
+        new_theta = (new_pos_y > 0) ? 270 : 90
+      else
+        new_r = Math.sqrt((new_pos_x ** 2) + (new_pos_y ** 2)).round
+        new_theta = (Math.atan(-new_pos_y / new_pos_x.to_f) * 180 / Math::PI).round
+        new_theta += 180 if new_pos_x < 0
+        new_theta += 360 if new_theta < 0
+      end
+      @changed_controls[property_r] = new_r
+      @changed_controls[property_theta] = new_theta
+      @captured[0] = new_canvas_x
+      @captured[1] = new_canvas_y
+      sprite.x = new_canvas_x
+      sprite.y = new_canvas_y
+      if spr2
+        value_x = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, :x2, @display_keyframe)
+        value_y = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, :y2, @display_keyframe)
+        spr2.x = sprite.x + value_x[0]
+        spr2.y = sprite.y + value_y[0]
+      end
+      return
+    end
+    # Check if moved horizontally
+    if @captured[0] != new_canvas_x
+      new_pos_x = new_canvas_x
+      case particle[:focus]
+      when :foreground, :midground, :background
+      when :user, :user_position
+        new_pos_x -= @user_coords[0]
+      when :target, :target_position
+        new_pos_x -= @target_coords[first_target_index][0]
+      when :user_and_target, :user_position_and_target, :user_and_target_position,
+           :user_position_and_target_position
+        user_pos = @user_coords
+        target_pos = @target_coords[first_target_index]
+        distance = GameData::Animation::USER_AND_TARGET_SEPARATION
+        new_pos_x -= user_pos[0]
+        new_pos_x *= distance[0]
+        new_pos_x /= target_pos[0] - user_pos[0]
+      when :user_side_foreground, :user_side_background
+        base_coords = Battle::Scene.pbBattlerPosition(user_index)
+        new_pos_x -= base_coords[0]
+      when :target_side_foreground, :target_side_background
+        base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
+        new_pos_x -= base_coords[0]
+      end
+      relative_to_index = -1
+      if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
+        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+          relative_to_index = user_index
+        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+          relative_to_index = first_target_index
+        end
+      end
+      new_pos_x *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_x]
       @changed_controls ||= {}
       property = ((particle[:emitter_type] || :none) == :none) ? :x : :emit_x
-      @changed_controls[property] = new_pos
+      @changed_controls[property] = new_pos_x
       @captured[0] = new_canvas_x
       sprite.x = new_canvas_x
       if spr2
@@ -1102,19 +1271,19 @@ class AnimationEditor::Canvas < Sprite
     end
     # Check if moved vertically
     if @captured[1] != new_canvas_y
-      new_pos = new_canvas_y
+      new_pos_y = new_canvas_y
       case particle[:focus]
       when :foreground, :midground, :background
       when :user
-        new_pos -= @user_coords[1]
+        new_pos_y -= @user_coords[1]
       when :user_position
         base_coords = Battle::Scene.pbBattlerPosition(user_index, side_size(user_index))
-        new_pos -= base_coords[1]
+        new_pos_y -= base_coords[1]
       when :target
-        new_pos -= @target_coords[first_target_index][1]
+        new_pos_y -= @target_coords[first_target_index][1]
       when :target_position
         base_coords = Battle::Scene.pbBattlerPosition(first_target_index, side_size(first_target_index))
-        new_pos -= base_coords[1]
+        new_pos_y -= base_coords[1]
       when :user_and_target, :user_position_and_target, :user_and_target_position,
            :user_position_and_target_position
         user_pos = @user_coords
@@ -1126,15 +1295,15 @@ class AnimationEditor::Canvas < Sprite
           target_pos = [0, Battle::Scene.pbBattlerPosition(first_target_index, side_size(first_target_index))[1]]
         end
         distance = GameData::Animation::USER_AND_TARGET_SEPARATION
-        new_pos -= user_pos[1]
-        new_pos *= distance[1]
-        new_pos /= target_pos[1] - user_pos[1]
+        new_pos_y -= user_pos[1]
+        new_pos_y *= distance[1]
+        new_pos_y /= target_pos[1] - user_pos[1]
       when :user_side_foreground, :user_side_background
         base_coords = Battle::Scene.pbBattlerPosition(user_index)
-        new_pos -= base_coords[1]
+        new_pos_y -= base_coords[1]
       when :target_side_foreground, :target_side_background
         base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
-        new_pos -= base_coords[1]
+        new_pos_y -= base_coords[1]
       end
       relative_to_index = -1
       if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
@@ -1144,10 +1313,10 @@ class AnimationEditor::Canvas < Sprite
           relative_to_index = first_target_index
         end
       end
-      new_pos *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_y]
+      new_pos_y *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_y]
       @changed_controls ||= {}
       property = ((particle[:emitter_type] || :none) == :none) ? :y : :emit_y
-      @changed_controls[property] = new_pos
+      @changed_controls[property] = new_pos_y
       @captured[1] = new_canvas_y
       sprite.y = new_canvas_y
       if spr2
@@ -1219,8 +1388,10 @@ class AnimationEditor::Canvas < Sprite
     case @anim[:particles][@selected_particle][:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
-      # Offset battler frames because they aren't around the battler's position
-      @sel_frame_sprite.y -= target.bitmap.height / 2
+      # Offset battler frames because their x/y is where their feet are rather
+      # than the middle of their graphic
+      @sel_frame_sprite.x += (target.bitmap.width / 2) - target.ox
+      @sel_frame_sprite.y += (target.bitmap.height / 2) - target.oy
     end
   end
 

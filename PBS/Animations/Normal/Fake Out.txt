@@ -1,0 +1,223 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,FAKEOUT]
+Name = DB Animation
+NoUser = true
+Credit = Dawn Bronze
+<Target>
+    MoveZoomX = 13,1,50
+    MoveZoomY = 13,1,130
+    MoveZoomX = 15,3,100
+    MoveZoomY = 15,3,100
+<Hand L>
+    Graphic = hand gesture
+    Focus = Target
+    SetFrame = 4,4
+    SetX = 4,-50
+    SetOpacity = 4,0
+    MoveOpacity = 4,4,255
+    MoveAngle = 10,1,-5
+    SetFrame = 11,5
+    MoveX = 11,1,-10
+    MoveZoomY = 11,1,130
+    MoveAngle = 11,1,0
+    SetFrame = 12,6
+    MoveZoomY = 12,1,100
+    SetFrame = 16,5
+    MoveAngle = 16,1,5
+    MoveX = 16,3,-50
+    MoveAngle = 17,2,0
+    SetFrame = 18,4
+    MoveOpacity = 22,6,0
+<Hand R>
+    Graphic = hand gesture
+    Focus = Target
+    SetFrame = 4,4
+    SetFlip = 4,true
+    SetX = 4,50
+    SetOpacity = 4,0
+    MoveOpacity = 4,4,255
+    MoveAngle = 10,1,5
+    SetFrame = 11,5
+    MoveX = 11,1,10
+    MoveZoomY = 11,1,130
+    MoveAngle = 11,1,0
+    SetFrame = 12,6
+    MoveZoomY = 12,1,100
+    SetFrame = 16,5
+    MoveAngle = 16,1,-5
+    MoveX = 16,3,50
+    MoveAngle = 17,2,0
+    SetFrame = 18,4
+    MoveOpacity = 22,6,0
+<Hit>
+    Graphic = hit
+    Focus = Target
+    SetZoomX = 12,0
+    SetZoomY = 12,0
+    SetOpacity = 12,0
+    SetColor = 12,24B4D0FF
+    MoveOpacity = 12,1,190
+    MoveZoomX = 12,9,100
+    MoveZoomY = 12,9,100
+    SetFrame = 14,1
+    SetOpacity = 18,180
+    MoveOpacity = 18,3,0
+<Sparks Emitter>
+    Graphic = spark small
+    Focus = Target
+    Emitter = Projectile
+    EmitterRate = 40
+    SetZ = 13,10
+    SetZoomX = 13,75
+    SetZoomY = 13,75
+    SetColor = 13,24B4D0FF
+    SetEmitting = 13,true
+    SetEmitSpeed = 13,300
+    SetEmitSpeedRange = 13,75
+    SetEmitDirection = 13,90
+    SetEmitDirectionRange = 13,120
+    SetEmitGravity = 13,500
+    MoveZoomX = 13,9,20
+    MoveZoomY = 13,9,20
+    SetEmitting = 15,false
+    MoveOpacity = 19,3,0
+<Background>
+    Graphic = Screens/white
+    Focus = Background
+    SetOpacity = 11,0
+    MoveOpacity = 11,3,225
+    MoveOpacity = 17,3,0
+<Bar R>
+    Graphic = Screens/white
+    Focus = Background
+    SetX = 11,528
+    SetY = 11,-10
+    SetOpacity = 11,225
+    SetColor = 11,000000FF
+    MoveX = 11,3,406
+    MoveY = 11,3,-15
+    MoveOpacity = 11,3,0
+<Bar L>
+    Graphic = Screens/white
+    Focus = Background
+    SetX = 11,-510
+    SetY = 11,-7
+    SetOpacity = 11,225
+    SetColor = 11,000000FF
+    MoveX = 11,2,-115
+    MoveY = 11,2,-1
+    MoveOpacity = 11,3,0
+<SE>
+    Play = 11,Normal/Fake Out
+#-------------------------------
+[OppMove,FAKEOUT]
+Name = DB Animation
+NoUser = true
+Credit = Dawn Bronze
+<Target>
+    MoveZoomX = 13,1,50
+    MoveZoomY = 13,1,130
+    MoveZoomX = 15,3,100
+    MoveZoomY = 15,3,100
+<Hand L>
+    Graphic = hand gesture
+    Focus = Target
+    SetFrame = 4,4
+    SetX = 4,-50
+    SetOpacity = 4,0
+    MoveOpacity = 4,4,255
+    MoveAngle = 10,1,-5
+    SetFrame = 11,5
+    MoveX = 11,1,-10
+    MoveZoomY = 11,1,130
+    MoveAngle = 11,1,0
+    SetFrame = 12,6
+    MoveZoomY = 12,1,100
+    SetFrame = 16,5
+    MoveAngle = 16,1,5
+    MoveX = 16,3,-50
+    MoveAngle = 17,2,0
+    SetFrame = 18,4
+    MoveOpacity = 22,6,0
+<Hand R>
+    Graphic = hand gesture
+    Focus = Target
+    SetFrame = 4,4
+    SetFlip = 4,true
+    SetX = 4,50
+    SetOpacity = 4,0
+    MoveOpacity = 4,4,255
+    MoveAngle = 10,1,5
+    SetFrame = 11,5
+    MoveX = 11,1,10
+    MoveZoomY = 11,1,130
+    MoveAngle = 11,1,0
+    SetFrame = 12,6
+    MoveZoomY = 12,1,100
+    SetFrame = 16,5
+    MoveAngle = 16,1,-5
+    MoveX = 16,3,50
+    MoveAngle = 17,2,0
+    SetFrame = 18,4
+    MoveOpacity = 22,6,0
+<Hit>
+    Graphic = hit
+    Focus = Target
+    SetZoomX = 12,0
+    SetZoomY = 12,0
+    SetOpacity = 12,0
+    SetColor = 12,24B4D0FF
+    MoveOpacity = 12,1,190
+    MoveZoomX = 12,9,100
+    MoveZoomY = 12,9,100
+    SetFrame = 14,1
+    SetOpacity = 18,180
+    MoveOpacity = 18,3,0
+<Sparks Emitter>
+    Graphic = spark small
+    Focus = Target
+    Emitter = Projectile
+    EmitterRate = 40
+    SetZ = 13,10
+    SetZoomX = 13,75
+    SetZoomY = 13,75
+    SetColor = 13,24B4D0FF
+    SetEmitting = 13,true
+    SetEmitSpeed = 13,300
+    SetEmitSpeedRange = 13,75
+    SetEmitDirection = 13,90
+    SetEmitDirectionRange = 13,120
+    SetEmitGravity = 13,500
+    MoveZoomX = 13,9,20
+    MoveZoomY = 13,9,20
+    SetEmitting = 15,false
+    MoveOpacity = 19,3,0
+<Background>
+    Graphic = Screens/white
+    Focus = Background
+    SetOpacity = 11,0
+    MoveOpacity = 11,3,225
+    MoveOpacity = 17,3,0
+<Bar R>
+    Graphic = Screens/white
+    Focus = Background
+    SetX = 11,528
+    SetY = 11,-10
+    SetOpacity = 11,225
+    SetColor = 11,000000FF
+    MoveX = 11,2,128
+    MoveY = 11,2,-16
+    MoveOpacity = 11,3,0
+<Bar L>
+    Graphic = Screens/white
+    Focus = Background
+    SetX = 11,-510
+    SetY = 11,-7
+    SetOpacity = 11,225
+    SetColor = 11,000000FF
+    MoveX = 11,3,-390
+    MoveY = 11,3,-13
+    MoveOpacity = 11,3,0
+<SE>
+    Play = 11,Normal/Fake Out

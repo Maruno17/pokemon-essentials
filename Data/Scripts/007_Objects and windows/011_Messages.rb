@@ -293,6 +293,7 @@ def pbCsvPosInt!(str)
 end
 
 def pbReplaceMessageText(text, msg_window)
+  isDarkSkin = msg_window && isDarkWindowskin(msg_window.windowskin)
   # \sign[something] gets turned into \op\cl\ts[]\w[something]
   text.gsub!(/\\sign\[([^\]]*)\]/i) { next "\\op\\cl\\ts[]\\w[" + $1 + "]" }
   # Escaped characters
@@ -317,16 +318,28 @@ def pbReplaceMessageText(text, msg_window)
   text.gsub!(/\\pog/i, "\\b") if $player&.female?
   text.gsub!(/\\pg/i, "")
   text.gsub!(/\\pog/i, "")
-  male_text_tag = shadowc3tag(MessageConfig::MALE_TEXT_MAIN_COLOR, MessageConfig::MALE_TEXT_SHADOW_COLOR)
-  female_text_tag = shadowc3tag(MessageConfig::FEMALE_TEXT_MAIN_COLOR, MessageConfig::FEMALE_TEXT_SHADOW_COLOR)
+  if isDarkSkin
+    male_text_tag = shadowc3tag(MessageConfig::LIGHT_MALE_TEXT_MAIN_COLOR, MessageConfig::LIGHT_MALE_TEXT_SHADOW_COLOR)
+    female_text_tag = shadowc3tag(MessageConfig::LIGHT_FEMALE_TEXT_MAIN_COLOR, MessageConfig::LIGHT_FEMALE_TEXT_SHADOW_COLOR)
+  else
+    male_text_tag = shadowc3tag(MessageConfig::MALE_TEXT_MAIN_COLOR, MessageConfig::MALE_TEXT_SHADOW_COLOR)
+    female_text_tag = shadowc3tag(MessageConfig::FEMALE_TEXT_MAIN_COLOR, MessageConfig::FEMALE_TEXT_SHADOW_COLOR)
+  end
   text.gsub!(/\\b/i, male_text_tag)
   text.gsub!(/\\r/i, female_text_tag)
   # Other text colors
   text.gsub!(/\\\[([0-9a-f]{8,8})\]/i) { "<c2=" + $1 + ">" }
-  isDarkSkin = msg_window && isDarkWindowskin(msg_window.windowskin)
   text.gsub!(/\\c\[([0-9]+)\]/i) do
     main_color, shadow_color = get_text_colors_for_windowskin(msg_window&.windowskin, $1.to_i, isDarkSkin)
     next shadowc3tag(main_color, shadow_color)
+  end
+  # Dark version of icon
+  if isDarkSkin
+    text.gsub!(/<icon=([^>\n\r]+)>/i) do
+      filename = $1
+      next "<icon=" + filename + "_dark>" if pbResolveBitmap("Graphics/Icons/" + filename + "_dark")
+      next "<icon=" + filename + ">"
+    end
   end
 end
 
