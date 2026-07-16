@@ -445,7 +445,7 @@ class Battle::Scene
     end
     default_idx = 2 if targets.nil? || targets.empty?   # Treat as non-targeting status move
     # Check for a default animation
-    if move_type
+    if move_type && ANIMATION_DEFAULTS_FOR_TYPE_CATEGORY[move_type]
       default_idx += 3 if targets && !targets.empty? &&
                           (target_data.num_targets > 1 ||
                            (target_data.num_targets > 0 && status))
