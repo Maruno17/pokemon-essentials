@@ -289,11 +289,25 @@ class Battle::Move
   def pbEffectivenessMessage(user, target, numTargets = 1)
     return if self.is_a?(Battle::Move::FixedDamageMove)
     return if target.damageState.disguise || target.damageState.iceFace
-    if Effectiveness.super_effective?(target.damageState.typeMod)
+    if Settings::MORE_TYPE_EFFECTIVENESS_MESSAGES &&
+       Effectiveness.extremely_effective?(target.damageState.typeMod)
+      if numTargets > 1
+        @battle.pbDisplay(_INTL("It's extremely effective on {1}!", target.pbThis(true)))
+      else
+        @battle.pbDisplay(_INTL("It's extremely effective!"))
+      end
+    elsif Effectiveness.super_effective?(target.damageState.typeMod)
       if numTargets > 1
         @battle.pbDisplay(_INTL("It's super effective on {1}!", target.pbThis(true)))
       else
         @battle.pbDisplay(_INTL("It's super effective!"))
+      end
+    elsif Settings::MORE_TYPE_EFFECTIVENESS_MESSAGES &&
+          Effectiveness.mostly_ineffective?(target.damageState.typeMod)
+      if numTargets > 1
+        @battle.pbDisplay(_INTL("It's mostly ineffective on {1}...", target.pbThis(true)))
+      else
+        @battle.pbDisplay(_INTL("It's mostly ineffective..."))
       end
     elsif Effectiveness.not_very_effective?(target.damageState.typeMod)
       if numTargets > 1
