@@ -3707,7 +3707,7 @@ Battle::AbilityEffects::OnWeatherChange.add(:PROTOSYNTHESIS,
       end
       battle.pbDisplay(_INTL("{1} {2} was heightened!", battler.pbOfThis, GameData::Stat.get(best[0]).name))
       battle.pbHideAbilitySplash(battler)
-      battler.pbHeldItemTriggered if consume_item
+      battler.pbHeldItemTriggered(battler.item) if consume_item
     elsif battler.effects[PBEffects::ProtosynthesisStat]
       battler.effects[PBEffects::ProtosynthesisStat] = nil
       battle.pbDisplay(_INTL("The effects of {1} have worn off...", battler.abilityName))
@@ -3782,7 +3782,7 @@ Battle::AbilityEffects::OnTerrainChange.add(:QUARKDRIVE,
       end
       battle.pbDisplay(_INTL("{1} {2} was heightened!", battler.pbOfThis, GameData::Stat.get(best[0]).name))
       battle.pbHideAbilitySplash(battler)
-      battler.pbHeldItemTriggered if consume_item
+      battler.pbHeldItemTriggered(battler.item) if consume_item
     elsif battler.effects[PBEffects::ProtosynthesisStat]
       battler.effects[PBEffects::ProtosynthesisStat] = nil
       battle.pbDisplay(_INTL("The effects of {1} have worn off...", battler.abilityName))
