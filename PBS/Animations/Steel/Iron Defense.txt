@@ -1,0 +1,22 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,IRONDEFENSE]
+Name = Essentials
+NoTarget = true
+Credit = Maruno
+<User>
+    MaskGraphic = Masks/metallic
+    SetMaskOpacity = 16,192
+    MoveMaskX = 16,20,1152
+    MoveMaskOpacity = 26,10,0
+<Background>
+    Graphic = Screens/white
+    Focus = Background
+    SetOpacity = 0,0
+    MoveOpacity = 0,4,192
+    MoveOpacity = 5,4,0
+    MoveOpacity = 11,4,192
+    MoveOpacity = 16,4,0
+    SetVisible = 20,false
+<SE>
+    Play = 15,Steel/Iron Defense,80

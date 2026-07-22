@@ -1,0 +1,75 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,AQUARING]
+Name = Essentials
+NoTarget = true
+HidesDataBoxes = true
+Credit = Maruno
+<User>
+    SetColor = 0,FFFFFF00
+    MoveColor = 0,8,FFFFFFFF
+    MoveColor = 21,7,FFFFFF00
+<Bubble>
+    Graphic = bubble 1
+    Focus = User
+    SetY = 0,16
+    SetZ = 0,10
+    SetZoomX = 0,200
+    SetZoomY = 0,200
+    SetOpacity = 0,0
+    MoveOpacity = 0,4,128
+    MoveOpacity = 26,6,0
+    SetVisible = 32,false
+<Glow emitter>
+    Graphic = circle 1
+    Focus = User
+    Emitter = NoMovement
+    EmitterRate = 30
+    SetZ = 0,20
+    SetZoomX = 0,90
+    SetZoomY = 0,90
+    SetOpacity = 0,0
+    SetEmitting = 0,true
+    SetEmitY = 0,16
+    MoveOpacity = 0,2,96
+    MoveZoomX = 2,13,200
+    MoveZoomY = 2,13,200
+    MoveOpacity = 2,13,0,EaseOut
+    SetVisible = 15,false
+    SetEmitting = 26,false
+<Oval emitter>
+    Graphic = circle 1
+    Focus = User
+    Emitter = NoMovement
+    EmitterRate = 6
+    SetZ = 0,30
+    SetZoomX = 0,0
+    SetZoomY = 0,0
+    SetAngle = 0,90
+    SetColor = 0,0020F8A0
+    SetEmitting = 0,true
+    SetEmitY = 0,16
+    MoveColor = 0,2,00E0A0A0
+    MoveZoomX = 0,9,300
+    MoveZoomY = 0,9,60
+    MoveAngle = 0,26,536
+    MoveColor = 2,2,0020F8A0
+    MoveColor = 4,2,00E0A0A0
+    MoveColor = 6,2,0020F8A0
+    SetEmitting = 8,false
+    MoveColor = 8,2,00E0A0A0
+    MoveColor = 10,2,0020F8A0
+    MoveColor = 12,2,00E0A0A0
+    MoveColor = 14,2,0020F8A0
+    MoveColor = 16,2,00E0A0A0
+    MoveColor = 18,2,0020F8A0
+    MoveColor = 20,2,00E0A0A0
+    MoveZoomX = 21,5,100
+    MoveZoomY = 21,5,20
+    MoveColor = 22,2,0020F8A0
+    MoveOpacity = 24,2,0
+    MoveColor = 24,2,00E0A0A0
+    SetVisible = 26,false
+<SE>
+    Play = 0,Water/Aqua Ring,80
+    Play = 20,Water/Aqua Ring,80
