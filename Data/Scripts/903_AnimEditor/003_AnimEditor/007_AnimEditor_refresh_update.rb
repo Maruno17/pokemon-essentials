@@ -301,6 +301,7 @@ class AnimationEditor
             particle.delete(property)
           end
           refresh
+          add_to_change_history
         end
       end
     elsif Input.triggerex?(:DELETE)
@@ -314,6 +315,7 @@ class AnimationEditor
           particle.delete(property)
         end
         refresh
+        add_to_change_history
       end
     elsif Input.pressex?(:LCTRL) || Input.pressex?(:RCTRL)
       if Input.triggerex?(:Z) || Input.repeatex?(:Z)
