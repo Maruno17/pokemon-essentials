@@ -13,7 +13,7 @@
     // Note that the "Game Title" defined in RPG Maker XP should not have
     // accented characters in it, which is why this property is useful.
     //
-    "windowTitle": "Pokémon Essentials v21.99",
+    "windowTitle": "Pokemon Essentials v21.99",
 
     // The game window's width and height, in pixels.
     //
@@ -226,6 +226,13 @@
     // with lower specs.
     //
     // "maxTextureSize": 0,
+
+    // Controls the algorithm for reporting the height of rendered text.
+    // 0: Nominal (TTF_FontHeight); matches RGSS behavior; may cut off bottoms
+    //    of some characters.
+    // 1: Rendered (TTF_SizeUTF8); deviates from RGSS; may look better.
+    // (default: 0)
+    "fontHeightReporting": 1,
 
     // A list of fonts to render without alpha blending.
     //

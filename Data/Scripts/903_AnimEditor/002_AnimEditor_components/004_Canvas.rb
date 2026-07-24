@@ -1112,8 +1112,6 @@ class AnimationEditor::Canvas < Sprite
     mouse_x, mouse_y = mouse_pos
     wheel_v = Input.scroll_v
     if mouse_x && mouse_y && wheel_v != 0
-      # TODO: mkxp-z has a bug whereby holding Ctrl stops the scroll wheel from
-      #       being updated. Await the implementation of its fix.
       increment = (Input.pressex?(:LCTRL) || Input.pressex?(:RCTRL)) ? 20 : 5
       @changed_controls ||= {}
       @changed_controls[:zoom] = (wheel_v > 0) ? increment : -increment

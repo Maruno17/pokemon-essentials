@@ -16,13 +16,13 @@ module MessageConfig
   LIGHT_FEMALE_TEXT_SHADOW_COLOR = Color.new(88, 80, 72)
 
   FONT_NAME                = "Power Green"
-  FONT_SIZE                = 27
+  FONT_SIZE                = 32
   FONT_Y_OFFSET            = 8
   SMALL_FONT_NAME          = "Power Green Small"
-  SMALL_FONT_SIZE          = 21
+  SMALL_FONT_SIZE          = 26
   SMALL_FONT_Y_OFFSET      = 8
   NARROW_FONT_NAME         = "Power Green Narrow"
-  NARROW_FONT_SIZE         = 27
+  NARROW_FONT_SIZE         = 32
   NARROW_FONT_Y_OFFSET     = 8
   # 0 = Pause cursor is displayed at end of text
   # 1 = Pause cursor is displayed at bottom right

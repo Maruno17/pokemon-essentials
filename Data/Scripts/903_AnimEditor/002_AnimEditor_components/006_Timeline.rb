@@ -753,8 +753,6 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
 
   # Scroll timeline with mouse scroll wheel.
   def update_input_scroll_wheel
-    # TODO: mkxp-z has a bug whereby holding Shift stops the scroll wheel from
-    #       being updated. Await the implementation of its fix.
     wheel_v = Input.scroll_v
     return if wheel_v == 0
     if @scrollable_rect.contains?(*mouse_pos)

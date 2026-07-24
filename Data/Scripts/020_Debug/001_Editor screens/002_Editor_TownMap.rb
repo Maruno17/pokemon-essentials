@@ -863,8 +863,6 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
 
   def update_input
     # Scroll map with mouse wheel
-    # TODO: mkxp-z has a bug whereby holding Shift stops the scroll wheel from
-    #       being updated. Await the implementation of its fix.
     return if !@components.get_control(:map_control).mouse_in_control?
     wheel_v = Input.scroll_v
     return if wheel_v == 0
