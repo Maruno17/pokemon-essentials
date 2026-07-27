@@ -24,5 +24,9 @@ class AnimationPlayer
       @form = form
       @gender = gender
     end
+
+    def shiny?
+      return false
+    end
   end
 end
