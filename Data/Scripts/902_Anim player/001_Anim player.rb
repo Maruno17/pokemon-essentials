@@ -43,10 +43,10 @@ class AnimationPlayer
       pkmn = @user.pokemon
       @battler_filenames[@user.index] = []
       @battler_filenames[@user.index].push(GameData::Species.front_sprite_filename(
-        pkmn.species, pkmn.form, pkmn.gender)
+        pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
       )
       @battler_filenames[@user.index].push(GameData::Species.back_sprite_filename(
-        pkmn.species, pkmn.form, pkmn.gender)
+        pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
       )
     end
     if @targets
@@ -54,10 +54,10 @@ class AnimationPlayer
         pkmn = target.pokemon
         @battler_filenames[target.index] = []
         @battler_filenames[target.index].push(GameData::Species.front_sprite_filename(
-          pkmn.species, pkmn.form, pkmn.gender)
+          pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
         )
         @battler_filenames[target.index].push(GameData::Species.back_sprite_filename(
-          pkmn.species, pkmn.form, pkmn.gender)
+          pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
         )
       end
     end
