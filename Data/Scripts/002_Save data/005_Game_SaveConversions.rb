@@ -16,9 +16,9 @@ SaveData.register_conversion(:v21_replace_phone_data) do
             if contact.length > 4
               # Trainer
               @phone.add(contact[6], contact[7], contact[1], contact[2], contact[5], 0)
-              new_contact = @phone.get(contact[1], contact[2], 0)
-              new_contact.visible = contact[0]
-              new_contact.rematch_flag = [contact[4] - 1, 0].max
+              new_contact = @phone.get(true, contact[1], contact[2], 0)
+              new_contact&.visible = contact[0]
+              new_contact&.rematch_flag = [contact[4] - 1, 0].max
             else
               # Non-trainer
               @phone.add(contact[3], contact[2], contact[1])
