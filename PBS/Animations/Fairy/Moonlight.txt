@@ -1,0 +1,56 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MOONLIGHT]
+Name = Essentials
+NoTarget = true
+HidesDataBoxes = true
+Credit = Maruno
+<User>
+<Background>
+    Graphic = Screens/Moonlight
+    Focus = Background
+    SetOpacity = 0,0
+    SetColor = 0,000000FF
+    MoveOpacity = 0,5,255
+    MoveColor = 5,5,00000000
+    MoveY = 5,54,-176
+    SetColor = 54,FFFFFF00
+    MoveColor = 54,5,FFFFFFFF
+    MoveOpacity = 59,6,0
+    SetVisible = 65,false
+<Sparkle emitter>
+    Graphic = shines
+    Focus = User
+    SecondLayer = true
+    Emitter = Straight
+    EmitterRate = 25
+    SetFrame = 14,2
+    SetZoomX = 14,0
+    SetZoomY = 14,0
+    SetOpacity = 14,128
+    SetColor = 14,E0E000F8
+    SetOpacity2 = 14,-255
+    SetEmitting = 14,true
+    SetEmitXRange = 14,128
+    SetEmitY = 14,-160
+    SetEmitYRange = 14,128
+    SetEmitSpeed = 14,180
+    SetEmitDirection = 14,270
+    SetZoomRange = 14,30
+    MoveZoomX = 14,8,40
+    MoveZoomY = 14,8,40
+    MoveOpacity = 14,8,255
+    MoveAngle = 14,16,360
+    SetZ2 = 22,1
+    SetZoomX2 = 22,150
+    SetZoomY2 = 22,150
+    SetAngle2 = 22,-180
+    SetOpacity2 = 22,0
+    MoveZoomX = 22,8,0
+    MoveZoomY = 22,8,0
+    MoveOpacity = 22,8,128
+    MoveAngle2 = 22,8,-360
+    SetVisible = 30,false
+    SetEmitting = 33,false
+<SE>
+    Play = 5,Fairy/Moonlight,80

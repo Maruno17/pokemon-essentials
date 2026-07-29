@@ -1,0 +1,45 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,MIST]
+Name = Essentials
+NoTarget = true
+HidesDataBoxes = true
+Credit = Maruno
+<User>
+<Background>
+    Graphic = Screens/white
+    Focus = Background
+    SetOpacity = 0,0
+    MoveOpacity = 0,7,192
+    MoveOpacity = 48,6,0
+<Mist emitter>
+    Graphic = smog 1
+    Focus = UserSideForeground
+    Emitter = Projectile
+    EmitterRate = 15
+    RandomInvertFlip = true
+    SetZ = 0,10
+    SetZoomX = 0,300
+    SetZoomY = 0,50
+    SetOpacity = 0,0
+    SetEmitting = 0,true
+    SetEmitXRange = 0,32
+    SetEmitY = 0,-128
+    SetEmitYRange = 0,16
+    SetEmitSpeed = 0,10
+    SetEmitSpeedRange = 0,20
+    SetEmitDirection = 0,90
+    SetEmitDirectionRange = 0,45
+    SetEmitGravity = 0,200
+    SetZoomRange = 0,10
+    MoveOpacity = 0,7,255,EaseOut
+    MoveZoomX = 0,14,750
+    MoveZoomY = 0,14,125
+    MoveY = 14,16,-80,EaseIn
+    MoveZoomX = 14,16,300
+    MoveZoomY = 14,16,50
+    SetEmitting = 22,false
+    MoveOpacity = 23,7,0
+    SetVisible = 30,false
+<SE>
+    Play = 0,Ice/Mist,80

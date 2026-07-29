@@ -1,0 +1,51 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,CALMMIND]
+Name = Essentials
+NoTarget = true
+HidesDataBoxes = true
+Credit = Maruno
+<User>
+<Background>
+    Graphic = Screens/black
+    Focus = Background
+    SetOpacity = 0,0
+    MoveOpacity = 0,7,200
+    MoveOpacity = 38,6,0
+    SetVisible = 44,false
+<Glow>
+    Graphic = spark small
+    Focus = User
+    SetY = 8,16
+    SetZ = 8,10
+    SetZoomX = 8,150
+    SetZoomY = 8,150
+    MoveZoomX = 8,14,400
+    MoveZoomY = 8,14,400
+    MoveOpacity = 15,7,0
+    SetVisible = 22,false
+<Ring emitter>
+    Graphic = circle 1
+    Focus = User
+    Emitter = NoMovement
+    EmitterRate = 4
+    SetY = 15,16
+    SetZ = 15,20
+    SetZoomX = 15,250
+    SetZoomY = 15,250
+    SetOpacity = 15,0
+    SetColor = 15,E0000060
+    SetEmitting = 15,true
+    SetEmitY = 15,16
+    MoveOpacity = 15,3,255
+    MoveColor = 15,5,E00000C0
+    MoveZoomX = 15,13,50
+    MoveZoomY = 15,13,50
+    MoveOpacity = 20,8,0
+    SetEmitting = 26,false
+    SetVisible = 28,false
+<SE>
+    Play = 8,Psychic/Calm Mind,80
+    Play = 10,Psychic/Calm Mind,80
+    Play = 12,Psychic/Calm Mind,80
+    Play = 14,Psychic/Calm Mind,80
