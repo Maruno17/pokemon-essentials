@@ -1,4 +1,6 @@
 //==============================================================================
+// mkxp.json for Pokémon Essentials
+//==============================================================================
 // Since this is a JSON file, comments are written with // instead of a #. Any
 // backslashes in file paths written in here need to be escaped (i.e. a single
 // backslash becomes a double backslash). If that's too much hassle, you can use
@@ -13,7 +15,7 @@
     // Note that the "Game Title" defined in RPG Maker XP should not have
     // accented characters in it, which is why this property is useful.
     //
-    "windowTitle": "Pokemon Essentials v21.99",
+    "windowTitle": "Pokémon Essentials v21.99",
 
     // The game window's width and height, in pixels.
     //
