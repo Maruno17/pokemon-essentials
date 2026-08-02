@@ -3,7 +3,7 @@
 #===============================================================================
 class AnimationEditor
   def save
-    AnimationEditor::ParticleDataHelper.optimize_all_particles(@anim[:particles])
+#    AnimationEditor::ParticleDataHelper.optimize_all_particles(@anim[:particles])
     GameData::Animation.register(@anim, @anim_id)
     Compiler.write_battle_animation_file(@anim[:pbs_path])
     if @anim[:pbs_path] != @pbs_path

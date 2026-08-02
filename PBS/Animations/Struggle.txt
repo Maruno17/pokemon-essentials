@@ -1,0 +1,85 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,STRUGGLE]
+Name = Essentials
+Credit = Maruno
+<User>
+    MoveX = 0,1,-16,EaseBoth
+    MoveY = 0,1,4,EaseBoth
+    MoveAngle = 0,1,6,EaseBoth
+    MoveX = 1,1,0,EaseIn
+    MoveY = 1,1,1,EaseBoth
+    MoveAngle = 1,1,0,EaseIn
+    MoveX = 2,1,46,EaseOut
+    MoveY = 2,1,10,EaseBoth
+    MoveAngle = 2,1,-20,EaseOut
+    MoveX = 4,1,0,EaseIn
+    MoveY = 4,1,0,EaseIn
+    MoveAngle = 4,1,0,EaseIn
+    MoveX = 5,1,-36,EaseOut
+    MoveY = 5,1,10,EaseOut
+    MoveAngle = 5,1,20,EaseOut
+    MoveX = 7,1,0,EaseIn
+    MoveY = 7,1,0,EaseIn
+    MoveAngle = 7,1,0,EaseIn
+    MoveX = 8,1,32,EaseOut
+    MoveY = 8,1,8,EaseOut
+    MoveAngle = 8,1,-16,EaseOut
+    MoveX = 10,1,0,EaseIn
+    MoveY = 10,1,0,EaseIn
+    MoveAngle = 10,1,0,EaseIn
+    MoveX = 11,1,-32,EaseOut
+    MoveY = 11,1,8,EaseOut
+    MoveAngle = 11,1,16,EaseOut
+    MoveX = 13,1,28,EaseBoth
+    MoveY = 13,1,6,EaseBoth
+    MoveAngle = 13,1,-10,EaseBoth
+    MoveX = 15,1,-22,EaseBoth
+    MoveY = 15,1,4,EaseBoth
+    MoveAngle = 15,1,10,EaseBoth
+    MoveX = 17,1,16,EaseBoth
+    MoveY = 17,1,2,EaseBoth
+    MoveAngle = 17,1,-5,EaseBoth
+    MoveX = 19,1,-8,EaseBoth
+    MoveAngle = 19,1,4,EaseBoth
+    MoveX = 21,1,0,EaseBoth
+    MoveY = 21,1,0,EaseBoth
+    MoveAngle = 21,1,0,EaseBoth
+<Target>
+    FoeInvertX = true
+    MoveX = 14,1,-2
+    MoveX = 15,2,2
+    MoveX = 17,2,-2
+    MoveX = 19,2,2
+    MoveX = 21,1,0
+<Hit emitter>
+    Graphic = dazzle small
+    Focus = Target
+    SecondLayer = true
+    FoeInvertX = true
+    Emitter = NoMovement
+    EmitterRate = 10
+    SetX = 14,-27
+    SetY = 14,51
+    SetZ = 14,10
+    SetZoomX = 14,60
+    SetZoomY = 14,60
+    SetOpacity = 14,0
+    SetColor = 14,E0000060
+    SetZoomX2 = 14,60
+    SetZoomY2 = 14,60
+    SetEmitting = 14,true
+    SetEmitX = 14,16
+    SetEmitXRange = 14,24
+    SetEmitY = 14,16
+    SetEmitYRange = 14,24
+    MoveZoomX = 14,3,120
+    MoveZoomY = 14,3,120
+    MoveOpacity = 14,3,255
+    MoveZoomX = 17,3,180
+    MoveZoomY = 17,3,180
+    MoveOpacity = 17,3,0
+    SetEmitting = 19,false
+    SetVisible = 20,false
+<SE>
+    Play = 0,Struggle,80

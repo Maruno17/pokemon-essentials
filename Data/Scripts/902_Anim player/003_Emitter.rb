@@ -330,6 +330,13 @@ class AnimationPlayer::Emitter
     end
     particle_sprite.random_invert_angle = true if @particle[:random_invert_angle] && rand(2) == 0
     particle_sprite.random_invert_flip = true if @particle[:random_invert_flip] && rand(2) == 0
+    # Base angle
+    case @particle[:angle_override] || :none
+    when :emitted_direction
+      ang = particle_sprite.emitter_params[:angle] || @values[:angle]
+      ang *= -1 if particle_sprite.random_invert_angle
+      particle_sprite.property_offsets[:angle] = ang
+    end
   end
 
   # NOTE: @processes assume the first keyframe is 0.

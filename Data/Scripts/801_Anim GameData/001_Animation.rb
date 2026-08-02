@@ -72,7 +72,8 @@ module GameData
       "None"                       => :none,
       "InitialAngleToFocus"        => :initial_angle_to_focus,
       "InitialEmitterAngleToFocus" => :initial_emitter_angle_to_focus,
-      "AlwaysPointAtFocus"         => :always_point_at_focus
+      "AlwaysPointAtFocus"         => :always_point_at_focus,
+      "EmittedDirection"           => :emitted_direction
     }
     # NOTE: These are all the same properties as the base layer, minus :visible.
     #       :frame2, :blending2, :color2 and :tone2 are standalone and are not
@@ -609,8 +610,10 @@ module GameData
                      FOCUS_TYPES_WITH_TARGET.include?(@particles[index][:focus])
       when "AngleOverride"
         ret = nil if ret == :none
-        ret = nil if !FOCUS_TYPES_WITH_USER.include?(@particles[index][:focus]) &&
-                     !FOCUS_TYPES_WITH_TARGET.include?(@particles[index][:focus])
+        if ret && ![:emitted_direction].include?(ret)
+          ret = nil if !FOCUS_TYPES_WITH_USER.include?(@particles[index][:focus]) &&
+                       !FOCUS_TYPES_WITH_TARGET.include?(@particles[index][:focus])
+        end
       when "RandomFrameMax", "RandomAngleRange"
         ret = nil if ret == PARTICLE_DEFAULT_VALUES[SUB_SCHEMA[key][0]]
       when "AllCommands"
