@@ -126,12 +126,12 @@ Credit = Maruno
     SetZoomY = 0,50
     SetAngle = 0,120
     SetOpacity = 0,0
+    SetColor = 0,F8F800F8
     MoveOpacity = 0,8,255
     MoveX = 0,12,-124
     MoveY = 0,12,68
     MoveZoomX = 0,12,120
     MoveZoomY = 0,12,150
-    SetColor = 8,F8F800F8
     MoveOpacity = 8,4,0
     SetVisible = 12,false
 <Zap 3b>

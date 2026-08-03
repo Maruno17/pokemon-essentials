@@ -1556,18 +1556,6 @@ MenuHandlers.add(:debug_menu, :create_pbs_files, {
   }
 })
 
-MenuHandlers.add(:debug_menu, :rename_files, {
-  "name"        => _INTL("Rename outdated files"),
-  "parent"      => :files_menu,
-  "description" => _INTL("Check for files with outdated names and rename/move them. Can alter map data."),
-  "effect"      => proc {
-    if pbConfirmMessage(_INTL("Are you sure you want to automatically rename outdated files?"))
-      FilenameUpdater.rename_files
-      pbMessage(_INTL("Done."))
-    end
-  }
-})
-
 MenuHandlers.add(:debug_menu, :extract_text, {
   "name"        => _INTL("Extract text for translation"),
   "parent"      => :files_menu,
