@@ -66,9 +66,11 @@ end
 
 #===============================================================================
 # OHKO. Accuracy increases by difference between levels of user and target.
+# Accuracy jumps to 100 if user has :NOGUARD and doesn't fail
 #===============================================================================
 class Battle::Move::OHKO < Battle::Move::FixedDamageMove
   def pbFailsAgainstTarget?(user, target, show_message)
+    return false if user.hasActiveAbility?(:NOGUARD)
     if target.level > user.level
       @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis)) if show_message
       return true
@@ -90,6 +92,7 @@ class Battle::Move::OHKO < Battle::Move::FixedDamageMove
   end
 
   def pbAccuracyCheck(user, target)
+    return 100 if user.hasActiveAbility?(:NOGUARD)
     acc = @accuracy + user.level - target.level
     return @battle.pbRandom(100) < acc
   end
@@ -108,9 +111,11 @@ end
 # OHKO. Accuracy increases by difference between levels of user and target.
 # Lower accuracy when used by a non-Ice-type Pokémon. Doesn't affect Ice-type
 # Pokémon. (Sheer Cold (Gen 7+))
+# Accuracy jumps to 100 if user has :NOGUARD and doesn't fail
 #===============================================================================
 class Battle::Move::OHKOIce < Battle::Move::OHKO
   def pbFailsAgainstTarget?(user, target, show_message)
+    return false if user.hasActiveAbility?(:NOGUARD)
     if target.pbHasType?(:ICE)
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
@@ -119,6 +124,7 @@ class Battle::Move::OHKOIce < Battle::Move::OHKO
   end
 
   def pbAccuracyCheck(user, target)
+    return 100 if user.hasActiveAbility?(:NOGUARD)
     acc = @accuracy + user.level - target.level
     acc -= 10 if !user.pbHasType?(:ICE)
     return @battle.pbRandom(100) < acc
