@@ -4,6 +4,7 @@
 class AnimationPlayer
   attr_accessor :looping
   attr_reader   :slowdown   # 1 = normal speed, 2 = half speed, 3 = one third speed, etc.
+  attr_reader   :sprites, :particle_sprites, :emitters
 
   # animation is either a GameData::Animation or a hash made from one.
   # user is a Battler, or nil.
@@ -131,6 +132,10 @@ class AnimationPlayer
   def finish
     @timer_start = nil
     @finished = true
+    ((@animation.is_a?(GameData::Animation)) ? @animation.scripts : @animation[:scripts]).each do |script|
+      next if !AnimationPlayer::END_ANIMATION_SCRIPTS[script]
+      AnimationPlayer::END_ANIMATION_SCRIPTS.trigger(script, self)
+    end
   end
 
   def finished?
@@ -178,7 +183,7 @@ class AnimationPlayer
   #-----------------------------------------------------------------------------
 
   def create_particle_sprite(particle, target_idx = -1)
-    particle_sprite = AnimationPlayer::ParticleSprite.new
+    particle_sprite = AnimationPlayer::ParticleSprite.new(particle[:name])
     @particle_sprites.push(particle_sprite)
     create_particle_sprite_assign_sprite(particle_sprite, particle, target_idx)
     create_particle_sprite_set_coordinates(particle_sprite, particle, target_idx)
@@ -395,6 +400,11 @@ class AnimationPlayer
     # Update all particles/sprites
     @particle_sprites.each { |particle| particle.update(elapsed_time) }
     @emitters.each { |emitter| emitter.update(elapsed_time) }
+    # Run update scripts
+    ((@animation.is_a?(GameData::Animation)) ? @animation.scripts : @animation[:scripts]).each do |script|
+      next if !AnimationPlayer::UPDATE_ANIMATION_SCRIPTS[script]
+      AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.trigger(script, self, elapsed_time / @slowdown)
+    end
     # Finish or loop the animation
     if elapsed_time >= @duration
       if looping

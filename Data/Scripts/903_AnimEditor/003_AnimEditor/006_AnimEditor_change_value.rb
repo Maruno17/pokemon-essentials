@@ -420,6 +420,12 @@ class AnimationEditor
       refresh
     when :usable
       @anim[:ignore] = !value
+    when :scripts
+      text = @components[:animation_properties].get_control(:scripts).value
+      texts = text.split(",")
+      texts.select! { |txt| txt && txt != "" }
+      @anim[property] = texts
+      @components[:animation_properties].get_control(:scripts).value = texts.join(",")
     else
       @anim[property] = value
     end

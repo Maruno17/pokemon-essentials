@@ -41,6 +41,7 @@ class AnimationEditor
       play_controls.update
       if play_controls.changed?
         if play_controls.changed_controls.keys.include?(:stop)
+          anim_player.finish
           play_controls.clear_changed
           pbSEStop
           break

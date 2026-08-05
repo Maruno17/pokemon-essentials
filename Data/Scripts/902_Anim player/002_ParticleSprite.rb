@@ -3,7 +3,8 @@
 #       order they happen.
 #===============================================================================
 class AnimationPlayer::ParticleSprite
-  attr_reader   :sprite
+  attr_reader   :name
+  attr_reader   :sprite, :tiled_sprites
   attr_accessor :focus_xy, :offset_xy, :focus_z
   attr_reader   :property_offsets
   attr_accessor :angle_override, :random_invert_angle, :random_invert_flip
@@ -12,7 +13,8 @@ class AnimationPlayer::ParticleSprite
   # Used by particles from emitter
   attr_reader   :emitter_params
 
-  def initialize
+  def initialize(name)
+    @name = name
     @property_offsets = {}
     @processes = []
     @sprite = nil

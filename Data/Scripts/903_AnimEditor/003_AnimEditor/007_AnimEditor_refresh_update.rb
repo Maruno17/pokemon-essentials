@@ -83,6 +83,7 @@ class AnimationEditor
     ctrls.get_control(:fps).value = @anim[:fps] || 20
     ctrls.get_control(:hides_data_boxes).value = @anim[:hides_data_boxes] || false
     ctrls.get_control(:usable).value = !(@anim[:ignore] || false)
+    ctrls.get_control(:scripts).value = @anim[:scripts].join(",") || ""
     ctrls.get_control(:credit).value = @anim[:credit] || "Anon"
   end
 

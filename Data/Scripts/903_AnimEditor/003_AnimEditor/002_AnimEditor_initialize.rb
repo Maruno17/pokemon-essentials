@@ -251,6 +251,7 @@ class AnimationEditor
     anim_properties.add_underlined_label(:playing_label, _INTL("Playing"))
     anim_properties.add_labelled_number_text_box(:fps, _INTL("FPS"), 1, 100, 20)
     anim_properties.add_labelled_checkbox(:hides_data_boxes, _INTL("Hides data boxes?"), false)
+    anim_properties.add_labelled_text_box(:scripts, _INTL("Scripts"), "")
     # Animation completion status
     anim_properties.add_underlined_label(:completion_label, _INTL("Completion"))
     anim_properties.add_labelled_checkbox(:usable, _INTL("Can be used in battle?"), true)

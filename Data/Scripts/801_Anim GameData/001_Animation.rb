@@ -9,6 +9,7 @@ module GameData
     attr_reader :ignore       # Whether the animation can't be played in battle
     attr_reader :hides_data_boxes
     attr_reader :fps          # Frames per second, 20 by default
+    attr_reader :scripts
     attr_reader :credit
     attr_reader :flags
     attr_reader :pbs_path     # Whole path minus "PBS/Animations/" at start and ".txt" at end
@@ -95,6 +96,7 @@ module GameData
       "Ignore"         => [:ignore,           "b"],
       "HidesDataBoxes" => [:hides_data_boxes, "b"],
       "FPS"            => [:fps,              "v"],
+      "Scripts"        => [:scripts,          "*s"],
       "Credit"         => [:credit,           "s"],
       "Particle"       => [:particles,        "s"]   # Is a subheader line like <text>
     }
@@ -481,6 +483,7 @@ module GameData
       ret[:ignore]           = false
       ret[:hides_data_boxes] = false
       ret[:fps]              = 20
+      ret[:scripts]          = []
       ret[:credit]           = "Anon"
       ret[:particles]        = [
         {:name => "User", :focus => :user, :graphic => "USER"},
@@ -503,6 +506,7 @@ module GameData
       @ignore           = hash[:ignore]           || false
       @hides_data_boxes = hash[:hides_data_boxes] || false
       @fps              = hash[:fps]              || 20
+      @scripts          = hash[:scripts]          || []
       @credit           = hash[:credit]           || "Anon"
       @particles        = hash[:particles]        || []
       @flags            = hash[:flags]            || []
@@ -522,6 +526,7 @@ module GameData
       ret[:ignore] = @ignore
       ret[:hides_data_boxes] = @hides_data_boxes
       ret[:fps] = @fps
+      ret[:scripts] = @scripts.clone
       ret[:credit] = @credit
       ret[:particles] = []   # Clone the @particles array, which is nested hashes and arrays
       @particles.each do |particle|

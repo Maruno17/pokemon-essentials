@@ -4,6 +4,7 @@
 class AnimationPlayer::Emitter
   attr_accessor :slowdown
   attr_accessor :emitter_polar_coordinates
+  attr_reader   :particle_sprites
 
   # These properties are used by individual ParticleSprites spawned by this
   # emitter, and aren't used by the emitter itself so don't need updating here.
@@ -45,6 +46,10 @@ class AnimationPlayer::Emitter
   end
 
   #-----------------------------------------------------------------------------
+
+  def name
+    return @particle[:name]
+  end
 
   # If the particle's focus is :user_and_target, this will return the user's
   # index.
@@ -163,7 +168,7 @@ class AnimationPlayer::Emitter
 
   # @next_emission is the time the sprite is being emitted.
   def create_particle_sprite(target_idx = -1)
-    particle_sprite = AnimationPlayer::ParticleSprite.new
+    particle_sprite = AnimationPlayer::ParticleSprite.new(self.name)
     particle_sprite.slowdown = @slowdown
     particle_sprite.emitter_params[:type] = @particle[:emitter_type]
     particle_sprite.emitter_params[:start_time] = @next_emission

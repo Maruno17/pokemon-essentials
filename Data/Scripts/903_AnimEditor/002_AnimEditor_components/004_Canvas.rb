@@ -102,8 +102,8 @@ class AnimationEditor::Canvas < Sprite
   end
 
   def initialize_background
-    self.z = -200
-    # NOTE: The background graphic is self.bitmap.
+    @background = IconSprite.new(0, 0, viewport)
+    @background.z = -200
     player_base_pos = Battle::Scene.pbBattlerPosition(0)
     @player_base = IconSprite.new(*player_base_pos, viewport)
     @player_base.z = -199
@@ -237,8 +237,8 @@ class AnimationEditor::Canvas < Sprite
   def color_scheme=(value)
     return if @color_scheme == value
     @color_scheme = value
-    self.bitmap.font.color = get_color_of(:text)
-    self.bitmap.font.size = text_size
+    self.bitmap.font.color = get_color_of(:text) if self.bitmap
+    self.bitmap.font.size = text_size if self.bitmap
     refresh
   end
 
@@ -300,6 +300,11 @@ class AnimationEditor::Canvas < Sprite
 
   def prepare_to_play_animation
     @sprites = {}
+    # Background sprites
+    @sprites["battle_bg"] = @background
+#    @sprites["battle_bg2"]
+    @sprites["base_0"] = @player_base
+    @sprites["base_1"] = @foe_base
     # Populate @sprites with sprites that are present during battle, and reset
     # their x/y/z values so the animation player knows where they start
     idx = user_index
@@ -344,9 +349,9 @@ class AnimationEditor::Canvas < Sprite
     @bg_name = @settings[:anim_editor][:canvas_bg]
     core_name = @bg_name.sub(/_eve$/, "").sub(/_night$/, "")
     if pbResolveBitmap("Graphics/Battlebacks/" + @bg_name + "_bg")
-      self.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", @bg_name + "_bg")
+      @background.setBitmap("Graphics/Battlebacks/" + @bg_name + "_bg")
     else
-      self.bitmap = RPG::Cache.load_bitmap("Graphics/Battlebacks/", core_name + "_bg")
+      @background.setBitmap("Graphics/Battlebacks/" + core_name + "_bg")
     end
     if pbResolveBitmap("Graphics/Battlebacks/" + @bg_name + "_base0")
       @player_base.setBitmap("Graphics/Battlebacks/" + @bg_name + "_base0")
