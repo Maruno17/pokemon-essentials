@@ -7,7 +7,7 @@ class AnimationPlayer::ParticleSprite
   attr_accessor :focus_xy, :offset_xy, :focus_z
   attr_reader   :property_offsets
   attr_accessor :angle_override, :random_invert_angle, :random_invert_flip
-  attr_accessor :foe_invert_x, :foe_invert_y, :foe_flip
+  attr_accessor :foe_invert_x, :foe_invert_y, :foe_invert_z, :foe_flip
   attr_accessor :slowdown
   # Used by particles from emitter
   attr_reader   :emitter_params
@@ -348,6 +348,13 @@ class AnimationPlayer::ParticleSprite
       apply_sprite_property_override(:angle)
     when :z
       value += (@property_offsets[property] || 0)
+      if @foe_invert_z
+        if @focus_z.is_a?(Array)
+          value = AnimationEditor::PROPERTY_RANGES[:z].sum + GameData::Animation::USER_AND_TARGET_SEPARATION[2] - value
+        else
+          value *= -1
+        end
+      end
       AnimationPlayer::Helper.apply_z_focus_to_sprite(@sprite[0], value, @focus_z)
       apply_sprite_property(:z2, @values[:z2])
       if @tiled_sprites

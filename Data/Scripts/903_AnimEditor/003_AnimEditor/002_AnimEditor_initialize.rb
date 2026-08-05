@@ -289,6 +289,8 @@ class AnimationEditor
       GameData::Animation::PARTICLE_DEFAULT_VALUES[:foe_invert_x])
     part_properties.add_labelled_checkbox(:foe_invert_y, _INTL("Invert Y"),
       GameData::Animation::PARTICLE_DEFAULT_VALUES[:foe_invert_y])
+    part_properties.add_labelled_checkbox(:foe_invert_z, _INTL("Invert Z"),
+      GameData::Animation::PARTICLE_DEFAULT_VALUES[:foe_invert_z])
     part_properties.add_labelled_checkbox(:foe_flip, _INTL("Flip sprite"),
       GameData::Animation::PARTICLE_DEFAULT_VALUES[:foe_flip])
     # Property overrides

@@ -111,6 +111,7 @@ module GameData
       "PolarCoordinates"        => [:polar_coordinates,         "b"],
       "FoeInvertX"              => [:foe_invert_x,              "b"],
       "FoeInvertY"              => [:foe_invert_y,              "b"],
+      "FoeInvertZ"              => [:foe_invert_z,              "b"],
       "FoeFlip"                 => [:foe_flip,                  "b"],
       "Emitter"                 => [:emitter_type,              "e", EMITTER_TYPES],
       "EmitterRate"             => [:emitter_rate,              "v"],   # Emissions/second
@@ -270,6 +271,7 @@ module GameData
       :polar_coordinates         => false,
       :foe_invert_x              => false,
       :foe_invert_y              => false,
+      :foe_invert_z              => false,
       :foe_flip                  => false,
       :tiled_graphic             => false,
       :angle_override            => :none,

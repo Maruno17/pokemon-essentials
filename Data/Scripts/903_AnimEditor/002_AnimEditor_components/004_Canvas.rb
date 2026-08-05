@@ -790,6 +790,17 @@ class AnimationEditor::Canvas < Sprite
         end
       end
     when :z
+      if particle[:foe_invert_z]
+        if GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
+          if user_index.odd?
+            value = AnimationEditor::PROPERTY_RANGES[:z].sum + GameData::Animation::USER_AND_TARGET_SEPARATION[2] - value
+          end
+        elsif GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+          value *= -1 if user_index.odd?
+        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+          value *= -1 if target_idx.odd?
+        end
+      end
       focus_z = AnimationPlayer::Helper.get_z_focus(particle, user_index, target_idx)
       AnimationPlayer::Helper.apply_z_focus_to_sprite(sprite1, value, focus_z)
       if @particle_tiled_sprites[index]

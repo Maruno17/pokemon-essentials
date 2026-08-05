@@ -234,6 +234,7 @@ class AnimationPlayer::Emitter
   def create_particle_sprite_set_flips(particle_sprite, target_idx = -1)
     relative_to_index = index_of_particle_focus(target_idx)
     return if relative_to_index < 0 || relative_to_index.even?   # No focus/focus on player's side
+    particle_sprite.foe_invert_z = @particle[:foe_invert_z]
     return if GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(@particle[:focus])
     particle_sprite.foe_invert_x = @particle[:foe_invert_x]
     particle_sprite.foe_invert_y = @particle[:foe_invert_y]
