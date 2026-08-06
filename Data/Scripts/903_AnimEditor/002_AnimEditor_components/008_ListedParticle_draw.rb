@@ -157,6 +157,7 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
          :emit_period_y, :emit_period_y_range,
          :emit_period_z, :emit_period_z_range,
          :emit_radius_x_range, :emit_radius_y_range, :emit_radius_z_range,
+         :emit_x_multiplier, :emit_y_multiplier,
          :emit_zoom_multiplier,
          :emit_zoom_range, :emit_zoom_x_range, :emit_zoom_y_range,
          :emit_opacity_multiplier,

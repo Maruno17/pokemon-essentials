@@ -267,6 +267,7 @@ class AnimationPlayer::ParticleSprite
     when :x
       value = value.round + (@property_offsets[property] || 0)
       value += @values[:base_x] || 0   # Used by emitters
+      value *= @emitter_params[:x_multiplier] || 1
       value *= -1 if @foe_invert_x
       AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :x, value, @focus_xy)
       @sprite[0].x += @offset_xy[0]
@@ -289,6 +290,7 @@ class AnimationPlayer::ParticleSprite
     when :y
       value = value.round + (@property_offsets[property] || 0)
       value += @values[:base_y] || 0   # Used by emitters
+      value *= @emitter_params[:y_multiplier] || 1
       value *= -1 if @foe_invert_y
       AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :y, value, @focus_xy)
       @sprite[0].y += @offset_xy[1]
@@ -315,9 +317,11 @@ class AnimationPlayer::ParticleSprite
       base_y = -dist * Math.sin(dir * Math::PI / 180)
       base_x = base_x.round + (@property_offsets[:x] || 0)
       base_x += @values[:base_x] || 0   # Used by emitters
+      base_x *= @emitter_params[:x_multiplier] || 1
       base_x *= -1 if @foe_invert_x
       base_y = base_y.round + (@property_offsets[:y] || 0)
       base_y += @values[:base_y] || 0   # Used by emitters
+      base_y *= @emitter_params[:x_multiplier] || 1
       base_y *= -1 if @foe_invert_y
       AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :x, base_x, @focus_xy)
       AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :y, base_y, @focus_xy)

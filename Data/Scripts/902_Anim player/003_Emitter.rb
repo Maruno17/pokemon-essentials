@@ -280,6 +280,8 @@ class AnimationPlayer::Emitter
     # Clockwise
     particle_sprite.emitter_params[:clockwise] = @values[:emit_clockwise]
     # Multipliers
+    particle_sprite.emitter_params[:x_multiplier] = @values[:emit_x_multiplier] / 100.0
+    particle_sprite.emitter_params[:y_multiplier] = @values[:emit_y_multiplier] / 100.0
     particle_sprite.emitter_params[:zoom_multiplier] = @values[:emit_zoom_multiplier] / 100.0
     particle_sprite.emitter_params[:opacity_multiplier] = @values[:emit_opacity_multiplier] / 100.0
     # X/Y speed
@@ -341,6 +343,16 @@ class AnimationPlayer::Emitter
     when :emitted_direction
       ang = particle_sprite.emitter_params[:angle] || @values[:angle]
       ang *= -1 if particle_sprite.random_invert_angle
+      if @values[:emit_x_multiplier] != 100 || @values[:emit_y_multiplier] != 100
+        start_x = Math.cos(ang * Math::PI / 180) * @values[:emit_x_multiplier] / 100.0
+        start_y = Math.sin(ang * Math::PI / 180) * @values[:emit_y_multiplier] / 100.0
+        if start_x == 0
+          ang = (start_y > 0) ? 270 : 90
+        else
+          ang = Math.atan(start_y / start_x) * 180 / Math::PI
+        end
+        ang += 180 if start_x < 0
+      end
       particle_sprite.property_offsets[:angle] = ang
     end
   end
