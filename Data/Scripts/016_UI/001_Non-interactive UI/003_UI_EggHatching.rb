@@ -30,7 +30,9 @@ class PokemonEggHatch_Scene
                                          @pokemon.form, @pokemon.shiny?,
                                          false, false, true)   # Egg sprite
     # Load egg cracks bitmap
-    crackfilename = GameData::Species.egg_cracks_sprite_filename(@pokemon.species, @pokemon.form)
+    crackfilename = GameData::Species.egg_cracks_sprite_filename(
+      @pokemon.species, @pokemon.form, @pokemon.gender, @pokemon.shiny?, @pokemon.shadowPokemon?
+    )
     @hatchSheet = AnimatedBitmap.new(crackfilename)
     # Create egg cracks sprite
     @sprites["hatch"] = Sprite.new(@viewport)
