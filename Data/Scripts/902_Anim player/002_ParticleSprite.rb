@@ -170,23 +170,23 @@ class AnimationPlayer::ParticleSprite
     when :straight
       if @emitter_params[:speed_x] != 0
         new_x = (@emitter_params[:speed_x] * delta_t).round
-        @values[:base_x] = new_x
+        @values[:auto_movement_x] = new_x
         changed_properties.push(:x)
       end
       if @emitter_params[:speed_y] != 0
         new_y = (@emitter_params[:speed_y] * delta_t).round
-        @values[:base_y] = new_y
+        @values[:auto_movement_y] = new_y
         changed_properties.push(:y)
       end
     when :projectile
       if @emitter_params[:speed_x] != 0
         new_x = (@emitter_params[:speed_x] * delta_t).round
-        @values[:base_x] = new_x
+        @values[:auto_movement_x] = new_x
         changed_properties.push(:x)
       end
       if @emitter_params[:speed_y] != 0 || @emitter_params[:gravity] != 0
         new_y = ((@emitter_params[:speed_y] * delta_t) + (@emitter_params[:gravity] * delta_t * delta_t / 2)).round   # s = ut + 1/2 at^2
-        @values[:base_y] = new_y
+        @values[:auto_movement_y] = new_y
         changed_properties.push(:y)
       end
     when :helix
@@ -194,12 +194,12 @@ class AnimationPlayer::ParticleSprite
         new_angle = @emitter_params[:angle]
         new_angle += (360 * delta_t / @emitter_params[:period_x]) * (@emitter_params[:clockwise] ? -1 : 1)
         new_x = @values[:radius_x] * @emitter_params[:radius_x_mult] * Math.sin(new_angle * Math::PI / 180)
-        @values[:base_x] = new_x
+        @values[:auto_movement_x] = new_x
         changed_properties.push(:x)
       end
       if @emitter_params[:speed] != 0
         new_y = (@emitter_params[:speed] * delta_t).round
-        @values[:base_y] = new_y
+        @values[:auto_movement_y] = new_y
         changed_properties.push(:y)
       end
       if @emitter_params[:period_z] != 0
@@ -214,13 +214,13 @@ class AnimationPlayer::ParticleSprite
         new_angle = @emitter_params[:angle]
         new_angle += (360 * delta_t / @emitter_params[:period_x]) * (@emitter_params[:clockwise] ? -1 : 1)
         new_x = @values[:radius_x] * @emitter_params[:radius_x_mult] * Math.cos(new_angle * Math::PI / 180)
-        @values[:base_x] = new_x
+        @values[:auto_movement_x] = new_x
         changed_properties.push(:x)
       end
       if @emitter_params[:period_y] != 0
         new_angle = @emitter_params[:angle] + (360 * delta_t / @emitter_params[:period_y])
         new_y = -@values[:radius_y] * @emitter_params[:radius_y_mult] * Math.sin(new_angle * Math::PI / 180)
-        @values[:base_y] = new_y
+        @values[:auto_movement_y] = new_y
         changed_properties.push(:y)
       end
     end
@@ -266,7 +266,7 @@ class AnimationPlayer::ParticleSprite
       end
     when :x
       value = value.round + (@property_offsets[property] || 0)
-      value += @values[:base_x] || 0   # Used by emitters
+      value += @values[:auto_movement_x] || 0   # Used by emitters
       value *= @emitter_params[:x_multiplier] || 1
       value *= -1 if @foe_invert_x
       AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :x, value, @focus_xy)
@@ -289,7 +289,7 @@ class AnimationPlayer::ParticleSprite
       @sprite[1].x = @sprite[0].x + value if @sprite[1]
     when :y
       value = value.round + (@property_offsets[property] || 0)
-      value += @values[:base_y] || 0   # Used by emitters
+      value += @values[:auto_movement_y] || 0   # Used by emitters
       value *= @emitter_params[:y_multiplier] || 1
       value *= -1 if @foe_invert_y
       AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :y, value, @focus_xy)
@@ -316,11 +316,11 @@ class AnimationPlayer::ParticleSprite
       base_x = dist * Math.cos(dir * Math::PI / 180)
       base_y = -dist * Math.sin(dir * Math::PI / 180)
       base_x = base_x.round + (@property_offsets[:x] || 0)
-      base_x += @values[:base_x] || 0   # Used by emitters
+      base_x += @values[:auto_movement_x] || 0   # Used by emitters
       base_x *= @emitter_params[:x_multiplier] || 1
       base_x *= -1 if @foe_invert_x
       base_y = base_y.round + (@property_offsets[:y] || 0)
-      base_y += @values[:base_y] || 0   # Used by emitters
+      base_y += @values[:auto_movement_y] || 0   # Used by emitters
       base_y *= @emitter_params[:x_multiplier] || 1
       base_y *= -1 if @foe_invert_y
       AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :x, base_x, @focus_xy)
