@@ -7,15 +7,15 @@ HidesDataBoxes = true
 Credit = Maruno
 <User>
 <Background>
-    Graphic = Screens/black
     Focus = Background
+    Graphic = Screens/black
     SetOpacity = 0,0
     MoveOpacity = 0,7,200
     MoveOpacity = 38,6,0
     SetVisible = 44,false
 <Glow>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetY = 8,16
     SetZ = 8,10
     SetZoomX = 8,150
@@ -25,8 +25,8 @@ Credit = Maruno
     MoveOpacity = 15,7,0
     SetVisible = 22,false
 <Ring emitter>
-    Graphic = circle 1
     Focus = User
+    Graphic = circle 1
     Emitter = NoMovement
     EmitterRate = 4
     SetY = 15,16
@@ -35,8 +35,8 @@ Credit = Maruno
     SetZoomY = 15,250
     SetOpacity = 15,0
     SetColor = 15,E0000060
+    SetEmitterY = 15,16
     SetEmitting = 15,true
-    SetEmitY = 15,16
     MoveOpacity = 15,3,255
     MoveColor = 15,5,E00000C0
     MoveZoomX = 15,13,50

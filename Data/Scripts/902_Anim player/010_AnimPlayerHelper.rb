@@ -102,7 +102,7 @@ module AnimationPlayer::Helper
   end
 
   # property is :x or :y.
-  def apply_xy_focus_to_sprite(sprite, property, value, focus)
+  def apply_xy_value_using_focus_to_sprite(sprite, property, value, focus)
     result = value
     coord_idx = (property == :x) ? 0 : 1
     if focus
@@ -189,13 +189,17 @@ module AnimationPlayer::Helper
   def initial_angle_between(particle, focus, offset)
     x1 = 0
     y1 = 0
-    x2 = (focus.length == 2) ? focus[1][0] : focus[0][0]
-    y2 = (focus.length == 2) ? focus[1][1] : focus[0][1]
+    x2 = 0
+    y2 = 0
+    if focus
+      x2 = (focus.length == 2) ? focus[1][0] : focus[0][0]
+      y2 = (focus.length == 2) ? focus[1][1] : focus[0][1]
+    end
     if particle.is_a?(Array)
       x1, x2 = particle
     else
       coords = [:x, :y]
-      coords = [:emit_x, :emit_y] if (particle[:emitter_type] || :none) != :none
+      coords = [:emitter_x, :emitter_y] if (particle[:emitter_type] || :none) != :none
       coords.each do |property|
         next if !particle[property]
         particle[property].each do |cmd|

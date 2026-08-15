@@ -6,8 +6,8 @@ NoTarget = true
 Credit = Dawn Bronze
 <User>
 <Z 1>
-    Graphic = sleep 1
     Focus = User
+    Graphic = sleep 1
     SetX = 5,-33
     SetY = 5,-38
     SetZ = 5,10
@@ -27,8 +27,8 @@ Credit = Dawn Bronze
     MoveOpacity = 22,5,0
     SetVisible = 27,false
 <Z 2>
-    Graphic = sleep 1
     Focus = User
+    Graphic = sleep 1
     SetX = 15,-33
     SetY = 15,-38
     SetZ = 15,10
@@ -48,8 +48,8 @@ Credit = Dawn Bronze
     MoveOpacity = 32,5,0
     SetVisible = 37,false
 <Z 3>
-    Graphic = sleep 1
     Focus = User
+    Graphic = sleep 1
     SetX = 25,-33
     SetY = 25,-38
     SetZ = 25,10

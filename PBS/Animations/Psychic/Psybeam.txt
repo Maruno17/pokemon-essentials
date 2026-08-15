@@ -18,8 +18,8 @@ Credit = Dawn Bronze
     MoveColor = 34,4,00000000
     MoveX = 38,4,0
 <Outer Circle Emitter>
-    Graphic = circle multiple 1
     Focus = UserAndTarget
+    Graphic = circle multiple 1
     Emitter = Straight
     EmitterRate = 20
     SetZ = 5,50
@@ -45,8 +45,8 @@ Credit = Dawn Bronze
     SetEmitting = 25,false
     SetVisible = 31,false
 <Inner Circle Emitter>
-    Graphic = circle multiple 1
     Focus = UserAndTarget
+    Graphic = circle multiple 1
     Emitter = Straight
     EmitterRate = 20
     SetZ = 5,50

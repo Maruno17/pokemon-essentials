@@ -6,8 +6,8 @@ NoTarget = true
 Credit = Dawn Bronze
 <User>
 <Particle 1A>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 0,70
     SetY = 0,-60
     SetZ = 0,10
@@ -26,8 +26,8 @@ Credit = Dawn Bronze
     MoveOpacity = 26,4,0
     MoveColor = 27,3,00BEFF96
 <Particle 2A>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 1,40
     SetY = 1,-60
     SetZ = 1,10
@@ -46,8 +46,8 @@ Credit = Dawn Bronze
     MoveOpacity = 27,4,0
     MoveColor = 28,3,00BEFF96
 <Particle 3A>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 2,10
     SetY = 2,-60
     SetZ = 2,10
@@ -66,8 +66,8 @@ Credit = Dawn Bronze
     MoveOpacity = 28,4,0
     MoveColor = 29,3,FFFFFF64
 <Particle 4A>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 3,-20
     SetY = 3,-60
     SetZ = 3,10
@@ -86,8 +86,8 @@ Credit = Dawn Bronze
     MoveOpacity = 29,4,0
     MoveColor = 30,3,00FFAC64
 <Particle 5A>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 4,-50
     SetY = 4,-60
     SetZ = 4,10
@@ -106,8 +106,8 @@ Credit = Dawn Bronze
     MoveOpacity = 30,4,0
     MoveColor = 31,3,00BEFF96
 <Particle 6A>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 5,-80
     SetY = 5,-60
     SetZ = 5,10
@@ -126,8 +126,8 @@ Credit = Dawn Bronze
     MoveOpacity = 31,4,0
     MoveColor = 32,3,FFFFFF64
 <Particle 1B>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 0,70
     SetY = 0,-30
     SetZ = 0,10
@@ -146,8 +146,8 @@ Credit = Dawn Bronze
     MoveOpacity = 26,4,0
     MoveColor = 27,3,FFFFFF64
 <Particle 2B>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 1,40
     SetY = 1,-30
     SetZ = 1,10
@@ -166,8 +166,8 @@ Credit = Dawn Bronze
     MoveOpacity = 27,4,0
     MoveColor = 28,3,00BEFF96
 <Particle 3B>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 2,10
     SetY = 2,-30
     SetZ = 2,10
@@ -186,8 +186,8 @@ Credit = Dawn Bronze
     MoveOpacity = 28,4,0
     MoveColor = 29,3,FFFFFF64
 <Particle 4B>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 3,-20
     SetY = 3,-30
     SetZ = 3,10
@@ -206,8 +206,8 @@ Credit = Dawn Bronze
     MoveOpacity = 29,4,0
     MoveColor = 30,3,00FFAC64
 <Particle 5B>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 4,-50
     SetY = 4,-30
     SetZ = 4,10
@@ -226,8 +226,8 @@ Credit = Dawn Bronze
     MoveOpacity = 30,4,0
     MoveColor = 31,3,00BEFF96
 <Particle 6B>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 5,-80
     SetY = 5,-30
     SetZ = 5,10
@@ -246,8 +246,8 @@ Credit = Dawn Bronze
     MoveOpacity = 31,4,0
     MoveColor = 32,3,00BEFF96
 <Particle 1C>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 0,70
     SetZ = 0,10
     SetOpacity = 0,0
@@ -265,8 +265,8 @@ Credit = Dawn Bronze
     MoveOpacity = 26,4,0
     MoveColor = 27,3,00BEFF96
 <Particle 2C>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 1,40
     SetZ = 1,10
     SetOpacity = 1,0
@@ -284,8 +284,8 @@ Credit = Dawn Bronze
     MoveOpacity = 27,4,0
     MoveColor = 28,3,FFFFFF64
 <Particle 3C>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 2,10
     SetZ = 2,10
     SetOpacity = 2,0
@@ -303,8 +303,8 @@ Credit = Dawn Bronze
     MoveOpacity = 28,4,0
     MoveColor = 29,3,00FFAC64
 <Particle 4C>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 3,-20
     SetZ = 3,10
     SetOpacity = 3,0
@@ -322,8 +322,8 @@ Credit = Dawn Bronze
     MoveOpacity = 29,4,0
     MoveColor = 30,3,00BEFF96
 <Particle 5C>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 4,-50
     SetZ = 4,10
     SetOpacity = 4,0
@@ -341,8 +341,8 @@ Credit = Dawn Bronze
     MoveOpacity = 30,4,0
     MoveColor = 31,3,FFFFFF64
 <Particle 6C>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 5,-80
     SetZ = 5,10
     SetOpacity = 5,0
@@ -360,8 +360,8 @@ Credit = Dawn Bronze
     MoveOpacity = 31,4,0
     MoveColor = 32,3,00BEFF96
 <Particle 1D>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 0,70
     SetY = 0,30
     SetZ = 0,10
@@ -380,8 +380,8 @@ Credit = Dawn Bronze
     MoveOpacity = 26,4,0
     MoveColor = 27,3,00BEFF96
 <Particle 2D>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 1,40
     SetY = 1,30
     SetZ = 1,10
@@ -400,8 +400,8 @@ Credit = Dawn Bronze
     MoveOpacity = 27,4,0
     MoveColor = 28,3,00BEFF96
 <Particle 3D>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 2,10
     SetY = 2,30
     SetZ = 2,10
@@ -420,8 +420,8 @@ Credit = Dawn Bronze
     MoveOpacity = 28,4,0
     MoveColor = 29,3,FFFFFF64
 <Particle 4D>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 3,-20
     SetY = 3,30
     SetZ = 3,10
@@ -440,8 +440,8 @@ Credit = Dawn Bronze
     MoveOpacity = 29,4,0
     MoveColor = 30,3,00FFAC64
 <Particle 5D>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 4,-50
     SetY = 4,30
     SetZ = 4,10
@@ -460,8 +460,8 @@ Credit = Dawn Bronze
     MoveOpacity = 30,4,0
     MoveColor = 31,3,00BEFF96
 <Particle 6D>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 5,-80
     SetY = 5,30
     SetZ = 5,10
@@ -480,8 +480,8 @@ Credit = Dawn Bronze
     MoveOpacity = 31,4,0
     MoveColor = 32,3,FFFFFF64
 <Particle 1E>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 0,70
     SetY = 0,60
     SetZ = 0,10
@@ -500,8 +500,8 @@ Credit = Dawn Bronze
     MoveOpacity = 26,4,0
     MoveColor = 27,3,00BEFF96
 <Particle 2E>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 1,40
     SetY = 1,60
     SetZ = 1,10
@@ -520,8 +520,8 @@ Credit = Dawn Bronze
     MoveOpacity = 27,4,0
     MoveColor = 28,3,FFFFFF64
 <Particle 3E>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 2,10
     SetY = 2,60
     SetZ = 2,10
@@ -540,8 +540,8 @@ Credit = Dawn Bronze
     MoveOpacity = 28,4,0
     MoveColor = 29,3,00BEFF96
 <Particle 4E>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 3,-20
     SetY = 3,60
     SetZ = 3,10
@@ -560,8 +560,8 @@ Credit = Dawn Bronze
     MoveOpacity = 29,4,0
     MoveColor = 30,3,FFFFFF64
 <Particle 5E>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 4,-50
     SetY = 4,60
     SetZ = 4,10
@@ -580,8 +580,8 @@ Credit = Dawn Bronze
     MoveOpacity = 30,4,0
     MoveColor = 31,3,00FFAC64
 <Particle 6E>
-    Graphic = spark small
     Focus = User
+    Graphic = spark small
     SetX = 5,-80
     SetY = 5,60
     SetZ = 5,10

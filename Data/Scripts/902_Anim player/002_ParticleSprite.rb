@@ -10,6 +10,7 @@ class AnimationPlayer::ParticleSprite
   attr_accessor :angle_override, :random_invert_angle, :random_invert_flip
   attr_accessor :foe_invert_x, :foe_invert_y, :foe_invert_z, :foe_flip
   attr_accessor :slowdown
+  attr_reader   :values
   # Used by particles from emitter
   attr_reader   :emitter_params
 
@@ -74,6 +75,7 @@ class AnimationPlayer::ParticleSprite
   #-----------------------------------------------------------------------------
 
   # :angle => value is particle[:angle_override] from GameData::Animation::ANGLE_OVERRIDES.
+  # TODO: I don't like this being special for :angle.
   def set_base_property_offset(property, value)
     case property
     when :angle
@@ -160,7 +162,7 @@ class AnimationPlayer::ParticleSprite
     process[5] = false if elapsed_time >= process[1] + process[2]
   end
 
-  # Usually only :x and :y.
+  # Calculates (usually only) :x and :y based on the emitter type.
   def update_emitter_type_properties(elapsed_time, changed_properties)
     return if (@emitter_params[:type] || :none) == :none
     delta_t = (elapsed_time - @emitter_params[:start_time]) / @slowdown.to_f
@@ -239,39 +241,19 @@ class AnimationPlayer::ParticleSprite
       return
     end
     case property
-    when :frame
-      value += (@property_offsets[property] || 0)
-      @sprite[0].src_rect.x = value.floor * @sprite[0].src_rect.width
-    when :frame2
-      @sprite[1].src_rect.x = value.floor * @sprite[1].src_rect.width if @sprite[1]
-    when :blending
-      @sprite[0].blend_type = value
-      if @tiled_sprites
-        @tiled_sprites.each { |spr| spr.blend_type = value }
-      end
-    when :blending2
-      @sprite[1].blend_type = value if @sprite[1]
-    when :flip
-      @sprite[0].mirror = value
-      @sprite[0].mirror = !@sprite[0].mirror if @foe_flip
-      @sprite[0].mirror = !@sprite[0].mirror if @random_invert_flip
-      apply_sprite_property(:flip2, @values[:flip2])
-      if @tiled_sprites
-        @tiled_sprites.each { |spr| spr.mirror = @sprite[0].mirror }
-      end
-    when :flip2
-     if @sprite[1]
-        @sprite[1].mirror = @sprite[0].mirror
-        @sprite[1].mirror = !@sprite[1].mirror if value
-      end
-    when :x
-      value = value.round + (@property_offsets[property] || 0)
+    when :x, :spawn_x_offset, :spawn_x_multiplier
+      value = @values[:x].round   # Spawn point to current location
       value += @values[:auto_movement_x] || 0   # Used by emitters
+      spawn_offset = (@property_offsets[:spawn_x] || 0) + (@values[:spawn_x_offset] || 0)
+      spawn_offset *= @values[:spawn_x_multiplier] / 100.0
+      value += spawn_offset   # Emitter to spawn point
+      value += (@property_offsets[:emitter_x] || 0)   # Focus to emitter
       value *= @emitter_params[:x_multiplier] || 1
       value *= -1 if @foe_invert_x
-      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :x, value, @focus_xy)
+      AnimationPlayer::Helper.apply_xy_value_using_focus_to_sprite(@sprite[0], :x, value, @focus_xy)   # Screen to focus
       @sprite[0].x += @offset_xy[0]
-      apply_sprite_property(:x2, @values[:x2])
+      # Apply value to other sprites
+      apply_sprite_property(:x2, @values[:x2])   # Second layer
       if @tiled_sprites
         while @sprite[0].x < 0
           @sprite[0].x += @sprite[0].src_rect.width
@@ -287,14 +269,19 @@ class AnimationPlayer::ParticleSprite
       apply_sprite_property_override(:angle)
     when :x2
       @sprite[1].x = @sprite[0].x + value if @sprite[1]
-    when :y
-      value = value.round + (@property_offsets[property] || 0)
+    when :y, :spawn_y_offset, :spawn_y_multiplier
+      value = @values[:y].round   # Spawn point to current location
       value += @values[:auto_movement_y] || 0   # Used by emitters
+      spawn_offset = (@property_offsets[:spawn_y] || 0) + (@values[:spawn_y_offset] || 0)
+      spawn_offset *= @values[:spawn_y_multiplier] / 100.0
+      value += spawn_offset   # Emitter to spawn point
+      value += (@property_offsets[:emitter_y] || 0)   # Focus to emitter
       value *= @emitter_params[:y_multiplier] || 1
       value *= -1 if @foe_invert_y
-      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :y, value, @focus_xy)
+      AnimationPlayer::Helper.apply_xy_value_using_focus_to_sprite(@sprite[0], :y, value, @focus_xy)   # Screen to focus
       @sprite[0].y += @offset_xy[1]
-      apply_sprite_property(:y2, @values[:y2])
+      # Apply value to other sprites
+      apply_sprite_property(:y2, @values[:y2])   # Second layer
       if @tiled_sprites
         while @sprite[0].y < 0
           @sprite[0].y += @sprite[0].src_rect.height
@@ -313,45 +300,20 @@ class AnimationPlayer::ParticleSprite
     when :r, :theta
       dist = @values[:r]
       dir = @values[:theta]
-      base_x = dist * Math.cos(dir * Math::PI / 180)
-      base_y = -dist * Math.sin(dir * Math::PI / 180)
-      base_x = base_x.round + (@property_offsets[:x] || 0)
-      base_x += @values[:auto_movement_x] || 0   # Used by emitters
-      base_x *= @emitter_params[:x_multiplier] || 1
-      base_x *= -1 if @foe_invert_x
-      base_y = base_y.round + (@property_offsets[:y] || 0)
-      base_y += @values[:auto_movement_y] || 0   # Used by emitters
-      base_y *= @emitter_params[:x_multiplier] || 1
-      base_y *= -1 if @foe_invert_y
-      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :x, base_x, @focus_xy)
-      AnimationPlayer::Helper.apply_xy_focus_to_sprite(@sprite[0], :y, base_y, @focus_xy)
-      @sprite[0].x += @offset_xy[0]
-      @sprite[0].y += @offset_xy[1]
-      apply_sprite_property(:x2, @values[:x2])
-      apply_sprite_property(:y2, @values[:y2])
-      if @tiled_sprites
-        while @sprite[0].x < 0
-          @sprite[0].x += @sprite[0].src_rect.width
-        end
-        while @sprite[0].x >= @sprite[0].src_rect.width
-          @sprite[0].x -= @sprite[0].src_rect.width
-        end
-        @tiled_sprites.each_with_index do |spr, i|
-          spr.x = @sprite[0].x
-          spr.x -= @sprite[0].src_rect.width if i.even?
-        end
-        while @sprite[0].y < 0
-          @sprite[0].y += @sprite[0].src_rect.height
-        end
-        while @sprite[0].y >= @sprite[0].src_rect.height
-          @sprite[0].y -= @sprite[0].src_rect.height
-        end
-        @tiled_sprites.each_with_index do |spr, i|
-          spr.y = @sprite[0].y
-          spr.y -= @sprite[0].src_rect.height if i > 0
-        end
-      end
-      apply_sprite_property_override(:angle)
+      @values[:x] = (dist * Math.cos(dir * Math::PI / 180)).round
+      @values[:y] = (-dist * Math.sin(dir * Math::PI / 180)).round
+      apply_sprite_property(:x, @values[:x])
+      apply_sprite_property(:y, @values[:y])
+    when :spawn_r_offset, :spawn_theta_offset, :spawn_r_multiplier
+      dist = (@property_offsets[:spawn_r] || 0) + (@values[:spawn_r_offset] || 0)
+      dist *= @values[:spawn_r_multiplier] / 100.0
+      dir = (@property_offsets[:spawn_theta] || 0) + (@values[:spawn_theta_offset] || 0)
+      @values[:spawn_x_offset] = dist * Math.cos(dir * Math::PI / 180)
+      @values[:spawn_x_offset] -= (@property_offsets[:spawn_x] || 0)
+      @values[:spawn_y_offset] = -dist * Math.sin(dir * Math::PI / 180)
+      @values[:spawn_y_offset] -= (@property_offsets[:spawn_y] || 0)
+      apply_sprite_property(:x, @values[:x])
+      apply_sprite_property(:y, @values[:y])
     when :z
       value += (@property_offsets[property] || 0)
       if @foe_invert_z
@@ -400,6 +362,19 @@ class AnimationPlayer::ParticleSprite
         new_val *= -1 if @random_invert_angle
         @sprite[1].angle = @sprite[0].angle + new_val
       end
+    when :flip
+      @sprite[0].mirror = value
+      @sprite[0].mirror = !@sprite[0].mirror if @foe_flip
+      @sprite[0].mirror = !@sprite[0].mirror if @random_invert_flip
+      apply_sprite_property(:flip2, @values[:flip2])
+      if @tiled_sprites
+        @tiled_sprites.each { |spr| spr.mirror = @sprite[0].mirror }
+      end
+    when :flip2
+     if @sprite[1]
+        @sprite[1].mirror = @sprite[0].mirror
+        @sprite[1].mirror = !@sprite[1].mirror if value
+      end
     when :visible
       @sprite.each { |spr| spr.visible = value }
       if @tiled_sprites
@@ -442,6 +417,18 @@ class AnimationPlayer::ParticleSprite
         @sprite[1].invert = @sprite[0].invert
         @sprite[1].invert = !@sprite[1].invert if value
       end
+    when :frame
+      value += (@property_offsets[property] || 0)
+      @sprite[0].src_rect.x = value.floor * @sprite[0].src_rect.width
+    when :frame2
+      @sprite[1].src_rect.x = value.floor * @sprite[1].src_rect.width if @sprite[1]
+    when :blending
+      @sprite[0].blend_type = value
+      if @tiled_sprites
+        @tiled_sprites.each { |spr| spr.blend_type = value }
+      end
+    when :blending2
+      @sprite[1].blend_type = value if @sprite[1]
     when :mask_blending
       @sprite[0].pattern_blend_type = value
     when :mask_opacity

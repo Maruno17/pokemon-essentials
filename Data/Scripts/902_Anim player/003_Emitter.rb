@@ -3,7 +3,7 @@
 #===============================================================================
 class AnimationPlayer::Emitter
   attr_accessor :slowdown
-  attr_accessor :emitter_polar_coordinates
+  attr_accessor :emitter_position_polar_coordinates, :emitter_spawn_polar_coordinates
   attr_reader   :particle_sprites
 
   # These properties are used by individual ParticleSprites spawned by this
@@ -224,14 +224,18 @@ class AnimationPlayer::Emitter
   # Calculate x/y/z focus values and additional x/y modifier and pass them all
   # to particle_sprite.
   def create_particle_sprite_set_coordinates(particle_sprite, target_idx = -1)
-    focus_xy = AnimationPlayer::Helper.get_xy_focus(
+    particle_sprite.focus_xy = AnimationPlayer::Helper.get_xy_focus(
       @particle, @user&.index, target_idx, @user_coords, @target_coords[target_idx], @side_sizes
     )
-    offset_xy = AnimationPlayer::Helper.get_xy_offset(@particle, (particle_sprite.sprite) ? particle_sprite.sprite[0] : nil)
-    focus_z = AnimationPlayer::Helper.get_z_focus(@particle, @user&.index, target_idx)
-    particle_sprite.focus_xy = focus_xy
-    particle_sprite.offset_xy = offset_xy
-    particle_sprite.focus_z = focus_z
+    particle_sprite.offset_xy = AnimationPlayer::Helper.get_xy_offset(@particle, (particle_sprite.sprite) ? particle_sprite.sprite[0] : nil)
+    particle_sprite.focus_z = AnimationPlayer::Helper.get_z_focus(@particle, @user&.index, target_idx)
+    if @emitter_position_polar_coordinates
+      particle_sprite.emitter_params[:emitter_x] = (@values[:emitter_r] * Math.cos(@values[:emitter_theta] * Math::PI / 180)).round
+      particle_sprite.emitter_params[:emitter_y] = (-@values[:emitter_r] * Math.sin(@values[:emitter_theta] * Math::PI / 180)).round
+    else
+      particle_sprite.emitter_params[:emitter_x] = @values[:emitter_x]
+      particle_sprite.emitter_params[:emitter_y] = @values[:emitter_y]
+    end
   end
 
   # Set whether properties should be modified if the particle's target is on the
@@ -295,25 +299,27 @@ class AnimationPlayer::Emitter
 
   def create_particle_sprite_set_base_property_offsets(particle_sprite, target_idx = -1)
     # X, Y
-    if @emitter_polar_coordinates
-      start_r = @values[:emit_r]
-      start_r_range = @values[:emit_r_range]
+    if @emitter_spawn_polar_coordinates
+      start_r = @values[:spawn_r]
+      start_r_range = @values[:spawn_r_range]
       start_r += rand(-start_r_range, start_r_range) if start_r_range > 0
-      start_theta = @values[:emit_theta]
-      start_theta_range = @values[:emit_theta_range]
+      start_theta = @values[:spawn_theta]
+      start_theta_range = @values[:spawn_theta_range]
       start_theta += rand(-start_theta_range, start_theta_range) if start_theta_range > 0
       start_x = (start_r * Math.cos(start_theta * Math::PI / 180)).round
       start_y = (-start_r * Math.sin(start_theta * Math::PI / 180)).round
+      particle_sprite.set_base_property_offset(:spawn_r, start_r)
+      particle_sprite.set_base_property_offset(:spawn_theta, start_theta)
     else
-      start_x = @values[:emit_x]
-      start_x_range = @values[:emit_x_range]
+      start_x = @values[:spawn_x]
+      start_x_range = @values[:spawn_x_range]
       start_x += rand(-start_x_range, start_x_range) if start_x_range > 0
-      start_y = @values[:emit_y]
-      start_y_range = @values[:emit_y_range]
+      start_y = @values[:spawn_y]
+      start_y_range = @values[:spawn_y_range]
       start_y += rand(-start_y_range, start_y_range) if start_y_range > 0
     end
-    particle_sprite.set_base_property_offset(:x, start_x)
-    particle_sprite.set_base_property_offset(:y, start_y)
+    particle_sprite.set_base_property_offset(:spawn_x, start_x)
+    particle_sprite.set_base_property_offset(:spawn_y, start_y)
     # Angle
     relative_to_index = index_of_particle_focus(target_idx)
     if relative_to_index >= 0

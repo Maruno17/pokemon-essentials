@@ -18,7 +18,7 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
   TIME_BAR_HEIGHT = ADD_PARTICLE_BUTTON_Y + BUTTON_SIZE + (VIEWPORT_SPACING * 2)   # Not including separator line
   LIST_X          = 0
   LIST_Y          = TIME_BAR_HEIGHT + VIEWPORT_SPACING   # After black horizontal line
-  LIST_WIDTH      = 200   # Not including the last pixel between particle list and black line
+  LIST_WIDTH      = 210   # Not including the last pixel between particle list and black line
 
   TIMELINE_X = LIST_X + LIST_WIDTH + (VIEWPORT_SPACING * 2)
   TIMELINE_Y = LIST_Y

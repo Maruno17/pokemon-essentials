@@ -13,8 +13,8 @@ Credit = Maruno
     MoveX = 12,2,2
     MoveX = 14,1,0
 <Teeth upper>
-    Graphic = fangs
     Focus = Target
+    Graphic = fangs
     SetY = 0,-18
     SetZ = 0,10
     SetZoomX = 0,125
@@ -30,8 +30,8 @@ Credit = Maruno
     MoveZoomY = 7,8,150
     MoveOpacity = 11,4,0
 <Teeth lower>
-    Graphic = fangs
     Focus = Target
+    Graphic = fangs
     SetY = 0,18
     SetZ = 0,5
     SetZoomX = 0,125
@@ -46,8 +46,8 @@ Credit = Maruno
     MoveZoomY = 7,8,150
     MoveOpacity = 11,4,0
 <Teeth upper afterimage>
-    Graphic = fangs
     Focus = Target
+    Graphic = fangs
     SetY = 4,-72
     SetZ = 4,20
     SetZoomX = 4,125
@@ -56,8 +56,8 @@ Credit = Maruno
     MoveOpacity = 4,2,0
     SetVisible = 6,false
 <Teeth lower afterimage>
-    Graphic = fangs
     Focus = Target
+    Graphic = fangs
     SetY = 4,72
     SetZ = 4,15
     SetZoomX = 4,125
@@ -65,8 +65,8 @@ Credit = Maruno
     MoveOpacity = 4,2,0
     SetVisible = 6,false
 <Hit left yellow>
-    Graphic = hit
     Focus = Target
+    Graphic = hit
     SetX = 4,-64
     SetZ = 4,30
     SetZoomX = 4,0
@@ -78,8 +78,8 @@ Credit = Maruno
     MoveOpacity = 7,2,0
     SetVisible = 9,false
 <Hit left white>
-    Graphic = hit
     Focus = Target
+    Graphic = hit
     SetX = 4,-64
     SetZ = 4,35
     SetZoomX = 4,0
@@ -90,8 +90,8 @@ Credit = Maruno
     MoveOpacity = 7,2,0
     SetVisible = 9,false
 <Hit right yellow>
-    Graphic = hit
     Focus = Target
+    Graphic = hit
     SetX = 4,64
     SetZ = 4,30
     SetZoomX = 4,0
@@ -102,8 +102,8 @@ Credit = Maruno
     MoveOpacity = 7,2,0
     SetVisible = 9,false
 <Hit right white>
-    Graphic = hit
     Focus = Target
+    Graphic = hit
     SetX = 4,64
     SetZ = 4,35
     SetZoomX = 4,0

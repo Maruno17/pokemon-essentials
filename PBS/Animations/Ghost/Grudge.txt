@@ -12,14 +12,14 @@ Credit = Maruno
     MoveColor = 28,9,401838E0
     MoveColor = 39,9,40183800
 <Background>
-    Graphic = Screens/black
     Focus = Background
+    Graphic = Screens/black
     SetOpacity = 0,0
     MoveOpacity = 0,6,200
     MoveOpacity = 50,5,0
 <Wisp 1>
-    Graphic = wisp
     Focus = User
+    Graphic = wisp
     SetZ = 7,20
     SetZoomX = 7,90
     SetZoomY = 7,90
@@ -73,8 +73,8 @@ Credit = Maruno
     MoveFrame = 39,1,3
     SetVisible = 40,false
 <Wisp 2>
-    Graphic = wisp
     Focus = User
+    Graphic = wisp
     SetX = 7,-71
     SetY = 7,21
     SetZ = 7,11
@@ -130,8 +130,8 @@ Credit = Maruno
     MoveFrame = 39,1,3
     SetVisible = 40,false
 <Wisp 3>
-    Graphic = wisp
     Focus = User
+    Graphic = wisp
     SetX = 7,-71
     SetY = 7,21
     SetZ = 7,-11
@@ -188,8 +188,8 @@ Credit = Maruno
     MoveFrame = 39,1,3
     SetVisible = 40,false
 <Wisp 4>
-    Graphic = wisp
     Focus = User
+    Graphic = wisp
     SetZ = 7,-20
     SetZoomX = 7,90
     SetZoomY = 7,90
@@ -243,8 +243,8 @@ Credit = Maruno
     MoveFrame = 39,1,3
     SetVisible = 40,false
 <Wisp 5>
-    Graphic = wisp
     Focus = User
+    Graphic = wisp
     SetX = 7,71
     SetY = 7,-21
     SetZ = 7,-11
@@ -300,8 +300,8 @@ Credit = Maruno
     MoveFrame = 39,1,3
     SetVisible = 40,false
 <Wisp 6>
-    Graphic = wisp
     Focus = User
+    Graphic = wisp
     SetX = 7,67
     SetY = 7,-21
     SetZ = 7,11

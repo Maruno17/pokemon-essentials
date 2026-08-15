@@ -354,7 +354,8 @@ class AnimationPlayer
   end
 
   def set_up_emitter_parameters(emitter, particle)
-    emitter.emitter_polar_coordinates = particle[:emitter_polar_coordinates]
+    emitter.emitter_position_polar_coordinates = particle[:emitter_position_polar_coordinates]
+    emitter.emitter_spawn_polar_coordinates = particle[:emitter_spawn_polar_coordinates]
   end
 
   def add_emitter_commands(emitter, particle)

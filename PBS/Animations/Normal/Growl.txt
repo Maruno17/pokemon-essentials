@@ -12,8 +12,8 @@ Credit = Maruno
     MoveX = 33,2,2
     MoveX = 35,1,0
 <Ring 1>
-    Graphic = circle
     Focus = User
+    Graphic = circle
     SetZ = 0,10
     SetZoomX = 0,0
     SetZoomY = 0,0
@@ -25,8 +25,8 @@ Credit = Maruno
     MoveOpacity = 9,9,0
     SetVisible = 18,false
 <Ring 2>
-    Graphic = circle
     Focus = User
+    Graphic = circle
     SetZ = 0,10
     SetZoomX = 0,0
     SetZoomY = 0,0
@@ -38,8 +38,8 @@ Credit = Maruno
     MoveOpacity = 9,9,0
     SetVisible = 18,false
 <Ring 3>
-    Graphic = circle
     Focus = User
+    Graphic = circle
     SetZ = 0,10
     SetZoomX = 0,0
     SetZoomY = 0,0
@@ -51,8 +51,8 @@ Credit = Maruno
     MoveOpacity = 9,9,0
     SetVisible = 18,false
 <Zap 1a>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetY = 0,-8
     SetZ = 0,19
     SetZoomX = 0,40
@@ -66,8 +66,8 @@ Credit = Maruno
     MoveOpacity = 8,4,0
     SetVisible = 12,false
 <Zap 1b>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetY = 8,-52
     SetZ = 8,20
     SetZoomX = 8,60
@@ -81,8 +81,8 @@ Credit = Maruno
     MoveOpacity = 12,6,0
     SetVisible = 18,false
 <Zap 2a>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetX = 0,-3
     SetY = 0,-4
     SetZ = 0,20
@@ -99,8 +99,8 @@ Credit = Maruno
     MoveOpacity = 8,4,0
     SetVisible = 12,false
 <Zap 2b>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetX = 8,-39
     SetY = 8,-26
     SetZ = 8,20
@@ -117,8 +117,8 @@ Credit = Maruno
     MoveOpacity = 12,6,0
     SetVisible = 18,false
 <Zap 3a>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetX = 0,-3
     SetY = 0,4
     SetZ = 0,20
@@ -135,8 +135,8 @@ Credit = Maruno
     MoveOpacity = 8,4,0
     SetVisible = 12,false
 <Zap 3b>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetX = 8,-39
     SetY = 8,26
     SetZ = 8,20
@@ -153,8 +153,8 @@ Credit = Maruno
     MoveOpacity = 12,6,0
     SetVisible = 18,false
 <Zap 4a>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetY = 0,8
     SetZ = 0,20
     SetZoomX = 0,40
@@ -168,8 +168,8 @@ Credit = Maruno
     MoveOpacity = 8,4,0
     SetVisible = 12,false
 <Zap 4b>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetY = 8,50
     SetZ = 8,20
     SetZoomX = 8,60
@@ -184,8 +184,8 @@ Credit = Maruno
     MoveOpacity = 12,6,0
     SetVisible = 18,false
 <Zap 5a>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetX = 0,3
     SetY = 0,4
     SetZ = 0,20
@@ -202,8 +202,8 @@ Credit = Maruno
     MoveOpacity = 8,4,0
     SetVisible = 12,false
 <Zap 5b>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetX = 8,39
     SetY = 8,26
     SetZ = 8,20
@@ -220,8 +220,8 @@ Credit = Maruno
     MoveOpacity = 12,6,0
     SetVisible = 18,false
 <Zap 6a>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetX = 0,3
     SetY = 0,-4
     SetZ = 0,20
@@ -238,8 +238,8 @@ Credit = Maruno
     MoveOpacity = 8,4,0
     SetVisible = 12,false
 <Zap 6b>
-    Graphic = zap
     Focus = User
+    Graphic = zap
     SetX = 8,39
     SetY = 8,-26
     SetZ = 8,20

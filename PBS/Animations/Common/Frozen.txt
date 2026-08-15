@@ -6,18 +6,18 @@ NoTarget = true
 Credit = Maruno
 <User>
 <Ice emitter>
-    Graphic = ice mist
     Focus = User
+    Graphic = ice mist
     SecondLayer = true
+    RandomInvertAngle = true
     Emitter = NoMovement
     EmitterRate = 20
-    RandomInvertAngle = true
     SetZ = 0,20
-    SetFrame2 = 0,1
     SetZ2 = 0,-10
+    SetFrame2 = 0,1
     SetEmitting = 0,true
-    SetEmitXRange = 0,64
-    SetEmitYRange = 0,64
+    SetSpawnXRange = 0,64
+    SetSpawnYRange = 0,64
     MoveOpacity = 0,2,64
     MoveOpacity2 = 0,2,192
     MoveX2 = 0,10,16

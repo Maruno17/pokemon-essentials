@@ -164,21 +164,17 @@ class AnimationEditor
       ctrls.get_control(:tiled_graphic).value = this_particle[:tiled_graphic]
       ctrls.get_control(:tiled_graphic).disable
     end
-    # Angle override
-    if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(this_particle[:focus]) ||
-       GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(this_particle[:focus])
-      ctrls.get_control(:angle_override).enable
-    else
-      this_particle[:angle_override] = :none
-      ctrls.get_control(:angle_override).disable
-    end
     # Emitter quantity
     if (this_particle[:emitter_type] || :none) == :none
       ctrls.get_control(:emitter_rate).disable
       ctrls.get_control(:emitter_intensity).disable
+      ctrls.get_control(:emitter_position_polar_coordinates).disable
+      ctrls.get_control(:emitter_spawn_polar_coordinates).disable
     else
       ctrls.get_control(:emitter_rate).enable
       ctrls.get_control(:emitter_intensity).enable
+      ctrls.get_control(:emitter_position_polar_coordinates).enable
+      ctrls.get_control(:emitter_spawn_polar_coordinates).enable
     end
     # Duplicate button
     ctrls.get_control(:duplicate).enabled = (@anim[:particles][idx_particle][:name] != "SE")

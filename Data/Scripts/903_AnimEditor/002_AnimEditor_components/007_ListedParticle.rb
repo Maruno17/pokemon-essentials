@@ -20,8 +20,9 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
   # NOTE: Any property in here that is also in PROPERTY_GROUPS above should be
   #       in the same group.
   EMITTER_PROPERTY_GROUPS = {
-    :emitter_group                => [:emit_x, :emit_y, :emit_r, :emit_theta, :emitting],
-    :emitted_spawn_location_group => [:emit_x_range, :emit_y_range, :emit_r_range, :emit_theta_range],
+    :emitter_group                => [:emitter_x, :emitter_y, :emitter_r, :emitter_theta, :emitting],
+    :emitted_spawn_location_group => [:spawn_x, :spawn_x_range, :spawn_y, :spawn_y_range,
+                                      :spawn_r, :spawn_r_range, :spawn_theta, :spawn_theta_range],
     :emitted_auto_movement_group  => [:emit_speed, :emit_speed_range,
                                       :emit_direction, :emit_direction_range,
                                       :emit_gravity, :emit_gravity_range,
@@ -34,7 +35,10 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
                                       :emit_zoom_range, :emit_zoom_multiplier,
                                       :emit_zoom_x_range, :emit_zoom_y_range,
                                       :emit_opacity_multiplier],
-    :position_group               => [:x, :y, :r, :theta, :z, :radius_x, :radius_y, :radius_z],
+    :position_group               => [:x, :y, :r, :theta,
+                                      :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
+                                      :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset,
+                                      :z, :radius_x, :radius_y, :radius_z],
     :transformation_group         => [:zoom_x, :zoom_y, :angle, :flip],
     :appearance_group             => [:visible, :opacity, :color, :tone, :invert_color, :frame, :blending],
     :mask_group                   => [:mask_opacity, :mask_x, :mask_y, :mask_zoom_x, :mask_zoom_y, :mask_blending],
@@ -51,20 +55,26 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
     :no_movement => [:emit_x_multiplier, :emit_y_multiplier,
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
-                     :emit_opacity_multiplier],
+                     :emit_opacity_multiplier,
+                     :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
+                     :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset],
     :straight    => [:emit_speed, :emit_speed_range,
                      :emit_direction, :emit_direction_range,
                      :emit_x_multiplier, :emit_y_multiplier,
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
-                     :emit_opacity_multiplier],
+                     :emit_opacity_multiplier,
+                     :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
+                     :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset],
     :projectile  => [:emit_speed, :emit_speed_range,
                      :emit_direction, :emit_direction_range,
                      :emit_gravity, :emit_gravity_range,
                      :emit_x_multiplier, :emit_y_multiplier,
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
-                     :emit_opacity_multiplier],
+                     :emit_opacity_multiplier,
+                     :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
+                     :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset],
     :helix       => [:emit_speed, :emit_speed_range,   # Vertical speed
                      :emit_direction, :emit_direction_range,
                      :emit_period_x, :emit_period_x_range,
@@ -75,6 +85,8 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
                      :emit_opacity_multiplier,
+                     :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
+                     :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset,
                      :radius_x, :radius_z],
     :polar       => [:emit_direction, :emit_direction_range,
                      :emit_period_x, :emit_period_x_range,
@@ -85,6 +97,8 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
                      :emit_opacity_multiplier,
+                     :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
+                     :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset,
                      :radius_x, :radius_y]
   }
 
@@ -94,7 +108,7 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
   LIST_ARROW_SIZE        = 20   # Size of bitmap showing the expanding arrow in group rows
   LIST_BOX_TOP_LEVEL_X   = 20
   LIST_BOX_INDENT_X      = 12   # Number of pixels per indent level
-  CONTROL_X              = 128
+  CONTROL_X              = 138
   PROPERTIES_BUTTON_SIZE = 20   # Full size of button; bitmap in the button is 12
 
   DIAMOND_SIZE          = 3   # Actual overall size is double this + 1 = 7
@@ -331,10 +345,17 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
       return true if [:r, :theta].include?(row)
     end
     # Cartesian or polar coordinates - hide the unused ones for emitters
-    if @particle[:emitter_polar_coordinates]
-      return true if [:emit_x, :emit_y, :emit_x_range, :emit_y_range].include?(row)
+    if @particle[:emitter_position_polar_coordinates]
+      return true if [:emitter_x, :emitter_y].include?(row)
     else
-      return true if [:emit_r, :emit_theta, :emit_r_range, :emit_theta_range].include?(row)
+      return true if [:emitter_r, :emitter_theta].include?(row)
+    end
+    if @particle[:emitter_spawn_polar_coordinates]
+      return true if [:spawn_x, :spawn_x_range, :spawn_y, :spawn_y_range].include?(row)
+      return true if [:spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier].include?(row)
+    else
+      return true if [:spawn_r, :spawn_r_range, :spawn_theta, :spawn_theta_range].include?(row)
+      return true if [:spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset].include?(row)
     end
     # Mask group
     if (@particle[:mask_graphic] || "") == "" &&

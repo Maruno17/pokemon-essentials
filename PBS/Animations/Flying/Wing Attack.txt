@@ -11,8 +11,8 @@ Credit = Maruno
     MoveX = 5,2,-6
     MoveX = 7,1,0
 <Hit 1>
-    Graphic = hit
     Focus = Target
+    Graphic = hit
     SetY = 0,64
     SetZ = 0,40
     SetZoomX = 0,125
@@ -20,8 +20,8 @@ Credit = Maruno
     SetColor = 0,F8F8B4C0
     SetVisible = 3,false
 <Hit 2>
-    Graphic = hit
     Focus = Target
+    Graphic = hit
     SetY = 1,32
     SetZ = 1,39
     SetZoomX = 1,115
@@ -29,8 +29,8 @@ Credit = Maruno
     SetColor = 1,F8F8B4C0
     SetVisible = 4,false
 <Hit 3>
-    Graphic = hit
     Focus = Target
+    Graphic = hit
     SetY = 2,-8
     SetZ = 2,38
     SetZoomX = 2,105
@@ -38,8 +38,8 @@ Credit = Maruno
     SetColor = 2,F8F8B4C0
     SetVisible = 5,false
 <Hit 4>
-    Graphic = hit
     Focus = Target
+    Graphic = hit
     SetY = 3,-48
     SetZ = 3,37
     SetZoomX = 3,95
@@ -48,8 +48,8 @@ Credit = Maruno
     SetColor = 3,C0C040C0
     SetVisible = 6,false
 <Hit 5>
-    Graphic = hit
     Focus = Target
+    Graphic = hit
     SetY = 4,-88
     SetZ = 4,36
     SetZoomX = 4,85
@@ -58,12 +58,12 @@ Credit = Maruno
     SetColor = 4,C0C040C0
     SetVisible = 7,false
 <Feather emitter>
-    Graphic = feather
     Focus = Target
-    Emitter = Projectile
-    EmitterRate = 40
+    Graphic = feather
     RandomAngleRange = 20
     RandomInvertAngle = true
+    Emitter = Projectile
+    EmitterRate = 40
     SetZ = 0,1
     SetZoomX = 0,0
     SetZoomY = 0,0

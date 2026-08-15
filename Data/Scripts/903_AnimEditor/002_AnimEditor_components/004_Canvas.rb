@@ -639,60 +639,36 @@ class AnimationEditor::Canvas < Sprite
     end
   end
 
+  def index_that_particle_is_relative_to(particle, target_idx)
+    ret = -1
+    if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
+      if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
+        ret = user_index
+      elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+        ret = target_idx
+      end
+    end
+    return ret
+  end
+
   def apply_sprite_property(particle, index, property, value, target_idx, sprite1, sprite2 = nil)
     case property
-    when :frame
-      sprite1.src_rect.x = value.floor * sprite1.src_rect.width
-    when :frame2
-      sprite2.src_rect.x = value.floor * sprite2.src_rect.width if sprite2
-    when :blending
-      sprite1.blend_type = value
-      if @particle_tiled_sprites[index]
-        @particle_tiled_sprites[index].each { |ts| ts.blend_type = sprite1.blend_type }
-      end
-    when :blending2
-      sprite2.blend_type = value if sprite2
-    when :flip
-      sprite1.mirror = value
-      relative_to_index = -1
-      if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
-        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
-          relative_to_index = user_index
-        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-          relative_to_index = target_idx
-        end
-      end
-      sprite1.mirror = !sprite1.mirror if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_flip]
-      if @particle_tiled_sprites[index]
-        @particle_tiled_sprites[index].each { |ts| ts.mirror = sprite1.mirror }
-      end
-    when :flip2
-      if sprite2
-        sprite2.mirror = sprite1.mirror
-        sprite2.mirror = !sprite2.mirror if value
-      end
     when :x
-      polar = ((particle[:emitter_type] || :none) == :none) ? particle[:polar_coordinates] : particle[:emitter_polar_coordinates]
+      polar = ((particle[:emitter_type] || :none) == :none) ? particle[:polar_coordinates] : particle[:emitter_position_polar_coordinates]
       return if polar
-      relative_to_index = -1
-      if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
-        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
-          relative_to_index = user_index
-        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-          relative_to_index = target_idx
-        end
-      end
-      x_property = ((particle[:emitter_type] || :none) == :none) ? :x : :emit_x
-      base_x = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, x_property, @display_keyframe)[0]
+      x_property = ((particle[:emitter_type] || :none) == :none) ? :x : :emitter_x
+      base_x = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, x_property, @display_keyframe)[0].round
+      relative_to_index = index_that_particle_is_relative_to(particle, target_idx)
       if relative_to_index >= 0 && relative_to_index.odd?
         base_x *= -1 if particle[:foe_invert_x]
       end
       focus_xy = AnimationPlayer::Helper.get_xy_focus(particle, user_index, target_idx,
                                                       @user_coords, @target_coords[target_idx],
                                                       [side_size(0), side_size(1)])
-      AnimationPlayer::Helper.apply_xy_focus_to_sprite(sprite1, :x, base_x, focus_xy)
+      AnimationPlayer::Helper.apply_xy_value_using_focus_to_sprite(sprite1, :x, base_x, focus_xy)
       offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, sprite1)
       sprite1.x += offset_xy[0]
+      # Apply value to other sprites
       if @particle_tiled_sprites[index]
         while sprite1.x < 0
           sprite1.x += sprite1.src_rect.width
@@ -708,27 +684,21 @@ class AnimationEditor::Canvas < Sprite
     when :x2
       sprite2.x = sprite1.x + value if sprite2
     when :y
-      polar = ((particle[:emitter_type] || :none) == :none) ? particle[:polar_coordinates] : particle[:emitter_polar_coordinates]
+      polar = ((particle[:emitter_type] || :none) == :none) ? particle[:polar_coordinates] : particle[:emitter_position_polar_coordinates]
       return if polar
-      relative_to_index = -1
-      if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
-        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
-          relative_to_index = user_index
-        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-          relative_to_index = target_idx
-        end
-      end
-      y_property = ((particle[:emitter_type] || :none) == :none) ? :y : :emit_y
-      base_y = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, y_property, @display_keyframe)[0]
+      y_property = ((particle[:emitter_type] || :none) == :none) ? :y : :emitter_y
+      base_y = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, y_property, @display_keyframe)[0].round
+      relative_to_index = index_that_particle_is_relative_to(particle, target_idx)
       if relative_to_index >= 0 && relative_to_index.odd?
         base_y *= -1 if particle[:foe_invert_y]
       end
       focus_xy = AnimationPlayer::Helper.get_xy_focus(particle, user_index, target_idx,
                                                       @user_coords, @target_coords[target_idx],
                                                       [side_size(0), side_size(1)])
-      AnimationPlayer::Helper.apply_xy_focus_to_sprite(sprite1, :y, base_y, focus_xy)
+      AnimationPlayer::Helper.apply_xy_value_using_focus_to_sprite(sprite1, :y, base_y, focus_xy)
       offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, sprite1)
       sprite1.y += offset_xy[1]
+      # Apply value to other sprites
       if @particle_tiled_sprites[index]
         while sprite1.y < 0
           sprite1.y += sprite1.src_rect.height
@@ -744,22 +714,15 @@ class AnimationEditor::Canvas < Sprite
     when :y2
       sprite2.y = sprite1.y + value if sprite2
     when :r, :theta
-      polar = ((particle[:emitter_type] || :none) == :none) ? particle[:polar_coordinates] : particle[:emitter_polar_coordinates]
+      polar = ((particle[:emitter_type] || :none) == :none) ? particle[:polar_coordinates] : particle[:emitter_position_polar_coordinates]
       return if !polar
-      relative_to_index = -1
-      if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
-        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
-          relative_to_index = user_index
-        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-          relative_to_index = target_idx
-        end
-      end
-      dist_property = ((particle[:emitter_type] || :none) == :none) ? :r : :emit_r
-      dir_property = ((particle[:emitter_type] || :none) == :none) ? :theta : :emit_theta
+      dist_property = ((particle[:emitter_type] || :none) == :none) ? :r : :emitter_r
+      dir_property = ((particle[:emitter_type] || :none) == :none) ? :theta : :emitter_theta
       dist = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, dist_property, @display_keyframe)[0]
       dir = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, dir_property, @display_keyframe)[0]
       base_x = (dist * Math.cos(dir * Math::PI / 180)).round
       base_y = (-dist * Math.sin(dir * Math::PI / 180)).round
+      relative_to_index = index_that_particle_is_relative_to(particle, target_idx)
       if relative_to_index >= 0 && relative_to_index.odd?
         base_x *= -1 if particle[:foe_invert_x]
         base_y *= -1 if particle[:foe_invert_y]
@@ -767,11 +730,12 @@ class AnimationEditor::Canvas < Sprite
       focus_xy = AnimationPlayer::Helper.get_xy_focus(particle, user_index, target_idx,
                                                       @user_coords, @target_coords[target_idx],
                                                       [side_size(0), side_size(1)])
-      AnimationPlayer::Helper.apply_xy_focus_to_sprite(sprite1, :x, base_x, focus_xy)
-      AnimationPlayer::Helper.apply_xy_focus_to_sprite(sprite1, :y, base_y, focus_xy)
+      AnimationPlayer::Helper.apply_xy_value_using_focus_to_sprite(sprite1, :x, base_x, focus_xy)
+      AnimationPlayer::Helper.apply_xy_value_using_focus_to_sprite(sprite1, :y, base_y, focus_xy)
       offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, sprite1)
       sprite1.x += offset_xy[0]
       sprite1.y += offset_xy[1]
+      # Apply value to other sprites
       if @particle_tiled_sprites[index]
         while sprite1.x < 0
           sprite1.x += sprite1.src_rect.width
@@ -831,15 +795,19 @@ class AnimationEditor::Canvas < Sprite
         offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, sprite1)
         sprite1.angle = AnimationPlayer::Helper.initial_angle_between(particle, focus_xy, offset_xy)
       when :always_point_at_focus
+        target_x = 0
+        target_y = 0
         focus_xy = AnimationPlayer::Helper.get_xy_focus(
           particle, user_index, target_idx,
           @user_coords, @target_coords[target_idx], [side_size(0), side_size(1)]
         )
-        offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, sprite1)
-        target_x = (focus_xy.length == 2) ? focus_xy[1][0] : focus_xy[0][0]
-        target_x += offset_xy[0]
-        target_y = (focus_xy.length == 2) ? focus_xy[1][1] : focus_xy[0][1]
-        target_y += offset_xy[1]
+        if focus_xy
+          offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, sprite1)
+          target_x = (focus_xy.length == 2) ? focus_xy[1][0] : focus_xy[0][0]
+          target_x += offset_xy[0]
+          target_y = (focus_xy.length == 2) ? focus_xy[1][1] : focus_xy[0][1]
+          target_y += offset_xy[1]
+        end
         sprite1.angle = AnimationPlayer::Helper.angle_between(sprite1.x, sprite1.y, target_x, target_y)
       else
         sprite1.angle = 0
@@ -847,6 +815,18 @@ class AnimationEditor::Canvas < Sprite
       sprite1.angle += value
     when :angle2
       sprite2.angle = sprite1.angle + value if sprite2
+    when :flip
+      sprite1.mirror = value
+      relative_to_index = index_that_particle_is_relative_to(particle, target_idx)
+      sprite1.mirror = !sprite1.mirror if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_flip]
+      if @particle_tiled_sprites[index]
+        @particle_tiled_sprites[index].each { |ts| ts.mirror = sprite1.mirror }
+      end
+    when :flip2
+      if sprite2
+        sprite2.mirror = sprite1.mirror
+        sprite2.mirror = !sprite2.mirror if value
+      end
     when :visible
       visible_property = ((particle[:emitter_type] || :none) == :none) ? property : :emitting
       vis = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, visible_property, @display_keyframe)[0]
@@ -901,6 +881,17 @@ class AnimationEditor::Canvas < Sprite
         sprite2.invert = sprite1.invert
         sprite2.invert = !sprite2.invert if value
       end
+    when :frame
+      sprite1.src_rect.x = value.floor * sprite1.src_rect.width
+    when :frame2
+      sprite2.src_rect.x = value.floor * sprite2.src_rect.width if sprite2
+    when :blending
+      sprite1.blend_type = value
+      if @particle_tiled_sprites[index]
+        @particle_tiled_sprites[index].each { |ts| ts.blend_type = sprite1.blend_type }
+      end
+    when :blending2
+      sprite2.blend_type = value if sprite2
     when :mask_blending
       sprite1.pattern_blend_type = value
     when :mask_opacity
@@ -1087,7 +1078,7 @@ class AnimationEditor::Canvas < Sprite
       if (particle[:emitter_type] || :none) == :none
         property = (particle[:polar_coordinates]) ? :theta : :x
       else
-        property = (particle[:emitter_polar_coordinates]) ? :emit_theta : :emit_x
+        property = (particle[:emitter_position_polar_coordinates]) ? :emitter_theta : :emitter_x
       end
       new_pos = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, property, @display_keyframe)[0] + x_move
       @changed_controls ||= {}
@@ -1110,7 +1101,7 @@ class AnimationEditor::Canvas < Sprite
       if (particle[:emitter_type] || :none) == :none
         property = (particle[:polar_coordinates]) ? :r : :y
       else
-        property = (particle[:emitter_polar_coordinates]) ? :emit_r : :emit_y
+        property = (particle[:emitter_position_polar_coordinates]) ? :emitter_r : :emitter_y
       end
       new_pos = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, property, @display_keyframe)[0] + y_move
       @changed_controls ||= {}
@@ -1159,7 +1150,7 @@ class AnimationEditor::Canvas < Sprite
     spr2 = get_second_sprite(@selected_particle, first_target_index)
     # Check if moved at all (in polar coordinates)
     if (particle[:polar_coordinates] && (particle[:emitter_type] || :none) == :none) ||
-       (particle[:emitter_polar_coordinates] && (particle[:emitter_type] || :none) != :none)
+       (particle[:emitter_position_polar_coordinates] && (particle[:emitter_type] || :none) != :none)
       new_pos_x = new_canvas_x
       new_pos_y = new_canvas_y
       case particle[:focus]
@@ -1204,19 +1195,12 @@ class AnimationEditor::Canvas < Sprite
         new_pos_x -= base_coords[0]
         new_pos_y -= base_coords[1]
       end
-      relative_to_index = -1
-      if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
-        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
-          relative_to_index = user_index
-        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-          relative_to_index = first_target_index
-        end
-      end
+      relative_to_index = index_that_particle_is_relative_to(particle, first_target_index)
       new_pos_x *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_x]
       new_pos_y *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_y]
       @changed_controls ||= {}
-      property_r = ((particle[:emitter_type] || :none) == :none) ? :r : :emit_r
-      property_theta = ((particle[:emitter_type] || :none) == :none) ? :theta : :emit_theta
+      property_r = ((particle[:emitter_type] || :none) == :none) ? :r : :emitter_r
+      property_theta = ((particle[:emitter_type] || :none) == :none) ? :theta : :emitter_theta
       if new_pos_x == 0
         new_r = new_pos_y.abs
         new_theta = (new_pos_y > 0) ? 270 : 90
@@ -1264,17 +1248,10 @@ class AnimationEditor::Canvas < Sprite
         base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
         new_pos_x -= base_coords[0]
       end
-      relative_to_index = -1
-      if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
-        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
-          relative_to_index = user_index
-        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-          relative_to_index = first_target_index
-        end
-      end
+      relative_to_index = index_that_particle_is_relative_to(particle, first_target_index)
       new_pos_x *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_x]
       @changed_controls ||= {}
-      property = ((particle[:emitter_type] || :none) == :none) ? :x : :emit_x
+      property = ((particle[:emitter_type] || :none) == :none) ? :x : :emitter_x
       @changed_controls[property] = new_pos_x
       @captured[0] = new_canvas_x
       sprite.x = new_canvas_x
@@ -1319,17 +1296,10 @@ class AnimationEditor::Canvas < Sprite
         base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
         new_pos_y -= base_coords[1]
       end
-      relative_to_index = -1
-      if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus])
-        if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus])
-          relative_to_index = user_index
-        elsif GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-          relative_to_index = first_target_index
-        end
-      end
+      relative_to_index = index_that_particle_is_relative_to(particle, first_target_index)
       new_pos_y *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_y]
       @changed_controls ||= {}
-      property = ((particle[:emitter_type] || :none) == :none) ? :y : :emit_y
+      property = ((particle[:emitter_type] || :none) == :none) ? :y : :emitter_y
       @changed_controls[property] = new_pos_y
       @captured[1] = new_canvas_y
       sprite.y = new_canvas_y

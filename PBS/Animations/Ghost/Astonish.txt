@@ -13,8 +13,8 @@ Credit = Maruno
     MoveZoomY = 4,3,125
     MoveZoomY = 8,3,100
 <Hit>
-    Graphic = hit half
     Focus = Target
+    Graphic = hit half
     SetY = 7,-32
     SetZ = 7,10
     SetZoomX = 7,0
@@ -28,8 +28,8 @@ Credit = Maruno
     MoveOpacity = 10,2,0
     SetVisible = 12,false
 <Spark 1>
-    Graphic = bubble 1
     Focus = Target
+    Graphic = bubble 1
     SetX = 7,-28
     SetY = 7,-36
     SetZ = 7,5
@@ -44,8 +44,8 @@ Credit = Maruno
     MoveY = 13,3,-54,EaseIn
     MoveOpacity = 13,3,0
 <Spark 2>
-    Graphic = bubble 1
     Focus = Target
+    Graphic = bubble 1
     SetX = 7,-12
     SetY = 7,-29
     SetZ = 7,5
@@ -60,8 +60,8 @@ Credit = Maruno
     MoveY = 13,3,-101,EaseIn
     MoveOpacity = 13,3,0
 <Spark 3>
-    Graphic = bubble 1
     Focus = Target
+    Graphic = bubble 1
     SetX = 7,-5
     SetY = 7,-31
     SetZ = 7,5
@@ -76,8 +76,8 @@ Credit = Maruno
     MoveY = 13,3,-90,EaseIn
     MoveOpacity = 13,3,0
 <Spark 4>
-    Graphic = bubble 1
     Focus = Target
+    Graphic = bubble 1
     SetX = 7,-5
     SetY = 7,-31
     SetZ = 7,5
@@ -92,8 +92,8 @@ Credit = Maruno
     MoveY = 14,3,-85,EaseIn
     MoveOpacity = 14,3,0
 <Spark 5>
-    Graphic = bubble 1
     Focus = Target
+    Graphic = bubble 1
     SetX = 7,-5
     SetY = 7,-31
     SetZ = 7,5
@@ -108,8 +108,8 @@ Credit = Maruno
     MoveY = 14,3,-122,EaseIn
     MoveOpacity = 14,3,0
 <Spark 6>
-    Graphic = bubble 1
     Focus = Target
+    Graphic = bubble 1
     SetX = 7,-4
     SetY = 7,-24
     SetZ = 7,5
@@ -124,8 +124,8 @@ Credit = Maruno
     MoveY = 13,3,-104,EaseIn
     MoveOpacity = 13,3,0
 <Spark 7>
-    Graphic = bubble 1
     Focus = Target
+    Graphic = bubble 1
     SetX = 7,-5
     SetY = 7,-31
     SetZ = 7,5
@@ -140,8 +140,8 @@ Credit = Maruno
     MoveY = 13,4,-79,EaseIn
     MoveOpacity = 14,3,0
 <Spark 8>
-    Graphic = bubble 1
     Focus = Target
+    Graphic = bubble 1
     SetX = 7,3
     SetY = 7,-33
     SetZ = 7,5

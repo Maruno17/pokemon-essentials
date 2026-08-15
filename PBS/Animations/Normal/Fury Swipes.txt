@@ -12,8 +12,8 @@ Credit = Maruno & Dawn Bronze
     MoveX = 5,2,2
     MoveX = 7,1,0
 <Scratch 1>
-    Graphic = scratch
     Focus = Target
+    Graphic = scratch
     SetX = 0,51
     SetY = 0,-102
     SetZ = 0,30
@@ -29,8 +29,8 @@ Credit = Maruno & Dawn Bronze
     MoveOpacity = 2,5,0
     SetVisible = 7,false
 <Scratch 1 afterimage>
-    Graphic = scratch
     Focus = Target
+    Graphic = scratch
     SetX = 1,19
     SetY = 1,-50
     SetZ = 1,25
@@ -42,8 +42,8 @@ Credit = Maruno & Dawn Bronze
     MoveOpacity = 1,7,0
     SetVisible = 8,false
 <Scratch 2>
-    Graphic = scratch
     Focus = Target
+    Graphic = scratch
     SetX = 4,-86
     SetY = 4,-81
     SetZ = 4,-30
@@ -59,8 +59,8 @@ Credit = Maruno & Dawn Bronze
     MoveOpacity = 6,5,0
     SetVisible = 11,false
 <Scratch 2 afterimage>
-    Graphic = scratch
     Focus = Target
+    Graphic = scratch
     SetX = 5,-72
     SetY = 5,-59
     SetZ = 5,-30
@@ -72,8 +72,8 @@ Credit = Maruno & Dawn Bronze
     MoveOpacity = 5,7,0
     SetVisible = 12,false
 <Spark spawner>
-    Graphic = spark
     Focus = Target
+    Graphic = spark
     Emitter = Projectile
     EmitterRate = 60
     SetZ = 0,5

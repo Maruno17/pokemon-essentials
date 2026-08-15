@@ -20,8 +20,8 @@ Credit = Dawn Bronze
     MoveZoomX = 32,2,90
     MoveZoomX = 34,2,100
 <Target Afterimage>
-    Graphic = TARGET_FRONT
     Focus = TargetPosition
+    Graphic = TARGET_FRONT
     SetY = 24,-55
     SetZ = 24,10
     SetOpacity = 24,0
@@ -37,8 +37,8 @@ Credit = Dawn Bronze
     SetOpacity = 33,100
     MoveOpacity = 33,4,0
 <Background>
-    Graphic = Screens/black
     Focus = Background
+    Graphic = Screens/black
     SetOpacity = 0,0
     MoveOpacity = 0,12,240
     MoveOpacity = 41,9,0
@@ -65,8 +65,8 @@ Credit = Dawn Bronze
     MoveZoomX = 32,2,90
     MoveZoomX = 34,2,100
 <Target Afterimage>
-    Graphic = TARGET_BACK
     Focus = TargetPosition
+    Graphic = TARGET_BACK
     SetY = 24,-55
     SetZ = 24,10
     SetOpacity = 24,0
@@ -82,8 +82,8 @@ Credit = Dawn Bronze
     SetOpacity = 33,100
     MoveOpacity = 33,4,0
 <Background>
-    Graphic = Screens/black
     Focus = Background
+    Graphic = Screens/black
     SetOpacity = 0,0
     MoveOpacity = 0,12,240
     MoveOpacity = 41,9,0

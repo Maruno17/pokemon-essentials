@@ -6,8 +6,8 @@ NoTarget = true
 Credit = Maruno
 <User>
 <Ball>
-    Graphic = bubble 1
     Focus = User
+    Graphic = bubble 1
     SetY = 0,32
     SetZ = 0,10
     SetZoomX = 0,250
@@ -21,8 +21,8 @@ Credit = Maruno
     MoveOpacity = 9,4,0
     SetVisible = 13,false
 <Swish>
-    Graphic = swish
     Focus = User
+    Graphic = swish
     SetY = 7,32
     SetZ = 7,5
     SetZoomX = 7,90

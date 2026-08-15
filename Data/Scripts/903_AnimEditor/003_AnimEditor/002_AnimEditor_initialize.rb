@@ -84,7 +84,7 @@ class AnimationEditor
     @components[:help] = UIControls::ListedContainer.new(
       HELP_X, HELP_Y, HELP_WIDTH, HELP_HEIGHT, @pop_up_viewport
     )
-    @components[:help].label_offset_x = 140
+    @components[:help].label_offset_x = AnimationEditor::HELP_LABEL_WIDTH
     [:editor_settings, :animation_properties, :particle_properties].each do |pop_up|
       size = {
         :editor_settings      => [EDITOR_SETTINGS_X, EDITOR_SETTINGS_Y, EDITOR_SETTINGS_WIDTH, EDITOR_SETTINGS_HEIGHT],
@@ -94,7 +94,7 @@ class AnimationEditor
       @components[pop_up] = UIControls::ListedContainer.new(
         size[0] + 4, size[1], size[2] - 8, size[3], @pop_up_viewport
       )
-      @components[pop_up].label_offset_x = 170
+      @components[pop_up].label_offset_x = AnimationEditor::PROPERTIES_POPUP_LABEL_WIDTH
     end
     # Command batch editor
     @components[:command_batch_editor] = UIControls::BaseContainer.new(
@@ -266,66 +266,50 @@ class AnimationEditor
   end
 
   def set_particle_properties_contents
+    defaults = GameData::Animation::PARTICLE_DEFAULT_VALUES
     part_properties = @components[:particle_properties]
     part_properties.add_header_label(:header, _INTL("Particle properties"))
     # Misc
-    part_properties.add_labelled_text_box(:name, _INTL("Name"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:name])
+    part_properties.add_labelled_text_box(:name, _INTL("Name"), defaults[:name])
     part_properties.get_control(:name).set_blacklist("", "User", "Target", "SE")
-    part_properties.add_labelled_label(:graphic_name, _INTL("Graphic"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:graphic])
+    part_properties.add_labelled_dropdown_list(:focus, _INTL("Focus"), {}, defaults[:focus])
+    part_properties.add_labelled_checkbox(:polar_coordinates, _INTL("Use polar coordinates?"), defaults[:polar_coordinates])
+    # Graphic
+    part_properties.add_underlined_label(:graphics_label, _INTL("Graphics"))
+    part_properties.add_labelled_label(:graphic_name, _INTL("Graphic filename"), defaults[:graphic])
     part_properties.add_labelled_fitted_button(:graphic, "", _INTL("Change"))
-    part_properties.add_labelled_label(:mask_graphic_name, _INTL("Mask graphic"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:mask_graphic])
+    part_properties.add_labelled_label(:mask_graphic_name, _INTL("Mask graphic filename"), defaults[:mask_graphic])
     part_properties.add_labelled_fitted_button(:mask_graphic, "", _INTL("Change"))
-    part_properties.add_labelled_dropdown_list(:focus, _INTL("Focus"), {},
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:focus])
-    part_properties.add_labelled_checkbox(:second_layer, _INTL("Second layer"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:second_layer])
-    part_properties.add_labelled_checkbox(:polar_coordinates, _INTL("Use polar coordinates"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:polar_coordinates])
+    part_properties.add_labelled_checkbox(:tiled_graphic, _INTL("Tiled graphic?"), defaults[:tiled_graphic])
+    part_properties.add_labelled_checkbox(:second_layer, _INTL("Has second layer?"), defaults[:second_layer])
     # OppMove replacements
     part_properties.add_underlined_label(:opposing_label, _INTL("If on opposing side..."))
-    part_properties.add_labelled_checkbox(:foe_invert_x, _INTL("Invert X"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:foe_invert_x])
-    part_properties.add_labelled_checkbox(:foe_invert_y, _INTL("Invert Y"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:foe_invert_y])
-    part_properties.add_labelled_checkbox(:foe_invert_z, _INTL("Invert Z"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:foe_invert_z])
-    part_properties.add_labelled_checkbox(:foe_flip, _INTL("Flip sprite"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:foe_flip])
+    part_properties.add_labelled_checkbox(:foe_invert_x, _INTL("Invert X?"), defaults[:foe_invert_x])
+    part_properties.add_labelled_checkbox(:foe_invert_y, _INTL("Invert Y?"), defaults[:foe_invert_y])
+    part_properties.add_labelled_checkbox(:foe_invert_z, _INTL("Invert Z?"), defaults[:foe_invert_z])
+    part_properties.add_labelled_checkbox(:foe_flip, _INTL("Flip sprite?"), defaults[:foe_flip])
     # Property overrides
-    part_properties.add_underlined_label(:property_override_label, _INTL("Property overrides"))
-    part_properties.add_labelled_checkbox(:tiled_graphic, _INTL("Tiled graphic"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:tiled_graphic])
+    part_properties.add_underlined_label(:property_override_label, _INTL("Property base values"))
     angle_overrides = {}
     # TODO: Is this okay using the in-PBS name of the override type?
     GameData::Animation::ANGLE_OVERRIDES.each_pair { |name, key| angle_overrides[key] = name }
-    part_properties.add_labelled_dropdown_list(:angle_override, _INTL("Angle override"), angle_overrides,
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:angle_override])
+    part_properties.add_labelled_dropdown_list(:angle_override, _INTL("Base angle"), angle_overrides, defaults[:angle_override])
     # Randomization
-    part_properties.add_underlined_label(:property_randomize_label, _INTL("Randomization of properties"))
-    part_properties.add_labelled_number_text_box(:random_frame_max, _INTL("Random frame (max)"), 0, 99,
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:random_frame_max])
-    part_properties.add_labelled_number_text_box(:random_angle_range, _INTL("Random angle offset"), 0, 180,
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:random_angle_range])
-    part_properties.add_labelled_checkbox(:random_invert_angle, _INTL("Randomly invert angle"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:random_invert_angle])
-    part_properties.add_labelled_checkbox(:random_invert_flip, _INTL("Randomly invert flip"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:random_invert_flip])
+    part_properties.add_underlined_label(:property_randomize_label, _INTL("Property randomization"))
+    part_properties.add_labelled_number_text_box(:random_angle_range, _INTL("Random angle offset"), 0, 180, defaults[:random_angle_range])
+    part_properties.add_labelled_checkbox(:random_invert_angle, _INTL("Randomly invert angle?"), defaults[:random_invert_angle])
+    part_properties.add_labelled_checkbox(:random_invert_flip, _INTL("Randomly invert flip?"), defaults[:random_invert_flip])
+    part_properties.add_labelled_number_text_box(:random_frame_max, _INTL("Random frame (max)"), 0, 99, defaults[:random_frame_max])
     # Emitter
     part_properties.add_underlined_label(:emitter_label, _INTL("Emitter properties"))
     emitter_types = {}
     # TODO: Is this okay using the in-PBS name of the emitter type?
     GameData::Animation::EMITTER_TYPES.each_pair { |name, key| emitter_types[key] = name }
-    part_properties.add_labelled_dropdown_list(:emitter_type, _INTL("Emitter type"), emitter_types,
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:emitter_type])
-    part_properties.add_labelled_number_text_box(:emitter_rate, _INTL("Emissions/second"), 1, 500,
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:emitter_rate])
-    part_properties.add_labelled_number_text_box(:emitter_intensity, _INTL("Sprites/emission"), 1, 20,
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:emitter_intensity])
-    part_properties.add_labelled_checkbox(:emitter_polar_coordinates, _INTL("Use polar coordinates"),
-      GameData::Animation::PARTICLE_DEFAULT_VALUES[:emitter_polar_coordinates])
+    part_properties.add_labelled_dropdown_list(:emitter_type, _INTL("Emitter type"), emitter_types, defaults[:emitter_type])
+    part_properties.add_labelled_number_text_box(:emitter_rate, _INTL("Emissions/second"), 1, 500, defaults[:emitter_rate])
+    part_properties.add_labelled_number_text_box(:emitter_intensity, _INTL("Sprites/emission"), 1, 20, defaults[:emitter_intensity])
+    part_properties.add_labelled_checkbox(:emitter_position_polar_coordinates, _INTL("Polar coords (position)?"), defaults[:emitter_position_polar_coordinates])
+    part_properties.add_labelled_checkbox(:emitter_spawn_polar_coordinates, _INTL("Polar coords (spawn area)?"), defaults[:emitter_spawn_polar_coordinates])
     # Particle existence
     part_properties.add_fitted_button(:duplicate, _INTL("Duplicate this particle"))
     part_properties.add_fitted_button(:delete, _INTL("Delete this particle"))

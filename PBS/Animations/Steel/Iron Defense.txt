@@ -10,8 +10,8 @@ Credit = Maruno
     MoveMaskX = 16,20,1152
     MoveMaskOpacity = 26,10,0
 <Background>
-    Graphic = Screens/white
     Focus = Background
+    Graphic = Screens/white
     SetOpacity = 0,0
     MoveOpacity = 0,4,192
     MoveOpacity = 5,4,0

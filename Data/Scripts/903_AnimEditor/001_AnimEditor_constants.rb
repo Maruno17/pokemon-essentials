@@ -38,15 +38,20 @@ class AnimationEditor
     :opacity2                => [  -255,   255],
     :frame2                  => [     0,    99],
     # These properties are specifically for emitter particles.
+    # Location of emitter.
+    :emitter_x               => [-99999, 99999],
+    :emitter_y               => [-99999, 99999],
+    :emitter_r               => [     0, 99999],
+    :emitter_theta           => [-99999, 99999],
     # Location of emitted particles.
-    :emit_x                  => [-99999, 99999],
-    :emit_x_range            => [     0, 99999],
-    :emit_y                  => [-99999, 99999],
-    :emit_y_range            => [     0, 99999],
-    :emit_r                  => [     0, 99999],
-    :emit_r_range            => [     0, 99999],
-    :emit_theta              => [-99999, 99999],
-    :emit_theta_range        => [     0,   180],
+    :spawn_x                 => [-99999, 99999],
+    :spawn_x_range           => [     0, 99999],
+    :spawn_y                 => [-99999, 99999],
+    :spawn_y_range           => [     0, 99999],
+    :spawn_r                 => [     0, 99999],
+    :spawn_r_range           => [     0, 99999],
+    :spawn_theta             => [-99999, 99999],
+    :spawn_theta_range       => [     0,   180],
     # Automated movement of emitted particles.
     :emit_speed              => [-99999, 99999],
     :emit_speed_range        => [     0,  9999],
@@ -73,6 +78,13 @@ class AnimationEditor
     :emit_opacity_multiplier => [     0,  9999],
     # Extra particle properties for emitted particles. (Used by :helix/:polar
     # emitter types.)
+    :spawn_x_offset          => [-99999, 99999],
+    :spawn_x_multiplier      => [     0,  9999],
+    :spawn_y_offset          => [-99999, 99999],
+    :spawn_y_multiplier      => [     0,  9999],
+    :spawn_r_offset          => [-99999, 99999],
+    :spawn_r_multiplier      => [     0,  9999],
+    :spawn_theta_offset      => [-99999, 99999],
     :radius_x                => [     0,  9999],
     :radius_y                => [     0,  9999],
     :radius_z                => [     0,    50]

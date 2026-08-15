@@ -6,8 +6,8 @@ NoTarget = true
 Credit = Dawn Bronze
 <User>
 <Spike 1>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     FoeInvertX = true
     SetX = 5,45
     SetY = 5,-90
@@ -27,8 +27,8 @@ Credit = Dawn Bronze
     MoveAngle = 11,4,0
     MoveOpacity = 20,12,0
 <Spike 2>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     FoeInvertX = true
     SetX = 9,45
     SetY = 9,-100
@@ -50,8 +50,8 @@ Credit = Dawn Bronze
     MoveAngle = 15,4,0
     MoveOpacity = 24,12,0
 <Spike 3>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     FoeInvertX = true
     SetX = 13,45
     SetY = 13,-100
@@ -71,8 +71,8 @@ Credit = Dawn Bronze
     MoveAngle = 19,4,0
     MoveOpacity = 28,12,0
 <Spike 4>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     FoeInvertX = true
     SetX = 17,45
     SetY = 17,-90
@@ -92,8 +92,8 @@ Credit = Dawn Bronze
     MoveAngle = 23,4,0
     MoveOpacity = 32,12,0
 <Spike 5>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     FoeInvertX = true
     SetX = 21,45
     SetY = 21,-80
@@ -115,8 +115,8 @@ Credit = Dawn Bronze
     MoveAngle = 27,4,0
     MoveOpacity = 36,12,0
 <Spike 6>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     FoeInvertX = true
     SetX = 25,45
     SetY = 25,-90
@@ -144,8 +144,8 @@ NoTarget = true
 Credit = Dawn Bronze
 <User>
 <Spike 1>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     SetX = 5,-31
     SetY = 5,-100
     SetZ = 5,-1
@@ -166,8 +166,8 @@ Credit = Dawn Bronze
     MoveAngle = 11,4,0
     MoveOpacity = 20,12,0
 <Spike 2>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     SetX = 9,-31
     SetY = 9,-110
     SetZ = 9,10
@@ -188,8 +188,8 @@ Credit = Dawn Bronze
     MoveAngle = 15,4,0
     MoveOpacity = 24,12,0
 <Spike 3>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     SetX = 13,-31
     SetY = 13,-110
     SetZ = 13,10
@@ -210,8 +210,8 @@ Credit = Dawn Bronze
     MoveAngle = 19,4,0
     MoveOpacity = 28,12,0
 <Spike 4>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     SetX = 17,-31
     SetY = 17,-100
     SetZ = 17,10
@@ -232,8 +232,8 @@ Credit = Dawn Bronze
     MoveAngle = 23,4,0
     MoveOpacity = 32,12,0
 <Spike 5>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     SetX = 21,-31
     SetY = 21,-90
     SetZ = 21,-50
@@ -254,8 +254,8 @@ Credit = Dawn Bronze
     MoveAngle = 27,4,0
     MoveOpacity = 36,12,0
 <Spike 6>
-    Graphic = spike
     Focus = UserSideForeground
+    Graphic = spike
     SetX = 25,-31
     SetY = 25,-100
     SetZ = 25,-1

@@ -18,14 +18,14 @@ Credit = Maruno
     MoveColor = 22,5,F8F840E0
     MoveColor = 29,8,F8F84000
 <Background>
-    Graphic = Screens/black
     Focus = Background
+    Graphic = Screens/black
     SetOpacity = 0,0
     MoveOpacity = 0,7,192
     MoveOpacity = 19,7,0
 <Punch>
-    Graphic = fist
     Focus = Target
+    Graphic = fist
     SetZ = 0,40
     SetZoomX = 0,1000
     SetZoomY = 0,1000
@@ -61,8 +61,8 @@ Credit = Maruno
     MoveY = 13,1,0,EaseBoth
     SetVisible = 14,false
 <Flare>
-    Graphic = spark small
     Focus = Target
+    Graphic = spark small
     SetZ = 3,10
     MoveZoomX = 3,4,600,EaseOut
     MoveZoomY = 3,4,600,EaseOut
@@ -71,16 +71,16 @@ Credit = Maruno
     MoveOpacity = 10,4,0,EaseIn
     SetVisible = 14,false
 <Zaps emitter>
-    Graphic = electricity 1
     Focus = Target
-    Emitter = Straight
-    EmitterRate = 40
+    Graphic = electricity 1
     AngleOverride = AlwaysPointAtFocus
     RandomInvertFlip = true
-    SetFrame = 1,1
+    Emitter = Straight
+    EmitterRate = 40
     SetZ = 1,20
     SetZoomX = 1,20
     SetZoomY = 1,75
+    SetFrame = 1,1
     SetEmitting = 1,true
     SetEmitSpeed = 1,250
     SetEmitSpeedRange = 1,100

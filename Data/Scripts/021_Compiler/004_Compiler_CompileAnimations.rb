@@ -213,14 +213,31 @@ module Compiler
                       particle[:name]) + "\n" + FileLineData.linereport
         end
       end
-      if particle[:emitter_polar_coordinates]
-        if particle[:emit_x] || particle[:emit_x_range] || particle[:emit_y] || particle[:emit_y_range]
-          raise _INTL("Emitter \"{1}\" uses polar coordinates but has an EmitX/EmitY command.",
+      if particle[:emitter_position_polar_coordinates]
+        if particle[:emitter_x] || particle[:emitter_y]
+          raise _INTL("Emitter \"{1}\" uses position polar coordinates but has an EmitterX/EmitterY command.",
                       particle[:name]) + "\n" + FileLineData.linereport
         end
       else
-        if particle[:emit_r] || particle[:emit_r_range] || particle[:emit_theta] || particle[:emit_theta_range]
-          raise _INTL("Emitter \"{1}\" doesn't use polar coordinates but has an EmitR/EmitTheta command.",
+        if particle[:emitter_r] || particle[:emitter_theta]
+          raise _INTL("Emitter \"{1}\" doesn't use position polar coordinates but has an EmitterR/EmitterTheta command.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+      end
+      if particle[:emitter_spawn_polar_coordinates]
+        if particle[:spawn_x] || particle[:spawn_x_range] ||
+           particle[:spawn_y] || particle[:spawn_y_range] ||
+           particle[:spawn_x_offset] || particle[:spawn_x_multiplier] ||
+           particle[:spawn_y_offset] || particle[:spawn_y_multiplier]
+          raise _INTL("Emitter \"{1}\" uses spawn polar coordinates but has a Spawn X/Y command.",
+                      particle[:name]) + "\n" + FileLineData.linereport
+        end
+      else
+        if particle[:spawn_r] || particle[:spawn_r_range] ||
+           particle[:spawn_theta] || particle[:spawn_theta_range] ||
+           particle[:spawn_r_offset] || particle[:spawn_r_multiplier] ||
+           particle[:spawn_theta_offset]
+          raise _INTL("Emitter \"{1}\" doesn't use spawn polar coordinates but has a Spawn R/Theta command.",
                       particle[:name]) + "\n" + FileLineData.linereport
         end
       end

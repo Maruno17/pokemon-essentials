@@ -12,8 +12,8 @@ Credit = Maruno
     MoveX = 5,2,2
     MoveX = 7,1,0
 <Scratch 1>
-    Graphic = scratch
     Focus = Target
+    Graphic = scratch
     SetX = 0,51
     SetY = 0,-102
     SetZ = 0,30
@@ -28,8 +28,8 @@ Credit = Maruno
     MoveOpacity = 2,5,0
     SetVisible = 7,false
 <Scratch afterimage 1>
-    Graphic = scratch
     Focus = Target
+    Graphic = scratch
     SetX = 1,19
     SetY = 1,-50
     SetZ = 1,25
@@ -40,8 +40,8 @@ Credit = Maruno
     MoveOpacity = 1,7,0
     SetVisible = 8,false
 <Scratch afterimage 2>
-    Graphic = scratch
     Focus = Target
+    Graphic = scratch
     SetX = 2,-12
     SetY = 2,6
     SetZ = 2,25
@@ -52,8 +52,8 @@ Credit = Maruno
     MoveOpacity = 2,7,0
     SetVisible = 9,false
 <Spark spawner>
-    Graphic = spark
     Focus = Target
+    Graphic = spark
     Emitter = Projectile
     EmitterRate = 80
     SetZ = 0,5

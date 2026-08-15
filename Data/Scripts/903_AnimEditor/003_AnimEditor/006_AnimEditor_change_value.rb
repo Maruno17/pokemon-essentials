@@ -77,7 +77,7 @@ class AnimationEditor
     when :particle_index
       @components[:timeline].particle_index = value
       refresh
-    when :x, :y, :r, :theta, :emit_x, :emit_y, :emit_r, :emit_theta, :angle
+    when :x, :y, :r, :theta, :emitter_x, :emitter_y, :emitter_r, :emitter_theta, :angle
       particle = @anim[:particles][particle_index]
       before_all = particle[property] && particle[property].none? { |cmd| cmd[0] <= keyframe }
       after_all = particle[property] && particle[property].none? { |cmd| cmd[0] + cmd[1] >= keyframe }
@@ -431,10 +431,6 @@ class AnimationEditor
     end
   end
 
-  # TODO: If :emitter_type is changed from :none to an emitter type, and the
-  #       ListedParticle for this particle needs to create new group rows for
-  #       the emitter properties, those rows will not have their expand arrow
-  #       until the particle properties pop-up window is closed.
   def apply_changed_particle_properties_value(property, value)
     idx_particle = (value.is_a?(Array)) ? value[0] : particle_index
     value = value[1] if value.is_a?(Array)
