@@ -7,7 +7,7 @@ class AnimationPlayer::ParticleSprite
   attr_reader   :sprite, :tiled_sprites
   attr_accessor :focus_xy, :offset_xy, :focus_z
   attr_reader   :property_offsets
-  attr_accessor :angle_override, :random_invert_angle, :random_invert_flip
+  attr_accessor :initial_angle, :random_invert_angle, :random_invert_flip
   attr_accessor :foe_invert_x, :foe_invert_y, :foe_invert_z, :foe_flip
   attr_accessor :slowdown
   attr_reader   :values
@@ -74,15 +74,8 @@ class AnimationPlayer::ParticleSprite
 
   #-----------------------------------------------------------------------------
 
-  # :angle => value is particle[:angle_override] from GameData::Animation::ANGLE_OVERRIDES.
-  # TODO: I don't like this being special for :angle.
   def set_base_property_offset(property, value)
-    case property
-    when :angle
-      @angle_override = value || :none   # Only used for :always_point_at_focus
-    else
-      @property_offsets[property] = value
-    end
+    @property_offsets[property] = value
   end
 
   #-----------------------------------------------------------------------------
@@ -193,7 +186,7 @@ class AnimationPlayer::ParticleSprite
       end
     when :helix
       if @emitter_params[:period_x] != 0
-        new_angle = @emitter_params[:angle]
+        new_angle = @emitter_params[:direction] || 0
         new_angle += (360 * delta_t / @emitter_params[:period_x]) * (@emitter_params[:clockwise] ? -1 : 1)
         new_x = @values[:radius_x] * @emitter_params[:radius_x_mult] * Math.sin(new_angle * Math::PI / 180)
         @values[:auto_movement_x] = new_x
@@ -205,7 +198,7 @@ class AnimationPlayer::ParticleSprite
         changed_properties.push(:y)
       end
       if @emitter_params[:period_z] != 0
-        new_angle = @emitter_params[:angle]
+        new_angle = @emitter_params[:direction] || 0
         new_angle += (360 * delta_t / @emitter_params[:period_z]) * (@emitter_params[:clockwise] ? -1 : 1)
         new_z = @values[:radius_z] * @emitter_params[:radius_z_mult] * Math.cos(new_angle * Math::PI / 180)
         @values[:z] = new_z
@@ -213,14 +206,14 @@ class AnimationPlayer::ParticleSprite
       end
     when :polar
       if @emitter_params[:period_x] != 0
-        new_angle = @emitter_params[:angle]
+        new_angle = @emitter_params[:direction] || 0
         new_angle += (360 * delta_t / @emitter_params[:period_x]) * (@emitter_params[:clockwise] ? -1 : 1)
         new_x = @values[:radius_x] * @emitter_params[:radius_x_mult] * Math.cos(new_angle * Math::PI / 180)
         @values[:auto_movement_x] = new_x
         changed_properties.push(:x)
       end
       if @emitter_params[:period_y] != 0
-        new_angle = @emitter_params[:angle] + (360 * delta_t / @emitter_params[:period_y])
+        new_angle = (@emitter_params[:direction] || 0) + (360 * delta_t / @emitter_params[:period_y])
         new_y = -@values[:radius_y] * @emitter_params[:radius_y_mult] * Math.sin(new_angle * Math::PI / 180)
         @values[:auto_movement_y] = new_y
         changed_properties.push(:y)
@@ -349,7 +342,7 @@ class AnimationPlayer::ParticleSprite
     when :zoom_y2
       @sprite[1].zoom_y = @sprite[0].zoom_y * value / 100.0 if @sprite[1]
     when :angle
-      if @angle_override == :always_point_at_focus
+      if @initial_angle == :always_particle_to_focus
         apply_sprite_property_override(:angle)
       else
         @sprite[0].angle = value + (@property_offsets[property] || 0)
@@ -447,9 +440,11 @@ class AnimationPlayer::ParticleSprite
   def apply_sprite_property_override(property)
     case property
     when :angle
-      # NOTE: This assumes vertically up is an angle of 0, and the angle
-      #       increases anticlockwise.
-      return if @angle_override != :always_point_at_focus
+      # NOTE: As with everything else, an angle of 0 corresponds to right, and
+      #       the angle increases anticlockwise. Most directional particles
+      #       (e.g. needles) point up and will need rotating by 270 degrees to
+      #       get them to point towards the focus.
+      return if @initial_angle != :always_particle_to_focus
       # Get coordinates
       sprite_x = @sprite[0].x
       sprite_y = @sprite[0].y

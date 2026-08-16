@@ -59,6 +59,9 @@ class AnimationEditor
     :emit_direction_range    => [     0,   180],
     :emit_gravity            => [-99999, 99999],
     :emit_gravity_range      => [     0,  9999],
+    :emit_radius_x_range     => [     0,  9999],
+    :emit_radius_y_range     => [     0,  9999],
+    :emit_radius_z_range     => [     0,    50],
     :emit_period_x           => [     0,  9999],
     :emit_period_x_range     => [     0,  9999],
     :emit_period_y           => [     0,  9999],
@@ -68,16 +71,13 @@ class AnimationEditor
     # Property modifiers for emitted particles.
     :emit_x_multiplier       => [     0,  9999],
     :emit_y_multiplier       => [     0,  9999],
-    :emit_radius_x_range     => [     0,  9999],
-    :emit_radius_y_range     => [     0,  9999],
-    :emit_radius_z_range     => [     0,    50],
     :emit_zoom_multiplier    => [     0,  9999],
     :emit_zoom_range         => [     0,  9999],
     :emit_zoom_x_range       => [     0,  9999],
     :emit_zoom_y_range       => [     0,  9999],
     :emit_opacity_multiplier => [     0,  9999],
-    # Extra particle properties for emitted particles. (Used by :helix/:polar
-    # emitter types.)
+    # Extra particle properties for emitted particles. (Radii used by :helix/
+    # :polar emitter types.)
     :spawn_x_offset          => [-99999, 99999],
     :spawn_x_multiplier      => [     0,  9999],
     :spawn_y_offset          => [-99999, 99999],

@@ -22,10 +22,11 @@ Credit = Maruno
 <Needle 1>
     Focus = UserAndTarget
     Graphic = needle
-    AngleOverride = InitialAngleToFocus
+    InitialAngle = ParticleToFocus
     SetZ = 4,-50
     SetZoomX = 4,50
     SetZoomY = 4,80
+    SetAngle = 4,270
     SetColor = 4,A020C080
     MoveX = 4,7,200
     MoveY = 4,7,-180
@@ -46,10 +47,11 @@ Credit = Maruno
 <Needle 2>
     Focus = UserAndTarget
     Graphic = needle
-    AngleOverride = InitialAngleToFocus
+    InitialAngle = ParticleToFocus
     SetZ = 7,-50
     SetZoomX = 7,50
     SetZoomY = 7,80
+    SetAngle = 7,270
     SetColor = 7,A020C080
     MoveX = 7,6,200
     MoveY = 7,6,-200

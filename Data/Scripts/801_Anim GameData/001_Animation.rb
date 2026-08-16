@@ -69,12 +69,12 @@ module GameData
       "Helix"      => :helix,         # Sine movement in x, straight movement in y
       "Polar"      => :polar          # Sine movement in x/y
     }
-    ANGLE_OVERRIDES = {
-      "None"                       => :none,
-      "InitialAngleToFocus"        => :initial_angle_to_focus,
-      "InitialEmitterAngleToFocus" => :initial_emitter_angle_to_focus,
-      "AlwaysPointAtFocus"         => :always_point_at_focus,
-      "EmittedDirection"           => :emitted_direction
+    PARTICLE_INITIAL_ANGLES = {
+      "None"                  => :none,
+      "ParticleToFocus"       => :particle_to_focus,
+      "AlwaysParticleToFocus" => :always_particle_to_focus,
+      "EmitterToFocus"        => :emitter_to_focus,
+      "EmittedDirection"      => :emitted_direction   # :emit_direction or away from emitter
     }
     # NOTE: These are all the same properties as the base layer, minus :visible.
     #       * :frame2, :blending2, :color2 and :tone2 are standalone and are not
@@ -116,7 +116,7 @@ module GameData
       "FoeInvertY"                      => [:foe_invert_y,                       "b"],
       "FoeInvertZ"                      => [:foe_invert_z,                       "b"],
       "FoeFlip"                         => [:foe_flip,                           "b"],
-      "AngleOverride"                   => [:angle_override,                     "e", ANGLE_OVERRIDES],
+      "InitialAngle"                    => [:initial_angle,                      "e", PARTICLE_INITIAL_ANGLES],
       "RandomAngleRange"                => [:random_angle_range,                 "u"],
       "RandomInvertAngle"               => [:random_invert_angle,                "b"],
       "RandomInvertFlip"                => [:random_invert_flip,                 "b"],
@@ -236,6 +236,12 @@ module GameData
       "MoveEmitGravity"        => [:emit_gravity,         "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitGravityRange"    => [:emit_gravity_range,   "^uu"],
       "MoveEmitGravityRange"   => [:emit_gravity_range,   "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetEmitRadiusXRange"    => [:emit_radius_x_range,  "^uu"],
+      "MoveEmitRadiusXRange"   => [:emit_radius_x_range,  "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetEmitRadiusYRange"    => [:emit_radius_y_range,  "^uu"],
+      "MoveEmitRadiusYRange"   => [:emit_radius_y_range,  "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetEmitRadiusZRange"    => [:emit_radius_z_range,  "^uu"],
+      "MoveEmitRadiusZRange"   => [:emit_radius_z_range,  "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitPeriodX"         => [:emit_period_x,        "^uu"],   # NOTE: Actually time for 100 periods.
       "MoveEmitPeriodX"        => [:emit_period_x,        "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitPeriodXRange"    => [:emit_period_x_range,  "^uu"],
@@ -254,12 +260,6 @@ module GameData
       "MoveEmitXMultiplier"       => [:emit_x_multiplier,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitYMultiplier"        => [:emit_y_multiplier,       "^uu"],
       "MoveEmitYMultiplier"       => [:emit_y_multiplier,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetEmitRadiusXRange"       => [:emit_radius_x_range,     "^uu"],
-      "MoveEmitRadiusXRange"      => [:emit_radius_x_range,     "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetEmitRadiusYRange"       => [:emit_radius_y_range,     "^uu"],
-      "MoveEmitRadiusYRange"      => [:emit_radius_y_range,     "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
-      "SetEmitRadiusZRange"       => [:emit_radius_z_range,     "^uu"],
-      "MoveEmitRadiusZRange"      => [:emit_radius_z_range,     "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitZoomRange"          => [:emit_zoom_range,         "^uu"],
       "MoveEmitZoomRange"         => [:emit_zoom_range,         "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitZoomMultiplier"     => [:emit_zoom_multiplier,    "^uu"],
@@ -309,7 +309,7 @@ module GameData
       :foe_invert_y                       => false,
       :foe_invert_z                       => false,
       :foe_flip                           => false,
-      :angle_override                     => :none,
+      :initial_angle                      => :none,
       :random_angle_range                 => 0,
       :random_invert_angle                => false,
       :random_invert_flip                 => false,
@@ -385,6 +385,9 @@ module GameData
       :emit_direction_range    => 0,
       :emit_gravity            => 0,
       :emit_gravity_range      => 0,
+      :emit_radius_x_range     => 0,
+      :emit_radius_y_range     => 0,
+      :emit_radius_z_range     => 0,
       :emit_period_x           => 100,
       :emit_period_x_range     => 0,
       :emit_period_y           => 100,
@@ -395,16 +398,13 @@ module GameData
       # Property modifiers for emitted particles.
       :emit_x_multiplier       => 100,
       :emit_y_multiplier       => 100,
-      :emit_radius_x_range     => 0,
-      :emit_radius_y_range     => 0,
-      :emit_radius_z_range     => 0,
       :emit_zoom_range         => 0,
       :emit_zoom_multiplier    => 100,
       :emit_zoom_x_range       => 0,
       :emit_zoom_y_range       => 0,
       :emit_opacity_multiplier => 100,
-      # Extra particle properties for emitted particles. (Used by :helix/:polar
-      # emitter types.)
+      # Extra particle properties for emitted particles. (Radii used by :helix/
+      # :polar emitter types.)
       :spawn_x_offset          => 0,
       :spawn_x_multiplier      => 100,
       :spawn_y_offset          => 0,
@@ -484,6 +484,9 @@ module GameData
         :emit_direction_range    => _INTL("Direction ±"),
         :emit_gravity            => _INTL("Gravity"),
         :emit_gravity_range      => _INTL("Gravity ±"),
+        :emit_radius_x_range     => _INTL("Radius X ±%"),
+        :emit_radius_y_range     => _INTL("Radius Y ±%"),
+        :emit_radius_z_range     => _INTL("Radius Z ±%"),
         :emit_period_x           => _INTL("Period X"),
         :emit_period_x_range     => _INTL("Period X ±"),
         :emit_period_y           => _INTL("Period Y"),
@@ -494,16 +497,13 @@ module GameData
         # Property modifiers for emitted particles.
         :emit_x_multiplier       => _INTL("X ×%"),
         :emit_y_multiplier       => _INTL("Y ×%"),
-        :emit_radius_x_range     => _INTL("Rad. X ±%"),
-        :emit_radius_y_range     => _INTL("Rad. Y ±%"),
-        :emit_radius_z_range     => _INTL("Rad. Z ±%"),
         :emit_zoom_range         => _INTL("Zoom ±%"),
         :emit_zoom_multiplier    => _INTL("Zoom ×%"),
         :emit_zoom_x_range       => _INTL("Zoom X ±%"),
         :emit_zoom_y_range       => _INTL("Zoom Y ±%"),
         :emit_opacity_multiplier => _INTL("Opacity ×%"),
-        # Extra particle properties for emitted particles. (Used by :helix/:polar
-        # emitter types.)
+        # Extra particle properties for emitted particles. (Radii used by :helix/
+        # :polar emitter types.)
         :spawn_x_offset          => _INTL("Spawn X ±"),
         :spawn_x_multiplier      => _INTL("Spawn X ×%"),
         :spawn_y_offset          => _INTL("Spawn Y ±"),

@@ -333,14 +333,6 @@ module Compiler
         raise _INTL("Particle \"{1}\" can't can't set \"TiledGraphic\" if it is an emitter or has a non-screen focus.",
                     particle[:name]) + "\n" + FileLineData.linereport
       end
-      # Ensure that only particles that have an entity as a focus can have a
-      # smart angle
-      if (particle[:angle_override] || :none) != :none &&
-         !GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus]) &&
-         !GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-        raise _INTL("Particle \"{1}\" can't set \"AngleOverride\" if its focus isn't a specific thing(s).",
-                    particle[:name]) + "\n" + FileLineData.linereport
-      end
       # Ensure that a particle with a user's/target's graphic doesn't have any
       # :frame commands
       if !["User", "Target", "SE"].include?(particle[:name]) &&

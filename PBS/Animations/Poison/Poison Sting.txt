@@ -20,9 +20,10 @@ Credit = Maruno
 <Stinger>
     Focus = UserAndTarget
     Graphic = needle
-    AngleOverride = AlwaysPointAtFocus
+    InitialAngle = AlwaysParticleToFocus
     SetZ = 3,-1
     SetZoomX = 3,50
+    SetAngle = 3,270
     SetColor = 3,E040C880
     MoveX = 3,4,200
     MoveY = 3,4,-200

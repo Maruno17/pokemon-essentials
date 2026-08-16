@@ -178,25 +178,28 @@ module AnimationPlayer::Helper
 
   #-----------------------------------------------------------------------------
 
-  def angle_between(x1, y1, x2, y2)
-    diff_x = x1 - x2
-    diff_y = y1 - y2
-    ret = Math.atan(diff_x.to_f / diff_y) * 180 / Math::PI
-    ret += 180 if diff_y < 0
+  # Returns the direction (an angle) that "to" is from "from". The angle that
+  # "from" has to face to be looking at "to".
+  def angle_between(from_x, from_y, to_x, to_y)
+    diff_x = to_x - from_x
+    diff_y = to_y - from_y
+    ret = -Math.atan2(diff_y.to_f, diff_x) * 180 / Math::PI
+    ret += 360 if ret < 0
     return ret
   end
 
+  # Returns the direction (an angle) that the particle is in from the focus.
   def initial_angle_between(particle, focus, offset)
-    x1 = 0
-    y1 = 0
-    x2 = 0
-    y2 = 0
+    particle_x = 0
+    particle_y = 0
+    focus_x = 0
+    focus_y = 0
     if focus
-      x2 = (focus.length == 2) ? focus[1][0] : focus[0][0]
-      y2 = (focus.length == 2) ? focus[1][1] : focus[0][1]
+      focus_x = (focus.length == 2) ? focus[1][0] : focus[0][0]
+      focus_y = (focus.length == 2) ? focus[1][1] : focus[0][1]
     end
     if particle.is_a?(Array)
-      x1, x2 = particle
+      particle_x, particle_y = particle
     else
       coords = [:x, :y]
       coords = [:emitter_x, :emitter_y] if (particle[:emitter_type] || :none) != :none
@@ -205,9 +208,9 @@ module AnimationPlayer::Helper
         particle[property].each do |cmd|
           break if cmd[1] > 0
           if property == :x
-            x1 = cmd[2]
+            particle_x = cmd[2]
           else
-            y1 = cmd[2]
+            particle_y = cmd[2]
           end
           break
         end
@@ -216,16 +219,16 @@ module AnimationPlayer::Helper
     if focus
       if focus.length == 2
         distance = GameData::Animation::USER_AND_TARGET_SEPARATION
-        x1 = focus[0][0] + ((x1.to_f / distance[0]) * (focus[1][0] - focus[0][0])).to_i
-        y1 = focus[0][1] + ((y1.to_f / distance[1]) * (focus[1][1] - focus[0][1])).to_i
+        particle_x = focus[0][0] + ((particle_x.to_f / distance[0]) * (focus[1][0] - focus[0][0])).to_i
+        particle_y = focus[0][1] + ((particle_y.to_f / distance[1]) * (focus[1][1] - focus[0][1])).to_i
       else
-        x1 += focus[0][0]
-        y1 += focus[0][1]
+        particle_x += focus[0][0]
+        particle_y += focus[0][1]
       end
     end
-    x1 += offset[0]
-    y1 += offset[1]
-    return angle_between(x1, y1, x2, y2)
+    particle_x += offset[0]
+    particle_y += offset[1]
+    return angle_between(particle_x, particle_y, focus_x, focus_y)
   end
 
   #-----------------------------------------------------------------------------

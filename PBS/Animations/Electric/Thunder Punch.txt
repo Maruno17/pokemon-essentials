@@ -73,13 +73,14 @@ Credit = Maruno
 <Zaps emitter>
     Focus = Target
     Graphic = electricity 1
-    AngleOverride = AlwaysPointAtFocus
+    InitialAngle = AlwaysParticleToFocus
     RandomInvertFlip = true
     Emitter = Straight
     EmitterRate = 40
     SetZ = 1,20
     SetZoomX = 1,20
     SetZoomY = 1,75
+    SetAngle = 1,90
     SetFrame = 1,1
     SetEmitting = 1,true
     SetEmitSpeed = 1,250
