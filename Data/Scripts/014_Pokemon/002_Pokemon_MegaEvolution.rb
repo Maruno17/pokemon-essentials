@@ -40,8 +40,10 @@ class Pokemon
   end
 
   def makeUnmega
+    was_fainted = fainted?
     unmegaForm = self.getUnmegaForm
     self.form = unmegaForm if unmegaForm >= 0
+    self.hp = 0 if was_fainted
   end
 
   def megaName
@@ -76,11 +78,13 @@ class Pokemon
   end
 
   def makeUnprimal
+    was_fainted = fainted?
     v = MultipleForms.call("getUnprimalForm", self)
     if !v.nil?
       self.form = v
     elsif primal?
       self.form = 0
     end
+    self.hp = 0 if was_fainted
   end
 end

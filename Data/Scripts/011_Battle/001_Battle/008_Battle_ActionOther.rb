@@ -71,13 +71,8 @@ class Battle
   #-----------------------------------------------------------------------------
 
   def pbHasMegaRing?(idxBattler)
-    if pbOwnedByPlayer?(idxBattler)
-      @mega_rings.each { |item| return true if $bag.has?(item) }
-    else
-      trainer_items = pbGetOwnerItems(idxBattler)
-      return false if !trainer_items
-      @mega_rings.each { |item| return true if trainer_items.include?(item) }
-    end
+    return true if !pbOwnedByPlayer?(idxBattler)
+    @mega_rings.each { |item| return true if $bag.has?(item) }
     return false
   end
 
