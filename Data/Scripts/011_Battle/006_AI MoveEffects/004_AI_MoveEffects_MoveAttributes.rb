@@ -831,7 +831,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUser",
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.canProtectAgainst? }
-      next if (b.has_active_ability?(:UNSEENFIST) || b.has_active_ability?(:PIERCINGDRILL)) &&
+      next if b.can_make_contact_through_protection? &&
               b.check_for_move { |m| m.pbContactMove?(b.battler) }
       useless = false
       # General preference
@@ -876,7 +876,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserBanefulBunker",
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.canProtectAgainst? }
-      next if (b.has_active_ability?(:UNSEENFIST) || b.has_active_ability?(:PIERCINGDRILL)) &&
+      next if b.can_make_contact_through_protection? &&
               b.check_for_move { |m| m.pbContactMove?(b.battler) }
       useless = false
       # General preference
@@ -934,7 +934,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesBurningBu
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.damagingMove? && m.canProtectAgainst? }
-      next if (b.has_active_ability?(:UNSEENFIST) || b.has_active_ability?(:PIERCINGDRILL)) &&
+      next if b.can_make_contact_through_protection? &&
               b.check_for_move { |m| m.pbContactMove?(b.battler) }
       useless = false
       # General preference
@@ -987,7 +987,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesKingsShie
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.damagingMove? && m.canProtectAgainst? }
-      next if (b.has_active_ability?(:UNSEENFIST) || b.has_active_ability?(:PIERCINGDRILL)) &&
+      next if b.can_make_contact_through_protection? &&
               b.check_for_move { |m| m.pbContactMove?(b.battler) }
       useless = false
       # General preference
@@ -1041,7 +1041,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesObstruct"
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.damagingMove? && m.canProtectAgainst? }
-      next if (b.has_active_ability?(:UNSEENFIST) || b.has_active_ability?(:PIERCINGDRILL)) &&
+      next if b.can_make_contact_through_protection? &&
               b.check_for_move { |m| m.pbContactMove?(b.battler) }
       useless = false
       # General preference
@@ -1091,7 +1091,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromDamagingMovesSilkTrap"
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.damagingMove? && m.canProtectAgainst? }
-      next if (b.has_active_ability?(:UNSEENFIST) || b.has_active_ability?(:PIERCINGDRILL)) &&
+      next if b.can_make_contact_through_protection? &&
               b.check_for_move { |m| m.pbContactMove?(b.battler) }
       useless = false
       # General preference
@@ -1141,7 +1141,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserFromTargetingMovesSpikyShi
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.canProtectAgainst? }
-      next if (b.has_active_ability?(:UNSEENFIST) || b.has_active_ability?(:PIERCINGDRILL)) &&
+      next if b.can_make_contact_through_protection? &&
               b.check_for_move { |m| m.pbContactMove?(b.battler) }
       useless = false
       # General preference
@@ -1193,7 +1193,7 @@ Battle::AI::Handlers::MoveEffectScore.add("ProtectUserSideFromDamagingMovesIfUse
     ai.each_foe_battler(user.side) do |b, i|
       next if !b.can_attack?
       next if !b.check_for_move { |m| m.damagingMove? && m.canProtectAgainst? }
-      next if (b.has_active_ability?(:UNSEENFIST) || b.has_active_ability?(:PIERCINGDRILL)) &&
+      next if b.can_make_contact_through_protection? &&
               b.check_for_move { |m| m.pbContactMove?(b.battler) }
       useless = false
       # General preference

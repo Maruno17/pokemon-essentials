@@ -236,8 +236,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttack",
     end
     # Don't prefer if target has a protecting move
     if ai.trainer.high_skill? &&
-       !((user.has_active_ability?(:UNSEENFIST) || user.has_active_ability?(:PIERCINGDRILL)) &&
-         move.move.pbContactMove?(user.battler))
+       !(user.can_make_contact_through_protection? && move.move.pbContactMove?(user.battler))
       has_protect_move = false
       if move.pbTarget(user).num_targets > 1 &&
          (Settings::MECHANICS_GENERATION >= 7 || move.damagingMove?)

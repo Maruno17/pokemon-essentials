@@ -1102,7 +1102,18 @@ Battle::AbilityEffects::MoveImmunity.add(:FLASHFIRE,
 
 Battle::AbilityEffects::MoveImmunity.add(:GOODASGOLD,
   proc { |ability, user, target, move, type, battle, show_message|
-    next move.statusMove?
+    next false if !move.statusMove?
+    if show_message
+      battle.pbShowAbilitySplash(target)
+      if Battle::Scene::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
+      else
+        battle.pbDisplay(_INTL("{1} {2} made {3} ineffective!",
+                               target.pbOfThis, target.abilityName, move.name))
+      end
+      battle.pbHideAbilitySplash(target)
+    end
+    next true
   }
 )
 

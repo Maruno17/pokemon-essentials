@@ -281,6 +281,14 @@ class Battle::AI::AIBattler
     return battler.beingMoldBroken?
   end
 
+  def has_airborne_ability?
+    return battler.hasAirborneAbility?
+  end
+
+  def can_make_contact_through_protection?
+    return battler.canMakeContactThroughProtection?
+  end
+
   #-----------------------------------------------------------------------------
 
   def item_id; return battler.item_id; end
