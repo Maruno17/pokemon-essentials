@@ -20,6 +20,7 @@ class Battle::Move
   attr_accessor :calcType
   attr_accessor :powerBoost
   attr_accessor :snatched
+  attr_accessor :magicCoatIndex, :magicBounceIndex
 
   CRITICAL_HIT_RATIOS = (Settings::NEW_CRITICAL_HIT_RATE_MECHANICS) ? [24, 8, 2, 1] : [16, 8, 4, 3, 2]
 
@@ -28,23 +29,25 @@ class Battle::Move
   #-----------------------------------------------------------------------------
 
   def initialize(battle, move)
-    @battle        = battle
-    @realMove      = move
-    @id            = move.id
-    @name          = move.name   # Get the move's name
+    @battle          = battle
+    @realMove        = move
+    @id              = move.id
+    @name            = move.name   # Get the move's name
     # Get data on the move
-    @function_code = move.function_code
-    @power         = move.power
-    @type          = move.type
-    @category      = move.category
-    @accuracy      = move.accuracy
-    @pp            = move.pp   # Can be changed with Mimic/Transform
-    @target        = move.target
-    @priority      = move.priority
-    @flags         = move.flags.clone
-    @addlEffect    = move.effect_chance
-    @powerBoost    = false   # For Aerilate, Pixilate, Refrigerate, Galvanize, Dragonize
-    @snatched      = false
+    @function_code   = move.function_code
+    @power           = move.power
+    @type            = move.type
+    @category        = move.category
+    @accuracy        = move.accuracy
+    @pp              = move.pp   # Can be changed with Mimic/Transform
+    @target          = move.target
+    @priority        = move.priority
+    @flags           = move.flags.clone
+    @addlEffect      = move.effect_chance
+    @powerBoost      = false   # For Aerilate, Pixilate, Refrigerate, Galvanize, Dragonize
+    @snatched        = false
+    @magicCoatIndex   = -1
+    @magicBounceIndex = -1
   end
 
   # This is the code actually used to generate a Battle::Move object. The

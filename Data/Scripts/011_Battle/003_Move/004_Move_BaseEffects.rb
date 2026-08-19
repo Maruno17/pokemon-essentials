@@ -22,22 +22,24 @@ end
 #===============================================================================
 class Battle::Move::Confusion < Battle::Move
   def initialize(battle, move)
-    @battle        = battle
-    @realMove      = move
-    @id            = :CONFUSEDAMAGE
-    @name          = ""
-    @function_code = "None"
-    @power         = 40
-    @type          = nil
-    @category      = 0
-    @accuracy      = 100
-    @pp            = -1
-    @target        = :User
-    @priority      = 0
-    @flags         = []
-    @addlEffect    = 0
-    @powerBoost    = false
-    @snatched      = false
+    @battle           = battle
+    @realMove         = move
+    @id               = :CONFUSEDAMAGE
+    @name             = ""
+    @function_code    = "None"
+    @power            = 40
+    @type             = nil
+    @category         = 0
+    @accuracy         = 100
+    @pp               = -1
+    @target           = :User
+    @priority         = 0
+    @flags            = []
+    @addlEffect       = 0
+    @powerBoost       = false
+    @snatched         = false
+    @magicCoatIndex   = -1
+    @magicBounceIndex = -1
   end
 
   def physicalMove?(thisType = nil);   return true;  end
@@ -50,22 +52,24 @@ end
 #===============================================================================
 class Battle::Move::Struggle < Battle::Move
   def initialize(battle, move)
-    @battle        = battle
-    @realMove      = nil                     # Not associated with a move
-    @id            = :STRUGGLE
-    @name          = _INTL("Struggle")
-    @function_code = "Struggle"
-    @power         = 50
-    @type          = nil
-    @category      = 0
-    @accuracy      = 0
-    @pp            = -1
-    @target        = :RandomNearFoe
-    @priority      = 0
-    @flags         = ["Contact", "CanProtect"]
-    @addlEffect    = 0
-    @powerBoost    = false
-    @snatched      = false
+    @battle           = battle
+    @realMove         = nil                     # Not associated with a move
+    @id               = :STRUGGLE
+    @name             = _INTL("Struggle")
+    @function_code    = "Struggle"
+    @power            = 50
+    @type             = nil
+    @category         = 0
+    @accuracy         = 0
+    @pp               = -1
+    @target           = :RandomNearFoe
+    @priority         = 0
+    @flags            = ["Contact", "CanProtect"]
+    @addlEffect       = 0
+    @powerBoost       = false
+    @snatched         = false
+    @magicCoatIndex   = -1
+    @magicBounceIndex = -1
   end
 
   def physicalMove?(thisType = nil); return true;  end

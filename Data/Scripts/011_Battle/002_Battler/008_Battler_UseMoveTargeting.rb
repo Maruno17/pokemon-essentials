@@ -3,16 +3,11 @@
 #===============================================================================
 class Battle::Battler
   #-----------------------------------------------------------------------------
-  # Get move's user.
+  # Change move's user.
   #-----------------------------------------------------------------------------
-
-  def pbFindUser(_choice, _move)
-    return self
-  end
 
   def pbChangeUser(choice, move, user)
     # Snatch
-    move.snatched = false
     if move.statusMove? && move.canSnatch?
       newUser = nil
       strength = 100
