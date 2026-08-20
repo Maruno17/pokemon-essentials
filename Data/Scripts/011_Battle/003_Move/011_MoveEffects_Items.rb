@@ -11,6 +11,7 @@ class Battle::Move::UserTakesTargetItem < Battle::Move
     return if target.unlosableItem?(target.item)
     return if user.unlosableItem?(target.item)
     return if target.hasActiveAbility?(:STICKYHOLD) && !target.beingMoldBroken?
+    item_name = target.item.name
     if Settings::STOLEN_HELD_ITEMS_GO_INTO_BAG && user.pbOwnedByPlayer? && target.wild? &&
        $bag.can_add?(target.item_id)
       $bag.add(target.item_id)
@@ -19,7 +20,7 @@ class Battle::Move::UserTakesTargetItem < Battle::Move
     else
       @battle.swapHeldItems(user, target)
     end
-    @battle.pbDisplay(_INTL("{1} stole {2}'s {3}!", user.pbThis, target.pbThis(true), user.itemName))
+    @battle.pbDisplay(_INTL("{1} stole {2}'s {3}!", user.pbThis, target.pbThis(true), item_name))
     user.pbHeldItemTriggerCheck
   end
 end

@@ -839,7 +839,7 @@ class TriadScreen
         if scores.length == 0
           @scene.pbDisplay(_INTL("{1} can't move somehow...", @opponentName))
           playerTurn = !playerTurn
-          continue
+          next
         end
         result = scores[rand(scores.length)]
         cardIndex = result[0]
@@ -928,7 +928,7 @@ class TriadScreen
         cardname = GameData::Species.get(card).name
         @scene.pbDisplayPaused(_INTL("Opponent won your {1} card.", cardname))
       when 1   # Keep only cards of your color
-        originalCards.each { |crd| $PokemonGlobal.triads.remove(card) }
+        originalCards.each { |crd| $PokemonGlobal.triads.remove(crd) }
         cards.each { |crd| $PokemonGlobal.triads.add(crd) }
         (@width * @height).times do |i|
           if board[i].owner == 1

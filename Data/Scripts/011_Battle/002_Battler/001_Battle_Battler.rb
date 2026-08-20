@@ -46,7 +46,6 @@ class Battle::Battler
   attr_accessor :tookPhysicalHit
   attr_accessor :statsRaisedThisRound   # Boolean for whether self's stat(s) raised this round
   attr_accessor :statsLoweredThisRound   # Boolean for whether self's stat(s) lowered this round
-  attr_accessor :canRestoreIceFace   # Whether Hail started in the round
   attr_accessor :damageState
 
   # These arrays should all have the same number of values in them

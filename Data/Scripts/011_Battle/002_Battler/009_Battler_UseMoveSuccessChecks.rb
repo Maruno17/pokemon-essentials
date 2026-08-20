@@ -194,7 +194,7 @@ class Battle::Battler
   # Check whether the user (self) is able to take action at all.
   # If this returns true, and if PP isn't a problem, the move will be considered
   # to have been used (even if it then fails for whatever reason).
-  def pbTryUseMove(choice, move, specialUsage, skipAccuracyCheck)
+  def pbTryUseMove(choice, move, specialUsage, skipStatusFailureChecks)
     # Check whether it's possible for self to use the given move
     # NOTE: Encore has already changed the move being used, no need to have a
     #       check for it here.
@@ -219,7 +219,7 @@ class Battle::Battler
       return false
     end
     # Skip checking all applied effects that could make self fail doing something
-    return true if skipAccuracyCheck
+    return true if skipStatusFailureChecks
     # Check status problems and continue their effects/cure them
     case @status
     when :SLEEP
@@ -684,7 +684,7 @@ class Battle::Battler
 
   # Per-hit success check against the target.
   # Includes semi-invulnerable move use and accuracy calculation.
-  def pbSuccessCheckPerHit(move, user, target, skipAccuracyCheck)
+  def pbSuccessCheckPerHit(move, user, target)
     # Two-turn attacks can't fail here in the charging turn
     return true if user.effects[PBEffects::TwoTurnAttack]
     # Lock-On
@@ -699,8 +699,6 @@ class Battle::Battler
                    target.hasActiveAbility?(:NOGUARD)
     # Semi-invulnerable target
     return false if target.damageState.invulnerable
-    # Called by another move
-    return true if skipAccuracyCheck
     # Accuracy check
     return true if move.pbAccuracyCheck(user, target)   # Includes Counter/Mirror Coat
     PBDebug.log("[Move failed] Failed pbAccuracyCheck")

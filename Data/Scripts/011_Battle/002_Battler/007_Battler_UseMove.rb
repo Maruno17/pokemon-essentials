@@ -110,9 +110,7 @@ class Battle::Battler
     if !@effects[PBEffects::ChoiceBand] &&
        (hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF]) ||
        hasActiveAbility?(:GORILLATACTICS))
-      if @lastMoveUsed && pbHasMove?(@lastMoveUsed)
-        @effects[PBEffects::ChoiceBand] = @lastMoveUsed
-      elsif @lastRegularMoveUsed && pbHasMove?(@lastRegularMoveUsed)
+      if @lastRegularMoveUsed && pbHasMove?(@lastRegularMoveUsed)
         @effects[PBEffects::ChoiceBand] = @lastRegularMoveUsed
       end
     end
@@ -146,8 +144,8 @@ class Battle::Battler
   end
 
   #-----------------------------------------------------------------------------
-  # Simple "use move" method, used when a move calls another move and for Future
-  # Sight's attack.
+  # Simple "use move" method, used when a move calls another move, for Future
+  # Sight's attack, and for moves used because of Instruct/Dancer.
   #-----------------------------------------------------------------------------
 
   def pbUseMoveSimple(moveID, target = -1, idxMove = -1, specialUsage = true)
@@ -172,7 +170,7 @@ class Battle::Battler
   def pbUseMove(choice, specialUsage = false)
     # NOTE: This is intentionally determined before a multi-turn attack can
     #       set specialUsage to true.
-    skipAccuracyCheck = (specialUsage && choice[2] != @battle.struggle)
+    skipStatusFailureChecks = (specialUsage && choice[2] != @battle.struggle)
     # Start using the move
     pbBeginTurn(choice)
     # Decide if a different move should be used instead
@@ -181,12 +179,14 @@ class Battle::Battler
     return if !move   # if move was not chosen somehow
     # User tries to act and use the move (inc. disobedience)
     @lastMoveFailed = false
-    if !pbTryUseMove(choice, move, specialUsage, skipAccuracyCheck)
-      @lastMoveUsed     = nil
-      @lastMoveUsedType = nil
-      if !specialUsage
-        @lastRegularMoveUsed   = nil
-        @lastRegularMoveTarget = -1
+    if !pbTryUseMove(choice, move, specialUsage, skipStatusFailureChecks)
+      if @lastMoveFailed
+        @lastMoveUsed     = nil
+        @lastMoveUsedType = nil
+        if !specialUsage
+          @lastRegularMoveUsed   = nil
+          @lastRegularMoveTarget = -1
+        end
       end
       @battle.pbGainExp   # In case self is KO'd due to confusion
       pbCancelMoves(false)
@@ -281,7 +281,7 @@ class Battle::Battler
       realNumHits = 0   # The actual number of hits that land
       numHits.times do |i|
         break if move.magicCoatIndex >= 0 || move.magicBounceIndex >= 0
-        success = pbProcessMoveHit(move, user, targets, i, skipAccuracyCheck)
+        success = pbProcessMoveHit(move, user, targets, i)
         if !success
           if i == 0 && targets.length > 0   # First hit failed and targets are involved
             hasFailed = false
@@ -384,9 +384,10 @@ class Battle::Battler
       @effects[PBEffects::TwoTurnAttack] = nil   # Cancel use of two-turn attack
     end
     # Reset trackers for Snatch, Magic Coat and Magic Bounce
-    move.snatched         = false
-    move.magicCoatIndex   = -1
-    move.magicBounceIndex = -1
+    move.snatched                 = false
+    move.magicCoatIndex           = -1
+    move.magicBounceIndex         = -1
+    move.hadEffectWhenMagicCoated = false
     # Add to counters for moves which increase them when used in succession
     move.pbChangeUsageCounters(self, specialUsage)
     # Charge up Metronome item
@@ -597,6 +598,7 @@ class Battle::Battler
         newTargets.compact!
       end
       pbProcessMoveHit(move, b, newTargets, 0, false) if success
+      move.hadEffectWhenMagicCoated = success
       b.lastMoveFailed = true if !success
       targets.each { |otherB| otherB.pbFaint if otherB&.fainted? }
       user.pbFaint if user.fainted?
@@ -613,6 +615,7 @@ class Battle::Battler
         if !move.pbMoveFailed?(mc, [])
           success = pbProcessMoveHit(move, mc, [], 0, false)
         end
+        move.hadEffectWhenMagicCoated = success
         mc.lastMoveFailed = true if !success
         targets.each { |b| b.pbFaint if b&.fainted? }
         user.pbFaint if user.fainted?
@@ -674,7 +677,7 @@ class Battle::Battler
         nextUser.effects[PBEffects::Dancer] = true
         if nextUser.pbCanChooseMove?(move, false)
           @battle.clearStagesChangeRecords
-          PBDebug.logonerr { nextUser.pbUseMoveSimple(move.id, preTarget) }
+          PBDebug.logonerr { nextUser.pbUseMoveSimple(move.id, preTarget, -1, false) }
           @battle.checkStatChangeResponses
           nextUser.lastRoundMoved = oldLastRoundMoved
           nextUser.effects[PBEffects::Outrage] = oldOutrage
@@ -692,7 +695,7 @@ class Battle::Battler
   # Attack a single target.
   #-----------------------------------------------------------------------------
 
-  def pbProcessMoveHit(move, user, targets, hitNum, skipAccuracyCheck)
+  def pbProcessMoveHit(move, user, targets, hitNum)
     return false if user.fainted?
     # For two-turn attacks being used in a single turn
     move.pbInitialEffect(user, targets, hitNum)
@@ -704,7 +707,7 @@ class Battle::Battler
       targets.each do |b|
         b.damageState.missed = false
         next if b.damageState.unaffected
-        if pbSuccessCheckPerHit(move, user, b, skipAccuracyCheck)
+        if pbSuccessCheckPerHit(move, user, b)
           numTargets += 1
         else
           b.damageState.missed     = true
@@ -880,7 +883,7 @@ class Battle::Battler
     # Dragon Darts' second half of attack
     if move.pbRepeatHit? && hitNum == 0 &&
        targets.any? { |b| !b.fainted? && !b.damageState.unaffected }
-      pbProcessMoveHit(move, user, all_targets, 1, skipAccuracyCheck)
+      pbProcessMoveHit(move, user, all_targets, 1)
     end
     return true
   end

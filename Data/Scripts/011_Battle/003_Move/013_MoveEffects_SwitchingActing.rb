@@ -102,7 +102,7 @@ class Battle::Move::LowerTargetAtkSpAtk1SwitchOutUser < Battle::Move::TargetMult
       next if switchedBattlers.include?(b.index)
       switcher = b if b.effects[PBEffects::MagicCoat] || b.effects[PBEffects::MagicBounce]
     end
-    return if switcher.fainted? || numHits == 0
+    return if switcher.fainted? || (numHits == 0 && !@hadEffectWhenMagicCoated)
     return if !@battle.pbCanChooseNonActive?(switcher.index)
     return if user.effects[PBEffects::Commanding] >= 0 || user.effects[PBEffects::CommandedBy] >= 0
     @battle.pbDisplay(_INTL("{1} went back to {2}!", switcher.pbThis,
@@ -289,7 +289,7 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
 
   def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers)
     return if !switched_battlers.empty?
-    return if user.fainted? || numHits == 0
+    return if user.fainted? || (numHits == 0 && !@hadEffectWhenMagicCoated)
     targets.each do |b|
       next if b.fainted? || b.damageState.unaffected
       next if b.wild?

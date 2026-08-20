@@ -143,7 +143,6 @@ class Battle::Battler
     @tookPhysicalHit         = false
     @statsRaisedThisRound    = false
     @statsLoweredThisRound   = false
-    @canRestoreIceFace       = false
     @lastMoveUsed            = nil
     @lastMoveUsedType        = nil
     @lastRegularMoveUsed     = nil

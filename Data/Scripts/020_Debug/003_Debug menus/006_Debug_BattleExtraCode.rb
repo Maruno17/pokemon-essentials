@@ -148,8 +148,7 @@ module Battle::DebugVariables
 #    PBEffects::Wish - too complex to be worth bothering with
 #    PBEffects::WishAmount - too complex to be worth bothering with
 #    PBEffects::WishMaker - too complex to be worth bothering with
-    }
-  end
+  }
 
   SIDE_EFFECTS = {
     PBEffects::AuroraVeil         => {name: "Aurora Veil duration",                   default: 0},
@@ -191,6 +190,7 @@ module Battle::DebugVariables
     PBEffects::WaterSportField => {name: "Water Sport duration (Gen 6+)",    default: 0},
     PBEffects::WonderRoom      => {name: "Wonder Room duration",             default: 0}
   }
+end
 
 #===============================================================================
 # Screen for listing the above battle variables for modifying.

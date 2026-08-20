@@ -1936,9 +1936,9 @@ Battle::ItemEffects::OnTerrainChange.add(:BOOSTERENERGY,
     next false if !battler.hasActiveAbility?(:QUARKDRIVE)
     next false if battle.field.terrain != :Electric
     best = nil
-    [:ATTACK, :DEFENSE, :SPECIAL_ATTACK, :SPECIAL_DEFENSE, :SPEED].each do |stat|
-      value = battler.stat_with_stages(stat)
-      best = [stat, value] if !best || value > best[1]
+    GameData::Stat.each_main_battle do |stat|
+      value = battler.stat_with_stages(stat.id)
+      best = [stat.id, value] if !best || value > best[1]
     end
     battler.effects[PBEffects::ProtosynthesisStat] = best[0]
     battler.effects[PBEffects::BoosterEnergy] = true

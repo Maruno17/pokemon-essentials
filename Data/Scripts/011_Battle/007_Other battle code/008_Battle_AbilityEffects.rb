@@ -2581,7 +2581,7 @@ Battle::AbilityEffects::AfterMoveUseFromTarget.add(:COLORCHANGE,
   proc { |ability, target, user, move, switched_battlers, battle|
     next if target.damageState.calcDamage == 0 || target.damageState.substitute
     next if !move.calcType || GameData::Type.get(move.calcType).pseudo_type
-    next if target.pbHasType?(move.calcType) && !target.pbHasOtherType?(move.calcType)
+    next if target.pbHasType?(move.calcType)
     typeName = GameData::Type.get(move.calcType).name
     battle.pbShowAbilitySplash(target)
     target.pbChangeTypes(move.calcType)
@@ -2661,20 +2661,6 @@ Battle::AbilityEffects::EndOfRoundWeather.add(:ICEBODY,
     else
       battle.pbDisplay(_INTL("{1} {2} restored its HP.", battler.pbOfThis, battler.abilityName))
     end
-    battle.pbHideAbilitySplash(battler)
-  }
-)
-
-Battle::AbilityEffects::EndOfRoundWeather.add(:ICEFACE,
-  proc { |ability, weather, battler, battle|
-    next if !battler.isSpecies?(:EISCUE) || battler.form != 1 || battler.effects[PBEffects::Transform]
-    next if ![:Hail, :Snowstorm].include?(weather)
-    next if !battler.canRestoreIceFace
-    battle.pbShowAbilitySplash(battler)
-    if !Battle::Scene::USE_ABILITY_SPLASH
-      battle.pbDisplay(_INTL("{1} {2} activated!", battler.pbOfThis, battler.abilityName))
-    end
-    battler.pbChangeForm(0, _INTL("{1} transformed!", battler.pbThis))
     battle.pbHideAbilitySplash(battler)
   }
 )

@@ -231,7 +231,9 @@ class Battle::Battler
     if !ability_changed && isSpecies?(:EISCUE) && self.ability == :ICEFACE &&
        @form == 1 && !@effects[PBEffects::Transform] &&
        [:Hail, :Snowstorm].include?(effectiveWeather)
-      @canRestoreIceFace = true   # Changed form at end of round
+      @battle.pbShowAbilitySplash(self, true)
+      @battle.pbHideAbilitySplash(self)
+      pbChangeForm(0, _INTL("{1} transformed!", pbThis))
     end
   end
 

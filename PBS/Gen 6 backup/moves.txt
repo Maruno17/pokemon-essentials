@@ -6501,7 +6501,6 @@ Category = Status
 Accuracy = 0
 TotalPP = 10
 Target = BothSides
-Priority = -7
 FunctionCode = StartSwapAllBattlersBaseDefensiveStats
 Flags = CanMirrorMove
 Description = The user creates a bizarre area in which Pokémon's Defense and Sp. Def stats are swapped for five turns.

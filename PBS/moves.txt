@@ -289,6 +289,7 @@ Category = Status
 Accuracy = 100
 TotalPP = 20
 Target = NearOther
+Priority = 1
 FunctionCode = TargetNextFireMoveDamagesTarget
 Flags = CanProtect,CanMirrorMove,Powder
 Description = The user covers the target in a combustible powder. If the target uses a Fire-type move, the powder explodes and damages it instead.
@@ -491,7 +492,7 @@ Accuracy = 100
 TotalPP = 10
 Target = NearOther
 FunctionCode = TrapUserAndTargetInBattle
-Flags = Contact,CanProtect,CanMirrorMove
+Flags = Contact,CanProtect,CanMirrorMove,Biting
 Description = This move prevents the user and the target from switching out until either of them faints. The effect goes away if either leaves the field.
 #-------------------------------
 [THROATCHOP]
@@ -8601,7 +8602,6 @@ Category = Status
 Accuracy = 0
 TotalPP = 10
 Target = BothSides
-Priority = -7
 FunctionCode = StartSwapAllBattlersBaseDefensiveStats
 Flags = CanMirrorMove
 Description = The user creates a bizarre area in which Pokémon's Defense and Sp. Def stats are swapped for five turns.
