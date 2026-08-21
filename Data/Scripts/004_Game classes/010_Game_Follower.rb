@@ -192,8 +192,8 @@ class Game_Follower < Game_Event
     end
     # Check if tiles at (x, y) allow passage for followe
     if !passed_tile_checks
-      [2, 1, 0].each do |i|
-        tile_id = this_map.data[x, y, i] || 0
+      (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+        tile_id = this_map.data[x, y, layer] || 0
         next if tile_id == 0
         tile_data = GameData::TerrainTag.try_get(this_map.terrain_tags[tile_id])
         next if tile_data.ignore_passability

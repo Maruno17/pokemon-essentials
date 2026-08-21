@@ -29,12 +29,13 @@ class Game_Map
   attr_reader   :display_y                # display y-coordinate * 128
   attr_accessor :need_refresh             # refresh request flag
 
-  TILE_WIDTH  = 32
-  TILE_HEIGHT = 32
-  X_SUBPIXELS = 4
-  Y_SUBPIXELS = 4
-  REAL_RES_X  = TILE_WIDTH * X_SUBPIXELS
-  REAL_RES_Y  = TILE_HEIGHT * Y_SUBPIXELS
+  TILE_WIDTH   = 32
+  TILE_HEIGHT  = 32
+  X_SUBPIXELS  = 4
+  Y_SUBPIXELS  = 4
+  REAL_RES_X   = TILE_WIDTH * X_SUBPIXELS
+  REAL_RES_Y   = TILE_HEIGHT * Y_SUBPIXELS
+  LAYERS_COUNT = 3
 
   def initialize
     @map_id = 0
@@ -180,13 +181,13 @@ class Game_Map
       newy -= 1
     end
     return false if !valid?(newx, newy)
-    [2, 1, 0].each do |i|
-      tile_id = data[x, y, i]
+    (LAYERS_COUNT - 1).downto(0) do |layer|
+      tile_id = data[x, y, layer]
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       # If already on water, only allow movement to another water tile
       if self_event && terrain.can_surf_freely
-        [2, 1, 0].each do |j|
-          facing_tile_id = data[newx, newy, j]
+        (LAYERS_COUNT - 1).downto(0) do |layer2|
+          facing_tile_id = data[newx, newy, layer2]
           next if facing_tile_id == 0
           return false if facing_tile_id.nil?
           facing_terrain = GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id])
@@ -200,8 +201,8 @@ class Game_Map
         return false
       elsif self_event && self_event.x == x && self_event.y == y
         # Can't walk onto ledges
-        [2, 1, 0].each do |j|
-          facing_tile_id = data[newx, newy, j]
+        (LAYERS_COUNT - 1).downto(0) do |layer2|
+          facing_tile_id = data[newx, newy, layer2]
           next if facing_tile_id == 0
           return false if facing_tile_id.nil?
           facing_terrain = GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id])
@@ -221,8 +222,8 @@ class Game_Map
 
   def playerPassable?(x, y, dir, self_event = nil)
     bit = (1 << ((dir / 2) - 1)) & 0x0f
-    [2, 1, 0].each do |i|
-      tile_id = data[x, y, i]
+    (LAYERS_COUNT - 1).downto(0) do |layer|
+      tile_id = data[x, y, layer]
       next if tile_id == 0
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       passage = @passages[tile_id]
@@ -257,8 +258,8 @@ class Game_Map
       return false if @passages[event.tile_id] & 0x0f != 0
       return true if @priorities[event.tile_id] == 0
     end
-    [2, 1, 0].each do |i|
-      tile_id = data[x, y, i]
+    (LAYERS_COUNT - 1).downto(0) do |layer|
+      tile_id = data[x, y, layer]
       next if tile_id == 0
       next if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).ignore_passability
       return false if @passages[tile_id] & 0x0f != 0
@@ -268,8 +269,8 @@ class Game_Map
   end
 
   def bush?(x, y)
-    [2, 1, 0].each do |i|
-      tile_id = data[x, y, i]
+    (LAYERS_COUNT - 1).downto(0) do |layer|
+      tile_id = data[x, y, layer]
       next if tile_id == 0
       return false if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).bridge &&
                       $PokemonGlobal.bridge > 0
@@ -279,8 +280,8 @@ class Game_Map
   end
 
   def deepBush?(x, y)
-    [2, 1, 0].each do |i|
-      tile_id = data[x, y, i]
+    (LAYERS_COUNT - 1).downto(0) do |layer|
+      tile_id = data[x, y, layer]
       next if tile_id == 0
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       return false if terrain.bridge && $PokemonGlobal.bridge > 0
@@ -290,8 +291,8 @@ class Game_Map
   end
 
   def counter?(x, y)
-    [2, 1, 0].each do |i|
-      tile_id = data[x, y, i]
+    (LAYERS_COUNT - 1).downto(0) do |layer|
+      tile_id = data[x, y, layer]
       next if tile_id == 0
       passage = @passages[tile_id]
       return true if passage & 0x80 == 0x80
@@ -301,8 +302,8 @@ class Game_Map
 
   def terrain_tag(x, y, countBridge = false)
     if valid?(x, y)
-      [2, 1, 0].each do |i|
-        tile_id = data[x, y, i]
+      (LAYERS_COUNT - 1).downto(0) do |layer|
+        tile_id = data[x, y, layer]
         next if tile_id == 0
         terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
         next if terrain.id == :None || terrain.ignore_passability

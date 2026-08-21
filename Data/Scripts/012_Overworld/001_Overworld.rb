@@ -127,8 +127,8 @@ EventHandlers.add(:on_step_taken, :pick_up_soot,
   proc { |event|
     thistile = $map_factory.getRealTilePos(event.map.map_id, event.x, event.y)
     map = $map_factory.getMap(thistile[0])
-    [2, 1, 0].each do |i|
-      tile_id = map.data[thistile[1], thistile[2], i]
+    (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+      tile_id = map.data[thistile[1], thistile[2], layer]
       next if tile_id.nil?
       next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
       if event == $game_player && $bag.has?(:SOOTSACK)
@@ -136,7 +136,7 @@ EventHandlers.add(:on_step_taken, :pick_up_soot,
         $player.soot += 1
         $stats.soot_collected += $player.soot - old_soot if $player.soot > old_soot
       end
-      map.erase_tile(thistile[1], thistile[2], i)
+      map.erase_tile(thistile[1], thistile[2], layer)
       break
     end
   }

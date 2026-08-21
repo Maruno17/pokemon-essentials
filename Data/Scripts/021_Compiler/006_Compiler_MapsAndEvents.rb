@@ -453,12 +453,12 @@ module Compiler
       return false if x < 0 || x >= map.width || y < 0 || y >= map.height
       passages   = getTilesetPassages(map, mapID)
       priorities = getTilesetPriorities(map, mapID)
-      [2, 1, 0].each do |i|
-        tile_id = map.data[x, y, i]
+      (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+        tile_id = map.data[x, y, layer]
         return false if tile_id.nil?
         passage = passages[tile_id]
         if !passage
-          raise "The tile used on map #{mapID} at coordinates (#{x}, #{y}) on layer #{i + 1} doesn't exist in the tileset. " +
+          raise "The tile used on map #{mapID} at coordinates (#{x}, #{y}) on layer #{layer + 1} doesn't exist in the tileset. " +
                 "It should be deleted to prevent errors."
         end
         return false if passage & 0x0f == 0x0f
@@ -471,12 +471,12 @@ module Compiler
       map = getMap(mapID)
       return false if !map
       passages = getTilesetPassages(map, mapID)
-      [2, 1, 0].each do |i|
-        tile_id = map.data[x, y, i]
+      (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+        tile_id = map.data[x, y, layer]
         return false if tile_id.nil?
         passage = passages[tile_id]
         if !passage
-          raise "The tile used on map #{mapID} at coordinates (#{x}, #{y}) on layer #{i + 1} doesn't exist in the tileset. " +
+          raise "The tile used on map #{mapID} at coordinates (#{x}, #{y}) on layer #{layer + 1} doesn't exist in the tileset. " +
                 "It should be deleted to prevent errors."
         end
         return true if passage & 0x80 == 0x80
@@ -488,8 +488,8 @@ module Compiler
       map = getMap(mapID)
       return if !map
       passages = getTilesetPassages(map, mapID)
-      [2, 1, 0].each do |i|
-        tile_id = map.data[x, y, i]
+      (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+        tile_id = map.data[x, y, layer]
         next if tile_id == 0
         passages[tile_id] |= 0x80
         break

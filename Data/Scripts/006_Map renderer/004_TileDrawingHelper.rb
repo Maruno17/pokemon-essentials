@@ -180,8 +180,8 @@ def createMapBitmap(map_id, tile_width = Game_Map::TILE_WIDTH, tile_height = Gam
   helper = TileDrawingHelper.fromTileset(tileset)
   map.height.times do |y|
     map.width.times do |x|
-      3.times do |z|
-        id = map.data[x, y, z]
+      Game_Map::LAYERS_COUNT.times do |layer|
+        id = map.data[x, y, layer]
         id = 0 if !id
         helper.bltSmallTile(bitmap, x * tile_width, y * tile_height, tile_width, tile_height, id)
       end
@@ -235,8 +235,8 @@ def getPassabilityMinimap(mapid)
   map.width.times do |i|
     map.height.times do |j|
       pass = true
-      [2, 1, 0].each do |z|
-        if !passable?(passages, map.data[i, j, z])
+      (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+        if !passable?(passages, map.data[i, j, layer])
           pass = false
           break
         end
