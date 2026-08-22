@@ -339,13 +339,24 @@ class Battle
         b.statsDropped = false
       end
     end
-    # For each battler that entered battle, in speed order
     pbPriority(true).each do |b|
       next if !battler_index.include?(b.index) || b.fainted?
       pbRecordBattlerAsParticipated(b)
-      pbMessagesOnBattlerEnteringBattle(b)
+      pbMessagesOnBattlerEnteringBattle(b)   # "It's a Shadow Pokémon!"
+    end
+    # Tera Shift
+    pbPriority(true).each do |b|
+      next if !battler_index.include?(b.index) || b.fainted?
+      pbCheckForm if b.isSpecies?(:TERAPAGOS)
+    end
+    # Neutralizing Gas, Unnerve/As One
+    pbNegationAbilitiesOnBattlerEnteringBattle(battler_index)
+    # For each battler that entered battle, in speed order
+    pbPriority(true).each do |b|
+      next if !battler_index.include?(b.index) || b.fainted?
       # Position/field effects triggered by the battler appearing
       pbEffectsOnBattlerEnteringPosition(b)   # Healing Wish/Lunar Dance
+      # Entry hazards
       pbEntryHazards(b)
       # Battler faints if it is knocked out because of an entry hazard above
       if b.fainted?
@@ -354,35 +365,59 @@ class Battle
         pbJudge
         next
       end
-      b.pbCheckForm
-      # Primal Revert upon entering battle
-      pbPrimalReversion(b.index)
-      # Check for end of primordial weather
-      pbEndPrimordialWeather
       # Abilities that trigger upon switching in
       if (!b.fainted? && b.unstoppableAbility?) || b.abilityActive?
         Battle::AbilityEffects.triggerOnSwitchIn(b.ability, b, self, true)
-        pbPriority(true).each { |b| b.pbItemStatRestoreCheck }   # White Herb
       end
-      # Check for end of primordial weather
-      pbEndPrimordialWeather
-      # Items that trigger upon switching in (Air Balloon message)
-      if b.itemActive?
-        Battle::ItemEffects.triggerOnSwitchIn(b.item, b, self)
-        pbPriority(true).each { |b| b.pbItemStatRestoreCheck }   # White Herb
-      end
-      # Berry check, status-curing ability check
-      b.pbHeldItemTriggerCheck
       b.pbAbilityStatusCureCheck
+      pbEndPrimordialWeather
+      # Items that trigger upon switching in
+      if b.itemActive?
+        Battle::ItemEffects.triggerOnSwitchIn(b.item, b, self)   # Air Balloon message
+      end
+      # Healing/curing items (most berries, Berry Juice, Mental Herb)
+      b.pbItemHPHealCheck(b.item)
+      b.pbItemStatusCureCheck(b.item)
     end
-    # Ending primordial weather, checking Trace
-    pbPriority(true).each { |b| b.pbContinualAbilityChecks(true) }
+    # For each battler that entered battle, in speed order
+    pbPriority(true).each do |b|
+      next if !battler_index.include?(b.index) || b.fainted?
+      # Terrain Seeds, Room Service
+      if b.itemActive? && b.item != :BOOSTERENERGY
+        Battle::ItemEffects.triggerOnWeatherChange(b.item, b, self, :None)
+        Battle::ItemEffects.triggerOnTerrainChange(b.item, b, self, :None)
+        Battle::ItemEffects.triggerOnTrickRoomStarted(b.item, b, self)
+      end
+      # Primal Revert upon entering battle
+      pbPrimalReversion(b.index)
+      pbEndPrimordialWeather
+    end
+    # For each battler that entered battle, in speed order
+    pbPriority(true).each do |b|
+      next if !battler_index.include?(b.index) || b.fainted?
+      # Certain abilities that for no apparent reason trigger later than others
+      b.pbContinualAbilityChecks(true)   # Commander
+      if (!b.fainted? && b.unstoppableAbility?) || b.abilityActive?
+        Battle::AbilityEffects.triggerOnSwitchInDelayed(b.ability, b, self, true)
+      end
+      # Form changes
+      # NOTE: Schooling/Shields Down are supposed to trigger at the same time as
+      #       Primal Reversion, but I'm ignoring that.
+      b.pbCheckForm
+      # Booster Energy
+      if b.itemActive?
+        Battle::ItemEffects.triggerOnSwitchInDelayed(b.item, b, self)
+      end
+    end
+    # White Herb
+    pbPriority(true).each { |b| b.pbItemStatRestoreCheck }
+    # Opportunist, Mirror Herb
     checkStatChangeResponses
     # Check for triggering of Emergency Exit/Wimp Out/Eject Pack (only one will
     # be triggered)
     pbPriority(true, true).each do |b|
       break if b.pbItemOnStatDropped   # Eject Pack
-      break if b.pbAbilitiesOnDamageTaken
+      break if b.pbAbilitiesOnDamageTaken   # Anger Shell, Emergency Exit, Wimp Out
     end
     checkStatChangeResponses
     allBattlers(true).each do |b|
@@ -405,6 +440,24 @@ class Battle
     if battler.shadowPokemon?
       pbCommonAnimation("Shadow", battler)
       pbDisplay(_INTL("Oh!\nA Shadow Pokémon!")) if battler.opposes?
+    end
+  end
+
+  # battler_index is an array of indices of battlers that entered battle
+  def pbNegationAbilitiesOnBattlerEnteringBattle(battler_index)
+    # Neutralizing Gas
+    # For each battler that entered battle, in speed order
+    pbPriority(true).each do |b|
+      next if !battler_index.include?(b.index) || b.fainted?
+      next if !b.abilityActive? && !b.unstoppableAbility?
+      Battle::AbilityEffects.triggerOnSwitchInNeutralizingGas(b.ability, b, self, true)
+    end
+    # Unnerve/As One
+    # For each battler that entered battle, in speed order
+    pbPriority(true).each do |b|
+      next if !battler_index.include?(b.index) || b.fainted?
+      next if !b.abilityActive? && !b.unstoppableAbility?
+      Battle::AbilityEffects.triggerOnSwitchInUnnerve(b.ability, b, self, true)
     end
   end
 

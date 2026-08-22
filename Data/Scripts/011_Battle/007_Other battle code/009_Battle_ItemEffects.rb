@@ -42,13 +42,15 @@ module Battle::ItemEffects
   TerrainExtender                 = ItemHandlerHash.new   # Terrain Extender
   OnWeatherChange                 = ItemHandlerHash.new
   OnTerrainChange                 = ItemHandlerHash.new
+  OnTrickRoomStarted              = ItemHandlerHash.new   # Room Service
   # End Of Round
   EndOfRoundHealing               = ItemHandlerHash.new
   EndOfRoundEffect                = ItemHandlerHash.new
   # Switching and fainting
   CertainSwitching                = ItemHandlerHash.new   # Shed Shell
   TrappingByTarget                = ItemHandlerHash.new   # None!
-  OnSwitchIn                      = ItemHandlerHash.new   # Air Balloon
+  OnSwitchIn                      = ItemHandlerHash.new   # Air Balloon, Room Service
+  OnSwitchInDelayed               = ItemHandlerHash.new   # Booster Energy
   OnIntimidated                   = ItemHandlerHash.new   # Adrenaline Orb
   # Running from battle
   CertainEscapeFromBattle         = ItemHandlerHash.new   # Smoke Ball
@@ -202,6 +204,10 @@ module Battle::ItemEffects
     return trigger(OnTerrainChange, item, battler, battle, old_terrain)
   end
 
+  def self.triggerOnTrickRoomStarted(item, battler, battle)
+    OnTrickRoomStarted.trigger(item, battler, battle)
+  end
+
   #-----------------------------------------------------------------------------
 
   def self.triggerEndOfRoundHealing(item, battler, battle)
@@ -224,6 +230,10 @@ module Battle::ItemEffects
 
   def self.triggerOnSwitchIn(item, battler, battle)
     OnSwitchIn.trigger(item, battler, battle)
+  end
+
+  def self.triggerOnSwitchInDelayed(item, battler, battle)
+    OnSwitchInDelayed.trigger(item, battler, battle)
   end
 
   def self.triggerOnIntimidated(item, battler, battle)
@@ -1995,6 +2005,20 @@ Battle::ItemEffects::OnTerrainChange.add(:PSYCHICSEED,
 )
 
 #===============================================================================
+# OnTrickRoomStarted handlers
+#===============================================================================
+
+Battle::ItemEffects::OnTrickRoomStarted.add(:ROOMSERVICE,
+  proc { |item, battler, battle|
+    next if battle.field.effects[PBEffects::TrickRoom] == 0
+    next if !battler.pbCanLowerStatStage?(:SPEED)
+    battle.pbCommonAnimation("UseItem", battler)
+    battler.pbLowerStatStage(:SPEED, 1, nil)
+    battler.pbConsumeItem
+  }
+)
+
+#===============================================================================
 # EndOfRoundHealing handlers
 #===============================================================================
 
@@ -2087,21 +2111,15 @@ Battle::ItemEffects::OnSwitchIn.add(:AIRBALLOON,
   }
 )
 
-Battle::ItemEffects::OnSwitchIn.add(:BOOSTERENERGY,
+#===============================================================================
+# OnSwitchInDelayed handlers
+#===============================================================================
+
+Battle::ItemEffects::OnSwitchInDelayed.add(:BOOSTERENERGY,
   proc { |item, battler, battle|
     next if battler.effects[PBEffects::ProtosynthesisStat]
     Battle::ItemEffects.triggerOnWeatherChange(item, battler, battle, battle.field.weather)
     Battle::ItemEffects.triggerOnTerrainChange(item, battler, battle, battle.field.terrain)
-  }
-)
-
-Battle::ItemEffects::OnSwitchIn.add(:ROOMSERVICE,
-  proc { |item, battler, battle|
-    next if battle.field.effects[PBEffects::TrickRoom] == 0
-    next if !battler.pbCanLowerStatStage?(:SPEED)
-    battle.pbCommonAnimation("UseItem", battler)
-    battler.pbLowerStatStage(:SPEED, 1, nil)
-    battler.pbConsumeItem
   }
 )
 

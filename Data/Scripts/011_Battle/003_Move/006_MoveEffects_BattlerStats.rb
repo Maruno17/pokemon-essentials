@@ -2287,7 +2287,7 @@ class Battle::Move::StartUserSideDoubleSpeed < Battle::Move
     user.pbOwnSide.effects[PBEffects::Tailwind] = 4
     @battle.pbDisplay(_INTL("The Tailwind blew from behind {1}!", user.pbTeam(true)))
     @battle.allSameSideBattlers(user).each do |b|
-      pbRaiseStatStageByAbility(:ATTACK, 1, b) if b.hasActiveAbility?(:WINDRIDER)
+      b.pbRaiseStatStageByAbility(:ATTACK, 1, user) if b.hasActiveAbility?(:WINDRIDER)
       Battle::AbilityEffects.triggerOnBeingHit(b.ability, user, b, self, @battle) if b.hasActiveAbility?(:WINDPOWER)
     end
   end

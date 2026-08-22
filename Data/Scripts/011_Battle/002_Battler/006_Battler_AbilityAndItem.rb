@@ -107,25 +107,10 @@ class Battle::Battler
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
     # Trace
-    if hasActiveAbility?(:TRACE)
-      # NOTE: In Gen 5 only, Trace only triggers upon the Trace bearer switching
-      #       in and not at any later times, even if a traceable ability turns
-      #       up later. Essentials ignores this, and allows Trace to trigger
-      #       whenever it can even in Gen 5 battle mechanics.
-      choices = @battle.allOtherSideBattlers(@index).select do |b|
-        next !b.ungainableAbility? || b.ability_id == :WONDERGUARD
-      end
-      if choices.length > 0
-        choice = choices[@battle.pbRandom(choices.length)]
-        @battle.pbShowAbilitySplash(self)
-        self.ability = choice.ability
-        @battle.pbDisplay(_INTL("{1} traced {2} {3}!", pbThis, choice.pbOfThis(true), choice.abilityName))
-        @battle.pbHideAbilitySplash(self)
-        if !onSwitchIn && (unstoppableAbility? || abilityActive?)
-          Battle::AbilityEffects.triggerOnSwitchIn(self.ability, self, @battle)
-        end
-      end
+    if abilityActive?
+      Battle::AbilityEffects.triggerTrace(b.ability, self, @battle, onSwitchIn)
     end
+    # Commander
     if isSpecies?(:TATSUGIRI) && self.ability == :COMMANDER &&
        @effects[PBEffects::Commanding] < 0 && @effects[PBEffects::SkyDrop] < 0
       ally = nil
@@ -399,7 +384,8 @@ class Battle::Battler
     end
   end
 
-  # item_to_use is an item ID for Bug Bite/Pluck and Fling, and nil otherwise.
+  # item_to_use is an item ID for Bug Bite/Pluck and Fling and for switching in,
+  # and nil otherwise.
   # fling is for Fling only.
   def pbItemHPHealCheck(item_to_use = nil, fling = false)
     return if !item_to_use && !itemActive?
@@ -414,7 +400,8 @@ class Battle::Battler
 
   # Cures status conditions, confusion, infatuation and the other effects cured
   # by Mental Herb.
-  # item_to_use is an item ID for Bug Bite/Pluck and Fling, and nil otherwise.
+  # item_to_use is an item ID for Bug Bite/Pluck and Fling and for switching in,
+  # and nil otherwise.
   # fling is for Fling only.
   def pbItemStatusCureCheck(item_to_use = nil, fling = false)
     return if fainted?
