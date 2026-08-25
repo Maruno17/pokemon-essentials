@@ -28,32 +28,34 @@ class AnimationEditor
       end
     end
     # Create animation player
-    anim_player = AnimationPlayer.new(@anim, user_battler, target_battlers, @components[:canvas])
-    anim_player.looping = @components[:play_controls].looping
-    anim_player.slowdown = @components[:play_controls].slowdown
-    anim_player.set_up
-    # Play animation
-    anim_player.start
-    loop do
-      Graphics.update
-      Input.update
-      anim_player.update
-      play_controls.update
-      if play_controls.changed?
-        if play_controls.changed_controls.keys.include?(:stop)
-          anim_player.finish
-          play_controls.clear_changed
+    PBDebug.logonerr {
+      anim_player = AnimationPlayer.new(@anim, user_battler, target_battlers, @components[:canvas])
+      anim_player.looping = @components[:play_controls].looping
+      anim_player.slowdown = @components[:play_controls].slowdown
+      anim_player.set_up
+      # Play animation
+      anim_player.start
+      loop do
+        Graphics.update
+        Input.update
+        anim_player.update
+        play_controls.update
+        if play_controls.changed?
+          if play_controls.changed_controls.keys.include?(:stop)
+            anim_player.finish
+            play_controls.clear_changed
+            pbSEStop
+            break
+          end
+        end
+        if Input.triggerex?(:SPACE)
           pbSEStop
           break
         end
+        break if anim_player.finished?
       end
-      if Input.triggerex?(:SPACE)
-        pbSEStop
-        break
-      end
-      break if anim_player.finished?
-    end
-    anim_player.dispose
+      anim_player.dispose
+    }
     @components[:canvas].end_playing_animation
     play_controls.end_playing_animation
   end

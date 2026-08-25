@@ -56,7 +56,7 @@ class AnimationPlayer::ParticleSprite
   def set_tiled_sprites(particle, user_index, target_index, user_sprites, target_sprites)
     @tiled_sprites = []
     3.times do |i|
-      @tiled_sprites.push(Sprite.new(sprite.viewport))
+      @tiled_sprites.push(Sprite.new(@sprite[0].viewport))
       AnimationPlayer::Helper.set_bitmap_and_origin(
         particle, @tiled_sprites.last, user_index, target_index, user_sprites, target_sprites
       )

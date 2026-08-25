@@ -794,7 +794,7 @@ class TriadScreen
       opponentCards = []
       self.maxCards.times do
         # Choose random card from candidates based on trainer's level
-        index = minLevel + rand(20)
+        index = (minLevel * 20) + rand((maxLevel - minLevel + 1) * 20)
         opponentCards.push(candidates[index][0])
       end
     end

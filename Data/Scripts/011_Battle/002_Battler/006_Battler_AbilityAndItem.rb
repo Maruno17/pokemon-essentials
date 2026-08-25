@@ -108,7 +108,7 @@ class Battle::Battler
     @battle.pbEndPrimordialWeather
     # Trace
     if abilityActive?
-      Battle::AbilityEffects.triggerTrace(b.ability, self, @battle, onSwitchIn)
+      Battle::AbilityEffects.triggerTrace(self.ability, self, @battle, onSwitchIn)
     end
     # Commander
     if isSpecies?(:TATSUGIRI) && self.ability == :COMMANDER &&

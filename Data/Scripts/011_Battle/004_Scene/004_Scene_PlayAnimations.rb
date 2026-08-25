@@ -644,16 +644,18 @@ class Battle::Scene
       @sprites["dataBox_#{i}"].visible = false if anim_data.hides_data_boxes
     end
     # Create animation player
-    anim_player = AnimationPlayer.new(anim_data, user, targets, self)
-    anim_player.set_up
-    # Play animation
-    anim_player.start
-    loop do
-      pbUpdate
-      anim_player.update
-      break if anim_player.can_continue_battle?
-    end
-    anim_player.dispose
+    PBDebug.logonerr {
+      anim_player = AnimationPlayer.new(anim_data, user, targets, self)
+      anim_player.set_up
+      # Play animation
+      anim_player.start
+      loop do
+        pbUpdate
+        anim_player.update
+        break if anim_player.can_continue_battle?
+      end
+      anim_player.dispose
+    }
     # Restore old battler coordinates
     old_battler_coords.each_with_index do |values, i|
       next if !values
