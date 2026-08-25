@@ -597,7 +597,7 @@ class Battle::Battler
         end
         newTargets.compact!
       end
-      pbProcessMoveHit(move, b, newTargets, 0, false) if success
+      pbProcessMoveHit(move, b, newTargets, 0) if success
       move.hadEffectWhenMagicCoated = success
       b.lastMoveFailed = true if !success
       targets.each { |otherB| otherB.pbFaint if otherB&.fainted? }
@@ -613,7 +613,7 @@ class Battle::Battler
         @battle.pbHideAbilitySplash(mc) if move.magicBounceIndex >= 0
         success = false
         if !move.pbMoveFailed?(mc, [])
-          success = pbProcessMoveHit(move, mc, [], 0, false)
+          success = pbProcessMoveHit(move, mc, [], 0)
         end
         move.hadEffectWhenMagicCoated = success
         mc.lastMoveFailed = true if !success
