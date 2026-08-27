@@ -12,6 +12,8 @@ class AnimationPlayer::Emitter
                          :blending, :blending2,
                          :flip, :flip2,
                          :x, :x2, :y, :y2, :r, :theta, :z, :z2,
+                         :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
+                         :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset,
                          :radius_x, :radius_y, :radius_z,
                          :zoom_x, :zoom_x2, :zoom_y, :zoom_y2,
                          :angle, :angle2,
