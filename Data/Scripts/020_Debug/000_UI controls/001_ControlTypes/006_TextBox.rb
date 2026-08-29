@@ -252,11 +252,24 @@ class UIControls::TextBox < UIControls::BaseControl
   end
 
   def update_special_inputs
+    holding_ctrl = Input.press?(Input::CTRL)
     # Left/right to move cursor
     if Input.triggerex?(:LEFT) || Input.repeatex?(:LEFT)
-      self.cursor_pos = @cursor_pos - 1 if @cursor_pos > 0
+      loop do
+        break if @cursor_pos == 0
+        self.cursor_pos = @cursor_pos - 1
+        break if !holding_ctrl
+        break if [".", ",", "\"", ")"].include?(@value.to_s[@cursor_pos])
+        break if [" ", "\"", "(", "/", "\\"].include?(@value.to_s[@cursor_pos - 1])
+      end
     elsif Input.triggerex?(:RIGHT) || Input.repeatex?(:RIGHT)
-      self.cursor_pos = @cursor_pos + 1 if @cursor_pos < @value.to_s.length
+      loop do
+        break if @cursor_pos >= @value.to_s.length
+        self.cursor_pos = @cursor_pos + 1
+        break if !holding_ctrl
+        break if [".", ",", "\"", ")"].include?(@value.to_s[@cursor_pos])
+        break if [" ", "\"", "(", "/", "\\"].include?(@value.to_s[@cursor_pos - 1])
+      end
     end
     # Home/End to jump to start/end of the text
     if Input.triggerex?(:HOME) || Input.repeatex?(:HOME)
@@ -266,9 +279,25 @@ class UIControls::TextBox < UIControls::BaseControl
     end
     # Backspace/Delete to remove text
     if Input.triggerex?(:BACKSPACE) || Input.repeatex?(:BACKSPACE)
-      delete_at(@cursor_pos - 1) if @cursor_pos > 0
+      loop do
+        break if @cursor_pos == 0
+        deleted_char = @value.to_s[@cursor_pos - 1]
+        delete_at(@cursor_pos - 1)
+        break if @cursor_pos == 0
+        break if !holding_ctrl
+        break if [".", ",", "\"", ")", "/", "\\"].include?(deleted_char)
+        break if [" ", "\"", "(", "/", "\\"].include?(@value.to_s[@cursor_pos - 1])
+      end
     elsif Input.triggerex?(:DELETE) || Input.repeatex?(:DELETE)
-      delete_at(@cursor_pos) if @cursor_pos < @value.to_s.length
+      loop do
+        break if @cursor_pos >= @value.to_s.length
+        deleted_char = @value.to_s[@cursor_pos]
+        delete_at(@cursor_pos) if @cursor_pos < @value.to_s.length
+        break if @cursor_pos >= @value.to_s.length
+        break if !holding_ctrl
+        break if [" ", "\"", "(", "/", "\\"].include?(deleted_char)
+        break if [".", ",", "\"", ")", "/", "\\"].include?(@value.to_s[@cursor_pos])
+      end
     end
     # Return/Escape to end text input (Escape undoes the change)
     if Input.triggerex?(:RETURN) || Input.repeatex?(:RETURN) ||
