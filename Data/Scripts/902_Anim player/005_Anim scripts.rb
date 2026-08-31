@@ -32,3 +32,23 @@ AnimationPlayer::END_ANIMATION_SCRIPTS.add("darkpulse") { |player|
     player.sprites[sprite].tone.set(0, 0, 0, 0)   # Back to normal
   end
 }
+
+#===============================================================================
+
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("roost") { |player, time|
+  # Make ParticleSprites spawned by emitters inherit their angle from the
+  # ParticleSprite they're following
+  player.emitters.each do |emitter|
+    emitter.particle_sprites.each do |emit_particle|
+      next if emit_particle.emitter_params[:angle_set]
+      if emit_particle.name[/Feather echo emitter (\d)/]
+        number = $~[1]
+        player.particle_sprites.each do |particle|
+          next if particle.name != "Feather " + number
+          emit_particle.sprite[0].angle = particle.sprite[0].angle
+          emit_particle.emitter_params[:angle_set] = true
+        end
+      end
+    end
+  end
+}
