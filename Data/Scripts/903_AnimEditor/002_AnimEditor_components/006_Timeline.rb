@@ -27,7 +27,7 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
   TIME_BAR_TEXT_SIZE   = 16
   KEYFRAME_SPACING     = 20
 
-  DURATION_BUFFER = 20   # Extra keyframes shown after the animation's end
+  DURATION_BUFFER = 36   # Extra keyframes shown after the animation's end
 
   def initialize(x, y, width, height, viewport, particles)
     @particles         = particles

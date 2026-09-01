@@ -201,7 +201,7 @@ class AnimationPlayer::ParticleSprite
         new_angle = @emitter_params[:direction] || 0
         new_angle += (360 * delta_t / @emitter_params[:period_z]) * (@emitter_params[:clockwise] ? -1 : 1)
         new_z = @values[:radius_z] * @emitter_params[:radius_z_mult] * Math.cos(new_angle * Math::PI / 180)
-        @values[:z] = new_z
+        @values[:auto_movement_z] = new_z
         changed_properties.push(:z)
       end
     when :polar
@@ -308,6 +308,7 @@ class AnimationPlayer::ParticleSprite
       apply_sprite_property(:x, @values[:x])
       apply_sprite_property(:y, @values[:y])
     when :z
+      value += @values[:auto_movement_z] || 0   # Used by emitters
       value += (@property_offsets[property] || 0)
       if @foe_invert_z
         if @focus_z.is_a?(Array)

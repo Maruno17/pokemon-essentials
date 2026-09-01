@@ -64,7 +64,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Bubble emitter>
     Focus = Target
-    Graphic = Special/sludge
+    Graphic = bubble spark
     SecondLayer = true
     Emitter = Straight
     EmitterRate = 15
@@ -183,7 +183,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Bubble emitter>
     Focus = Target
-    Graphic = Special/sludge
+    Graphic = bubble spark
     SecondLayer = true
     Emitter = Straight
     EmitterRate = 15
