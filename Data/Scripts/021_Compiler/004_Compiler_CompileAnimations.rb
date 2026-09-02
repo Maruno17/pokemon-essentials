@@ -311,7 +311,8 @@ module Compiler
       # Ensure that none of the particle's "alter something if focus is a
       # battler on the foe's side" properties are set if the particle doesn't
       # have such a focus
-      if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus]) == GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
+      if GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(particle[:focus]) ||
+         (GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(particle[:focus]) && hash[:no_user])
         if particle[:foe_invert_x]
           raise _INTL("Particle \"{1}\" can't set \"FoeInvertX\" if its focus isn't exactly 1 thing.",
                       particle[:name]) + "\n" + FileLineData.linereport
@@ -328,8 +329,7 @@ module Compiler
       # Ensure that the particle isn't a tiled graphic if it is an emitter or
       # has a non-screen focus
       if particle[:tiled_graphic] && ((particle[:emitter_type] || :none) != :none ||
-         GameData::Animation::FOCUS_TYPES_WITH_USER.include?(particle[:focus]) ||
-         GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus]))
+         !GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(particle[:focus]))
         raise _INTL("Particle \"{1}\" can't can't set \"TiledGraphic\" if it is an emitter or has a non-screen focus.",
                     particle[:name]) + "\n" + FileLineData.linereport
       end

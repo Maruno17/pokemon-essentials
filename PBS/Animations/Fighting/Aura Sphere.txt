@@ -16,6 +16,7 @@ Credit = Maruno
     Focus = Background
     Graphic = Screens/AuraSphereDP
     TiledGraphic = true
+    FoeInvertX = true
     InitialAngle = None
     SetVisible = 0,true
     SetOpacity = 0,0

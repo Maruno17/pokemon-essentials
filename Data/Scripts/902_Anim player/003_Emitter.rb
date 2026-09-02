@@ -4,6 +4,7 @@
 class AnimationPlayer::Emitter
   attr_accessor :slowdown
   attr_accessor :emitter_position_polar_coordinates, :emitter_spawn_polar_coordinates
+  attr_accessor :no_user, :no_target
   attr_reader   :particle_sprites
 
   # These properties are used by individual ParticleSprites spawned by this
@@ -248,7 +249,8 @@ class AnimationPlayer::Emitter
     particle_sprite.random_invert_flip = true if @particle[:random_invert_flip] && rand(2) == 0
     # Inverts/flips if the focus is on the opposing side
     relative_to_index = index_of_particle_focus(target_idx)
-    if relative_to_index && relative_to_index >= 0 && relative_to_index.odd?
+    if (relative_to_index >= 0 && relative_to_index.odd?) ||
+       (relative_to_index < 0 && !@no_user && @user.index.odd?)
       particle_sprite.foe_invert_z = @particle[:foe_invert_z]
       if !GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(@particle[:focus])
         particle_sprite.foe_invert_x = @particle[:foe_invert_x]

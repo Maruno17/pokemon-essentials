@@ -659,7 +659,9 @@ class AnimationEditor::Canvas < Sprite
       x_property = ((particle[:emitter_type] || :none) == :none) ? :x : :emitter_x
       base_x = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, x_property, @display_keyframe)[0].round
       relative_to_index = index_that_particle_is_relative_to(particle, target_idx)
-      if relative_to_index >= 0 && relative_to_index.odd?
+      if (relative_to_index >= 0 && relative_to_index.odd?) ||
+         (GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(particle[:focus]) &&
+          !@anim[:no_user] && user_index.odd?)
         base_x *= -1 if particle[:foe_invert_x]
       end
       focus_xy = AnimationPlayer::Helper.get_xy_focus(particle, user_index, target_idx,
@@ -689,7 +691,9 @@ class AnimationEditor::Canvas < Sprite
       y_property = ((particle[:emitter_type] || :none) == :none) ? :y : :emitter_y
       base_y = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, y_property, @display_keyframe)[0].round
       relative_to_index = index_that_particle_is_relative_to(particle, target_idx)
-      if relative_to_index >= 0 && relative_to_index.odd?
+      if (relative_to_index >= 0 && relative_to_index.odd?) ||
+         (GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(particle[:focus]) &&
+          !@anim[:no_user] && user_index.odd?)
         base_y *= -1 if particle[:foe_invert_y]
       end
       focus_xy = AnimationPlayer::Helper.get_xy_focus(particle, user_index, target_idx,
@@ -723,7 +727,9 @@ class AnimationEditor::Canvas < Sprite
       base_x = (dist * Math.cos(dir * Math::PI / 180)).round
       base_y = (-dist * Math.sin(dir * Math::PI / 180)).round
       relative_to_index = index_that_particle_is_relative_to(particle, target_idx)
-      if relative_to_index >= 0 && relative_to_index.odd?
+      if (relative_to_index >= 0 && relative_to_index.odd?) ||
+         (GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(particle[:focus]) &&
+          !@anim[:no_user] && user_index.odd?)
         base_x *= -1 if particle[:foe_invert_x]
         base_y *= -1 if particle[:foe_invert_y]
       end
@@ -1196,8 +1202,12 @@ class AnimationEditor::Canvas < Sprite
         new_pos_y -= base_coords[1]
       end
       relative_to_index = index_that_particle_is_relative_to(particle, first_target_index)
-      new_pos_x *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_x]
-      new_pos_y *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_y]
+      if (relative_to_index >= 0 && relative_to_index.odd?) ||
+         (GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(particle[:focus]) &&
+          !@anim[:no_user] && user_index.odd?)
+        new_pos_x *= -1 if particle[:foe_invert_x]
+        new_pos_y *= -1 if particle[:foe_invert_y]
+      end
       @changed_controls ||= {}
       property_r = ((particle[:emitter_type] || :none) == :none) ? :r : :emitter_r
       property_theta = ((particle[:emitter_type] || :none) == :none) ? :theta : :emitter_theta
@@ -1249,7 +1259,11 @@ class AnimationEditor::Canvas < Sprite
         new_pos_x -= base_coords[0]
       end
       relative_to_index = index_that_particle_is_relative_to(particle, first_target_index)
-      new_pos_x *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_x]
+      if (relative_to_index >= 0 && relative_to_index.odd?) ||
+         (GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(particle[:focus]) &&
+          !@anim[:no_user] && user_index.odd?)
+        new_pos_x *= -1 if particle[:foe_invert_x]
+      end
       @changed_controls ||= {}
       property = ((particle[:emitter_type] || :none) == :none) ? :x : :emitter_x
       @changed_controls[property] = new_pos_x
@@ -1297,7 +1311,11 @@ class AnimationEditor::Canvas < Sprite
         new_pos_y -= base_coords[1]
       end
       relative_to_index = index_that_particle_is_relative_to(particle, first_target_index)
-      new_pos_y *= -1 if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_invert_y]
+      if (relative_to_index >= 0 && relative_to_index.odd?) ||
+         (GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(particle[:focus]) &&
+          !@anim[:no_user] && user_index.odd?)
+        new_pos_y *= -1 if particle[:foe_invert_y]
+      end
       @changed_controls ||= {}
       property = ((particle[:emitter_type] || :none) == :none) ? :y : :emitter_y
       @changed_controls[property] = new_pos_y

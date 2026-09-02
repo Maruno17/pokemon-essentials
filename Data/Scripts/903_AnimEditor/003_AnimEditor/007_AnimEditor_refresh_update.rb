@@ -144,7 +144,8 @@ class AnimationEditor
     end
     ctrls.get_control(:focus).options = focus_values
     # "If on opposing side..." properties
-    if GameData::Animation::FOCUS_TYPES_WITH_USER.include?(this_particle[:focus]) == GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(this_particle[:focus])
+    if GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(this_particle[:focus]) ||
+       (GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(this_particle[:focus]) && @anim[:no_user])
       ctrls.get_control(:foe_invert_x).disable
       ctrls.get_control(:foe_invert_y).disable
       ctrls.get_control(:foe_flip).disable

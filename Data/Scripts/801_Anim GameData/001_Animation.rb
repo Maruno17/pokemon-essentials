@@ -39,6 +39,9 @@ module GameData
       "TargetSideForeground"          => :target_side_foreground,
       "TargetSideBackground"          => :target_side_background
     }
+    FOCUS_TYPES_OF_SCREEN = [   # Neither user nor target
+      :foreground, :midground, :background
+    ]
     FOCUS_TYPES_WITH_USER = [
       :user, :user_position, :user_and_target, :user_position_and_target,
       :user_and_target_position, :user_position_and_target_position,
