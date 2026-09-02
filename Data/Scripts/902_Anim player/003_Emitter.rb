@@ -336,8 +336,8 @@ class AnimationPlayer::Emitter
     if relative_to_index >= 0
       case @particle[:initial_angle] || :none
       when :particle_to_focus
-        x_from_focus = particle_sprite.emitter_params[:emitter_x] + start_x
-        y_from_focus = particle_sprite.emitter_params[:emitter_y] + start_y
+        x_from_focus = (particle_sprite.emitter_params[:emitter_x] || 0) + start_x
+        y_from_focus = (particle_sprite.emitter_params[:emitter_y] || 0) + start_y
         val = AnimationPlayer::Helper.initial_angle_between(
           [x_from_focus, y_from_focus], particle_sprite.focus_xy, particle_sprite.offset_xy
         )
