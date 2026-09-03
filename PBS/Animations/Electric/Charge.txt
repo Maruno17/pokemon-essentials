@@ -17,7 +17,7 @@ Credit = Maruno
     MoveOpacity = 85,6,0
 <Spark 1 emitter>
     Focus = User
-    Graphic = sparks
+    Graphic = glows
     SecondLayer = true
     InitialAngle = None
     RandomAngleRange = 180
@@ -53,7 +53,7 @@ Credit = Maruno
     SetEmitting = 52,false
 <Spark 2 emitter>
     Focus = User
-    Graphic = sparks
+    Graphic = glows
     SecondLayer = true
     InitialAngle = None
     RandomAngleRange = 180
@@ -87,7 +87,7 @@ Credit = Maruno
     SetEmitting = 64,false
 <Glow green>
     Focus = User
-    Graphic = sparks
+    Graphic = glows
     SecondLayer = true
     InitialAngle = None
     SetY = 35,16
@@ -157,7 +157,7 @@ Credit = Maruno
     SetVisible = 78,false
 <Glow yellow>
     Focus = User
-    Graphic = sparks
+    Graphic = glows
     SecondLayer = true
     InitialAngle = None
     SetY = 35,16

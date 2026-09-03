@@ -118,7 +118,7 @@ Credit = Dawn Bronze
     SetVisible = 23,false
 <Chunk Emitter 1>
     Focus = Target
-    Graphic = rock
+    Graphic = rock 1
     RandomAngleRange = 180
     RandomInvertAngle = true
     RandomInvertFlip = true

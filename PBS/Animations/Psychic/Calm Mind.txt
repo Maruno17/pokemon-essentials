@@ -15,7 +15,7 @@ Credit = Maruno
     SetVisible = 44,false
 <Glow>
     Focus = User
-    Graphic = spark small
+    Graphic = glow 2
     SetY = 8,16
     SetZ = 8,10
     SetZoomX = 8,150

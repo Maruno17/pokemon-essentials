@@ -17,7 +17,7 @@ Credit = Maruno & Dawn Bronze
     MoveX = 45,1,0
 <Spark>
     Focus = User
-    Graphic = spark
+    Graphic = glow 1
     SetZoomX = 3,10
     SetZoomY = 3,10
     SetOpacity = 3,0

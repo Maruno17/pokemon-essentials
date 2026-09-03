@@ -7,7 +7,7 @@ Credit = Maruno
 <User>
 <Ice emitter>
     Focus = User
-    Graphic = ice mist
+    Graphic = ice smog
     SecondLayer = true
     RandomInvertAngle = true
     Emitter = NoMovement

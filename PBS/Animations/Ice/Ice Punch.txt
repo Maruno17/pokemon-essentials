@@ -63,7 +63,7 @@ Credit = Maruno
     SetVisible = 14,false
 <Ice emitter>
     Focus = Target
-    Graphic = ice
+    Graphic = ice 1
     RandomAngleRange = 180
     RandomInvertAngle = true
     RandomInvertFlip = true

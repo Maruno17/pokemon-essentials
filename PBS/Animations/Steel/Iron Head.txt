@@ -35,7 +35,7 @@ Credit = Maruno
     SetVisible = 14,false
 <Debris emitter 1>
     Focus = Target
-    Graphic = rock
+    Graphic = rock 1
     RandomAngleRange = 180
     RandomInvertAngle = true
     RandomInvertFlip = true
@@ -61,7 +61,7 @@ Credit = Maruno
     SetVisible = 20,false
 <Debris emitter 2>
     Focus = Target
-    Graphic = rock
+    Graphic = rock 1
     RandomAngleRange = 180
     RandomInvertAngle = true
     RandomInvertFlip = true

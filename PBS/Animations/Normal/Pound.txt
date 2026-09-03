@@ -25,7 +25,7 @@ Credit = Maruno
     SetVisible = 5,false
 <Spark spawner>
     Focus = Target
-    Graphic = spark
+    Graphic = glow 1
     Emitter = Projectile
     EmitterRate = 80
     SetZ = 0,5

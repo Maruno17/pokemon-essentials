@@ -220,7 +220,7 @@ Credit = Dawn Bronze
     SetEmitting = 33,false
 <Ice Crystal 1>
     Focus = TargetPosition
-    Graphic = ice
+    Graphic = ice 1
     SetX = 28,1
     SetY = 28,-49
     SetZoomX = 28,0
@@ -242,7 +242,7 @@ Credit = Dawn Bronze
     MoveOpacity = 58,7,0
 <Ice Crystal 2>
     Focus = TargetPosition
-    Graphic = ice
+    Graphic = ice 1
     SetX = 31,-43
     SetY = 31,-68
     SetZoomX = 31,0
@@ -261,7 +261,7 @@ Credit = Dawn Bronze
     MoveOpacity = 61,7,0
 <Ice Crystal 3>
     Focus = TargetPosition
-    Graphic = ice
+    Graphic = ice 1
     SetX = 34,27
     SetY = 34,-44
     SetZoomX = 34,0
@@ -280,7 +280,7 @@ Credit = Dawn Bronze
     SetZoomX = 71,0
 <Ice Crystal 4>
     Focus = TargetPosition
-    Graphic = ice
+    Graphic = ice 1
     SetX = 37,18
     SetY = 37,-89
     SetZoomX = 37,0
@@ -302,7 +302,7 @@ Credit = Dawn Bronze
     MoveOpacity = 67,7,0
 <Ice Crystal 5>
     Focus = TargetPosition
-    Graphic = ice
+    Graphic = ice 1
     SetX = 40,-46
     SetY = 40,-18
     SetZoomX = 40,0

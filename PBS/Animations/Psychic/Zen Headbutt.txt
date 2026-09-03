@@ -29,7 +29,7 @@ Credit = Maruno
     SetVisible = 61,false
 <Glow>
     Focus = User
-    Graphic = spark small
+    Graphic = glow 2
     SetX = 14,16
     SetY = 14,16
     SetZ = 14,10
@@ -252,7 +252,7 @@ Credit = Maruno
     SetEmitting = 47,false
 <Star emitter>
     Focus = Target
-    Graphic = star
+    Graphic = stars
     SecondLayer = true
     Emitter = Projectile
     EmitterRate = 20

@@ -15,7 +15,7 @@ Credit = Maruno
     SetVisible = 48,false
 <Hail large emitter>
     Focus = Foreground
-    Graphic = ice
+    Graphic = ice 1
     RandomAngleRange = 180
     RandomInvertAngle = true
     RandomInvertFlip = true
@@ -40,7 +40,7 @@ Credit = Maruno
     SetEmitting = 27,false
 <Hail medium emitter 1>
     Focus = Midground
-    Graphic = ice
+    Graphic = ice 1
     RandomAngleRange = 180
     RandomInvertAngle = true
     RandomInvertFlip = true
@@ -65,7 +65,7 @@ Credit = Maruno
     SetEmitting = 32,false
 <Hail medium emitter 2>
     Focus = Background
-    Graphic = ice
+    Graphic = ice 1
     RandomAngleRange = 180
     RandomInvertAngle = true
     RandomInvertFlip = true

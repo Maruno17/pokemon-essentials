@@ -32,7 +32,7 @@ Credit = Maruno
     MoveOpacity = 96,5,0
 <Spiral glow>
     Focus = User
-    Graphic = spark
+    Graphic = glow 1
     SecondLayer = true
     InitialAngle = None
     SetY = 18,16
@@ -76,7 +76,7 @@ Credit = Maruno
     SetVisible = 76,false
 <Blast>
     Focus = UserAndTarget
-    Graphic = whoosh spark
+    Graphic = blast glow
     SecondLayer = true
     FoeInvertZ = true
     InitialAngle = ParticleToFocus
@@ -98,7 +98,7 @@ Credit = Maruno
     SetVisible = 79,false
 <Blue spark emitter>
     Focus = User
-    Graphic = spark
+    Graphic = glow 1
     SecondLayer = true
     FoeInvertX = true
     InitialAngle = None
@@ -126,7 +126,7 @@ Credit = Maruno
     SetVisible = 83,false
 <Cyan spark emitter>
     Focus = User
-    Graphic = spark
+    Graphic = glow 1
     SecondLayer = true
     FoeInvertX = true
     InitialAngle = None
@@ -153,7 +153,7 @@ Credit = Maruno
     SetVisible = 83,false
 <Green spark emitter>
     Focus = User
-    Graphic = spark
+    Graphic = glow 1
     SecondLayer = true
     FoeInvertX = true
     InitialAngle = None

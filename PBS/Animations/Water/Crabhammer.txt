@@ -15,7 +15,7 @@ Credit = Maruno
     SetVisible = 6,false
 <Swipe>
     Focus = Target
-    Graphic = whoosh
+    Graphic = blast
     FoeFlip = true
     SetY = 1,-96
     SetZ = 1,30
@@ -29,7 +29,7 @@ Credit = Maruno
     SetVisible = 5,false
 <Swipe afterimage 1>
     Focus = Target
-    Graphic = whoosh
+    Graphic = blast
     FoeFlip = true
     SetY = 1,-96
     SetZ = 1,29
@@ -41,7 +41,7 @@ Credit = Maruno
     SetVisible = 6,false
 <Swipe afterimage 2>
     Focus = Target
-    Graphic = whoosh
+    Graphic = blast
     FoeFlip = true
     SetY = 2,-64
     SetZ = 2,28
@@ -53,7 +53,7 @@ Credit = Maruno
     SetVisible = 7,false
 <Swipe afterimage 3>
     Focus = Target
-    Graphic = whoosh
+    Graphic = blast
     FoeFlip = true
     SetY = 3,-32
     SetZ = 3,27
@@ -65,7 +65,7 @@ Credit = Maruno
     SetVisible = 8,false
 <Swipe afterimage 4>
     Focus = Target
-    Graphic = whoosh
+    Graphic = blast
     FoeFlip = true
     SetZ = 4,26
     SetZoomX = 4,75

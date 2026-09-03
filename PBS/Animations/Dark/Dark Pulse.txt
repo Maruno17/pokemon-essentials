@@ -65,7 +65,7 @@ Credit = Maruno
     SetVisible = 11,false
 <Gunk emitter 1>
     Focus = User
-    Graphic = whoosh spark
+    Graphic = blast glow
     SecondLayer = true
     InitialAngle = EmittedDirection
     RandomInvertFlip = true
@@ -101,7 +101,7 @@ Credit = Maruno
     SetVisible = 21,false
 <Gunk emitter 2>
     Focus = User
-    Graphic = whoosh spark
+    Graphic = blast glow
     SecondLayer = true
     InitialAngle = EmittedDirection
     RandomInvertFlip = true
@@ -138,7 +138,7 @@ Credit = Maruno
     SetVisible = 21,false
 <Gunk emitter 3>
     Focus = User
-    Graphic = whoosh spark
+    Graphic = blast glow
     SecondLayer = true
     InitialAngle = EmittedDirection
     RandomInvertFlip = true
@@ -175,7 +175,7 @@ Credit = Maruno
     SetVisible = 21,false
 <Gunk emitter 4>
     Focus = User
-    Graphic = whoosh spark
+    Graphic = blast glow
     SecondLayer = true
     InitialAngle = EmittedDirection
     RandomInvertFlip = true
@@ -278,7 +278,7 @@ Credit = Maruno
     SetVisible = 11,false
 <Gunk emitter 1>
     Focus = User
-    Graphic = whoosh spark
+    Graphic = blast glow
     SecondLayer = true
     InitialAngle = EmittedDirection
     RandomInvertFlip = true
@@ -314,7 +314,7 @@ Credit = Maruno
     SetVisible = 21,false
 <Gunk emitter 2>
     Focus = User
-    Graphic = whoosh spark
+    Graphic = blast glow
     SecondLayer = true
     InitialAngle = EmittedDirection
     RandomInvertFlip = true
@@ -351,7 +351,7 @@ Credit = Maruno
     SetVisible = 21,false
 <Gunk emitter 3>
     Focus = User
-    Graphic = whoosh spark
+    Graphic = blast glow
     SecondLayer = true
     InitialAngle = EmittedDirection
     RandomInvertFlip = true
@@ -388,7 +388,7 @@ Credit = Maruno
     SetVisible = 21,false
 <Gunk emitter 4>
     Focus = User
-    Graphic = whoosh spark
+    Graphic = blast glow
     SecondLayer = true
     InitialAngle = EmittedDirection
     RandomInvertFlip = true

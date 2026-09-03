@@ -11,7 +11,7 @@ Credit = Maruno
     MoveColor = 16,5,A800F800
 <Sludge projectile>
     Focus = UserAndTarget
-    Graphic = dust cloud
+    Graphic = cloud 1
     SetY = 0,96
     SetZ = 0,40
     SetZoomX = 0,50
@@ -28,7 +28,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Sludge copy 1>
     Focus = UserAndTarget
-    Graphic = dust cloud
+    Graphic = cloud 1
     SetX = 7,144
     SetY = 7,-244
     SetZ = 7,10
@@ -40,7 +40,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Sludge copy 2>
     Focus = UserAndTarget
-    Graphic = dust cloud
+    Graphic = cloud 1
     SetX = 8,158
     SetY = 8,-200
     SetZ = 8,20
@@ -52,7 +52,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Sludge copy 3>
     Focus = UserAndTarget
-    Graphic = dust cloud
+    Graphic = cloud 1
     SetX = 9,186
     SetY = 9,-206
     SetZ = 9,30
@@ -64,7 +64,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Bubble emitter>
     Focus = Target
-    Graphic = bubble spark
+    Graphic = bubble glow
     SecondLayer = true
     Emitter = Straight
     EmitterRate = 15
@@ -130,7 +130,7 @@ Credit = Maruno
     MoveColor = 16,5,A800F800
 <Sludge projectile>
     Focus = UserAndTarget
-    Graphic = dust cloud
+    Graphic = cloud 1
     SetY = 0,-32
     SetZ = 0,-140
     SetZoomX = 0,50
@@ -147,7 +147,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Sludge copy 1>
     Focus = UserAndTarget
-    Graphic = dust cloud
+    Graphic = cloud 1
     SetX = 7,140
     SetY = 7,32
     SetZ = 7,-110
@@ -159,7 +159,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Sludge copy 2>
     Focus = UserAndTarget
-    Graphic = dust cloud
+    Graphic = cloud 1
     SetX = 8,164
     SetY = 8,-24
     SetZ = 8,-120
@@ -171,7 +171,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Sludge copy 3>
     Focus = UserAndTarget
-    Graphic = dust cloud
+    Graphic = cloud 1
     SetX = 9,174
     SetY = 9,-94
     SetZ = 9,-130
@@ -183,7 +183,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Bubble emitter>
     Focus = Target
-    Graphic = bubble spark
+    Graphic = bubble glow
     SecondLayer = true
     Emitter = Straight
     EmitterRate = 15

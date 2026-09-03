@@ -73,7 +73,7 @@ Credit = Maruno & Dawn Bronze
     SetVisible = 12,false
 <Spark spawner>
     Focus = Target
-    Graphic = spark
+    Graphic = glow 1
     Emitter = Projectile
     EmitterRate = 60
     SetZ = 0,5

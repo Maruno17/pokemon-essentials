@@ -65,7 +65,7 @@ Credit = Dawn Bronze
     MoveOpacity = 18,3,0
 <Sparks Emitter>
     Focus = Target
-    Graphic = spark small
+    Graphic = glow 2
     Emitter = Projectile
     EmitterRate = 40
     SetZ = 13,10
@@ -176,7 +176,7 @@ Credit = Dawn Bronze
     MoveOpacity = 18,3,0
 <Sparks Emitter>
     Focus = Target
-    Graphic = spark small
+    Graphic = glow 2
     Emitter = Projectile
     EmitterRate = 40
     SetZ = 13,10

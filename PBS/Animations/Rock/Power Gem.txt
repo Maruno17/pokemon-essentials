@@ -31,7 +31,7 @@ Credit = Maruno
     MoveOpacity = 71,7,0
 <Gem emitter>
     Focus = User
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     Emitter = NoMovement
     EmitterRate = 20
@@ -118,7 +118,7 @@ Credit = Maruno
     SetVisible = 43,false
 <Shot gem 1>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     FoeInvertZ = true
     SetX = 37,0
@@ -156,7 +156,7 @@ Credit = Maruno
     SetVisible = 47,false
 <Shot gem 1 emitter>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     FoeInvertZ = true
     Emitter = NoMovement
     EmitterRate = 30
@@ -176,7 +176,7 @@ Credit = Maruno
     SetEmitting = 47,false
 <Shot gem 2>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     FoeInvertZ = true
     SetX = 37,0
@@ -214,7 +214,7 @@ Credit = Maruno
     SetVisible = 47,false
 <Shot gem 2 emitter>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     FoeInvertZ = true
     Emitter = NoMovement
     EmitterRate = 30
@@ -234,7 +234,7 @@ Credit = Maruno
     SetEmitting = 47,false
 <Shot gem 3>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     FoeInvertZ = true
     SetX = 37,0
@@ -272,7 +272,7 @@ Credit = Maruno
     SetVisible = 47,false
 <Shot gem 3 emitter>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     FoeInvertZ = true
     Emitter = NoMovement
     EmitterRate = 30
@@ -292,7 +292,7 @@ Credit = Maruno
     SetEmitting = 47,false
 <Shot gem 4>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     FoeInvertZ = true
     SetX = 37,0
@@ -330,7 +330,7 @@ Credit = Maruno
     SetVisible = 47,false
 <Shot gem 4 emitter>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     FoeInvertZ = true
     Emitter = NoMovement
     EmitterRate = 30
@@ -350,7 +350,7 @@ Credit = Maruno
     SetEmitting = 47,false
 <Shot gem 5>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     FoeInvertZ = true
     SetX = 37,0
@@ -388,7 +388,7 @@ Credit = Maruno
     SetVisible = 47,false
 <Shot gem 5 emitter>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     FoeInvertZ = true
     Emitter = NoMovement
     EmitterRate = 30
@@ -408,7 +408,7 @@ Credit = Maruno
     SetEmitting = 47,false
 <Shot gem 6>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     FoeInvertZ = true
     SetX = 37,0
@@ -446,7 +446,7 @@ Credit = Maruno
     SetVisible = 47,false
 <Shot gem 6 emitter>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     FoeInvertZ = true
     Emitter = NoMovement
     EmitterRate = 30
@@ -466,7 +466,7 @@ Credit = Maruno
     SetEmitting = 47,false
 <Shot gem 7>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     FoeInvertZ = true
     SetX = 37,0
@@ -504,7 +504,7 @@ Credit = Maruno
     SetVisible = 47,false
 <Shot gem 7 emitter>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     FoeInvertZ = true
     Emitter = NoMovement
     EmitterRate = 30
@@ -524,7 +524,7 @@ Credit = Maruno
     SetEmitting = 47,false
 <Shot gem 8>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     FoeInvertZ = true
     SetX = 37,0
@@ -562,7 +562,7 @@ Credit = Maruno
     SetVisible = 47,false
 <Shot gem 8 emitter>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     FoeInvertZ = true
     Emitter = NoMovement
     EmitterRate = 30
@@ -582,7 +582,7 @@ Credit = Maruno
     SetEmitting = 47,false
 <Shot gem 9>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     FoeInvertZ = true
     SetX = 37,0
@@ -620,7 +620,7 @@ Credit = Maruno
     SetVisible = 47,false
 <Shot gem 9 emitter>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     FoeInvertZ = true
     Emitter = NoMovement
     EmitterRate = 30
@@ -640,7 +640,7 @@ Credit = Maruno
     SetEmitting = 47,false
 <Shot gem 10>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     SecondLayer = true
     FoeInvertZ = true
     SetX = 37,0
@@ -678,7 +678,7 @@ Credit = Maruno
     SetVisible = 47,false
 <Shot gem 10 emitter>
     Focus = UserAndTarget
-    Graphic = strobe spark
+    Graphic = strobe glow
     FoeInvertZ = true
     Emitter = NoMovement
     EmitterRate = 30

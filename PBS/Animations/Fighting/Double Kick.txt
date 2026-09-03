@@ -62,7 +62,7 @@ Credit = Dawn Bronze
     MoveOpacity = 8,3,0
 <Spark spawner>
     Focus = Target
-    Graphic = spark
+    Graphic = glow 1
     Emitter = Projectile
     EmitterRate = 80
     SetEmitSpeed = 0,300
@@ -133,7 +133,7 @@ Credit = Dawn Bronze
     MoveOpacity = 19,3,0
 <Spark spawner 2>
     Focus = Target
-    Graphic = spark
+    Graphic = glow 1
     Emitter = Projectile
     EmitterRate = 80
     SetEmitSpeed = 11,300

@@ -76,7 +76,7 @@ Credit = Maruno
     SetVisible = 8,false
 <Spark spawner>
     Focus = Target
-    Graphic = spark
+    Graphic = glow 1
     SecondLayer = true
     Emitter = Straight
     EmitterRate = 80

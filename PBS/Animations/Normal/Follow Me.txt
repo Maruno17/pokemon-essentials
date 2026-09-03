@@ -66,7 +66,7 @@ Credit = Dawn Bronze
     MoveOpacity = 65,4,0
 <SE>
     Play = 3,Normal/Follow Me
-    Play = 62,Shiny,50
+    Play = 62,Common/Shiny,50
 #-------------------------------
 [OppMove,FOLLOWME]
 Name = DB Animation
@@ -135,4 +135,4 @@ Credit = Dawn Bronze
     MoveOpacity = 65,4,0
 <SE>
     Play = 2,Normal/Follow Me
-    Play = 63,Shiny,50
+    Play = 63,Common/Shiny,50

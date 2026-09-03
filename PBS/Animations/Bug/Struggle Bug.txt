@@ -4,17 +4,17 @@
 Name = DB Animation
 Credit = Dawn Bronze
 <User>
-    MoveX = 0,1,3
-    MoveX = 1,2,-3
-    MoveX = 3,2,3
-    MoveX = 5,2,-3
-    MoveX = 7,2,3
-    MoveX = 9,2,-3
-    MoveX = 11,2,3
-    MoveX = 13,2,-3
-    MoveX = 15,2,3
-    MoveX = 17,2,-3
-    MoveX = 19,2,3
+    MoveX = 0,1,4
+    MoveX = 1,2,-4
+    MoveX = 3,2,4
+    MoveX = 5,2,-4
+    MoveX = 7,2,4
+    MoveX = 9,2,-4
+    MoveX = 11,2,4
+    MoveX = 13,2,-4
+    MoveX = 15,2,4
+    MoveX = 17,2,-4
+    MoveX = 19,2,4
     MoveX = 21,1,0
 <Target>
     MoveZoomX = 24,2,50
@@ -27,7 +27,7 @@ Credit = Dawn Bronze
     MoveZoomY = 30,2,100
 <Bug Emitter User>
     Focus = User
-    Graphic = spark small
+    Graphic = glow 2
     RandomAngleRange = 180
     Emitter = Projectile
     EmitterRate = 25
@@ -53,7 +53,7 @@ Credit = Dawn Bronze
     MoveColor = 21,5,FFFFFFFF
 <Bug Emitter Target>
     Focus = TargetPosition
-    Graphic = spark small
+    Graphic = glow 2
     RandomInvertFlip = true
     Emitter = Helix
     EmitterRate = 15
@@ -81,7 +81,7 @@ Credit = Dawn Bronze
     SetVisible = 22,false
 <Gathering Bug Emitter 1>
     Focus = Target
-    Graphic = spark small
+    Graphic = glow 2
     InitialAngle = AlwaysParticleToFocus
     Emitter = Polar
     EmitterRate = 10
@@ -105,7 +105,7 @@ Credit = Dawn Bronze
     SetEmitting = 24,false
 <Gathering Bug Emitter 2>
     Focus = Target
-    Graphic = spark small
+    Graphic = glow 2
     InitialAngle = AlwaysParticleToFocus
     Emitter = Polar
     EmitterRate = 10

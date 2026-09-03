@@ -26,7 +26,7 @@ Credit = Maruno
     SetVisible = 7,false
 <Glow>
     Focus = User
-    Graphic = spark
+    Graphic = glow 1
     SetY = 3,16
     SetZ = 3,10
     SetZoomX = 3,350
@@ -37,7 +37,7 @@ Credit = Maruno
     SetVisible = 10,false
 <Spark emitter>
     Focus = User
-    Graphic = spark
+    Graphic = glow 1
     Emitter = Polar
     EmitterRate = 80
     EmitterIntensity = 4

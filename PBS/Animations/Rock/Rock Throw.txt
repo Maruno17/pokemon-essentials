@@ -22,7 +22,7 @@ Credit = Maruno
     MoveY = 28,1,0
 <Falling rock>
     Focus = TargetPosition
-    Graphic = rock
+    Graphic = rock 1
     SetY = 0,-192
     SetZ = 0,10
     SetOpacity = 0,0
@@ -34,7 +34,7 @@ Credit = Maruno
     SetVisible = 5,false
 <Bouncing rock>
     Focus = TargetPosition
-    Graphic = rock
+    Graphic = rock 1
     Emitter = Projectile
     SetZ = 5,10
     SetAngle = 5,180
@@ -52,7 +52,7 @@ Credit = Maruno
     SetVisible = 16,false
 <Rubble spawner>
     Focus = TargetPosition
-    Graphic = rock
+    Graphic = rock 1
     RandomAngleRange = 180
     RandomInvertAngle = true
     RandomInvertFlip = true

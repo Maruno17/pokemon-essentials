@@ -21,7 +21,7 @@ Credit = Dawn Bronze
     MoveColor = 42,5,C400F400
 <Smog Emitter>
     Focus = TargetPosition
-    Graphic = spark small
+    Graphic = glow 2
     RandomInvertFlip = true
     Emitter = Helix
     EmitterRate = 15
@@ -51,7 +51,7 @@ Credit = Dawn Bronze
     SetVisible = 26,false
 <Gathering Particle Emitter 1>
     Focus = Target
-    Graphic = spark small
+    Graphic = glow 2
     RandomAngleRange = 180
     Emitter = Polar
     EmitterRate = 10
@@ -75,7 +75,7 @@ Credit = Dawn Bronze
     SetEmitting = 21,false
 <Gathering Particle Emitter 2>
     Focus = Target
-    Graphic = spark small
+    Graphic = glow 2
     RandomAngleRange = 180
     Emitter = Polar
     EmitterRate = 10
@@ -149,7 +149,7 @@ Credit = Dawn Bronze
     MoveZoomY = 36,7,0
 <Base>
     Focus = Target
-    Graphic = spark
+    Graphic = glow 1
     SetY = 27,60
     SetZ = 27,-10
     SetZoomX = 27,300

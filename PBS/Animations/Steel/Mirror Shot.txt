@@ -18,7 +18,7 @@ Credit = Maruno
     MoveX = 56,1,0
 <Glow>
     Focus = User
-    Graphic = sparks
+    Graphic = glows
     SecondLayer = true
     SetY = 0,16
     SetZ = 0,30
@@ -136,7 +136,7 @@ Credit = Maruno
     SetVisible = 32,false
 <Ball emitter>
     Focus = User
-    Graphic = spark small
+    Graphic = glow 2
     Emitter = Straight
     EmitterRate = 12
     SetZ = 22,10

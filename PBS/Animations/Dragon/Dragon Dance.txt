@@ -43,7 +43,7 @@ Credit = Maruno
     MoveColor = 45,6,F8000000
 <Black cloud emitter 1>
     Focus = User
-    Graphic = dust cloud
+    Graphic = cloud 1
     InitialAngle = None
     RandomAngleRange = 180
     RandomInvertFlip = true
@@ -73,7 +73,7 @@ Credit = Maruno
     SetEmitting = 41,false
 <Black cloud emitter 2>
     Focus = User
-    Graphic = dust cloud
+    Graphic = cloud 1
     InitialAngle = None
     RandomAngleRange = 180
     RandomInvertFlip = true
@@ -102,7 +102,7 @@ Credit = Maruno
     SetEmitting = 36,false
 <Red cloud emitter 1>
     Focus = User
-    Graphic = dust cloud
+    Graphic = cloud 1
     InitialAngle = None
     RandomAngleRange = 180
     RandomInvertFlip = true
@@ -132,7 +132,7 @@ Credit = Maruno
     SetEmitting = 41,false
 <Red cloud emitter 2>
     Focus = User
-    Graphic = dust cloud
+    Graphic = cloud 1
     InitialAngle = None
     RandomAngleRange = 180
     RandomInvertFlip = true

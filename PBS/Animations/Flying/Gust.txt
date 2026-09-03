@@ -21,7 +21,7 @@ Credit = Dawn Bronze
     MoveX = 36,2,0
 <Cloud Swirl Emitter 1>
     Focus = TargetPosition
-    Graphic = dust cloud
+    Graphic = cloud 1
     RandomAngleRange = 85
     RandomInvertAngle = true
     RandomInvertFlip = true
@@ -41,7 +41,7 @@ Credit = Dawn Bronze
     MoveOpacity = 20,6,0
 <Cloud Swirl Emitter 2>
     Focus = TargetPosition
-    Graphic = dust cloud
+    Graphic = cloud 1
     RandomAngleRange = 85
     RandomInvertAngle = true
     RandomInvertFlip = true

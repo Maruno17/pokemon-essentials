@@ -86,7 +86,7 @@ Credit = Dawn Bronze
     MoveOpacity = 16,4,0
 <Hit 1 Spark Emitter>
     Focus = TargetPosition
-    Graphic = spark small
+    Graphic = glow 2
     Emitter = Projectile
     EmitterRate = 40
     SetZoomX = 14,50
@@ -131,7 +131,7 @@ Credit = Dawn Bronze
     MoveOpacity = 20,4,0
 <Hit 2 Spark Emitter>
     Focus = TargetPosition
-    Graphic = spark small
+    Graphic = glow 2
     Emitter = Projectile
     EmitterRate = 40
     SetZoomX = 18,50
@@ -176,7 +176,7 @@ Credit = Dawn Bronze
     MoveOpacity = 24,4,0
 <Hit 3 Spark Emitter>
     Focus = TargetPosition
-    Graphic = spark small
+    Graphic = glow 2
     Emitter = Projectile
     EmitterRate = 40
     SetZoomX = 22,50
@@ -282,7 +282,7 @@ Credit = Dawn Bronze
     MoveOpacity = 16,4,0
 <Hit 1 Spark Emitter>
     Focus = TargetPosition
-    Graphic = spark small
+    Graphic = glow 2
     Emitter = Projectile
     EmitterRate = 40
     SetZoomX = 14,50
@@ -327,7 +327,7 @@ Credit = Dawn Bronze
     MoveOpacity = 20,4,0
 <Hit 2 Spark Emitter>
     Focus = TargetPosition
-    Graphic = spark small
+    Graphic = glow 2
     Emitter = Projectile
     EmitterRate = 40
     SetZoomX = 18,50
@@ -372,7 +372,7 @@ Credit = Dawn Bronze
     MoveOpacity = 24,4,0
 <Hit 3 Spark Emitter>
     Focus = TargetPosition
-    Graphic = spark small
+    Graphic = glow 2
     Emitter = Projectile
     EmitterRate = 40
     SetZoomX = 22,50

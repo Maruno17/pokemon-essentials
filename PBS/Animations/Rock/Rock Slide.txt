@@ -43,7 +43,7 @@ Credit = Maruno & Dawn Bronze
     MoveZoomY = 39,2,100
 <Falling rocks>
     Focus = TargetSideForeground
-    Graphic = rock
+    Graphic = rock 1
     Emitter = Projectile
     EmitterRate = 15
     SetZ = 8,10
@@ -61,7 +61,7 @@ Credit = Maruno & Dawn Bronze
     SetEmitting = 32,false
 <Bouncing rocks>
     Focus = TargetSideForeground
-    Graphic = rock
+    Graphic = rock 1
     Emitter = Projectile
     EmitterRate = 20
     SetZ = 12,9
@@ -83,7 +83,7 @@ Credit = Maruno & Dawn Bronze
     SetEmitting = 36,false
 <Dust Cloud spawner>
     Focus = TargetSideForeground
-    Graphic = dust cloud
+    Graphic = cloud 1
     RandomAngleRange = 180
     RandomInvertAngle = true
     RandomInvertFlip = true

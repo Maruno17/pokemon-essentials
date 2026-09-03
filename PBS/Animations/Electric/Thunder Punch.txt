@@ -62,7 +62,7 @@ Credit = Maruno
     SetVisible = 14,false
 <Flare>
     Focus = Target
-    Graphic = spark small
+    Graphic = glow 2
     SetZ = 3,10
     MoveZoomX = 3,4,600,EaseOut
     MoveZoomY = 3,4,600,EaseOut
