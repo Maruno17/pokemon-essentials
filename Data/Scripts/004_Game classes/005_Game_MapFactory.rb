@@ -454,7 +454,7 @@ module MapFactoryHelper
     # Add map to cache if can't be found
     if !@@MapDims[id]
       begin
-        map = load_data(sprintf("Data/Map%03d.rxdata", id))
+        map = Game_Map.load_map_data(id)
         @@MapDims[id] = [map.width, map.height]
       rescue
         @@MapDims[id] = [0, 0]

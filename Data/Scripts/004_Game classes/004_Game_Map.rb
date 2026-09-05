@@ -29,13 +29,20 @@ class Game_Map
   attr_reader   :display_y                # display y-coordinate * 128
   attr_accessor :need_refresh             # refresh request flag
 
-  TILE_WIDTH   = 32
-  TILE_HEIGHT  = 32
-  X_SUBPIXELS  = 4
-  Y_SUBPIXELS  = 4
-  REAL_RES_X   = TILE_WIDTH * X_SUBPIXELS
-  REAL_RES_Y   = TILE_HEIGHT * Y_SUBPIXELS
-  LAYERS_COUNT = 3
+  TILE_WIDTH  = 32
+  TILE_HEIGHT = 32
+  X_SUBPIXELS = 4
+  Y_SUBPIXELS = 4
+  REAL_RES_X  = TILE_WIDTH * X_SUBPIXELS
+  REAL_RES_Y  = TILE_HEIGHT * Y_SUBPIXELS
+
+  def self.map_data_exists?(map_id)
+    return pbRgssExists?(sprintf("Data/Map%03d.rxdata", map_id))
+  end
+
+  def self.load_map_data(map_id)
+    return load_data(sprintf("Data/Map%03d.rxdata", map_id)) rescue nil
+  end
 
   def initialize
     @map_id = 0
@@ -45,7 +52,7 @@ class Game_Map
 
   def setup(map_id)
     @map_id = map_id
-    @map = load_data(sprintf("Data/Map%03d.rxdata", map_id))
+    @map = Game_Map.load_map_data(map_id)
     tileset = $data_tilesets[@map.tileset_id]
     updateTileset
     @fog_ox                  = 0
@@ -181,12 +188,12 @@ class Game_Map
       newy -= 1
     end
     return false if !valid?(newx, newy)
-    (LAYERS_COUNT - 1).downto(0) do |layer|
+    (data.zsize - 1).downto(0) do |layer|
       tile_id = data[x, y, layer]
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       # If already on water, only allow movement to another water tile
       if self_event && terrain.can_surf_freely
-        (LAYERS_COUNT - 1).downto(0) do |layer2|
+        (data.zsize - 1).downto(0) do |layer2|
           facing_tile_id = data[newx, newy, layer2]
           next if facing_tile_id == 0
           return false if facing_tile_id.nil?
@@ -201,7 +208,7 @@ class Game_Map
         return false
       elsif self_event && self_event.x == x && self_event.y == y
         # Can't walk onto ledges
-        (LAYERS_COUNT - 1).downto(0) do |layer2|
+        (data.zsize - 1).downto(0) do |layer2|
           facing_tile_id = data[newx, newy, layer2]
           next if facing_tile_id == 0
           return false if facing_tile_id.nil?
@@ -222,7 +229,7 @@ class Game_Map
 
   def playerPassable?(x, y, dir, self_event = nil)
     bit = (1 << ((dir / 2) - 1)) & 0x0f
-    (LAYERS_COUNT - 1).downto(0) do |layer|
+    (data.zsize - 1).downto(0) do |layer|
       tile_id = data[x, y, layer]
       next if tile_id == 0
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
@@ -258,7 +265,7 @@ class Game_Map
       return false if @passages[event.tile_id] & 0x0f != 0
       return true if @priorities[event.tile_id] == 0
     end
-    (LAYERS_COUNT - 1).downto(0) do |layer|
+    (data.zsize - 1).downto(0) do |layer|
       tile_id = data[x, y, layer]
       next if tile_id == 0
       next if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).ignore_passability
@@ -269,7 +276,7 @@ class Game_Map
   end
 
   def bush?(x, y)
-    (LAYERS_COUNT - 1).downto(0) do |layer|
+    (data.zsize - 1).downto(0) do |layer|
       tile_id = data[x, y, layer]
       next if tile_id == 0
       return false if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).bridge &&
@@ -280,7 +287,7 @@ class Game_Map
   end
 
   def deepBush?(x, y)
-    (LAYERS_COUNT - 1).downto(0) do |layer|
+    (data.zsize - 1).downto(0) do |layer|
       tile_id = data[x, y, layer]
       next if tile_id == 0
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
@@ -291,7 +298,7 @@ class Game_Map
   end
 
   def counter?(x, y)
-    (LAYERS_COUNT - 1).downto(0) do |layer|
+    (data.zsize - 1).downto(0) do |layer|
       tile_id = data[x, y, layer]
       next if tile_id == 0
       passage = @passages[tile_id]
@@ -302,7 +309,7 @@ class Game_Map
 
   def terrain_tag(x, y, countBridge = false)
     if valid?(x, y)
-      (LAYERS_COUNT - 1).downto(0) do |layer|
+      (data.zsize - 1).downto(0) do |layer|
         tile_id = data[x, y, layer]
         next if tile_id == 0
         terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])

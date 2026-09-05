@@ -168,10 +168,9 @@ end
 #
 #===============================================================================
 def createMapBitmap(map_id, tile_width = Game_Map::TILE_WIDTH, tile_height = Game_Map::TILE_HEIGHT, with_outline = false)
-  map_file = sprintf("Data/Map%03d.rxdata", map_id)
   map = nil
-  if pbRgssExists?(map_file)
-    map = load_data(map_file) rescue nil
+  if Game_Map.map_data_exists?(map_id)
+    map = Game_Map.load_map_data(map_id)
   end
   return Bitmap.new(32, 32) if !map
   bitmap = Bitmap.new(map.width * tile_width, map.height * tile_height)
@@ -180,7 +179,7 @@ def createMapBitmap(map_id, tile_width = Game_Map::TILE_WIDTH, tile_height = Gam
   helper = TileDrawingHelper.fromTileset(tileset)
   map.height.times do |y|
     map.width.times do |x|
-      Game_Map::LAYERS_COUNT.times do |layer|
+      map.data.zsize.times do |layer|
         id = map.data[x, y, layer]
         id = 0 if !id
         helper.bltSmallTile(bitmap, x * tile_width, y * tile_height, tile_width, tile_height, id)
@@ -226,7 +225,7 @@ end
 
 # Unused
 def getPassabilityMinimap(mapid)
-  map = load_data(sprintf("Data/Map%03d.rxdata", mapid))
+  map = Game_Map.load_map_data(mapid)
   tileset = $data_tilesets[map.tileset_id]
   minimap = AnimatedBitmap.new("Graphics/UI/minimap_tiles")
   ret = Bitmap.new(map.width * 6, map.height * 6)
@@ -235,7 +234,7 @@ def getPassabilityMinimap(mapid)
   map.width.times do |i|
     map.height.times do |j|
       pass = true
-      (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+      (map.data.zsize - 1).downto(0) do |layer|
         if !passable?(passages, map.data[i, j, layer])
           pass = false
           break

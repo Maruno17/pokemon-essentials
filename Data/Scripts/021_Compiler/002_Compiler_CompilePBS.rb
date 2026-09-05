@@ -321,9 +321,9 @@ module Compiler
       pbCompilerEachPreppedLine(path) do |line, lineno|
         FileLineData.setLine(line, lineno)
         record = get_csv_record(line, schema)
-        if !pbRgssExists?(sprintf("Data/Map%03d.rxdata", record[0]))
+        if !Game_Map.map_data_exists?(record[0])
           print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.", record[0]) + "\n" + FileLineData.linereport
-        elsif !pbRgssExists?(sprintf("Data/Map%03d.rxdata", record[3]))
+        elsif !Game_Map.map_data_exists?(record[3])
           print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.", record[3]) + "\n" + FileLineData.linereport
         end
         case record[1]

@@ -114,9 +114,8 @@ module Translator
           t += 5
           Graphics.update
         end
-        filename = sprintf("Data/Map%03d.rxdata", id)
-        next if !pbRgssExists?(filename)
-        map = load_data(filename)
+        next if !Game_Map.map_data_exists?(id)
+        map = Game_Map.load_map_data(id)
         items = []
         choices = []
         map.events.each_value do |event|

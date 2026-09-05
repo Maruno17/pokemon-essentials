@@ -453,7 +453,7 @@ module Compiler
       return false if x < 0 || x >= map.width || y < 0 || y >= map.height
       passages   = getTilesetPassages(map, mapID)
       priorities = getTilesetPriorities(map, mapID)
-      (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+      (map.data.zsize - 1).downto(0) do |layer|
         tile_id = map.data[x, y, layer]
         return false if tile_id.nil?
         passage = passages[tile_id]
@@ -471,7 +471,7 @@ module Compiler
       map = getMap(mapID)
       return false if !map
       passages = getTilesetPassages(map, mapID)
-      (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+      (map.data.zsize - 1).downto(0) do |layer|
         tile_id = map.data[x, y, layer]
         return false if tile_id.nil?
         passage = passages[tile_id]
@@ -488,7 +488,7 @@ module Compiler
       map = getMap(mapID)
       return if !map
       passages = getTilesetPassages(map, mapID)
-      (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+      (map.data.zsize - 1).downto(0) do |layer|
         tile_id = map.data[x, y, layer]
         next if tile_id == 0
         passages[tile_id] |= 0x80

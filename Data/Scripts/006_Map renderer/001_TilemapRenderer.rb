@@ -15,6 +15,7 @@ class TilemapRenderer
   DISPLAY_TILE_HEIGHT     = Game_Map::TILE_HEIGHT rescue 32
   SOURCE_TILE_WIDTH       = 32
   SOURCE_TILE_HEIGHT      = 32
+  DEFAULT_LAYERS_COUNT    = 3
   ZOOM_X                  = DISPLAY_TILE_WIDTH / SOURCE_TILE_WIDTH
   ZOOM_Y                  = DISPLAY_TILE_HEIGHT / SOURCE_TILE_HEIGHT
   TILESET_TILES_PER_ROW   = 8
@@ -281,7 +282,7 @@ class TilemapRenderer
     @tiles_horizontal_count.times do |i|
       @tiles[i] = []
       @tiles_vertical_count.times do |j|
-        @tiles[i][j] = Array.new(Game_Map::LAYERS_COUNT) { TileSprite.new(@viewport) }
+        @tiles[i][j] = Array.new(DEFAULT_LAYERS_COUNT) { TileSprite.new(@viewport) }
       end
     end
     @current_map_id         = 0
@@ -585,8 +586,10 @@ class TilemapRenderer
         tile_x = i + map_display_x_tile
         (start_y..end_y).each do |j|
           tile_y = j + map_display_y_tile
-          @tiles[i][j].each_with_index do |tile, layer|
-            tile_id = map.data[tile_x, tile_y, layer]
+          [map.data.zsize, @tiles[i][j].length].max.times do |layer|
+            @tiles[i][j][layer] ||= TileSprite.new(@viewport)
+            tile = @tiles[i][j][layer]
+            tile_id = map.data[tile_x, tile_y, layer] || 0
             if do_full_refresh || tile.need_refresh || tile.tile_id != tile_id
               refresh_tile(tile, i, j, map, layer, tile_id)
             else

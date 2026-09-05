@@ -259,6 +259,7 @@ module RandomDungeon
       :upper_wall_in_7        => Console.markup_style("~", bg: :gray),
       :upper_wall_in_9        => Console.markup_style("~", bg: :gray)
     }
+    LAYERS_COUNT     = 3
     FLOOR_LAYER      = 0
     FLOOR_DECO_LAYER = 1
     WALL_LAYER       = 2
@@ -267,7 +268,7 @@ module RandomDungeon
       @width  = width
       @height = height
       @array  = []
-      Game_Map::LAYERS_COUNT.times { @array.push([]) }
+      LAYERS_COUNT.times { @array.push([]) }
       clear
     end
 
@@ -281,7 +282,7 @@ module RandomDungeon
 
     def value(x, y)
       return :void if x < 0 || x >= @width || y < 0 || y >= @height
-      (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+      (LAYERS_COUNT - 1).downto(0) do |layer|
         return @array[layer][(y * @width) + x] if @array[layer][(y * @width) + x] != :none
       end
       return :void
@@ -1003,7 +1004,7 @@ module RandomDungeon
       # Draw tiles in map based on tile types
       map.width.times do |i|
         map.height.times do |j|
-          Game_Map::LAYERS_COUNT.times do |layer|
+          DungeonLayout::LAYERS_COUNT.times do |layer|
             tile_type = @map_data[i, j, layer]
             real_tile_type = (tile_type.is_a?(Array)) ? tile_type[0] : tile_type
             tile_version = (tile_type.is_a?(Array)) ? tile_type[1] : -1
@@ -1052,7 +1053,7 @@ module RandomDungeon
           tileset = $data_tilesets[map.tileset_id]
           event_width.times do |i|
             event_height.times do |j|
-              (Game_Map::LAYERS_COUNT - 1).downto(0) do |layer|
+              (DungeonLayout::LAYERS_COUNT - 1).downto(0) do |layer|
                 tile_id = map.data[room[0] + x + i, room[1] + y + j, layer]
                 next if tile_id == 0
                 next if GameData::TerrainTag.try_get(tileset.terrain_tags[tile_id]).ignore_passability

@@ -55,7 +55,7 @@ class Scene_Map
     playingBGM = $game_system.playing_bgm
     playingBGS = $game_system.playing_bgs
     return if !playingBGM && !playingBGS
-    map = load_data(sprintf("Data/Map%03d.rxdata", mapid))
+    map = Game_Map.load_map_data(mapid)
     if playingBGM && map.autoplay_bgm
       test_filename = map.bgm.name
       test_filename += "_n" if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/" + test_filename + "_n")
