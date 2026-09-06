@@ -6,6 +6,12 @@ HidesDataBoxes = true
 Credit = Maruno
 <User>
 <Target>
+    SetX = 18,0
+    MoveX = 18,1,2
+    MoveX = 19,2,-2
+    MoveX = 21,2,2
+    MoveX = 23,2,-2
+    MoveX = 25,1,0
 <Background>
     Focus = Background
     Graphic = Screens/white
@@ -140,6 +146,12 @@ HidesDataBoxes = true
 Credit = Maruno
 <User>
 <Target>
+    SetX = 18,0
+    MoveX = 18,1,-2
+    MoveX = 19,2,2
+    MoveX = 21,2,-2
+    MoveX = 23,2,2
+    MoveX = 25,1,0
 <Background>
     Focus = Background
     Graphic = Screens/white

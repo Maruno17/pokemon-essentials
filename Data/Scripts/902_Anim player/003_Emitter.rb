@@ -265,6 +265,7 @@ class AnimationPlayer::Emitter
       [:emit_speed, :speed],
       [:emit_direction, :direction],
       [:emit_gravity, :gravity],
+      [:emit_deceleration, :deceleration],
       [:emit_period_x, :period_x],
       [:emit_period_y, :period_y],
       [:emit_period_z, :period_z],
@@ -305,6 +306,14 @@ class AnimationPlayer::Emitter
     speed_y = -speed * Math.sin(angle * Math::PI / 180)
     particle_sprite.emitter_params[:speed_x] = speed_x
     particle_sprite.emitter_params[:speed_y] = speed_y
+    # X/Y deceleration
+    deceleration = particle_sprite.emitter_params[:deceleration]
+    decel_x = deceleration * Math.cos(angle * Math::PI / 180).abs
+    decel_y = deceleration * Math.sin(angle * Math::PI / 180).abs
+    decel_x *= -1 if particle_sprite.emitter_params[:speed_x] > 0
+    decel_y *= -1 if particle_sprite.emitter_params[:speed_y] > 0
+    particle_sprite.emitter_params[:deceleration_x] = decel_x
+    particle_sprite.emitter_params[:deceleration_y] = decel_y
   end
 
   def create_particle_sprite_set_base_property_offsets(particle_sprite, target_idx = -1)

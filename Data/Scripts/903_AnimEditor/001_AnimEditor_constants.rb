@@ -59,6 +59,8 @@ class AnimationEditor
     :emit_direction_range    => [     0,   180],
     :emit_gravity            => [-99999, 99999],
     :emit_gravity_range      => [     0,  9999],
+    :emit_deceleration       => [-99999, 99999],
+    :emit_deceleration_range => [     0,  9999],
     :emit_radius_x_range     => [     0,  9999],
     :emit_radius_y_range     => [     0,  9999],
     :emit_radius_z_range     => [     0,    50],

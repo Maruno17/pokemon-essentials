@@ -184,6 +184,22 @@ class AnimationPlayer::ParticleSprite
         @values[:auto_movement_y] = new_y
         changed_properties.push(:y)
       end
+    when :dampened
+      use_time = delta_t
+      if @emitter_params[:deceleration] > 0
+        balance_time = (@emitter_params[:speed].to_f / @emitter_params[:deceleration]).abs
+        use_time = balance_time if use_time > balance_time
+      end
+      if @emitter_params[:speed_x] != 0
+        new_x = ((@emitter_params[:speed_x] * use_time) + (@emitter_params[:deceleration_x] * use_time * use_time / 2)).round   # s = ut + 1/2 at^2
+        @values[:auto_movement_x] = new_x
+        changed_properties.push(:x)
+      end
+      if @emitter_params[:speed_y] != 0
+        new_y = ((@emitter_params[:speed_y] * use_time) + (@emitter_params[:deceleration_y] * use_time * use_time / 2)).round   # s = ut + 1/2 at^2
+        @values[:auto_movement_y] = new_y
+        changed_properties.push(:y)
+      end
     when :helix
       if @emitter_params[:period_x] != 0
         new_angle = @emitter_params[:direction] || 0

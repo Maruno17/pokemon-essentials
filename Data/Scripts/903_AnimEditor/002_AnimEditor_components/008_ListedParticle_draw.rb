@@ -154,6 +154,7 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
          :emit_speed, :emit_speed_range,
          :emit_direction, :emit_direction_range,
          :emit_gravity, :emit_gravity_range,
+         :emit_deceleration, :emit_deceleration_range,
          :emit_radius_x_range, :emit_radius_y_range, :emit_radius_z_range,
          :emit_period_x, :emit_period_x_range,
          :emit_period_y, :emit_period_y_range,
