@@ -142,7 +142,7 @@ class Battle
         next if battler.opposes?(side)
         next if !battler.takesIndirectDamage? || battler.pbHasType?(:FIRE)
         @scene.pbDamageAnimation(battler)
-        battler.pbTakeEffectDamage(battler.totalhp / 8, false) do |hp_lost|
+        battler.pbTakeEffectDamage(battler.totalhp / 8) do |hp_lost|
           pbDisplay(_INTL("{1} is hurt by the sea of fire!", battler.pbThis))
         end
       end
@@ -318,7 +318,7 @@ class Battle
       hpLoss = (Settings::MECHANICS_GENERATION >= 6) ? battler.totalhp / 6 : battler.totalhp / 8
     end
     @scene.pbDamageAnimation(battler)
-    battler.pbTakeEffectDamage(hpLoss, false) do |hp_lost|
+    battler.pbTakeEffectDamage(hpLoss) do |hp_lost|
       pbDisplay(_INTL("{1} is hurt by {2}!", battler.pbThis, move_name))
     end
   end
@@ -426,7 +426,7 @@ class Battle
       pbDisplay(_INTL("{1} perish count fell to {2}!", battler.pbOfThis, battler.effects[PBEffects::PerishSong]))
       if battler.effects[PBEffects::PerishSong] == 0
         perishSongUsers.push(battler.effects[PBEffects::PerishSongUser])
-        battler.pbReduceHP(battler.hp)
+        battler.pbReduceHP(battler.hp, false)
       end
       battler.pbItemHPHealCheck
       battler.pbFaint if battler.fainted?

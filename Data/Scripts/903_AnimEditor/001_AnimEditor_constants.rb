@@ -103,7 +103,7 @@ class AnimationEditor
     # Terrain
     "ElectricTerrain", "GrassyTerrain", "MistyTerrain", "PsychicTerrain",
     # HP and stats
-    "HealthDown", "HealthUp",
+    "HealthUp",
     "CriticalHitRateUp", "StatDown", "StatUp",
     # Status conditions
     "Burn", "Frozen", "Paralysis", "Poison", "Sleep", "Toxic",

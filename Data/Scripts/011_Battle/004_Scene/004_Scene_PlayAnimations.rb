@@ -239,8 +239,8 @@ class Battle::Scene
     @briefMessage = false
     if battler.hp > oldHP
       pbCommonAnimation("HealthUp", battler) if showAnim && !@battle.rules[:no_battle_animations]
-    elsif battler.hp < oldHP
-      pbCommonAnimation("HealthDown", battler) if showAnim && !@battle.rules[:no_battle_animations]
+#    elsif battler.hp < oldHP
+#      pbCommonAnimation("HealthDown", battler) if showAnim && !@battle.rules[:no_battle_animations]
     end
     @sprites["dataBox_#{battler.index}"].animate_hp(oldHP, battler.hp)
     while @sprites["dataBox_#{battler.index}"].animating_hp?

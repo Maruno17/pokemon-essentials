@@ -41,7 +41,7 @@ class Battle::Battler
   def pbRecoverHPFromDrain(amt, target, msg = nil)
     if target.hasActiveAbility?(:LIQUIDOOZE, true)
       @battle.pbShowAbilitySplash(target)
-      pbReduceHP(amt)
+      pbReduceHP(amt, false)
       @battle.pbDisplay(_INTL("{1} sucked up the liquid ooze!", pbThis))
       @battle.pbHideAbilitySplash(target)
       pbItemHPHealCheck
@@ -59,7 +59,7 @@ class Battle::Battler
     end
   end
 
-  def pbTakeEffectDamage(amt, show_anim = true)
+  def pbTakeEffectDamage(amt, show_anim = false)
     @droppedBelowHalfHP = false
     hp_lost = pbReduceHP(amt, show_anim)
     yield hp_lost if block_given?   # Show message

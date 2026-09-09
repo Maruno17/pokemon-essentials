@@ -1,0 +1,60 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,ParentalBond]
+Name = Essentials
+Credit = Maruno
+<User>
+<Target>
+    FoeInvertX = true
+    MoveX = 0,1,-2
+    MoveX = 1,2,2
+    MoveX = 3,2,-2
+    MoveX = 5,2,2
+    MoveX = 7,1,0
+<Hit 1>
+    Focus = Target
+    Graphic = hit
+    SetZ = 0,10
+    SetZoomX = 0,75
+    SetZoomY = 0,75
+    SetColor = 0,F8F8C0FF
+    MoveZoomX = 0,1,100
+    MoveZoomY = 0,1,100
+    SetVisible = 1,false
+<Hit 2>
+    Focus = Target
+    Graphic = hit
+    SetZ = 1,10
+    SetZoomX = 1,60
+    SetZoomY = 1,60
+    SetColor = 1,F8C000FF
+    SetFrame = 1,1
+    MoveZoomX = 1,4,100
+    MoveZoomY = 1,4,100
+    MoveOpacity = 1,4,0
+    SetVisible = 5,false
+<Spark spawner>
+    Focus = Target
+    Graphic = glow 1
+    Emitter = Projectile
+    EmitterRate = 80
+    SetZ = 0,5
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetOpacity = 0,0
+    SetColor = 0,F8F880FF
+    SetEmitting = 0,true
+    SetEmitSpeed = 0,300
+    SetEmitSpeedRange = 0,75
+    SetEmitDirection = 0,90
+    SetEmitDirectionRange = 0,120
+    SetEmitGravity = 0,500
+    MoveOpacity = 0,1,255
+    SetEmitting = 2,false
+    MoveZoomX = 4,9,0
+    MoveZoomY = 4,9,0
+    MoveOpacity = 4,9,0
+    MoveColor = 4,9,F86020FF,EaseOut
+    SetVisible = 13,false
+<SE>
+    Play = 0,Normal/Tackle
