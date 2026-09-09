@@ -1266,3 +1266,7 @@ Description = Powers up the Pokémon's Fire-type moves.
 [SPICYSPRAY]
 Name = Spicy Spray
 Description = When the Pokémon takes damage from a move, it burns the attacker.
+#-------------------------------
+[AURAGUARD]
+Name = Aura Guard
+Description = Halves the damage the Pokémon takes from contact moves.

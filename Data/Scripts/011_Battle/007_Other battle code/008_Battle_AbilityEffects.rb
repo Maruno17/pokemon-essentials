@@ -1816,6 +1816,12 @@ Battle::AbilityEffects::DamageCalcFromAlly.add(:STEELYSPIRIT,
 # DamageCalcFromTarget handlers
 #===============================================================================
 
+Battle::AbilityEffects::DamageCalcFromTarget.add(:AURAGUARD,
+  proc { |ability, user, target, move, mults, power, type|
+    mults[:final_damage_multiplier] /= 2 if move.pbContactMove?(user)
+  }
+)
+
 Battle::AbilityEffects::DamageCalcFromTarget.add(:DRYSKIN,
   proc { |ability, user, target, move, mults, power, type|
     mults[:power_multiplier] *= 1.25 if type == :FIRE
