@@ -264,85 +264,85 @@ module Battle::Scene::Animation::BallAnimationMixin
     #  top glare filename, top glare start tone, top glare end tone,
     #  bottom glare filename, bottom glare start tone, bottom glare end tone]
     :POKEBALL    => [Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, -96), Tone.new(0, 0, -192)],   # Light yellow, yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, -96), Tone.new(0, 0, -192)],   # Light yellow, yellow
     :GREATBALL   => [Tone.new(0, 0, 0), Tone.new(-128, -64, 0),   # White, blue
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(-128, 0, 0), Tone.new(-248, -64, 0),   # Cyan, dark cyan
-                     "spark", Tone.new(0, 0, 0), Tone.new(-96, -48, 0),   # White, light blue
-                     "spark", Tone.new(-96, -48, 0), Tone.new(-192, -96, 0)],   # Blue, dark blue
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(-128, 0, 0), Tone.new(-248, -64, 0),   # Cyan, dark cyan
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(-96, -48, 0),   # White, light blue
+                     "glow 1", Tone.new(-96, -48, 0), Tone.new(-192, -96, 0)],   # Blue, dark blue
     :SAFARIBALL  => [Tone.new(0, 0, -32), Tone.new(-128, 0, -128),   # Pale yellow, green
-                     "spark", Tone.new(0, 0, -64), Tone.new(-160, 0, -160),   # Beige, darker green
-                     "spark", Tone.new(0, 0, -64), Tone.new(-160, 0, -160),   # Beige, darker green
-                     "spark", Tone.new(0, 0, 0), Tone.new(-80, 0, -80),   # White, light green
-                     "spark", Tone.new(-32, 0, -96), Tone.new(-160, 0, -160)],   # Pale green, darker green
+                     "glow 1", Tone.new(0, 0, -64), Tone.new(-160, 0, -160),   # Beige, darker green
+                     "glow 1", Tone.new(0, 0, -64), Tone.new(-160, 0, -160),   # Beige, darker green
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(-80, 0, -80),   # White, light green
+                     "glow 1", Tone.new(-32, 0, -96), Tone.new(-160, 0, -160)],   # Pale green, darker green
     :ULTRABALL   => [Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, -64), Tone.new(0, 0, -224),   # Pale yellow, yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, -64), Tone.new(0, 0, -224),   # Pale yellow, yellow
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, -128),   # White, light yellow
-                     "spark", Tone.new(0, 0, -64), Tone.new(0, 0, -224)],   # Pale yellow, yellow
+                     "glow 1", Tone.new(0, 0, -64), Tone.new(0, 0, -224)],   # Pale yellow, yellow
     :MASTERBALL  => [Tone.new(0, 0, 0), Tone.new(-48, -200, -56),   # White, magenta
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(-48, -200, -56),   # White, magenta
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(-48, -200, -56),   # White, magenta
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(-48, -200, -56), Tone.new(-48, -200, -56)],   # Magenta, magenta
     :NETBALL     => [Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, -64, 0),   # White, lilac
                      "web", Tone.new(-32, -64, -32), Tone.new(-64, -128, -64)],   # Light purple, purple
     :DIVEBALL    => [Tone.new(0, 0, 0), Tone.new(-192, -128, -32),   # White, dark blue
                      "bubble 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(-184, -40, 0), Tone.new(-184, -40, 0),   # Cyan, cyan
+                     "glow 1", Tone.new(-184, -40, 0), Tone.new(-184, -40, 0),   # Cyan, cyan
                      "dazzle", Tone.new(-184, -40, 0), Tone.new(-184, -40, 0),   # Cyan, cyan
-                     "spark", Tone.new(0, 0, 0), Tone.new(-184, -40, 0)],   # White, cyan
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(-184, -40, 0)],   # White, cyan
     :NESTBALL    => [Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Light yellow, dark orange
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Light yellow, dark orange
                      "dazzle", Tone.new(0, 0, 0), Tone.new(-96, 0, -96),   # White, green
-                     "spark", Tone.new(-96, 0, -96), Tone.new(-192, 0, -192)],   # Green, dark green
+                     "glow 1", Tone.new(-96, 0, -96), Tone.new(-192, 0, -192)],   # Green, dark green
     :REPEATBALL  => [Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
                      "circle wave", Tone.new(-16, -16, -88), Tone.new(-32, -32, -176),   # Yellow, yellow
-                     "spark", Tone.new(-144, -144, -144), Tone.new(-160, -160, -160),   # Grey, grey
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, -128, -248), Tone.new(0, -128, -248)],   # Dark orange, dark orange
+                     "glow 1", Tone.new(-144, -144, -144), Tone.new(-160, -160, -160),   # Grey, grey
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, -128, -248), Tone.new(0, -128, -248)],   # Dark orange, dark orange
     :TIMERBALL   => [Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, -96), Tone.new(0, 0, -192)],   # Light yellow, yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, -96), Tone.new(0, 0, -192)],   # Light yellow, yellow
     :LUXURYBALL  => [Tone.new(0, 0, 0), Tone.new(0, -128, -160),   # White, orange
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, -64, -144), Tone.new(0, -192, -248)],   # Light orange, red
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, -64, -144), Tone.new(0, -192, -248)],   # Light orange, red
     :PREMIERBALL => [Tone.new(0, -160, -148), Tone.new(0, 0, 0),   # Red, white
-                     "spark", Tone.new(0, -192, -152), Tone.new(0, -192, -152),   # Red, red
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, -192, -152),   # White, red
+                     "glow 1", Tone.new(0, -192, -152), Tone.new(0, -192, -152),   # Red, red
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, -192, -152),   # White, red
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0)],   # White, white
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0)],   # White, white
     :DUSKBALL    => [Tone.new(-48, -200, -56), Tone.new(-160, -224, -160),   # Magenta, dark purple
-                     "spark", Tone.new(-248, -248, -248), Tone.new(-248, -248, -248),   # Black, black
-                     "spark", Tone.new(-24, -96, -32), Tone.new(-24, -96, -32),   # Light magenta, light magenta
-                     "spark", Tone.new(-248, -248, -248), Tone.new(-248, -248, -248),   # Black, black
+                     "glow 1", Tone.new(-248, -248, -248), Tone.new(-248, -248, -248),   # Black, black
+                     "glow 1", Tone.new(-24, -96, -32), Tone.new(-24, -96, -32),   # Light magenta, light magenta
+                     "glow 1", Tone.new(-248, -248, -248), Tone.new(-248, -248, -248),   # Black, black
                      "vortex 2", Tone.new(-160, -224, -160), Tone.new(-160, -224, -160)],   # Dark purple, dark purple
     :HEALBALL    => [Tone.new(-8, -48, -8), Tone.new(-16, -128, -112),   # Pink, dark pink
                      "shine 3", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "shine 3", Tone.new(0, -96, -104), Tone.new(-160, -64, 0),   # Pink/orange, cyan
                      "dazzle", Tone.new(0, 0, 0), Tone.new(-32, -112, -80),   # White, magenta
-                     "spark", Tone.new(-8, -48, -8), Tone.new(-64, -224, -160)],   # Pink, dark magenta
+                     "glow 1", Tone.new(-8, -48, -8), Tone.new(-64, -224, -160)],   # Pink, dark magenta
     :QUICKBALL   => [Tone.new(-64, 0, 0), Tone.new(-192, -96, 0),   # Light cyan, dark blue
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(-96, 0, 0), Tone.new(-192, -96, 0)],   # Cyan, dark blue
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, -96), Tone.new(0, -128, -248),   # Yellow, dark orange
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(-96, 0, 0), Tone.new(-192, -96, 0)],   # Cyan, dark blue
     :CHERISHBALL => [Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white (unused; see below)
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White ,yellow
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, -96), Tone.new(0, 0, -192)]   # Light yellow, yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White ,yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, -96), Tone.new(0, 0, -192)]   # Light yellow, yellow
   }
 
   # The regular Poké Ball burst animation, for when a Pokémon appears from a
@@ -467,100 +467,100 @@ module Battle::Scene::Animation::BallAnimationMixin
     #  top particle filename, top particle start tone, top particle end tone,
     #  bottom particle filename, bottom particle start tone, bottom particle end tone,
     #  ring tone start, ring tone end]
-    :POKEBALL    => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :POKEBALL    => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark_small", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark_small", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 2", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 2", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
                      Tone.new(0, 0, -96), Tone.new(0, 0, -96)],   # Light yellow, light yellow
-    :GREATBALL   => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :GREATBALL   => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark_small", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark_small", Tone.new(0, 0, 0), Tone.new(-128, -64, 0),   # White, blue
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 2", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 2", Tone.new(0, 0, 0), Tone.new(-128, -64, 0),   # White, blue
                      Tone.new(-128, -32, 0), Tone.new(-128, -32, 0)],   # Blue, blue
-    :SAFARIBALL  => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :SAFARIBALL  => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark_small", Tone.new(-48, 0, -48), Tone.new(-48, 0, -48),   # Light green, light green
-                     "spark_small", Tone.new(-48, 0, -48), Tone.new(-128, 0, -128),   # Light green, green
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 2", Tone.new(-48, 0, -48), Tone.new(-48, 0, -48),   # Light green, light green
+                     "glow 2", Tone.new(-48, 0, -48), Tone.new(-128, 0, -128),   # Light green, green
                      Tone.new(-48, 0, -48), Tone.new(-128, 0, -128)],   # Light green, green
-    :ULTRABALL   => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :ULTRABALL   => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
                      Tone.new(0, 0, -128), Tone.new(0, 0, -128)],   # Light yellow, light yellow
-    :MASTERBALL  => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :MASTERBALL  => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(-64, -128, -64), Tone.new(-96, -160, -96),   # Purple, darker purple
+                     "glow 1", Tone.new(-64, -128, -64), Tone.new(-96, -160, -96),   # Purple, darker purple
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, -80, 0), Tone.new(0, -128, -64),   # Purple, hot pink
+                     "glow 1", Tone.new(0, -80, 0), Tone.new(0, -128, -64),   # Purple, hot pink
                      Tone.new(0, 0, 0), Tone.new(-48, -200, -80)],   # White, magenta
-    :NETBALL     => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :NETBALL     => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark_small", Tone.new(-128, -56, 0), Tone.new(-128, -56, 0),   # Blue, blue
-                     "spark_small", Tone.new(-128, -56, 0), Tone.new(-128, -56, 0),   # Blue, blue
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 2", Tone.new(-128, -56, 0), Tone.new(-128, -56, 0),   # Blue, blue
+                     "glow 2", Tone.new(-128, -56, 0), Tone.new(-128, -56, 0),   # Blue, blue
                      Tone.new(-160, -64, 0), Tone.new(-128, -56, 0)],   # Cyan, blue
-    :DIVEBALL    => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :DIVEBALL    => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
                      "bubble 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(-128, -48, 0), Tone.new(-128, -48, 0),   # Aqua, aqua
+                     "glow 1", Tone.new(-128, -48, 0), Tone.new(-128, -48, 0),   # Aqua, aqua
                      Tone.new(-64, 0, 0), Tone.new(-180, -32, -32)],   # Light blue, turquoise
-    :NESTBALL    => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :NESTBALL    => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
                      "circle wave", Tone.new(-32, 0, -104), Tone.new(-104, -16, -128),   # Lime green, green
                      "circle wave", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow (unused)
                      Tone.new(-48, 0, -48), Tone.new(-128, 0, -128)],   # Light green, green
-    :REPEATBALL  => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :REPEATBALL  => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
                      "circle wave", Tone.new(-16, -16, -88), Tone.new(-32, -32, -176),   # Yellow, yellow
-                     "spark", Tone.new(-144, -144, -144), Tone.new(-160, -160, -160),   # Grey, grey
+                     "glow 1", Tone.new(-144, -144, -144), Tone.new(-160, -160, -160),   # Grey, grey
                      Tone.new(0, 0, -96), Tone.new(0, 0, -96)],   # Light yellow, light yellow
-    :TIMERBALL   => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :TIMERBALL   => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark_small", Tone.new(0, 0, 0), Tone.new(0, 0, -96),   # White, light yellow
-                     "spark_small", Tone.new(0, -48, -160), Tone.new(0, 0, -96),   # Orange, light yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 2", Tone.new(0, 0, 0), Tone.new(0, 0, -96),   # White, light yellow
+                     "glow 2", Tone.new(0, -48, -160), Tone.new(0, 0, -96),   # Orange, light yellow
                      Tone.new(0, -48, -128), Tone.new(0, -160, -248)],   # Light orange, dark orange
-    :LUXURYBALL  => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :LUXURYBALL  => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, -192, -248),   # White, red
-                     "spark_small", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark_small", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, -192, -248),   # White, red
+                     "glow 2", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 2", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
                      Tone.new(0, -48, -128), Tone.new(0, -192, -248)],   # Light orange, red
-    :PREMIERBALL => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :PREMIERBALL => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "circle faded", Tone.new(-16, -40, -80), Tone.new(-16, -136, -176),   # Light orange, dark orange
                      Tone.new(0, 0, 0), Tone.new(0, 0, 0)],   # White, white
-    :DUSKBALL    => ["spark", Tone.new(-255, -255, -255), Tone.new(-255, -255, -255),   # Black, black
+    :DUSKBALL    => ["glow 1", Tone.new(-255, -255, -255), Tone.new(-255, -255, -255),   # Black, black
                      "vortex 2", Tone.new(-112, -184, -128), Tone.new(-255, -255, -255),   # Purple, black
                      "vortex 2", Tone.new(-112, -184, -128), Tone.new(-112, -184, -128),   # Purple, purple
-                     "spark", Tone.new(-112, -184, -128), Tone.new(-255, -255, -255),   # Purple, black
-                     "spark_small", Tone.new(-112, -184, -128), Tone.new(-255, -255, -255),   # Purple, black
+                     "glow 1", Tone.new(-112, -184, -128), Tone.new(-255, -255, -255),   # Purple, black
+                     "glow 2", Tone.new(-112, -184, -128), Tone.new(-255, -255, -255),   # Purple, black
                      Tone.new(0, 0, -96), Tone.new(0, 0, -96)],   # Light yellow, light yellow
-    :HEALBALL    => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :HEALBALL    => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, -32, 0), Tone.new(0, -32, 0),   # Light pink, light pink
+                     "glow 1", Tone.new(0, -32, 0), Tone.new(0, -32, 0),   # Light pink, light pink
                      "shine 3", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "shine 3", Tone.new(0, 0, 0), Tone.new(-160, -64, 0),   # White, cyan
                      Tone.new(0, 0, 0), Tone.new(0, -32, 0)],   # White, light pink
-    :QUICKBALL   => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :QUICKBALL   => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
-                     "spark_small", Tone.new(0, 0, 0), Tone.new(0, 0, -96),   # White, light yellow
-                     "spark_small", Tone.new(0, -48, -160), Tone.new(0, 0, -96),   # Orange, light yellow
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, -192),   # White, yellow
+                     "glow 2", Tone.new(0, 0, 0), Tone.new(0, 0, -96),   # White, light yellow
+                     "glow 2", Tone.new(0, -48, -160), Tone.new(0, 0, -96),   # Orange, light yellow
                      Tone.new(0, -48, -128), Tone.new(0, -160, -248)],   # Light orange, dark orange
-    :CHERISHBALL => ["spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+    :CHERISHBALL => ["glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "dazzle", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
-                     "spark", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
+                     "glow 1", Tone.new(0, 0, 0), Tone.new(0, 0, 0),   # White, white
                      "circle faded", Tone.new(-16, -40, -80), Tone.new(-16, -136, -176),   # Light orange, dark orange
                      Tone.new(0, 0, 0), Tone.new(0, 0, 0)]   # White, white
   }
@@ -617,7 +617,7 @@ module Battle::Scene::Animation::BallAnimationMixin
     # Burst particles
     num_particles.times do |i|
       # Set up particle that keeps moving out
-      particle1 = addNewSprite(ballX, ballY, "Graphics/Battle animations/spark", PictureOrigin::CENTER)
+      particle1 = addNewSprite(ballX, ballY, "Graphics/Battle animations/glow 1", PictureOrigin::CENTER)
       particle1.setZ(0, 5105)
       particle1.setZoom(0, 150)
       particle1.setOpacity(0, 160)
@@ -664,7 +664,7 @@ module Battle::Scene::Animation::BallAnimationMixin
           particle.moveZoom(delay, particle_duration / 2, 225)
         elsif num == 0 && poke_ball == :DIVEBALL
           particle.moveZoom(delay, particle_duration / 2, 125)
-        elsif ["spark"].include?(variances[12 - (3 * num)])
+        elsif ["glow 1"].include?(variances[12 - (3 * num)])
           particle.moveZoom(delay, particle_duration / 2, (poke_ball == :PREMIERBALL) ? 50 : 80)
         elsif ["circle wave"].include?(variances[12 - (3 * num)])
           particle.moveZoom(delay, particle_duration / 2, 50)
@@ -674,7 +674,7 @@ module Battle::Scene::Animation::BallAnimationMixin
           particle.moveZoom(delay, particle_duration / 2, 100)
         end
         # Zoom out
-        if ["spark", "dazzle", "circle wave", "circle faded", "shine 3"].include?(variances[12 - (3 * num)])
+        if ["glow 1", "dazzle", "circle wave", "circle faded", "shine 3"].include?(variances[12 - (3 * num)])
           particle.moveZoom(delay + (particle_duration * 2 / 3), particle_duration / 3, 10)
         else
           particle.moveZoom(delay + (particle_duration * 2 / 3), particle_duration / 3, 25)
@@ -774,7 +774,7 @@ module Battle::Scene::Animation::BallAnimationMixin
     base_radius = 64   # How far out from the Poké Ball the particles go
     num_particles.times do |i|
       # Set up particle
-      particle = addNewSprite(ballX, ballY, "Graphics/Battle animations/spark", PictureOrigin::CENTER)
+      particle = addNewSprite(ballX, ballY, "Graphics/Battle animations/glow 1", PictureOrigin::CENTER)
       particle.setZ(0, 5110)
       particle.setZoom(0, 150)
       particle.setOpacity(0, 0)
