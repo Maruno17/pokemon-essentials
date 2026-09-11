@@ -1,0 +1,37 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,Attract]
+Name = Essentials
+NoTarget = true
+Credit = Maruno
+<User>
+<Heart emitter>
+    Focus = User
+    Graphic = heart
+    SecondLayer = true
+    InitialAngle = None
+    Emitter = Straight
+    EmitterRate = 6
+    SetZ = 0,10
+    SetZoomX = 0,0
+    SetZoomY = 0,0
+    SetVisible = 0,true
+    SetColor = 0,F8008080
+    SetZoomX2 = 0,65
+    SetZoomY2 = 0,65
+    SetEmitting = 0,true
+    SetSpawnXRange = 0,64
+    SetEmitSpeed = 0,100
+    SetEmitDirection = 0,90
+    SetEmitDirectionRange = 0,30
+    MoveZoomX = 0,6,240
+    MoveZoomY = 0,6,240
+    MoveZoomX = 6,13,0
+    MoveZoomY = 6,13,0
+    SetVisible = 19,false
+    SetEmitting = 21,false
+<SE>
+    Play = 0,Normal/Attract,80
+    Play = 6,Normal/Attract,80
+    Play = 12,Normal/Attract,80
+    Play = 18,Normal/Attract,80

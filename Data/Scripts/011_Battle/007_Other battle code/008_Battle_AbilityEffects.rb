@@ -2105,6 +2105,7 @@ Battle::AbilityEffects::OnBeingHit.add(:CUTECHARM,
     next if !user.pbCanAttract?(target, false)
     next if battle.pbRandom(100) >= 30
     battle.pbShowAbilitySplash(target)
+    battle.pbCommonAnimation("Attract", user)
     msg = nil
     if !Battle::Scene::USE_ABILITY_SPLASH
       msg = _INTL("{1} {2} made {3} fall in love!",

@@ -563,11 +563,11 @@ class Battle::Battler
 
   def pbAttract(user, msg = nil)
     @effects[PBEffects::Attract] = user.index
-    @battle.pbCommonAnimation("Attract", self)
     msg = _INTL("{1} fell in love!", pbThis) if nil_or_empty?(msg)
     @battle.pbDisplay(msg)
     # Destiny Knot
     if hasActiveItem?(:DESTINYKNOT) && user.pbCanAttract?(self, false)
+      @battle.pbCommonAnimation("Attract", user)
       user.pbAttract(self, _INTL("{1} fell in love from the {2}!", user.pbThis(true), itemName))
     end
     # Attraction cures
