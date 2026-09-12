@@ -23,6 +23,27 @@ class Battle::Scene
     :DARK     => [:KNOCKOFF,     :DARKPULSE,    :HONECLAWS,   nil,         :SNARL,         :EMBARGO],
     :FAIRY    => [:TACKLE,       :FAIRYWIND,    :MOONLIGHT,   nil,         :DAZZLINGGLEAM, :SWEETKISS]
   }
+  COMMON_ANIMATION_DEFAULTS = {
+    "CriticalHitRateUp" => "StatUp",
+    "Toxic"             => "Poison",
+    "SuperShiny"        => "Shiny",
+    "BanefulBunker"     => "Protect",
+    "BurningBulwark"    => "Protect",
+    "CraftyShield"      => "Protect",
+    "KingsShield"       => "Protect",
+    "Obstruct"          => "Protect",
+    "QuickGuard"        => "Protect",
+    "SilkTrap"          => "Protect",
+    "SpikyShield"       => "Protect",
+    "WideGuard"         => "Protect",
+    "Bind"              => "Wrap",
+    "Clamp"             => "Wrap",
+    "FireSpin"          => "Wrap",
+    "Infestation"       => "Wrap",
+    "MagmaStorm"        => "FireSpin",
+    "SandTomb"          => "Wrap",
+    "EatBerry"          => "UseItem"
+  }
 
   # Animates the battle intro.
   def pbBattleIntroAnimation
@@ -542,6 +563,23 @@ class Battle::Scene
   # Loads a common animation.
   #-----------------------------------------------------------------------------
 
+  def find_common_animation(anim_name, user_index)
+    # Get animation
+    anims = try_get_better_common_animation(anim_name, user_index)
+    return anims if anims
+    visited_names = [anim_name]
+    try_name = anim_name
+    loop do
+      break if !COMMON_ANIMATION_DEFAULTS[try_name]
+      try_name = COMMON_ANIMATION_DEFAULTS[try_name]
+      break if visited_names.include?(try_name)   # Avoids infinite loops
+      anims = try_get_better_common_animation(try_name, user_index)
+      return anims if anims
+      visited_names.push(try_name)
+    end
+    return nil
+  end
+
   def try_get_better_common_animation(anim_name, user_index)
     # Find a new format common animation to play
     ret = []
@@ -566,11 +604,9 @@ class Battle::Scene
     animations = pbLoadBattleAnimations
     return nil if !animations
     animations.each do |anim|
-      next if !anim || anim.name != "Common:" + anim_name
-      ret = anim
-      break
+      return anim if anim && anim.name == "Common:" + anim_name
     end
-    return ret
+    return nil
   end
 
   #-----------------------------------------------------------------------------
@@ -605,7 +641,7 @@ class Battle::Scene
   def pbCommonAnimation(anim_name, user = nil, target = nil)
     return if nil_or_empty?(anim_name)
     # Find an animation to play (new format or old format)
-    anims = try_get_better_common_animation(anim_name, user&.index)
+    anims = find_common_animation(anim_name, user&.index)
     return if !anims
     # Play a new format animation
     if anims.is_a?(Array)
