@@ -41,6 +41,14 @@ class UIControls::SEPicker < UIControls::BaseControl
 
   #-----------------------------------------------------------------------------
 
+  def mouse_in_control?
+    if @picker_box_viewport
+      mouse_coords = Mouse.getMousePos
+      return true if mouse_coords && @picker_box_viewport.rect.contains?(*mouse_coords)
+    end
+    return super
+  end
+
   def busy?
     return true if @picker_box_bg || @toggling_picker_box
     return super

@@ -266,6 +266,10 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
 
   #-----------------------------------------------------------------------------
 
+  def viewport
+    return @main_viewport
+  end
+
   def group_name(group)
     return {
       :position_group               => _INTL("Position"),
@@ -290,6 +294,14 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
       objs[LIST_CONTROL]&.color_scheme = value
     end
     refresh
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def mouse_in_container?
+    return true if @captured && @captured.respond_to?("mouse_in_control?") &&
+                   @captured.mouse_in_control?
+    return super
   end
 
   #-----------------------------------------------------------------------------
@@ -811,12 +823,16 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
     elsif @picker_box
       update_interpolation_picker
       return
-    elsif @captured
+    end
+    if @captured
       @captured.update
       @captured = nil if !@captured.busy?
-    else
+    end
+    if !@captured || !@captured.respond_to?("mouse_in_control?") ||
+       !@captured.mouse_in_control?
       @rows.each_value do |objs|
         [LIST_ARROW, LIST_CONTROL].each do |obj|
+          next if @captured && objs[obj] == @captured
           objs[obj]&.update
           @captured = objs[obj] if objs[obj]&.busy?
         end

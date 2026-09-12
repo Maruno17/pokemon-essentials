@@ -633,24 +633,30 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
   #-----------------------------------------------------------------------------
 
   def update_controls_and_particles
-    # Update only a thing that is being interacted with
+    # Update captured control (if there is one)
     if @captured
       @captured.update
       @captured = nil if !@captured.busy?
       update_time_bar_control
-      return
     end
-    # Update controls
-    @controls.each_value do |c|
-      c.update
-      @captured = c if c.busy?
+    # Update controls (except the captured control)
+    if !@captured ||
+       (!(@captured.respond_to?("mouse_in_control?") && @captured.mouse_in_control?) &&
+        !(@captured.respond_to?("mouse_in_container?") && @captured.mouse_in_container?))
+      @controls.each_value do |c|
+        next if @captured && c == @captured
+        c.update
+        @captured = c if c.busy?
+      end
     end
     # Update listed particles
-    @display_particles.each_with_index do |particle, i|
-      particle.update
-      if particle.busy?
-        @captured = particle
-        @captured_index = i
+    if !@captured ||
+       (!(@captured.respond_to?("mouse_in_control?") && @captured.mouse_in_control?) &&
+        !(@captured.respond_to?("mouse_in_container?") && @captured.mouse_in_container?))
+      @display_particles.each_with_index do |particle, i|
+        next if @captured && particle == @captured
+        particle.update
+        @captured = particle if particle.busy?
       end
     end
   end

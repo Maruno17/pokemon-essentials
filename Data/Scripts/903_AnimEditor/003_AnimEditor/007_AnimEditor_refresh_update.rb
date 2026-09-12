@@ -327,27 +327,33 @@ class AnimationEditor
   def update
     old_keyframe = keyframe
     old_particle_index = particle_index
+    # Update captured control (if there is one)
+    if @captured
+      @captured.update
+      @captured = nil if !@captured.busy?
+    end
+    # Update controls (except the captured control)
+    if !@captured || !@captured.respond_to?("mouse_in_control?") ||
+       !@captured.mouse_in_control?
+      @components.each_value do |c|
+        next if @captured && c == @captured
+        c.update
+        @captured = c if c.busy?
+      end
+    end
+    # Check for updated controls
     @components.each_pair do |sym, component|
-      next if @captured && @captured != sym
-      next if !component.visible
-      component.update
-      @captured = sym if component.busy?
-      if component.changed?
-        if component.respond_to?("changed_controls")
-          changed_ctrls = component.changed_controls
-          if changed_ctrls
-            changed_ctrls.each_pair do |property, value|
-              apply_changed_value(sym, property, value)
-            end
+      next if !component.changed?
+      if component.respond_to?("changed_controls")
+        changed_ctrls = component.changed_controls
+        if changed_ctrls
+          changed_ctrls.each_pair do |property, value|
+            apply_changed_value(sym, property, value)
           end
         end
-        component.clear_changed
       end
+      component.clear_changed
       component.repaint if [:timeline, :menu_bar].include?(sym)
-      if @captured
-        @captured = nil if !component.busy?
-        break
-      end
     end
     update_input if !@captured
     refresh if keyframe != old_keyframe || particle_index != old_particle_index

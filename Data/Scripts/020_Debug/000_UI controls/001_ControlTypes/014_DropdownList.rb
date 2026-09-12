@@ -38,6 +38,11 @@ class UIControls::DropdownList < UIControls::BaseControl
 
   #-----------------------------------------------------------------------------
 
+  def mouse_in_control?
+    return @dropdown_menu&.mouse_in_control?
+    return super
+  end
+
   def busy?
     return true if @dropdown_menu || @toggling_dropdown_list
     return super

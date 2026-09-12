@@ -356,8 +356,11 @@ class AnimationEditor::AnimationSelector
       if captured
         captured.update
         captured = nil if !captured.busy?
-      else
+      end
+      if !captured || !captured.respond_to?("mouse_in_control?") ||
+         !captured.mouse_in_control?
         buttons.each do |btn|
+          next if captured && btn[1] == captured
           btn[1].update
           captured = btn[1] if btn[1].busy?
         end

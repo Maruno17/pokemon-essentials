@@ -292,7 +292,6 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
     @components.add_control_at(:point_name, label_x + POINT_CONTROLS_LABEL_WIDTH, row_y, text_box)
     row_y += ROW_HEIGHT
     # Point description
-    # TODO: Make a multiline text box for this.
     label = UIControls::Label.new(POINT_CONTROLS_LABEL_WIDTH, ROW_HEIGHT,
                                   @viewport, _INTL("Description"))
     @components.add_control_at(:point_description_label, label_x, row_y, label)
@@ -314,13 +313,11 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
     text_box = UIControls::FittedNumberTextBox.new(52, ROW_HEIGHT, @viewport, 0, 999, 0)
     @components.add_control_at(:point_switch, label_x + POINT_CONTROLS_LABEL_WIDTH, row_y, text_box)
     row_y += ROW_HEIGHT
-
     # Fly section label
     label = UIControls::Label.new(column_width, HEADER_HEIGHT, @viewport, _INTL("Using Fly"))
     label.underlined = true
     @components.add_control_at(:point_fly_section_label, label_x, row_y, label)
     row_y += ROW_HEIGHT
-
     # Fly destination
     label = UIControls::Label.new(POINT_CONTROLS_LABEL_WIDTH, ROW_HEIGHT,
                                   @viewport, _INTL("Fly destination"))
@@ -337,7 +334,6 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
     checkbox = UIControls::Checkbox.new(POINT_CONTROLS_CONTROL_WIDTH, ROW_HEIGHT, @viewport)
     @components.add_control_at(:point_hide_fly_icon, label_x + POINT_CONTROLS_LABEL_WIDTH, row_y, checkbox)
     row_y += ROW_HEIGHT
-
     # Fly icon offset
     label = UIControls::Label.new(POINT_CONTROLS_LABEL_WIDTH, ROW_HEIGHT, @viewport, _INTL("Fly icon offset"))
     @components.add_control_at(:point_fly_icon_offset_label, label_x, row_y, label)
