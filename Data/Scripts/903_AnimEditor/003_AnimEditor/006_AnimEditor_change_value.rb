@@ -506,6 +506,7 @@ class AnimationEditor
       editor.get_control(:particles).deselect_all
     when :apply
       target_particles = editor.get_control(:particles).value
+      return if !target_particles || target_particles.empty?
       start_frame = editor.get_control(:start_keyframe).value
       end_frame = editor.get_control(:end_keyframe).value
       if end_frame < start_frame
