@@ -327,6 +327,7 @@ class AnimationEditor
   def update
     old_keyframe = keyframe
     old_particle_index = particle_index
+    old_captured = @captured
     # Update captured control (if there is one)
     if @captured
       @captured.update
@@ -336,7 +337,7 @@ class AnimationEditor
     if !@captured || !@captured.respond_to?("mouse_in_control?") ||
        !@captured.mouse_in_control?
       @components.each_value do |c|
-        next if @captured && c == @captured
+        next if old_captured && c == old_captured
         c.update
         @captured = c if c.busy?
       end

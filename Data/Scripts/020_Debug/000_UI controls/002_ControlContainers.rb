@@ -160,6 +160,7 @@ class UIControls::BaseContainer
 
   def update
     return if disposed? || !@visible
+    old_captured = @captured
     # Update captured control (if there is one)
     if @captured
       @captured.update
@@ -169,7 +170,7 @@ class UIControls::BaseContainer
     if !@captured || !@captured.respond_to?("mouse_in_control?") ||
        !@captured.mouse_in_control?
       @controls.each_value do |c|
-        next if @captured && c == @captured
+        next if old_captured && c == old_captured
         c.update
         @captured = c if c.busy?
       end

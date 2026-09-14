@@ -824,6 +824,7 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
       update_interpolation_picker
       return
     end
+    old_captured = @captured
     if @captured
       @captured.update
       @captured = nil if !@captured.busy?
@@ -832,7 +833,7 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
        !@captured.mouse_in_control?
       @rows.each_value do |objs|
         [LIST_ARROW, LIST_CONTROL].each do |obj|
-          next if @captured && objs[obj] == @captured
+          next if old_captured && objs[obj] == old_captured
           objs[obj]&.update
           @captured = objs[obj] if objs[obj]&.busy?
         end

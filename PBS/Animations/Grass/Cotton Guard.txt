@@ -1,0 +1,73 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,COTTONGUARD]
+Name = Essentials
+NoTarget = true
+HidesDataBoxes = true
+Credit = Maruno
+<User>
+<Cotton 1 emitter>
+    Focus = User
+    Graphic = cloud 1
+    InitialAngle = None
+    RandomAngleRange = 180
+    Emitter = NoMovement
+    EmitterRate = 20
+    EmitterSpawnPolarCoordinates = true
+    SetZ = 0,10
+    SetZoomX = 0,10
+    SetZoomY = 0,10
+    SetVisible = 0,true
+    SetOpacity = 0,0
+    SetColor = 0,F8E8E8E0
+    SetTone = 0,-FF-FF-FF+00
+    SetEmitterY = 0,16
+    SetEmitting = 0,true
+    SetSpawnR = 0,112
+    SetSpawnRRange = 0,16
+    SetSpawnThetaRange = 0,180
+    SetEmitYMultiplier = 0,80
+    SetEmitZoomRange = 0,20
+    SetSpawnROffset = 0,-64
+    MoveZoomX = 0,5,80
+    MoveZoomY = 0,5,80
+    MoveOpacity = 0,5,255
+    MoveTone = 0,10,+00+80+A0+00
+    MoveSpawnROffset = 0,10,0,EaseOut
+    SetTone = 11,+00+80+A0+00
+    MoveTone = 11,9,-FF-FF-FF+00
+    SetOpacity = 16,255
+    MoveOpacity = 16,4,0
+    SetEmitting = 18,false
+    SetVisible = 20,false
+<Cotton 2 emitter>
+    Focus = User
+    Graphic = cloud 1
+    InitialAngle = None
+    RandomAngleRange = 180
+    Emitter = NoMovement
+    EmitterRate = 15
+    EmitterSpawnPolarCoordinates = true
+    SetZ = 21,10
+    SetZoomX = 21,80
+    SetZoomY = 21,80
+    SetVisible = 21,true
+    SetColor = 21,F8E8E8E0
+    SetTone = 21,+00+80+A0+00
+    SetEmitterY = 21,16
+    SetEmitting = 21,true
+    SetSpawnR = 21,112
+    SetSpawnThetaRange = 21,180
+    SetEmitXMultiplier = 21,75
+    SetEmitYMultiplier = 21,75
+    SetEmitZoomRange = 21,20
+    SetSpawnRMultiplier = 21,100
+    MoveSpawnRMultiplier = 21,6,30
+    MoveEmitXMultiplier = 21,15,150
+    MoveEmitYMultiplier = 21,15,150
+    SetEmitting = 36,false
+    SetOpacity = 44,255
+    MoveOpacity = 44,2,0
+    SetVisible = 46,false
+<SE>
+    Play = 0,Grass/Cotton Guard,80

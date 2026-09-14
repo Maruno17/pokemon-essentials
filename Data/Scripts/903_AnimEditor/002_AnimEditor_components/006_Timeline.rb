@@ -633,6 +633,7 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
   #-----------------------------------------------------------------------------
 
   def update_controls_and_particles
+    old_captured = @captured
     # Update captured control (if there is one)
     if @captured
       @captured.update
@@ -644,7 +645,7 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
        (!(@captured.respond_to?("mouse_in_control?") && @captured.mouse_in_control?) &&
         !(@captured.respond_to?("mouse_in_container?") && @captured.mouse_in_container?))
       @controls.each_value do |c|
-        next if @captured && c == @captured
+        next if old_captured && c == old_captured
         c.update
         @captured = c if c.busy?
       end
@@ -654,7 +655,7 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
        (!(@captured.respond_to?("mouse_in_control?") && @captured.mouse_in_control?) &&
         !(@captured.respond_to?("mouse_in_container?") && @captured.mouse_in_container?))
       @display_particles.each_with_index do |particle, i|
-        next if @captured && particle == @captured
+        next if old_captured && particle == old_captured
         particle.update
         @captured = particle if particle.busy?
       end
