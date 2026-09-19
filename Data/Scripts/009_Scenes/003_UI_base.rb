@@ -152,7 +152,7 @@ module UI
     }
 
     # slider_height includes the heights of the arrows at either end.
-    def draw_slider(bitmap, slider_x, slider_y, slider_height, visible_top, visible_height, total_height, hide_if_inactive: :false, overlay: :overlay)
+    def draw_slider(bitmap, slider_x, slider_y, slider_height, visible_top, visible_height, total_height, hide_if_inactive: false, overlay: :overlay)
       coords = self.class::SLIDER_COORDS
       bar_y = slider_y + coords[:arrow_size][1]
       bar_height = slider_height - (2 * coords[:arrow_size][1])

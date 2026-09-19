@@ -446,6 +446,7 @@ class UI::BagVisuals < UI::BaseVisuals
   def refresh_input_indicators
     @sprites[:overlay].bitmap.clear if @sprites[:overlay]
     return if item.nil?
+    action_text = nil
     action_icon_x = 4
     action_icon_y = 244
     if @pocket == :Machines

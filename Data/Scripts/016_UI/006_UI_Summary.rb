@@ -613,7 +613,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
   def draw_input_helpers
     case @page
     when :info, :skills, :memo, :egg_memo
-      draw_input_icon(22, Graphics.height - 106, Input::USE)
+      draw_input_icon(22, Graphics.height - 106, Input::USE) if @mode != :in_battle
     when :moves
       text = nil
       text2 = nil
