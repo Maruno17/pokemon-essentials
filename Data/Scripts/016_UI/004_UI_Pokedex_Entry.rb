@@ -70,7 +70,7 @@ class UI::PokedexEntryVisuals < UI::BaseVisuals
     @page  = all_pages[0]
     get_unlocked_regions
     @region = region
-    if @region < 0 || !@unlocked_regions.include?(@reigon)
+    if @region < 0 || !@unlocked_regions.include?(@region)
       @region = ($game_map.metadata&.town_map_position || [0])[0]   # Current region
       @region = @unlocked_regions.first if !@unlocked_regions.include?(@region)
     end
