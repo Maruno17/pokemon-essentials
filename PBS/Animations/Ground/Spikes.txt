@@ -3,6 +3,7 @@
 [Move,SPIKES]
 Name = DB Animation
 NoTarget = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
 <Spike 1>
@@ -141,6 +142,7 @@ Credit = Dawn Bronze
 [OppMove,SPIKES]
 Name = DB Animation
 NoTarget = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
 <Spike 1>

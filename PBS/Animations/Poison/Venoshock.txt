@@ -3,6 +3,7 @@
 [Move,VENOSHOCK]
 Name = DB Animation
 NoUser = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <Target>
     MoveZoomX = 23,2,150
@@ -148,9 +149,8 @@ Credit = Dawn Bronze
     MoveZoomX = 36,7,0
     MoveZoomY = 36,7,0
 <Base>
-    Focus = Target
+    Focus = TargetPosition
     Graphic = glow 1
-    SetY = 27,60
     SetZ = 27,-10
     SetZoomX = 27,300
     SetOpacity = 27,0

@@ -3,6 +3,7 @@
 [Move,THUNDERWAVE]
 Name = DB Animation
 NoUser = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <Target>
     MoveColor = 9,7,FFF454C8
@@ -17,6 +18,12 @@ Credit = Dawn Bronze
     MoveX = 23,1,0
     MoveColor = 35,5,FFF454C8
     MoveColor = 47,4,FFF45400
+<Background>
+    Focus = Background
+    Graphic = Screens/black
+    SetOpacity = 0,0
+    MoveOpacity = 0,11,195
+    MoveOpacity = 62,10,0
 <Aura>
     Focus = Target
     Graphic = circle wave
@@ -160,12 +167,6 @@ Credit = Dawn Bronze
     SetFlip = 40,false
     SetFlip = 41,true
     SetVisible = 41,false
-<Background>
-    Focus = Background
-    Graphic = Screens/black
-    SetOpacity = 0,0
-    MoveOpacity = 0,11,195
-    MoveOpacity = 62,10,0
 <SE>
     Play = 10,Electric/Thunder Wave 1
     Play = 34,Electric/Thunder Wave 2

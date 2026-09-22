@@ -2,6 +2,7 @@
 #-------------------------------
 [Move,WATERGUN]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
 <Target>

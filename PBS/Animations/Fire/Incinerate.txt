@@ -2,6 +2,7 @@
 #-------------------------------
 [Move,INCINERATE]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
 <Target>
@@ -182,6 +183,7 @@ Credit = Dawn Bronze
 #-------------------------------
 [OppMove,INCINERATE]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
 <Target>
@@ -216,7 +218,7 @@ Credit = Dawn Bronze
     MoveZoomY = 43,3,100
     MoveColor = 55,11,E41C0000
 <Flame Stream Emitter>
-    Focus = UserSideBackground
+    Focus = UserSideForeground
     Graphic = smog 2
     SecondLayer = true
     RandomAngleRange = 45

@@ -2,6 +2,7 @@
 #-------------------------------
 [Move,RAZORLEAF]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
 <Target>
@@ -246,7 +247,7 @@ Credit = Dawn Bronze
     SetAngle = 25,-60
     SetOpacity = 25,240
     SetFrame = 25,1
-    MoveX = 25,8,302
+    MoveX = 25,8,352
     MoveY = 25,8,-493
 <Projectile 6>
     Focus = UserAndTarget
@@ -256,7 +257,7 @@ Credit = Dawn Bronze
     SetAngle = 30,-60
     SetOpacity = 30,240
     SetFrame = 30,1
-    MoveX = 30,8,302
+    MoveX = 30,8,352
     MoveY = 30,8,-493
 <Projectile 7>
     Focus = UserAndTarget
@@ -285,7 +286,7 @@ Credit = Dawn Bronze
     SetAngle = 26,-60
     SetOpacity = 26,240
     SetFrame = 26,1
-    MoveX = 26,8,302
+    MoveX = 26,8,352
     MoveY = 26,8,-493
 <Projectile 10>
     Focus = UserAndTarget

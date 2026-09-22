@@ -3,7 +3,8 @@
 [Move,ROCKSLIDE]
 Name = DB Animation
 NoUser = true
-Credit = Maruno & Dawn Bronze
+HidesDataBoxes = true
+Credit = Dawn Bronze, Maruno
 <Target>
     SetY = 13,2
     MoveY = 13,1,-2

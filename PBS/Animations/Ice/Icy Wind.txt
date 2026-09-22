@@ -2,11 +2,9 @@
 #-------------------------------
 [Move,ICYWIND]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
-    MoveX = 10,1,-10
-    SetY = 14,1
-    MoveX = 44,2,0
 <Target>
     MoveX = 20,1,3
     MoveX = 21,2,-5
@@ -20,6 +18,12 @@ Credit = Dawn Bronze
     MoveX = 35,2,5
     MoveX = 37,1,0
     MoveColor = 61,5,64544800
+<Background>
+    Focus = Background
+    Graphic = Screens/black
+    SetOpacity = 0,0
+    MoveOpacity = 0,9,195
+    MoveOpacity = 75,8,0
 <Wind Emitter 1>
     Focus = UserAndTarget
     Graphic = smog 2
@@ -318,11 +322,5 @@ Credit = Dawn Bronze
     MoveOpacity = 62,3,100
     MoveOpacity = 67,3,255
     MoveOpacity = 70,7,0
-<Background>
-    Focus = Background
-    Graphic = Screens/black
-    SetOpacity = 0,0
-    MoveOpacity = 0,9,195
-    MoveOpacity = 75,8,0
 <SE>
     Play = 6,Ice/Icy Wind

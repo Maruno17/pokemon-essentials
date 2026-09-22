@@ -2,6 +2,7 @@
 #-------------------------------
 [Move,BUBBLE]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
 <Target>
@@ -359,6 +360,7 @@ Credit = Dawn Bronze
 #-------------------------------
 [OppMove,BUBBLE]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
 <Target>

@@ -3,6 +3,7 @@
 [Move,FOLLOWME]
 Name = DB Animation
 NoTarget = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
     MoveZoomX = 61,1,85
@@ -71,6 +72,7 @@ Credit = Dawn Bronze
 [OppMove,FOLLOWME]
 Name = DB Animation
 NoTarget = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
     MoveZoomX = 61,1,85

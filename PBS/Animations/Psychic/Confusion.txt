@@ -2,6 +2,7 @@
 #-------------------------------
 [Move,CONFUSION]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
     MoveX = 12,1,5
@@ -21,16 +22,13 @@ Credit = Dawn Bronze
     MoveZoomX = 34,2,100
 <Target Afterimage>
     Focus = TargetPosition
-    Graphic = TARGET_FRONT
-    SetY = 24,-55
+    Graphic = TARGET
     SetZ = 24,10
     SetOpacity = 24,0
     SetColor = 24,FFFFFFA8
     MoveOpacity = 24,1,150
-    MoveY = 24,2,-25
     MoveZoomX = 24,2,135
     MoveZoomY = 24,2,135
-    MoveY = 26,2,-55
     MoveZoomX = 26,3,70
     MoveZoomY = 26,6,100
     MoveZoomX = 29,3,100
@@ -47,6 +45,7 @@ Credit = Dawn Bronze
 #-------------------------------
 [OppMove,CONFUSION]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
     MoveX = 12,1,5
@@ -66,7 +65,7 @@ Credit = Dawn Bronze
     MoveZoomX = 34,2,100
 <Target Afterimage>
     Focus = TargetPosition
-    Graphic = TARGET_BACK
+    Graphic = TARGET
     SetY = 24,-55
     SetZ = 24,10
     SetOpacity = 24,0

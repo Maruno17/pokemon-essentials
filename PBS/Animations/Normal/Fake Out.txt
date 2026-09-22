@@ -3,6 +3,7 @@
 [Move,FAKEOUT]
 Name = DB Animation
 NoUser = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <Target>
     MoveZoomX = 13,1,50
@@ -114,6 +115,7 @@ Credit = Dawn Bronze
 [OppMove,FAKEOUT]
 Name = DB Animation
 NoUser = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <Target>
     MoveZoomX = 13,1,50

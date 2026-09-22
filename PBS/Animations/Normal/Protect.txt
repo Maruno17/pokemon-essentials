@@ -3,6 +3,7 @@
 [Move,PROTECT]
 Name = DB Animation
 NoTarget = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
 <Particle 1A>
@@ -25,6 +26,7 @@ Credit = Dawn Bronze
     MoveColor = 24,3,FFFFFF64
     MoveOpacity = 26,4,0
     MoveColor = 27,3,00BEFF96
+    SetVisible = 30,false
 <Particle 2A>
     Focus = User
     Graphic = glow 2
@@ -45,6 +47,7 @@ Credit = Dawn Bronze
     MoveColor = 25,3,FFFFFF64
     MoveOpacity = 27,4,0
     MoveColor = 28,3,00BEFF96
+    SetVisible = 31,false
 <Particle 3A>
     Focus = User
     Graphic = glow 2
@@ -65,6 +68,7 @@ Credit = Dawn Bronze
     MoveColor = 26,3,00FFAC64
     MoveOpacity = 28,4,0
     MoveColor = 29,3,FFFFFF64
+    SetVisible = 32,false
 <Particle 4A>
     Focus = User
     Graphic = glow 2
@@ -85,6 +89,7 @@ Credit = Dawn Bronze
     MoveColor = 27,3,00BEFF96
     MoveOpacity = 29,4,0
     MoveColor = 30,3,00FFAC64
+    SetVisible = 33,false
 <Particle 5A>
     Focus = User
     Graphic = glow 2
@@ -105,6 +110,7 @@ Credit = Dawn Bronze
     MoveColor = 28,3,FFFFFF64
     MoveOpacity = 30,4,0
     MoveColor = 31,3,00BEFF96
+    SetVisible = 34,false
 <Particle 6A>
     Focus = User
     Graphic = glow 2
@@ -145,6 +151,7 @@ Credit = Dawn Bronze
     MoveColor = 24,3,00FFAC64
     MoveOpacity = 26,4,0
     MoveColor = 27,3,FFFFFF64
+    SetVisible = 30,false
 <Particle 2B>
     Focus = User
     Graphic = glow 2
@@ -165,6 +172,7 @@ Credit = Dawn Bronze
     MoveColor = 25,3,FFFFFF64
     MoveOpacity = 27,4,0
     MoveColor = 28,3,00BEFF96
+    SetVisible = 31,false
 <Particle 3B>
     Focus = User
     Graphic = glow 2
@@ -185,6 +193,7 @@ Credit = Dawn Bronze
     MoveColor = 26,3,00FFAC64
     MoveOpacity = 28,4,0
     MoveColor = 29,3,FFFFFF64
+    SetVisible = 32,false
 <Particle 4B>
     Focus = User
     Graphic = glow 2
@@ -205,6 +214,7 @@ Credit = Dawn Bronze
     MoveColor = 27,3,00BEFF96
     MoveOpacity = 29,4,0
     MoveColor = 30,3,00FFAC64
+    SetVisible = 33,false
 <Particle 5B>
     Focus = User
     Graphic = glow 2
@@ -225,6 +235,7 @@ Credit = Dawn Bronze
     MoveColor = 28,3,FFFFFF64
     MoveOpacity = 30,4,0
     MoveColor = 31,3,00BEFF96
+    SetVisible = 34,false
 <Particle 6B>
     Focus = User
     Graphic = glow 2
@@ -264,6 +275,7 @@ Credit = Dawn Bronze
     MoveColor = 24,3,FFFFFF64
     MoveOpacity = 26,4,0
     MoveColor = 27,3,00BEFF96
+    SetVisible = 30,false
 <Particle 2C>
     Focus = User
     Graphic = glow 2
@@ -283,6 +295,7 @@ Credit = Dawn Bronze
     MoveColor = 25,3,00FFAC64
     MoveOpacity = 27,4,0
     MoveColor = 28,3,FFFFFF64
+    SetVisible = 31,false
 <Particle 3C>
     Focus = User
     Graphic = glow 2
@@ -302,6 +315,7 @@ Credit = Dawn Bronze
     MoveColor = 26,3,00BEFF96
     MoveOpacity = 28,4,0
     MoveColor = 29,3,00FFAC64
+    SetVisible = 32,false
 <Particle 4C>
     Focus = User
     Graphic = glow 2
@@ -321,6 +335,7 @@ Credit = Dawn Bronze
     MoveColor = 27,3,FFFFFF64
     MoveOpacity = 29,4,0
     MoveColor = 30,3,00BEFF96
+    SetVisible = 33,false
 <Particle 5C>
     Focus = User
     Graphic = glow 2
@@ -340,6 +355,7 @@ Credit = Dawn Bronze
     MoveColor = 28,3,00FFAC64
     MoveOpacity = 30,4,0
     MoveColor = 31,3,FFFFFF64
+    SetVisible = 34,false
 <Particle 6C>
     Focus = User
     Graphic = glow 2
@@ -379,6 +395,7 @@ Credit = Dawn Bronze
     MoveColor = 24,3,FFFFFF64
     MoveOpacity = 26,4,0
     MoveColor = 27,3,00BEFF96
+    SetVisible = 30,false
 <Particle 2D>
     Focus = User
     Graphic = glow 2
@@ -399,6 +416,7 @@ Credit = Dawn Bronze
     MoveColor = 25,3,FFFFFF64
     MoveOpacity = 27,4,0
     MoveColor = 28,3,00BEFF96
+    SetVisible = 31,false
 <Particle 3D>
     Focus = User
     Graphic = glow 2
@@ -419,6 +437,7 @@ Credit = Dawn Bronze
     MoveColor = 26,3,00FFAC64
     MoveOpacity = 28,4,0
     MoveColor = 29,3,FFFFFF64
+    SetVisible = 32,false
 <Particle 4D>
     Focus = User
     Graphic = glow 2
@@ -439,6 +458,7 @@ Credit = Dawn Bronze
     MoveColor = 27,3,00BEFF96
     MoveOpacity = 29,4,0
     MoveColor = 30,3,00FFAC64
+    SetVisible = 33,false
 <Particle 5D>
     Focus = User
     Graphic = glow 2
@@ -459,6 +479,7 @@ Credit = Dawn Bronze
     MoveColor = 28,3,FFFFFF64
     MoveOpacity = 30,4,0
     MoveColor = 31,3,00BEFF96
+    SetVisible = 34,false
 <Particle 6D>
     Focus = User
     Graphic = glow 2
@@ -499,6 +520,7 @@ Credit = Dawn Bronze
     MoveColor = 24,3,FFFFFF64
     MoveOpacity = 26,4,0
     MoveColor = 27,3,00BEFF96
+    SetVisible = 30,false
 <Particle 2E>
     Focus = User
     Graphic = glow 2
@@ -519,6 +541,7 @@ Credit = Dawn Bronze
     MoveColor = 25,3,00FFAC64
     MoveOpacity = 27,4,0
     MoveColor = 28,3,FFFFFF64
+    SetVisible = 31,false
 <Particle 3E>
     Focus = User
     Graphic = glow 2
@@ -539,6 +562,7 @@ Credit = Dawn Bronze
     MoveColor = 26,3,FFFFFF64
     MoveOpacity = 28,4,0
     MoveColor = 29,3,00BEFF96
+    SetVisible = 32,false
 <Particle 4E>
     Focus = User
     Graphic = glow 2
@@ -559,6 +583,7 @@ Credit = Dawn Bronze
     MoveColor = 27,3,00FFAC64
     MoveOpacity = 29,4,0
     MoveColor = 30,3,FFFFFF64
+    SetVisible = 33,false
 <Particle 5E>
     Focus = User
     Graphic = glow 2
@@ -579,6 +604,7 @@ Credit = Dawn Bronze
     MoveColor = 28,3,00BEFF96
     MoveOpacity = 30,4,0
     MoveColor = 31,3,00FFAC64
+    SetVisible = 34,false
 <Particle 6E>
     Focus = User
     Graphic = glow 2

@@ -2,19 +2,18 @@
 #-------------------------------
 [Move,DAZZLINGGLEAM]
 Name = DB Animation
-Credit = Maruno & Dawn Bronze
+HidesDataBoxes = true
+Credit = Dawn Bronze, Maruno
 <User>
 <Target>
+    FoeInvertX = true
     MoveColor = 30,7,FFFFBCCC
-    MoveX = 32,1,5
-    MoveX = 33,2,-5
-    MoveX = 35,2,5
-    MoveX = 37,2,-5
+    MoveX = 32,1,-4
+    MoveX = 33,2,4
+    MoveX = 35,2,-4
+    MoveX = 37,2,4
     MoveColor = 38,4,FFFFBC00
-    MoveX = 39,2,5
-    MoveX = 41,2,-5
-    MoveX = 43,2,5
-    MoveX = 45,1,0
+    MoveX = 39,1,0
 <Spark>
     Focus = User
     Graphic = glow 1

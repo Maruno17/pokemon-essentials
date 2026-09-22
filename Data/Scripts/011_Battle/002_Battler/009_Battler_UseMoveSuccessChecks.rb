@@ -415,8 +415,10 @@ class Battle::Battler
         end
         # Mat Block
         if target.pbOwnSide.effects[PBEffects::MatBlock] && move.damagingMove?
-          # NOTE: Confirmed no common animation for this effect.
-          @battle.pbDisplay(_INTL("{1} was blocked by the kicked-up mat!", move.name)) if show_message
+          if show_message
+            @battle.pbCommonAnimation("KingsShield", target)
+            @battle.pbDisplay(_INTL("{1} was blocked by the kicked-up mat!", move.name))
+          end
           target.damageState.protected = true
           @battle.successStates[user.index].protected = true
           return true

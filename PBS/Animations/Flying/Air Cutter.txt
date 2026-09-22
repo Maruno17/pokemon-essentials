@@ -3,20 +3,14 @@
 [Move,AIRCUTTER]
 Name = DB Animation
 NoUser = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <Target>
-    MoveY = 10,1,-5
-    MoveY = 11,2,5
-    MoveY = 13,2,-5
-    MoveY = 15,2,5
-    MoveY = 17,2,-5
-    MoveY = 19,2,5
-    MoveY = 21,2,-5
-    MoveY = 23,2,5
-    MoveY = 25,2,-5
-    MoveY = 27,2,5
-    MoveY = 29,2,-5
-    MoveY = 31,1,0
+    MoveY = 10,1,4
+    MoveY = 11,2,-4
+    MoveY = 13,2,4
+    MoveY = 15,2,-4
+    MoveY = 17,1,0
 <Wind Emitter>
     Focus = TargetSideForeground
     Graphic = strobe 1

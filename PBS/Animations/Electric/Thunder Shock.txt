@@ -3,6 +3,7 @@
 [Move,THUNDERSHOCK]
 Name = DB Animation
 NoUser = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <Target>
     MoveX = 10,1,5

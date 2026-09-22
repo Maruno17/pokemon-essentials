@@ -94,14 +94,14 @@ module GameData
     SCHEMA = {
       "SectionName"    => [:id,               "esU", {"Move" => :move, "OppMove" => :opp_move,
                                                       "Common" => :common, "OppCommon" => :opp_common}],
-      "Name"           => [:name,             "s"],
+      "Name"           => [:name,             "q"],
       "NoUser"         => [:no_user,          "b"],
       "NoTarget"       => [:no_target,        "b"],
       "Ignore"         => [:ignore,           "b"],
       "HidesDataBoxes" => [:hides_data_boxes, "b"],
       "FPS"            => [:fps,              "v"],
       "Scripts"        => [:scripts,          "*s"],
-      "Credit"         => [:credit,           "s"],
+      "Credit"         => [:credit,           "q"],
       "Particle"       => [:particles,        "s"]   # Is a subheader line like <text>
     }
     # For individual particles. Any property whose schema begins with "^" can

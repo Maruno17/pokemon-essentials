@@ -2,21 +2,30 @@
 #-------------------------------
 [Move,FAIRYWIND]
 Name = DB Animation
+NoUser = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
-<User>
 <Target>
-    SetX = 12,10
-    MoveX = 12,3,0
+    FoeInvertX = true
+    SetX = 10,0
+    MoveX = 10,2,-8
+    MoveX = 12,4,8
     MoveColor = 12,5,FF80FF7C
-    MoveX = 15,3,-10
-    MoveX = 18,3,0
+    MoveX = 16,4,-8
     MoveColor = 19,5,00000000
-    MoveX = 21,3,10
-    MoveX = 24,3,0
+    MoveX = 20,4,8
+    MoveX = 24,2,0
     MoveColor = 26,5,FF80FF7C
-    MoveX = 27,3,-10
-    MoveX = 30,3,0
     MoveColor = 33,5,00000000
+<Background>
+    Focus = Background
+    Graphic = Screens/white
+    SetVisible = 0,false
+    SetColor = 0,FFBAF5FF
+    SetVisible = 6,true
+    SetOpacity = 6,0
+    MoveOpacity = 6,25,140
+    MoveOpacity = 32,10,0
 <Cloud Swirl Emitter 1>
     Focus = TargetPosition
     Graphic = smog 2
@@ -147,15 +156,6 @@ Credit = Dawn Bronze
     SetEmitting = 10,false
     MoveZoomX = 15,6,100
     MoveZoomY = 15,6,100
-<Background>
-    Focus = Background
-    Graphic = Screens/white
-    SetVisible = 0,false
-    SetColor = 0,FFBAF5FF
-    SetVisible = 6,true
-    SetOpacity = 6,0
-    MoveOpacity = 6,25,140
-    MoveOpacity = 32,10,0
 <SE>
     Play = 5,Flying/Gust,30
     Play = 7,Fairy/Fairy Wind Sparkle

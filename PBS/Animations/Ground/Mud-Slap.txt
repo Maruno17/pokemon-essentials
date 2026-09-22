@@ -2,6 +2,7 @@
 #-------------------------------
 [Move,MUDSLAP]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
     MoveX = 4,1,-10

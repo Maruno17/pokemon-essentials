@@ -2,9 +2,10 @@
 #-------------------------------
 [Move,TOXICSPIKES]
 Name = DB Animation
+NoTarget = true
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
-<Target>
 <Spike 1>
     Focus = UserSideForeground
     Graphic = spike
@@ -136,7 +137,7 @@ Credit = Dawn Bronze
     MoveAngle = 31,4,0
     MoveOpacity = 42,10,0
 <Bubble Emitter>
-    Focus = TargetSideForeground
+    Focus = UserSideForeground
     Graphic = Special/Poison Sting blob
     Emitter = Straight
     EmitterRate = 25
@@ -144,6 +145,8 @@ Credit = Dawn Bronze
     SetZoomX = 43,0
     SetZoomY = 43,0
     SetColor = 43,C000C0AC
+    SetEmitterX = 43,256
+    SetEmitterY = 43,-128
     SetEmitting = 43,true
     SetSpawnXRange = 43,64
     SetSpawnYRange = 43,8

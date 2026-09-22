@@ -2,6 +2,7 @@
 #-------------------------------
 [Move,SWIFT]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
 <Target>
@@ -12,6 +13,12 @@ Credit = Dawn Bronze
     MoveX = 32,2,5
     MoveX = 34,2,-5
     MoveX = 36,1,0
+<Background>
+    Focus = Background
+    Graphic = Screens/black
+    SetOpacity = 0,0
+    MoveOpacity = 0,11,195
+    MoveOpacity = 40,10,0
 <Star Circle Emitter>
     Focus = User
     Graphic = stars
@@ -245,11 +252,5 @@ Credit = Dawn Bronze
     MoveZoomY = 30,9,10
     SetEmitting = 32,false
     MoveOpacity = 36,3,0
-<Background>
-    Focus = Background
-    Graphic = Screens/black
-    SetOpacity = 0,0
-    MoveOpacity = 0,11,195
-    MoveOpacity = 40,10,0
 <SE>
     Play = 0,Normal/Swift

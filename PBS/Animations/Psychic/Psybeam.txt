@@ -2,6 +2,7 @@
 #-------------------------------
 [Move,PSYBEAM]
 Name = DB Animation
+HidesDataBoxes = true
 Credit = Dawn Bronze
 <User>
     SetZ = 0,-10
