@@ -521,9 +521,13 @@ class Game_Character
         when 29 then self.move_speed = command.parameters[0]
         when 30 then self.move_frequency = command.parameters[0]
         when 31 then @walk_anime = true
-        when 32 then @walk_anime = false
+        when 32
+          straighten if moving?
+          @walk_anime = false
         when 33 then @step_anime = true
-        when 34 then @step_anime = false
+        when 34
+          straighten if !moving?
+          @step_anime = false
         when 35 then @direction_fix = true
         when 36 then @direction_fix = false
         when 37 then @through = true
