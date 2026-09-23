@@ -1696,7 +1696,7 @@ Battle::AbilityEffects::DamageCalcFromUser.add(:SOLARPOWER,
 
 Battle::AbilityEffects::DamageCalcFromUser.add(:STAKEOUT,
   proc { |ability, user, target, move, mults, power, type|
-    mults[:attack_multiplier] *= 2 if target.battle.choices[target.index][0] == :SwitchOut
+    mults[:attack_multiplier] *= 2 if target.turnCount == 0
   }
 )
 
