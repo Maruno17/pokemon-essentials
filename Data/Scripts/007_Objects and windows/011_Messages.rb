@@ -164,6 +164,7 @@ def pbChooseNumber(msgwindow, params)
   cmdwindow.sign = params.negativesAllowed # must be set before number
   cmdwindow.number = defaultNumber
   pbPositionNearMsgWindow(cmdwindow, msgwindow, :right)
+  $game_temp&.current_num_window = cmdwindow
   loop do
     Graphics.update
     Input.update
@@ -188,6 +189,7 @@ def pbChooseNumber(msgwindow, params)
     end
   end
   cmdwindow.dispose
+  $game_temp&.current_num_window = nil
   Input.update
   return ret
 end
@@ -413,6 +415,7 @@ def pbCreateStatusWindow(viewport = nil)
   pbBottomLeftLines(msgwindow, 2)
   skinfile = MessageConfig.pbGetSpeechFrame
   msgwindow.setSkin(skinfile)
+  $game_temp&.current_msg_window = msgwindow
   return msgwindow
 end
 
@@ -427,37 +430,24 @@ def pbCreateMessageWindow(viewport = nil, skin = nil)
   msgwindow.letterbyletter = true
   msgwindow.back_opacity = MessageConfig::WINDOW_OPACITY
   pbBottomLeftLines(msgwindow, 2)
-  $game_temp.message_window_showing = true if $game_temp
+  $game_temp&.message_window_showing = true
   skin = MessageConfig.pbGetSpeechFrame if !skin
   msgwindow.setSkin(skin)
+  $game_temp&.current_msg_window = msgwindow
   return msgwindow
 end
 
 def pbDisposeMessageWindow(msgwindow)
-  $game_temp.message_window_showing = false if $game_temp
+  $game_temp&.message_window_showing = false
+  $game_temp.current_msg_window = nil if $game_temp&.current_msg_window.equal?(msgwindow)
   msgwindow.dispose
 end
 
 #===============================================================================
 # Main message-displaying function.
 #===============================================================================
-def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = nil)
-  return if !msgwindow
-  oldletterbyletter = msgwindow.letterbyletter
-  msgwindow.letterbyletter = (letterbyletter) ? true : false
-  ret = nil
-  commands = nil
-  facewindow = nil
-  goldwindow = nil
-  coinwindow = nil
-  battlepointswindow = nil
-  cmdvariable = 0
-  cmdIfCancel = 0
-  msgwindow.waitcount = 0
-  autoresume = false
-  text = message.clone
-  linecount = (Graphics.height > 400) ? 3 : 2
-  ### Text replacement
+# Preprocesses text and runs any immediate controls
+def pbMessagePreprocessText(text, msgwindow, linecount)
   pbReplaceMessageText(text, msgwindow)
   text.gsub!(/\\[Ww]\[([^\]]*)\]/) do
     w = $1.to_s
@@ -486,7 +476,11 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     colortag = shadowc3tag(main_color, shadow_color)
   end
   text = colortag + text
-  ### Controls
+  return text, linecount
+end
+
+# Parses controls and returns them along with the modified text.
+def pbMessageParseControls(text)
   textchunks = []
   controls = []
   while text[/(?:\\(f|ff|ts|cl|me|se|wt|wtnp|ch)\[([^\]]*)\]|\\(g|cn|pt|wd|wm|op|cl|wu|\.|\||\!|\^))/i]
@@ -515,181 +509,234 @@ def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = ni
     controls[i][2] = textlen
   end
   text = textchunks.join
-  appear_timer_start = nil
-  appear_duration = 0.5   # In seconds
-  haveSpecialClose = false
-  specialCloseSE = ""
-  startSE = nil
+  return text, controls
+end
+
+# Runs controls that execute immediately at the start.
+def pbMessageRunControls(text, controls, state)
   controls.length.times do |i|
     control = controls[i][0]
     param = controls[i][1]
     case control
     when "op"
-      appear_timer_start = System.uptime
+      state[:appear_timer_start] = System.uptime
     when "cl"
       text = text.sub(/\001\z/, "")   # fix: '$' can match end of line as well
-      haveSpecialClose = true
-      specialCloseSE = param
+      state[:haveSpecialClose] = true
+      state[:specialCloseSE] = param
     when "f"
-      facewindow&.dispose
-      facewindow = PictureWindow.new("Graphics/Pictures/#{param}")
+      state[:facewindow]&.dispose
+      state[:facewindow] = PictureWindow.new("Graphics/Pictures/#{param}")
+      $game_temp&.current_face_window = state[:facewindow]
     when "ff"
-      facewindow&.dispose
-      facewindow = FaceWindowVX.new(param)
+      state[:facewindow]&.dispose
+      state[:facewindow] = FaceWindowVX.new(param)
+      $game_temp&.current_face_window = state[:facewindow]
     when "ch"
       cmds = param.clone
-      cmdvariable = pbCsvPosInt!(cmds)
-      cmdIfCancel = pbCsvField!(cmds).to_i
-      commands = []
+      state[:cmdvariable] = pbCsvPosInt!(cmds)
+      state[:cmdIfCancel] = pbCsvField!(cmds).to_i
+      state[:commands] = []
       while cmds.length > 0
-        commands.push(pbCsvField!(cmds))
+        state[:commands].push(pbCsvField!(cmds))
       end
     when "wtnp", "^"
       text = text.sub(/\001\z/, "")   # fix: '$' can match end of line as well
     when "se"
       if controls[i][2] == 0
-        startSE = param
+        state[:startSE] = param
         controls[i] = nil
       end
     end
   end
-  if startSE
-    pbSEPlay(pbStringToAudioFile(startSE))
-  elsif !appear_timer_start && letterbyletter
+  return text
+end
+
+# Runs every single frame of the message loop.
+def pbMessageDisplayFrame(msgwindow, controls, letterbyletter, commandProc, state)
+  appear_duration = 0.5   # In seconds
+  if state[:appear_timer_start]
+    y_start = (state[:atTop]) ? -msgwindow.height : Graphics.height
+    y_end = (state[:atTop]) ? 0 : Graphics.height - msgwindow.height
+    msgwindow.y = lerp(y_start, y_end, appear_duration, state[:appear_timer_start], System.uptime)
+    state[:appear_timer_start] = nil if msgwindow.y == y_end
+  end
+  controls.length.times do |i|
+    next if !controls[i]
+    next if controls[i][2] > msgwindow.position || msgwindow.waitcount != 0
+    control = controls[i][0]
+    param = controls[i][1]
+    case control
+    when "f"
+      state[:facewindow]&.dispose
+      state[:facewindow] = PictureWindow.new("Graphics/Pictures/#{param}")
+      pbPositionNearMsgWindow(state[:facewindow], msgwindow, :left)
+      state[:facewindow].viewport = msgwindow.viewport
+      state[:facewindow].z        = msgwindow.z
+      $game_temp&.current_face_window = state[:facewindow]
+    when "ff"
+      state[:facewindow]&.dispose
+      state[:facewindow] = FaceWindowVX.new(param)
+      pbPositionNearMsgWindow(state[:facewindow], msgwindow, :left)
+      state[:facewindow].viewport = msgwindow.viewport
+      state[:facewindow].z        = msgwindow.z
+      $game_temp&.current_face_window = state[:facewindow]
+    when "g"      # Display gold window
+      state[:goldwindow]&.dispose
+      state[:goldwindow] = pbDisplayGoldWindow(msgwindow)
+      $game_temp&.current_gold_window = state[:goldwindow]
+    when "cn"     # Display coins window
+      state[:coinwindow]&.dispose
+      state[:coinwindow] = pbDisplayCoinsWindow(msgwindow, state[:goldwindow])
+      $game_temp&.current_coin_window = state[:coinwindow]
+    when "pt"     # Display battle points window
+      state[:battlepointswindow]&.dispose
+      state[:battlepointswindow] = pbDisplayBattlePointsWindow(msgwindow)
+      $game_temp&.current_bp_window = state[:battlepointswindow]
+    when "wu"
+      state[:atTop] = true
+      msgwindow.y = 0
+      pbPositionNearMsgWindow(state[:facewindow], msgwindow, :left)
+      if state[:appear_timer_start]
+        msgwindow.y = lerp(y_start, y_end, appear_duration, state[:appear_timer_start], System.uptime)
+      end
+    when "wm"
+      state[:atTop] = false
+      msgwindow.y = (Graphics.height - msgwindow.height) / 2
+      pbPositionNearMsgWindow(state[:facewindow], msgwindow, :left)
+    when "wd"
+      state[:atTop] = false
+      msgwindow.y = Graphics.height - msgwindow.height
+      pbPositionNearMsgWindow(state[:facewindow], msgwindow, :left)
+      if state[:appear_timer_start]
+        msgwindow.y = lerp(y_start, y_end, appear_duration, state[:appear_timer_start], System.uptime)
+      end
+    when "ts"     # Change text speed
+      msgwindow.textspeed = (param == "") ? 0 : param.to_i / 80.0
+    when "."      # Wait 0.25 seconds
+      msgwindow.waitcount += 0.25
+    when "|"      # Wait 1 second
+      msgwindow.waitcount += 1.0
+    when "wt"     # Wait X/20 seconds
+      param = param.sub(/\A\s+/, "").sub(/\s+\z/, "")
+      msgwindow.waitcount += param.to_i / 20.0
+    when "wtnp"   # Wait X/20 seconds, no pause
+      param = param.sub(/\A\s+/, "").sub(/\s+\z/, "")
+      msgwindow.waitcount = param.to_i / 20.0
+      state[:autoresume] = true
+    when "^"      # Wait, no pause
+      state[:autoresume] = true
+    when "se"     # Play SE
+      pbSEPlay(pbStringToAudioFile(param))
+    when "me"     # Play ME
+      pbMEPlay(pbStringToAudioFile(param))
+    end
+    controls[i] = nil
+  end
+  return true if !letterbyletter
+  Graphics.update
+  Input.update
+  state[:facewindow]&.update
+  if state[:autoresume] && msgwindow.waitcount == 0
+    msgwindow.resume if msgwindow.busy?
+    return true if !msgwindow.busy?
+  end
+  if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
+    if msgwindow.busy?
+      pbPlayDecisionSE if msgwindow.pausing?
+      msgwindow.resume
+    elsif !state[:appear_timer_start]
+      return true
+    end
+  end
+  pbUpdateSceneMap
+  msgwindow.update
+  yield if block_given?
+  return true if (!letterbyletter || commandProc || state[:commands]) && !msgwindow.busy?
+  return false
+end
+
+# Runs the closing animation.
+def pbMessageSpecialClose(msgwindow, specialCloseSE)
+  pbSEPlay(pbStringToAudioFile(specialCloseSE))
+  atTop = (msgwindow.y == 0)
+  y_start = (atTop) ? 0 : Graphics.height - msgwindow.height
+  y_end = (atTop) ? -msgwindow.height : Graphics.height
+  disappear_duration = 0.5   # In seconds
+  disappear_timer_start = System.uptime
+  loop do
+    msgwindow.y = lerp(y_start, y_end, disappear_duration, disappear_timer_start, System.uptime)
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+    msgwindow.update
+    break if msgwindow.y == y_end
+  end
+end
+
+# Main message-displaying function.
+def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = nil)
+  return if !msgwindow
+  oldletterbyletter = msgwindow.letterbyletter
+  msgwindow.letterbyletter = (letterbyletter) ? true : false
+  ret = nil
+  msgwindow.waitcount = 0
+  text = message.clone
+  linecount = (Graphics.height > 400) ? 3 : 2
+  ### Text replacement
+  text, linecount = pbMessagePreprocessText(text, msgwindow, linecount)
+  ### Controls
+  text, controls = pbMessageParseControls(text)
+  state = {
+    facewindow:          nil,
+    goldwindow:          nil,
+    coinwindow:          nil,
+    battlepointswindow:  nil,
+    commands:            nil,
+    cmdvariable:         0,
+    cmdIfCancel:         0,
+    appear_timer_start:  nil,
+    haveSpecialClose:    false,
+    specialCloseSE:      "",
+    startSE:             nil,
+    atTop:               false,
+    autoresume:          false
+  }
+  text = pbMessageRunControls(text, controls, state)
+  if state[:startSE]
+    pbSEPlay(pbStringToAudioFile(state[:startSE]))
+  elsif !state[:appear_timer_start] && letterbyletter
     pbPlayDecisionSE
   end
   # Position message window
   pbRepositionMessageWindow(msgwindow, linecount)
-  if facewindow
-    pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-    facewindow.viewport = msgwindow.viewport
-    facewindow.z        = msgwindow.z
+  if state[:facewindow]
+    pbPositionNearMsgWindow(state[:facewindow], msgwindow, :left)
+    state[:facewindow].viewport = msgwindow.viewport
+    state[:facewindow].z        = msgwindow.z
   end
-  atTop = (msgwindow.y == 0)
+  state[:atTop] = (msgwindow.y == 0)
   # Show text
   msgwindow.text = text
   loop do
-    if appear_timer_start
-      y_start = (atTop) ? -msgwindow.height : Graphics.height
-      y_end = (atTop) ? 0 : Graphics.height - msgwindow.height
-      msgwindow.y = lerp(y_start, y_end, appear_duration, appear_timer_start, System.uptime)
-      appear_timer_start = nil if msgwindow.y == y_end
-    end
-    controls.length.times do |i|
-      next if !controls[i]
-      next if controls[i][2] > msgwindow.position || msgwindow.waitcount != 0
-      control = controls[i][0]
-      param = controls[i][1]
-      case control
-      when "f"
-        facewindow&.dispose
-        facewindow = PictureWindow.new("Graphics/Pictures/#{param}")
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        facewindow.viewport = msgwindow.viewport
-        facewindow.z        = msgwindow.z
-      when "ff"
-        facewindow&.dispose
-        facewindow = FaceWindowVX.new(param)
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        facewindow.viewport = msgwindow.viewport
-        facewindow.z        = msgwindow.z
-      when "g"      # Display gold window
-        goldwindow&.dispose
-        goldwindow = pbDisplayGoldWindow(msgwindow)
-      when "cn"     # Display coins window
-        coinwindow&.dispose
-        coinwindow = pbDisplayCoinsWindow(msgwindow, goldwindow)
-      when "pt"     # Display battle points window
-        battlepointswindow&.dispose
-        battlepointswindow = pbDisplayBattlePointsWindow(msgwindow)
-      when "wu"
-        atTop = true
-        msgwindow.y = 0
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        if appear_timer_start
-          msgwindow.y = lerp(y_start, y_end, appear_duration, appear_timer_start, System.uptime)
-        end
-      when "wm"
-        atTop = false
-        msgwindow.y = (Graphics.height - msgwindow.height) / 2
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-      when "wd"
-        atTop = false
-        msgwindow.y = Graphics.height - msgwindow.height
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        if appear_timer_start
-          msgwindow.y = lerp(y_start, y_end, appear_duration, appear_timer_start, System.uptime)
-        end
-      when "ts"     # Change text speed
-        msgwindow.textspeed = (param == "") ? 0 : param.to_i / 80.0
-      when "."      # Wait 0.25 seconds
-        msgwindow.waitcount += 0.25
-      when "|"      # Wait 1 second
-        msgwindow.waitcount += 1.0
-      when "wt"     # Wait X/20 seconds
-        param = param.sub(/\A\s+/, "").sub(/\s+\z/, "")
-        msgwindow.waitcount += param.to_i / 20.0
-      when "wtnp"   # Wait X/20 seconds, no pause
-        param = param.sub(/\A\s+/, "").sub(/\s+\z/, "")
-        msgwindow.waitcount = param.to_i / 20.0
-        autoresume = true
-      when "^"      # Wait, no pause
-        autoresume = true
-      when "se"     # Play SE
-        pbSEPlay(pbStringToAudioFile(param))
-      when "me"     # Play ME
-        pbMEPlay(pbStringToAudioFile(param))
-      end
-      controls[i] = nil
-    end
-    break if !letterbyletter
-    Graphics.update
-    Input.update
-    facewindow&.update
-    if autoresume && msgwindow.waitcount == 0
-      msgwindow.resume if msgwindow.busy?
-      break if !msgwindow.busy?
-    end
-    if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
-      if msgwindow.busy?
-        pbPlayDecisionSE if msgwindow.pausing?
-        msgwindow.resume
-      elsif !appear_timer_start
-        break
-      end
-    end
-    pbUpdateSceneMap
-    msgwindow.update
-    yield if block_given?
-    break if (!letterbyletter || commandProc || commands) && !msgwindow.busy?
+    break if pbMessageDisplayFrame(msgwindow, controls, letterbyletter, commandProc, state) { yield if block_given? }
   end
   Input.update   # Must call Input.update again to avoid extra triggers
   msgwindow.letterbyletter = oldletterbyletter
-  if commands
-    $game_variables[cmdvariable] = pbShowCommands(msgwindow, commands, cmdIfCancel)
+  if state[:commands]
+    $game_variables[state[:cmdvariable]] = pbShowCommands(msgwindow, state[:commands], state[:cmdIfCancel])
     $game_map.need_refresh = true if $game_map
   end
   ret = commandProc.call(msgwindow) if commandProc
-  goldwindow&.dispose
-  coinwindow&.dispose
-  battlepointswindow&.dispose
-  facewindow&.dispose
-  if haveSpecialClose
-    pbSEPlay(pbStringToAudioFile(specialCloseSE))
-    atTop = (msgwindow.y == 0)
-    y_start = (atTop) ? 0 : Graphics.height - msgwindow.height
-    y_end = (atTop) ? -msgwindow.height : Graphics.height
-    disappear_duration = 0.5   # In seconds
-    disappear_timer_start = System.uptime
-    loop do
-      msgwindow.y = lerp(y_start, y_end, disappear_duration, disappear_timer_start, System.uptime)
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
-      msgwindow.update
-      break if msgwindow.y == y_end
-    end
-  end
+  state[:goldwindow]&.dispose
+  state[:coinwindow]&.dispose
+  state[:battlepointswindow]&.dispose
+  state[:facewindow]&.dispose
+  $game_temp&.current_gold_window = nil
+  $game_temp&.current_coin_window = nil
+  $game_temp&.current_bp_window = nil
+  $game_temp&.current_face_window = nil
+  pbMessageSpecialClose(msgwindow, state[:specialCloseSE]) if state[:haveSpecialClose]
   return ret
 end
 
@@ -738,6 +785,7 @@ def pbShowCommands(msgwindow, commands = nil, cmdIfCancel = 0, defaultCmd = 0)
   cmdwindow.resizeToFit(cmdwindow.commands)
   pbPositionNearMsgWindow(cmdwindow, msgwindow, :right)
   cmdwindow.index = defaultCmd
+  $game_temp&.current_cmd_window = cmdwindow
   command = 0
   loop do
     Graphics.update
@@ -762,6 +810,7 @@ def pbShowCommands(msgwindow, commands = nil, cmdIfCancel = 0, defaultCmd = 0)
   end
   ret = command
   cmdwindow.dispose
+  $game_temp&.current_cmd_window = nil
   Input.update
   return ret
 end
@@ -778,6 +827,7 @@ def pbShowCommandsWithHelp(msgwindow, commands, help, cmdIfCancel = 0, defaultCm
     cmdwindow.resizeToFit(cmdwindow.commands)
     cmdwindow.height = msgwin.y if cmdwindow.height > msgwin.y
     cmdwindow.index = defaultCmd
+    $game_temp&.current_cmd_window = cmdwindow
     command = 0
     msgwin.text = help[cmdwindow.index]
     msgwin.width = msgwin.width   # Necessary evil to make it use the proper margins
@@ -806,6 +856,7 @@ def pbShowCommandsWithHelp(msgwindow, commands, help, cmdIfCancel = 0, defaultCm
     end
     ret = command
     cmdwindow.dispose
+    $game_temp&.current_cmd_window = nil
     Input.update
   end
   msgwin.letterbyletter = oldlbl
