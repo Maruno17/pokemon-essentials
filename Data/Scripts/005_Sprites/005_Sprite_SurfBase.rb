@@ -57,14 +57,15 @@ class Sprite_SurfBase
     @sprite = Sprite.new(@viewport) if !@sprite
     return if !@sprite
     if $PokemonGlobal.surfing
-      @sprite.bitmap = @surfbitmap.bitmap
+      new_bitmap = @surfbitmap.bitmap
       cw = @cws
       ch = @chs
-    elsif $PokemonGlobal.diving
-      @sprite.bitmap = @divebitmap.bitmap
+    else   # $PokemonGlobal.diving
+      new_bitmap = @divebitmap.bitmap
       cw = @cwd
       ch = @chd
     end
+    @sprite.bitmap = new_bitmap if @sprite.bitmap != new_bitmap
     sx = event.pattern_surf * cw
     sy = ((event.direction - 2) / 2) * ch
     @sprite.src_rect.set(sx, sy, cw, ch)

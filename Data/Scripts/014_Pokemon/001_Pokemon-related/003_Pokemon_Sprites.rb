@@ -72,7 +72,8 @@ class PokemonSprite < Sprite
     super
     if @_iconbitmap
       @_iconbitmap.update
-      self.bitmap = @_iconbitmap.bitmap
+      new_bitmap = @_iconbitmap.bitmap
+      self.bitmap = new_bitmap if bitmap != new_bitmap
     end
   end
 end
@@ -200,7 +201,8 @@ class PokemonIconSprite < Sprite
     return if !@animBitmap
     super
     @animBitmap.update
-    self.bitmap = @animBitmap.bitmap
+    new_bitmap = @animBitmap.bitmap
+    self.bitmap = @new_bitmap if bitmap != new_bitmap
     # Update animation
     update_frame
     self.src_rect.x = self.src_rect.width * @current_frame
@@ -323,7 +325,8 @@ class PokemonSpeciesIconSprite < Sprite
     return if !@animBitmap
     super
     @animBitmap.update
-    self.bitmap = @animBitmap.bitmap
+    new_bitmap = @animBitmap.bitmap
+    self.bitmap = @new_bitmap if bitmap != new_bitmap
     # Update animation
     update_frame
     self.src_rect.x = self.src_rect.width * @current_frame

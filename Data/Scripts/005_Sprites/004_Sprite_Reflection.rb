@@ -76,7 +76,8 @@ class Sprite_Reflection
       @sprite.zoom_y   = @parent_sprite.zoom_y
       @sprite.angle    = 180.0
       @sprite.mirror   = true
-      @sprite.bitmap   = @parent_sprite.bitmap
+      parent_bitmap    = @parent_sprite.bitmap
+      @sprite.bitmap   = parent_bitmap if @sprite.bitmap != parent_bitmap
       @sprite.tone     = @parent_sprite.tone
       if @height > 0
         @sprite.color   = Color.new(48, 96, 160, 255)   # Dark still water

@@ -55,10 +55,11 @@ class Sprite_Shadow < RPG::Sprite
     end
     if @chbitmap.is_a?(AnimatedBitmap)
       @chbitmap.update
-      self.bitmap = @chbitmap.bitmap
+      new_bitmap = @chbitmap.bitmap
     else
-      self.bitmap = @chbitmap
+      new_bitmap = @chbitmap
     end
+    self.bitmap = new_bitmap if bitmap != new_bitmap
     self.visible = !@character.transparent
     if @tile_id == 0
       sx = @character.pattern * @cw
