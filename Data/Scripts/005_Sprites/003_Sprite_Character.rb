@@ -218,12 +218,14 @@ class Sprite_Character < RPG::Sprite
     bushdepth = bush_depth
     if bushdepth == 0
       # Not in a bush, just update self's bitmap
-      self.bitmap = (@charbitmapAnimated) ? @charbitmap.bitmap : @charbitmap
+      new_bitmap = (@charbitmapAnimated) ? @charbitmap.bitmap : @charbitmap
+      self.bitmap = new_bitmap if bitmap != new_bitmap
       return
     end
     # Make and use a bush bitmap
     @bushbitmap = BushBitmap.new(@charbitmap, (@tile_id >= TilemapRenderer::TILESET_START_ID), bushdepth) if !@bushbitmap
-    self.bitmap = @bushbitmap.bitmap
+    new_bitmap = @bushbitmap.bitmap
+    self.bitmap = new_bitmap if bitmap != new_bitmap
   end
 
   def update_visibility

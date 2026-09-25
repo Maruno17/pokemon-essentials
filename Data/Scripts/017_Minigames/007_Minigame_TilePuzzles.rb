@@ -51,7 +51,7 @@ class TilePuzzleCursor < BitmapSprite
     x += @tilewidth * (@position % @boardwidth)
     y = ((Graphics.height - (@tileheight * @boardheight)) / 2) - 32
     y += @tileheight * ((@position % (@boardwidth * @boardheight)) / @boardwidth)
-    self.tone = Tone.new(0, (@holding ? 64 : 0), (@holding ? 64 : 0), 0)
+    self.tone.set(0, (@holding ? 64 : 0), (@holding ? 64 : 0), 0)
     # Cursor
     if @game != 3
       expand = (@holding) ? 0 : 4
