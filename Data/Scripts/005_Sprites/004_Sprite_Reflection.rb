@@ -80,11 +80,11 @@ class Sprite_Reflection
       @sprite.bitmap   = parent_bitmap if @sprite.bitmap != parent_bitmap
       @sprite.tone     = @parent_sprite.tone
       if @height > 0
-        @sprite.color   = Color.new(48, 96, 160, 255)   # Dark still water
+        @sprite.color.set(48, 96, 160, 255)   # Dark still water
         @sprite.opacity = @parent_sprite.opacity
         @sprite.visible = !Settings::TIME_SHADING   # Can't time-tone a colored sprite
       else
-        @sprite.color   = Color.new(224, 224, 224, 96)
+        @sprite.color.set(224, 224, 224, 96)
         @sprite.opacity = @parent_sprite.opacity * 3 / 4
         @sprite.visible = true
       end

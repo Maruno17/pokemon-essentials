@@ -50,7 +50,7 @@ class PokemonSprite < Sprite
     @_iconbitmap&.dispose
     @_iconbitmap = (pokemon) ? GameData::Species.sprite_bitmap_from_pokemon(pokemon, back) : nil
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
-    self.color = Color.new(0, 0, 0, 0)
+    self.color.set(0, 0, 0, 0)
     changeOrigin
   end
 

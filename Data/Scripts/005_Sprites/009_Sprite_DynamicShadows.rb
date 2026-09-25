@@ -15,6 +15,7 @@ class Sprite_Shadow < RPG::Sprite
     @self_opacity = (params.size > 4) ? params[4] : 100
     @distancemax  = (params.size > 3) ? params[3] : 350
     @character    = character
+    self.color.set(0, 0, 0, 255)
     update
   end
 
@@ -88,7 +89,6 @@ class Sprite_Shadow < RPG::Sprite
     end
     @deltax = ScreenPosHelper.pbScreenX(@source) - self.x
     @deltay = ScreenPosHelper.pbScreenY(@source) - self.y
-    self.color = Color.black
     @distance = ((@deltax**2) + (@deltay**2))
     self.opacity = @self_opacity * 13_000 / ((@distance * 370 / @distancemax) + 6000)
     self.angle = 57.3 * Math.atan2(@deltax, @deltay)
