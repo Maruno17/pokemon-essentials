@@ -1,90 +1,68 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
 [Move,CONFUSION]
-Name = DB Animation
+Name = Essentials
 HidesDataBoxes = true
-Credit = Dawn Bronze
+Credit = Dawn Bronze, Maruno
 <User>
-    MoveX = 12,1,5
-    MoveX = 13,2,-5
-    MoveColor = 14,3,FFFFFF88
-    MoveX = 15,2,5
-    MoveX = 17,2,-5
-    MoveX = 19,2,5
-    MoveColor = 19,3,FFFFFF00
-    MoveX = 21,1,0
+    FoeInvertX = true
+    SetColor = 13,FFFFFF00
+    MoveX = 13,1,5
+    MoveColor = 13,4,FFFFFF50
+    MoveX = 14,2,-5
+    MoveX = 16,2,5
+    MoveX = 18,2,-5
+    MoveColor = 18,4,FFFFFF00
+    MoveX = 20,1,0
 <Target>
-    MoveZoomX = 24,2,90
-    MoveZoomX = 26,2,100
-    MoveZoomX = 28,2,90
-    MoveZoomX = 30,2,100
-    MoveZoomX = 32,2,90
-    MoveZoomX = 34,2,100
+    FoeInvertX = true
+    SetX = 23,0
+    SetZoomY = 23,100
+    MoveX = 23,1,-8
+    MoveZoomX = 23,3,130
+    MoveZoomY = 23,3,130
+    MoveX = 24,2,8
+    MoveX = 26,2,-8
+    SetZoomX = 28,130
+    SetZoomY = 28,130
+    MoveX = 28,2,8
+    MoveZoomX = 28,3,100
+    MoveZoomY = 28,3,100
+    MoveX = 30,1,0
 <Target Afterimage>
-    Focus = TargetPosition
+    Focus = Target
     Graphic = TARGET
-    SetZ = 24,10
-    SetOpacity = 24,0
-    SetColor = 24,FFFFFFA8
-    MoveOpacity = 24,1,150
-    MoveZoomX = 24,2,135
-    MoveZoomY = 24,2,135
-    MoveZoomX = 26,3,70
-    MoveZoomY = 26,6,100
-    MoveZoomX = 29,3,100
-    SetOpacity = 33,100
-    MoveOpacity = 33,4,0
+    FoeInvertX = true
+    SetX = 23,0
+    SetZ = 23,10
+    SetOpacity = 23,0
+    SetTone = 23,-20-20-20+00
+    SetBlending = 23,1
+    MoveX = 23,1,-8
+    MoveZoomX = 23,1,130
+    MoveOpacity = 23,1,255
+    MoveZoomY = 23,3,150
+    MoveZoomX = 24,1,125
+    MoveX = 24,2,8
+    MoveZoomX = 25,1,160
+    MoveZoomX = 26,1,150
+    MoveX = 26,2,-8
+    MoveZoomX = 27,1,160
+    SetZoomY = 28,150
+    MoveZoomX = 28,1,125
+    MoveX = 28,2,8
+    MoveZoomY = 28,3,100
+    MoveZoomX = 29,1,130
+    SetOpacity = 30,255
+    MoveX = 30,1,0
+    MoveZoomX = 30,1,100
+    MoveOpacity = 30,1,0
+    SetVisible = 31,false
 <Background>
     Focus = Background
     Graphic = Screens/black
     SetOpacity = 0,0
-    MoveOpacity = 0,12,240
-    MoveOpacity = 41,9,0
+    MoveOpacity = 0,5,224
+    MoveOpacity = 39,5,0
 <SE>
-    Play = 16,Psychic/Confusion
-#-------------------------------
-[OppMove,CONFUSION]
-Name = DB Animation
-HidesDataBoxes = true
-Credit = Dawn Bronze
-<User>
-    MoveX = 12,1,5
-    MoveX = 13,2,-5
-    MoveColor = 14,3,FFFFFF88
-    MoveX = 15,2,5
-    MoveX = 17,2,-5
-    MoveX = 19,2,5
-    MoveColor = 19,3,FFFFFF00
-    MoveX = 21,1,0
-<Target>
-    MoveZoomX = 24,2,90
-    MoveZoomX = 26,2,100
-    MoveZoomX = 28,2,90
-    MoveZoomX = 30,2,100
-    MoveZoomX = 32,2,90
-    MoveZoomX = 34,2,100
-<Target Afterimage>
-    Focus = TargetPosition
-    Graphic = TARGET
-    SetY = 24,-55
-    SetZ = 24,10
-    SetOpacity = 24,0
-    SetColor = 24,FFFFFFA8
-    MoveOpacity = 24,1,150
-    MoveY = 24,2,-70
-    MoveZoomX = 24,2,135
-    MoveZoomY = 24,2,135
-    MoveZoomX = 26,3,70
-    MoveY = 26,4,-75
-    MoveZoomY = 26,6,100
-    MoveZoomX = 29,3,100
-    SetOpacity = 33,100
-    MoveOpacity = 33,4,0
-<Background>
-    Focus = Background
-    Graphic = Screens/black
-    SetOpacity = 0,0
-    MoveOpacity = 0,12,240
-    MoveOpacity = 41,9,0
-<SE>
-    Play = 16,Psychic/Confusion
+    Play = 21,Psychic/Confusion

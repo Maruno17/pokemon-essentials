@@ -77,15 +77,15 @@ Credit = Maruno
 <Hit>
     Focus = Target
     Graphic = hit
-    SetZ = 6,20
-    SetZoomX = 6,0
-    SetZoomY = 6,0
-    SetFrame = 6,1
-    MoveZoomX = 6,4,150
-    MoveZoomY = 6,4,150
-    MoveColor = 8,2,4040F8FF
-    MoveOpacity = 9,2,0
-    SetVisible = 11,false
+    SetZ = 5,20
+    SetZoomX = 5,0
+    SetZoomY = 5,0
+    SetFrame = 5,1
+    MoveZoomX = 5,4,150
+    MoveZoomY = 5,4,150
+    MoveColor = 7,2,4040F8FF
+    MoveOpacity = 8,2,0
+    SetVisible = 10,false
 <Bubble emitter 1>
     Focus = Target
     Graphic = bubble 1

@@ -62,11 +62,11 @@ Credit = Maruno
     MoveZoomX = 16,12,0
     MoveZoomY = 16,12,0
     MoveOpacity = 16,12,0
-    SetEmitting = 23,false
+    SetEmitting = 27,false
     SetVisible = 28,false
 <SE>
     Play = 3,Poison/Poison Sting whoosh
-    Play = 7,Poison/Poison Sting hit,,140
-    Play = 11,Poison/Poison Sting bubble,80,90
-    Play = 16,Poison/Poison Sting bubble,80,90
-    Play = 21,Poison/Poison Sting bubble,80,90
+    Play = 7,Poison/Poison Sting hit
+    Play = 11,Poison/Poison Sting bubble,80
+    Play = 17,Poison/Poison Sting bubble,80
+    Play = 23,Poison/Poison Sting bubble,80
