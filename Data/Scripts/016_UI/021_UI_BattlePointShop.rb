@@ -25,7 +25,7 @@ end
 #===============================================================================
 class UI::BPShopVisuals < UI::MartVisuals
   def initialize_item_list
-    @sprites[:item_list] = UI::BPShopVisualsList.new(@stock, 152, 10, 374, 38 + (ITEMS_VISIBLE * 32), @viewport)
+    @sprites[:item_list] = UI::MartVisualsList.new(@stock, 152, 10, 374, 38 + (ITEMS_VISIBLE * 32), self, @viewport)
     @sprites[:item_list].expensive_base_color   = get_text_color_theme(:expensive)[0]
     @sprites[:item_list].expensive_shadow_color = get_text_color_theme(:expensive)[1]
     @sprites[:item_list].active                 = false
