@@ -1349,6 +1349,7 @@ class AnimationEditor::Canvas < Sprite
     now_angle = Math.atan2(now_y, now_x)
     # Apply new angle
     angle = @captured[2] + ((init_angle - now_angle) * 180 / Math::PI)
+    angle = angle.round
     @changed_controls ||= {}
     @changed_controls[:angle] = angle
     sprite.angle = angle

@@ -1,0 +1,100 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,LEER]
+Name = Essentials
+Credit = Maruno
+<User>
+<Target>
+    FoeInvertX = true
+    SetX = 17,0
+    MoveX = 17,1,-2
+    MoveX = 18,2,2
+    MoveX = 20,2,-2
+    MoveX = 22,2,2
+    MoveX = 24,1,0
+<Background>
+    Focus = Background
+    Graphic = Screens/black
+    InitialAngle = None
+    SetVisible = 0,true
+    SetOpacity = 0,0
+    MoveOpacity = 0,7,192
+    SetOpacity = 17,192
+    MoveOpacity = 17,7,0
+    SetVisible = 24,false
+<Leer circle>
+    Focus = User
+    Graphic = circle 1
+    FoeInvertX = true
+    FoeInvertY = true
+    InitialAngle = None
+    SetX = 10,56
+    SetY = 10,-16
+    SetZ = 10,10
+    SetZoomX = 10,20
+    SetZoomY = 10,20
+    SetVisible = 10,true
+    SetColor = 10,F8F80020
+    MoveZoomX = 10,5,60
+    MoveZoomY = 10,5,60
+    SetOpacity = 13,255
+    MoveOpacity = 13,2,0
+    SetVisible = 15,false
+<Leer star>
+    Focus = User
+    Graphic = shine 3
+    FoeInvertX = true
+    FoeInvertY = true
+    InitialAngle = None
+    SetX = 10,56
+    SetY = 10,-16
+    SetZ = 10,10
+    SetZoomX = 10,25
+    SetZoomY = 10,25
+    SetVisible = 10,true
+    MoveZoomX = 10,5,90
+    MoveZoomY = 10,5,90
+    SetOpacity = 14,255
+    MoveOpacity = 14,3,0
+    SetVisible = 17,false
+<Leer vertical strobe>
+    Focus = User
+    Graphic = strobe 1
+    FoeInvertX = true
+    FoeInvertY = true
+    InitialAngle = None
+    SetX = 10,56
+    SetY = 10,-16
+    SetZ = 10,20
+    SetZoomX = 10,20
+    SetZoomY = 10,25
+    SetVisible = 10,true
+    MoveZoomX = 10,4,30
+    MoveZoomY = 10,4,50
+    SetOpacity = 14,255
+    SetColor = 14,F8F80000
+    MoveColor = 14,1,F8F80040
+    MoveOpacity = 14,4,0
+    SetVisible = 18,false
+<Leer horizontal strobe>
+    Focus = User
+    Graphic = strobe 1
+    FoeInvertX = true
+    FoeInvertY = true
+    InitialAngle = None
+    SetX = 10,56
+    SetY = 10,-16
+    SetZ = 10,20
+    SetZoomX = 10,20
+    SetZoomY = 10,50
+    SetAngle = 10,90
+    SetVisible = 10,true
+    MoveZoomX = 10,4,30
+    MoveZoomY = 10,4,90
+    SetOpacity = 14,255
+    SetColor = 14,F8F80000
+    MoveColor = 14,1,F8F80040
+    MoveOpacity = 14,4,0
+    SetVisible = 18,false
+<SE>
+    Play = 10,Normal/Leer,80
