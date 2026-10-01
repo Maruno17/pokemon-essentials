@@ -183,8 +183,7 @@ class UIControls::CheckboxList < UIControls::List
     # Scroll via the mouse scroll wheel
     if @hover_area
       wheel_v = Input.scroll_v
-      scroll_dist = UIControls::Scrollbar::SCROLL_DISTANCE
-      scroll_dist /= 2 if @options.length / @rows_count > 20   # Arbitrary 20
+      scroll_dist = @scrollbar.wheel_scroll_distance
       if wheel_v > 0   # Scroll up
         @scrollbar.slider_top -= scroll_dist
       elsif wheel_v < 0   # Scroll down

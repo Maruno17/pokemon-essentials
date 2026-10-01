@@ -363,13 +363,11 @@ class AnimationPlayer::Emitter
     # emitter)
     case @particle[:initial_angle] || :none
     when :emitted_direction
-      ang = particle_sprite.emitter_params[:direction]   # Auto-movement direction
-      if ang.nil?   # Direction away from emitter
-        if start_x == 0
-          ang = (start_y > 0) ? 270 : 90
-        else
-          ang = Math.atan(start_y / start_x) * 180 / Math::PI
-        end
+      if (!@particle[:emit_direction] || @particle[:emit_direction].empty?) &&
+         (!@particle[:emit_direction_range] || @particle[:emit_direction_range].empty?)
+        ang = (Math.atan2(-start_y, start_x.to_f) * 180 / Math::PI).round   # Direction away from emitter
+      else
+        ang = particle_sprite.emitter_params[:direction]   # Auto-movement direction
       end
       ang *= -1 if particle_sprite.random_invert_angle
       if @values[:emit_x_multiplier] != 100 || @values[:emit_y_multiplier] != 100

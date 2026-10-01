@@ -69,6 +69,11 @@ class UIControls::Scrollbar < UIControls::BaseControl
     return @range > @tray_size
   end
 
+  def wheel_scroll_distance
+    # 2 is generally a couple of row heights if used in a list
+    return [SCROLL_DISTANCE, @tray_size / 4, [@slider_size - 2, 1].max].min
+  end
+
   #-----------------------------------------------------------------------------
 
   def set_interactive_rects
@@ -154,7 +159,7 @@ class UIControls::Scrollbar < UIControls::BaseControl
       if mouse_x && mouse_y && @interactions[:slider_tray].contains?(mouse_x, mouse_y)
         wheel_v = Input.scroll_v
         if wheel_v != 0
-          dist = [SCROLL_DISTANCE, @tray_size / 4].min
+          dist = wheel_scroll_distance
           if wheel_v > 0   # Scroll up
             self.slider_top -= dist
           elsif wheel_v < 0   # Scroll down
