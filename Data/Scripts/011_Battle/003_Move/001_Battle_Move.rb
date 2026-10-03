@@ -183,9 +183,10 @@ class Battle::Move
            "PowerHigherWithUserPositiveStatStages", "PowerDependsOnUserStockpile",
            "PowerHigherWithTimesHit", "PowerHigherWithFaintedAllies",
            "IncreasePowerInElectricTerrain", "DoublePowerIfUserPoisonedBurnedParalyzed",
-           "DoublePowerIfUserHasNoItem", "DoublePowerIfUserLastMoveFailed",
-           "DoublePowerIfAllyFaintedLastTurn"
+           "DoublePowerIfUserLastMoveFailed", "DoublePowerIfAllyFaintedLastTurn"
         return pbBasePower(@power, battler, nil)
+      when "DoublePowerIfUserHasNoItem", "TwoTurnAttackOneTurnInSun"
+        return [(pbBasePower(@power, battler, nil) * pbBasePowerMultiplier(1.0, battler, nil)).round, 1].max
       end
     end
     return @realMove.display_power(battler.pokemon)
