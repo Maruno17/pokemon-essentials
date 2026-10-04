@@ -240,7 +240,7 @@ module Battle::CatchAndStoreMixin
         dex_modifier = 1
       end
       dex_modifier *= 2 if $bag.has?(:CATCHINGCHARM)
-      critical_chance = mod_catch_rate * dex_modifier / 12
+      critical_chance = mod_catch_rate * dex_modifier / (12 * 4096)
       # Calculate the number of shakes
       if critical_chance > 0 && pbRandom(256) < critical_chance
         @criticalCapture = true
