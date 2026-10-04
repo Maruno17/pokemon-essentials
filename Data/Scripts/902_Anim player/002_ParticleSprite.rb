@@ -96,7 +96,7 @@ class AnimationPlayer::ParticleSprite
     @processes.delete_if { |process| process[0] == property }
   end
 
-  # Sets sprite's initial For looping purposes.
+  # Sets sprite's initial properties. For looping purposes.
   def reset_processes
     initialize_values
     set_as_battler_sprite if is_battler_sprite?   # Start battler sprites as visible
