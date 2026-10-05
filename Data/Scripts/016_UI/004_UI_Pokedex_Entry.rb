@@ -818,6 +818,10 @@ class UI::PokedexEntryVisuals < UI::BaseVisuals
   def update_interaction(input)
     case input
     when Input::USE
+      if @mode == :new_entry
+        pbPlayCloseMenuSE
+        return :quit
+      end
       case @page
       when :info
         play_species_cry
