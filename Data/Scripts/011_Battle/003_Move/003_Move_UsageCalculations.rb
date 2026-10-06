@@ -305,20 +305,11 @@ class Battle::Move
     multipliers[:final_damage_multiplier] *= 0.75 if numTargets > 1
     # Critical hits
     if target.damageState.critical
-      if Settings::NEW_CRITICAL_HIT_RATE_MECHANICS
-        multipliers[:final_damage_multiplier] *= 1.5
-      else
-        multipliers[:final_damage_multiplier] *= 2
-      end
+      mult = (Settings::NEW_CRITICAL_HIT_RATE_MECHANICS) ? 1.5 : 2
+      multipliers[:final_damage_multiplier] *= mult
     end
     # STAB
-    if type && user.pbHasType?(type)
-      if user.hasActiveAbility?(:ADAPTABILITY)
-        multipliers[:final_damage_multiplier] *= 2
-      else
-        multipliers[:final_damage_multiplier] *= 1.5
-      end
-    end
+    pbCalcDamageMultipliersSTAB(user, target, numTargets, type, baseDmg, multipliers)
     # Type effectiveness
     multipliers[:final_damage_multiplier] *= target.damageState.typeMod
   end
@@ -547,6 +538,16 @@ class Battle::Move
     multipliers[:power_multiplier] = pbBasePowerMultiplier(multipliers[:power_multiplier], user, target)
     # Move-specific final damage modifiers
     multipliers[:final_damage_multiplier] = pbModifyDamage(multipliers[:final_damage_multiplier], user, target)
+  end
+
+  def pbCalcDamageMultipliersApplySTAB?(user, target, numTargets, type, baseDmg, multipliers)
+    return type && user.pbHasType?(type)
+  end
+
+  def pbCalcDamageMultipliersSTAB(user, target, numTargets, type, baseDmg, multipliers)
+    return if !pbCalcDamageMultipliersApplySTAB?(user, target, numTargets, type, baseDmg, multipliers)
+    mult = (user.hasActiveAbility?(:ADAPTABILITY)) ? 2 : 1.5
+    multipliers[:final_damage_multiplier] *= mult
   end
 
   #-----------------------------------------------------------------------------

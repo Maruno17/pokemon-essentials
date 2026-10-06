@@ -155,29 +155,13 @@ class Battle::AI::AIMove
     end
     # Critical hits
     if is_critical
-      if Settings::NEW_CRITICAL_HIT_RATE_MECHANICS
-        multipliers[:final_damage_multiplier] *= 1.5
-      else
-        multipliers[:final_damage_multiplier] *= 2
-      end
+      mult = (Settings::NEW_CRITICAL_HIT_RATE_MECHANICS) ? 1.5 : 2
+      multipliers[:final_damage_multiplier] *= mult
     end
     # STAB
-    if calc_type && user.has_type?(calc_type)
-      if user.has_active_ability?(:ADAPTABILITY)
-        multipliers[:final_damage_multiplier] *= 2
-      else
-        multipliers[:final_damage_multiplier] *= 1.5
-      end
-    end
+    rough_damage_modifiers_STAB(user, target, calc_type, base_dmg, multipliers, is_critical)
     # Type effectiveness
-    typeMod = target.effectiveness_of_type_against_battler(calc_type, user, @move)
-    if target.battler.isSpecies?(:TERAPAGOS) && target.battler.form == 1 &&
-       target.has_active_ability?(:TERASHELL) && !target.being_mold_broken? &&
-       target.hp == target.totalhp &&
-       move.damagingMove? && !move.is_a?(Battle::Move::FixedDamageMove) &&
-       !Effectiveness.not_very_effective?(typeMod) && !Effectiveness.ineffective?(typeMod)
-      typeMod = Effectiveness::NOT_VERY_EFFECTIVE_MULTIPLIER
-    end
+    typeMod = calc_type_mod(user, target, calc_type, base_dmg, multipliers, is_critical)
     multipliers[:final_damage_multiplier] *= typeMod
   end
 
@@ -454,6 +438,28 @@ class Battle::AI::AIMove
     #       for in an AI's MoveBasePower handler or can't be checked now anyway.
     # NOTE: No need to check pbModifyDamage, as it's already accounted for in an
     #       AI's MoveBasePower handler.
+  end
+
+  def rough_damage_modifiers_apply_STAB?(user, target, calc_type, base_dmg, multipliers, is_critical)
+    return calc_type && user.has_type?(calc_type)
+  end
+
+  def rough_damage_modifiers_STAB(user, target, calc_type, base_dmg, multipliers, is_critical)
+    return if !rough_damage_modifiers_apply_STAB?(user, target, calc_type, base_dmg, multipliers, is_critical)
+    mult = (user.has_active_ability?(:ADAPTABILITY)) ? 2 : 1.5
+    multipliers[:final_damage_multiplier] *= mult
+  end
+
+  def calc_type_mod(user, target, calc_type, base_dmg, multipliers, is_critical)
+    ret = target.effectiveness_of_type_against_battler(calc_type, user, @move)
+    if target.battler.isSpecies?(:TERAPAGOS) && target.battler.form == 1 &&
+      target.has_active_ability?(:TERASHELL) && !target.being_mold_broken? &&
+      target.hp == target.totalhp &&
+      move.damagingMove? && !move.is_a?(Battle::Move::FixedDamageMove) &&
+      !Effectiveness.not_very_effective?(ret) && !Effectiveness.ineffective?(ret)
+      ret = Effectiveness::NOT_VERY_EFFECTIVE_MULTIPLIER
+    end
+    return ret
   end
 
   #-----------------------------------------------------------------------------
