@@ -23,6 +23,10 @@ module Settings
   # Whether the sprite of a selected Pokémon in battle (when targeting it)
   # flashes visible/invisible.
   FLASH_BATTLER_SPRITE_IF_TARGETED    = true
+  # Whether the "Call" battle command replaces the "Run"/"Cancel" battle
+  # commands. If false, both commands will be shown if possible. "Call" is only
+  # available for a Shadow Pokémon.
+  CALL_REPLACES_RUN                   = false
   # Whether the command UI will hide the buttons for useless commands (e.g.
   # "Run" if you're not allowed to run from battle, or "Bag" if the "disableBag"
   # battle rule is applied).

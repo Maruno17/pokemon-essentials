@@ -6,37 +6,88 @@ class Battle::Scene
   # The player chooses a main command for a Pokémon.
   #-----------------------------------------------------------------------------
 
-  def pbCommandMenu(idxBattler, firstAction)
-    cmds = []
-    # Commands for top row
-    if @battle.pbCanShift?(idxBattler)
-      cmds.push(:fight2)
-      cmds.push(:shift)
-    else
-      cmds.push(:fight)
-    end
-    cmds.push(nil)
-    # Commands for bottom row
-    cmds.push(:bag) if !@battle.rules[:disable_bag] || !Settings::HIDE_USELESS_BATTLE_COMMANDS
-    cmds.push(:call) if @battle.battlers[idxBattler].shadowPokemon?
-    if firstAction
-      if $DEBUG || !Settings::HIDE_USELESS_BATTLE_COMMANDS
-        cmds.push(:run)
-      elsif @battle.trainerBattle?
-        cmds.push(:run) if !@internalBattle || Settings::CAN_FORFEIT_TRAINER_BATTLES
-      elsif !@battle.rules[:cannot_run]
-        cmds.push(:run)
+  COMMAND_MENU_OPTIONS = HandlerHash.new
+
+  # Top row of commands (row = 0)
+  COMMAND_MENU_OPTIONS.add(:fight, {   # Wide button
+    :order     => 10,
+    :row       => 0,
+    :condition => proc { |battle, idxBattler, firstAction| next !battle.pbCanShift?(idxBattler) }
+  })
+  COMMAND_MENU_OPTIONS.add(:fight2, {   # Regular width button
+    :order     => 10,
+    :row       => 0,
+    :condition => proc { |battle, idxBattler, firstAction| next battle.pbCanShift?(idxBattler) }
+  })
+  COMMAND_MENU_OPTIONS.add(:shift, {
+    :order     => 20,
+    :row       => 0,
+    :condition => proc { |battle, idxBattler, firstAction| next battle.pbCanShift?(idxBattler) }
+  })
+
+  # Bottom row of commands (row = 1)
+  COMMAND_MENU_OPTIONS.add(:bag, {
+    :order     => 10,
+    :row       => 1,
+    :condition => proc { |battle, idxBattler, firstAction|
+      next !battle.rules[:disable_bag] || !Settings::HIDE_USELESS_BATTLE_COMMANDS
+    }
+  })
+  COMMAND_MENU_OPTIONS.add(:call, {
+    :order     => 20,
+    :row       => 1,
+    :condition => proc { |battle, idxBattler, firstAction|
+      next battle.battlers[idxBattler].shadowPokemon?
+    }
+  })
+  COMMAND_MENU_OPTIONS.add(:run, {   # Mutually exclusive with :cancel
+    :order     => 30,
+    :row       => 1,
+    :condition => proc { |battle, idxBattler, firstAction|
+      next false if !firstAction
+      next false if battle.battlers[idxBattler].shadowPokemon? && Settings::CALL_REPLACES_RUN
+      next true if $DEBUG || !Settings::HIDE_USELESS_BATTLE_COMMANDS
+      if battle.trainerBattle?
+        next !battle.internalBattle || Settings::CAN_FORFEIT_TRAINER_BATTLES
       end
-    else
-      cmds.push(:cancel)
+      next !battle.rules[:cannot_run]
+    }
+  })
+  COMMAND_MENU_OPTIONS.add(:cancel, {   # Mutually exclusive with :run
+    :order     => 30,
+    :row       => 1,
+    :condition => proc { |battle, idxBattler, firstAction|
+      next false if battle.battlers[idxBattler].shadowPokemon? && Settings::CALL_REPLACES_RUN
+      next !firstAction
+    }
+  })
+  COMMAND_MENU_OPTIONS.add(:pokemon, {
+    :order     => 40,
+    :row       => 1
+  })
+
+  def pbCommandMenu(idxBattler, firstAction)
+    # Get all available options
+    options = []
+    COMMAND_MENU_OPTIONS.each do |key, hash|
+      next if hash[:condition] && !hash[:condition].call(@battle, idxBattler, firstAction)
+      options.push([key, hash[:row] || 0, hash[:order] || 0])
     end
-    cmds.push(:pokemon)
-    # Open the menu
-    ret = pbCommandMenuEx(idxBattler, cmds)
-    return ret
+    options.sort! { |a, b| a[1] == b[1] ? a[2] <=> b[2] : a[1] <=> b[1] }
+    # Sort options by row and order, and insert "nil" to separate rows
+    commands = []
+    last_row = 0
+    options.each do |option|
+      commands.push(nil) if last_row != option[1]
+      last_row = option[1]
+      commands.push(option[0])
+    end
+    return pbCommandMenuEx(idxBattler, commands, firstAction)
   end
 
-  def pbCommandMenuEx(idxBattler, commands)
+  # NOTE: This is a separate method because it is also used by Safari Zone and
+  #       Bug Catching Contest battles with different commands.
+  def pbCommandMenuEx(idxBattler, commands, firstAction = true)
     pbShowWindow(COMMAND_BOX)
     cw = @sprites["commandWindow"]
     last_cmd = @lastCmd[idxBattler]
@@ -53,7 +104,7 @@ class Battle::Scene
         ret = cw.command
         @lastCmd[idxBattler] = ret
         break
-      elsif Input.trigger?(Input::BACK) && commands.include?(:cancel)   # Cancel
+      elsif Input.trigger?(Input::BACK) && !firstAction   # Cancel
         pbPlayCancelSE
         break
       elsif Input.trigger?(Input::F9) && $DEBUG   # Debug menu

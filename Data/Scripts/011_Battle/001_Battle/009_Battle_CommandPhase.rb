@@ -229,7 +229,7 @@ class Battle
       end
       # Player chooses an action
       actioned.push(idxBattler)
-      commandsEnd = false   # Whether to cancel choosing all other actions this round
+      commandsEnd = [false]   # Whether to cancel choosing all other actions this round
       loop do
         cmd = pbCommandMenu(idxBattler, actioned.length == 1)
         # If being Sky Dropped, can't do anything except use a move
@@ -237,34 +237,7 @@ class Battle
           pbDisplay(_INTL("Sky Drop won't let {1} go!", @battlers[idxBattler].pbThis(true)))
           next
         end
-        case cmd
-        when :fight, :fight2    # Fight
-          break if pbFightMenu(idxBattler)
-        when :shift   # Shift
-          pbUnregisterMegaEvolution(idxBattler)
-          break if pbRegisterShift(idxBattler)
-        when :bag, :throw_ball_contest    # Bag
-          if pbItemMenu(idxBattler, actioned.length == 1)
-            commandsEnd = true if pbItemUsesAllActions?(@choices[idxBattler][1])
-            break
-          end
-        when :pokemon    # Pokémon
-          break if pbPartyMenu(idxBattler)
-        when :run    # Run
-          # NOTE: "Run" is only an available option for the first battler the
-          #       player chooses an action for in a round. Attempting to run
-          #       from battle prevents you from choosing any other actions in
-          #       that round.
-          if pbRunMenu(idxBattler)
-            commandsEnd = true
-            break
-          end
-        when :call    # Call
-          break if pbCallMenu(idxBattler)
-        when :debug   # Debug
-          pbDebugMenu
-          next
-        when :cancel   # Go back to previous battler's action choice
+        if cmd == :cancel   # Go back to previous battler's action choice
           next if actioned.length <= 1
           actioned.pop   # Forget this battler was done
           idxBattler = actioned.last - 1
@@ -272,9 +245,41 @@ class Battle
           actioned.pop   # Forget the previous battler was done
           break
         end
+        break if pbCommandPhaseLoopAction(idxBattler, cmd, actioned, commandsEnd)
         pbCancelChoice(idxBattler)
       end
-      break if commandsEnd
+      break if commandsEnd[0]
     end
+  end
+
+  def pbCommandPhaseLoopAction(idxBattler, cmd, actioned, commandsEnd)
+    case cmd
+    when :fight, :fight2    # Fight
+      return true if pbFightMenu(idxBattler)
+    when :shift   # Shift
+      pbUnregisterMegaEvolution(idxBattler)
+      return true if pbRegisterShift(idxBattler)
+    when :bag, :throw_ball_contest    # Bag
+      if pbItemMenu(idxBattler, actioned.length == 1)
+        commandsEnd[0] = true if pbItemUsesAllActions?(@choices[idxBattler][1])
+        return true
+      end
+    when :pokemon    # Pokémon
+      return true if pbPartyMenu(idxBattler)
+    when :run    # Run
+      # NOTE: "Run" is only an available option for the first battler the
+      #       player chooses an action for in a round. Attempting to run
+      #       from battle prevents you from choosing any other actions in
+      #       that round.
+      if pbRunMenu(idxBattler)
+        commandsEnd[0] = true
+        return true
+      end
+    when :call    # Call
+      return true if pbCallMenu(idxBattler)
+    when :debug   # Debug
+      pbDebugMenu
+    end
+    return false
   end
 end
