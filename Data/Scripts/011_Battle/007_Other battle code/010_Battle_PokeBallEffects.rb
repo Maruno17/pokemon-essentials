@@ -104,7 +104,7 @@ Battle::PokeBallEffects::ModifyCatchRate.add(:FASTBALL, proc { |ball, catchRate,
 
 Battle::PokeBallEffects::ModifyCatchRate.add(:LEVELBALL, proc { |ball, catchRate, battle, battler|
   maxlevel = 0
-  battle.allSameSideBattlers(true).each { |b| maxlevel = b.level if b.level > maxlevel }
+  battle.allSameSideBattlers(0, true).each { |b| maxlevel = b.level if b.level > maxlevel }
   if maxlevel >= battler.level * 4
     catchRate *= 8
   elsif maxlevel >= battler.level * 2
