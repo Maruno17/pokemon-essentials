@@ -54,6 +54,7 @@ Credit = Maruno
 <Spark spawner>
     Focus = Target
     Graphic = glow 1
+    SecondLayer = true
     Emitter = Projectile
     EmitterRate = 80
     SetZ = 0,5
@@ -61,6 +62,9 @@ Credit = Maruno
     SetZoomY = 0,40
     SetOpacity = 0,0
     SetColor = 0,F8F880FF
+    SetZ2 = 0,1
+    SetZoomX2 = 0,50
+    SetZoomY2 = 0,50
     SetEmitting = 0,true
     SetEmitSpeed = 0,300
     SetEmitSpeedRange = 0,75
