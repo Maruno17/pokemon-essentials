@@ -51,8 +51,11 @@ module UIControls::StyleMixin
         :user_position_and_target_position => Color.new(224, 224, 64),    # Yellow
         :user_side_foreground              => Color.new(128, 224, 224),   # Cyan
         :user_side_background              => Color.new(128, 224, 224),   # Cyan
+        :non_user_side_foreground          => Color.new(128, 224, 224),   # Cyan
+        :non_user_side_background          => Color.new(128, 224, 224),   # Cyan
         :target_side_foreground            => Color.new(128, 224, 224),   # Cyan
-        :target_side_background            => Color.new(128, 224, 224)    # Cyan
+        :target_side_background            => Color.new(128, 224, 224),   # Cyan
+        :user_and_other_side               => Color.new(128, 224, 224)    # Cyan
       }
     },
     :dark => {
@@ -97,8 +100,11 @@ module UIControls::StyleMixin
         :user_position_and_target_position => Color.new(192, 192, 32),   # Yellow
         :user_side_foreground              => Color.new(80, 208, 208),   # Cyan
         :user_side_background              => Color.new(80, 208, 208),   # Cyan
+        :non_user_side_foreground          => Color.new(80, 208, 208),   # Cyan
+        :non_user_side_background          => Color.new(80, 208, 208),   # Cyan
         :target_side_foreground            => Color.new(80, 208, 208),   # Cyan
-        :target_side_background            => Color.new(80, 208, 208)    # Cyan
+        :target_side_background            => Color.new(80, 208, 208),   # Cyan
+        :user_and_other_side               => Color.new(80, 208, 208)    # Cyan
       }
     }
   }

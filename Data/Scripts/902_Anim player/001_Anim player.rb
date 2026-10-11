@@ -5,10 +5,11 @@ class AnimationPlayer
   attr_accessor :looping
   attr_reader   :slowdown   # 1 = normal speed, 2 = half speed, 3 = one third speed, etc.
   attr_reader   :sprites, :particle_sprites, :emitters
+  attr_reader   :scene, :user
 
   # animation is either a GameData::Animation or a hash made from one.
-  # user is a Battler, or nil.
-  # targets is an array of Battlers, or nil.
+  # user is a Battler or FakeBattler, or nil if there is no user.
+  # targets is an array of Battlers or FakeBattlers, or nil if there are none.
   # scene is either Battle::Scene or AnimationEditor::Canvas.
   def initialize(animation, user, targets, scene)
     @animation = animation

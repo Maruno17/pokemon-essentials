@@ -395,7 +395,9 @@ class AnimationPlayer::Emitter
     # randomness added above
     if !particle_sprite.is_battler_sprite?
       if AnimationPlayer::Helper.get_first_command_frame(@particle, PARTICLE_PROPERTIES) >= 0
-        [:x, :y, :r, :theta, :priority, :zoom_x, :zoom_y, :angle, :flip, :opacity].each do |property|
+        [:x, :y, :r, :theta, :z, :zoom_x, :zoom_y, :angle, :flip, :opacity].each do |property|
+          next if [:x, :y].include?(property) && @particle[:polar_coordinates]
+          next if [:r, :theta].include?(property) && !@particle[:polar_coordinates]
           particle_sprite.add_set_process(property, @next_emission, GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[property])
         end
         particle_sprite.add_set_process(:visible, @next_emission, true)

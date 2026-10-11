@@ -85,8 +85,12 @@ module AnimationPlayer::Helper
              [target_coords[0], Battle::Scene.pbBattlerPosition(target_index, side_sizes[target_index % 2])[1]]]
     when :user_side_foreground, :user_side_background
       ret = [Battle::Scene.pbBattlerPosition(user_index)]
+    when :non_user_side_foreground, :non_user_side_background
+      ret = [Battle::Scene.pbBattlerPosition(user_index + 1)]
     when :target_side_foreground, :target_side_background
       ret = [Battle::Scene.pbBattlerPosition(target_index)]
+    when :user_and_other_side
+      ret = [user_coords.clone, Battle::Scene.pbBattlerPosition(user_index + 1)]
     end
     return ret
   end
@@ -147,6 +151,15 @@ module AnimationPlayer::Helper
     when :user_side_background, :target_side_background
       this_idx = (particle[:focus] == :user_side_background) ? user_index : target_index
       ret = 1000 if this_idx.even?   # On player's side
+    when :non_user_side_foreground
+      ret = 1000
+      ret += 1000 if user_index.odd?   # User is on foe's side
+    when :non_user_side_background
+      ret = 1000 if user_index.odd?   # User is on foe's side
+    when :user_and_other_side   # Other side's foreground
+      user_pos = 1000 + ((100 * ((user_index / 2) + 1)) * (user_index.even? ? 1 : -1))
+      side_pos = 1000 + (user_index.odd? ? 1000 : 0)
+      ret = [user_pos, side_pos]
     end
     return ret
   end

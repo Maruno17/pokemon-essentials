@@ -8,7 +8,7 @@ Credit = Maruno
 <Ball>
     Focus = User
     Graphic = bubble 1
-    SetY = 0,32
+    SetY = 0,16
     SetZ = 0,10
     SetZoomX = 0,250
     SetZoomY = 0,250
@@ -23,7 +23,7 @@ Credit = Maruno
 <Swish>
     Focus = User
     Graphic = swish
-    SetY = 7,32
+    SetY = 7,16
     SetZ = 7,5
     SetZoomX = 7,90
     SetZoomY = 7,90

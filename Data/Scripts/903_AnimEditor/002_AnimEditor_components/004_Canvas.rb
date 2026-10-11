@@ -1196,10 +1196,24 @@ class AnimationEditor::Canvas < Sprite
         base_coords = Battle::Scene.pbBattlerPosition(user_index)
         new_pos_x -= base_coords[0]
         new_pos_y -= base_coords[1]
+      when :non_user_side_foreground, :non_user_side_background
+        base_coords = Battle::Scene.pbBattlerPosition(user_index + 1)
+        new_pos_x -= base_coords[0]
+        new_pos_y -= base_coords[1]
       when :target_side_foreground, :target_side_background
         base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
         new_pos_x -= base_coords[0]
         new_pos_y -= base_coords[1]
+      when :user_and_other_side
+        user_pos = @user_coords
+        target_pos = Battle::Scene.pbBattlerPosition(user_index + 1)
+        distance = GameData::Animation::USER_AND_TARGET_SEPARATION
+        new_pos_x -= user_pos[0]
+        new_pos_x *= distance[0]
+        new_pos_x /= target_pos[0] - user_pos[0]
+        new_pos_y -= user_pos[1]
+        new_pos_y *= distance[1]
+        new_pos_y /= target_pos[1] - user_pos[1]
       end
       relative_to_index = index_that_particle_is_relative_to(particle, first_target_index)
       if (relative_to_index >= 0 && relative_to_index.odd?) ||
@@ -1254,9 +1268,19 @@ class AnimationEditor::Canvas < Sprite
       when :user_side_foreground, :user_side_background
         base_coords = Battle::Scene.pbBattlerPosition(user_index)
         new_pos_x -= base_coords[0]
+      when :non_user_side_foreground, :non_user_side_background
+        base_coords = Battle::Scene.pbBattlerPosition(user_index + 1)
+        new_pos_x -= base_coords[0]
       when :target_side_foreground, :target_side_background
         base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
         new_pos_x -= base_coords[0]
+      when :user_and_other_side
+        user_pos = @user_coords
+        target_pos = Battle::Scene.pbBattlerPosition(user_index + 1)
+        distance = GameData::Animation::USER_AND_TARGET_SEPARATION
+        new_pos_x -= user_pos[0]
+        new_pos_x *= distance[0]
+        new_pos_x /= target_pos[0] - user_pos[0]
       end
       relative_to_index = index_that_particle_is_relative_to(particle, first_target_index)
       if (relative_to_index >= 0 && relative_to_index.odd?) ||
@@ -1306,9 +1330,19 @@ class AnimationEditor::Canvas < Sprite
       when :user_side_foreground, :user_side_background
         base_coords = Battle::Scene.pbBattlerPosition(user_index)
         new_pos_y -= base_coords[1]
+      when :non_user_side_foreground, :non_user_side_background
+        base_coords = Battle::Scene.pbBattlerPosition(user_index + 1)
+        new_pos_y -= base_coords[1]
       when :target_side_foreground, :target_side_background
         base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
         new_pos_y -= base_coords[1]
+      when :user_and_other_side
+        user_pos = @user_coords
+        target_pos = Battle::Scene.pbBattlerPosition(user_index + 1)
+        distance = GameData::Animation::USER_AND_TARGET_SEPARATION
+        new_pos_y -= user_pos[1]
+        new_pos_y *= distance[1]
+        new_pos_y /= target_pos[1] - user_pos[1]
       end
       relative_to_index = index_that_particle_is_relative_to(particle, first_target_index)
       if (relative_to_index >= 0 && relative_to_index.odd?) ||

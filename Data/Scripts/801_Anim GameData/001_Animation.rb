@@ -36,8 +36,11 @@ module GameData
       "UserPositionAndTargetPosition" => :user_position_and_target_position,
       "UserSideForeground"            => :user_side_foreground,
       "UserSideBackground"            => :user_side_background,
+      "NonUserSideForeground"         => :non_user_side_foreground,
+      "NonUserSideBackground"         => :non_user_side_background,
       "TargetSideForeground"          => :target_side_foreground,
-      "TargetSideBackground"          => :target_side_background
+      "TargetSideBackground"          => :target_side_background,
+      "UserAndOtherSide"              => :user_and_other_side   # Other side's foreground
     }
     FOCUS_TYPES_OF_SCREEN = [   # Neither user nor target
       :foreground, :midground, :background
@@ -45,7 +48,8 @@ module GameData
     FOCUS_TYPES_WITH_USER = [
       :user, :user_position, :user_and_target, :user_position_and_target,
       :user_and_target_position, :user_position_and_target_position,
-      :user_side_foreground, :user_side_background
+      :user_side_foreground, :user_side_background, :non_user_side_foreground,
+      :non_user_side_background, :user_and_other_side
     ]
     FOCUS_TYPES_WITH_TARGET = [
       :target, :target_position, :user_and_target, :user_position_and_target,

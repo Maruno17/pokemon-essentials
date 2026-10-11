@@ -133,8 +133,11 @@ class AnimationEditor
       :user_position_and_target_position => _INTL("User pos and target pos"),
       :user_side_foreground              => _INTL("In front of user's side"),
       :user_side_background              => _INTL("Behind user's side"),
+      :non_user_side_foreground          => _INTL("In front of non-user's side"),
+      :non_user_side_background          => _INTL("Behind non-user's side"),
       :target_side_foreground            => _INTL("In front of target's side"),
-      :target_side_background            => _INTL("Behind target's side")
+      :target_side_background            => _INTL("Behind target's side"),
+      :user_and_other_side               => _INTL("User and other side")
     }
     if @anim[:no_user]
       GameData::Animation::FOCUS_TYPES_WITH_USER.each { |f| focus_values.delete(f) }

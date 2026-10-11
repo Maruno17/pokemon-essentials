@@ -3,11 +3,12 @@ class AnimationPlayer
   #
   #=============================================================================
   class FakeBattler
-    attr_reader :index
+    attr_reader :index, :idxOwnSide
     attr_reader :pokemon
 
     def initialize(index, species, form = 0, gender = 0)
       @index = index
+      @idxOwnSide = index & 1
       @pokemon = AnimationPlayer::FakePokemon.new(species, form, gender)
     end
   end

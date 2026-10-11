@@ -20,6 +20,7 @@ end
 # go from 0.0 to 1.5 no matter the slowdown factor).
 #===============================================================================
 
+# Makes the background graphics grayscale during the animation.
 AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("darkpulse") { |player, time|
   ["battle_bg", "battle_bg2", "base_0", "base_1"].each do |sprite|
     next if !player.sprites[sprite]
@@ -35,9 +36,9 @@ AnimationPlayer::END_ANIMATION_SCRIPTS.add("darkpulse") { |player|
 
 #===============================================================================
 
+# Make ParticleSprites spawned by emitters called "Feather echo emitter #"
+# inherit their original angle from the ParticleSprite called "Feather #".
 AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("roost") { |player, time|
-  # Make ParticleSprites spawned by emitters inherit their angle from the
-  # ParticleSprite they're following
   player.emitters.each do |emitter|
     emitter.particle_sprites.each do |emit_particle|
       next if emit_particle.emitter_params[:angle_set]
@@ -50,5 +51,39 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("roost") { |player, time|
         end
       end
     end
+  end
+}
+
+#===============================================================================
+
+# Makes all battlers on the side opposite to the user glow purple temporarily.
+# The coloring starts at start_time, fades in, remains colored briefly then
+# fades away.
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("toxicspikes") { |player, time|
+  next if !player.user   # Just in case; there should be a user
+  start_time = 34 / 20.0
+  next if time < start_time
+  fade_time = 7 / 20.0
+  linger_time = 1 / 20.0   # Time spent fully colored purple
+  mod_time = time - start_time
+  side = player.user.idxOwnSide
+  # Calculate the color
+  if mod_time < fade_time + linger_time   # Fading in
+    poison_color = Color.new(168, 0, 248, lerp(0, 160, fade_time, mod_time))
+  else   # Fading out
+    poison_color = Color.new(168, 0, 248, lerp(160, 0, fade_time, mod_time - fade_time - linger_time))
+  end
+  # Apply the color to all battlers on the other side
+  player.scene.sprites.each_pair do |id, sprite|
+    next if !sprite.is_a?(Battle::Scene::BattlerSprite) || (sprite.index & 1) == side
+    sprite.color.set(poison_color.red, poison_color.green, poison_color.blue, poison_color.alpha)
+  end
+}
+AnimationPlayer::END_ANIMATION_SCRIPTS.add("toxicspikes") { |player|
+  next if !player.user   # Just in case; there should be a user
+  side = player.user.idxOwnSide
+  player.scene.sprites.each_pair do |id, sprite|
+    next if !sprite.is_a?(Battle::Scene::BattlerSprite) || (sprite.index & 1) == side
+    sprite.color.set(0, 0, 0, 0)   # Back to normal
   end
 }
