@@ -360,6 +360,8 @@ ItemHandlers::UseInField.add(:EXPALLOFF, proc { |item|
   pbMessage(_INTL("The Exp Share was turned on."))
   next true
 })
+ItemHandlers::PairedItems[:EXPALLOFF] = :EXPALL
+
 
 ItemHandlers::UseText.add(:EXPALL, proc { |item|
   next _INTL("Turn off")
@@ -369,6 +371,7 @@ ItemHandlers::UseInField.add(:EXPALL, proc { |item|
   pbMessage(_INTL("The Exp Share was turned off."))
   next true
 })
+ItemHandlers::PairedItems[:EXPALL] = :EXPALLOFF
 
 #-------------------------------------------------------------------------------
 

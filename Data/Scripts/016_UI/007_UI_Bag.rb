@@ -938,8 +938,14 @@ class UI::Bag < UI::BaseScreen
     :effect => proc { |screen|
       if screen.bag.registered?(screen.item.id)
         screen.bag.unregister(screen.item.id)
+        ItemHandlers.getPairedItems(screen.item.id).each do |itm|
+          screen.bag.unregister(itm) if itm
+        end
       else
         screen.bag.register(screen.item.id)
+        ItemHandlers.getPairedItems(screen.item.id).each do |itm|
+          screen.bag.register(itm) if itm
+        end
       end
       screen.refresh
     }

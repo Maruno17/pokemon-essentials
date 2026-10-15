@@ -8194,6 +8194,24 @@ FieldUse = Direct
 Flags = KeyItem
 Description = A long and durable rope. Use it to escape instantly from locations like caves or dungeons.
 #-------------------------------
+[EXPALL]
+Name = Exp. Share
+NamePlural = Exp. Shares
+Pocket = KeyItems
+Price = 0
+FieldUse = Direct
+Flags = KeyItem
+Description = Turning on this special device will allow all the Pokémon on your team to share in Exp. Points gained.
+#-------------------------------
+[EXPALLOFF]
+Name = Exp. Share
+NamePlural = Exp. Shares
+Pocket = KeyItems
+Price = 0
+FieldUse = Direct
+Flags = KeyItem
+Description = Turning on this special device will allow all the Pokémon on your team to share in Exp. Points gained.
+#-------------------------------
 [COINCASE]
 Name = Coin Case
 NamePlural = Coin Cases
