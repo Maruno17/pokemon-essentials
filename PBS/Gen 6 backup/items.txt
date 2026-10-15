@@ -5296,7 +5296,7 @@ Pocket = KeyItems
 Price = 0
 FieldUse = Direct
 Flags = KeyItem
-Description = Turning on this special device will allow all the Pokémon on your team to share in Exp. Points gained.
+Description = This special device allows all the Pokémon on your team to share in Exp. Points gained.
 #-------------------------------
 [EXPALLOFF]
 Name = Exp. Share
