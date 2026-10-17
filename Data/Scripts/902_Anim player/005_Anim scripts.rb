@@ -36,6 +36,24 @@ AnimationPlayer::END_ANIMATION_SCRIPTS.add("darkpulse") { |player|
 
 #===============================================================================
 
+# Make each ParticleSprite spawned by an emitter a random color.
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("protect") { |player, time|
+  colors = [
+    [0, 0, 0, 0],          # White
+    [32, 168, 248, 160],   # Blue
+    [32, 248, 168, 160],   # Green
+  ]
+  player.emitters.each do |emitter|
+    emitter.particle_sprites.each do |emit_particle|
+      next if emit_particle.emitter_params[:color_set]
+      emit_particle.sprite[0].color.set(*colors.sample)
+      emit_particle.emitter_params[:color_set] = true
+    end
+  end
+}
+
+#===============================================================================
+
 # Make ParticleSprites spawned by emitters called "Feather echo emitter #"
 # inherit their original angle from the ParticleSprite called "Feather #".
 AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("roost") { |player, time|
