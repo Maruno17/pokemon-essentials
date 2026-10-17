@@ -89,7 +89,7 @@ class UI::MoveReminderVisuals < UI::BaseVisuals
     @moves = move_list
     @index = @moves.length - 1 if @index >= @moves.length
     refresh_on_index_changed(@index)
-    @cursor.visible = false if @moves.empty?
+    @sprites[:cursor] = false if @moves.empty?
     refresh
   end
 
@@ -150,6 +150,7 @@ class UI::MoveReminderVisuals < UI::BaseVisuals
 
   def draw_move_properties
     move = @moves[@index]
+    return if move.nil?
     move_data = GameData::Move.get(move)
     # Power
     draw_text(_INTL("POWER"), 278, 120, theme: :white)
