@@ -47,6 +47,14 @@ class Game_Temp
   attr_accessor :memorized_bgm_position   # set when trainer intro BGM is played
   attr_accessor :darkness_sprite          # DarknessSprite or nil
   attr_accessor :mart_prices
+  # Current message and related windows
+  attr_accessor :current_msg_window
+  attr_accessor :current_face_window
+  attr_accessor :current_cmd_window
+  attr_accessor :current_num_window
+  attr_accessor :current_gold_window
+  attr_accessor :current_coin_window
+  attr_accessor :current_bp_window
 
   def initialize
     # Flags requesting something to happen
