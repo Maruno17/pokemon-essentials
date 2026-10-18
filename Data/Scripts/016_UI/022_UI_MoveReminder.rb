@@ -89,7 +89,7 @@ class UI::MoveReminderVisuals < UI::BaseVisuals
     @moves = move_list
     @index = @moves.length - 1 if @index >= @moves.length
     refresh_on_index_changed(@index)
-    @sprites[:cursor] = false if @moves.empty?
+    @sprites[:cursor].visible = false if @moves.empty?
     refresh
   end
 
