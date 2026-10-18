@@ -132,6 +132,7 @@ class PokemonSystem
     @force_set_options = true
     all_options = self.instance_variables.map { |val| val.to_s.gsub("@", "").to_sym }
     all_options.each do |option|
+      next if !respond_to?(option.to_s) || !respond_to?(option.to_s + "=")
       next if option == :force_set_options
       self.send((option.to_s + "=").to_sym, self.send(option))
     end
