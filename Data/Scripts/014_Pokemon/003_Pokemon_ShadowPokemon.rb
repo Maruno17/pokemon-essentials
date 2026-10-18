@@ -10,18 +10,20 @@ class Pokemon
   attr_accessor :shadow_moves
   attr_accessor :heart_gauge_step_counter
 
-  alias __shadow_expeq exp= unless method_defined?(:__shadow_expeq)
+  alias __shadow__expeq exp= unless method_defined?(:__shadow__expeq)
+
   def exp=(value)
     if shadowPokemon?
       @saved_exp += value - @exp
     else
-      __shadow_expeq(value)
+      __shadow__expeq(value)
     end
   end
 
-  alias __shadow_hpeq hp= unless method_defined?(:__shadow_hpeq)
+  alias __shadow__hpeq hp= unless method_defined?(:__shadow__hpeq)
+
   def hp=(value)
-    __shadow_hpeq(value)
+    __shadow__hpeq(value)
     @hyper_mode = false if @hp <= 0
   end
 
@@ -209,9 +211,9 @@ class Pokemon
     end
   end
 
-  alias __shadow_clone clone unless method_defined?(:__shadow_clone)
+  alias __shadow__clone clone unless method_defined?(:__shadow__clone)
   def clone
-    ret = __shadow_clone
+    ret = __shadow__clone
     if @saved_ev
       GameData::Stat.each_main { |s| ret.saved_ev[s.id] = @saved_ev[s.id] }
     end

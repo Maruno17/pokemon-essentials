@@ -68,18 +68,10 @@ class Battle::Move
     return ret if !moveType
     return ret if moveType == :GROUND && target.pbHasType?(:FLYING) && target.hasActiveItem?(:IRONBALL)
     # Get effectivenesses
-    if moveType == :SHADOW
-      if target.shadowPokemon?
-        ret = Effectiveness::NOT_VERY_EFFECTIVE_MULTIPLIER
-      else
-        ret = Effectiveness::SUPER_EFFECTIVE_MULTIPLIER
-      end
-    else
-      target.pbTypes(true).each do |type|
-        ret *= pbCalcTypeModSingle(moveType, type, user, target)
-      end
-      ret *= 2 if target.effects[PBEffects::TarShot] && moveType == :FIRE
+    target.pbTypes(true).each do |type|
+      ret *= pbCalcTypeModSingle(moveType, type, user, target)
     end
+    ret *= 2 if target.effects[PBEffects::TarShot] && moveType == :FIRE
     return ret
   end
 

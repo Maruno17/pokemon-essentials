@@ -19,11 +19,6 @@ class Battle
       end
       return false
     end
-    # Hyper Mode and non-Scents
-    if pkmn.hyper_mode && !GameData::Item.get(item)&.is_scent?
-      scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
-      return false
-    end
     return true
   end
 
