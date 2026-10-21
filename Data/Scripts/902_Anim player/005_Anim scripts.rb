@@ -74,6 +74,37 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("roost") { |player, time|
 
 #===============================================================================
 
+# Make ParticleSprites spawned by emitters called "Star trail emitter #" inherit
+# their original color and z from the ParticleSprite called "Launched star #".
+# Make ParticleSprites spawned by emitters called "Hit sparks emitter #" inherit
+# their original color and z from the ParticleSprite called "Hit circle #".
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("swift") { |player, time|
+  player.emitters.each do |emitter|
+    emitter.particle_sprites.each do |emit_particle|
+      next if emit_particle.emitter_params[:color_set]
+      if emit_particle.name[/Star trail emitter (\d)/]
+        number = $~[1]
+        player.particle_sprites.each do |particle|
+          next if particle.name != "Launched star " + number
+          emit_particle.sprite[0].color = particle.sprite[0].color
+          emit_particle.sprite[0].z = particle.sprite[0].z
+          emit_particle.emitter_params[:color_set] = true
+        end
+      elsif emit_particle.name[/Hit sparks emitter (\d)/]
+        number = $~[1]
+        player.particle_sprites.each do |particle|
+          next if particle.name != "Hit circle " + number
+          emit_particle.sprite[0].color = particle.sprite[0].color
+          emit_particle.sprite[0].z = particle.sprite[0].z
+          emit_particle.emitter_params[:color_set] = true
+        end
+      end
+    end
+  end
+}
+
+#===============================================================================
+
 # Makes all battlers on the side opposite to the user glow purple temporarily.
 # The coloring starts at start_time, fades in, remains colored briefly then
 # fades away.
