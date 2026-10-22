@@ -326,6 +326,7 @@ class AnimationPlayer::ParticleSprite
     when :z
       value += @values[:auto_movement_z] || 0   # Used by emitters
       value += (@property_offsets[property] || 0)
+      value += @emitter_params[:z] || 0
       if @foe_invert_z
         if @focus_z.is_a?(Array)
           value = AnimationEditor::PROPERTY_RANGES[:z].sum + GameData::Animation::USER_AND_TARGET_SEPARATION[2] - value
@@ -362,7 +363,9 @@ class AnimationPlayer::ParticleSprite
       if @initial_angle == :always_particle_to_focus
         apply_sprite_property_override(:angle)
       else
-        @sprite[0].angle = value + (@property_offsets[property] || 0)
+        value += (@property_offsets[property] || 0)
+        value += @emitter_params[:angle] || 0
+        @sprite[0].angle = value
       end
       @sprite[0].angle *= -1 if @random_invert_angle
       apply_sprite_property(:angle2, @values[:angle2])

@@ -294,6 +294,9 @@ class AnimationPlayer::Emitter
     end
     # Clockwise
     particle_sprite.emitter_params[:clockwise] = @values[:emit_clockwise]
+    # Offsets
+    particle_sprite.emitter_params[:z] = @values[:emit_z_offset] || 0
+    particle_sprite.emitter_params[:angle] = @values[:emit_angle_offset] || 0
     # Multipliers
     particle_sprite.emitter_params[:x_multiplier] = @values[:emit_x_multiplier] / 100.0
     particle_sprite.emitter_params[:y_multiplier] = @values[:emit_y_multiplier] / 100.0

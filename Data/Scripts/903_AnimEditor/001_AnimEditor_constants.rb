@@ -73,10 +73,12 @@ class AnimationEditor
     # Property modifiers for emitted particles.
     :emit_x_multiplier       => [     0,  9999],
     :emit_y_multiplier       => [     0,  9999],
-    :emit_zoom_multiplier    => [     0,  9999],
+    :emit_z_offset           => [   -50,    50],
     :emit_zoom_range         => [     0,  9999],
+    :emit_zoom_multiplier    => [     0,  9999],
     :emit_zoom_x_range       => [     0,  9999],
     :emit_zoom_y_range       => [     0,  9999],
+    :emit_angle_offset       => [-99999, 99999],
     :emit_opacity_multiplier => [     0,  9999],
     # Extra particle properties for emitted particles. (Radii used by :helix/
     # :polar emitter types.)

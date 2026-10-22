@@ -145,29 +145,6 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
       ctrl.set_interactive_rects
       @rows[row][LIST_CONTROL] = ctrl
       return
-    when :x, :y, :r, :theta, :z, :zoom_x, :zoom_y, :angle, :opacity, :frame,
-         :mask_opacity, :mask_x, :mask_y, :mask_zoom_x, :mask_zoom_y,
-         :x2, :y2, :z2, :zoom_x2, :zoom_y2, :angle2, :opacity2, :frame2,
-         :emitter_x, :emitter_y, :emitter_r, :emitter_theta,
-         :spawn_x, :spawn_x_range, :spawn_y, :spawn_y_range,
-         :spawn_r, :spawn_r_range, :spawn_theta, :spawn_theta_range,
-         :emit_speed, :emit_speed_range,
-         :emit_direction, :emit_direction_range,
-         :emit_gravity, :emit_gravity_range,
-         :emit_deceleration, :emit_deceleration_range,
-         :emit_radius_x_range, :emit_radius_y_range, :emit_radius_z_range,
-         :emit_period_x, :emit_period_x_range,
-         :emit_period_y, :emit_period_y_range,
-         :emit_period_z, :emit_period_z_range,
-         :emit_x_multiplier, :emit_y_multiplier,
-         :emit_zoom_range, :emit_zoom_multiplier, :emit_zoom_x_range, :emit_zoom_y_range,
-         :emit_opacity_multiplier,
-         :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
-         :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset,
-         :radius_x, :radius_y, :radius_z
-      vals = AnimationEditor::PROPERTY_RANGES[row] || [0, 0]
-      default = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[row] || 0
-      ctrl = UIControls::FittedNumberTextBox.new(ctrl_width, ctrl_height, @list_viewport, *vals, default)
     when :flip, :flip2, :invert_color, :invert_color2, :emitting, :emit_clockwise
       default = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[row] || false
       ctrl = UIControls::Checkbox.new(ctrl_width, ctrl_height, @list_viewport, default)
@@ -187,7 +164,13 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
       }
       ctrl = UIControls::DropdownList.new(ctrl_width, ctrl_height, @list_viewport, vals, 0)
     else
-      raise _INTL("Couldn't decide what kind of control to make for property {1}.", row)
+      if AnimationEditor::PROPERTY_RANGES.has_key?(row)
+        vals = AnimationEditor::PROPERTY_RANGES[row] || [0, 0]
+        default = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[row] || 0
+        ctrl = UIControls::FittedNumberTextBox.new(ctrl_width, ctrl_height, @list_viewport, *vals, default)
+      else
+        raise _INTL("Couldn't decide what kind of control to make for property {1}.", row)
+      end
     end
     if ctrl
       ctrl.x = CONTROL_X

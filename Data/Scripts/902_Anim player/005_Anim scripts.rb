@@ -56,6 +56,10 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("protect") { |player, time|
 
 # Make ParticleSprites spawned by emitters called "Feather echo emitter #"
 # inherit their original angle from the ParticleSprite called "Feather #".
+# NOTE: This can't use the "SetEmitAngleOffset" property because "Feather #"
+#       begins with a random angle that can't be referenced except by this code.
+# NOTE: Setting emit_particle's angle directly is fine because it doesn't change
+#       its angle after being emitted.
 AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("roost") { |player, time|
   player.emitters.each do |emitter|
     emitter.particle_sprites.each do |emit_particle|
@@ -75,9 +79,11 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("roost") { |player, time|
 #===============================================================================
 
 # Make ParticleSprites spawned by emitters called "Star trail emitter #" inherit
-# their original color and z from the ParticleSprite called "Launched star #".
+# their original color from the ParticleSprite called "Launched star #".
 # Make ParticleSprites spawned by emitters called "Hit sparks emitter #" inherit
-# their original color and z from the ParticleSprite called "Hit circle #".
+# their original color from the ParticleSprite called "Hit circle #".
+# NOTE: Setting emit_particle's color directly is fine because it doesn't change
+#       its color after being emitted.
 AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("swift") { |player, time|
   player.emitters.each do |emitter|
     emitter.particle_sprites.each do |emit_particle|
@@ -87,7 +93,6 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("swift") { |player, time|
         player.particle_sprites.each do |particle|
           next if particle.name != "Launched star " + number
           emit_particle.sprite[0].color = particle.sprite[0].color
-          emit_particle.sprite[0].z = particle.sprite[0].z
           emit_particle.emitter_params[:color_set] = true
         end
       elsif emit_particle.name[/Hit sparks emitter (\d)/]
@@ -95,7 +100,6 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("swift") { |player, time|
         player.particle_sprites.each do |particle|
           next if particle.name != "Hit circle " + number
           emit_particle.sprite[0].color = particle.sprite[0].color
-          emit_particle.sprite[0].z = particle.sprite[0].z
           emit_particle.emitter_params[:color_set] = true
         end
       end

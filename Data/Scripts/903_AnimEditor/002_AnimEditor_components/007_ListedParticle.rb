@@ -33,8 +33,10 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
                                       :emit_period_z, :emit_period_z_range,
                                       :emit_clockwise],
     :emitted_modifiers_group      => [:emit_x_multiplier, :emit_y_multiplier,
+                                      :emit_z_offset,
                                       :emit_zoom_range, :emit_zoom_multiplier,
                                       :emit_zoom_x_range, :emit_zoom_y_range,
+                                      :emit_angle_offset,
                                       :emit_opacity_multiplier],
     :position_group               => [:x, :y, :r, :theta,
                                       :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
@@ -54,16 +56,20 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
   # type.
   USED_EMITTER_PARAMETERS = {
     :no_movement => [:emit_x_multiplier, :emit_y_multiplier,
+                     :emit_z_offset,
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
+                     :emit_angle_offset,
                      :emit_opacity_multiplier,
                      :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
                      :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset],
     :straight    => [:emit_speed, :emit_speed_range,
                      :emit_direction, :emit_direction_range,
                      :emit_x_multiplier, :emit_y_multiplier,
+                     :emit_z_offset,
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
+                     :emit_angle_offset,
                      :emit_opacity_multiplier,
                      :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
                      :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset],
@@ -71,8 +77,10 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
                      :emit_direction, :emit_direction_range,
                      :emit_gravity, :emit_gravity_range,
                      :emit_x_multiplier, :emit_y_multiplier,
+                     :emit_z_offset,
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
+                     :emit_angle_offset,
                      :emit_opacity_multiplier,
                      :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
                      :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset],
@@ -80,8 +88,10 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
                      :emit_direction, :emit_direction_range,
                      :emit_deceleration, :emit_deceleration_range,
                      :emit_x_multiplier, :emit_y_multiplier,
+                     :emit_z_offset,
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
+                     :emit_angle_offset,
                      :emit_opacity_multiplier,
                      :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
                      :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset],
@@ -92,8 +102,10 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
                      :emit_period_z, :emit_period_z_range,
                      :emit_clockwise,
                      :emit_x_multiplier, :emit_y_multiplier,
+                     :emit_z_offset,
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
+                     :emit_angle_offset,
                      :emit_opacity_multiplier,
                      :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
                      :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset,
@@ -104,8 +116,10 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
                      :emit_period_y, :emit_period_y_range,
                      :emit_clockwise,
                      :emit_x_multiplier, :emit_y_multiplier,
+                     :emit_z_offset,
                      :emit_zoom_range, :emit_zoom_multiplier,
                      :emit_zoom_x_range, :emit_zoom_y_range,
+                     :emit_angle_offset,
                      :emit_opacity_multiplier,
                      :spawn_x_offset, :spawn_x_multiplier, :spawn_y_offset, :spawn_y_multiplier,
                      :spawn_r_offset, :spawn_r_multiplier, :spawn_theta_offset,
@@ -661,7 +675,8 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
     new_vals = AnimationEditor::ParticleDataHelper.get_all_keyframe_particle_values(@particle, @selected_keyframe)
     @rows.each_pair do |row, objs|
       next if !objs[LIST_CONTROL] || !row_is_property?(row)
-      if row == :z
+      case row
+      when :z, :emit_z_offset
         objs[LIST_CONTROL].min_value = AnimationEditor::PROPERTY_RANGES[:z][0]
         if GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(@particle[:focus])
           objs[LIST_CONTROL].min_value += GameData::Animation::USER_AND_TARGET_SEPARATION[2]

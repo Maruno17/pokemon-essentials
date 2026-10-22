@@ -272,6 +272,8 @@ module GameData
       "MoveEmitXMultiplier"       => [:emit_x_multiplier,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitYMultiplier"        => [:emit_y_multiplier,       "^uu"],
       "MoveEmitYMultiplier"       => [:emit_y_multiplier,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetEmitZOffset"            => [:emit_z_offset,           "^ui"],
+      "MoveEmitZOffset"           => [:emit_z_offset,           "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitZoomRange"          => [:emit_zoom_range,         "^uu"],
       "MoveEmitZoomRange"         => [:emit_zoom_range,         "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitZoomMultiplier"     => [:emit_zoom_multiplier,    "^uu"],
@@ -280,6 +282,8 @@ module GameData
       "MoveEmitZoomXRange"        => [:emit_zoom_x_range,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitZoomYRange"         => [:emit_zoom_y_range,       "^uu"],
       "MoveEmitZoomYRange"        => [:emit_zoom_y_range,       "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
+      "SetEmitAngleOffset"        => [:emit_angle_offset,       "^ui"],
+      "MoveEmitAngleOffset"       => [:emit_angle_offset,       "^uuiE", nil, nil, nil, INTERPOLATION_TYPES],
       "SetEmitOpacityMultiplier"  => [:emit_opacity_multiplier, "^uu"],
       "MoveEmitOpacityMultiplier" => [:emit_opacity_multiplier, "^uuuE", nil, nil, nil, INTERPOLATION_TYPES],
       # Extra particle properties for emitted particles. (Radii used by :helix/
@@ -412,10 +416,12 @@ module GameData
       # Property modifiers for emitted particles.
       :emit_x_multiplier       => 100,
       :emit_y_multiplier       => 100,
+      :emit_z_offset           => 0,
       :emit_zoom_range         => 0,
       :emit_zoom_multiplier    => 100,
       :emit_zoom_x_range       => 0,
       :emit_zoom_y_range       => 0,
+      :emit_angle_offset       => 0,
       :emit_opacity_multiplier => 100,
       # Extra particle properties for emitted particles. (Radii used by :helix/
       # :polar emitter types.)
@@ -513,10 +519,12 @@ module GameData
         # Property modifiers for emitted particles.
         :emit_x_multiplier       => _INTL("X ×%"),
         :emit_y_multiplier       => _INTL("Y ×%"),
+        :emit_z_offset           => _INTL("Priority +"),
         :emit_zoom_range         => _INTL("Zoom ±%"),
         :emit_zoom_multiplier    => _INTL("Zoom ×%"),
         :emit_zoom_x_range       => _INTL("Zoom X ±%"),
         :emit_zoom_y_range       => _INTL("Zoom Y ±%"),
+        :emit_angle_offset       => _INTL("Angle +"),
         :emit_opacity_multiplier => _INTL("Opacity ×%"),
         # Extra particle properties for emitted particles. (Radii used by :helix/
         # :polar emitter types.)
