@@ -24,15 +24,18 @@ class Battle::Scene
     :FAIRY    => [:TACKLE,       :FAIRYWIND,    :MOONLIGHT,   nil,         :DAZZLINGGLEAM, :SWEETKISS]
   }
   COMMON_ANIMATION_DEFAULTS = {
+    "Snowstorm"         => "Hail",
+    "HarshSun"          => "Sun",
+    "HeavyRain"         => "Rain",
     "CriticalHitRateUp" => "StatUp",
     "Toxic"             => "Poison",
     "SuperShiny"        => "Shiny",
-    "Bind"              => "Wrap",
-    "Clamp"             => "Wrap",
-    "FireSpin"          => "Wrap",
-    "Infestation"       => "Wrap",
+    "Clamp"             => "Bind",
+    "FireSpin"          => "Bind",
+    "Infestation"       => "Bind",
     "MagmaStorm"        => "FireSpin",
-    "SandTomb"          => "Wrap",
+    "SandTomb"          => "Bind",
+    "Wrap"              => "Bind",
     "EatBerry"          => "UseItem"
   }
 
