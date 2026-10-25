@@ -1195,8 +1195,8 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
     @sprites[:box].fade_all_pokemon
     using(cmd_window = Window_AdvancedCommandPokemon.new(commands)) do
       position_speech_box(text)
-      cmd_window.viewport = @viewport
-      cmd_window.z        = @sprites[:speech_box].z + 1
+      cmd_window.viewport = @side_pane_viewport
+      cmd_window.z        = 100
       pbBottomLeft(cmd_window)
       cmd_window.width    = @sprites[:side_pane].width
       cmd_window.height   = [cmd_window.height, Graphics.height].min
