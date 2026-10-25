@@ -1,0 +1,48 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,HealthUp]
+Name = Essentials
+NoTarget = true
+Credit = Maruno
+<User>
+    MaskGraphic = Masks/healing
+    SetMaskOpacity = 0,192
+    MoveMaskY = 0,22,-600
+    MoveMaskOpacity = 15,7,0
+<Sparkles emitter>
+    Focus = User
+    Graphic = shines
+    SecondLayer = true
+    InitialAngle = None
+    Emitter = Straight
+    EmitterRate = 20
+    SetZ = 0,10
+    SetZoomX = 0,50
+    SetZoomY = 0,50
+    SetVisible = 0,true
+    SetColor = 0,80C0F8FF
+    SetFrame = 0,1
+    SetZ2 = 0,1
+    SetZoomX2 = 0,60
+    SetZoomY2 = 0,60
+    SetEmitting = 0,true
+    SetSpawnXRange = 0,64
+    SetSpawnYRange = 0,48
+    SetEmitSpeed = 0,50
+    SetEmitDirection = 0,90
+    MoveZoomX = 0,6,90
+    MoveZoomY = 0,6,90
+    SetColor = 3,80C0F8FF
+    MoveColor = 3,1,80C0F800
+    SetOpacity = 6,255
+    SetColor = 6,80E08000
+    SetOpacity2 = 6,0
+    MoveColor = 6,1,80E080FF
+    MoveZoomX = 6,5,50
+    MoveZoomY = 6,5,50
+    MoveOpacity = 6,5,0
+    MoveOpacity2 = 6,5,-128
+    SetVisible = 11,false
+    SetEmitting = 13,false
+<SE>
+    Play = 0,Common/HealthUp,90

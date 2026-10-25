@@ -215,7 +215,7 @@ class UIControls::TextBoxDropdownList < UIControls::TextBox
     # Filter the dropdown menu options based on @value if it changes
     if @dropdown_menu && @initial_value && @value != @initial_value
       @dropdown_menu.options = @options.select do |key, val|
-        key.to_s.downcase.include?(@value.downcase) || val.downcase.include?(@value.downcase)
+        key.to_s.downcase.include?(@value.downcase) || val&.downcase&.include?(@value.downcase)
       end
     end
   end
