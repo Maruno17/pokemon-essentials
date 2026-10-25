@@ -1,0 +1,85 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Common,UseItemFromBag]
+Name = Essentials
+NoTarget = true
+Credit = Maruno
+<User>
+<Shrinking circle>
+    Focus = User
+    Graphic = circle 1
+    InitialAngle = None
+    SetY = 0,16
+    SetZ = 0,20
+    SetZoomX = 0,140
+    SetZoomY = 0,140
+    SetVisible = 0,true
+    MoveZoomX = 0,7,50
+    MoveZoomY = 0,7,50
+    SetColor = 3,60E0E000
+    MoveColor = 3,4,60E0E0FF
+    SetOpacity = 6,255
+    MoveOpacity = 6,1,0
+    SetVisible = 7,false
+<Glow>
+    Focus = User
+    Graphic = glow 1
+    InitialAngle = None
+    SetY = 6,16
+    SetZ = 6,30
+    SetZoomX = 6,120
+    SetZoomY = 6,120
+    SetVisible = 6,true
+    SetOpacity = 6,0
+    SetColor = 6,60E0E0FF
+    MoveOpacity = 6,1,224
+    MoveZoomX = 6,5,0
+    MoveZoomY = 6,5,0
+    MoveOpacity = 7,4,0
+    SetVisible = 11,false
+<Expanding circle 1>
+    Focus = User
+    Graphic = circle 1
+    InitialAngle = None
+    SetY = 0,16
+    SetZ = 0,10
+    SetZoomX = 0,140
+    SetZoomY = 0,140
+    SetVisible = 0,true
+    SetOpacity = 0,255
+    MoveZoomX = 0,7,200
+    MoveZoomY = 0,7,200
+    MoveOpacity = 0,7,0
+    SetVisible = 7,false
+<Expanding circle 2>
+    Focus = User
+    Graphic = circle 1
+    InitialAngle = None
+    SetY = 4,16
+    SetZ = 4,10
+    SetZoomX = 4,90
+    SetZoomY = 4,90
+    SetVisible = 4,true
+    SetOpacity = 4,255
+    SetColor = 4,60E0E040
+    MoveZoomX = 4,7,130
+    MoveZoomY = 4,7,130
+    MoveOpacity = 4,7,0
+    SetVisible = 11,false
+<Expanding circle 3>
+    Focus = User
+    Graphic = circle 1
+    InitialAngle = None
+    SetY = 8,16
+    SetZ = 8,10
+    SetZoomX = 8,40
+    SetZoomY = 8,40
+    SetVisible = 8,true
+    SetOpacity = 8,255
+    SetColor = 8,60E0E0FF
+    MoveZoomX = 8,7,60
+    MoveZoomY = 8,7,60
+    MoveOpacity = 8,7,0
+    SetVisible = 15,false
+<SE>
+    Play = 0,Common/UseItemFromBag,80

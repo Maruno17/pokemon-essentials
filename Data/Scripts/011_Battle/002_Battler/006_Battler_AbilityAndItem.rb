@@ -502,7 +502,7 @@ class Battle::Battler
     end
     @battle.pbCommonAnimation("EatBerry", self) if !forced
     @battle.pbHideAbilitySplash(self) if ripening
-    amt = pbRecoverHP(amt)
+    amt = pbRecoverHP(amt, false)
     if amt > 0
       if forced
         PBDebug.log("[Item triggered] Forced consuming of #{used_item_name}")

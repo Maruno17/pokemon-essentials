@@ -844,7 +844,7 @@ class Battle::Battler
     if user.effects[PBEffects::GemConsumed] && hitNum == 0
       # NOTE: The consume animation and message for Gems are shown now, but the
       #       actual removal of the item happens in def pbEffectsAfterMove.
-      @battle.pbCommonAnimation("UseItem", user)
+      @battle.pbCommonAnimation("HeldItem", user)
       @battle.pbDisplay(_INTL("The {1} strengthened {2}'s power!",
                               GameData::Item.get(user.effects[PBEffects::GemConsumed]).name, move.name))
     end

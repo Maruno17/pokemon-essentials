@@ -104,6 +104,7 @@ class Battle
     battler = pbFindBattler(idxParty, userBattler.index)
     ch = @choices[userBattler.index]
     if ItemHandlers.triggerCanUseInBattle(item, pkmn, battler, ch[3], true, self, @scene, false)
+      pbCommonAnimation("UseItemFromBag", battler) if battler
       ItemHandlers.triggerBattleUseOnPokemon(item, pkmn, battler, ch, @scene)
       ch[1] = nil   # Delete item from choice
       return
@@ -121,6 +122,7 @@ class Battle
     ch = @choices[userBattler.index]
     if battler
       if ItemHandlers.triggerCanUseInBattle(item, battler.pokemon, battler, ch[3], true, self, @scene, false)
+        pbCommonAnimation("UseItemFromBag", battler)
         ItemHandlers.triggerBattleUseOnBattler(item, battler, @scene)
         ch[1] = nil   # Delete item from choice
         battler.pbItemStatRestoreCheck   # White Herb

@@ -380,11 +380,11 @@ class Battle::Move
       end
       @battle.pbHideAbilitySplash(target)
     elsif target.damageState.focusSash
-      @battle.pbCommonAnimation("UseItem", target)
+      @battle.pbCommonAnimation("HeldItem", target)
       @battle.pbDisplay(_INTL("{1} hung on using its Focus Sash!", target.pbThis))
       target.pbConsumeItem
     elsif target.damageState.focusBand
-      @battle.pbCommonAnimation("UseItem", target)
+      @battle.pbCommonAnimation("HeldItem", target)
       @battle.pbDisplay(_INTL("{1} hung on using its Focus Band!", target.pbThis))
     elsif target.damageState.affection_endured
       @battle.pbDisplay(_INTL("{1} toughed it out so you wouldn't feel sad!", target.pbThis))

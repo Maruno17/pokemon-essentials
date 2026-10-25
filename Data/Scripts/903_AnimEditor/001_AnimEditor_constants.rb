@@ -128,7 +128,7 @@ class AnimationEditor
     # EOR trapping
     "Bind", "Clamp", "FireSpin", "Infestation", "MagmaStorm", "SandTomb", "Wrap",
     # Items
-    "EatBerry", "UseItem",
+    "EatBerry", "HeldItem", "UseItemFromBag",
     # Misc.
     "Commander",
     "LevelUp",

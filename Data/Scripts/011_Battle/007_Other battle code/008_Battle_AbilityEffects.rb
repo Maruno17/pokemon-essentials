@@ -3808,7 +3808,7 @@ Battle::AbilityEffects::OnWeatherChange.add(:PROTOSYNTHESIS,
         triggered = true
       elsif battler.hasActiveItem?(:BOOSTERENERGY)
         triggered = true
-        battle.pbCommonAnimation("UseItem", battler)
+        battle.pbCommonAnimation("HeldItem", battler)
         consume_item = true
       end
     end
@@ -3882,7 +3882,7 @@ Battle::AbilityEffects::OnTerrainChange.add(:QUARKDRIVE,
         triggered = true
       elsif battler.hasActiveItem?(:BOOSTERENERGY)
         triggered = true
-        battle.pbCommonAnimation("UseItem", battler)
+        battle.pbCommonAnimation("HeldItem", battler)
         consume_item = true
       end
     end

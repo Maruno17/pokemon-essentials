@@ -348,7 +348,7 @@ class Battle::Move::TwoTurnMove < Battle::Move
     targets.each { |b| pbChargingTurnEffect(user, b) }
     if @powerHerb
       # Moves that would make the user semi-invulnerable will hide the user
-      # after the charging animation, so the "UseItem" animation shouldn't show
+      # after the charging animation, so the "HeldItem" animation shouldn't show
       # for it
       if !["TwoTurnAttackInvulnerableInSky",
            "TwoTurnAttackInvulnerableUnderground",
@@ -356,7 +356,7 @@ class Battle::Move::TwoTurnMove < Battle::Move
            "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
            "TwoTurnAttackInvulnerableRemoveProtections",
            "TwoTurnAttackInvulnerableInSkyTargetCannotAct"].include?(@function_code)
-        @battle.pbCommonAnimation("UseItem", user)
+        @battle.pbCommonAnimation("HeldItem", user)
       end
       @battle.pbDisplay(_INTL("{1} became fully charged due to its Power Herb!", user.pbThis))
       user.pbConsumeItem

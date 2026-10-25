@@ -36,7 +36,7 @@ class Battle::Scene
     "MagmaStorm"        => "FireSpin",
     "SandTomb"          => "Bind",
     "Wrap"              => "Bind",
-    "EatBerry"          => "UseItem"
+    "EatBerry"          => "HeldItem"
   }
 
   # Animates the battle intro.
