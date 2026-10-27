@@ -21,13 +21,13 @@ Credit = Maruno
     SetZoomX = 0,5
     SetZoomY = 0,150
     SetAngle = 0,10
+    SetVisible = 7,false
+    SetEmitting = 0,true
+    SetEmitting = 28,false
     SetEmitterX = 0,224
     SetEmitterY = 0,-80
-    SetEmitting = 0,true
     SetSpawnXRange = 0,256
     SetEmitSpeed = 0,1200
     SetEmitDirection = 0,-80
-    SetVisible = 7,false
-    SetEmitting = 28,false
 <SE>
     Play = 0,Water/Rain Dance,80
