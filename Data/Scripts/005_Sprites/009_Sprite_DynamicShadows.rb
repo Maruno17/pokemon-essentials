@@ -135,7 +135,7 @@ class Sprite_Character < RPG::Sprite
       params = XPML_read(map, "Shadow", @character, 4)
       if params
         shadows.each do |shadow|
-          @ombrelist.push(Sprite_Shadow.new(viewport, @character, shadows))
+          @ombrelist.push(Sprite_Shadow.new(viewport, @character, shadow))
         end
       end
     end
