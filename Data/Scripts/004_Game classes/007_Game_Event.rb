@@ -8,12 +8,14 @@ class Game_Event < Game_Character
   attr_reader   :starting
   attr_reader   :tempSwitches   # Temporary self-switches
   attr_accessor :need_refresh
+  attr_accessor :active
 
   def initialize(map_id, event, map = nil)
     super(map)
     @map_id       = map_id
     @event        = event
     @id           = @event.id
+    @always_update = (@event.name[/update/i] != nil)
     @original_x   = @event.x
     @original_y   = @event.y
     if @event.name[/size\((\d+),(\d+)\)/i]
@@ -26,6 +28,7 @@ class Game_Event < Game_Character
     @route_erased = false
     @through      = true
     @to_update    = true
+    @active       = false
     @tempSwitches = {}
     moveto(@event.x, @event.y) if map
     refresh
@@ -271,6 +274,24 @@ class Game_Event < Game_Character
     @interpreter          = nil
     @interpreter          = Interpreter.new if @trigger == 4   # Parallel Process
     check_event_trigger_auto
+  ensure
+    if self.map
+      if should_update?(true)
+        self.map.register_event(self)
+      else
+        self.map.unregister_event(self)
+      end
+    end
+  end
+
+  def force_move_route(move_route)
+    super
+    self.map.register_event(self) if self.map
+  end
+
+  def moveto(x, y)
+    super
+    self.map.register_event(self) if self.map && !@active
   end
 
   def should_update?(recalc = false)
@@ -278,19 +299,28 @@ class Game_Event < Game_Character
     return true if @updated_last_frame
     return true if @trigger && (@trigger == 3 || @trigger == 4)
     return true if @move_route_forcing || @moveto_happened
-    return true if @event.name[/update/i]
+    return true if @always_update
+    map = self.map
+    return true if !map
     range = 2   # Number of tiles
-    return false if self.screen_x - (@sprite_size[0] / 2) > Graphics.width + (range * Game_Map::TILE_WIDTH)
-    return false if self.screen_x + (@sprite_size[0] / 2) < -range * Game_Map::TILE_WIDTH
-    return false if self.screen_y_ground - @sprite_size[1] > Graphics.height + (range * Game_Map::TILE_HEIGHT)
-    return false if self.screen_y_ground < -range * Game_Map::TILE_HEIGHT
+    event_x = @real_x / Game_Map::REAL_RES_X
+    event_y = @real_y / Game_Map::REAL_RES_Y
+    sprite_w_tiles = @sprite_size[0] / Game_Map::TILE_WIDTH
+    sprite_h_tiles = @sprite_size[1] / Game_Map::TILE_HEIGHT
+    return false if event_x - (sprite_w_tiles / 2) > map.display_x_tiles + map.screen_width_tiles + range
+    return false if event_x + (sprite_w_tiles / 2) < map.display_x_tiles - range
+    return false if event_y - sprite_h_tiles + 1 > map.display_y_tiles + map.screen_height_tiles + range
+    return false if event_y + 1 < map.display_y_tiles - range
     return true
   end
 
   def update
     @to_update = should_update?(true)
     @updated_last_frame = false
-    return if !@to_update
+    if !@to_update
+      self.map.unregister_event(self) if self.map
+      return
+    end
     @updated_last_frame = true
     @moveto_happened = false
     last_moving = moving?
