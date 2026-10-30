@@ -416,7 +416,7 @@ Battle::AbilityEffects::WeightCalc.add(:LIGHTMETAL,
 Battle::AbilityEffects::Trace.add(:TRACE,
   proc { |ability, battler, battle, switch_in|
     next if Settings::MECHANICS_GENERATION <= 5
-    Battle::AbilityEffects.triggerTrace(battler.ability, battler, battle, switch_in)
+    Battle::AbilityEffects.triggerOnSwitchIn(battler.ability, battler, battle, switch_in)
   }
 )
 
