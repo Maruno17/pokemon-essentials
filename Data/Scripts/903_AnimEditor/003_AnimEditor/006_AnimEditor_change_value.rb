@@ -426,6 +426,9 @@ class AnimationEditor
       texts.select! { |txt| txt && txt != "" }
       @anim[property] = texts
       @components[:animation_properties].get_control(:scripts).value = texts.join(",")
+    when :fps
+      @anim[property] = value
+      @components[:play_controls].duration = @components[:timeline].duration
     else
       @anim[property] = value
     end

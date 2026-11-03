@@ -27,6 +27,8 @@ class AnimationEditor
     @anim = Marshal.load(Marshal.dump(@undo_history.last))
     @components[:canvas].anim = @anim
     @components[:timeline].set_particles(@anim[:particles])
+    @components[:play_controls].anim = @anim
+    @components[:play_controls].duration = @components[:timeline].duration
     refresh
   end
 

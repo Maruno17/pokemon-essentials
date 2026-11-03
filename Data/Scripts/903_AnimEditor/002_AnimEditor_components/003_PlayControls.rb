@@ -3,6 +3,7 @@
 #===============================================================================
 class AnimationEditor::PlayControls < UIControls::BaseContainer
   attr_reader :slowdown, :looping
+  attr_writer :anim
 
   SLOWDOWN_FACTORS     = [1, 2, 4, 6, 8]
 

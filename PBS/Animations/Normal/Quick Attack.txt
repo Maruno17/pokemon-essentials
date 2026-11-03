@@ -1,0 +1,113 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,QUICKATTACK]
+Name = Essentials
+FPS = 30
+Credit = Maruno
+<User>
+    FoeInvertX = true
+    SetX = 0,0
+    SetY = 0,0
+    SetZ = 0,0
+    MoveX = 0,2,64,EaseBoth
+    MoveY = 0,4,32,EaseBoth
+    MoveZ = 0,4,20,EaseBoth
+    MoveX = 2,4,-64,EaseBoth
+    MoveY = 4,4,0,EaseBoth
+    MoveZ = 4,4,0,EaseBoth
+    MoveX = 6,2,0,EaseBoth
+<Target>
+    FoeInvertX = true
+    SetX = 14,0
+    MoveX = 14,1,-4
+    MoveX = 15,2,4
+    MoveX = 17,1,0
+<User afterimage 1>
+    Focus = User
+    Graphic = USER
+    FoeInvertX = true
+    SetX = 3,0
+    SetY = 3,0
+    SetZ = 3,0
+    SetOpacity = 3,208
+    SetColor = 3,F8F8F830
+    MoveX = 3,2,64,EaseBoth
+    MoveY = 3,4,32,EaseBoth
+    MoveZ = 3,4,20,EaseBoth
+    MoveX = 5,4,-64,EaseBoth
+    MoveY = 7,4,0,EaseBoth
+    MoveZ = 7,4,0,EaseBoth
+    MoveX = 9,2,0,EaseBoth
+    SetVisible = 12,false
+<User afterimage 2>
+    Focus = User
+    Graphic = USER
+    FoeInvertX = true
+    SetX = 5,0
+    SetY = 5,0
+    SetZ = 5,0
+    SetOpacity = 5,208
+    SetColor = 5,F8F8F830
+    MoveX = 5,2,64,EaseBoth
+    MoveY = 5,4,32,EaseBoth
+    MoveZ = 5,4,20,EaseBoth
+    MoveX = 7,4,-64,EaseBoth
+    MoveY = 9,4,0,EaseBoth
+    MoveZ = 9,4,0,EaseBoth
+    MoveX = 11,2,0,EaseBoth
+    SetVisible = 14,false
+<Hit>
+    Focus = Target
+    Graphic = hit
+    SecondLayer = true
+    InitialAngle = None
+    RandomAngleRange = 180
+    SetY = 14,8
+    SetZ = 14,20
+    SetZoomX = 14,50
+    SetZoomY = 14,50
+    SetVisible = 14,true
+    MoveZoomX = 14,6,140
+    MoveZoomY = 14,6,140
+    SetColor = 15,F8F800FF
+    SetOpacity = 18,255
+    MoveOpacity = 18,2,0
+    SetZ2 = 14,1
+    SetZoomX2 = 14,70
+    SetZoomY2 = 14,70
+<Spark emitter>
+    Focus = Target
+    Graphic = hit
+    InitialAngle = None
+    RandomAngleRange = 180
+    Emitter = Projectile
+    EmitterRate = 30
+    EmitterIntensity = 5
+    SetZ = 14,10
+    SetZoomX = 14,50
+    SetZoomY = 14,50
+    SetVisible = 14,true
+    SetOpacity = 14,128
+    MoveOpacity = 14,2,224
+    SetZoomX = 19,50
+    SetZoomY = 19,50
+    SetColor = 19,F8F80000
+    MoveColor = 19,5,F8A000A0
+    MoveZoomX = 19,12,10,EaseIn
+    MoveZoomY = 19,12,10,EaseIn
+    MoveColor = 24,7,E04000A0
+    SetOpacity = 25,224
+    MoveOpacity = 25,6,0
+    SetVisible = 31,false
+    SetEmitting = 14,true
+    SetEmitting = 16,false
+    SetEmitterY = 14,8
+    SetEmitSpeed = 14,400
+    SetEmitSpeedRange = 14,100
+    SetEmitDirection = 14,90
+    SetEmitDirectionRange = 14,70
+    SetEmitGravity = 14,500
+    SetEmitZoomRange = 14,20
+<SE>
+    Play = 0,Normal/Quick Attack 1,90
+    Play = 14,Normal/Quick Attack 2,90
