@@ -196,18 +196,17 @@ class UIControls::TextBox < UIControls::BaseControl
     # Draw cursor at end
     draw_cursor(char_x - 1) if @cursor_pos == @value.to_s.length
     # Draw left/right arrows to indicate more text beyond the text box sides
-    # TODO: The tips of these get cut off now that TEXT_BOX_X is 0.
     arrow_color = (disabled?) ? get_color_of(:disabled_text) : get_color_of(:text)
     if @display_pos > 0
-      bitmap.fill_rect(@text_box_rect.x, (height / 2) - 4, 1, 8, get_color_of(:background))
-      5.times do |i|
-        bitmap.fill_rect(@text_box_rect.x - 2 + i, (height / 2) - (i + 1), 1, 2 * (i + 1), arrow_color)
+      bitmap.fill_rect(@text_box_rect.x, (height / 2) - 2, 1, 4, get_color_of(:background))
+      3.times do |i|
+        bitmap.fill_rect(@text_box_rect.x + i, (height / 2) - (i + 1), 1, 2 * (i + 1), arrow_color)
       end
     end
     if last_char_index < @value.to_s.length - 1
-      bitmap.fill_rect(@text_box_rect.x + @text_box_rect.width - 1, (height / 2) - 4, 1, 8, get_color_of(:background))
-      5.times do |i|
-        bitmap.fill_rect(@text_box_rect.x + @text_box_rect.width + 1 - i, (height / 2) - (i + 1), 1, 2 * (i + 1), arrow_color)
+      bitmap.fill_rect(@text_box_rect.x + @text_box_rect.width - 1, (height / 2) - 2, 1, 4, get_color_of(:background))
+      3.times do |i|
+        bitmap.fill_rect(@text_box_rect.x + @text_box_rect.width - i - 1, (height / 2) - (i + 1), 1, 2 * (i + 1), arrow_color)
       end
     end
   end

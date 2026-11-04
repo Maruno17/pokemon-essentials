@@ -1258,7 +1258,8 @@ Battle::AbilityEffects::MoveImmunity.add(:WINDRIDER,
 Battle::AbilityEffects::MoveImmunity.add(:WONDERGUARD,
   proc { |ability, user, target, move, type, battle, show_message|
     next false if move.statusMove?
-    next false if !type || Effectiveness.super_effective?(target.damageState.typeMod)
+    next false if move.id == battle.struggle.id
+    next false if type && Effectiveness.super_effective?(target.damageState.typeMod)
     if show_message
       battle.pbShowAbilitySplash(target)
       if Battle::Scene::USE_ABILITY_SPLASH

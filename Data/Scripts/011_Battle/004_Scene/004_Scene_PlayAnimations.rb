@@ -446,7 +446,7 @@ class Battle::Scene
     anims = find_move_animation_for_move(move_id, version, user_index)
     return anims if anims
     # Get information to decide which default animation to try
-    if move_id == :STRUGGLE && !GameData::Move.exists?(move_id)
+    if move_id == @battle.struggle.id && !GameData::Move.exists?(move_id)
       target_data = GameData::Target.get(@battle.struggle.target)
       move_type = @battle.struggle.type
       default_idx = @battle.struggle.category

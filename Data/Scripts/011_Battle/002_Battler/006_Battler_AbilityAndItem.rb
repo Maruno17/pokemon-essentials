@@ -375,10 +375,10 @@ class Battle::Battler
     pbItemStatusCureCheck(item_to_use, fling)
     pbItemEndOfMoveCheck(item_to_use, fling)
     # For Enigma Berry, Kee Berry and Maranga Berry, which have their effects
-    # when forcibly consumed by Pluck/Fling.
+    # when forcibly consumed by Pluck/Fling
     if item_to_use
       itm = item_to_use || self.item
-      if Battle::ItemEffects.triggerOnBeingHitPositiveBerry(itm, self, @battle, true)
+      if Battle::ItemEffects.triggerForcedRestoreBerry(itm, self, @battle, true)
         pbHeldItemTriggered(itm, false, fling)
       end
     end

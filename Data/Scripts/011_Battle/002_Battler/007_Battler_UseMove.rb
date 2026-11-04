@@ -745,8 +745,10 @@ class Battle::Battler
         next if b.damageState.unaffected
         move.pbEndureKOMessage(b)
       end
+      # Knock Off
+      move.pbKnockOffItem(user, targets)
       # HP-healing held items
-      pbProcessMoveHit_TriggerHealingUponDealingDamage(move, user, targets)
+      pbProcessMoveHit_TriggerRestoringUponDealingDamage(move, user, targets)
       # Animate battlers fainting (checks all battlers rather than just targets
       # because Flame Burst's splash damage affects non-targets)
       @battle.pbPriority(true).each { |b| pbProcessMoveHit_CheckIfBattlerFaintedFromHit(move, user, b) }
@@ -881,13 +883,17 @@ class Battle::Battler
     end
   end
 
-  def pbProcessMoveHit_TriggerHealingUponDealingDamage(move, user, targets)
+  def pbProcessMoveHit_TriggerRestoringUponDealingDamage(move, user, targets)
     # HP-healing held items
     # NOTE: This checks all battlers rather than just targets because Flame
     #       Burst's splash damage affects non-targets.
     @battle.pbPriority(true).each do |b|
       next if move.preventsBattlerConsumingHealingBerry?(b, targets)
       b.pbItemHPHealCheck
+      # Kee/Maranga/Enigma Berry (trigger after Knock Off removes the held item)
+      if b.itemActive?(true)
+        Battle::ItemEffects.triggerRestoreOnBeingHit(b.item, user, b, move, @battle)
+      end
     end
   end
 

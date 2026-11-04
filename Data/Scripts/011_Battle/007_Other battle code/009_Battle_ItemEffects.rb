@@ -28,7 +28,8 @@ module Battle::ItemEffects
   CriticalCalcFromTarget          = ItemHandlerHash.new   # None!
   # Upon a move hitting a target
   OnBeingHit                      = ItemHandlerHash.new
-  OnBeingHitPositiveBerry         = ItemHandlerHash.new
+  RestoreOnBeingHit               = ItemHandlerHash.new
+  ForcedRestoreBerry              = ItemHandlerHash.new   # Called by RestoreOnBeing Hit
   # Items that trigger at the end of using a move
   AfterMoveUseFromTarget          = ItemHandlerHash.new
   AfterMoveUseFromUser            = ItemHandlerHash.new
@@ -152,8 +153,12 @@ module Battle::ItemEffects
     OnBeingHit.trigger(item, user, target, move, battle)
   end
 
-  def self.triggerOnBeingHitPositiveBerry(item, battler, battle, forced)
-    return trigger(OnBeingHitPositiveBerry, item, battler, battle, forced)
+  def self.triggerRestoreOnBeingHit(item, user, target, move, battle)
+    RestoreOnBeingHit.trigger(item, user, target, move, battle)
+  end
+
+  def self.triggerForcedRestoreBerry(item, battler, battle, forced)
+    return trigger(ForcedRestoreBerry, item, battler, battle, forced)
   end
 
   #-----------------------------------------------------------------------------
@@ -1417,18 +1422,6 @@ Battle::ItemEffects::OnBeingHit.add(:CELLBATTERY,
   }
 )
 
-Battle::ItemEffects::OnBeingHit.add(:ENIGMABERRY,
-  proc { |item, user, target, move, battle|
-    next if target.damageState.substitute ||
-            target.damageState.disguise || target.damageState.iceFace
-    next if !Effectiveness.super_effective?(target.damageState.typeMod)
-    if Battle::ItemEffects.triggerOnBeingHitPositiveBerry(item, target, battle, false)
-      battle.pbDisplay(_INTL("The {1} was used up...", target.itemName))
-      target.pbHeldItemTriggered(item)
-    end
-  }
-)
-
 Battle::ItemEffects::OnBeingHit.add(:JABOCABERRY,
   proc { |item, user, target, move, battle|
     next if !target.canConsumeBerry?
@@ -1451,21 +1444,6 @@ Battle::ItemEffects::OnBeingHit.add(:JABOCABERRY,
   }
 )
 
-# NOTE: Kee Berry supposedly shouldn't trigger if the user has Sheer Force, but
-#       I'm ignoring this. Weakness Policy has the same kind of effect and
-#       nowhere says it should be stopped by Sheer Force. I suspect this
-#       stoppage is either a false report that no one ever corrected, or an
-#       effect that later changed and wasn't noticed.
-Battle::ItemEffects::OnBeingHit.add(:KEEBERRY,
-  proc { |item, user, target, move, battle|
-    next if !move.physicalMove?
-    if Battle::ItemEffects.triggerOnBeingHitPositiveBerry(item, target, battle, false)
-      battle.pbDisplay(_INTL("The {1} was used up...", target.itemName))
-      target.pbHeldItemTriggered(item)
-    end
-  }
-)
-
 Battle::ItemEffects::OnBeingHit.add(:LUMINOUSMOSS,
   proc { |item, user, target, move, battle|
     next if move.calcType != :WATER
@@ -1474,21 +1452,6 @@ Battle::ItemEffects::OnBeingHit.add(:LUMINOUSMOSS,
     target.pbRaiseStatStageByCause(:SPECIAL_DEFENSE, 1, target, target.itemName)
     battle.pbDisplay(_INTL("The {1} was used up...", target.itemName))
     target.pbHeldItemTriggered(item)
-  }
-)
-
-# NOTE: Maranga Berry supposedly shouldn't trigger if the user has Sheer Force,
-#       but I'm ignoring this. Weakness Policy has the same kind of effect and
-#       nowhere says it should be stopped by Sheer Force. I suspect this
-#       stoppage is either a false report that no one ever corrected, or an
-#       effect that later changed and wasn't noticed.
-Battle::ItemEffects::OnBeingHit.add(:MARANGABERRY,
-  proc { |item, user, target, move, battle|
-    next if !move.specialMove?
-    if Battle::ItemEffects.triggerOnBeingHitPositiveBerry(item, target, battle, false)
-      battle.pbDisplay(_INTL("The {1} was used up...", target.itemName))
-      target.pbHeldItemTriggered(item)
-    end
   }
 )
 
@@ -1568,12 +1531,59 @@ Battle::ItemEffects::OnBeingHit.add(:WEAKNESSPOLICY,
 )
 
 #===============================================================================
-# OnBeingHitPositiveBerry handlers
+# RestoreOnBeingHit handlers
+#===============================================================================
+Battle::ItemEffects::RestoreOnBeingHit.add(:ENIGMABERRY,
+  proc { |item, user, target, move, battle|
+    next if target.damageState.substitute ||
+            target.damageState.disguise || target.damageState.iceFace
+    next if !Effectiveness.super_effective?(target.damageState.typeMod)
+    if Battle::ItemEffects.triggerForcedRestoreBerry(item, target, battle, false)
+      battle.pbDisplay(_INTL("The {1} was used up...", target.itemName))
+      target.pbHeldItemTriggered(item)
+    end
+  }
+)
+
+# NOTE: Kee Berry supposedly shouldn't trigger if the user has Sheer Force, but
+#       I'm ignoring this. Weakness Policy has the same kind of effect and
+#       nowhere says it should be stopped by Sheer Force. I suspect this
+#       stoppage is either a false report that no one ever corrected, or an
+#       effect that later changed and wasn't noticed.
+Battle::ItemEffects::RestoreOnBeingHit.add(:KEEBERRY,
+  proc { |item, user, target, move, battle|
+    next if !move.physicalMove?
+    if Battle::ItemEffects.triggerForcedRestoreBerry(item, target, battle, false)
+      battle.pbDisplay(_INTL("The {1} was used up...", target.itemName))
+      target.pbHeldItemTriggered(item)
+    end
+  }
+)
+
+# NOTE: Maranga Berry supposedly shouldn't trigger if the user has Sheer Force,
+#       but I'm ignoring this. Weakness Policy has the same kind of effect and
+#       nowhere says it should be stopped by Sheer Force. I suspect this
+#       stoppage is either a false report that no one ever corrected, or an
+#       effect that later changed and wasn't noticed.
+Battle::ItemEffects::RestoreOnBeingHit.add(:MARANGABERRY,
+  proc { |item, user, target, move, battle|
+    next if !move.specialMove?
+    if Battle::ItemEffects.triggerForcedRestoreBerry(item, target, battle, false)
+      battle.pbDisplay(_INTL("The {1} was used up...", target.itemName))
+      target.pbHeldItemTriggered(item)
+    end
+  }
+)
+
+#===============================================================================
+# ForcedRestoreBerry handlers
 # NOTE: This is for berries that have an effect when Pluck/Bug Bite/Fling
-#       forces their use.
+#       forces their use. They're separate from the RestoreOnBeingHit handlers
+#       because, when forced to be consumed, there will be no move and no move
+#       user so it makes the arguments a bit more convenient.
 #===============================================================================
 
-Battle::ItemEffects::OnBeingHitPositiveBerry.add(:ENIGMABERRY,
+Battle::ItemEffects::ForcedRestoreBerry.add(:ENIGMABERRY,
   proc { |item, battler, battle, forced|
     next false if !battler.canHeal?
     next false if !forced && !battler.canConsumeBerry?
@@ -1602,7 +1612,7 @@ Battle::ItemEffects::OnBeingHitPositiveBerry.add(:ENIGMABERRY,
   }
 )
 
-Battle::ItemEffects::OnBeingHitPositiveBerry.add(:KEEBERRY,
+Battle::ItemEffects::ForcedRestoreBerry.add(:KEEBERRY,
   proc { |item, battler, battle, forced|
     next false if !forced && !battler.canConsumeBerry?
     next false if !battler.pbCanRaiseStatStage?(:DEFENSE, battler)
@@ -1622,7 +1632,7 @@ Battle::ItemEffects::OnBeingHitPositiveBerry.add(:KEEBERRY,
   }
 )
 
-Battle::ItemEffects::OnBeingHitPositiveBerry.add(:MARANGABERRY,
+Battle::ItemEffects::ForcedRestoreBerry.add(:MARANGABERRY,
   proc { |item, battler, battle, forced|
     next false if !forced && !battler.canConsumeBerry?
     next false if !battler.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, battler)

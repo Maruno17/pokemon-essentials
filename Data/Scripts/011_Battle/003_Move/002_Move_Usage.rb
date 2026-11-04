@@ -87,6 +87,7 @@ class Battle::Move
   def pbEffectAgainstTarget(user, target); end
   def pbEffectGeneral(user); end
   def pbAdditionalEffect(user, target); end
+  def pbKnockOffItem(user, targets); end   # For Knock Off
   def pbEffectAfterAllHits(user, target); end   # Move effects that occur after all hits
   def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers); end
   def pbEndOfMoveUsageEffect(user, targets, numHits, switchedBattlers); end

@@ -157,16 +157,18 @@ class Battle::Move::RemoveTargetItem < Battle::Move
     return base_power
   end
 
-  def pbEffectAfterAllHits(user, target)
+  def pbKnockOffItem(user, targets)
     return if user.wild?   # Wild Pokémon can't knock off
     return if user.fainted?
-    return if target.damageState.unaffected || target.damageState.substitute
-    return if !target.item || target.unlosableItem?(target.item)
-    return if target.hasActiveAbility?(:STICKYHOLD) && !target.beingMoldBroken?
-    itemName = target.itemName
-    target.pbRemoveItem
-    target.knockOffItem
-    @battle.pbDisplay(_INTL("{1} dropped its {2}!", target.pbThis, itemName))
+    targets.each do |target|
+      next if target.damageState.unaffected || target.damageState.substitute
+      next if !target.item || target.unlosableItem?(target.item)
+      next if target.hasActiveAbility?(:STICKYHOLD) && !target.beingMoldBroken?
+      itemName = target.itemName
+      target.pbRemoveItem
+      target.knockOffItem
+      @battle.pbDisplay(_INTL("{1} dropped its {2}!", target.pbThis, itemName))
+    end
   end
 end
 
