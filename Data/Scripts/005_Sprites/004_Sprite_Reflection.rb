@@ -43,6 +43,7 @@ class Sprite_Reflection
   def update
     return if disposed?
     shouldShow = @parent_sprite.visible
+    shouldShow = false if GameData::MapMetadata.try_get(event.map_id)&.no_reflections
     if !shouldShow
       # Just-in-time disposal of sprite
       if @sprite

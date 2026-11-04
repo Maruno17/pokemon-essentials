@@ -386,7 +386,7 @@ class UI::OptionsVisualsList < Window_DrawableCommand
       spacing = option_width / 2
       @values[this_index].each_with_index do |value, i|
         if value
-          text = Input.input_name(value, (i == 0) ? :keyboard : :gamepad)
+          text = Input.key_name(value, (i == 0) ? :keyboard : :gamepad)
           text_colors = [self.baseColor, self.shadowColor]
         else
           text = "---"

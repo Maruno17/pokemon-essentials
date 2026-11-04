@@ -170,18 +170,18 @@ module Input
     return (ret[0].empty? && ret[1].empty?) ? nil : ret
   end
 
-  def self.input_name(input, type = :keyboard)
+  def self.key_name(key, type = :keyboard)
     case type
     when :keyboard
-      return _INTL(REMAP_KEYBOARD_KEYS[input]) if REMAP_KEYBOARD_KEYS[input]
+      return _INTL(REMAP_KEYBOARD_KEYS[key]) if REMAP_KEYBOARD_KEYS[key]
     when :gamepad
-      if AXIS_HASH.key?(input)
-        return _INTL(REMAP_GAMEPAD_AXIS[input]) if REMAP_GAMEPAD_AXIS[input]
+      if AXIS_HASH.key?(key)
+        return _INTL(REMAP_GAMEPAD_AXIS[key]) if REMAP_GAMEPAD_AXIS[key]
       else
-        return _INTL(REMAP_GAMEPAD_BUTTONS[input]) if REMAP_GAMEPAD_BUTTONS[input]
+        return _INTL(REMAP_GAMEPAD_BUTTONS[key]) if REMAP_GAMEPAD_BUTTONS[key]
       end
     end
-    return input.to_s
+    return key.to_s
   end
 
   if !defined? __orig_press?

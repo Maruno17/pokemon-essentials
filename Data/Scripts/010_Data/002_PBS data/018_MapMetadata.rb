@@ -13,6 +13,7 @@ module GameData
     attr_reader :can_bicycle
     attr_reader :always_bicycle
     attr_reader :weather
+    attr_reader :no_reflections
     attr_reader :still_reflections
     attr_reader :dive_map_id
     attr_reader :teleport_destination
@@ -44,6 +45,7 @@ module GameData
       "Bicycle"           => [:can_bicycle,          "b"],
       "BicycleAlways"     => [:always_bicycle,       "b"],
       "Weather"           => [:weather,              "eu", :Weather],
+      "NoReflections"     => [:no_reflections,       "b"],
       "StillReflections"  => [:still_reflections,    "b"],
       "DiveMap"           => [:dive_map_id,          "v"],
       "HealingSpot"       => [:teleport_destination, "vuu"],
@@ -76,6 +78,7 @@ module GameData
         ["Bicycle",           BooleanProperty,         _INTL("If true, the bicycle can be used on this map.")],
         ["BicycleAlways",     BooleanProperty,         _INTL("If true, the bicycle will be mounted automatically on this map and cannot be dismounted.")],
         ["Weather",           WeatherEffectProperty,   _INTL("Weather conditions in effect for this map.")],
+        ["NoReflections",     BooleanProperty,         _INTL("If true, reflections of events and the player will not be shown.")],
         ["StillReflections",  BooleanProperty,         _INTL("If true, reflections of events and the player will not ripple horizontally.")],
         ["DiveMap",           MapProperty,             _INTL("Specifies the underwater layer of this map. Use only if this map has deep water.")],
         ["HealingSpot",       MapCoordsProperty,       _INTL("Map ID of this Pokémon Center's town, and X and Y coordinates of its entrance within that town.")],
@@ -107,6 +110,7 @@ module GameData
       @can_bicycle          = hash[:can_bicycle]
       @always_bicycle       = hash[:always_bicycle]
       @weather              = hash[:weather]
+      @no_reflections       = hash[:no_reflections]
       @still_reflections    = hash[:still_reflections]
       @dive_map_id          = hash[:dive_map_id]
       @teleport_destination = hash[:teleport_destination]

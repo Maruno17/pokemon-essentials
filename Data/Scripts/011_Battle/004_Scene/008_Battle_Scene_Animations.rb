@@ -159,14 +159,15 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     # Choose ball's graphic
     idxParty = getPartyIndexFromBallIndex(idxBall)
     graphicFilename = "Graphics/UI/Battle/icon_ball_empty"
+    empty = true
     if idxParty >= 0 && idxParty < @party.length && @party[idxParty]
+      graphicFilename = "Graphics/UI/Battle/icon_ball"
       if !@party[idxParty].able?
         graphicFilename = "Graphics/UI/Battle/icon_ball_faint"
       elsif @party[idxParty].status != :NONE
         graphicFilename = "Graphics/UI/Battle/icon_ball_status"
-      else
-        graphicFilename = "Graphics/UI/Battle/icon_ball"
       end
+      empty = false
     end
     # Set up ball sprite
     ball = addSprite(@sprites["partyBall_#{@side}_#{idxBall}"])
@@ -174,6 +175,7 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     ball.setName(delay, graphicFilename)
     ball.setDelta(delay, dir * Graphics.width / 2, 0)
     ball.moveDelta(delay, 8, -dir * Graphics.width / 2, 0)
+    ball.setSE(delay + 8, "Battle lineup ball") if !empty
   end
 end
 
