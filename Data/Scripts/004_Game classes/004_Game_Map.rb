@@ -48,11 +48,12 @@ class Game_Map
     @map_id = 0
     @display_x = 0
     @display_y = 0
+    @tile_animations = []
   end
 
   def setup(map_id)
     @map_id = map_id
-    @map = Game_Map.load_map_data(map_id)
+    @map = Game_Map.load_map_data(@map_id)
     tileset = $data_tilesets[@map.tileset_id]
     updateTileset
     @fog_ox                  = 0
@@ -67,7 +68,7 @@ class Game_Map
     self.display_x           = 0
     self.display_y           = 0
     @need_refresh            = false
-    EventHandlers.trigger(:on_game_map_setup, map_id, @map, tileset)
+    EventHandlers.trigger(:on_game_map_setup, @map_id, @map, tileset)
     @events                  = {}
     @map.events.each_key do |i|
       @events[i]             = Game_Event.new(@map_id, @map.events[i], self)
@@ -321,6 +322,20 @@ class Game_Map
     return GameData::TerrainTag.get(:None)
   end
 
+  def real_map_and_coords_of(x, y)
+    return [self, x, y] if valid?(x, y)
+    return $map_factory&.getNewMap(x, y, @map_id)
+  end
+
+  def each_layer_terrain_tag_at(x, y)
+    (data.zsize - 1).downto(0) do |layer|
+      tile_id = data[x, y, layer]
+      next if tile_id == 0
+      terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
+      break if yield layer, terrain
+    end
+  end
+
   # Unused.
   def check_event(x, y)
     self.events.each_value do |event|
@@ -434,13 +449,17 @@ class Game_Map
     set_tile(x, y, layer, 0)
   end
 
+  # instructions is an array of [frame, tile ID offset]
+  # start_offset is in seconds, not frames
+  def animate_tile(x, y, layer, instructions, timer_start = nil, start_offset = 0, fps = 20)
+    @tile_animations ||= []
+    return if @tile_animations.any? { |anim| anim.affects_tile?(x, y, layer) }
+    @tile_animations.push(TileAnimation.new(self, x, y, layer, instructions, timer_start, start_offset, fps))
+  end
+
   def refresh
-    @events.each_value do |event|
-      event.refresh
-    end
-    @common_events.each_value do |common_event|
-      common_event.refresh
-    end
+    @events.each_value { |event| event.refresh }
+    @common_events.each_value { |common_event| common_event.refresh }
     @need_refresh = false
   end
 
@@ -464,6 +483,11 @@ class Game_Map
       scroll_offset = lerp(0, @scroll_distance_y, duration, @scroll_timer_start, uptime_now)
       self.display_y = @scroll_start_y + (scroll_offset * REAL_RES_Y)
       @scroll_distance_y = 0 if scroll_offset == @scroll_distance_y
+    end
+    # Update tile animations
+    if @tile_animations
+      @tile_animations.each { |anim| anim.update }
+      @tile_animations.delete_if { |anim| anim.disposed? }
     end
     # Only update events that are on-screen
     if !$game_temp.in_menu
@@ -494,6 +518,50 @@ class Game_Map
         @fog_opacity_timer_start = nil
       end
     end
+  end
+end
+
+#===============================================================================
+# Animates 1 tile in 1 layer of a map, by changing its tile ID.
+# instructions is an array of [frame, tile ID offset].
+# start_offset is in seconds, not frames.
+#===============================================================================
+class Game_Map::TileAnimation
+  def initialize(map, x, y, layer, instructions, timer_start = nil, start_offset = 0, fps = 20)
+    @map = map
+    @x = x
+    @y = y
+    @layer = layer
+    @instructions = instructions
+    @timer_start = (timer_start || System.uptime) + start_offset
+    @fps = fps
+    @start_tile_id = @map.data[@x, @y, @layer]
+  end
+
+  def dispose
+    @disposed = true
+  end
+
+  def disposed?
+    return @disposed
+  end
+
+  def affects_tile?(test_x, test_y, test_layer)
+    return test_x == @s && test_y == @y && test_layer == @layer
+  end
+
+  def update
+    return if disposed?
+    time_now = System.uptime
+    return if time_now < @timer_start
+    this_frame = ((time_now - @timer_start) * @fps).to_i
+    @instructions.each_with_index do |instruction, i|
+      next if this_frame < instruction[0]   # Not started
+      next if instruction[2]   # Finished
+      @map.set_tile(@x, @y, @layer, @start_tile_id + instruction[1])
+      instruction[2] = true
+    end
+    dispose if @instructions.none? { |inst| inst[2] != true }
   end
 end
 

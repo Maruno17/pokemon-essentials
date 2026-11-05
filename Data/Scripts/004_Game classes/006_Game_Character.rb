@@ -214,24 +214,33 @@ class Game_Character
   end
 
   def calculate_bush_depth
-    if @tile_id > 0 || @always_on_top || jumping? || (respond_to?("name") && name[/airborne/i])
-      @bush_depth = 0
-      return
-    end
-    this_map = (self.map.valid?(@x, @y)) ? [self.map, @x, @y] : $map_factory&.getNewMap(@x, @y, self.map.map_id)
-    if this_map && this_map[0].deepBush?(this_map[1], this_map[2])
-      xbehind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
-      ybehind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
-      if moving?
-        behind_map = (self.map.valid?(xbehind, ybehind)) ? [self.map, xbehind, ybehind] : $map_factory&.getNewMap(xbehind, ybehind, self.map.map_id)
-        @bush_depth = Game_Map::TILE_HEIGHT if behind_map[0].deepBush?(behind_map[1], behind_map[2])
-      else
+    @bush_depth = 0
+    return if @tile_id > 0 || @always_on_top || jumping? || (respond_to?("name") && name[/airborne/i])
+    this_tile = self.map.real_map_and_coords_of(@x, @y)
+    if this_tile && this_tile[0].deepBush?(this_tile[1], this_tile[2])
+      # Very tall grass
+      # Rely on tile's priority to obscure player if they're stood still or
+      # moving left/right
+      return if !moving? || [4, 6].include?(@direction)
+      # Don't give the character a bush depth if moving down and entering very
+      # tall grass
+      if @direction == 2
+        behind_tile = self.map.real_map_and_coords_of(@x, @y - 1)
+        return if !behind_tile || !behind_tile[0].deepBush?(behind_tile[1], behind_tile[2])
+      end
+      # Character is in very tall grass
+      @bush_depth = Game_Map::TILE_HEIGHT
+    elsif moving? && @direction == 2
+      # Moving down out of very tall grass
+      x_behind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
+      y_behind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
+      behind_tile = self.map.real_map_and_coords_of(x_behind, y_behind)
+      if behind_tile[0].deepBush?(behind_tile[1], behind_tile[2]) && !terrain_tag&.deep_bush
         @bush_depth = Game_Map::TILE_HEIGHT
       end
-    elsif this_map && this_map[0].bush?(this_map[1], this_map[2]) && !moving?
-      @bush_depth = 12
-    else
-      @bush_depth = 0
+    elsif this_tile && this_tile[0].bush?(this_tile[1], this_tile[2])
+      # Tall grass
+      @bush_depth = 12 if !moving?
     end
   end
 
@@ -354,8 +363,12 @@ class Game_Character
         raise "Event's graphic is an out-of-range tile (event #{@id}, map #{self.map.map_id})"
       end
     end
+    # Add z if in very tall grass (to ensure the head always pokes out above the
+    # +1 priority very tall grass tile)
+    z += (Game_Map::TILE_HEIGHT / 2) + 1 if @bush_depth == Game_Map::TILE_HEIGHT
     # Add z if height exceeds 32
-    return z + ((height > Game_Map::TILE_HEIGHT) ? Game_Map::TILE_HEIGHT - 1 : 0)
+    z += Game_Map::TILE_HEIGHT - 1 if height > Game_Map::TILE_HEIGHT
+    return z
   end
 
   #-----------------------------------------------------------------------------

@@ -374,29 +374,34 @@ module Settings
   # Overworld animation IDs.
   #-----------------------------------------------------------------------------
 
+  # Whether grass and tall grass tiles will animate (by changing their tile IDs)
+  # when the player or an event starts stepping into them. These animations use
+  # additional tiles in the tileset to the right of the grass/tall grass tile (1
+  # and 3 extra tiles respectively).
+  ANIMATE_GRASS_TILES_WHEN_ENTERED = true
   # ID of the animation played when the player steps on grass (grass rustling).
-  GRASS_ANIMATION_ID           = 1
+  GRASS_ANIMATION_ID               = 1
   # ID of the animation played when the player lands on the ground after hopping
   # over a ledge (shows a dust impact).
-  DUST_ANIMATION_ID            = 2
+  DUST_ANIMATION_ID                = 2
   # ID of the animation played when the player finishes taking a step onto still
   # water (shows a water ripple).
-  WATER_RIPPLE_ANIMATION_ID    = 8
+  WATER_RIPPLE_ANIMATION_ID        = 8
   # ID of the animation played when a trainer notices the player (an exclamation
   # bubble).
-  EXCLAMATION_ANIMATION_ID     = 3
+  EXCLAMATION_ANIMATION_ID         = 3
   # ID of the animation played when a patch of grass rustles due to using the
   # Poké Radar.
-  RUSTLE_NORMAL_ANIMATION_ID   = 1
+  RUSTLE_NORMAL_ANIMATION_ID       = 1
   # ID of the animation played when a patch of grass rustles vigorously due to
   # using the Poké Radar. (Rarer species)
-  RUSTLE_VIGOROUS_ANIMATION_ID = 5
+  RUSTLE_VIGOROUS_ANIMATION_ID     = 5
   # ID of the animation played when a patch of grass rustles and shines due to
   # using the Poké Radar. (Shiny encounter)
-  RUSTLE_SHINY_ANIMATION_ID    = 6
+  RUSTLE_SHINY_ANIMATION_ID        = 6
   # ID of the animation played when a berry tree grows a stage while the player
   # is on the map (for new plant growth mechanics only).
-  PLANT_SPARKLE_ANIMATION_ID   = 7
+  PLANT_SPARKLE_ANIMATION_ID       = 7
 
   #-----------------------------------------------------------------------------
   # Files.

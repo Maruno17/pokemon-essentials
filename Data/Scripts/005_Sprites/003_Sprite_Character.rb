@@ -30,14 +30,11 @@ class BushBitmap
   def pbBushDepthBitmap(bitmap, depth)
     ret = Bitmap.new(bitmap.width, bitmap.height)
     charheight = ret.height / 4
-    cy = charheight - depth - 2
+    cy = charheight - depth
     4.times do |i|
       y = i * charheight
-      if cy >= 0
-        ret.blt(0, y, bitmap, Rect.new(0, y, ret.width, cy))
-        ret.blt(0, y + cy, bitmap, Rect.new(0, y + cy, ret.width, 2), 170)
-      end
-      ret.blt(0, y + cy + 2, bitmap, Rect.new(0, y + cy + 2, ret.width, 2), 85) if cy + 2 >= 0
+      ret.blt(0, y, bitmap, Rect.new(0, y, ret.width, cy)) if cy >= 0
+      ret.blt(0, y + cy, bitmap, Rect.new(0, y + cy, ret.width, 2)) if cy + 2 >= 0
     end
     return ret
   end

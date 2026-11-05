@@ -155,6 +155,64 @@ EventHandlers.add(:on_step_taken, :grass_rustling,
   }
 )
 
+# Show grass tile animating when walked into.
+EventHandlers.add(:on_leave_tile, :grass_tile_animation,
+  proc { |event, old_map_id, old_x, old_y|
+    next if !Settings::ANIMATE_GRASS_TILES_WHEN_ENTERED
+    next if !$scene.is_a?(Scene_Map)
+    next if event.respond_to?("name") && event.name[/airborne/i]
+    event.each_occupied_tile do |x, y|
+      next if !$map_factory.getTerrainTagFromCoords(event.map.map_id, x, y, true).shows_grass_rustle
+      # Get the actual map/coordinates occupied by the event
+      tile = $map_factory.getRealTilePos(event.map.map_id, x, y)
+      next if !$map_factory.hasMap?(tile[0])
+      map = $map_factory.getMap(tile[0])
+      # Get the layer containing the grass tile to be animated
+      tile_layer = -1
+      map.each_layer_terrain_tag_at(tile[1], tile[2]) do |layer, terrain|
+        next false if !terrain.shows_grass_rustle
+        tile_layer = layer
+        next true
+      end
+      next if tile_layer < 0
+      # Trigger animation
+      map.animate_tile(
+        tile[1], tile[2], tile_layer,
+        [[0, 1], [4, 0]]   # [frame, tile ID offset]
+      )
+    end
+  }
+)
+
+# Show tall grass tile animating when walked into.
+EventHandlers.add(:on_leave_tile, :tall_grass_tile_animation,
+  proc { |event, old_map_id, old_x, old_y|
+    next if !Settings::ANIMATE_GRASS_TILES_WHEN_ENTERED
+    next if !$scene.is_a?(Scene_Map)
+    next if event.respond_to?("name") && event.name[/airborne/i]
+    event.each_occupied_tile do |x, y|
+      next if !$map_factory.getTerrainTagFromCoords(event.map.map_id, x, y, true).shows_tall_grass_rustle
+      # Get the actual map/coordinates occupied by the event
+      tile = $map_factory.getRealTilePos(event.map.map_id, x, y)
+      next if !$map_factory.hasMap?(tile[0])
+      map = $map_factory.getMap(tile[0])
+      # Get the layer containing the tall grass tile to be animated
+      tile_layer = -1
+      map.each_layer_terrain_tag_at(tile[1], tile[2]) do |layer, terrain|
+        next false if !terrain.shows_tall_grass_rustle
+        tile_layer = layer
+        next true
+      end
+      next if tile_layer < 0
+      # Trigger animation
+      map.animate_tile(
+        tile[1], tile[2], tile_layer,
+        [[0, 1], [1, 2], [2, 0], [3, 3], [4, 0], [5, 3], [6, 0]]   # [frame, tile ID offset]
+      )
+    end
+  }
+)
+
 # Show water ripple animation.
 EventHandlers.add(:on_step_taken, :still_water_ripple,
   proc { |event|
