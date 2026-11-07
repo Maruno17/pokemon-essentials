@@ -1339,7 +1339,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
         txt = toUnformattedText(cmd).gsub(/\n/, "")
         txt_width = tmp_bitmap.text_size(txt).width
         check_text = cmd
-        while check_text[FORMATREGEXP]
+        while check_text[text_format_regexp]
           if $~[2].downcase == "icon" && $~[3]
             check_text = $~.post_match
             filename = $~[4].sub(/\s+$/, "")

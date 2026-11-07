@@ -580,9 +580,11 @@ def pbMessageDisplay_SetDefaultProperties(msg_window, text, control_params)
   end
 end
 
+# NOTE: All these appear as \XYZ[ABC].
 MESSAGE_DISPLAY_CONTROLS_WITH_PARAMETER = [
   "f", "ff", "ts", "cl", "me", "se", "wt", "wtnp", "ch"
 ]
+# NOTE: All these appear as \XYZ.
 MESSAGE_DISPLAY_CONTROLS_WITHOUT_PARAMETER = [
   "g", "cn", "pt", "wd", "wm", "wu", "op", "cl", "\\.", "\\|", "\\!", "\\^"
 ]

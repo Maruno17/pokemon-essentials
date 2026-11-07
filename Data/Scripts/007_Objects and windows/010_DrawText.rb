@@ -53,7 +53,22 @@ end
 #===============================================================================
 # Format text.
 #===============================================================================
-FORMATREGEXP = /<(\/?)(c|c2|c3|o|fn|br|fs|i|b|r|pg|pog|u|s|icon|img|ac|ar|al|outln|outln2)(\s*\=\s*([^>]*))?>/i
+# NOTE: All these appear as <XYZ> or <XYZ=ABC> or </XYZ>.
+TEXT_FORMAT_CONTROLS = [
+  "b", "i", "u", "s",   # Bold, italic, underline, strikethrough
+  "outln", "outln2",    # Outline, thicker outline
+  "fn", "fs", "o",      # Font name, font size, opacity
+  "c", "c2", "c3",      # Colors
+  "br",                 # Line break
+  "r",                  # Right align until next line break
+  "ac", "al", "ar",     # Center align, left align, right align
+  "icon", "img"         # Icon, image segment
+]
+
+def text_format_regexp
+  reg_string = "<" + "(\\/?)" + "(" + TEXT_FORMAT_CONTROLS.join("|") + ")" + "(\\s*\\=\\s*([^>]*))?" + ">"
+  return Regexp.new(reg_string, Regexp::IGNORECASE)
+end
 
 def fmtEscape(text)
   if text[/[&<>]/]
@@ -79,7 +94,7 @@ end
 def toUnformattedText(text)
   text2 = text.clone
   pbMessageDisplay_ReplaceMessageText(nil, text2)
-  text2 = text2.gsub(FORMATREGEXP, "")
+  text2 = text2.gsub(text_format_regexp, "")
   fmtReplaceEscapes(text2)
   return text2
 end
@@ -101,7 +116,9 @@ end
 
 def getFormattedTextForDims(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight,
                             newlineBreaks = true, explicitBreaksOnly = false)
+  # Ignore formatting controls that don't affect a character's size/shape/position
   text2 = text.gsub(/<(\/?)(c|c2|c3|o|u|s)(\s*\=\s*([^>]*))?>/i, "")
+  # Turn <br> and </br> into line breaks
   text2.gsub!(/<(\/?)(br)(\s*\=\s*([^>]*))?>/i, "\n") if newlineBreaks
   return getFormattedText(bitmap, xDst, yDst, widthDst, heightDst,
                           text2, lineheight, newlineBreaks,
@@ -305,7 +322,7 @@ end
 #                        four formats are supported: RRGGBBAA, RRGGBB, 16-bit
 #                        RGB, and Window_Base color numbers.
 #
-# Added 2009-9-12
+# Added 2009-09-12
 #
 #   <o=X>              - Displays the text in the given opacity (0-255)
 #
@@ -316,7 +333,7 @@ end
 # Added 2010-05-12
 #
 #   <outln2>           - Displays the text in outline format (outlines more
-#                        exaggerated.
+#                        exaggerated).
 #   <fn=X> ... </fn>   - Formats the text in the specified font, or Arial if the
 #                        font doesn't exist.
 #   <fs=X> ... </fs>   - Changes the font size to X.
@@ -348,7 +365,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   controls = []
 #  oldtext = text
   pbMessageDisplay_ReplaceMessageText(msg_window, text)
-  while text[FORMATREGEXP]
+  while text[text_format_regexp]
     textchunks.push($~.pre_match)
     if $~[3]
       controls.push([$~[2].downcase, $~[4], -1, $~[1] == "/"])
@@ -515,7 +532,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
         if !endtag
           param = param.sub(/\s+$/, "")
           graphic = "Graphics/Icons/#{param}"
-          controls[i] = nil
+          controls[i] = nil   # Set to nil and break because icon counts as a character
           break
         end
       when "img"   # Icon
@@ -529,7 +546,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
             graphicWidth = param[3].to_i
             graphicHeight = param[4].to_i
           end
-          controls[i] = nil
+          controls[i] = nil   # Set to nil and break because img counts as a character
           break
         end
       when "br"   # Line break
