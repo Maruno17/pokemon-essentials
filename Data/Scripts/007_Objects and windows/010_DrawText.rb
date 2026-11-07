@@ -78,7 +78,7 @@ end
 
 def toUnformattedText(text)
   text2 = text.clone
-  pbReplaceMessageText(text2, nil)
+  pbMessageDisplay_ReplaceMessageText(nil, text2)
   text2 = text2.gsub(FORMATREGEXP, "")
   fmtReplaceEscapes(text2)
   return text2
@@ -347,7 +347,7 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
   textchunks = []
   controls = []
 #  oldtext = text
-  pbReplaceMessageText(text, msg_window)
+  pbMessageDisplay_ReplaceMessageText(msg_window, text)
   while text[FORMATREGEXP]
     textchunks.push($~.pre_match)
     if $~[3]

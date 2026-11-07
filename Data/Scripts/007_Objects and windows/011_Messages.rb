@@ -292,57 +292,6 @@ def pbCsvPosInt!(str)
   return ret.to_i
 end
 
-def pbReplaceMessageText(text, msg_window)
-  isDarkSkin = msg_window && isDarkWindowskin(msg_window.windowskin)
-  # \sign[something] gets turned into \op\cl\ts[]\w[something]
-  text.gsub!(/\\sign\[([^\]]*)\]/i) { next "\\op\\cl\\ts[]\\w[" + $1 + "]" }
-  # Escaped characters
-  text.gsub!(/\\\\/, "\5")
-  text.gsub!(/\\1/, "\1")
-  text.gsub!(/\\n/i, "\n")
-  # Text placeholders
-  text.gsub!(/\\pn/i, $player.name) if $player
-  text.gsub!(/\\pm/i, _INTL("${1}", $player.money.to_s_formatted)) if $player
-  loop do
-    last_text = text.clone
-    text.gsub!(/\\v\[([0-9]+)\]/i) { $game_variables[$1.to_i] }
-    break if text == last_text
-  end
-  if $game_actors
-    text.gsub!(/\\n\[([1-8])\]/i) { next $game_actors[$1.to_i].name }
-  end
-  # Male/female text colors
-  text.gsub!(/\\pg/i, "\\b") if $player&.male?
-  text.gsub!(/\\pg/i, "\\r") if $player&.female?
-  text.gsub!(/\\pog/i, "\\r") if $player&.male?
-  text.gsub!(/\\pog/i, "\\b") if $player&.female?
-  text.gsub!(/\\pg/i, "")
-  text.gsub!(/\\pog/i, "")
-  if isDarkSkin
-    male_text_tag = shadowc3tag(MessageConfig::LIGHT_MALE_TEXT_MAIN_COLOR, MessageConfig::LIGHT_MALE_TEXT_SHADOW_COLOR)
-    female_text_tag = shadowc3tag(MessageConfig::LIGHT_FEMALE_TEXT_MAIN_COLOR, MessageConfig::LIGHT_FEMALE_TEXT_SHADOW_COLOR)
-  else
-    male_text_tag = shadowc3tag(MessageConfig::MALE_TEXT_MAIN_COLOR, MessageConfig::MALE_TEXT_SHADOW_COLOR)
-    female_text_tag = shadowc3tag(MessageConfig::FEMALE_TEXT_MAIN_COLOR, MessageConfig::FEMALE_TEXT_SHADOW_COLOR)
-  end
-  text.gsub!(/\\b/i, male_text_tag)
-  text.gsub!(/\\r/i, female_text_tag)
-  # Other text colors
-  text.gsub!(/\\\[([0-9a-f]{8,8})\]/i) { "<c2=" + $1 + ">" }
-  text.gsub!(/\\c\[([0-9]+)\]/i) do
-    main_color, shadow_color = get_text_colors_for_windowskin(msg_window&.windowskin, $1.to_i, isDarkSkin)
-    next shadowc3tag(main_color, shadow_color)
-  end
-  # Dark version of icon
-  if isDarkSkin
-    text.gsub!(/<icon=([^>\n\r]+)>/i) do
-      filename = $1
-      next "<icon=" + filename + "_dark>" if pbResolveBitmap("Graphics/Icons/" + filename + "_dark")
-      next "<icon=" + filename + ">"
-    end
-  end
-end
-
 #===============================================================================
 # Money and coins windows.
 #===============================================================================
@@ -441,256 +390,397 @@ end
 #===============================================================================
 # Main message-displaying function.
 #===============================================================================
-def pbMessageDisplay(msgwindow, message, letterbyletter = true, commandProc = nil)
-  return if !msgwindow
-  oldletterbyletter = msgwindow.letterbyletter
-  msgwindow.letterbyletter = (letterbyletter) ? true : false
-  ret = nil
-  commands = nil
-  facewindow = nil
-  goldwindow = nil
-  coinwindow = nil
-  battlepointswindow = nil
-  cmdvariable = 0
-  cmdIfCancel = 0
-  msgwindow.waitcount = 0
-  autoresume = false
+def pbMessageDisplay(msg_window, message, letter_by_letter = true, command_proc = nil)
+  return if !msg_window
+  old_letter_by_letter = msg_window.letterbyletter
+  msg_window.letterbyletter = letter_by_letter
+  controls = []   # Contains [control name, parameter || "", text length to trigger at]
+  control_params = {
+    :line_count         => (Graphics.height > 400) ? 3 : 2,
+    :appear_duration    => 0.5,   # In seconds
+    :disappear_duration => 0.5,   # In seconds
+    :auto_resume        => false
+  }
+  extra_sprites = {}   # For other windows and sprites
   text = message.clone
-  linecount = (Graphics.height > 400) ? 3 : 2
-  ### Text replacement
-  pbReplaceMessageText(text, msgwindow)
-  text.gsub!(/\\[Ww]\[([^\]]*)\]/) do
+  # Text replacement
+  pbMessageDisplay_ReplaceMessageText(msg_window, text)
+  # Get default windowskin/text color/number of lines (also replaces some text)
+  pbMessageDisplay_SetDefaultProperties(msg_window, text, control_params)
+  text = control_params[:color_tag] + text   # Prepend the default text color to text
+  # Extract controls from text
+  text = pbMessageDisplay_ExtractControls(text, controls)
+  # For various controls, create windows/sprites or set values
+  pbMessageDisplay_SetUpControls(text, controls, control_params, extra_sprites)
+  # Position message window and other windows/sprites
+  pbRepositionMessageWindow(msg_window, control_params[:line_count])
+  pbMessageDisplay_PositionExtraSprites(msg_window, extra_sprites)
+  # Play SE at start
+  if control_params[:start_se]
+    pbSEPlay(pbStringToAudioFile(control_params[:start_se]))
+  elsif !control_params[:appear_timer_start] && msg_window.letterbyletter   # Isn't sliding on, is showing letter by letter
+    pbPlayDecisionSE
+  end
+  ### Show text appearing
+  msg_window.text = text
+  msg_window.waitcount = 0
+  control_params[:msg_window_at_top] = (msg_window.y == 0)
+  loop do
+    # Message box slides into the screen at the start
+    pbMessageDisplay_UpdateMessageWindowSlideOn(msg_window, control_params, extra_sprites)
+    # Update and execute controls as they are reached during message display
+    controls.length.times do |i|
+      next if !controls[i]
+      next if controls[i][2] > msg_window.position   # Control triggers in the future
+      next if msg_window.waitcount != 0   # Message display is paused
+      pbMessageDisplay_UpdateControl(controls[i], msg_window, control_params, extra_sprites)
+      controls[i] = nil   # Delete the control after it triggers
+    end
+    break if !msg_window.letterbyletter   # Whole message has shown already, so break the loop
+    # Updating
+    Graphics.update
+    Input.update
+    extra_sprites.each_value { |sprite| sprite&.update }
+    # Continue message display if it was paused and should auto-resume
+    if control_params[:auto_resume] && msg_window.waitcount == 0
+      msg_window.resume if msg_window.busy?
+      break if !msg_window.busy?
+    end
+    # Player inputs to continue message display or close the message at the end
+    if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
+      if msg_window.busy?
+        pbPlayDecisionSE if msg_window.pausing?
+        msg_window.resume
+      elsif !control_params[:appear_timer_start]   # Not sliding in
+        break
+      end
+    end
+    # Updating
+    pbUpdateSceneMap
+    msg_window.update
+    yield if block_given?
+    # If message is fully shown, auto-break the loop if it's not showing letter
+    # by letter OR there is a choice to make OR if there's code to execute
+    # afterwards (if none of these apply, await player's input to close the
+    # message)
+    if !msg_window.busy?
+      break if !msg_window.letterbyletter || control_params[:choices] || command_proc
+    end
+  end
+  ### Message has finished displaying
+  Input.update   # Must call Input.update again to avoid extra triggers
+  msg_window.letterbyletter = old_letter_by_letter
+  # If message included choices using \ch, choose one now
+  pbMessageDisplay_AfterMessageAppeared(msg_window, control_params, extra_sprites)
+  # If message came with code to run afterwards, run it now (it can return a
+  # value)
+  ret = nil
+  ret = command_proc.call(msg_window) if command_proc
+  # Dispose extra windows/sprites
+  extra_sprites.each_value { |sprite| sprite&.dispose }
+  # Message box slides out of the screen at the end
+  pbMessageDisplay_MessageWindowSlideOff(msg_window, control_params)
+  return ret
+end
+
+def pbMessageDisplay_ReplaceMessageText(msg_window, text)
+  isDarkSkin = msg_window && isDarkWindowskin(msg_window&.windowskin)
+  pbMessageDisplay_ReplaceMessageTextShorthands(msg_window, text)
+  # Escaped characters
+  text.gsub!(/\\\\/, "\5")
+  text.gsub!(/\\1/, "\1")
+  text.gsub!(/\\n/i, "\n")
+  pbMessageDisplay_ReplaceMessageTextPlaceholders(msg_window, text)
+  # Male/female text colors
+  pbMessageDisplay_ReplaceMessageTextGenderColorPlaceholders(msg_window, text)
+  if isDarkSkin
+    male_text_tag = shadowc3tag(MessageConfig::LIGHT_MALE_TEXT_MAIN_COLOR, MessageConfig::LIGHT_MALE_TEXT_SHADOW_COLOR)
+    female_text_tag = shadowc3tag(MessageConfig::LIGHT_FEMALE_TEXT_MAIN_COLOR, MessageConfig::LIGHT_FEMALE_TEXT_SHADOW_COLOR)
+  else
+    male_text_tag = shadowc3tag(MessageConfig::MALE_TEXT_MAIN_COLOR, MessageConfig::MALE_TEXT_SHADOW_COLOR)
+    female_text_tag = shadowc3tag(MessageConfig::FEMALE_TEXT_MAIN_COLOR, MessageConfig::FEMALE_TEXT_SHADOW_COLOR)
+  end
+  text.gsub!(/\\b/i, male_text_tag)
+  text.gsub!(/\\r/i, female_text_tag)
+  # Other text colors
+  text.gsub!(/\\\[([0-9a-f]{8,8})\]/i) { "<c2=" + $1 + ">" }
+  text.gsub!(/\\c\[([0-9]+)\]/i) do
+    main_color, shadow_color = get_text_colors_for_windowskin(msg_window&.windowskin, $1.to_i, isDarkSkin)
+    next shadowc3tag(main_color, shadow_color)
+  end
+  # Dark version of icon
+  if isDarkSkin
+    text.gsub!(/<icon=([^>\n\r]+)>/i) do
+      filename = $1
+      next "<icon=" + filename + "_dark>" if pbResolveBitmap("Graphics/Icons/" + filename + "_dark")
+      next "<icon=" + filename + ">"
+    end
+  end
+end
+
+def pbMessageDisplay_ReplaceMessageTextShorthands(msg_window, text)
+  # \sign[something] gets turned into \op\cl\ts[]\w[something]
+  text.gsub!(/\\sign\[([^\]]*)\]/i) { next "\\op\\cl\\ts[]\\w[" + $1 + "]" }
+end
+
+def pbMessageDisplay_ReplaceMessageTextPlaceholders(msg_window, text)
+  text.gsub!(/\\pn/i, $player.name) if $player
+  text.gsub!(/\\pm/i, _INTL("${1}", $player.money.to_s_formatted)) if $player
+  loop do
+    last_text = text.clone
+    text.gsub!(/\\v\[([0-9]+)\]/i) { $game_variables[$1.to_i] }
+    break if text == last_text
+  end
+  if $game_actors
+    text.gsub!(/\\n\[([1-8])\]/i) { next $game_actors[$1.to_i].name }
+  end
+end
+
+def pbMessageDisplay_ReplaceMessageTextGenderColorPlaceholders(msg_window, text)
+  text.gsub!(/\\pg/i, "\\b") if $player&.male?
+  text.gsub!(/\\pg/i, "\\r") if $player&.female?
+  text.gsub!(/\\pog/i, "\\r") if $player&.male?
+  text.gsub!(/\\pog/i, "\\b") if $player&.female?
+  text.gsub!(/\\pg/i, "")
+  text.gsub!(/\\pog/i, "")
+end
+
+# NOTE: Controls mentioned in here shouldn't be in the constants below as they
+#       are removed here before the constants are used.
+def pbMessageDisplay_SetDefaultProperties(msg_window, text, control_params)
+  # Get windowskin to use for the message
+  text.gsub!(/\\w\[([^\]]*)\]/i) do
     w = $1.to_s
     if w == ""
-      msgwindow.windowskin = nil
+      msg_window.windowskin = nil
     else
-      msgwindow.setSkin("Graphics/Windowskins/#{w}", false)
+      msg_window.setSkin("Graphics/Windowskins/#{w}", false)
     end
     next ""
   end
+  # Get default text color based on the windowskin
+  colortag = ""
+  if $game_system && $game_system.message_frame != 0
+    main_color, shadow_color = get_text_colors_for_windowskin(msg_window.windowskin, 0, true)
+    colortag = shadowc3tag(main_color, shadow_color)
+  else
+    isDarkSkin = isDarkWindowskin(msg_window.windowskin)
+    main_color, shadow_color = get_text_colors_for_windowskin(msg_window.windowskin, 0, isDarkSkin)
+    colortag = shadowc3tag(main_color, shadow_color)
+  end
+  control_params[:color_tag] = colortag
+  # Get number of lines of text
   loop do
     last_text = text.clone
     text.gsub!(/\\l\[([0-9]+)\]/i) do
-      linecount = [1, $1.to_i].max
+      control_params[:line_count] = [1, $1.to_i].max
       next ""
     end
     break if text == last_text
   end
-  colortag = ""
-  if $game_system && $game_system.message_frame != 0
-    main_color, shadow_color = get_text_colors_for_windowskin(msgwindow.windowskin, 0, true)
-    colortag = shadowc3tag(main_color, shadow_color)
-  else
-    isDarkSkin = isDarkWindowskin(msgwindow.windowskin)
-    main_color, shadow_color = get_text_colors_for_windowskin(msgwindow.windowskin, 0, isDarkSkin)
-    colortag = shadowc3tag(main_color, shadow_color)
-  end
-  text = colortag + text
-  ### Controls
+end
+
+MESSAGE_DISPLAY_CONTROLS_WITH_PARAMETER = [
+  "f", "ff", "ts", "cl", "me", "se", "wt", "wtnp", "ch"
+]
+MESSAGE_DISPLAY_CONTROLS_WITHOUT_PARAMETER = [
+  "g", "cn", "pt", "wd", "wm", "wu", "op", "cl", "\\.", "\\|", "\\!", "\\^"
+]
+
+def pbMessageDisplay_ExtractControls(text, controls)
+  # Chop up text into chunks each time a control comes up, and puts the controls
+  # into one array and the non-control text into another
+  reg_string = "(?:" +
+               "\\\\(" + MESSAGE_DISPLAY_CONTROLS_WITH_PARAMETER.join("|") + ")" + "\\[([^\\\]]*)\\]" +
+               "|" +
+               "\\\\(" + MESSAGE_DISPLAY_CONTROLS_WITHOUT_PARAMETER.join("|") + ")" +
+               ")"
+  reg = Regexp.new(reg_string, Regexp::IGNORECASE)
   textchunks = []
-  controls = []
-  while text[/(?:\\(f|ff|ts|cl|me|se|wt|wtnp|ch)\[([^\]]*)\]|\\(g|cn|pt|wd|wm|op|cl|wu|\.|\||\!|\^))/i]
+  while text[reg]
     textchunks.push($~.pre_match)
     if $~[1]
-      controls.push([$~[1].downcase, $~[2], -1])
+      controls.push([$~[1].downcase, $~[2], -1])   # Has a parameter
     else
-      controls.push([$~[3].downcase, "", -1])
+      controls.push([$~[3].downcase, "", -1])   # No parameter
     end
     text = $~.post_match
   end
   textchunks.push(text)
-  textchunks.each do |chunk|
-    chunk.gsub!(/\005/, "\\")
-  end
+  textchunks.each { |chunk| chunk.gsub!(/\005/, "\\") }
+  # For certain controls (ones that pause and auto-resume), append display-
+  # halting text to the text chunk just before them
+  pbMessageDisplay_AddHaltingText(textchunks, controls)
+  # For all controls, determine when they trigger in terms of characters
+  # displayed and store that number in controls[i][2]
   textlen = 0
+  controls.length.times do |i|
+    control = controls[i][0]
+    textlen += toUnformattedText(textchunks[i]).scan(/./m).length
+    controls[i][2] = textlen
+  end
+  # Glue text chunks back together and return it
+  return textchunks.join
+end
+
+def pbMessageDisplay_AddHaltingText(textchunks, controls)
   controls.length.times do |i|
     control = controls[i][0]
     case control
     when "wt", "wtnp", ".", "|"
-      textchunks[i] += "\2"
+      textchunks[i] += "\2"   # Pause and auto-resume
     when "!"
-      textchunks[i] += "\1"
+      textchunks[i] += "\1"   # Pause and wait for input
     end
-    textlen += toUnformattedText(textchunks[i]).scan(/./m).length
-    controls[i][2] = textlen
   end
-  text = textchunks.join
-  appear_timer_start = nil
-  appear_duration = 0.5   # In seconds
-  haveSpecialClose = false
-  specialCloseSE = ""
-  startSE = nil
+end
+
+def pbMessageDisplay_SetUpControls(text, controls, control_params, extra_sprites)
   controls.length.times do |i|
     control = controls[i][0]
     param = controls[i][1]
     case control
-    when "op"
-      appear_timer_start = System.uptime
-    when "cl"
-      text = text.sub(/\001\z/, "")   # fix: '$' can match end of line as well
-      haveSpecialClose = true
-      specialCloseSE = param
     when "f"
-      facewindow&.dispose
-      facewindow = PictureWindow.new("Graphics/Pictures/#{param}")
+      extra_sprites[:face_window]&.dispose
+      extra_sprites[:face_window] = PictureWindow.new("Graphics/Pictures/#{param}")
     when "ff"
-      facewindow&.dispose
-      facewindow = FaceWindowVX.new(param)
-    when "ch"
-      cmds = param.clone
-      cmdvariable = pbCsvPosInt!(cmds)
-      cmdIfCancel = pbCsvField!(cmds).to_i
-      commands = []
-      while cmds.length > 0
-        commands.push(pbCsvField!(cmds))
-      end
-    when "wtnp", "^"
-      text = text.sub(/\001\z/, "")   # fix: '$' can match end of line as well
+      extra_sprites[:face_window]&.dispose
+      extra_sprites[:face_window] = FaceWindowVX.new(param)
     when "se"
-      if controls[i][2] == 0
-        startSE = param
+      if controls[i][2] == 0   # At start of message
+        control_params[:start_se] = param
         controls[i] = nil
       end
-    end
-  end
-  if startSE
-    pbSEPlay(pbStringToAudioFile(startSE))
-  elsif !appear_timer_start && letterbyletter
-    pbPlayDecisionSE
-  end
-  # Position message window
-  pbRepositionMessageWindow(msgwindow, linecount)
-  if facewindow
-    pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-    facewindow.viewport = msgwindow.viewport
-    facewindow.z        = msgwindow.z
-  end
-  atTop = (msgwindow.y == 0)
-  # Show text
-  msgwindow.text = text
-  loop do
-    if appear_timer_start
-      y_start = (atTop) ? -msgwindow.height : Graphics.height
-      y_end = (atTop) ? 0 : Graphics.height - msgwindow.height
-      msgwindow.y = lerp(y_start, y_end, appear_duration, appear_timer_start, System.uptime)
-      appear_timer_start = nil if msgwindow.y == y_end
-    end
-    controls.length.times do |i|
-      next if !controls[i]
-      next if controls[i][2] > msgwindow.position || msgwindow.waitcount != 0
-      control = controls[i][0]
-      param = controls[i][1]
-      case control
-      when "f"
-        facewindow&.dispose
-        facewindow = PictureWindow.new("Graphics/Pictures/#{param}")
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        facewindow.viewport = msgwindow.viewport
-        facewindow.z        = msgwindow.z
-      when "ff"
-        facewindow&.dispose
-        facewindow = FaceWindowVX.new(param)
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        facewindow.viewport = msgwindow.viewport
-        facewindow.z        = msgwindow.z
-      when "g"      # Display gold window
-        goldwindow&.dispose
-        goldwindow = pbDisplayGoldWindow(msgwindow)
-      when "cn"     # Display coins window
-        coinwindow&.dispose
-        coinwindow = pbDisplayCoinsWindow(msgwindow, goldwindow)
-      when "pt"     # Display battle points window
-        battlepointswindow&.dispose
-        battlepointswindow = pbDisplayBattlePointsWindow(msgwindow)
-      when "wu"
-        atTop = true
-        msgwindow.y = 0
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        if appear_timer_start
-          msgwindow.y = lerp(y_start, y_end, appear_duration, appear_timer_start, System.uptime)
-        end
-      when "wm"
-        atTop = false
-        msgwindow.y = (Graphics.height - msgwindow.height) / 2
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-      when "wd"
-        atTop = false
-        msgwindow.y = Graphics.height - msgwindow.height
-        pbPositionNearMsgWindow(facewindow, msgwindow, :left)
-        if appear_timer_start
-          msgwindow.y = lerp(y_start, y_end, appear_duration, appear_timer_start, System.uptime)
-        end
-      when "ts"     # Change text speed
-        msgwindow.textspeed = (param == "") ? 0 : param.to_i / 80.0
-      when "."      # Wait 0.25 seconds
-        msgwindow.waitcount += 0.25
-      when "|"      # Wait 1 second
-        msgwindow.waitcount += 1.0
-      when "wt"     # Wait X/20 seconds
-        param = param.sub(/\A\s+/, "").sub(/\s+\z/, "")
-        msgwindow.waitcount += param.to_i / 20.0
-      when "wtnp"   # Wait X/20 seconds, no pause
-        param = param.sub(/\A\s+/, "").sub(/\s+\z/, "")
-        msgwindow.waitcount = param.to_i / 20.0
-        autoresume = true
-      when "^"      # Wait, no pause
-        autoresume = true
-      when "se"     # Play SE
-        pbSEPlay(pbStringToAudioFile(param))
-      when "me"     # Play ME
-        pbMEPlay(pbStringToAudioFile(param))
+    when "ch"
+      cmds = param.clone
+      control_params[:choice_variable] = pbCsvPosInt!(cmds)
+      control_params[:choice_if_cancel] = pbCsvField!(cmds).to_i
+      control_params[:choices] = []
+      while cmds.length > 0
+        control_params[:choices].push(pbCsvField!(cmds))
       end
-      controls[i] = nil
+    when "wtnp", "^"
+      text.sub!(/\001\z/, "")   # fix: '$' can match end of line as well
+    when "op"
+      control_params[:appear_timer_start] = System.uptime
+    when "cl"
+      text.sub!(/\001\z/, "")   # fix: '$' can match end of line as well
+      control_params[:slide_off_at_close] = true
+      control_params[:end_se] = param
     end
-    break if !letterbyletter
-    Graphics.update
-    Input.update
-    facewindow&.update
-    if autoresume && msgwindow.waitcount == 0
-      msgwindow.resume if msgwindow.busy?
-      break if !msgwindow.busy?
-    end
-    if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
-      if msgwindow.busy?
-        pbPlayDecisionSE if msgwindow.pausing?
-        msgwindow.resume
-      elsif !appear_timer_start
-        break
-      end
-    end
-    pbUpdateSceneMap
-    msgwindow.update
-    yield if block_given?
-    break if (!letterbyletter || commandProc || commands) && !msgwindow.busy?
   end
-  Input.update   # Must call Input.update again to avoid extra triggers
-  msgwindow.letterbyletter = oldletterbyletter
-  if commands
-    $game_variables[cmdvariable] = pbShowCommands(msgwindow, commands, cmdIfCancel)
+end
+
+def pbMessageDisplay_PositionExtraSprites(msg_window, extra_sprites)
+  if extra_sprites[:face_window]
+    pbPositionNearMsgWindow(extra_sprites[:face_window], msg_window, :left)
+    extra_sprites[:face_window].viewport = msg_window.viewport
+    extra_sprites[:face_window].z        = msg_window.z
+  end
+end
+
+def pbMessageDisplay_UpdateMessageWindowSlideOn(msg_window, control_params, extra_sprites)
+  if control_params[:appear_timer_start]
+    y_start = (control_params[:msg_window_at_top]) ? -msg_window.height : Graphics.height
+    y_end = (control_params[:msg_window_at_top]) ? 0 : Graphics.height - msg_window.height
+    msg_window.y = lerp(y_start, y_end, control_params[:appear_duration],
+                        control_params[:appear_timer_start], System.uptime)
+    control_params[:appear_timer_start] = nil if msg_window.y == y_end
+  end
+end
+
+def pbMessageDisplay_UpdateControl(control, msg_window, control_params, extra_sprites)
+  param = control[1]
+  case control[0]
+  when "f"
+    extra_sprites[:face_window]&.dispose
+    extra_sprites[:face_window] = PictureWindow.new("Graphics/Pictures/#{param}")
+    pbPositionNearMsgWindow(extra_sprites[:face_window], msg_window, :left)
+    extra_sprites[:face_window].viewport = msg_window.viewport
+    extra_sprites[:face_window].z        = msg_window.z
+  when "ff"
+    extra_sprites[:face_window]&.dispose
+    extra_sprites[:face_window] = FaceWindowVX.new(param)
+    pbPositionNearMsgWindow(extra_sprites[:face_window], msg_window, :left)
+    extra_sprites[:face_window].viewport = msg_window.viewport
+    extra_sprites[:face_window].z        = msg_window.z
+  when "ts"     # Change text speed
+    msg_window.textspeed = (param == "") ? 0 : param.to_i / 80.0
+  when "me"     # Play ME
+    pbMEPlay(pbStringToAudioFile(param))
+  when "se"     # Play SE
+    pbSEPlay(pbStringToAudioFile(param))
+  when "wtnp"   # Wait X/20 seconds, no pause
+    param = param.sub(/\A\s+/, "").sub(/\s+\z/, "")
+    msg_window.waitcount = param.to_i / 20.0
+    control_params[:auto_resume] = true
+  when "wt"     # Wait X/20 seconds
+    param = param.sub(/\A\s+/, "").sub(/\s+\z/, "")
+    msg_window.waitcount += param.to_i / 20.0
+  when "g"      # Display gold window
+    extra_sprites[:gold_window]&.dispose
+    extra_sprites[:gold_window] = pbDisplayGoldWindow(msg_window)
+  when "cn"     # Display coins window
+    extra_sprites[:coins_window]&.dispose
+    extra_sprites[:coins_window] = pbDisplayCoinsWindow(msg_window, extra_sprites[:gold_window])
+  when "pt"     # Display battle points window
+    extra_sprites[:battle_points_window]&.dispose
+    extra_sprites[:battle_points_window] = pbDisplayBattlePointsWindow(msg_window)
+  when "wd"     # Put message window at the bottom of the screen
+    control_params[:msg_window_at_top] = false
+    msg_window.y = Graphics.height - msg_window.height
+    pbPositionNearMsgWindow(extra_sprites[:face_window], msg_window, :left)
+    if control_params[:appear_timer_start]   # If sliding in, recalculate position
+      msg_window.y = lerp(y_start, y_end, control_params[:appear_duration],
+                          control_params[:appear_timer_start], System.uptime)
+    end
+  when "wm"     # Put message window in the middle of the screen
+    control_params[:msg_window_at_top] = false
+    msg_window.y = (Graphics.height - msg_window.height) / 2
+    pbPositionNearMsgWindow(extra_sprites[:face_window], msg_window, :left)
+  when "wu"     # Put message window at the top of the screen
+    control_params[:msg_window_at_top] = true
+    msg_window.y = 0
+    pbPositionNearMsgWindow(extra_sprites[:face_window], msg_window, :left)
+    if control_params[:appear_timer_start]
+      msg_window.y = lerp(y_start, y_end, control_params[:appear_duration],
+                          control_params[:appear_timer_start], System.uptime)
+    end
+  when "."      # Wait 0.25 seconds
+    msg_window.waitcount += 0.25
+  when "|"      # Wait 1 second
+    msg_window.waitcount += 1.0
+  when "^"      # Wait, no pause
+    control_params[:auto_resume] = true
+  end
+end
+
+def pbMessageDisplay_AfterMessageAppeared(msg_window, control_params, extra_sprites)
+  if control_params[:choices]
+    $game_variables[control_params[:choice_variable]] = pbShowCommands(
+      msg_window, control_params[:choices], control_params[:choice_if_cancel]
+    )
     $game_map.need_refresh = true if $game_map
   end
-  ret = commandProc.call(msgwindow) if commandProc
-  goldwindow&.dispose
-  coinwindow&.dispose
-  battlepointswindow&.dispose
-  facewindow&.dispose
-  if haveSpecialClose
-    pbSEPlay(pbStringToAudioFile(specialCloseSE))
-    atTop = (msgwindow.y == 0)
-    y_start = (atTop) ? 0 : Graphics.height - msgwindow.height
-    y_end = (atTop) ? -msgwindow.height : Graphics.height
-    disappear_duration = 0.5   # In seconds
+end
+
+def pbMessageDisplay_MessageWindowSlideOff(msg_window, control_params)
+  if control_params[:slide_off_at_close]
+    pbSEPlay(pbStringToAudioFile(control_params[:end_se]))
+    msg_window_at_top = (msg_window.y == 0)
+    y_start = (msg_window_at_top) ? 0 : Graphics.height - msg_window.height
+    y_end = (msg_window_at_top) ? -msg_window.height : Graphics.height
     disappear_timer_start = System.uptime
     loop do
-      msgwindow.y = lerp(y_start, y_end, disappear_duration, disappear_timer_start, System.uptime)
+      msg_window.y = lerp(y_start, y_end, control_params[:disappear_duration],
+                          disappear_timer_start, System.uptime)
       Graphics.update
       Input.update
       pbUpdateSceneMap
-      msgwindow.update
-      break if msgwindow.y == y_end
+      msg_window.update
+      break if msg_window.y == y_end
     end
   end
-  return ret
 end
 
 #===============================================================================
