@@ -467,5 +467,8 @@ class AnimationEditor::BatchEdits < UIControls::BaseContainer
     add_control_at(:offset_commands, LABEL_X, ctrl_y + BUTTON_Y_OFFSET,
                    UIControls::Button.new(100, BUTTON_HEIGHT, @viewport, _INTL("Apply offset")))
     ctrl_y += LINE_SPACING
+    add_control_at(:clear_selected_row, LABEL_X, ctrl_y + BUTTON_Y_OFFSET,
+                   UIControls::Button.new(145, BUTTON_HEIGHT, @viewport, _INTL("Clear selected row")))
+    ctrl_y += LINE_SPACING
   end
 end

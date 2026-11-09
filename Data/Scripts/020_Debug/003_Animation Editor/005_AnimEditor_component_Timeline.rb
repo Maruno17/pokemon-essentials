@@ -314,6 +314,10 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
     return ret
   end
 
+  def property
+    return particle_index_and_property[1]
+  end
+
   def particle_index_and_property
     return -1, nil if @selected_row < 0
     idx = 0

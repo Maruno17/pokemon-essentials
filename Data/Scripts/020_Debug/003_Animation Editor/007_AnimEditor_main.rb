@@ -1422,6 +1422,11 @@ class AnimationEditor
     when :offset_commands
       batch_edit_commands
       return
+    when :clear_selected_row
+      part_idx, row = @components[:timeline].particle_index_and_property
+      return if !row
+      AnimationEditor::ParticleDataHelper.clear_property(@anim[:particles][part_idx], row)
+      @components[:timeline].change_particle_commands(part_idx)
     else
       return
     end
@@ -2038,6 +2043,12 @@ class AnimationEditor
       else
         component.get_control(:redo).disable
       end
+      property = @components[:timeline].property
+      if property && @anim[:particles][particle_index][property]
+        component.get_control(:clear_selected_row).enable
+      else
+        component.get_control(:clear_selected_row).disable
+      end
     when :timeline
       # Disable the "move particle up/down" buttons if the selected particle
       # can't move that way (or there is no selected particle)
@@ -2123,6 +2134,7 @@ class AnimationEditor
   def update
     old_keyframe = keyframe
     old_particle_index = particle_index
+    old_property = @components[:timeline].property
     old_captured = @captured
     # Update captured control (if there is one)
     if @captured
@@ -2153,7 +2165,8 @@ class AnimationEditor
       component.repaint if [:timeline, :menu_bar].include?(sym)
     end
     update_input if !@captured
-    refresh if keyframe != old_keyframe || particle_index != old_particle_index
+    refresh if keyframe != old_keyframe || particle_index != old_particle_index ||
+               @components[:timeline].property != old_property
   end
 
   #-----------------------------------------------------------------------------

@@ -647,6 +647,10 @@ module AnimationEditor::ParticleDataHelper
     end
   end
 
+  def clear_property(particle, property)
+    particle.delete(property)
+  end
+
   #-----------------------------------------------------------------------------
 
   # Creates a new particle and inserts it at index. If there is a particle above

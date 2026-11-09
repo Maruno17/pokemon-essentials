@@ -971,7 +971,7 @@ class AnimationEditor::Canvas < Sprite
       if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
         refresh_particle(i)   # Because there can be multiple targets
       else
-        refresh_sprite(i) if show_particle_sprite?(i)
+        refresh_sprite(i)
       end
     end
     refresh_particle_frame   # Intentionally after refreshing particles
@@ -1409,7 +1409,7 @@ class AnimationEditor::Canvas < Sprite
                   @anim[:particles][@selected_particle][:name]) if !target
     else
       target = @particle_sprites[@selected_particle]
-      if target && target.compact.length > 1
+      if target && GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(@anim[:particles][@selected_particle][:focus])
         target = target[first_target_index][0]
       elsif target
         target = target.compact[0][0]

@@ -582,11 +582,20 @@ end
 
 # NOTE: All these appear as \XYZ[ABC].
 MESSAGE_DISPLAY_CONTROLS_WITH_PARAMETER = [
-  "f", "ff", "ts", "cl", "me", "se", "wt", "wtnp", "ch"
+  "f", "ff",      # Show a picture/part of a picture above the message box
+  "ts",           # Sets the text display speed
+  "cl",           # Message box slides off at end of message
+  "me", "se",     # Play an ME/SE
+  "wt", "wtnp",   # Pause the message then auto-resume
+  "ch"            # Choices
 ]
 # NOTE: All these appear as \XYZ.
 MESSAGE_DISPLAY_CONTROLS_WITHOUT_PARAMETER = [
-  "g", "cn", "pt", "wd", "wm", "wu", "op", "cl", "\\.", "\\|", "\\!", "\\^"
+  "g", "cn", "pt",       # Show a money/coin/BP window
+  "wd", "wm", "wu",      # Position message box at bottom/middle/top of screen
+  "op", "cl",            # Message box slides in at start/off at end of message
+  "\\.", "\\|", "\\!",   # Pause the message then auto-resume
+  "\\^"                  # Auto-resumes after \1 and \!, and immediately closes the message at the end
 ]
 
 def pbMessageDisplay_ExtractControls(text, controls)

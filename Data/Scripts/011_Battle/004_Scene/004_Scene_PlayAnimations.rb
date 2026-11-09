@@ -679,6 +679,7 @@ class Battle::Scene
       anim_player.set_up
       # Play animation
       anim_player.start
+      anim_player.update
       loop do
         pbUpdate
         anim_player.update
@@ -743,6 +744,7 @@ class Battle::Scene
     )
     # Play the animation
     animPlayer.start
+    animPlayer.update
     loop do
       animPlayer.update
       pbUpdate
