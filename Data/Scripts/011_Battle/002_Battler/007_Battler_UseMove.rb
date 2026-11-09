@@ -627,6 +627,7 @@ class Battle::Battler
     # Instruct
     @battle.allBattlers.each do |b|
       next if !b.effects[PBEffects::Instruct] || !b.lastMoveUsed
+      next if b.usingMultiTurnAttack?
       b.effects[PBEffects::Instruct] = false
       idxMove = -1
       b.eachMoveWithIndex { |m, i| idxMove = i if m.id == b.lastMoveUsed }
@@ -652,7 +653,8 @@ class Battle::Battler
        @battle.pbCheckGlobalAbility(:DANCER) && move.danceMove?
       dancers = []
       @battle.pbPriority(true).each do |b|
-        dancers.push(b) if b.index != user.index && b.hasActiveAbility?(:DANCER)
+        dancers.push(b) if b.index != user.index && b.hasActiveAbility?(:DANCER) &&
+                           !b.usingMultiTurnAttack?
       end
       while dancers.length > 0
         nextUser = dancers.pop
