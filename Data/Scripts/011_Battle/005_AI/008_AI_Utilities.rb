@@ -103,10 +103,12 @@ class Battle::AI
 
   # Used by Revival Blessing.
   def choose_pokemon_to_revive(user)
-    targets = get_usability_of_item_on_pkmn(:REVIVE,
-       @battle.pbGetOwnerIndexFromBattlerIndex(user.index), user.idxOwnSide)
-    targets = targets[:revive]
-    targets.sort! { |a, b| a[1] <=> b[1] }
+    targets = []
+    @battle.eachInTeamFromBattlerIndex(@user.index) do |team_pkmn, i|
+      next if !team_pkmn.fainted?
+      usage = get_usability_of_item_on_pkmn(:REVIVE, i, user.idxOwnSide)
+      targets += usage[:revive]
+    end
     idxParty = targets.last[1]   # Latest fainted Pokémon in party
     return @battle.pbParty(user.idxOwnSide)[idxParty]
   end
@@ -287,7 +289,7 @@ Battle::AI::Handlers::AbilityRanking.add(:COMMANDER,
 
 Battle::AI::Handlers::AbilityRanking.add(:CUDCHEW,
   proc { |ability, score, battler, ai|
-    next score if battler.item.is_berry? || battler.effects[PBEffects::CudChewBerry]
+    next score if battler.item&.is_berry? || battler.effects[PBEffects::CudChewBerry]
     next 0
   }
 )

@@ -1147,6 +1147,7 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("SetUserAndAlliesAbility
   proc { |move, user, target, ai, battle|
     next true if user.battler.unlosableAbility? &&
                  user.battler.allAllies.none? { |ally| !ally.unlosableAbility? }
+    move.move.pbDetermineValidTargets(user.battler)
     next move.move.pbFailsAgainstTarget?(user.battler, target.battler, false)
   }
 )

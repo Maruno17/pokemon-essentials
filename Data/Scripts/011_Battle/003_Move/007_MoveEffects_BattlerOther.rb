@@ -660,10 +660,8 @@ end
 class Battle::Move::FlinchTargetFailsIfTargetNotUsingPriorityMove < Battle::Move::FlinchTarget
   def pbMoveFailed?(user, targets)
     failed = true
-    if !b.movedThisRound?
-      targets.each do |target|
-        failed = false if @battle.choices[target.index][4] > 0
-      end
+    targets.each do |target|
+      failed = false if !target.movedThisRound? && @battle.choices[target.index][4] > 0
     end
     if failed
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1199,10 +1197,14 @@ end
 class Battle::Move::SetUserAndAlliesAbilityToTargetAbility < Battle::Move
   def ignoresSubstitute?(user); return true; end
 
-  def pbMoveFailed?(user, targets)
-    failed = true
+  def pbDetermineValidTargets(user)
     @valid_targets = [user] + user.allAllies
     @valid_targets.delete_if { |battler| battler.unlosableAbility? }
+  end
+
+  def pbMoveFailed?(user, targets)
+    pbDetermineValidTargets(user)
+    failed = true
     if @valid_targets.empty?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true

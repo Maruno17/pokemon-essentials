@@ -29,6 +29,7 @@ class Battle::DebugSceneNoVisuals
   def pbCommonAnimation(animName, user = nil, target = nil); end
   def pbAnimation(moveID, user, targets, hitNum = 0); end
   def pbHitAndHPLossAnimation(targets); end
+  def pbSwapBattlerSprites(idxA, idxB); end
   def pbShowPartyLineup(side, fullAnim = false); end
   def pbShowAbilitySplash(battler, delay = false, logTrigger = true); end
   def pbReplaceAbilitySplash(battler); end

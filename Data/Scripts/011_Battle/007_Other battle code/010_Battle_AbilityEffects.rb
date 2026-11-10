@@ -3392,7 +3392,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:ORICHALCUMPULSE,
 
 Battle::AbilityEffects::OnSwitchIn.add(:PASTELVEIL,
   proc { |ability, battler, battle, switch_in|
-    next if battler.status != :POISON & battler.allAllies.none? { |ally| ally.status == :POISON }
+    next if battler.status != :POISON && battler.allAllies.none? { |ally| ally.status == :POISON }
     battle.pbShowAbilitySplash(battler)
     if battler.status == :POISON
       battler.pbCureStatus(Battle::Scene::USE_ABILITY_SPLASH)
@@ -3685,7 +3685,7 @@ Battle::AbilityEffects::OnSwitchInDelayed.add(:ICEFACE,
 Battle::AbilityEffects::OnSwitchInDelayed.add(:MIMICRY,
   proc { |ability, battler, battle, switch_in|
     next if battle.field.terrain == :None
-    Battle::AbilityEffects.triggerOnTerrainChange(ability, battler, battle, false)
+    Battle::AbilityEffects.triggerOnTerrainChange(ability, battler, battle, battle.field.terrain, false)
   }
 )
 

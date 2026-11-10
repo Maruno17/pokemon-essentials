@@ -735,7 +735,7 @@ class Battle::Move::RevivePokemonToHalfHP < Battle::Move
       end
     else
       # The AI chooses the Pokémon to revive
-      pkmn = Battle::AI.choose_pokemon_to_revive(user)
+      pkmn = @battle.battleAI.choose_pokemon_to_revive(user)
     end
     pkmn.hp = (pkmn.totalhp / 2).floor
     pkmn.hp = 1 if pkmn.hp <= 0

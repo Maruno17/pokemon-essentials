@@ -347,7 +347,7 @@ class Battle
     # Tera Shift
     pbPriority(true).each do |b|
       next if !battler_index.include?(b.index) || b.fainted?
-      pbCheckForm if b.isSpecies?(:TERAPAGOS)
+      b.pbCheckForm if b.isSpecies?(:TERAPAGOS)
     end
     # Neutralizing Gas, Unnerve/As One
     pbNegationAbilitiesOnBattlerEnteringBattle(battler_index)

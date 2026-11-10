@@ -419,7 +419,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddSpikesToFoeSide",
     if foe_reserves.empty?
       next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
     end
-    multiplier = [10, 7, 5][user.pbOpposingSide.effects[PBEffects::Spikes]]
+    multiplier = [10, 7, 5, 0][user.pbOpposingSide.effects[PBEffects::Spikes]]
     score += [multiplier * foe_reserves.length, 30].min
     next score
   }
@@ -450,7 +450,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddToxicSpikesToFoeSide",
     if foe_reserves.empty?
       next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
     end
-    multiplier = [8, 5][user.pbOpposingSide.effects[PBEffects::ToxicSpikes]]
+    multiplier = [8, 5, 0][user.pbOpposingSide.effects[PBEffects::ToxicSpikes]]
     score += [multiplier * foe_reserves.length, 30].min
     next score
   }
@@ -480,7 +480,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStealthRocksToFoeSide",
     if foe_reserves.empty?
       next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
     end
-    score += [10 * foe_reserves.length, 30].min
+    score += [10 * foe_reserves.length, 30].min if !user.pbOpposingSide.effects[PBEffects::StealthRock]
     next score
   }
 )
@@ -509,7 +509,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AddStickyWebToFoeSide",
     if foe_reserves.empty?
       next (move.damagingMove?) ? score : Battle::AI::MOVE_USELESS_SCORE
     end
-    score += [8 * foe_reserves.length, 30].min
+    score += [8 * foe_reserves.length, 30].min if !user.pbOpposingSide.effects[PBEffects::StickyWeb]
     next score
   }
 )
