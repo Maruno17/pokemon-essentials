@@ -100,6 +100,7 @@ class Battle::Battler
     @effects[PBEffects::Uproar]        = 0
     @effects[PBEffects::Bide]          = 0
     @currentMove = nil if @effects[PBEffects::HyperBeam] == 0
+    @battle.scene.pbForceBattlerInvisibility(@index, false)
     # Reset counters for moves which increase them when used in succession
     @effects[PBEffects::FuryCutter] = 0
     @effects[PBEffects::GigatonHammer] = false if move_failed

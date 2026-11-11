@@ -75,6 +75,15 @@ class Battle::Battler
       return
     end
     return if @fainted   # Has already fainted properly
+    @battle.scene.pbForceBattlerInvisibility(@index, false)
+    if @effects[PBEffects::Commanding] >= 0
+      @effects[PBEffects::Commanding] = -1
+      @battle.battlers[@effects[PBEffects::Commanding]].effects[PBEffects::CommandedBy] = -1
+    elsif @effects[PBEffects::CommandedBy] >= 0
+      @battle.scene.pbForceBattlerInvisibility(@effects[PBEffects::CommandedBy], false)
+      @effects[PBEffects::CommandedBy] = -1
+      @battle.battlers[@effects[PBEffects::CommandedBy]].effects[PBEffects::Commanding] = -1
+    end
     @battle.pbDisplayBrief(_INTL("{1} fainted!", pbThis)) if showMessage
     PBDebug.log("[Pokémon fainted] #{pbThis} (#{@index})") if !showMessage
     @battle.scene.pbFaintBattler(self)

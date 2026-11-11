@@ -296,6 +296,11 @@ class Battle::Scene
     pbRefresh
   end
 
+  def pbForceBattlerInvisibility(idxBattler, value)
+    @sprites["pokemon_#{idxBattler}"].forceInvisible = value
+    @sprites["shadow_#{idxBattler}"].forceInvisible = value
+  end
+
   #-----------------------------------------------------------------------------
   # Phases.
   #-----------------------------------------------------------------------------

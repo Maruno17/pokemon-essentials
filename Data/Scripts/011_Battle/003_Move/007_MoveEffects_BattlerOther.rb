@@ -1504,6 +1504,7 @@ class Battle::Move::HitsTargetInSkyGroundsTarget < Battle::Move
                                "TwoTurnAttackInvulnerableInSkyParalyzeTarget")   # NOTE: Not Sky Drop.
       target.effects[PBEffects::TwoTurnAttack] = nil
       @battle.pbClearChoice(target.index) if !target.movedThisRound?
+      @battle.scene.pbForceBattlerInvisibility(target.index, false)
     end
     target.effects[PBEffects::MagnetRise]  = 0
     target.effects[PBEffects::Telekinesis] = 0
@@ -1534,6 +1535,7 @@ class Battle::Move::StartGravity < Battle::Move
                             "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
         b.effects[PBEffects::TwoTurnAttack] = nil
         @battle.pbClearChoice(b.index) if !b.movedThisRound?
+        @battle.scene.pbForceBattlerInvisibility(target.index, false)
         showMessage = true
       end
       if b.effects[PBEffects::MagnetRise] > 0 ||

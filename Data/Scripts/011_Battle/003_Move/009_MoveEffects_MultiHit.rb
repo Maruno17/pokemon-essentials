@@ -415,6 +415,8 @@ end
 # (Handled in Battler's pbSuccessCheckPerHit): Is semi-invulnerable during use.
 #===============================================================================
 class Battle::Move::TwoTurnAttackInvulnerableUnderground < Battle::Move::TwoTurnMove
+  def hidesUser?; return true; end
+
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} burrowed its way under the ground!", user.pbThis))
   end
@@ -425,6 +427,8 @@ end
 # (Handled in Battler's pbSuccessCheckPerHit): Is semi-invulnerable during use.
 #===============================================================================
 class Battle::Move::TwoTurnAttackInvulnerableUnderwater < Battle::Move::TwoTurnMove
+  def hidesUser?; return true; end
+
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} hid underwater!", user.pbThis))
   end
@@ -436,6 +440,7 @@ end
 #===============================================================================
 class Battle::Move::TwoTurnAttackInvulnerableInSky < Battle::Move::TwoTurnMove
   def unusableInGravity?; return true; end
+  def hidesUser?;         return true; end
 
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} flew up high!", user.pbThis))
@@ -449,6 +454,7 @@ end
 #===============================================================================
 class Battle::Move::TwoTurnAttackInvulnerableInSkyParalyzeTarget < Battle::Move::TwoTurnMove
   def unusableInGravity?; return true; end
+  def hidesUser?;         return true; end
 
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} sprang up!", user.pbThis))
@@ -469,6 +475,8 @@ end
 #===============================================================================
 class Battle::Move::TwoTurnAttackInvulnerableInSkyTargetCannotAct < Battle::Move::TwoTurnMove
   def unusableInGravity?; return true; end
+  def hidesUser?;         return true; end
+  def hidesTarget?;       return true; end
 
   def pbIsChargingTurn?(user)
     # NOTE: Sky Drop doesn't benefit from Power Herb, probably because it works
@@ -539,6 +547,8 @@ end
 # use. Ends target's protections upon hit. (Shadow Force, Phantom Force)
 #===============================================================================
 class Battle::Move::TwoTurnAttackInvulnerableRemoveProtections < Battle::Move::TwoTurnMove
+  def hidesUser?; return true; end
+
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} vanished instantly!", user.pbThis))
   end

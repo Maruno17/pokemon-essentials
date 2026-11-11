@@ -123,8 +123,10 @@ class Battle::Battler
         break
       end
       if ally
+        @battle.scene.pbForceBattlerInvisibility(@index, false)   # In case semi-invulnerable
         @battle.pbShowAbilitySplash(self)
         @battle.pbCommonAnimation("Commander", self, ally)
+        @battle.scene.pbForceBattlerInvisibility(@index, true)
         @battle.pbDisplay(_INTL("{1} was swallowed by {2} and became {2} commander!", pbThis, ally.pbOfThis(true)))
         @effects[PBEffects::Commanding] = ally.index
         ally.effects[PBEffects::CommandedBy] = @index

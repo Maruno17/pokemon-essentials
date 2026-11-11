@@ -34,6 +34,7 @@ class AnimationPlayer
   attr_reader   :slowdown   # 1 = normal speed, 2 = half speed, 3 = one third speed, etc.
   attr_reader   :sprites, :particle_sprites, :emitters
   attr_reader   :scene, :user
+  attr_reader   :forceInvisibilities
 
   # animation is either a GameData::Animation or a hash made from one.
   # user is a Battler or FakeBattler, or nil if there is no user.
@@ -52,6 +53,7 @@ class AnimationPlayer
       @side_sizes[0] = @scene.side_size(0)
       @side_sizes[1] = @scene.side_size(1)
     end
+    @forceInvisibilities = []
     @viewport = @scene.viewport
     @sprites = @scene.sprites
     initialize_battler_sprite_names
@@ -261,6 +263,12 @@ class AnimationPlayer
                                           @battler_filenames[target_idx])
       end
     end
+    case particle[:graphic]
+    when "USER", "USER_OPP", "USER_FRONT", "USER_BACK"
+      particle_sprite.forceInvisibility = @forceInvisibilities[@user.index]
+    when "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
+      particle_sprite.forceInvisibility = @forceInvisibilities[target_idx]
+    end
     if sprite && (particle[:mask_graphic] || "") != ""
       sprite.pattern = RPG::Cache.load_bitmap("Graphics/Battle animations/", particle[:mask_graphic] || "")
     end
@@ -379,6 +387,7 @@ class AnimationPlayer
     emitter.set_user_and_targets(@user, @targets)
     emitter.set_sprites(@sprites)
     emitter.set_battler_filenames(@battler_filenames)
+    emitter.forceInvisibilities = @forceInvisibilities
     emitter.set_focus_coords(@user_coords, @target_coords)
     emitter.set_side_sizes(@side_sizes)
     emitter.no_user = (@animation.is_a?(GameData::Animation)) ? @animation.no_user : @animation[:no_user]
@@ -464,6 +473,7 @@ class AnimationPlayer::ParticleSprite
   attr_accessor :foe_invert_x, :foe_invert_y, :foe_invert_z, :foe_flip
   attr_accessor :slowdown
   attr_reader   :values
+  attr_accessor :forceInvisibility
   # Used by particles from emitter
   attr_reader   :emitter_params
 
@@ -842,9 +852,9 @@ class AnimationPlayer::ParticleSprite
         @sprite[1].mirror = !@sprite[1].mirror if value
       end
     when :visible
-      @sprite.each { |spr| spr.visible = value }
+      @sprite.each { |spr| spr.visible = !@forceInvisibility && value }
       if @tiled_sprites
-        @tiled_sprites.each { |spr| spr.visible = value }
+        @tiled_sprites.each { |spr| spr.visible = !@forceInvisibility && value }
       end
     when :opacity
       value += (@property_offsets[property] || 0)
@@ -958,6 +968,7 @@ class AnimationPlayer::Emitter
   attr_accessor :emitter_position_polar_coordinates, :emitter_spawn_polar_coordinates
   attr_accessor :no_user, :no_target
   attr_reader   :particle_sprites
+  attr_accessor :forceInvisibilities
 
   # These properties are used by individual ParticleSprites spawned by this
   # emitter, and aren't used by the emitter itself so don't need updating here.
@@ -1166,6 +1177,12 @@ class AnimationPlayer::Emitter
         @particle, sprite2, @user&.index, target_idx,
         @battler_filenames[@user&.index || -1], @battler_filenames[target_idx]
       )
+    end
+    case @particle[:graphic]
+    when "USER", "USER_OPP", "USER_FRONT", "USER_BACK"
+      particle_sprite.forceInvisibility = @forceInvisibilities[@user.index]
+    when "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
+      particle_sprite.forceInvisibility = @forceInvisibilities[target_idx]
     end
     if sprite && (@particle[:mask_graphic] || "") != ""
       sprite.pattern = RPG::Cache.load_bitmap("Graphics/Battle animations/", @particle[:mask_graphic] || "")

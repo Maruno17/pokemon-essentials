@@ -142,6 +142,7 @@ class Battle::Scene
     # data box appearing)
     sendOutAnims = []
     sendOuts.each_with_index do |b, i|
+      pbForceBattlerInvisibility(i, false)
       pkmn = @battle.battlers[b[0]].effects[PBEffects::Illusion] || b[1]
       pbChangePokemon(b[0], pkmn)
       pbRefresh
@@ -264,6 +265,7 @@ class Battle::Scene
   end
 
   def pbDamageAnimation(battler, effectiveness = 0)
+    return if @sprites["pokemon_#{battler.index}"].forceInvisible
     @briefMessage = false
     # Damage animation
     damageAnim = Animation::BattlerDamage.new(@sprites, @viewport, battler.index, effectiveness)
@@ -283,8 +285,10 @@ class Battle::Scene
     # Set up animations
     damageAnims = []
     targets.each do |t|
-      anim = Animation::BattlerDamage.new(@sprites, @viewport, t[0].index, t[2])
-      damageAnims.push(anim)
+      if !@sprites["pokemon_#{t[0].index}"].forceInvisible
+        anim = Animation::BattlerDamage.new(@sprites, @viewport, t[0].index, t[2])
+        damageAnims.push(anim)
+      end
       @sprites["dataBox_#{t[0].index}"].animate_hp(t[1], t[0].hp)
     end
     # Update loop
@@ -608,9 +612,10 @@ class Battle::Scene
   #-----------------------------------------------------------------------------
 
   # Plays a move animation.
-  def pbAnimation(move_id, user, targets, version = 0)
+  def pbAnimation(move_id, user, targets, version = 0, &block)
     anims = find_move_animation(move_id, version, user&.index, targets)
     return if !anims || anims.empty?
+    yield :before if block_given?
     if anims[0].is_a?(GameData::Animation)   # New format animation
       pbSaveShadows do
         # NOTE: anims.sample is a random valid animation.
@@ -629,6 +634,7 @@ class Battle::Scene
         end
       end
     end
+    yield :after if block_given?
   end
 
   # Plays a common animation.
@@ -676,6 +682,14 @@ class Battle::Scene
     # Create animation player
     PBDebug.logonerr {
       anim_player = AnimationPlayer.new(anim_data, user, targets, self)
+      if user
+        anim_player.forceInvisibilities[user.index] = @sprites["pokemon_#{user.index}"].forceInvisible
+      end
+      if targets
+        targets.each do |target|
+          anim_player.forceInvisibilities[target.index] = @sprites["pokemon_#{target.index}"].forceInvisible
+        end
+      end
       anim_player.set_up
       # Play animation
       anim_player.start

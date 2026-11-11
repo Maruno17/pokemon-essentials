@@ -315,7 +315,9 @@ end
 class Battle::Move::TwoTurnMove < Battle::Move
   attr_reader :chargingTurn
 
-  def chargingTurnMove?; return true; end
+  def chargingTurnMove?; return true;  end
+  def hidesUser?;        return false; end
+  def hidesTarget?;      return false; end   # For Sky Drop
 
   # user.effects[PBEffects::TwoTurnAttack] is set to the move's ID if this
   # method returns true, or nil if false.
@@ -376,6 +378,8 @@ class Battle::Move::TwoTurnMove < Battle::Move
     end
   end
 
+  # TODO: I think this should play after pbShowAnimation like Gen 4, even though
+  #       it's correctly positioned for Gen 5.
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} began charging up!", user.pbThis))
   end
@@ -399,7 +403,24 @@ class Battle::Move::TwoTurnMove < Battle::Move
 
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     hitNum = 1 if @chargingTurn && !@damagingTurn   # Charging anim
-    super
+    @battle.pbAnimation(id, user, targets, hitNum) do |timing|
+      case timing
+      when :before
+        if hitNum == 0   # Damaging animation
+          @battle.scene.pbForceBattlerInvisibility(user.index, false) if hidesUser?
+          if hidesTarget?
+            targets.each { |b| @battle.scene.pbForceBattlerInvisibility(b.index, false) }
+          end
+        end
+      when :after
+        if hitNum == 1   # Charging animation
+          @battle.scene.pbForceBattlerInvisibility(user.index, true) if hidesUser?
+          if hidesTarget?
+            targets.each { |b| @battle.scene.pbForceBattlerInvisibility(b.index, true) }
+          end
+        end
+      end
+    end
   end
 end
 
