@@ -123,10 +123,10 @@ class Battle::Battler
         break
       end
       if ally
-        @battle.scene.pbForceBattlerInvisibility(@index, false)   # In case semi-invulnerable
+        @battle.visuals.pbForceBattlerInvisibility(@index, false)   # In case semi-invulnerable
         @battle.pbShowAbilitySplash(self)
         @battle.pbCommonAnimation("Commander", self, ally)
-        @battle.scene.pbForceBattlerInvisibility(@index, true)
+        @battle.visuals.pbForceBattlerInvisibility(@index, true)
         @battle.pbDisplay(_INTL("{1} was swallowed by {2} and became {2} commander!", pbThis, ally.pbOfThis(true)))
         @effects[PBEffects::Commanding] = ally.index
         ally.effects[PBEffects::CommandedBy] = @index
@@ -186,12 +186,12 @@ class Battle::Battler
     if show_message
       @battle.pbShowAbilitySplash(self)
       if pbCanRaiseStatStage?(stat, self)
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           pbRaiseStatStage(stat, increment, self)
         else
           pbRaiseStatStageByCause(stat, increment, self, abilityName)
         end
-      elsif Battle::Scene::USE_ABILITY_SPLASH
+      elsif Battle::Visuals::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
       else
         @battle.pbDisplay(_INTL("{1} {2} made {3} ineffective!", pbOfThis, abilityName, move.name))
@@ -213,12 +213,12 @@ class Battle::Battler
     if show_message
       @battle.pbShowAbilitySplash(self)
       if canHeal? && pbRecoverHP(@totalhp / 4) > 0
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1}'s HP was restored.", pbThis))
         else
           @battle.pbDisplay(_INTL("{1} {2} restored its HP.", pbOfThis, abilityName))
         end
-      elsif Battle::Scene::USE_ABILITY_SPLASH
+      elsif Battle::Visuals::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
       else
         @battle.pbDisplay(_INTL("{1} {2} made {3} ineffective!", pbOfThis, abilityName, move.name))
@@ -241,7 +241,7 @@ class Battle::Battler
     elsif oldAbil == :ILLUSION && @effects[PBEffects::Illusion]
       @effects[PBEffects::Illusion] = nil
       if !@effects[PBEffects::Transform]
-        @battle.scene.pbChangePokemon(self, @pokemon)
+        @battle.visuals.pbChangePokemon(self, @pokemon)
         @battle.pbDisplay(_INTL("{1} {2} wore off!", pbOfThis, GameData::Ability.get(oldAbil).name))
         @battle.pbSetSeen(self)
       end
@@ -326,7 +326,7 @@ class Battle::Battler
       next if !b.item || b.unlosableItem?(b.item)
       next if unlosableItem?(b.item)
       @battle.pbShowAbilitySplash(b)
-      if Battle::Scene::USE_ABILITY_SPLASH
+      if Battle::Visuals::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} shared its {2} with {3}!",
                                 b.pbThis, b.itemName, pbThis(true)))
       else
@@ -349,7 +349,7 @@ class Battle::Battler
     if hasActiveAbility?(:CHEEKPOUCH) && GameData::Item.get(item_to_use).is_berry? && canHeal?
       @battle.pbShowAbilitySplash(self)
       pbRecoverHP(@totalhp / 3)
-      if Battle::Scene::USE_ABILITY_SPLASH
+      if Battle::Visuals::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1}'s HP was restored.", pbThis))
       else
         @battle.pbDisplay(_INTL("{1} {2} restored its HP.", pbOfThis, abilityName))

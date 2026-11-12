@@ -1,7 +1,7 @@
 #===============================================================================
 #
 #===============================================================================
-class Battle::Scene
+class Battle::Visuals
   ANIMATION_DEFAULTS = [:TACKLE, :DEFENSECURL]   # With target, without target
   ANIMATION_DEFAULTS_FOR_TYPE_CATEGORY = {
     :NORMAL   => [:TACKLE,       :SONICBOOM,    :DEFENSECURL, :BODYSLAM,   nil,            :TAILWHIP],
@@ -460,8 +460,8 @@ class Battle::Scene
   end
 
   def pbHideCaptureBall(idxBattler)
-    # NOTE: It's not really worth writing a whole Battle::Scene::Animation class
-    #       for making the capture ball fade out.
+    # NOTE: It's not really worth writing a whole Battle::Visuals::Animation
+    #       class for making the capture ball fade out.
     ball = @sprites["captureBall"]
     return if !ball
     # Data box disappear animation

@@ -251,7 +251,7 @@ class Battle::Move::CrashDamageIfFails < Battle::Move
   def pbCrashDamage(user)
     return if !user.takesIndirectDamage?
     @battle.pbDisplay(_INTL("{1} kept going and crashed!", user.pbThis))
-    @battle.scene.pbDamageAnimation(user)
+    @battle.visuals.pbDamageAnimation(user)
     user.pbReduceHP(user.totalhp / 2, false)
     user.pbItemHPHealCheck
     user.pbFaint if user.fainted?
@@ -628,7 +628,7 @@ class Battle::Move::UserMakeSubstitute < Battle::Move
     @battle.pbAnimation(id, user, targets, hitNum) do |timing|
       case timing
       when :after
-        @battle.scene.pbSwapBattlerAndSubstitute(user.index, :doll_instant)
+        @battle.visuals.pbSwapBattlerAndSubstitute(user.index, :doll_instant)
       end
     end
   end

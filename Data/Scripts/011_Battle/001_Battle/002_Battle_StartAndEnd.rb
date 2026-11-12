@@ -301,7 +301,7 @@ class Battle
       pbStartBattleCore
     rescue BattleAbortedException
       @decision = Outcome::UNDECIDED
-      @scene.pbEndBattle(@decision)
+      @visuals.pbEndBattle(@decision)
     end
     return @decision
   end
@@ -311,7 +311,7 @@ class Battle
     sendOuts = pbSetUpSides
     @battleAI.create_ai_objects
     # Create all the sprites and play the battle intro animation
-    @scene.pbStartBattle(self)
+    @visuals.pbStartBattle(self)
     # Show trainers on both sides sending out Pokémon
     pbStartBattleSendOut(sendOuts)
     # Weather announcement
@@ -444,7 +444,7 @@ class Battle
       PBDebug.log_header("===== Player won =====")
       PBDebug.log("")
       if trainerBattle?
-        @scene.pbTrainerBattleSuccess
+        @visuals.pbTrainerBattleSuccess
         case @opponent.length
         when 1
           pbDisplayPaused(_INTL("You defeated {1}!", @opponent[0].full_name))
@@ -456,7 +456,7 @@ class Battle
                                 @opponent[1].full_name, @opponent[2].full_name))
         end
         @opponent.each_with_index do |trainer, i|
-          @scene.pbShowOpponent(i)
+          @visuals.pbShowOpponent(i)
           msg = trainer.lose_text
           msg = "..." if !msg || msg.empty?
           pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
@@ -466,7 +466,7 @@ class Battle
       # Gain money from winning a trainer battle, and from Pay Day
       pbGainMoney if @decision != Outcome::CATCH
       # Hide remaining trainer
-      @scene.pbShowOpponent(@opponent.length) if trainerBattle? && @caughtPokemon.length > 0
+      @visuals.pbShowOpponent(@opponent.length) if trainerBattle? && @caughtPokemon.length > 0
     when Outcome::LOSE, Outcome::DRAW
       PBDebug.log("")
       PBDebug.log_header("===== Player lost =====") if @decision == Outcome::LOSE
@@ -494,7 +494,7 @@ class Battle
       elsif @decision == Outcome::LOSE   # Lost in a Battle Frontier battle
         if @opponent
           @opponent.each_with_index do |trainer, i|
-            @scene.pbShowOpponent(i)
+            @visuals.pbShowOpponent(i)
             msg = trainer.win_text
             msg = "..." if !msg || msg.empty?
             pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/, pbPlayer.name))
@@ -506,7 +506,7 @@ class Battle
       PBDebug.log("")
       PBDebug.log_header("===== Pokémon caught =====")
       PBDebug.log("")
-      @scene.pbWildBattleSuccess if !Settings::GAIN_EXP_FOR_CAPTURE
+      @visuals.pbWildBattleSuccess if !Settings::GAIN_EXP_FOR_CAPTURE
     end
     # Swap held items back to their original holders (in trainer battles only)
     if trainerBattle?
@@ -568,7 +568,7 @@ class Battle
       end
     end
     # Clean up battle stuff
-    @scene.pbEndBattle(@decision)
+    @visuals.pbEndBattle(@decision)
     @battlers.each do |b|
       next if !b
       pbCancelChoice(b.index)   # Restore unused items to Bag

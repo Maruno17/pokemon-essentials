@@ -157,8 +157,8 @@ class Battle
     battler.pokemon.makeMega
     battler.form = battler.pokemon.form
     battler.pbUpdate(true)
-    @scene.pbChangePokemon(battler, battler.pokemon)
-    @scene.pbRefreshOne(idxBattler)
+    @visuals.pbChangePokemon(battler, battler.pokemon)
+    @visuals.pbRefreshOne(idxBattler)
     pbCommonAnimation("MegaEvolution2", battler)
     megaName = battler.pokemon.megaName
     megaName = _INTL("Mega {1}", battler.pokemon.speciesName) if nil_or_empty?(megaName)
@@ -194,8 +194,8 @@ class Battle
     battler.pokemon.makePrimal
     battler.form = battler.pokemon.form
     battler.pbUpdate(true)
-    @scene.pbChangePokemon(battler, battler.pokemon)
-    @scene.pbRefreshOne(idxBattler)
+    @visuals.pbChangePokemon(battler, battler.pokemon)
+    @visuals.pbRefreshOne(idxBattler)
     if battler.isSpecies?(:KYOGRE)
       pbCommonAnimation("PrimalKyogre2", battler)
     elsif battler.isSpecies?(:GROUDON)

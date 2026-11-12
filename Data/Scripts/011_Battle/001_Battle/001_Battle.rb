@@ -27,11 +27,11 @@
 #             def pbEORShiftDistantBattlers
 #             def pbCanShift?
 #             def pbEndOfRoundPhase
-#           class Battle::Scene::TargetMenu
+#           class Battle::Visuals::TargetMenu
 #             def initialize
-#           class Battle::Scene::PokemonDataBox
+#           class Battle::Visuals::PokemonDataBox
 #             def initializeDataBoxGraphic
-#           class Battle::Scene
+#           class Battle::Visuals
 #             def self.pbBattlerPosition
 #             def self.pbTrainerPosition
 #           class Game_Temp
@@ -62,7 +62,7 @@ class Battle
 
   #-----------------------------------------------------------------------------
 
-  attr_reader   :scene            # Scene object for this battle
+  attr_reader   :visuals          # Visuals object for this battle
   attr_reader   :peer
   attr_reader   :field            # Effects common to the whole of a battle
   attr_reader   :sides            # Effects common to each side of a battle
@@ -114,13 +114,13 @@ class Battle
 
   #-----------------------------------------------------------------------------
 
-  def initialize(scene, p1, p2, player, opponent)
+  def initialize(visuals, p1, p2, player, opponent)
     if p1.length == 0
       raise ArgumentError.new(_INTL("Party 1 has no Pokémon."))
     elsif p2.length == 0
       raise ArgumentError.new(_INTL("Party 2 has no Pokémon."))
     end
-    @scene             = scene
+    @visuals           = visuals
     @peer              = Peer.new
     @field             = ActiveField.new    # Whole field (gravity/rooms)
     @sides             = [ActiveSide.new,   # Player's side
@@ -641,7 +641,7 @@ class Battle
     @battlers[idxA],       @battlers[idxB]       = @battlers[idxB],       @battlers[idxA]
     @battlers[idxA].index, @battlers[idxB].index = @battlers[idxB].index, @battlers[idxA].index
     @choices[idxA],        @choices[idxB]        = @choices[idxB],        @choices[idxA]
-    @scene.pbSwapBattlerSprites(idxA, idxB)
+    @visuals.pbSwapBattlerSprites(idxA, idxB)
     # Swap the target of any battlers' effects that point at either of the
     # swapped battlers, to ensure they still point at the correct target
     # NOTE: LeechSeed is not swapped, because drained HP goes to whichever
@@ -910,7 +910,7 @@ class Battle
   def pbStartWeatherAbility(new_weather, battler, ignore_primal = false, message = nil)
     return if !pbCanStartWeather?(new_weather, ignore_primal)
     pbShowAbilitySplash(battler)
-    if !Scene::USE_ABILITY_SPLASH
+    if !Visuals::USE_ABILITY_SPLASH
       pbDisplay(_INTL("{1} {2} activated!", battler.pbOfThis, battler.abilityName))
     end
     fixed_duration = false
@@ -986,7 +986,7 @@ class Battle
   def pbStartTerrainAbility(new_terrain, battler, message = nil)
     return if !pbCanStartTerrain?(new_terrain)
     pbShowAbilitySplash(battler)
-    if !Scene::USE_ABILITY_SPLASH
+    if !Visuals::USE_ABILITY_SPLASH
       pbDisplay(_INTL("{1} {2} activated!", battler.pbOfThis, battler.abilityName))
     end
     fixed_duration = true
@@ -999,25 +999,25 @@ class Battle
   #-----------------------------------------------------------------------------
 
   def pbDisplay(msg, &block)
-    @scene.pbDisplayMessage(msg, &block)
+    @visuals.pbDisplayMessage(msg, &block)
   end
 
   def pbDisplayBrief(msg)
-    @scene.pbDisplayMessage(msg, true)
+    @visuals.pbDisplayMessage(msg, true)
   end
 
   def pbDisplayPaused(msg, &block)
-    @scene.pbDisplayPausedMessage(msg, &block)
+    @visuals.pbDisplayPausedMessage(msg, &block)
   end
 
   def pbDisplayConfirm(msg)
-    return @scene.pbDisplayConfirmMessage(msg)
+    return @visuals.pbDisplayConfirmMessage(msg)
   end
 
   # defaultValue of -1 means "can't cancel". If it's 0 or greater, returns that
   # value when pressing the "Back" button.
   def pbShowCommands(msg, commands, defaultValue = -1)
-    return @scene.pbShowCommands(msg, commands, defaultValue)
+    return @visuals.pbShowCommands(msg, commands, defaultValue)
   end
 
   def pbAnimation(move_id, user, targets, hitNum = 0, no_substitute_after = false, &block)
@@ -1027,33 +1027,33 @@ class Battle
       yield :before if block_given?
       yield :after if block_given?
     else
-      @scene.pbAnimation(move_id, user, targets, hitNum, no_substitute_after, &block)
+      @visuals.pbAnimation(move_id, user, targets, hitNum, no_substitute_after, &block)
     end
   end
 
   def pbCommonAnimation(name, user = nil, targets = nil)
-    @scene.pbCommonAnimation(name, user, targets) if !@rules[:no_battle_animations]
+    @visuals.pbCommonAnimation(name, user, targets) if !@rules[:no_battle_animations]
   end
 
   def pbShowAbilitySplash(battler, delay = false, logTrigger = true)
     PBDebug.log("[Ability triggered] #{battler.pbOfThis} #{battler.abilityName}") if logTrigger
-    return if !Scene::USE_ABILITY_SPLASH
-    @scene.pbShowAbilitySplash(battler)
+    return if !Visuals::USE_ABILITY_SPLASH
+    @visuals.pbShowAbilitySplash(battler)
     if delay
       timer_start = System.uptime
       until System.uptime - timer_start >= 1   # 1 second
-        @scene.pbUpdate
+        @visuals.pbUpdate
       end
     end
   end
 
   def pbHideAbilitySplash(battler)
-    return if !Scene::USE_ABILITY_SPLASH
-    @scene.pbHideAbilitySplash(battler)
+    return if !Visuals::USE_ABILITY_SPLASH
+    @visuals.pbHideAbilitySplash(battler)
   end
 
   def pbReplaceAbilitySplash(battler)
-    return if !Scene::USE_ABILITY_SPLASH
-    @scene.pbReplaceAbilitySplash(battler)
+    return if !Visuals::USE_ABILITY_SPLASH
+    @visuals.pbReplaceAbilitySplash(battler)
   end
 end

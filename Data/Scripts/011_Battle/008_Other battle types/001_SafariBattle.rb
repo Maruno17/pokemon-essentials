@@ -69,7 +69,7 @@ end
 #===============================================================================
 # Data box for safari battles.
 #===============================================================================
-class Battle::Scene::SafariDataBox < Sprite
+class Battle::Visuals::SafariDataBox < Sprite
   attr_accessor :selected
 
   def initialize(battle, viewport = nil)
@@ -102,8 +102,8 @@ end
 #===============================================================================
 # Shows the player throwing bait at a wild Pokémon in a Safari battle.
 #===============================================================================
-class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
-  include Battle::Scene::Animation::BallAnimationMixin
+class Battle::Visuals::Animation::ThrowBait < Battle::Visuals::Animation
+  include Battle::Visuals::Animation::BallAnimationMixin
 
   def initialize(sprites, viewport, battler)
     @battler = battler
@@ -115,7 +115,7 @@ class Battle::Scene::Animation::ThrowBait < Battle::Scene::Animation
     # Calculate start and end coordinates for battler sprite movement
     batSprite = @sprites["pokemon_#{@battler.index}"]
     traSprite = @sprites["player_1"]
-    ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
+    ballPos = Battle::Visuals.pbBattlerPosition(@battler.index, batSprite.sideSize)
     ballStartX = traSprite.x
     ballStartY = traSprite.y - (traSprite.bitmap.height / 2)
     ballMidX   = 0   # Unused in arc calculation
@@ -166,8 +166,8 @@ end
 #===============================================================================
 # Shows the player throwing a rock at a wild Pokémon in a Safari battle.
 #===============================================================================
-class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
-  include Battle::Scene::Animation::BallAnimationMixin
+class Battle::Visuals::Animation::ThrowRock < Battle::Visuals::Animation
+  include Battle::Visuals::Animation::BallAnimationMixin
 
   def initialize(sprites, viewport, battler)
     @battler = battler
@@ -225,9 +225,9 @@ class Battle::Scene::Animation::ThrowRock < Battle::Scene::Animation
 end
 
 #===============================================================================
-# Safari Zone battle scene (the visuals of the battle).
+# Safari Zone battle visuals class.
 #===============================================================================
-class Battle::Scene
+class Battle::Visuals
   def pbSafariStart
     @briefMessage = false
     @sprites["dataBox_0"] = SafariDataBox.new(@battle, @viewport)
@@ -296,8 +296,8 @@ class SafariBattle
 
   def pbRandom(x); return rand(x); end
 
-  def initialize(scene, player, party2)
-    @scene         = scene
+  def initialize(visuals, player, party2)
+    @visuals       = visuals
     @peer          = Battle::Peer.new
     @backdrop      = ""
     @backdropBase  = nil
@@ -392,19 +392,19 @@ class SafariBattle
   #-----------------------------------------------------------------------------
 
   def pbDisplay(msg, &block)
-    @scene.pbDisplayMessage(msg, &block)
+    @visuals.pbDisplayMessage(msg, &block)
   end
 
   def pbDisplayPaused(msg, &block)
-    @scene.pbDisplayPausedMessage(msg, &block)
+    @visuals.pbDisplayPausedMessage(msg, &block)
   end
 
   def pbDisplayBrief(msg)
-    @scene.pbDisplayMessage(msg, true)
+    @visuals.pbDisplayMessage(msg, true)
   end
 
   def pbDisplayConfirm(msg)
-    return @scene.pbDisplayConfirmMessage(msg)
+    return @visuals.pbDisplayConfirmMessage(msg)
   end
 
   class BattleAbortedException < Exception; end
@@ -429,11 +429,11 @@ class SafariBattle
     begin
       pkmn = @party2[0]
       pbSetSeen(pkmn)
-      @scene.pbStartBattle(self)
+      @visuals.pbStartBattle(self)
       pbDisplayPaused(_INTL("Wild {1} appeared!", pkmn.name))
-      @scene.pbSafariStart
+      @visuals.pbSafariStart
       weather_data = GameData::BattleWeather.try_get(@weather)
-      @scene.pbCommonAnimation(weather_data.animation) if weather_data
+      @visuals.pbCommonAnimation(weather_data.animation) if weather_data
       safariBall = GameData::Item.get(:SAFARIBALL).id
       catch_rate = pkmn.species_data.catch_rate
       catchFactor  = (catch_rate * 100) / 1275
@@ -441,7 +441,7 @@ class SafariBattle
       escapeFactor = (pbEscapeRate(catch_rate) * 100) / 1275
       escapeFactor = [[escapeFactor, 2].max, 20].min
       loop do
-        cmd = @scene.pbSafariCommandMenu(0)
+        cmd = @visuals.pbSafariCommandMenu(0)
         case cmd
         when :throw_ball   # Ball
           if pbBoxesFull?
@@ -449,7 +449,7 @@ class SafariBattle
             next
           end
           @ballCount -= 1
-          @scene.pbRefresh
+          @visuals.pbRefresh
           rare = (catchFactor * 1275) / 100
           if safariBall
             pbThrowPokeBall(1, safariBall, rare, true)
@@ -460,12 +460,12 @@ class SafariBattle
           end
         when :throw_bait   # Bait
           pbDisplayBrief(_INTL("{1} threw some bait at the {2}!", self.pbPlayer.name, pkmn.name))
-          @scene.pbThrowBait
+          @visuals.pbThrowBait
           catchFactor  /= 2 if pbRandom(100) < 90   # Harder to catch
           escapeFactor /= 2                       # Less likely to escape
         when :throw_rock   # Rock
           pbDisplayBrief(_INTL("{1} threw a rock at the {2}!", self.pbPlayer.name, pkmn.name))
-          @scene.pbThrowRock
+          @visuals.pbThrowRock
           catchFactor  *= 2                       # Easier to catch
           escapeFactor *= 2 if pbRandom(100) < 90   # More likely to escape
         when :run   # Run
@@ -496,14 +496,14 @@ class SafariBattle
           end
           # Weather continues
           weather_data = GameData::BattleWeather.try_get(@weather)
-          @scene.pbCommonAnimation(weather_data.animation) if weather_data
+          @visuals.pbCommonAnimation(weather_data.animation) if weather_data
         end
         break if decided?
       end
-      @scene.pbEndBattle(@decision)
+      @visuals.pbEndBattle(@decision)
     rescue BattleAbortedException
       @decision = Battle::Outcome::UNDECIDED
-      @scene.pbEndBattle(@decision)
+      @visuals.pbEndBattle(@decision)
     end
     return @decision
   end

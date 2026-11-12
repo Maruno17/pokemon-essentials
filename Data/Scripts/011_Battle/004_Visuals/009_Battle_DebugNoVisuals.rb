@@ -1,7 +1,7 @@
 #===============================================================================
 # Used when generating new trainers for battle challenges.
 #===============================================================================
-class Battle::DebugSceneNoVisuals
+class Battle::DebugNoVisuals
   def initialize(log_messages = false)
     @battle       = nil
     @lastCmd      = [0, 0, 0, 0]

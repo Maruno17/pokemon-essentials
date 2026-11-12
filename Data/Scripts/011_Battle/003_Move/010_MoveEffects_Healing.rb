@@ -483,7 +483,7 @@ class Battle::Move::UserLosesHalfOfTotalHPExplosive < Battle::Move
     bearer = @battle.pbCheckGlobalAbility(:DAMP, true)
     if bearer
       @battle.pbShowAbilitySplash(bearer)
-      if Battle::Scene::USE_ABILITY_SPLASH
+      if Battle::Visuals::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} cannot use {2}!", user.pbThis, @name))
       else
         @battle.pbDisplay(_INTL("{1} cannot use {2} because of {3} {4}!",
@@ -513,7 +513,7 @@ class Battle::Move::UserFaintsExplosive < Battle::Move
     bearer = @battle.pbCheckGlobalAbility(:DAMP, true)
     if bearer
       @battle.pbShowAbilitySplash(bearer)
-      if Battle::Scene::USE_ABILITY_SPLASH
+      if Battle::Visuals::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} cannot use {2}!", user.pbThis, @name))
       else
         @battle.pbDisplay(_INTL("{1} cannot use {2} because of {3} {4}!",
@@ -722,7 +722,7 @@ class Battle::Move::RevivePokemonToHalfHP < Battle::Move
     pkmn = nil
     if !@battle.controlPlayer && @battle.pbOwnedByPlayer?(user.index)
       # Player chooses the Pokémon to revive
-      @battle.scene.pbPartyScreen(user.index, false, 3) do |idxParty, party_screen|
+      @battle.visuals.pbPartyScreen(user.index, false, 3) do |idxParty, party_screen|
         pkmn = @battle.pbParty(user.idxOwnSide)[idxParty]
         if pkmn.egg?
           party_screen.show_message(_INTL("You can't revive an egg!"))

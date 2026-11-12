@@ -33,30 +33,30 @@ class AnimationPlayer
   attr_accessor :looping
   attr_reader   :slowdown   # 1 = normal speed, 2 = half speed, 3 = one third speed, etc.
   attr_reader   :sprites, :particle_sprites, :emitters
-  attr_reader   :scene, :user
+  attr_reader   :visuals, :user
   attr_reader   :forceInvisibilities, :forceSubstitutes
 
   # animation is either a GameData::Animation or a hash made from one.
   # user is a Battler or FakeBattler, or nil if there is no user.
   # targets is an array of Battlers or FakeBattlers, or nil if there are none.
-  # scene is either Battle::Scene or AnimationEditor::Canvas.
-  def initialize(animation, user, targets, scene)
+  # visuals is either Battle::Visuals or AnimationEditor::Canvas.
+  def initialize(animation, user, targets, visuals)
     @animation = animation
     @user = user
     @targets = targets
-    @scene = scene
+    @visuals = visuals
     @side_sizes = [1, 1]
-    if @scene.is_a?(Battle::Scene)
-      @side_sizes[0] = @scene.battle.pbSideSize(0)
-      @side_sizes[1] = @scene.battle.pbSideSize(1)
-    elsif @scene.is_a?(AnimationEditor::Canvas)
-      @side_sizes[0] = @scene.side_size(0)
-      @side_sizes[1] = @scene.side_size(1)
+    if @visuals.is_a?(Battle::Visuals)
+      @side_sizes[0] = @visuals.battle.pbSideSize(0)
+      @side_sizes[1] = @visuals.battle.pbSideSize(1)
+    elsif @visuals.is_a?(AnimationEditor::Canvas)
+      @side_sizes[0] = @visuals.side_size(0)
+      @side_sizes[1] = @visuals.side_size(1)
     end
     @forceInvisibilities = []
     @forceSubstitutes = []
-    @viewport = @scene.viewport
-    @sprites = @scene.sprites
+    @viewport = @visuals.viewport
+    @sprites = @visuals.sprites
     initialize_battler_sprite_names
     initialize_battler_coordinates
     @looping = false
@@ -518,7 +518,7 @@ class AnimationPlayer::ParticleSprite
 
   #-----------------------------------------------------------------------------
 
-  # NOTE: is_battler is needed because sprite.is_a?(Battle::Scene::BattlerSprite)
+  # NOTE: is_battler is needed because sprite.is_a?(Battle::Visuals::BattlerSprite)
   #       won't work in the Animation Editor, where battler sprites are just
   #       Sprites.
   def set_sprite(sprite, is_battler = false)
@@ -1536,30 +1536,30 @@ module AnimationPlayer::Helper
     when :user
       ret = [user_coords.clone]
     when :user_position
-      ret = [[user_coords[0], Battle::Scene.pbBattlerPosition(user_index, side_sizes[user_index % 2])[1]]]
+      ret = [[user_coords[0], Battle::Visuals.pbBattlerPosition(user_index, side_sizes[user_index % 2])[1]]]
     when :target
       ret = [target_coords.clone]
     when :target_position
-      ret = [[target_coords[0], Battle::Scene.pbBattlerPosition(target_index, side_sizes[target_index % 2])[1]]]
+      ret = [[target_coords[0], Battle::Visuals.pbBattlerPosition(target_index, side_sizes[target_index % 2])[1]]]
     when :user_and_target
       ret = [user_coords.clone, target_coords.clone]
     when :user_position_and_target
-      ret = [[user_coords[0], Battle::Scene.pbBattlerPosition(user_index, side_sizes[user_index % 2])[1]],
+      ret = [[user_coords[0], Battle::Visuals.pbBattlerPosition(user_index, side_sizes[user_index % 2])[1]],
              target_coords.clone]
     when :user_and_target_position
       ret = [user_coords.clone,
-             [target_coords[0], Battle::Scene.pbBattlerPosition(target_index, side_sizes[target_index % 2])[1]]]
+             [target_coords[0], Battle::Visuals.pbBattlerPosition(target_index, side_sizes[target_index % 2])[1]]]
     when :user_position_and_target_position
-      ret = [[user_coords[0], Battle::Scene.pbBattlerPosition(user_index, side_sizes[user_index % 2])[1]],
-             [target_coords[0], Battle::Scene.pbBattlerPosition(target_index, side_sizes[target_index % 2])[1]]]
+      ret = [[user_coords[0], Battle::Visuals.pbBattlerPosition(user_index, side_sizes[user_index % 2])[1]],
+             [target_coords[0], Battle::Visuals.pbBattlerPosition(target_index, side_sizes[target_index % 2])[1]]]
     when :user_side_foreground, :user_side_background
-      ret = [Battle::Scene.pbBattlerPosition(user_index)]
+      ret = [Battle::Visuals.pbBattlerPosition(user_index)]
     when :non_user_side_foreground, :non_user_side_background
-      ret = [Battle::Scene.pbBattlerPosition(user_index + 1)]
+      ret = [Battle::Visuals.pbBattlerPosition(user_index + 1)]
     when :target_side_foreground, :target_side_background
-      ret = [Battle::Scene.pbBattlerPosition(target_index)]
+      ret = [Battle::Visuals.pbBattlerPosition(target_index)]
     when :user_and_other_side
-      ret = [user_coords.clone, Battle::Scene.pbBattlerPosition(user_index + 1)]
+      ret = [user_coords.clone, Battle::Visuals.pbBattlerPosition(user_index + 1)]
     end
     return ret
   end
@@ -1717,7 +1717,7 @@ module AnimationPlayer::Helper
 
   # user_sprites, target_sprites = [front sprite, back sprite]
   def set_bitmap_and_origin(particle, sprite, user_index, target_index, user_sprites, target_sprites)
-    return if !sprite || sprite.is_a?(Battle::Scene::BattlerSprite)
+    return if !sprite || sprite.is_a?(Battle::Visuals::BattlerSprite)
     case particle[:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK",
          "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"

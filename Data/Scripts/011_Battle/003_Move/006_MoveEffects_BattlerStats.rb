@@ -586,7 +586,7 @@ class Battle::Move::RaiseUserAtkSpd1RemoveEntryHazardsAndSubstitutes < Battle::M
       next if b.effects[PBEffects::Substitute] == 0
       b.effects[PBEffects::Substitute] = 0
       something_tidied = true
-      @battle.scene.pbSwapBattlerAndSubstitute(b.index, :doll_fade_battler_in)
+      @battle.visuals.pbSwapBattlerAndSubstitute(b.index, :doll_fade_battler_in)
       @battle.pbDisplay(_INTL("{1} substitute faded!", b.pbOfThis))
     end
     if user.pbOwnSide.effects[PBEffects::StealthRock]
@@ -1339,7 +1339,7 @@ class Battle::Move::LowerTargetSpAtk2IfCanAttract < Battle::Move::TargetStatDown
     if target.hasActiveAbility?(:OBLIVIOUS) && !target.beingMoldBroken?
       if show_message
         @battle.pbShowAbilitySplash(target)
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
         else
           @battle.pbDisplay(_INTL("{1} {2} prevents romance!", target.pbOfThis, target.abilityName))
@@ -1720,7 +1720,7 @@ class Battle::Move::LowerPoisonedTargetAtkSpAtkSpd1 < Battle::Move
       end
       if failed
         @battle.pbShowAbilitySplash(target)
-        if !Battle::Scene::USE_ABILITY_SPLASH
+        if !Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} {2} activated!", target.pbOfThis, target.abilityName))
         end
         user.pbCanLowerStatStage?(@statDown[0], target, self, true, false, true)   # Show fail message

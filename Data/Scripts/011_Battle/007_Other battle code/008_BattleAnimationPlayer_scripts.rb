@@ -127,16 +127,16 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("toxicspikes") { |player, time|
     poison_color = Color.new(168, 0, 248, lerp(160, 0, fade_time, mod_time - fade_time - linger_time))
   end
   # Apply the color to all battlers on the other side
-  player.scene.sprites.each_pair do |id, sprite|
-    next if !sprite.is_a?(Battle::Scene::BattlerSprite) || (sprite.index & 1) == side
+  player.visuals.sprites.each_pair do |id, sprite|
+    next if !sprite.is_a?(Battle::Visuals::BattlerSprite) || (sprite.index & 1) == side
     sprite.color.set(poison_color.red, poison_color.green, poison_color.blue, poison_color.alpha)
   end
 }
 AnimationPlayer::END_ANIMATION_SCRIPTS.add("toxicspikes") { |player|
   next if !player.user   # Just in case; there should be a user
   side = player.user.idxOwnSide
-  player.scene.sprites.each_pair do |id, sprite|
-    next if !sprite.is_a?(Battle::Scene::BattlerSprite) || (sprite.index & 1) == side
+  player.visuals.sprites.each_pair do |id, sprite|
+    next if !sprite.is_a?(Battle::Visuals::BattlerSprite) || (sprite.index & 1) == side
     sprite.color.set(0, 0, 0, 0)   # Back to normal
   end
 }

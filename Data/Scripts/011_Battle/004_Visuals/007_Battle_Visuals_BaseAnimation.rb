@@ -1,7 +1,7 @@
 #===============================================================================
 # Base class for all hardcoded battle animations.
 #===============================================================================
-class Battle::Scene::Animation
+class Battle::Visuals::Animation
   def initialize(sprites, viewport)
     @sprites  = sprites
     @viewport = viewport
@@ -65,7 +65,7 @@ end
 #===============================================================================
 # Mixin module for certain hardcoded battle animations that involve Poké Balls.
 #===============================================================================
-module Battle::Scene::Animation::BallAnimationMixin
+module Battle::Visuals::Animation::BallAnimationMixin
   # Returns the color that the Pokémon turns when it goes into or out of its
   # Poké Ball.
   def getBattlerColorFromPokeBall(poke_ball)

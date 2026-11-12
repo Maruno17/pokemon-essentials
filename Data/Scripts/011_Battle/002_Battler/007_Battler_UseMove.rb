@@ -100,7 +100,7 @@ class Battle::Battler
     @effects[PBEffects::Uproar]        = 0
     @effects[PBEffects::Bide]          = 0
     @currentMove = nil if @effects[PBEffects::HyperBeam] == 0
-    @battle.scene.pbForceBattlerInvisibility(@index, false)
+    @battle.visuals.pbForceBattlerInvisibility(@index, false)
     # Reset counters for moves which increase them when used in succession
     @effects[PBEffects::FuryCutter] = 0
     @effects[PBEffects::GigatonHammer] = false if move_failed
@@ -673,7 +673,7 @@ class Battle::Battler
         preTarget = user.index if nextUser.opposes?(user) || !nextUser.opposes?(preTarget)
         @battle.pbShowAbilitySplash(nextUser, true)
         @battle.pbHideAbilitySplash(nextUser)
-        if !Battle::Scene::USE_ABILITY_SPLASH
+        if !Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} kept the dance going with {2}!",
                                   nextUser.pbThis, nextUser.abilityName))
         end

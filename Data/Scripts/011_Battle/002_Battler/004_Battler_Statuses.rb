@@ -125,7 +125,7 @@ class Battle::Battler
       if showMessages
         @battle.pbShowAbilitySplash(immAlly || self)
         msg = ""
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           case newStatus
           when :SLEEP     then msg = _INTL("{1} stays awake!", pbThis)
           when :POISON    then msg = _INTL("{1} cannot be poisoned!", pbThis)
@@ -474,7 +474,7 @@ class Battle::Battler
     if (selfInflicted || !beingMoldBroken?) && hasActiveAbility?(:OWNTEMPO)
       if showMessages
         @battle.pbShowAbilitySplash(self)
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} doesn't become confused!", pbThis))
         else
           @battle.pbDisplay(_INTL("{1} {2} prevents confusion!", pbOfThis, abilityName))
@@ -535,7 +535,7 @@ class Battle::Battler
     if hasActiveAbility?([:AROMAVEIL, :OBLIVIOUS]) && !beingMoldBroken?
       if showMessages
         @battle.pbShowAbilitySplash(self)
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
         else
           @battle.pbDisplay(_INTL("{1} {2} prevents romance!", pbOfThis, abilityName))
@@ -548,7 +548,7 @@ class Battle::Battler
         next if !b.hasActiveAbility?(:AROMAVEIL) || b.beingMoldBroken?
         if showMessages
           @battle.pbShowAbilitySplash(b)
-          if Battle::Scene::USE_ABILITY_SPLASH
+          if Battle::Visuals::USE_ABILITY_SPLASH
             @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
           else
             @battle.pbDisplay(_INTL("{1} {2} prevents romance!", b.pbOfThis, b.abilityName))

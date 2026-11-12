@@ -484,7 +484,7 @@ class Battle::Battler
           target.damageState.protected = true
           @battle.successStates[user.index].protected = true
           if move.pbContactMove?(user) && user.affectedByContactEffect? && user.takesIndirectDamage?
-            @battle.scene.pbDamageAnimation(user)
+            @battle.visuals.pbDamageAnimation(user)
             user.pbReduceHP(user.totalhp / 8, false)
             @battle.pbDisplay(_INTL("{1} was hurt!", user.pbThis))
             user.pbItemHPHealCheck
@@ -575,7 +575,7 @@ class Battle::Battler
     if target.hasAirborneAbility? && !target.beingMoldBroken?
       if show_message
         @battle.pbShowAbilitySplash(target)
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} avoided the attack!", target.pbThis))
         else
           @battle.pbDisplay(_INTL("{1} avoided the attack with {2}!", target.pbThis, target.abilityName))
@@ -615,7 +615,7 @@ class Battle::Battler
       if target.hasActiveAbility?(:OVERCOAT) && !target.beingMoldBroken?
         if show_message
           @battle.pbShowAbilitySplash(target)
-          if Battle::Scene::USE_ABILITY_SPLASH
+          if Battle::Visuals::USE_ABILITY_SPLASH
             @battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
           else
             @battle.pbDisplay(_INTL("It doesn't affect {1} because of its {2}.", target.pbThis(true), target.abilityName))

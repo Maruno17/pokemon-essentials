@@ -6,15 +6,15 @@ class Battle
   # Choosing to use an item.
   #-----------------------------------------------------------------------------
 
-  def pbCanUseItemOnPokemon?(item, pkmn, battler, scene, showMessages = true)
+  def pbCanUseItemOnPokemon?(item, pkmn, battler, visuals, showMessages = true)
     if !pkmn || pkmn.egg?
-      scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
+      visuals.pbDisplay(_INTL("It won't have any effect.")) if showMessages
       return false
     end
     # Embargo
     if battler && battler.effects[PBEffects::Embargo] > 0
       if showMessages
-        scene.pbDisplay(_INTL("Embargo's effect prevents the item's use on {1}!",
+        visuals.pbDisplay(_INTL("Embargo's effect prevents the item's use on {1}!",
                               battler.pbThis(true)))
       end
       return false
@@ -103,9 +103,9 @@ class Battle
     pkmn = pbParty(userBattler.index)[idxParty]
     battler = pbFindBattler(idxParty, userBattler.index)
     ch = @choices[userBattler.index]
-    if ItemHandlers.triggerCanUseInBattle(item, pkmn, battler, ch[3], true, self, @scene, false)
+    if ItemHandlers.triggerCanUseInBattle(item, pkmn, battler, ch[3], true, self, @visuals, false)
       pbCommonAnimation("UseItemFromBag", battler) if battler
-      ItemHandlers.triggerBattleUseOnPokemon(item, pkmn, battler, ch, @scene)
+      ItemHandlers.triggerBattleUseOnPokemon(item, pkmn, battler, ch, @visuals)
       ch[1] = nil   # Delete item from choice
       return
     end
@@ -121,9 +121,9 @@ class Battle
     pbUseItemMessage(item, trainerName, battler)
     ch = @choices[userBattler.index]
     if battler
-      if ItemHandlers.triggerCanUseInBattle(item, battler.pokemon, battler, ch[3], true, self, @scene, false)
+      if ItemHandlers.triggerCanUseInBattle(item, battler.pokemon, battler, ch[3], true, self, @visuals, false)
         pbCommonAnimation("UseItemFromBag", battler)
-        ItemHandlers.triggerBattleUseOnBattler(item, battler, @scene)
+        ItemHandlers.triggerBattleUseOnBattler(item, battler, @visuals)
         ch[1] = nil   # Delete item from choice
         battler.pbItemStatRestoreCheck   # White Herb
         battler.pbItemOnStatDropped   # Eject Pack
@@ -153,7 +153,7 @@ class Battle
     battler = (idxBattler < 0) ? userBattler : @battlers[idxBattler]
     pkmn = battler.pokemon
     ch = @choices[userBattler.index]
-    if ItemHandlers.triggerCanUseInBattle(item, pkmn, battler, ch[3], true, self, @scene, false)
+    if ItemHandlers.triggerCanUseInBattle(item, pkmn, battler, ch[3], true, self, @visuals, false)
       ItemHandlers.triggerUseInBattle(item, battler, self)
       ch[1] = nil   # Delete item from choice
       return

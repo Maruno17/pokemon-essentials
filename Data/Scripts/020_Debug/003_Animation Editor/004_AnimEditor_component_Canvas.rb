@@ -104,10 +104,10 @@ class AnimationEditor::Canvas < Sprite
   def initialize_background
     @background = IconSprite.new(0, 0, viewport)
     @background.z = -200
-    player_base_pos = Battle::Scene.pbBattlerPosition(0)
+    player_base_pos = Battle::Visuals.pbBattlerPosition(0)
     @player_base = IconSprite.new(*player_base_pos, viewport)
     @player_base.z = -199
-    foe_base_pos = Battle::Scene.pbBattlerPosition(1)
+    foe_base_pos = Battle::Visuals.pbBattlerPosition(1)
     @foe_base = IconSprite.new(*foe_base_pos, viewport)
     @foe_base.z = -199
     @message_bar_sprite = Sprite.new(viewport)
@@ -485,7 +485,7 @@ class AnimationEditor::Canvas < Sprite
   # Returns the coordinates of the center of the battler sprite at index.
   def recalculate_battler_position(index, size, sprite_name, btmp)
     spr = Sprite.new(self.viewport)
-    spr.x, spr.y = Battle::Scene.pbBattlerPosition(index, size)
+    spr.x, spr.y = Battle::Visuals.pbBattlerPosition(index, size)
     species = sprite_name.gsub("_female", "").gsub("_shadow", "")
     form = 0
     if species[/^(\w+)_(\d+)$/]
@@ -1166,24 +1166,24 @@ class AnimationEditor::Canvas < Sprite
         new_pos_y -= @user_coords[1]
       when :user_position
         new_pos_x -= @user_coords[0]
-        base_coords = Battle::Scene.pbBattlerPosition(user_index, side_size(user_index))
+        base_coords = Battle::Visuals.pbBattlerPosition(user_index, side_size(user_index))
         new_pos_y -= base_coords[1]
       when :target
         new_pos_x -= @target_coords[first_target_index][0]
         new_pos_y -= @target_coords[first_target_index][1]
       when :target_position
         new_pos_x -= @target_coords[first_target_index][0]
-        base_coords = Battle::Scene.pbBattlerPosition(first_target_index, side_size(first_target_index))
+        base_coords = Battle::Visuals.pbBattlerPosition(first_target_index, side_size(first_target_index))
         new_pos_y -= base_coords[1]
       when :user_and_target, :user_position_and_target, :user_and_target_position,
            :user_position_and_target_position
         user_pos = @user_coords
         if [:user_position_and_target, :user_position_and_target_position].include?(particle[:focus])
-          user_pos = [user_pos[0], Battle::Scene.pbBattlerPosition(user_index, side_size(user_index))[1]]
+          user_pos = [user_pos[0], Battle::Visuals.pbBattlerPosition(user_index, side_size(user_index))[1]]
         end
         target_pos = @target_coords[first_target_index]
         if [:user_and_target_position, :user_position_and_target_position].include?(particle[:focus])
-          target_pos = [target_pos[0], Battle::Scene.pbBattlerPosition(first_target_index, side_size(first_target_index))[1]]
+          target_pos = [target_pos[0], Battle::Visuals.pbBattlerPosition(first_target_index, side_size(first_target_index))[1]]
         end
         distance = GameData::Animation::USER_AND_TARGET_SEPARATION
         new_pos_x -= user_pos[0]
@@ -1193,20 +1193,20 @@ class AnimationEditor::Canvas < Sprite
         new_pos_y *= distance[1]
         new_pos_y /= target_pos[1] - user_pos[1]
       when :user_side_foreground, :user_side_background
-        base_coords = Battle::Scene.pbBattlerPosition(user_index)
+        base_coords = Battle::Visuals.pbBattlerPosition(user_index)
         new_pos_x -= base_coords[0]
         new_pos_y -= base_coords[1]
       when :non_user_side_foreground, :non_user_side_background
-        base_coords = Battle::Scene.pbBattlerPosition(user_index + 1)
+        base_coords = Battle::Visuals.pbBattlerPosition(user_index + 1)
         new_pos_x -= base_coords[0]
         new_pos_y -= base_coords[1]
       when :target_side_foreground, :target_side_background
-        base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
+        base_coords = Battle::Visuals.pbBattlerPosition(first_target_index)
         new_pos_x -= base_coords[0]
         new_pos_y -= base_coords[1]
       when :user_and_other_side
         user_pos = @user_coords
-        target_pos = Battle::Scene.pbBattlerPosition(user_index + 1)
+        target_pos = Battle::Visuals.pbBattlerPosition(user_index + 1)
         distance = GameData::Animation::USER_AND_TARGET_SEPARATION
         new_pos_x -= user_pos[0]
         new_pos_x *= distance[0]
@@ -1266,17 +1266,17 @@ class AnimationEditor::Canvas < Sprite
         new_pos_x *= distance[0]
         new_pos_x /= target_pos[0] - user_pos[0]
       when :user_side_foreground, :user_side_background
-        base_coords = Battle::Scene.pbBattlerPosition(user_index)
+        base_coords = Battle::Visuals.pbBattlerPosition(user_index)
         new_pos_x -= base_coords[0]
       when :non_user_side_foreground, :non_user_side_background
-        base_coords = Battle::Scene.pbBattlerPosition(user_index + 1)
+        base_coords = Battle::Visuals.pbBattlerPosition(user_index + 1)
         new_pos_x -= base_coords[0]
       when :target_side_foreground, :target_side_background
-        base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
+        base_coords = Battle::Visuals.pbBattlerPosition(first_target_index)
         new_pos_x -= base_coords[0]
       when :user_and_other_side
         user_pos = @user_coords
-        target_pos = Battle::Scene.pbBattlerPosition(user_index + 1)
+        target_pos = Battle::Visuals.pbBattlerPosition(user_index + 1)
         distance = GameData::Animation::USER_AND_TARGET_SEPARATION
         new_pos_x -= user_pos[0]
         new_pos_x *= distance[0]
@@ -1306,39 +1306,39 @@ class AnimationEditor::Canvas < Sprite
       when :user
         new_pos_y -= @user_coords[1]
       when :user_position
-        base_coords = Battle::Scene.pbBattlerPosition(user_index, side_size(user_index))
+        base_coords = Battle::Visuals.pbBattlerPosition(user_index, side_size(user_index))
         new_pos_y -= base_coords[1]
       when :target
         new_pos_y -= @target_coords[first_target_index][1]
       when :target_position
-        base_coords = Battle::Scene.pbBattlerPosition(first_target_index, side_size(first_target_index))
+        base_coords = Battle::Visuals.pbBattlerPosition(first_target_index, side_size(first_target_index))
         new_pos_y -= base_coords[1]
       when :user_and_target, :user_position_and_target, :user_and_target_position,
            :user_position_and_target_position
         user_pos = @user_coords
         if [:user_position_and_target, :user_position_and_target_position].include?(particle[:focus])
-          user_pos = [0, Battle::Scene.pbBattlerPosition(user_index, side_size(user_index))[1]]
+          user_pos = [0, Battle::Visuals.pbBattlerPosition(user_index, side_size(user_index))[1]]
         end
         target_pos = @target_coords[first_target_index]
         if [:user_and_target_position, :user_position_and_target_position].include?(particle[:focus])
-          target_pos = [0, Battle::Scene.pbBattlerPosition(first_target_index, side_size(first_target_index))[1]]
+          target_pos = [0, Battle::Visuals.pbBattlerPosition(first_target_index, side_size(first_target_index))[1]]
         end
         distance = GameData::Animation::USER_AND_TARGET_SEPARATION
         new_pos_y -= user_pos[1]
         new_pos_y *= distance[1]
         new_pos_y /= target_pos[1] - user_pos[1]
       when :user_side_foreground, :user_side_background
-        base_coords = Battle::Scene.pbBattlerPosition(user_index)
+        base_coords = Battle::Visuals.pbBattlerPosition(user_index)
         new_pos_y -= base_coords[1]
       when :non_user_side_foreground, :non_user_side_background
-        base_coords = Battle::Scene.pbBattlerPosition(user_index + 1)
+        base_coords = Battle::Visuals.pbBattlerPosition(user_index + 1)
         new_pos_y -= base_coords[1]
       when :target_side_foreground, :target_side_background
-        base_coords = Battle::Scene.pbBattlerPosition(first_target_index)
+        base_coords = Battle::Visuals.pbBattlerPosition(first_target_index)
         new_pos_y -= base_coords[1]
       when :user_and_other_side
         user_pos = @user_coords
-        target_pos = Battle::Scene.pbBattlerPosition(user_index + 1)
+        target_pos = Battle::Visuals.pbBattlerPosition(user_index + 1)
         distance = GameData::Animation::USER_AND_TARGET_SEPARATION
         new_pos_y -= user_pos[1]
         new_pos_y *= distance[1]

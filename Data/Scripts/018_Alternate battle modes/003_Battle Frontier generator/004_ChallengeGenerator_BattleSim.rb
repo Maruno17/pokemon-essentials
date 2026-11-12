@@ -401,8 +401,8 @@ def pbRuledBattle(team1, team2, rule)
       items2[i] = p.item_id
       trainer2.party.push(p)
     end
-    scene = Battle::DebugSceneNoVisuals.new
-    battle = rule.createBattle(scene, trainer1, trainer2)
+    visuals = Battle::DebugNoVisuals.new
+    battle = rule.createBattle(visuals, trainer1, trainer2)
     battle.debug = true
     battle.controlPlayer = true
     battle.internalBattle = false

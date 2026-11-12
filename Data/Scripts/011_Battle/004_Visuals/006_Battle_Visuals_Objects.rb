@@ -1,7 +1,7 @@
 #===============================================================================
 # Data box for regular battles.
 #===============================================================================
-class Battle::Scene::PokemonDataBox < Sprite
+class Battle::Visuals::PokemonDataBox < Sprite
   attr_reader   :battler
   attr_accessor :selected
 
@@ -434,7 +434,7 @@ end
 #===============================================================================
 # Splash bar to announce a triggered ability.
 #===============================================================================
-class Battle::Scene::AbilitySplashBar < Sprite
+class Battle::Visuals::AbilitySplashBar < Sprite
   attr_reader :battler
 
   TEXT_BASE_COLOR   = Color.new(0, 0, 0)
@@ -527,7 +527,7 @@ end
 #===============================================================================
 # Pokémon sprite (used in battle).
 #===============================================================================
-class Battle::Scene::BattlerSprite < RPG::Sprite
+class Battle::Visuals::BattlerSprite < RPG::Sprite
   attr_reader   :pkmn
   attr_accessor :index
   attr_accessor :selected
@@ -630,7 +630,7 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
       self.z = 1000 - (100 * (@index + 1) / 2)
     end
     # Set original position
-    pos = Battle::Scene.pbBattlerPosition(@index, @sideSize)
+    pos = Battle::Visuals.pbBattlerPosition(@index, @sideSize)
     @spriteX = pos[0]
     @spriteY = pos[1]
     # Apply metrics (also modifies ox/oy)
@@ -704,7 +704,7 @@ end
 #===============================================================================
 # Shadow sprite for Pokémon (used in battle).
 #===============================================================================
-class Battle::Scene::BattlerShadowSprite < RPG::Sprite
+class Battle::Visuals::BattlerShadowSprite < RPG::Sprite
   attr_reader   :pkmn
   attr_accessor :index
   attr_accessor :selected
@@ -757,7 +757,7 @@ class Battle::Scene::BattlerShadowSprite < RPG::Sprite
     pbSetOrigin
     self.z = -198
     # Set original position
-    pkmn = Battle::Scene.pbBattlerPosition(@index, @sideSize)
+    pkmn = Battle::Visuals.pbBattlerPosition(@index, @sideSize)
     self.x = pkmn[0]
     self.y = pkmn[1]
     # Apply metrics
@@ -784,7 +784,7 @@ class Battle::Scene::BattlerShadowSprite < RPG::Sprite
     @_iconBitmap&.dispose
     @_iconBitmap = GameData::Species.substitute_shadow_bitmap
     self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
-    pbSetPosition(Battle::Scene::BattlerSprite.substitute_metrics)
+    pbSetPosition(Battle::Visuals::BattlerSprite.substitute_metrics)
   end
 
   def update

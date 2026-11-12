@@ -221,8 +221,8 @@ module BattleCreationHelperMethods
     return trainer_array, ally_items, pokemon_array, party_starts
   end
 
-  def create_battle_scene
-    return Battle::Scene.new
+  def create_battle_visuals
+    return Battle::Visuals.new
   end
 
   # Sets up various battle parameters and applies special rules.
@@ -392,10 +392,10 @@ class WildBattle
     foe_party = WildBattle.generate_foes(*args)
     # Generate information for the player and partner trainer(s)
     player_trainers, ally_items, player_party, player_party_starts = BattleCreationHelperMethods.set_up_player_trainers(foe_party)
-    # Create the battle scene (the visual side of it)
-    scene = BattleCreationHelperMethods.create_battle_scene
+    # Create the battle visuals (the visual side of it)
+    visuals = BattleCreationHelperMethods.create_battle_visuals
     # Create the battle class (the mechanics side of it)
-    battle = Battle.new(scene, player_party, foe_party, player_trainers, nil)
+    battle = Battle.new(visuals, player_party, foe_party, player_trainers, nil)
     battle.party1starts = player_party_starts
     battle.ally_items   = ally_items
     # Set various other properties in the battle class
@@ -510,10 +510,10 @@ class TrainerBattle
     foe_trainers, foe_items, foe_party, foe_party_starts = TrainerBattle.generate_foes(*args)
     # Generate information for the player and partner trainer(s)
     player_trainers, ally_items, player_party, player_party_starts = BattleCreationHelperMethods.set_up_player_trainers(foe_party)
-    # Create the battle scene (the visual side of it)
-    scene = BattleCreationHelperMethods.create_battle_scene
+    # Create the battle visuals (the visual side of it)
+    visuals = BattleCreationHelperMethods.create_battle_visuals
     # Create the battle class (the mechanics side of it)
-    battle = Battle.new(scene, player_party, foe_party, player_trainers, foe_trainers)
+    battle = Battle.new(visuals, player_party, foe_party, player_trainers, foe_trainers)
     battle.party1starts = player_party_starts
     battle.party2starts = foe_party_starts
     battle.ally_items   = ally_items

@@ -31,7 +31,7 @@ class Battle
   #-----------------------------------------------------------------------------
 
   def pbCommandMenu(idxBattler, firstAction)
-    return @scene.pbCommandMenu(idxBattler, firstAction)
+    return @visuals.pbCommandMenu(idxBattler, firstAction)
   end
 
   #-----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ class Battle
     return true if pbAutoFightMenu(idxBattler)
     # Regular move selection
     ret = false
-    @scene.pbFightMenu(idxBattler, pbCanMegaEvolve?(idxBattler)) do |cmd|
+    @visuals.pbFightMenu(idxBattler, pbCanMegaEvolve?(idxBattler)) do |cmd|
       case cmd
       when -1   # Cancel
       when -2   # Toggle Mega Evolution
@@ -99,7 +99,7 @@ class Battle
 
   def pbChooseTarget(battler, move)
     target_data = move.pbTarget(battler)
-    idxTarget = @scene.pbChooseTarget(battler.index, target_data)
+    idxTarget = @visuals.pbChooseTarget(battler.index, target_data)
     return false if idxTarget < 0
     pbRegisterTarget(battler.index, idxTarget)
     return true
@@ -111,7 +111,8 @@ class Battle
       return false
     end
     ret = false
-    @scene.pbItemMenu(idxBattler, firstAction) do |item, useType, idxPkmn, idxMove, itemScene|
+    # active_screen is either UI::Bag or UI::Party or @visuals
+    @visuals.pbItemMenu(idxBattler, firstAction) do |item, useType, idxPkmn, idxMove, active_screen|
       next false if !item
       battler = pkmn = nil
       case useType
@@ -119,12 +120,12 @@ class Battle
         next false if !ItemHandlers.hasBattleUseOnPokemon(item)
         battler = pbFindBattler(idxPkmn, idxBattler)
         pkmn    = pbParty(idxBattler)[idxPkmn]
-        next false if !pbCanUseItemOnPokemon?(item, pkmn, battler, itemScene)
+        next false if !pbCanUseItemOnPokemon?(item, pkmn, battler, active_screen)
       when 3   # Use on battler
         next false if !ItemHandlers.hasBattleUseOnBattler(item)
         battler = pbFindBattler(idxPkmn, idxBattler)
         pkmn    = battler.pokemon if battler
-        next false if !pbCanUseItemOnPokemon?(item, pkmn, battler, itemScene)
+        next false if !pbCanUseItemOnPokemon?(item, pkmn, battler, active_screen)
       when 4   # Poké Balls
         next false if idxPkmn < 0
         battler = @battlers[idxPkmn]
@@ -137,7 +138,7 @@ class Battle
       end
       next false if !pkmn
       next false if !ItemHandlers.triggerCanUseInBattle(item, pkmn, battler, idxMove,
-                                                        firstAction, self, itemScene)
+                                                        firstAction, self, active_screen)
       next false if !pbRegisterItem(idxBattler, item, idxPkmn, idxMove)
       ret = true
       next true
@@ -166,7 +167,7 @@ class Battle
 
   def pbDebugMenu
     pbBattleDebug(self)
-    @scene.pbRefreshEverything
+    @visuals.pbRefreshEverything
     allBattlers(true).each { |b| b.pbCheckFormOnWeatherChange }
     allBattlers(true).each { |b| b.pbCheckFormOnTerrainChange }
     pbEndPrimordialWeather
@@ -184,7 +185,7 @@ class Battle
 
   def pbCommandPhase
     @command_phase = true
-    @scene.pbBeginCommandPhase
+    @visuals.pbBeginCommandPhase
     # Reset choices if commands can be shown
     @battlers.each_with_index do |b, i|
       next if !b

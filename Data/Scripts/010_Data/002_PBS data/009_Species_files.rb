@@ -214,7 +214,7 @@ module GameData
     end
 
     def self.substitute_shadow_bitmap
-      metrics_data = Battle::Scene::BattlerSprite::SUBSTITUTE_METRICS
+      metrics_data = Battle::Visuals::BattlerSprite::SUBSTITUTE_METRICS
       filename = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%d", metrics_data.shadow_size))
       return (filename) ? AnimatedBitmap.new(filename) : nil
     end

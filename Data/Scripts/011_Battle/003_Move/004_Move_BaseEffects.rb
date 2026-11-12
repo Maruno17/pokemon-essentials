@@ -259,7 +259,7 @@ class Battle::Move::TargetMultiStatDownMove < Battle::Move
       end
       if failed
         @battle.pbShowAbilitySplash(target)
-        if !Battle::Scene::USE_ABILITY_SPLASH
+        if !Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} {2} activated!", target.pbOfThis, target.abilityName))
         end
         user.pbCanLowerStatStage?(@statDown[0], target, self, true, false, true)   # Show fail message
@@ -405,16 +405,16 @@ class Battle::Move::TwoTurnMove < Battle::Move
       case timing
       when :before
         if hitNum == 0   # Damaging animation
-          @battle.scene.pbForceBattlerInvisibility(user.index, false) if hidesUser?
+          @battle.visuals.pbForceBattlerInvisibility(user.index, false) if hidesUser?
           if hidesTarget?
-            targets.each { |b| @battle.scene.pbForceBattlerInvisibility(b.index, false) }
+            targets.each { |b| @battle.visuals.pbForceBattlerInvisibility(b.index, false) }
           end
         end
       when :after
         if hitNum == 1   # Charging animation
-          @battle.scene.pbForceBattlerInvisibility(user.index, true) if hidesUser?
+          @battle.visuals.pbForceBattlerInvisibility(user.index, true) if hidesUser?
           if hidesTarget?
-            targets.each { |b| @battle.scene.pbForceBattlerInvisibility(b.index, true) }
+            targets.each { |b| @battle.visuals.pbForceBattlerInvisibility(b.index, true) }
           end
         end
       end

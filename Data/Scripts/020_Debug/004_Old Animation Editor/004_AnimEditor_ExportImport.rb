@@ -109,17 +109,17 @@ module BattleAnimationEditor
           case j
           when 0      # User battler
             textdata[i][j][AnimFrame::FOCUS] = 2
-            textdata[i][j][AnimFrame::X] = Battle::Scene::FOCUSUSER_X
-            textdata[i][j][AnimFrame::Y] = Battle::Scene::FOCUSUSER_Y
+            textdata[i][j][AnimFrame::X] = Battle::Visuals::FOCUSUSER_X
+            textdata[i][j][AnimFrame::Y] = Battle::Visuals::FOCUSUSER_Y
           when 1   # Target battler
             textdata[i][j][AnimFrame::FOCUS] = 1
-            textdata[i][j][AnimFrame::X] = Battle::Scene::FOCUSTARGET_X
-            textdata[i][j][AnimFrame::Y] = Battle::Scene::FOCUSTARGET_Y
+            textdata[i][j][AnimFrame::X] = Battle::Visuals::FOCUSTARGET_X
+            textdata[i][j][AnimFrame::Y] = Battle::Visuals::FOCUSTARGET_Y
           else
             textdata[i][j][AnimFrame::FOCUS] = (textdata.position || 4)
             if textdata.position == 1
-              textdata[i][j][AnimFrame::X] += Battle::Scene::FOCUSTARGET_X
-              textdata[i][j][AnimFrame::Y] += Battle::Scene::FOCUSTARGET_Y - 2
+              textdata[i][j][AnimFrame::X] += Battle::Visuals::FOCUSTARGET_X
+              textdata[i][j][AnimFrame::Y] += Battle::Visuals::FOCUSTARGET_Y - 2
             end
           end
         end

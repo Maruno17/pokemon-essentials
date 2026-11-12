@@ -740,7 +740,7 @@ class Battle::Move::ConfuseTargetCrashDamageIfFails < Battle::Move::ConfuseTarge
   def pbCrashDamage(user)
     return if !user.takesIndirectDamage?
     @battle.pbDisplay(_INTL("{1} kept going and crashed!", user.pbThis))
-    @battle.scene.pbDamageAnimation(user)
+    @battle.visuals.pbDamageAnimation(user)
     user.pbReduceHP(user.totalhp / 2, false)
     user.pbItemHPHealCheck
     user.pbFaint if user.fainted?
@@ -1341,7 +1341,7 @@ class Battle::Move::UserTargetSwapAbilities < Battle::Move
       @battle.pbReplaceAbilitySplash(user)
       @battle.pbReplaceAbilitySplash(target)
     end
-    if Battle::Scene::USE_ABILITY_SPLASH
+    if Battle::Visuals::USE_ABILITY_SPLASH
       @battle.pbDisplay(_INTL("{1} swapped Abilities with its target!", user.pbThis))
     else
       @battle.pbDisplay(_INTL("{1} swapped its {2} Ability with its target's {3} Ability!",
@@ -1504,7 +1504,7 @@ class Battle::Move::HitsTargetInSkyGroundsTarget < Battle::Move
                                "TwoTurnAttackInvulnerableInSkyParalyzeTarget")   # NOTE: Not Sky Drop.
       target.effects[PBEffects::TwoTurnAttack] = nil
       @battle.pbClearChoice(target.index) if !target.movedThisRound?
-      @battle.scene.pbForceBattlerInvisibility(target.index, false)
+      @battle.visuals.pbForceBattlerInvisibility(target.index, false)
     end
     target.effects[PBEffects::MagnetRise]  = 0
     target.effects[PBEffects::Telekinesis] = 0
@@ -1535,7 +1535,7 @@ class Battle::Move::StartGravity < Battle::Move
                             "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
         b.effects[PBEffects::TwoTurnAttack] = nil
         @battle.pbClearChoice(b.index) if !b.movedThisRound?
-        @battle.scene.pbForceBattlerInvisibility(target.index, false)
+        @battle.visuals.pbForceBattlerInvisibility(target.index, false)
         showMessage = true
       end
       if b.effects[PBEffects::MagnetRise] > 0 ||
@@ -1592,6 +1592,6 @@ class Battle::Move::TransformUserIntoTarget < Battle::Move
 
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     super
-    @battle.scene.pbChangePokemon(user, targets[0].pokemon)
+    @battle.visuals.pbChangePokemon(user, targets[0].pokemon)
   end
 end

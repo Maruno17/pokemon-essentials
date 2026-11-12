@@ -118,7 +118,7 @@ class Battle
   # all instances where the party screen is opened.
   def pbPartyScreen(idxBattler, checkLaxOnly = false, canCancel = false, shouldRegister = false)
     ret = -1
-    @scene.pbPartyScreen(idxBattler, canCancel) do |idxParty, party_screen|
+    @visuals.pbPartyScreen(idxBattler, canCancel) do |idxParty, party_screen|
       if checkLaxOnly
         next false if !pbCanSwitchIn?(idxBattler, idxParty, party_screen)
       elsif !pbCanSwitch?(idxBattler, idxParty, party_screen)
@@ -227,9 +227,9 @@ class Battle
 
   # Actually performs the recalling and sending out in all situations.
   def pbRecallAndReplace(idxBattler, idxParty, randomReplacement = false, batonPass = false)
-    @scene.pbRecall(idxBattler) if !@battlers[idxBattler].fainted?
+    @visuals.pbRecall(idxBattler) if !@battlers[idxBattler].fainted?
     @battlers[idxBattler].pbAbilitiesOnSwitchOut   # Inc. primordial weather check
-    @scene.pbShowPartyLineup(idxBattler & 1) if pbSideSize(idxBattler) == 1
+    @visuals.pbShowPartyLineup(idxBattler & 1) if pbSideSize(idxBattler) == 1
     pbMessagesOnReplace(idxBattler, idxParty) if !randomReplacement
     pbReplace(idxBattler, idxParty, batonPass)
   end
@@ -297,9 +297,9 @@ class Battle
   # sendOuts is an array; each element is itself an array: [idxBattler,pkmn]
   def pbSendOut(sendOuts, startBattle = false)
     sendOuts.each { |b| @peer.pbOnEnteringBattle(self, @battlers[b[0]], b[1]) }
-    @scene.pbSendOutBattlers(sendOuts, startBattle)
+    @visuals.pbSendOutBattlers(sendOuts, startBattle)
     sendOuts.each do |b|
-      @scene.pbResetCommandsIndex(b[0])
+      @visuals.pbResetCommandsIndex(b[0])
       pbSetSeen(@battlers[b[0]])
       @usedInBattle[b[0] & 1][b[0] / 2] = true
     end
@@ -426,7 +426,7 @@ class Battle
     end
     pbPriority(true, true).each do |b|
       next if b.effects[PBEffects::Substitute] == 0
-      @scene.pbSwapBattlerAndSubstitute(b.index, :battler_out_doll_in)
+      @visuals.pbSwapBattlerAndSubstitute(b.index, :battler_out_doll_in)
     end
   end
 

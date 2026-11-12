@@ -1,9 +1,9 @@
 #===============================================================================
 #
 #===============================================================================
-class Battle::Scene
+class Battle::Visuals
   #-----------------------------------------------------------------------------
-  # Create the battle scene and its elements.
+  # Create the battle visuals class and its elements.
   #-----------------------------------------------------------------------------
 
   def initialize
@@ -147,7 +147,7 @@ class Battle::Scene
       bg.mirror = true
     end
     2.times do |side|
-      baseX, baseY = Battle::Scene.pbBattlerPosition(side)
+      baseX, baseY = Battle::Visuals.pbBattlerPosition(side)
       base = pbAddSprite("base_#{side}", baseX, baseY,
                          (side == 0) ? playerBase : enemyBase, @viewport)
       base.z = -199
@@ -166,7 +166,7 @@ class Battle::Scene
     else   # Partner trainer's sprite
       trainerFile = GameData::TrainerType.back_sprite_filename(trainerType)
     end
-    spriteX, spriteY = Battle::Scene.pbTrainerPosition(0, idxTrainer, numTrainers)
+    spriteX, spriteY = Battle::Visuals.pbTrainerPosition(0, idxTrainer, numTrainers)
     trainer = pbAddSprite("player_#{idxTrainer + 1}", spriteX, spriteY, trainerFile, @viewport)
     return if !trainer.bitmap
     # Alter position of sprite
@@ -181,7 +181,7 @@ class Battle::Scene
 
   def pbCreateTrainerFrontSprite(idxTrainer, trainerType, numTrainers = 1)
     trainerFile = GameData::TrainerType.front_sprite_filename(trainerType)
-    spriteX, spriteY = Battle::Scene.pbTrainerPosition(1, idxTrainer, numTrainers)
+    spriteX, spriteY = Battle::Visuals.pbTrainerPosition(1, idxTrainer, numTrainers)
     trainer = pbAddSprite("trainer_#{idxTrainer + 1}", spriteX, spriteY, trainerFile, @viewport)
     return if !trainer.bitmap
     # Alter position of sprite

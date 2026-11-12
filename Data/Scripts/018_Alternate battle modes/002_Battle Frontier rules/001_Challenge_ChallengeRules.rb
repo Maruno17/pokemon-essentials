@@ -108,8 +108,8 @@ class PokemonChallengeRules
     return self
   end
 
-  def createBattle(scene, trainer1, trainer2)
-    battle = @battletype.pbCreateBattle(scene, trainer1, trainer2)
+  def createBattle(visuals, trainer1, trainer2)
+    battle = @battletype.pbCreateBattle(visuals, trainer1, trainer2)
     @battlerules.each do |p|
       p.setRule(battle)
     end

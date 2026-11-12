@@ -371,10 +371,10 @@ def pbBugContestBattle(pkmn, level = 1)
   playerTrainer     = [$player]
   playerParty       = $player.party
   playerPartyStarts = [0]
-  # Create the battle scene (the visual side of it)
-  scene = BattleCreationHelperMethods.create_battle_scene
+  # Create the battle visuals
+  visuals = BattleCreationHelperMethods.create_battle_visuals
   # Create the battle class (the mechanics side of it)
-  battle = BugContestBattle.new(scene, playerParty, foeParty, playerTrainer, nil)
+  battle = BugContestBattle.new(visuals, playerParty, foeParty, playerTrainer, nil)
   battle.party1starts = playerPartyStarts
   battle.ballCount    = pbBugContestState.ballcount
   setBattleRule("single")

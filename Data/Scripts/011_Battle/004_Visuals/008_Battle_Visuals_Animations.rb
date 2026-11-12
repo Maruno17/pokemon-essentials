@@ -1,7 +1,7 @@
 #===============================================================================
-# Shows the battle scene fading in while elements slide around into place.
+# Shows the battle fading in while elements slide around into place.
 #===============================================================================
-class Battle::Scene::Animation::Intro < Battle::Scene::Animation
+class Battle::Visuals::Animation::Intro < Battle::Visuals::Animation
   def initialize(sprites, viewport, battle)
     @battle = battle
     super(sprites, viewport)
@@ -61,7 +61,7 @@ end
 # Shows wild Pokémon fading back to their normal color, and triggers their intro
 # animations.
 #===============================================================================
-class Battle::Scene::Animation::Intro2 < Battle::Scene::Animation
+class Battle::Visuals::Animation::Intro2 < Battle::Visuals::Animation
   def initialize(sprites, viewport, sideSize)
     @sideSize = sideSize
     super(sprites, viewport)
@@ -81,7 +81,7 @@ end
 #===============================================================================
 # Makes a side's party bar and balls appear.
 #===============================================================================
-class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
+class Battle::Visuals::Animation::LineupAppear < Battle::Visuals::Animation
   BAR_DISPLAY_WIDTH = 248
 
   def initialize(sprites, viewport, side, party, partyStarts, fullAnim)
@@ -113,7 +113,7 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     bar.y       = barY
     bar.opacity = 255
     bar.visible = false
-    Battle::Scene::NUM_BALLS.times do |i|
+    Battle::Visuals::NUM_BALLS.times do |i|
       ball = sprites["partyBall_#{@side}_#{i}"]
       ball.x       = ballX
       ball.y       = ballY
@@ -132,7 +132,7 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     end
     # Opposing lineup
     # NOTE: This doesn't work well for 4+ opposing trainers.
-    ballsPerTrainer = Battle::Scene::NUM_BALLS / @partyStarts.length   # 6/3/2
+    ballsPerTrainer = Battle::Visuals::NUM_BALLS / @partyStarts.length   # 6/3/2
     startsIndex = idxBall / ballsPerTrainer
     teamIndex = idxBall % ballsPerTrainer
     ret = @partyStarts[startsIndex] + teamIndex
@@ -150,7 +150,7 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     bar.setDelta(0, dir * Graphics.width / 2, 0)
     bar.moveDelta(0, 8, -dir * Graphics.width / 2, 0)
     delay = bar.totalDuration
-    Battle::Scene::NUM_BALLS.times do |i|
+    Battle::Visuals::NUM_BALLS.times do |i|
       createBall(i, (@fullAnim) ? delay + (i * 2) : 0, dir)
     end
   end
@@ -182,7 +182,7 @@ end
 #===============================================================================
 # Makes a Pokémon's data box appear.
 #===============================================================================
-class Battle::Scene::Animation::DataBoxAppear < Battle::Scene::Animation
+class Battle::Visuals::Animation::DataBoxAppear < Battle::Visuals::Animation
   def initialize(sprites, viewport, idxBox)
     @idxBox = idxBox
     super(sprites, viewport)
@@ -201,7 +201,7 @@ end
 #===============================================================================
 # Makes a Pokémon's data box disappear.
 #===============================================================================
-class Battle::Scene::Animation::DataBoxDisappear < Battle::Scene::Animation
+class Battle::Visuals::Animation::DataBoxDisappear < Battle::Visuals::Animation
   def initialize(sprites, viewport, idxBox)
     @idxBox = idxBox
     super(sprites, viewport)
@@ -219,7 +219,7 @@ end
 #===============================================================================
 # Makes a Pokémon's ability bar appear.
 #===============================================================================
-class Battle::Scene::Animation::AbilitySplashAppear < Battle::Scene::Animation
+class Battle::Visuals::Animation::AbilitySplashAppear < Battle::Visuals::Animation
   def initialize(sprites, viewport, side)
     @side = side
     super(sprites, viewport)
@@ -238,7 +238,7 @@ end
 #===============================================================================
 # Makes a Pokémon's ability bar disappear.
 #===============================================================================
-class Battle::Scene::Animation::AbilitySplashDisappear < Battle::Scene::Animation
+class Battle::Visuals::Animation::AbilitySplashDisappear < Battle::Visuals::Animation
   def initialize(sprites, viewport, side)
     @side = side
     super(sprites, viewport)
@@ -258,7 +258,7 @@ end
 # trainer slide off to the right first if it is on-screen.
 # Used at the end of battle.
 #===============================================================================
-class Battle::Scene::Animation::TrainerAppear < Battle::Scene::Animation
+class Battle::Visuals::Animation::TrainerAppear < Battle::Visuals::Animation
   def initialize(sprites, viewport, idxTrainer)
     @idxTrainer = idxTrainer
     super(sprites, viewport)
@@ -275,7 +275,7 @@ class Battle::Scene::Animation::TrainerAppear < Battle::Scene::Animation
     end
     # Make new trainer sprite move on-screen
     if @sprites["trainer_#{@idxTrainer + 1}"]
-      trainerX, trainerY = Battle::Scene.pbTrainerPosition(1)
+      trainerX, trainerY = Battle::Visuals.pbTrainerPosition(1)
       trainerX += 64 + (Graphics.width / 4)
       newTrainer = addSprite(@sprites["trainer_#{@idxTrainer + 1}"], PictureOrigin::BOTTOM)
       newTrainer.setVisible(delay, true)
@@ -290,7 +290,7 @@ end
 # Shows the player's/partner's throwing animation (if they have one).
 # Doesn't show the ball thrown or the Pokémon.
 #===============================================================================
-class Battle::Scene::Animation::PlayerFade < Battle::Scene::Animation
+class Battle::Visuals::Animation::PlayerFade < Battle::Visuals::Animation
   def initialize(sprites, viewport, fullAnim = false)
     @fullAnim = fullAnim   # True at start of battle, false when switching
     super(sprites, viewport)
@@ -326,7 +326,7 @@ class Battle::Scene::Animation::PlayerFade < Battle::Scene::Animation
       partyBar.setVisible(delay + 12, false)
       partyBar.setOpacity(delay + 12, 255)
     end
-    Battle::Scene::NUM_BALLS.times do |j|
+    Battle::Visuals::NUM_BALLS.times do |j|
       next if !@sprites["partyBall_0_#{j}"] || !@sprites["partyBall_0_#{j}"].visible
       partyBall = addSprite(@sprites["partyBall_0_#{j}"])
       partyBall.moveDelta(delay + (2 * j), 16, -Graphics.width, 0) if @fullAnim
@@ -341,7 +341,7 @@ end
 # Shows the enemy trainer(s) and the enemy party lineup sliding off screen.
 # Doesn't show the ball thrown or the Pokémon.
 #===============================================================================
-class Battle::Scene::Animation::TrainerFade < Battle::Scene::Animation
+class Battle::Visuals::Animation::TrainerFade < Battle::Visuals::Animation
   def initialize(sprites, viewport, fullAnim = false)
     @fullAnim = fullAnim   # True at start of battle, false when switching
     super(sprites, viewport)
@@ -369,7 +369,7 @@ class Battle::Scene::Animation::TrainerFade < Battle::Scene::Animation
       partyBar.setVisible(delay + 12, false)
       partyBar.setOpacity(delay + 12, 255)
     end
-    Battle::Scene::NUM_BALLS.times do |j|
+    Battle::Visuals::NUM_BALLS.times do |j|
       next if !@sprites["partyBall_1_#{j}"] || !@sprites["partyBall_1_#{j}"].visible
       partyBall = addSprite(@sprites["partyBall_1_#{j}"])
       partyBall.moveDelta(delay + (2 * j), 16, Graphics.width, 0) if @fullAnim
@@ -384,8 +384,8 @@ end
 # Shows a Pokémon being sent out on the player's side (including by a partner).
 # Includes the Poké Ball being thrown.
 #===============================================================================
-class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
-  include Battle::Scene::Animation::BallAnimationMixin
+class Battle::Visuals::Animation::PokeballPlayerSendOut < Battle::Visuals::Animation
+  include Battle::Visuals::Animation::BallAnimationMixin
 
   def initialize(sprites, viewport, idxTrainer, battler, startBattle, idxOrder = 0)
     @idxTrainer     = idxTrainer
@@ -409,7 +409,7 @@ class Battle::Scene::Animation::PokeballPlayerSendOut < Battle::Scene::Animation
     col = getBattlerColorFromPokeBall(poke_ball)
     col.alpha = 255
     # Calculate start and end coordinates for battler sprite movement
-    ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
+    ballPos = Battle::Visuals.pbBattlerPosition(@battler.index, batSprite.sideSize)
     battlerStartX = ballPos[0]   # Is also where the Ball needs to end
     battlerStartY = ballPos[1]   # Is also where the Ball needs to end + 18
     battlerEndX = batSprite.x
@@ -461,8 +461,8 @@ end
 # Includes the Poké Ball being "thrown" (although here the Poké Ball just
 # appears in the spot where it opens up rather than being thrown to there).
 #===============================================================================
-class Battle::Scene::Animation::PokeballTrainerSendOut < Battle::Scene::Animation
-  include Battle::Scene::Animation::BallAnimationMixin
+class Battle::Visuals::Animation::PokeballTrainerSendOut < Battle::Visuals::Animation
+  include Battle::Visuals::Animation::BallAnimationMixin
 
   def initialize(sprites, viewport, idxTrainer, battler, startBattle, idxOrder)
     @idxTrainer     = idxTrainer
@@ -484,7 +484,7 @@ class Battle::Scene::Animation::PokeballTrainerSendOut < Battle::Scene::Animatio
     col = getBattlerColorFromPokeBall(poke_ball)
     col.alpha = 255
     # Calculate start and end coordinates for battler sprite movement
-    ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
+    ballPos = Battle::Visuals.pbBattlerPosition(@battler.index, batSprite.sideSize)
     battlerStartX = ballPos[0]
     battlerStartY = ballPos[1]
     battlerEndX = batSprite.x
@@ -528,8 +528,8 @@ end
 #===============================================================================
 # Shows a Pokémon being recalled into its Poké Ball.
 #===============================================================================
-class Battle::Scene::Animation::BattlerRecall < Battle::Scene::Animation
-  include Battle::Scene::Animation::BallAnimationMixin
+class Battle::Visuals::Animation::BattlerRecall < Battle::Visuals::Animation
+  include Battle::Visuals::Animation::BallAnimationMixin
 
   def initialize(sprites, viewport, battler)
     @battler = battler
@@ -546,7 +546,7 @@ class Battle::Scene::Animation::BattlerRecall < Battle::Scene::Animation
     col = getBattlerColorFromPokeBall(poke_ball)
     col.alpha = 0
     # Calculate end coordinates for battler sprite movement
-    ballPos = Battle::Scene.pbBattlerPosition(@idxBattler, batSprite.sideSize)
+    ballPos = Battle::Visuals.pbBattlerPosition(@idxBattler, batSprite.sideSize)
     battlerEndX = ballPos[0]
     battlerEndY = ballPos[1]
     # Set up battler sprite
@@ -576,7 +576,7 @@ end
 #===============================================================================
 # Shows a Pokémon flashing after taking damage.
 #===============================================================================
-class Battle::Scene::Animation::BattlerDamage < Battle::Scene::Animation
+class Battle::Visuals::Animation::BattlerDamage < Battle::Visuals::Animation
   def initialize(sprites, viewport, idxBattler, effectiveness)
     @idxBattler    = idxBattler
     @effectiveness = effectiveness
@@ -612,7 +612,7 @@ end
 #===============================================================================
 # Shows a Pokémon fainting.
 #===============================================================================
-class Battle::Scene::Animation::BattlerFaint < Battle::Scene::Animation
+class Battle::Visuals::Animation::BattlerFaint < Battle::Visuals::Animation
   def initialize(sprites, viewport, idxBattler, battle)
     @idxBattler = idxBattler
     @battle     = battle
@@ -627,7 +627,7 @@ class Battle::Scene::Animation::BattlerFaint < Battle::Scene::Animation
     shadow  = addSprite(shaSprite, PictureOrigin::CENTER)
     # Get approx duration depending on sprite's position/size. Min 20 frames.
     battlerTop = batSprite.y - batSprite.oy
-    cropY = Battle::Scene.pbBattlerPosition(@idxBattler, @battle.pbSideSize(@idxBattler))[1]
+    cropY = Battle::Visuals.pbBattlerPosition(@idxBattler, @battle.pbSideSize(@idxBattler))[1]
     cropY += 8
     duration = (cropY - battlerTop) / 8
     duration = 10 if duration < 10   # Min 0.5 seconds
@@ -660,8 +660,8 @@ end
 #===============================================================================
 # Shows the player's Poké Ball being thrown to capture a Pokémon.
 #===============================================================================
-class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
-  include Battle::Scene::Animation::BallAnimationMixin
+class Battle::Visuals::Animation::PokeballThrowCapture < Battle::Visuals::Animation
+  include Battle::Visuals::Animation::BallAnimationMixin
 
   def initialize(sprites, viewport,
                  poke_ball, numShakes, critCapture, battler, showingTrainer)
@@ -681,7 +681,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     batSprite = @sprites["pokemon_#{@battler.index}"]
     shaSprite = @sprites["shadow_#{@battler.index}"]
     traSprite = @sprites["player_1"]
-    ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
+    ballPos = Battle::Visuals.pbBattlerPosition(@battler.index, batSprite.sideSize)
     battlerStartX = batSprite.x
     battlerStartY = batSprite.y
     ballStartX = -6
@@ -816,8 +816,8 @@ end
 #===============================================================================
 # Shows the player throwing a Poké Ball and it being deflected.
 #===============================================================================
-class Battle::Scene::Animation::PokeballThrowDeflect < Battle::Scene::Animation
-  include Battle::Scene::Animation::BallAnimationMixin
+class Battle::Visuals::Animation::PokeballThrowDeflect < Battle::Visuals::Animation
+  include Battle::Visuals::Animation::BallAnimationMixin
 
   def initialize(sprites, viewport, poke_ball, battler)
     @poke_ball = poke_ball
@@ -828,7 +828,7 @@ class Battle::Scene::Animation::PokeballThrowDeflect < Battle::Scene::Animation
   def createProcesses
     # Calculate start and end coordinates for battler sprite movement
     batSprite = @sprites["pokemon_#{@battler.index}"]
-    ballPos = Battle::Scene.pbBattlerPosition(@battler.index, batSprite.sideSize)
+    ballPos = Battle::Visuals.pbBattlerPosition(@battler.index, batSprite.sideSize)
     ballStartX = -6
     ballStartY = 246
     ballMidX   = 190   # Unused in arc calculation
@@ -854,7 +854,7 @@ end
 # Makes a Pokémon slide on- or off-screen, or fade out.
 # Used to swap a Pokémon with its Substitute doll in various ways.
 #===============================================================================
-class Battle::Scene::Animation::SwapSubstitute < Battle::Scene::Animation
+class Battle::Visuals::Animation::SwapSubstitute < Battle::Visuals::Animation
   # mode is one of: :slide_on, :slide_off, :fade_out
   def initialize(sprites, viewport, idxBattler, mode)
     @idxBattler = idxBattler

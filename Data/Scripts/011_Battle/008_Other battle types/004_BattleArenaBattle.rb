@@ -110,7 +110,7 @@ class BattleArenaBattle < Battle
 
   def pbCommandPhase
     if @battlersChanged
-      @scene.pbBattleArenaBattlers(@battlers[0], @battlers[1])
+      @visuals.pbBattleArenaBattlers(@battlers[0], @battlers[1])
       @battlersChanged = false
       @count = 0
     end
@@ -169,7 +169,7 @@ class BattleArenaBattle < Battle
       ratings2[2] = 2
     end
     # Show scores
-    @scene.pbBattleArenaJudgment(@battlers[0], @battlers[1], ratings1.clone, ratings2.clone)
+    @visuals.pbBattleArenaJudgment(@battlers[0], @battlers[1], ratings1.clone, ratings2.clone)
     # Calculate total scores
     points = [0, 0]
     ratings1.each { |val| points[0] += val }
@@ -219,7 +219,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-class Battle::Scene
+class Battle::Visuals
   def pbBattleArenaUpdate
     Graphics.update
     pbGraphicsUpdate

@@ -90,7 +90,7 @@ class Battle::Move::UserTargetSwapItems < Battle::Move
     if target.hasActiveAbility?(:STICKYHOLD) && !target.beingMoldBroken?
       if show_message
         @battle.pbShowAbilitySplash(target)
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("But it failed to affect {1}!", target.pbThis(true)))
         else
           @battle.pbDisplay(_INTL("But it failed to affect {1} because of its {2}!",
@@ -206,7 +206,7 @@ class Battle::Move::CorrodeTargetItem < Battle::Move
     if target.hasActiveAbility?(:STICKYHOLD) && !target.beingMoldBroken?
       if show_message
         @battle.pbShowAbilitySplash(target)
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
         else
           @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",

@@ -21,8 +21,8 @@ class Battle::Battler
         @battle.pbShowAbilitySplash(target)
         target_form = target.form
         target.pbChangeForm(0, nil)
-        if user.takesIndirectDamage?(Battle::Scene::USE_ABILITY_SPLASH)
-          @battle.scene.pbDamageAnimation(user)
+        if user.takesIndirectDamage?(Battle::Visuals::USE_ABILITY_SPLASH)
+          @battle.visuals.pbDamageAnimation(user)
           user.pbReduceHP(user.totalhp / 4, false)
         end
         case target_form

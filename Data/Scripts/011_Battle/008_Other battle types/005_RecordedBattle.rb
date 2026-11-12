@@ -141,7 +141,7 @@ module RecordedBattlePlaybackModule
     RUN     = 3
   end
 
-  def initialize(scene, battle)
+  def initialize(visuals, battle)
     @battletype  = battle[0]
     @properties  = battle[1]
     @rounds      = battle[2]
@@ -150,7 +150,7 @@ module RecordedBattlePlaybackModule
     @roundindex  = -1
     @randomindex = 0
     @switchindex = 0
-    super(scene,
+    super(visuals,
        Marshal.restore(@properties["party1"]),
        Marshal.restore(@properties["party2"]),
        RecordedBattle::PlaybackHelper.pbCreateTrainerInfo(@properties["player"]),

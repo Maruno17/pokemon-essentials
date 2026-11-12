@@ -123,7 +123,7 @@ class Battle::Battler
     @status = value
     @pokemon.status = value if @pokemon
     self.statusCount = 0 if value != :POISON && value != :SLEEP
-    @battle.scene.pbRefreshOne(@index)
+    @battle.visuals.pbRefreshOne(@index)
   end
 
   attr_reader :statusCount
@@ -131,7 +131,7 @@ class Battle::Battler
   def statusCount=(value)
     @statusCount = value
     @pokemon.statusCount = value if @pokemon
-    @battle.scene.pbRefreshOne(@index)
+    @battle.visuals.pbRefreshOne(@index)
   end
 
   #-----------------------------------------------------------------------------
@@ -712,7 +712,7 @@ class Battle::Battler
     if hasActiveAbility?(:MAGICGUARD)
       if showMsg
         @battle.pbShowAbilitySplash(self)
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
         else
           @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!", pbThis, abilityName))
@@ -774,7 +774,7 @@ class Battle::Battler
       if hasActiveAbility?(:OVERCOAT) && !beingMoldBroken?
         if showMsg
           @battle.pbShowAbilitySplash(self)
-          if Battle::Scene::USE_ABILITY_SPLASH
+          if Battle::Visuals::USE_ABILITY_SPLASH
             @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis))
           else
             @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!", pbThis, abilityName))
@@ -838,7 +838,7 @@ class Battle::Battler
     if hasActiveAbility?(:SUCTIONCUPS) && !beingMoldBroken?
       if show_message
         @battle.pbShowAbilitySplash(self)
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} anchors itself!", pbThis))
         else
           @battle.pbDisplay(_INTL("{1} anchors itself with {2}!", pbThis, abilityName))

@@ -162,9 +162,9 @@ class Battle::AI
     pkmn = @battle.pbParty(side)[party_index]
     battler = @battle.pbFindBattler(party_index, side)
     ret = {}
-    return ret if !@battle.pbCanUseItemOnPokemon?(item, pkmn, battler, @battle.scene, false)
+    return ret if !@battle.pbCanUseItemOnPokemon?(item, pkmn, battler, @battle.visuals, false)
     return ret if !ItemHandlers.triggerCanUseInBattle(item, pkmn, battler, nil,
-                                                      false, self, @battle.scene, false)
+                                                      false, self, @battle.visuals, false)
     want_to_cure_status = (pkmn.status != :NONE)
     if battler
       if want_to_cure_status

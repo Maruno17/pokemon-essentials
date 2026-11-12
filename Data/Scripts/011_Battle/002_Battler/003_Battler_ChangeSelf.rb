@@ -15,7 +15,7 @@ class Battle::Battler
     PBDebug.log("[HP change] #{pbThis} lost #{amt} HP (#{oldHP} -> #{@hp})") if amt > 0
     raise _INTL("HP less than 0") if @hp < 0
     raise _INTL("HP greater than total HP") if @hp > @totalhp
-    @battle.scene.pbHPChanged(self, oldHP, anim) if anyAnim && amt > 0
+    @battle.visuals.pbHPChanged(self, oldHP, anim) if anyAnim && amt > 0
     if amt > 0 && registerDamage
       @droppedBelowHalfHP = true if @hp < @totalhp / 2 && @hp + amt >= @totalhp / 2
       @tookDamageThisRound = true
@@ -33,7 +33,7 @@ class Battle::Battler
     PBDebug.log("[HP change] #{pbThis} gained #{amt} HP (#{oldHP} -> #{@hp})") if amt > 0
     raise _INTL("HP less than 0") if @hp < 0
     raise _INTL("HP greater than total HP") if @hp > @totalhp
-    @battle.scene.pbHPChanged(self, oldHP, anim) if anyAnim && amt > 0
+    @battle.visuals.pbHPChanged(self, oldHP, anim) if anyAnim && amt > 0
     @droppedBelowHalfHP = false if @hp >= @totalhp / 2
     return amt
   end
@@ -76,20 +76,20 @@ class Battle::Battler
     end
     return if @fainted   # Has already fainted properly
     if @effects[PBEffects::Substitute] > 0
-      @battle.scene.pbSwapBattlerAndSubstitute(user.index, :doll_fade_battler_in)
+      @battle.visuals.pbSwapBattlerAndSubstitute(user.index, :doll_fade_battler_in)
     end
-    @battle.scene.pbForceBattlerInvisibility(@index, false)
+    @battle.visuals.pbForceBattlerInvisibility(@index, false)
     if @effects[PBEffects::Commanding] >= 0
       @effects[PBEffects::Commanding] = -1
       @battle.battlers[@effects[PBEffects::Commanding]].effects[PBEffects::CommandedBy] = -1
     elsif @effects[PBEffects::CommandedBy] >= 0
-      @battle.scene.pbForceBattlerInvisibility(@effects[PBEffects::CommandedBy], false)
+      @battle.visuals.pbForceBattlerInvisibility(@effects[PBEffects::CommandedBy], false)
       @effects[PBEffects::CommandedBy] = -1
       @battle.battlers[@effects[PBEffects::CommandedBy]].effects[PBEffects::Commanding] = -1
     end
     @battle.pbDisplayBrief(_INTL("{1} fainted!", pbThis)) if showMessage
     PBDebug.log("[Pokémon fainted] #{pbThis} (#{@index})") if !showMessage
-    @battle.scene.pbFaintBattler(self)
+    @battle.visuals.pbFaintBattler(self)
     @battle.pbSetDefeated(self) if opposes?
     pbInitEffects(false)
     # Reset status
@@ -180,8 +180,8 @@ class Battle::Battler
     pbUpdate(true)
     @hp = @totalhp - oldDmg
     @effects[PBEffects::WeightChange] = 0 if Settings::MECHANICS_GENERATION >= 6
-    @battle.scene.pbChangePokemon(self, @pokemon)
-    @battle.scene.pbRefreshOne(@index)
+    @battle.visuals.pbChangePokemon(self, @pokemon)
+    @battle.visuals.pbRefreshOne(@index)
     @battle.pbDisplay(msg) if msg && msg != ""
     PBDebug.log("[Form changed] #{pbThis} changed from form #{oldForm} to form #{newForm}")
     @battle.pbSetSeen(self)
@@ -354,7 +354,7 @@ class Battle::Battler
     @effects[PBEffects::DisableMove]  = nil
     @effects[PBEffects::WeightChange] = target.effects[PBEffects::WeightChange]
     @battle.hitsTakenCounts[idxOwnSide][pokemonIndex] = @battle.hitsTakenCounts[target.idxOwnSide][target.pokemonIndex]
-    @battle.scene.pbRefreshOne(@index)
+    @battle.visuals.pbRefreshOne(@index)
     @battle.pbDisplay(_INTL("{1} transformed into {2}!", pbThis, target.pbThis(true)))
     pbOnLosingAbility(oldAbil)
   end

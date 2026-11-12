@@ -108,8 +108,8 @@ class Battle::Battler
     return false if fainted?
     ret = false
     @battle.pbShowAbilitySplash(user) if splashAnim
-    if pbCanRaiseStatStage?(stat, user, nil, Battle::Scene::USE_ABILITY_SPLASH)
-      if Battle::Scene::USE_ABILITY_SPLASH
+    if pbCanRaiseStatStage?(stat, user, nil, Battle::Visuals::USE_ABILITY_SPLASH)
+      if Battle::Visuals::USE_ABILITY_SPLASH
         ret = pbRaiseStatStage(stat, increment, user)
       else
         ret = pbRaiseStatStageByCause(stat, increment, user, user.abilityName)
@@ -219,7 +219,7 @@ class Battle::Battler
          user && user.index != @index && !statStageAtMin?(stat)
         if mirrorArmorSplash < 2
           @battle.pbShowAbilitySplash(self)
-          if !Battle::Scene::USE_ABILITY_SPLASH
+          if !Battle::Visuals::USE_ABILITY_SPLASH
             @battle.pbDisplay(_INTL("{1} {2} activated!", pbOfThis, abilityName))
           end
         end
@@ -260,7 +260,7 @@ class Battle::Battler
       if hasActiveAbility?(:MIRRORARMOR) && !ignoreMirrorArmor &&
          user && user.index != @index && !statStageAtMin?(stat)
         @battle.pbShowAbilitySplash(self)
-        if !Battle::Scene::USE_ABILITY_SPLASH
+        if !Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} {2} activated!", pbOfThis, abilityName))
         end
         ret = false
@@ -300,9 +300,9 @@ class Battle::Battler
   def pbLowerStatStageByAbility(stat, increment, user, splashAnim = true, checkContact = false)
     ret = false
     @battle.pbShowAbilitySplash(user) if splashAnim
-    if pbCanLowerStatStage?(stat, user, nil, Battle::Scene::USE_ABILITY_SPLASH) &&
-       (!checkContact || affectedByContactEffect?(Battle::Scene::USE_ABILITY_SPLASH))
-      if Battle::Scene::USE_ABILITY_SPLASH
+    if pbCanLowerStatStage?(stat, user, nil, Battle::Visuals::USE_ABILITY_SPLASH) &&
+       (!checkContact || affectedByContactEffect?(Battle::Visuals::USE_ABILITY_SPLASH))
+      if Battle::Visuals::USE_ABILITY_SPLASH
         ret = pbLowerStatStage(stat, increment, user)
       else
         ret = pbLowerStatStageByCause(stat, increment, user, user.abilityName)
@@ -316,7 +316,7 @@ class Battle::Battler
     return false if fainted?
     # NOTE: Substitute intentionally blocks Intimidate even if self has Contrary.
     if @effects[PBEffects::Substitute] > 0
-      if Battle::Scene::USE_ABILITY_SPLASH
+      if Battle::Visuals::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} is protected by its substitute!", pbThis))
       else
         @battle.pbDisplay(_INTL("{1} substitute protected it from {2} {3}!",
@@ -326,7 +326,7 @@ class Battle::Battler
     end
     if Settings::MECHANICS_GENERATION >= 8 && hasActiveAbility?([:OBLIVIOUS, :OWNTEMPO, :INNERFOCUS, :SCRAPPY])
       @battle.pbShowAbilitySplash(self)
-      if Battle::Scene::USE_ABILITY_SPLASH
+      if Battle::Visuals::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} {2} cannot be lowered!", pbOfThis, GameData::Stat.get(:ATTACK).name))
       else
         @battle.pbDisplay(_INTL("{1} {2} prevents {3} loss!", pbOfThis, abilityName,
@@ -335,7 +335,7 @@ class Battle::Battler
       @battle.pbHideAbilitySplash(self)
       return false
     end
-    if Battle::Scene::USE_ABILITY_SPLASH
+    if Battle::Visuals::USE_ABILITY_SPLASH
       if hasActiveAbility?(:GUARDDOG)
         @battle.pbShowAbilitySplash(self)
         ret = pbRaiseStatStageByAbility(:ATTACK, 1, user, false)
@@ -389,7 +389,7 @@ class Battle::Battler
     # NOTE: Substitute intentionally blocks Supersweet Syrup even if self has
     #       Contrary.
     if @effects[PBEffects::Substitute] > 0
-      if Battle::Scene::USE_ABILITY_SPLASH
+      if Battle::Visuals::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("{1} is protected by its substitute!", pbThis))
       else
         @battle.pbDisplay(_INTL("{1} substitute protected it from {2} {3}!",
@@ -397,7 +397,7 @@ class Battle::Battler
       end
       return false
     end
-    if Battle::Scene::USE_ABILITY_SPLASH
+    if Battle::Visuals::USE_ABILITY_SPLASH
       return pbLowerStatStageByAbility(:EVASION, 1, user, false)
     end
     # NOTE: These checks exist to ensure appropriate messages are shown if

@@ -680,7 +680,7 @@ Battle::ItemEffects::OnStatLoss.add(:EJECTPACK,
     battle.pbDisplay(_INTL("{1} is switched out by the {2}!", battler.pbThis, battler.itemName))
     battler.pbConsumeItem(true, false)
     if battle.endOfRound   # Just switch out
-      battle.scene.pbRecall(battler.index) if !battler.fainted?
+      battle.visuals.pbRecall(battler.index) if !battler.fainted?
       battler.pbAbilitiesOnSwitchOut   # Inc. primordial weather check
       next true
     end
@@ -1436,7 +1436,7 @@ Battle::ItemEffects::OnBeingHit.add(:JABOCABERRY,
     end
     battle.pbCommonAnimation("EatBerry", target)
     battle.pbHideAbilitySplash(target) if ripening
-    battle.scene.pbDamageAnimation(user)
+    battle.visuals.pbDamageAnimation(user)
     user.pbReduceHP(amt, false)
     battle.pbDisplay(_INTL("{1} consumed its {2} and hurt {3}!",
                            target.pbThis, target.itemName, user.pbThis(true)))
@@ -1459,7 +1459,7 @@ Battle::ItemEffects::OnBeingHit.add(:ROCKYHELMET,
   proc { |item, user, target, move, battle|
     next if !move.pbContactMove?(user) || !user.affectedByContactEffect?
     next if !user.takesIndirectDamage?
-    battle.scene.pbDamageAnimation(user)
+    battle.visuals.pbDamageAnimation(user)
     user.pbReduceHP(user.totalhp / 6, false)
     battle.pbDisplay(_INTL("{1} was hurt by the {2}!", user.pbThis, target.itemName))
   }
@@ -1479,7 +1479,7 @@ Battle::ItemEffects::OnBeingHit.add(:ROWAPBERRY,
     end
     battle.pbCommonAnimation("EatBerry", target)
     battle.pbHideAbilitySplash(target) if ripening
-    battle.scene.pbDamageAnimation(user)
+    battle.visuals.pbDamageAnimation(user)
     user.pbReduceHP(amt, false)
     battle.pbDisplay(_INTL("{1} consumed its {2} and hurt {3}!",
                            target.pbThis, target.itemName, user.pbThis(true)))
@@ -2079,7 +2079,7 @@ Battle::ItemEffects::EndOfRoundEffect.add(:FLAMEORB,
 Battle::ItemEffects::EndOfRoundEffect.add(:STICKYBARB,
   proc { |item, battler, battle|
     next if !battler.takesIndirectDamage?
-    battle.scene.pbDamageAnimation(battler)
+    battle.visuals.pbDamageAnimation(battler)
     battler.pbTakeEffectDamage(battler.totalhp / 8) do |hp_lost|
       battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
     end

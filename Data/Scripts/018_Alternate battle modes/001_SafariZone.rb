@@ -123,10 +123,10 @@ def pbSafariBattle(pkmn, level = 1)
   foeParty = [pkmn]
   # Calculate who the trainer is
   playerTrainer = $player
-  # Create the battle scene (the visual side of it)
-  scene = BattleCreationHelperMethods.create_battle_scene
+  # Create the battle visuals
+  visuals = BattleCreationHelperMethods.create_battle_visuals
   # Create the battle class (the mechanics side of it)
-  battle = SafariBattle.new(scene, playerTrainer, foeParty)
+  battle = SafariBattle.new(visuals, playerTrainer, foeParty)
   battle.ballCount = pbSafariState.ballcount
   BattleCreationHelperMethods.prepare_battle(battle)
   # Perform the battle itself
@@ -178,21 +178,6 @@ class UI::PauseMenu < UI::BaseScreen
     end
   end
 end
-
-# class PokemonPauseMenu
-#   alias __safari_pbShowInfo pbShowInfo unless method_defined?(:__safari_pbShowInfo)
-#
-#   def pbShowInfo
-#     __safari_pbShowInfo
-#     return if !pbInSafari?
-#     if Settings::SAFARI_STEPS <= 0
-#       @scene.pbShowInfo(_INTL("Balls: {1}", pbSafariState.ballcount))
-#     else
-#       @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
-#                               pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
-#     end
-#   end
-# end
 
 #===============================================================================
 #

@@ -17,7 +17,7 @@ class Battle::Move::FleeFromBattle < Battle::Move
 
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     @battle.pbAnimation(id, user, targets, hitNum, true) do |timing|
-      @battle.scene.pbForceBattlerInvisibility(user.index, true) if timing == :after
+      @battle.visuals.pbForceBattlerInvisibility(user.index, true) if timing == :after
     end
   end
 end
@@ -64,7 +64,7 @@ class Battle::Move::SwitchOutUserStatusMove < Battle::Move
 
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     @battle.pbAnimation(id, user, targets, hitNum, true) do |timing|
-      @battle.scene.pbForceBattlerInvisibility(user.index, true) if timing == :after
+      @battle.visuals.pbForceBattlerInvisibility(user.index, true) if timing == :after
     end
   end
 end
@@ -160,7 +160,7 @@ class Battle::Move::SwitchOutUserPassOnEffects < Battle::Move
 
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     @battle.pbAnimation(id, user, targets, hitNum, true) do |timing|
-      @battle.scene.pbForceBattlerInvisibility(user.index, true) if timing == :after
+      @battle.visuals.pbForceBattlerInvisibility(user.index, true) if timing == :after
     end
   end
 end
@@ -224,7 +224,7 @@ class Battle::Move::UserMakeSubstituteSwitchOutUser < Battle::Move
     @battle.pbAnimation(id, user, targets, hitNum) do |timing|
       case timing
       when :after
-        @battle.scene.pbSwapBattlerAndSubstitute(user.index, :doll_instant)
+        @battle.visuals.pbSwapBattlerAndSubstitute(user.index, :doll_instant)
       end
     end
   end
@@ -336,8 +336,8 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
     @battle.pbAnimation(id, user, targets, hitNum) do |timing|
       if timing == :after
         targets.each do |b|
-          @battle.scene.pbSwapBattlerAndSubstitute(b.index, :battler_instant)
-          @battle.scene.pbForceBattlerInvisibility(b.index, true)
+          @battle.visuals.pbSwapBattlerAndSubstitute(b.index, :battler_instant)
+          @battle.visuals.pbForceBattlerInvisibility(b.index, true)
         end
       end
     end
@@ -1006,7 +1006,7 @@ class Battle::Move::DisableTargetStatusMoves < Battle::Move
        !target.beingMoldBroken?
       if show_message
         @battle.pbShowAbilitySplash(target)
-        if Battle::Scene::USE_ABILITY_SPLASH
+        if Battle::Visuals::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("But it failed!"))
         else
           @battle.pbDisplay(_INTL("But it failed because of {1} {2}!",

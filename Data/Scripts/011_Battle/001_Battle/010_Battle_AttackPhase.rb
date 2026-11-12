@@ -184,7 +184,7 @@ class Battle
   #-----------------------------------------------------------------------------
 
   def pbAttackPhase
-    @scene.pbBeginAttackPhase
+    @visuals.pbBeginAttackPhase
     # Reset certain effects
     @battlers.each_with_index do |b, i|
       next if !b

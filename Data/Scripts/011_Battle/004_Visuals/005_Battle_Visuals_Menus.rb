@@ -1,12 +1,12 @@
 #===============================================================================
 # Base class for all three menu classes below.
 #===============================================================================
-class Battle::Scene::MenuBase < UI::SpriteContainer
+class Battle::Visuals::MenuBase < UI::SpriteContainer
   attr_reader   :index
   attr_accessor :active
 
   TEXT_COLOR_THEMES = {   # These color themes are added to @sprites[:overlay]
-    :default => [Battle::Scene::MESSAGE_BASE_COLOR, Battle::Scene::MESSAGE_SHADOW_COLOR]   # Base and shadow colour
+    :default => [Battle::Visuals::MESSAGE_BASE_COLOR, Battle::Visuals::MESSAGE_SHADOW_COLOR]   # Base and shadow colour
   }
   BUTTON_HEIGHT = 46
 
@@ -29,7 +29,7 @@ end
 #===============================================================================
 # Command menu (Fight/Pokémon/Bag/Run).
 #===============================================================================
-class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
+class Battle::Visuals::CommandMenu < Battle::Visuals::MenuBase
   attr_accessor :commands
 
   GRAPHICS_FOLDER = "Battle/"
@@ -142,7 +142,7 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
   def draw_player_party_icons
     return if @battle.is_a?(SafariBattle)
     party = @battle.pbParty(0)
-    Battle::Scene::NUM_BALLS.times do |i|
+    Battle::Visuals::NUM_BALLS.times do |i|
       pkmn = party[i]
       status = 0
       if pkmn.nil?
@@ -162,7 +162,7 @@ class Battle::Scene::CommandMenu < Battle::Scene::MenuBase
   def draw_opponent_party_icons
     return if @battle.wildBattle? || @battle.is_a?(SafariBattle)
     party = @battle.pbParty(1)
-    Battle::Scene::NUM_BALLS.times do |i|
+    Battle::Visuals::NUM_BALLS.times do |i|
       pkmn = party[i]
       status = 0
       if pkmn.nil?
@@ -252,13 +252,13 @@ end
 #===============================================================================
 # Fight menu (choose a move).
 #===============================================================================
-class Battle::Scene::FightMenu < Battle::Scene::MenuBase
+class Battle::Visuals::FightMenu < Battle::Visuals::MenuBase
   attr_reader :battler
   attr_reader :mega_evolution_state
 
   GRAPHICS_FOLDER = "Battle/"
   TEXT_COLOR_THEMES = {   # These color themes are added to @sprites[:overlay]
-    :default   => [Battle::Scene::MESSAGE_BASE_COLOR, Battle::Scene::MESSAGE_SHADOW_COLOR],   # Base and shadow colour
+    :default   => [Battle::Visuals::MESSAGE_BASE_COLOR, Battle::Visuals::MESSAGE_SHADOW_COLOR],   # Base and shadow colour
     :pp_yellow => [Color.new(248, 192, 0), Color.new(144, 104, 0)],   # Base and shadow colour
     :pp_orange => [Color.new(248, 136, 32), Color.new(144, 72, 24)],   # Base and shadow colour
     :pp_red    => [Color.new(248, 72, 72), Color.new(136, 48, 48)]   # Base and shadow colour
@@ -446,7 +446,7 @@ end
 #===============================================================================
 # Target menu (choose a move's target).
 #===============================================================================
-class Battle::Scene::TargetMenu < Battle::Scene::MenuBase
+class Battle::Visuals::TargetMenu < Battle::Visuals::MenuBase
   attr_reader :mode
 
   GRAPHICS_FOLDER = "Battle/"

@@ -133,8 +133,8 @@ def pbConvertRPGAnimation(animation)
       if animation.position == 3   # Screen
         point = transformPoint(
           -160, 80, 160, -80,
-          Battle::Scene::FOCUSUSER_X, Battle::Scene::FOCUSUSER_Y,
-          Battle::Scene::FOCUSTARGET_X, Battle::Scene::FOCUSTARGET_Y,
+          Battle::Visuals::FOCUSUSER_X, Battle::Visuals::FOCUSUSER_Y,
+          Battle::Visuals::FOCUSTARGET_X, Battle::Visuals::FOCUSTARGET_Y,
           data[j, 1], data[j, 2]
         )
         cel = pbCreateCel(point[0], point[1], data[j, 0])
@@ -461,11 +461,11 @@ class PBAnimation < Array
     pos = @array.length
     @array[pos] = []
     # Move's user
-    @array[pos][0] = pbCreateCel(Battle::Scene::FOCUSUSER_X, Battle::Scene::FOCUSUSER_Y, -1)
+    @array[pos][0] = pbCreateCel(Battle::Visuals::FOCUSUSER_X, Battle::Visuals::FOCUSUSER_Y, -1)
     @array[pos][0][AnimFrame::FOCUS]  = 2
     @array[pos][0][AnimFrame::LOCKED] = 1
     # Move's target
-    @array[pos][1] = pbCreateCel(Battle::Scene::FOCUSTARGET_X, Battle::Scene::FOCUSTARGET_Y, -2)
+    @array[pos][1] = pbCreateCel(Battle::Visuals::FOCUSTARGET_X, Battle::Visuals::FOCUSTARGET_Y, -2)
     @array[pos][1][AnimFrame::FOCUS]  = 1
     @array[pos][1][AnimFrame::LOCKED] = 1
     return @array[pos]
@@ -672,15 +672,15 @@ class PBAnimationPlayerX
 
   MAX_SPRITES = 60
 
-  def initialize(animation, user, target, scene = nil, oppMove = false, inEditor = false)
+  def initialize(animation, user, target, visuals = nil, oppMove = false, inEditor = false)
     @animation     = animation
     @user          = (oppMove) ? target : user   # Just used for playing user's cry
-    @usersprite    = (user) ? scene.sprites["pokemon_#{user.index}"] : nil
-    @targetsprite  = (target) ? scene.sprites["pokemon_#{target.index}"] : nil
+    @usersprite    = (user) ? visuals.sprites["pokemon_#{user.index}"] : nil
+    @targetsprite  = (target) ? visuals.sprites["pokemon_#{target.index}"] : nil
     @userbitmap    = @usersprite&.bitmap # not to be disposed
     @targetbitmap  = @targetsprite&.bitmap # not to be disposed
-    @scene         = scene
-    @viewport      = scene&.viewport
+    @visuals       = visuals
+    @viewport      = @visuals&.viewport
     @inEditor      = inEditor
     @looping       = false
     @animbitmap    = nil   # Animation sheet graphic
@@ -817,11 +817,11 @@ class PBAnimationPlayerX
       pbSpriteSetAnimFrame(sprite, cel, @usersprite, @targetsprite)
       case cel[AnimFrame::FOCUS]
       when 1   # Focused on target
-        sprite.x = cel[AnimFrame::X] + @targetOrig[0] - Battle::Scene::FOCUSTARGET_X
-        sprite.y = cel[AnimFrame::Y] + @targetOrig[1] - Battle::Scene::FOCUSTARGET_Y
+        sprite.x = cel[AnimFrame::X] + @targetOrig[0] - Battle::Visuals::FOCUSTARGET_X
+        sprite.y = cel[AnimFrame::Y] + @targetOrig[1] - Battle::Visuals::FOCUSTARGET_Y
       when 2   # Focused on user
-        sprite.x = cel[AnimFrame::X] + @userOrig[0] - Battle::Scene::FOCUSUSER_X
-        sprite.y = cel[AnimFrame::Y] + @userOrig[1] - Battle::Scene::FOCUSUSER_Y
+        sprite.x = cel[AnimFrame::X] + @userOrig[0] - Battle::Visuals::FOCUSUSER_X
+        sprite.y = cel[AnimFrame::Y] + @userOrig[1] - Battle::Visuals::FOCUSUSER_Y
       when 3   # Focused on user and target
         next if !@srcLine || !@dstLine
         point = transformPoint(@srcLine[0], @srcLine[1], @srcLine[2], @srcLine[3],

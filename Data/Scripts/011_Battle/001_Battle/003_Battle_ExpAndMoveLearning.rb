@@ -8,7 +8,7 @@ class Battle
 
   def pbGainExp
     # Play wild victory music if it's the end of the battle (has to be here)
-    @scene.pbWildBattleSuccess if wildBattle? && pbAllFainted?(1) && !pbAllFainted?(0)
+    @visuals.pbWildBattleSuccess if wildBattle? && pbAllFainted?(1) && !pbAllFainted?(0)
     return if !@internalBattle || @rules[:no_exp_gain]
     # Go through each battler in turn to find the Pokémon that participated in
     # battle against it, and award those Pokémon Exp/EVs
@@ -206,14 +206,14 @@ class Battle
       levelMaxExp = growth_rate.minimum_exp_for_level(curLevel + 1)
       tempExp2 = (levelMaxExp < expFinal) ? levelMaxExp : expFinal
       pkmn.exp = tempExp2
-      @scene.pbEXPBar(battler, levelMinExp, levelMaxExp, tempExp1, tempExp2)
+      @visuals.pbEXPBar(battler, levelMinExp, levelMaxExp, tempExp1, tempExp2)
       tempExp1 = tempExp2
       curLevel += 1
       if curLevel > newLevel
         # Gained all the Exp now, end the animation
         pkmn.calc_stats
         battler&.pbUpdate(false)
-        @scene.pbRefreshOne(battler.index) if battler
+        @visuals.pbRefreshOne(battler.index) if battler
         break
       end
       # Levelled up
@@ -227,10 +227,10 @@ class Battle
       battler.pokemon.changeHappiness("levelup") if battler&.pokemon
       pkmn.calc_stats
       battler&.pbUpdate(false)
-      @scene.pbRefreshOne(battler.index) if battler
+      @visuals.pbRefreshOne(battler.index) if battler
       pbDisplayPaused(_INTL("{1} grew to Lv. {2}!", pkmn.name, curLevel) + "\\se[Pkmn level up]\\wtnp[30]")
-      @scene.pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,
-                       oldSpAtk, oldSpDef, oldSpeed)
+      @visuals.pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,
+                         oldSpAtk, oldSpDef, oldSpeed)
       # Learn all moves learned at this level
       moveList = pkmn.getMoveList
       moveList.each { |m| pbLearnMove(idxParty, m[1]) if m[0] == curLevel }
@@ -265,7 +265,7 @@ class Battle
                           pkmnName, moveName, pkmn.numMoves.to_word))
     if pbDisplayConfirm(_INTL("Should {1} forget a move to learn {2}?", pkmnName, moveName))
       loop do
-        forgetMove = @scene.pbForgetMove(pkmn, newMove)
+        forgetMove = @visuals.pbForgetMove(pkmn, newMove)
         if forgetMove >= 0 && pkmn.moves[forgetMove]
           oldMoveName = pkmn.moves[forgetMove].name
           pkmn.moves[forgetMove] = Pokemon::Move.new(newMove)   # Replaces current/total PP

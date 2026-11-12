@@ -460,12 +460,12 @@ module BattleAnimationEditor
         @sprites["pokemon_1"].bitmap = @target
         @sprites["pokemon_1"].z = 16
         pbSpriteSetAnimFrame(@sprites["pokemon_0"],
-                             pbCreateCel(Battle::Scene::FOCUSUSER_X,
-                                         Battle::Scene::FOCUSUSER_Y, -1, 2),
+                             pbCreateCel(Battle::Visuals::FOCUSUSER_X,
+                                         Battle::Visuals::FOCUSUSER_Y, -1, 2),
                              @sprites["pokemon_0"], @sprites["pokemon_1"])
         pbSpriteSetAnimFrame(@sprites["pokemon_1"],
-                             pbCreateCel(Battle::Scene::FOCUSTARGET_X,
-                                         Battle::Scene::FOCUSTARGET_Y, -2, 1),
+                             pbCreateCel(Battle::Visuals::FOCUSTARGET_X,
+                                         Battle::Visuals::FOCUSTARGET_Y, -2, 1),
                              @sprites["pokemon_0"], @sprites["pokemon_1"])
         usersprite = @sprites["pokemon_#{oppmove ? 1 : 0}"]
         targetsprite = @sprites["pokemon_#{oppmove ? 0 : 1}"]
@@ -478,8 +478,8 @@ module BattleAnimationEditor
                                          @battle.battlers[oppmove ? 0 : 1],
                                          self, oppmove, true)
         @player.setLineTransform(
-          Battle::Scene::FOCUSUSER_X, Battle::Scene::FOCUSUSER_Y,
-          Battle::Scene::FOCUSTARGET_X, Battle::Scene::FOCUSTARGET_Y,
+          Battle::Visuals::FOCUSUSER_X, Battle::Visuals::FOCUSUSER_Y,
+          Battle::Visuals::FOCUSTARGET_X, Battle::Visuals::FOCUSTARGET_Y,
           olduserx, oldusery,
           oldtargetx, oldtargety
         )

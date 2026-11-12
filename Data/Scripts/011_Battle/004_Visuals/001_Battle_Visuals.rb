@@ -1,7 +1,7 @@
 #===============================================================================
-# Battle scene (the visuals of the battle)
+# Battle visuals class
 #===============================================================================
-class Battle::Scene
+class Battle::Visuals
   attr_accessor :abortable   # For non-interactive battles, can quit immediately
   attr_reader   :battle
   attr_reader   :viewport
