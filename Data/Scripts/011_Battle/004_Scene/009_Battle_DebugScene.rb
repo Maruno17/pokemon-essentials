@@ -30,6 +30,8 @@ class Battle::DebugSceneNoVisuals
   def pbAnimation(moveID, user, targets, hitNum = 0); end
   def pbHitAndHPLossAnimation(targets); end
   def pbSwapBattlerSprites(idxA, idxB); end
+  def pbForceBattlerInvisibility(idxBattler, value); end
+  def pbSwapBattlerAndSubstitute(idxBattler, mode); end
   def pbShowPartyLineup(side, fullAnim = false); end
   def pbShowAbilitySplash(battler, delay = false, logTrigger = true); end
   def pbReplaceAbilitySplash(battler); end

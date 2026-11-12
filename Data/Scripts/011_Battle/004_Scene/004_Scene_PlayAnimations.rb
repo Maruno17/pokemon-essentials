@@ -142,9 +142,10 @@ class Battle::Scene
     # data box appearing)
     sendOutAnims = []
     sendOuts.each_with_index do |b, i|
-      pbForceBattlerInvisibility(i, false)
       pkmn = @battle.battlers[b[0]].effects[PBEffects::Illusion] || b[1]
       pbChangePokemon(b[0], pkmn)
+      pbSwapBattlerAndSubstitute(b[0], :battler_instant)
+      pbForceBattlerInvisibility(b[0], false)
       pbRefresh
       if @battle.opposes?(b[0])
         sendOutAnim = Animation::PokeballTrainerSendOut.new(
@@ -191,14 +192,17 @@ class Battle::Scene
   # Animates a Pokémon being recalled into its Poké Ball and its data box hiding.
   def pbRecall(idxBattler)
     @briefMessage = false
-    # Recall animation
-    recallAnim = Animation::BattlerRecall.new(@sprites, @viewport, @battle.battlers[idxBattler])
-    loop do
-      recallAnim&.update
-      pbUpdate
-      break if recallAnim.animDone?
+    pbSwapBattlerAndSubstitute(idxBattler, :doll_out_battler_in)
+    if !@sprites["pokemon_#{idxBattler}"].forceInvisible
+      # Recall animation
+      recallAnim = Animation::BattlerRecall.new(@sprites, @viewport, @battle.battlers[idxBattler])
+      loop do
+        recallAnim&.update
+        pbUpdate
+        break if recallAnim.animDone?
+      end
+      recallAnim.dispose
     end
-    recallAnim.dispose
     # Data box disappear animation
     dataBoxAnim = Animation::DataBoxDisappear.new(@sprites, @viewport, idxBattler)
     loop do
@@ -207,6 +211,73 @@ class Battle::Scene
       break if dataBoxAnim.animDone?
     end
     dataBoxAnim.dispose
+  end
+
+  def pbSwapBattlerAndSubstitute(idxBattler, mode)
+    case mode
+    when :doll_out_battler_in
+      return if !@sprites["pokemon_#{idxBattler}"].forceSubstitute   # Battler already in
+      anim = Animation::SwapSubstitute.new(@sprites, @viewport, idxBattler, :slide_off)
+      loop do
+        anim.update
+        pbUpdate
+        break if anim.animDone?
+      end
+      anim.dispose
+      @sprites["pokemon_#{idxBattler}"].forceSubstitute = false
+      if !@sprites["pokemon_#{idxBattler}"].forceInvisible
+        anim = Animation::SwapSubstitute.new(@sprites, @viewport, idxBattler, :slide_on)
+        loop do
+          anim.update
+          pbUpdate
+          break if anim.animDone?
+        end
+        anim.dispose
+      end
+    when :doll_fade_battler_in   # Used when the Substitute dies
+      return if !@sprites["pokemon_#{idxBattler}"].forceSubstitute   # Battler already in
+      anim = Animation::SwapSubstitute.new(@sprites, @viewport, idxBattler, :fade_out)
+      loop do
+        anim.update
+        pbUpdate
+        break if anim.animDone?
+      end
+      anim.dispose
+      @sprites["pokemon_#{idxBattler}"].forceSubstitute = false
+      @sprites["pokemon_#{idxBattler}"].visible = true
+      if !@sprites["pokemon_#{idxBattler}"].forceInvisible
+        anim = Animation::SwapSubstitute.new(@sprites, @viewport, idxBattler, :slide_on)
+        loop do
+          anim.update
+          pbUpdate
+          break if anim.animDone?
+        end
+        anim.dispose
+      end
+    when :battler_out_doll_in
+      return if @sprites["pokemon_#{idxBattler}"].forceSubstitute   # Doll already in
+      if !@sprites["pokemon_#{idxBattler}"].forceInvisible
+        anim = Animation::SwapSubstitute.new(@sprites, @viewport, idxBattler, :slide_off)
+        loop do
+          anim.update
+          pbUpdate
+          break if anim.animDone?
+        end
+        anim.dispose
+      end
+      @sprites["pokemon_#{idxBattler}"].forceSubstitute = true
+      anim = Animation::SwapSubstitute.new(@sprites, @viewport, idxBattler, :slide_on)
+      loop do
+        anim.update
+        pbUpdate
+        break if anim.animDone?
+      end
+      anim.dispose
+    when :doll_instant   # Used after Substitute animation
+      @sprites["pokemon_#{idxBattler}"].forceSubstitute = true
+    when :battler_instant   # Used when switching
+      @sprites["pokemon_#{idxBattler}"].forceSubstitute = false
+    end
   end
 
   #-----------------------------------------------------------------------------
@@ -612,10 +683,13 @@ class Battle::Scene
   #-----------------------------------------------------------------------------
 
   # Plays a move animation.
-  def pbAnimation(move_id, user, targets, version = 0, &block)
+  def pbAnimation(move_id, user, targets, version = 0, no_substitute_after = false, &block)
     anims = find_move_animation(move_id, version, user&.index, targets)
     return if !anims || anims.empty?
-    yield :before if block_given?
+    if user && user.effects[PBEffects::Substitute] > 0
+      pbSwapBattlerAndSubstitute(user.index, :doll_out_battler_in)
+    end
+    yield :before if block_given?   # Make invisible battler visible before two turn attack hit
     if anims[0].is_a?(GameData::Animation)   # New format animation
       pbSaveShadows do
         # NOTE: anims.sample is a random valid animation.
@@ -634,7 +708,10 @@ class Battle::Scene
         end
       end
     end
-    yield :after if block_given?
+    yield :after if block_given?   # Make battler invisible after two turn attack charging
+    if user && user.effects[PBEffects::Substitute] > 0 && !no_substitute_after
+      pbSwapBattlerAndSubstitute(user.index, :battler_out_doll_in)
+    end
   end
 
   # Plays a common animation.
@@ -683,11 +760,19 @@ class Battle::Scene
     PBDebug.logonerr {
       anim_player = AnimationPlayer.new(anim_data, user, targets, self)
       if user
-        anim_player.forceInvisibilities[user.index] = @sprites["pokemon_#{user.index}"].forceInvisible
+        if @sprites["pokemon_#{user.index}"].forceSubstitute
+          anim_player.forceSubstitutes[user.index] = true
+        elsif @sprites["pokemon_#{user.index}"].forceInvisible
+          anim_player.forceInvisibilities[user.index] = true
+        end
       end
       if targets
         targets.each do |target|
-          anim_player.forceInvisibilities[target.index] = @sprites["pokemon_#{target.index}"].forceInvisible
+          if @sprites["pokemon_#{target.index}"].forceSubstitute
+            anim_player.forceSubstitutes[target.index] = true
+          elsif @sprites["pokemon_#{target.index}"].forceInvisible
+            anim_player.forceInvisibilities[target.index] = true
+          end
         end
       end
       anim_player.set_up

@@ -254,7 +254,7 @@ class Battle::Scene::Animation::AbilitySplashDisappear < Battle::Scene::Animatio
 end
 
 #===============================================================================
-# Make an enemy trainer slide on-screen from the right. Makes the previous
+# Makes an enemy trainer slide on-screen from the right. Makes the previous
 # trainer slide off to the right first if it is on-screen.
 # Used at the end of battle.
 #===============================================================================
@@ -847,5 +847,63 @@ class Battle::Scene::Animation::PokeballThrowDeflect < Battle::Scene::Animation
     ball.setSE(delay, "Battle ball drop")
     ball.moveXY(delay, 8, -32, Graphics.height - 96 + 32)   # Back to player's corner
     createBallTumbling(ball, delay, 8)
+  end
+end
+
+#===============================================================================
+# Makes a Pokémon slide on- or off-screen, or fade out.
+# Used to swap a Pokémon with its Substitute doll in various ways.
+#===============================================================================
+class Battle::Scene::Animation::SwapSubstitute < Battle::Scene::Animation
+  # mode is one of: :slide_on, :slide_off, :fade_out
+  def initialize(sprites, viewport, idxBattler, mode)
+    @idxBattler = idxBattler
+    @side = @idxBattler & 1
+    @mode = mode
+    super(sprites, viewport)
+  end
+
+  def createProcesses
+    case @mode
+    when :slide_on, :slide_off
+      createSlideProcesses
+    when :fade_out
+      createFadeProcesses
+    end
+  end
+
+  def createSlideProcesses
+    batSprite = @sprites["pokemon_#{@idxBattler}"]
+    if @side == 0
+      battler_x = batSprite.x
+      off_screen_x = batSprite.ox - batSprite.width
+    else
+      battler_x = batSprite.x
+      off_screen_x = Graphics.width + batSprite.ox
+    end
+    duration = (battler_x - off_screen_x).abs / 40
+    duration = 5 if duration < 5   # Min 0.25 seconds
+    # Animation
+    delay = 0
+    case @mode
+    when :slide_on
+      start_x = off_screen_x
+      end_x = battler_x
+    when :slide_off
+      start_x = battler_x
+      end_x = off_screen_x
+    end
+    batSprite.x = start_x
+    battler = addSprite(batSprite, nil)
+    battler.moveDelta(delay, duration, end_x - start_x, 0)
+  end
+
+  def createFadeProcesses
+    batSprite = @sprites["pokemon_#{@idxBattler}"]
+    delay = 0
+    battler = addSprite(batSprite, nil)
+    battler.moveOpacity(delay, 5, 0)
+    battler.setVisible(delay + 5, false)
+    battler.setOpacity(delay + 5, 255)
   end
 end

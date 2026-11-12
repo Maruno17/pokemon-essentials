@@ -273,8 +273,8 @@ module GameData
       return @flags.any? { |f| f.downcase == flag.downcase }
     end
 
-    def apply_metrics_to_sprite(sprite, index, shadow = false)
-      metrics_data = GameData::SpeciesMetrics.get_species_form(@species, @form)
+    def apply_metrics_to_sprite(sprite, index, shadow = false, metrics_data = nil)
+      metrics_data ||= GameData::SpeciesMetrics.get_species_form(@species, @form)
       metrics_data.apply_metrics_to_sprite(sprite, index, shadow)
     end
 

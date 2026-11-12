@@ -378,8 +378,6 @@ class Battle::Move::TwoTurnMove < Battle::Move
     end
   end
 
-  # TODO: I think this should play after pbShowAnimation like Gen 4, even though
-  #       it's correctly positioned for Gen 5.
   def pbChargingTurnMessage(user, targets)
     @battle.pbDisplay(_INTL("{1} began charging up!", user.pbThis))
   end

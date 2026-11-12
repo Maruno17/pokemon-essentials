@@ -533,6 +533,7 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
   attr_accessor :selected
   attr_reader   :sideSize
   attr_accessor :forceInvisible
+  attr_reader   :forceSubstitute
 
   # Time (in seconds) for one complete sprite bob cycle (up and down) while
   # choosing a command for this battler.
@@ -541,9 +542,24 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
   # being chosen as a target.
   TARGET_BLINKING_DURATION = 0.3
 
+  # Metrics used for the Substitute doll.
+  def self.substitute_metrics
+    return GameData::SpeciesMetrics.new(
+      {
+        :id                    => :substitute,
+        :back_sprite           => [0, 18],
+        :front_sprite          => [0, 27],
+        :front_sprite_altitude => 0,
+        :shadow_x              => 0,
+        :shadow_size           => 1
+      }
+    )
+  end
+
   def initialize(viewport, sideSize, index, battleAnimations)
     super(viewport)
     @pkmn             = nil
+    @back             = false
     @sideSize         = sideSize
     @index            = index
     @battleAnimations = battleAnimations
@@ -584,7 +600,13 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
 
   def visible=(value)
     @spriteVisible = value if !@updating   # For selection/targeting flashing
-    super(!@forceInvisible && value)
+    super((@forceSubstitute || !@forceInvisible) && value)
+  end
+
+  def forceSubstitute=(value)
+    return if @forceSubstitute == value
+    @forceSubstitute = value
+    refreshBitmap(@pkmn, @back)
   end
 
   # Set sprite's origin to bottom middle.
@@ -594,7 +616,7 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
     self.oy = @_iconBitmap.height
   end
 
-  def pbSetPosition
+  def pbSetPosition(metrics = nil)
     return if !@_iconBitmap
     pbSetOrigin
     if @index.even?
@@ -607,15 +629,32 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
     @spriteX = pos[0]
     @spriteY = pos[1]
     # Apply metrics (also modifies ox/oy)
-    @pkmn.species_data.apply_metrics_to_sprite(self, @index)
+    @pkmn.species_data.apply_metrics_to_sprite(self, @index, false, metrics)
+  end
+
+  def refreshBitmap(pkmn, back = false)
+    if @forceSubstitute
+      setSubstituteBitmap(back)
+    else
+      setPokemonBitmap(pkmn, back)
+    end
   end
 
   def setPokemonBitmap(pkmn, back = false)
     @pkmn = pkmn
+    @back = back
     @_iconBitmap&.dispose
-    @_iconBitmap = GameData::Species.sprite_bitmap_from_pokemon(@pkmn, back)
+    @_iconBitmap = GameData::Species.sprite_bitmap_from_pokemon(@pkmn, @back)
     self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
     pbSetPosition
+  end
+
+  def setSubstituteBitmap(back = false)
+    @back = back
+    @_iconBitmap&.dispose
+    @_iconBitmap = GameData::Species.substitute_sprite_bitmap(@back)
+    self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
+    pbSetPosition(self.class.substitute_metrics)
   end
 
   # This method plays the battle entrance animation of a Pokémon. By default
@@ -665,6 +704,7 @@ class Battle::Scene::BattlerShadowSprite < RPG::Sprite
   attr_accessor :index
   attr_accessor :selected
   attr_reader   :forceInvisible
+  attr_reader   :forceSubstitute
 
   def initialize(viewport, sideSize, index)
     super(viewport)
@@ -686,12 +726,18 @@ class Battle::Scene::BattlerShadowSprite < RPG::Sprite
   def height; return (self.bitmap) ? self.bitmap.height : 0; end
 
   def visible=(value)
-    super(!@forceInvisible && value)
+    super((@forceSubstitute || !@forceInvisible) && value)
   end
 
   def forceInvisible=(value)
     @forceInvisible = value
     self.visible = true
+  end
+
+  def forceSubstitute=(value)
+    return if @forceSubstitute == value
+    @forceSubstitute = value
+    refreshBitmap(@pkmn)
   end
 
   # Set sprite's origin to centre
@@ -701,16 +747,24 @@ class Battle::Scene::BattlerShadowSprite < RPG::Sprite
     self.oy = @_iconBitmap.height / 2
   end
 
-  def pbSetPosition
+  def pbSetPosition(metrics = nil)
     return if !@_iconBitmap
     pbSetOrigin
     self.z = -198
     # Set original position
-    p = Battle::Scene.pbBattlerPosition(@index, @sideSize)
-    self.x = p[0]
-    self.y = p[1]
+    pkmn = Battle::Scene.pbBattlerPosition(@index, @sideSize)
+    self.x = pkmn[0]
+    self.y = pkmn[1]
     # Apply metrics
-    @pkmn.species_data.apply_metrics_to_sprite(self, @index, true)
+    @pkmn.species_data.apply_metrics_to_sprite(self, @index, true, metrics)
+  end
+
+  def refreshBitmap(pkmn)
+    if @forceSubstitute
+      setSubstituteBitmap
+    else
+      setPokemonBitmap(pkmn)
+    end
   end
 
   def setPokemonBitmap(pkmn)
@@ -719,6 +773,13 @@ class Battle::Scene::BattlerShadowSprite < RPG::Sprite
     @_iconBitmap = GameData::Species.shadow_bitmap_from_pokemon(@pkmn)
     self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
     pbSetPosition
+  end
+
+  def setSubstituteBitmap
+    @_iconBitmap&.dispose
+    @_iconBitmap = GameData::Species.substitute_shadow_bitmap
+    self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
+    pbSetPosition(Battle::Scene::BattlerSprite.substitute_metrics)
   end
 
   def update

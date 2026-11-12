@@ -424,6 +424,10 @@ class Battle
       b.droppedBelowHalfHP = false
       b.statsDropped = false
     end
+    pbPriority(true, true).each do |b|
+      next if b.effects[PBEffects::Substitute] == 0
+      @scene.pbSwapBattlerAndSubstitute(b.index, :battler_out_doll_in)
+    end
   end
 
   def pbRecordBattlerAsParticipated(battler)

@@ -134,6 +134,16 @@ module GameData
       return ret
     end
 
+    def self.substitute_sprite_filename(back = false)
+      return pbResolveBitmap(sprintf("Graphics/Pokemon/substitute_back")) if back
+      return pbResolveBitmap(sprintf("Graphics/Pokemon/substitute"))
+    end
+
+    def self.substitute_sprite_bitmap(back = false)
+      filename = self.substitute_sprite_filename(back)
+      return (filename) ? AnimatedBitmap.new(filename) : nil
+    end
+
     #---------------------------------------------------------------------------
 
     def self.egg_icon_filename(species, form = 0, gender = 0, shiny = false, shadow = false)
@@ -200,6 +210,12 @@ module GameData
 
     def self.shadow_bitmap_from_pokemon(pkmn)
       filename = self.shadow_filename(pkmn.species, pkmn.form)
+      return (filename) ? AnimatedBitmap.new(filename) : nil
+    end
+
+    def self.substitute_shadow_bitmap
+      metrics_data = Battle::Scene::BattlerSprite::SUBSTITUTE_METRICS
+      filename = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%d", metrics_data.shadow_size))
       return (filename) ? AnimatedBitmap.new(filename) : nil
     end
 

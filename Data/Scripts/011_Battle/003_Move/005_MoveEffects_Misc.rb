@@ -623,6 +623,15 @@ class Battle::Move::UserMakeSubstitute < Battle::Move
     user.effects[PBEffects::Substitute]   = @subLife
     @battle.pbDisplay(_INTL("{1} put in a substitute!", user.pbThis))
   end
+
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    @battle.pbAnimation(id, user, targets, hitNum) do |timing|
+      case timing
+      when :after
+        @battle.scene.pbSwapBattlerAndSubstitute(user.index, :doll_instant)
+      end
+    end
+  end
 end
 
 #===============================================================================

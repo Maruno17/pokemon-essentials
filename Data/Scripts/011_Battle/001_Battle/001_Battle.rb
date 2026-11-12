@@ -1020,13 +1020,14 @@ class Battle
     return @scene.pbShowCommands(msg, commands, defaultValue)
   end
 
-  def pbAnimation(move, user, targets, hitNum = 0, &block)
-    @scene.pbAnimation(move, user, targets, hitNum, &block) if !@rules[:no_battle_animations]
-    # For the sake of two turn attacks making Pokémon invisible while semi-
-    # invulnerable even if no battle animations are played
-    if @rules[:no_battle_animations] && block_given?
-      yield :before
-      yield :after
+  def pbAnimation(move_id, user, targets, hitNum = 0, no_substitute_after = false, &block)
+    if @rules[:no_battle_animations]
+      # For the sake of two turn attacks making Pokémon invisible while semi-
+      # invulnerable even if no battle animations are played
+      yield :before if block_given?
+      yield :after if block_given?
+    else
+      @scene.pbAnimation(move_id, user, targets, hitNum, no_substitute_after, &block)
     end
   end
 

@@ -14,6 +14,12 @@ class Battle::Move::FleeFromBattle < Battle::Move
     @battle.pbDisplay(_INTL("{1} fled from battle!", user.pbThis))
     @battle.decision = Battle::Outcome::FLEE
   end
+
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    @battle.pbAnimation(id, user, targets, hitNum, true) do |timing|
+      @battle.scene.pbForceBattlerInvisibility(user.index, true) if timing == :after
+    end
+  end
 end
 
 #===============================================================================
@@ -36,10 +42,9 @@ class Battle::Move::SwitchOutUserStatusMove < Battle::Move
   end
 
   def pbEffectGeneral(user)
-    if user.wild?
-      @battle.pbDisplay(_INTL("{1} fled from battle!", user.pbThis))
-      @battle.decision = Battle::Outcome::FLEE
-    end
+    return if !user.wild?
+    @battle.pbDisplay(_INTL("{1} fled from battle!", user.pbThis))
+    @battle.decision = Battle::Outcome::FLEE
   end
 
   def pbEndOfMoveUsageEffect(user, targets, numHits, switchedBattlers)
@@ -55,6 +60,12 @@ class Battle::Move::SwitchOutUserStatusMove < Battle::Move
     @battle.moldBreaker = false
     @battle.pbOnBattlerEnteringBattle(user.index)
     switchedBattlers.push(user.index)
+  end
+
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    @battle.pbAnimation(id, user, targets, hitNum, true) do |timing|
+      @battle.scene.pbForceBattlerInvisibility(user.index, true) if timing == :after
+    end
   end
 end
 
@@ -146,6 +157,12 @@ class Battle::Move::SwitchOutUserPassOnEffects < Battle::Move
     @battle.pbOnBattlerEnteringBattle(user.index)
     switchedBattlers.push(user.index)
   end
+
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    @battle.pbAnimation(id, user, targets, hitNum, true) do |timing|
+      @battle.scene.pbForceBattlerInvisibility(user.index, true) if timing == :after
+    end
+  end
 end
 
 #===============================================================================
@@ -201,6 +218,15 @@ class Battle::Move::UserMakeSubstituteSwitchOutUser < Battle::Move
     @battle.moldBreaker = false
     @battle.pbOnBattlerEnteringBattle(user.index)
     switchedBattlers.push(user.index)
+  end
+
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    @battle.pbAnimation(id, user, targets, hitNum) do |timing|
+      case timing
+      when :after
+        @battle.scene.pbSwapBattlerAndSubstitute(user.index, :doll_instant)
+      end
+    end
   end
 end
 
@@ -288,6 +314,7 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
   end
 
   def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers)
+    return if @battle.decision != Battle::Outcome::UNDECIDED
     return if !switched_battlers.empty?
     return if user.fainted? || (numHits == 0 && !@hadEffectWhenMagicCoated)
     targets.each do |b|
@@ -302,6 +329,14 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
       @battle.pbOnBattlerEnteringBattle(b.index)
       switched_battlers.push(b.index)
       break
+    end
+  end
+
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    @battle.pbAnimation(id, user, targets, hitNum) do |timing|
+      if timing == :after
+        targets.each { |b| @battle.scene.pbForceBattlerInvisibility(b.index, true) }
+      end
     end
   end
 end

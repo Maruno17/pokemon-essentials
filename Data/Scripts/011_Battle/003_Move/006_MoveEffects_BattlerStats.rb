@@ -586,6 +586,7 @@ class Battle::Move::RaiseUserAtkSpd1RemoveEntryHazardsAndSubstitutes < Battle::M
       next if b.effects[PBEffects::Substitute] == 0
       b.effects[PBEffects::Substitute] = 0
       something_tidied = true
+      @battle.scene.pbSwapBattlerAndSubstitute(b.index, :doll_fade_battler_in)
       @battle.pbDisplay(_INTL("{1} substitute faded!", b.pbOfThis))
     end
     if user.pbOwnSide.effects[PBEffects::StealthRock]

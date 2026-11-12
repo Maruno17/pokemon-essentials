@@ -34,7 +34,7 @@ class AnimationPlayer
   attr_reader   :slowdown   # 1 = normal speed, 2 = half speed, 3 = one third speed, etc.
   attr_reader   :sprites, :particle_sprites, :emitters
   attr_reader   :scene, :user
-  attr_reader   :forceInvisibilities
+  attr_reader   :forceInvisibilities, :forceSubstitutes
 
   # animation is either a GameData::Animation or a hash made from one.
   # user is a Battler or FakeBattler, or nil if there is no user.
@@ -54,6 +54,7 @@ class AnimationPlayer
       @side_sizes[1] = @scene.side_size(1)
     end
     @forceInvisibilities = []
+    @forceSubstitutes = []
     @viewport = @scene.viewport
     @sprites = @scene.sprites
     initialize_battler_sprite_names
@@ -72,25 +73,35 @@ class AnimationPlayer
   def initialize_battler_sprite_names
     @battler_filenames = []
     if @user
-      pkmn = @user.pokemon
       @battler_filenames[@user.index] = []
-      @battler_filenames[@user.index].push(GameData::Species.front_sprite_filename(
-        pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
-      )
-      @battler_filenames[@user.index].push(GameData::Species.back_sprite_filename(
-        pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
-      )
+      if @forceSubstitutes[@user.index]
+        @battler_filenames[@user.index].push(GameData::Species.substitute_sprite_filename)
+        @battler_filenames[@user.index].push(GameData::Species.substitute_sprite_filename(true))
+      else
+        pkmn = @user.pokemon
+        @battler_filenames[@user.index].push(GameData::Species.front_sprite_filename(
+          pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
+        )
+        @battler_filenames[@user.index].push(GameData::Species.back_sprite_filename(
+          pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
+        )
+      end
     end
     if @targets
       @targets.each do |target|
-        pkmn = target.pokemon
-        @battler_filenames[target.index] = []
-        @battler_filenames[target.index].push(GameData::Species.front_sprite_filename(
-          pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
-        )
-        @battler_filenames[target.index].push(GameData::Species.back_sprite_filename(
-          pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
-        )
+        if @forceSubstitutes[target.index]
+          @battler_filenames[target.index].push(GameData::Species.substitute_sprite_filename)
+          @battler_filenames[target.index].push(GameData::Species.substitute_sprite_filename(true))
+        else
+          pkmn = target.pokemon
+          @battler_filenames[target.index] = []
+          @battler_filenames[target.index].push(GameData::Species.front_sprite_filename(
+            pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
+          )
+          @battler_filenames[target.index].push(GameData::Species.back_sprite_filename(
+            pkmn.species, pkmn.form, pkmn.gender, pkmn.shiny?)
+          )
+        end
       end
     end
   end

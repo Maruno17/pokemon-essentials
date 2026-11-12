@@ -75,6 +75,9 @@ class Battle::Battler
       return
     end
     return if @fainted   # Has already fainted properly
+    if @effects[PBEffects::Substitute] > 0
+      @battle.scene.pbSwapBattlerAndSubstitute(user.index, :doll_fade_battler_in)
+    end
     @battle.scene.pbForceBattlerInvisibility(@index, false)
     if @effects[PBEffects::Commanding] >= 0
       @effects[PBEffects::Commanding] = -1

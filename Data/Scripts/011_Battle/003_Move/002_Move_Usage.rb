@@ -348,6 +348,7 @@ class Battle::Move
     end
     if target.damageState.substitute && target.effects[PBEffects::Substitute] == 0
       target.effects[PBEffects::Substitute] = 0
+      @battle.scene.pbSwapBattlerAndSubstitute(target.index, :doll_fade_battler_in)
       @battle.pbDisplay(_INTL("{1} substitute faded!", target.pbOfThis))
     end
   end
