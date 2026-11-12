@@ -825,10 +825,14 @@ class Battle::Battler
   end
 
   # Returns whether this battler can be made to switch out because of another
-  # battler's move.
+  # battler's move or Red Card.
   def canBeForcedOutOfBattle?(show_message = true)
+    if semiInvulnerable?
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
+      return false
+    end
     if @effects[PBEffects::Commanding] >= 0 || @effects[PBEffects::CommandedBy] >= 0
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return false
     end
     if hasActiveAbility?(:SUCTIONCUPS) && !beingMoldBroken?

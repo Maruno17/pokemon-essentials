@@ -603,6 +603,11 @@ class Battle::Scene::BattlerSprite < RPG::Sprite
     super((@forceSubstitute || !@forceInvisible) && value)
   end
 
+  def forceInvisible=(value)
+    @forceInvisible = value
+    self.visible = true
+  end
+
   def forceSubstitute=(value)
     return if @forceSubstitute == value
     @forceSubstitute = value

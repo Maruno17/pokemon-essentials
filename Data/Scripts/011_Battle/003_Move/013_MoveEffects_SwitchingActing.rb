@@ -335,7 +335,10 @@ class Battle::Move::SwitchOutTargetStatusMove < Battle::Move
   def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
     @battle.pbAnimation(id, user, targets, hitNum) do |timing|
       if timing == :after
-        targets.each { |b| @battle.scene.pbForceBattlerInvisibility(b.index, true) }
+        targets.each do |b|
+          @battle.scene.pbSwapBattlerAndSubstitute(b.index, :battler_instant)
+          @battle.scene.pbForceBattlerInvisibility(b.index, true)
+        end
       end
     end
   end

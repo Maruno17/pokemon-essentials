@@ -175,7 +175,7 @@ class Battle::Scene::Animation::LineupAppear < Battle::Scene::Animation
     ball.setName(delay, graphicFilename)
     ball.setDelta(delay, dir * Graphics.width / 2, 0)
     ball.moveDelta(delay, 8, -dir * Graphics.width / 2, 0)
-    ball.setSE(delay + 8, "Battle lineup ball") if !empty
+    ball.setSE(delay + 8, "Battle lineup ball") if @fullAnim && !empty
   end
 end
 
