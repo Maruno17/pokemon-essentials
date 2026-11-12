@@ -65,9 +65,9 @@ module UIControls::StyleMixin
 #      :semi_transparent    => Color.new(0, 0, 0, 128),   # Unchanged
       :text                => Color.new(224, 224, 224),
       :disabled_text       => Color.new(96, 96, 96),
-      :line                => Color.new(224, 224, 224),
-      :disabled_fill       => Color.new(128, 128, 128),
-      :hover               => Color.new(16, 56, 56),
+      :line                => Color.new(200, 200, 200),
+      :disabled_fill       => Color.new(144, 144, 144),
+      :hover               => Color.new(32, 64, 64),
       :capture             => Color.new(224, 32, 96),
       :highlight           => Color.new(160, 128, 16),
       # Checkbox
@@ -83,7 +83,7 @@ module UIControls::StyleMixin
       :gridline            => Color.new(48, 48, 48),
       :gridline_after_end  => Color.new(112, 112, 112),
       # ListedParticle
-      :se_background       => Color.new(160, 160, 160),
+      :se_background       => Color.new(128, 128, 128),
       :property_background => Color.new(96, 96, 96),
       # ListedParticle and Canvas
       :focus_colors        => {
