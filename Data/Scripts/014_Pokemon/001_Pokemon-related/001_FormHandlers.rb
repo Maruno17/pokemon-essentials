@@ -227,27 +227,36 @@ MultipleForms.register(:CHERRIM, {
   }
 })
 
+ROTOM_FORM_MOVES = [
+  :OVERHEAT,    # Heat (microwave oven)
+  :HYDROPUMP,   # Wash (washing machine)
+  :BLIZZARD,    # Frost (refrigerator)
+  :AIRSLASH,    # Fan (electric fan)
+  :LEAFSTORM    # Mow (lawn mower)
+]
+ROTOM_BACKUP_MOVE = :THUNDERSHOCK   # To learn if forgetting the only move Rotom knows
+
 MultipleForms.register(:ROTOM, {
+  "onResetMoves" => proc { |pkmn|
+    # NOTE: This allows for wild alternate form Rotom to have their form-
+    #       specific move by default. It replaces Thunder Shock if known, or the
+    #       first move if not.
+    next if pkmn.form == 0
+    new_move_id = ROTOM_FORM_MOVES[pkmn.form - 1]
+    next if !new_move_id || pkmn.hasMove?(new_move_id)
+    # Find Thunder Shock, or get the first known move
+    move_index = pkmn.moves.index { |move| move.id == ROTOM_BACKUP_MOVE } || 0
+    # Replace Thunder Shock with the form-specific move
+    pkmn.moves[move_index] = Pokemon::Move.new(new_move_id)
+  },
   "onSetForm" => proc { |pkmn, form, oldForm|
-    form_moves = [
-      :OVERHEAT,    # Heat (microwave oven)
-      :HYDROPUMP,   # Wash (washing machine)
-      :BLIZZARD,    # Frost (refrigerator)
-      :AIRSLASH,    # Fan (electric fan)
-      :LEAFSTORM    # Mow (lawn mower)
-    ]
     # Find a known move that should be forgotten
-    old_move_index = -1
-    pkmn.moves.each_with_index do |move, i|
-      next if !form_moves.include?(move.id)
-      old_move_index = i
-      break
-    end
+    old_move_index = pkmn.moves.index { |move| ROTOM_FORM_MOVES.include?(move.id) } || -1
     # Determine which new move to learn (if any)
-    new_move_id = (form > 0) ? form_moves[form - 1] : nil
+    new_move_id = (form > 0) ? ROTOM_FORM_MOVES[form - 1] : nil
     new_move_id = nil if !GameData::Move.exists?(new_move_id)
     if new_move_id.nil? && old_move_index >= 0 && pkmn.numMoves == 1
-      new_move_id = :THUNDERSHOCK
+      new_move_id = ROTOM_BACKUP_MOVE
       new_move_id = nil if !GameData::Move.exists?(new_move_id)
       raise _INTL("Rotom is trying to forget its last move, but there isn't another move to replace it with.") if new_move_id.nil?
     end

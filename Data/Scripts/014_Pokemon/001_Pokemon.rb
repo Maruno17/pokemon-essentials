@@ -658,6 +658,7 @@ class Pokemon
     (first_move_index...knowable_moves.length).each do |i|
       @moves.push(Pokemon::Move.new(knowable_moves[i]))
     end
+    MultipleForms.call("onResetMoves", self)
   end
 
   # Silently learns the given move. Will erase the first known move if it has to.
