@@ -345,14 +345,14 @@ module RPG
       if @fading && @type != @target_type
         if @fade_time >= FADE_OLD_TILES_START && @fade_time < FADE_OLD_TILES_END &&
            @time_shift == 0   # There were old tiles to fade out
-          fraction = (@fade_time - [FADE_OLD_TILES_START - @time_shift, 0].max) / (FADE_OLD_TILES_END - FADE_OLD_TILES_START)
-          sprite.opacity = 255 * (1 - fraction)
+          new_opacity = lerp(255, 0, FADE_OLD_TILES_END - FADE_OLD_TILES_START,
+                             [FADE_OLD_TILES_START - @time_shift, 0].max, @fade_time)
+          sprite.opacity = new_opacity
         elsif @fade_time >= [FADE_NEW_TILES_START - @time_shift, 0].max &&
               @fade_time < [FADE_NEW_TILES_END - @time_shift, 0].max
-          fraction = (@fade_time - [FADE_NEW_TILES_START - @time_shift, 0].max) / (FADE_NEW_TILES_END - FADE_NEW_TILES_START)
-          sprite.opacity = 255 * fraction
-        else
-          sprite.opacity = 0
+          new_opacity = lerp(0, 255, FADE_NEW_TILES_END - FADE_NEW_TILES_START,
+                             [FADE_NEW_TILES_START - @time_shift, 0].max, @fade_time)
+          sprite.opacity = new_opacity
         end
       else
         sprite.opacity = (@max > 0) ? 255 : 0
@@ -364,6 +364,10 @@ module RPG
       weather_type = @type
       weather_max = @max
       fraction = 1
+      old_tone_red = 0
+      old_tone_green = 0
+      old_tone_blue = 0
+      old_tone_gray = 0
       tone_red = 0
       tone_green = 0
       tone_blue = 0
@@ -374,33 +378,58 @@ module RPG
           if @fade_time >= [FADE_NEW_TONE_START - @time_shift, 0].max &&
              @fade_time < [FADE_NEW_TONE_END - @time_shift, 0].max
             weather_max = @target_max
-            fract = (@fade_time - [FADE_NEW_TONE_START - @time_shift, 0].max) / (FADE_NEW_TONE_END - FADE_NEW_TONE_START)
-            tone_red = @target_tone.red + ((1 - fract) * (@old_tone.red - @target_tone.red))
-            tone_green = @target_tone.green + ((1 - fract) * (@old_tone.green - @target_tone.green))
-            tone_blue = @target_tone.blue + ((1 - fract) * (@old_tone.blue - @target_tone.blue))
-            tone_gray = @target_tone.gray + ((1 - fract) * (@old_tone.gray - @target_tone.gray))
+            old_tone_red = @old_tone.red
+            old_tone_green = @old_tone.green
+            old_tone_blue = @old_tone.blue
+            old_tone_gray = @old_tone.gray
+            tone_red = @target_tone.red
+            tone_green = @target_tone.green
+            tone_blue = @target_tone.blue
+            tone_gray = @target_tone.gray
+            fraction = lerp(0.0, 1.0, FADE_NEW_TONE_END - FADE_NEW_TONE_START,
+                            [FADE_NEW_TONE_START - @time_shift, 0].max, @fade_time)
           else
             tone_red = @viewport.tone.red
             tone_green = @viewport.tone.green
             tone_blue = @viewport.tone.blue
             tone_gray = @viewport.tone.gray
           end
-        elsif @time_shift < 2 && @fade_time >= FADE_OLD_TONE_START && @fade_time < FADE_OLD_TONE_END
+        elsif @time_shift < 2 && @fade_time >= [FADE_OLD_TONE_START - @time_shift, 0].max &&
+              @fade_time < FADE_OLD_TONE_END
+          # Old weather; fade it out if going to :None
           weather_max = @old_max
-          fraction = ((@fade_time - FADE_OLD_TONE_START) / (FADE_OLD_TONE_END - FADE_OLD_TONE_START)).clamp(0, 1)
-          fraction = 1 - fraction
-          tone_red = @old_tone.red
-          tone_green = @old_tone.green
-          tone_blue = @old_tone.blue
-          tone_gray = @old_tone.gray
-        elsif @fade_time >= [FADE_NEW_TONE_START - @time_shift, 0].max
-          weather_type = @target_type
-          weather_max = @target_max
-          fraction = ((@fade_time - [FADE_NEW_TONE_START - @time_shift, 0].max) / (FADE_NEW_TONE_END - FADE_NEW_TONE_START)).clamp(0, 1)
+          old_tone_red = @old_tone.red
+          old_tone_green = @old_tone.green
+          old_tone_blue = @old_tone.blue
+          old_tone_gray = @old_tone.gray
           tone_red = @target_tone.red
           tone_green = @target_tone.green
           tone_blue = @target_tone.blue
           tone_gray = @target_tone.gray
+          fraction = 0
+          if @target_type == :None
+            fraction = lerp(1.0, 0.0, FADE_OLD_TONE_END - FADE_OLD_TONE_START,
+                            [FADE_OLD_TONE_START - @time_shift, 0].max, @fade_time)
+          end
+        elsif @target_type != :None && @fade_time >= [FADE_NEW_TONE_START - @time_shift, 0].max
+          # New weather; fade it in
+          weather_type = @target_type
+          weather_max = @target_max
+          old_tone_red = @old_tone.red
+          old_tone_green = @old_tone.green
+          old_tone_blue = @old_tone.blue
+          old_tone_gray = @old_tone.gray
+          tone_red = @target_tone.red
+          tone_green = @target_tone.green
+          tone_blue = @target_tone.blue
+          tone_gray = @target_tone.gray
+          fraction = lerp(0.0, 1.0, FADE_NEW_TONE_END - FADE_NEW_TONE_START,
+                          [FADE_NEW_TONE_START - @time_shift, 0].max, @fade_time)
+        else
+          tone_red = @viewport.tone.red
+          tone_green = @viewport.tone.green
+          tone_blue = @viewport.tone.blue
+          tone_gray = @viewport.tone.gray
         end
       else
         base_tone = get_weather_tone(weather_type, weather_max)
@@ -420,8 +449,10 @@ module RPG
         tone_blue += @sun_strength / 2
       end
       # Apply screen tone
-      @viewport.tone.set(tone_red * fraction, tone_green * fraction,
-                         tone_blue * fraction, tone_gray * fraction)
+      @viewport.tone.set(old_tone_red + ((tone_red - old_tone_red) * fraction),
+                         old_tone_green + ((tone_green - old_tone_green) * fraction),
+                         old_tone_blue + ((tone_blue - old_tone_blue) * fraction),
+                         old_tone_gray + ((tone_gray - old_tone_gray) * fraction))
     end
 
     def update_fading

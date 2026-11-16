@@ -583,7 +583,7 @@ class Battle::Move::MultiTurnAttackPreventSleeping < Battle::Move
     @battle.pbDisplay(_INTL("{1} caused an uproar!", user.pbThis))
     @battle.pbPriority(true).each do |b|
       next if b.fainted? || b.status != :SLEEP
-      next if b.hasActiveAbility?(:SOUNDPROOF)
+      next if b.hasActiveAbility?(:SOUNDPROOF) && !(Settings::MECHANICS_GENERATION >= 8 && b.index == user.index)
       b.pbCureStatus
     end
   end
