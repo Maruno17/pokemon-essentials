@@ -44,7 +44,7 @@ class Battle::Battler
     @species      = pkmn.species
     @form         = pkmn.form
     @level        = pkmn.level
-    @hp           = pkmn.hp
+    @hp           = (pkmn.hp > 0) ? pkmn.hp : 1
     @totalhp      = pkmn.totalhp
     @types        = pkmn.types
     # ability and item intentionally not copied across here

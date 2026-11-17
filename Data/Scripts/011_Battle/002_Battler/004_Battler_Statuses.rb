@@ -27,7 +27,7 @@ class Battle::Battler
   end
 
   def pbCanInflictStatus?(newStatus, user, showMessages, move = nil, ignoreStatus = false)
-    return false if fainted?
+    return false if fainted? || @dummy
     self_inflicted = (user && user.index == @index)   # Rest and Flame Orb/Toxic Orb only
     # Already have that status problem
     if self.status == newStatus && !ignoreStatus
@@ -175,7 +175,7 @@ class Battle::Battler
   end
 
   def pbCanSynchronizeStatus?(newStatus, user)
-    return false if fainted?
+    return false if fainted? || @dummy
     # Trying to replace a status problem with another one
     return false if self.status != :NONE
     # Terrain immunity
@@ -456,7 +456,7 @@ class Battle::Battler
   #-----------------------------------------------------------------------------
 
   def pbCanConfuse?(user = nil, showMessages = true, move = nil, selfInflicted = false)
-    return false if fainted?
+    return false if fainted? || @dummy
     if @effects[PBEffects::Confusion] > 0
       @battle.pbDisplay(_INTL("{1} is already confused.", pbThis)) if showMessages
       return false
@@ -520,7 +520,7 @@ class Battle::Battler
   #-----------------------------------------------------------------------------
 
   def pbCanAttract?(user, showMessages = true)
-    return false if fainted?
+    return false if fainted? || @dummy
     return false if !user || user.fainted?
     if @effects[PBEffects::Attract] >= 0
       @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis)) if showMessages

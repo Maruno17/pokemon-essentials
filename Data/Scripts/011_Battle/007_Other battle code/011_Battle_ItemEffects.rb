@@ -1678,7 +1678,7 @@ Battle::ItemEffects::AfterMoveUseFromTarget.add(:EJECTBUTTON,
 
 Battle::ItemEffects::AfterMoveUseFromTarget.add(:REDCARD,
   proc { |item, battler, user, move, switched_battlers, battle|
-    next if !switched_battlers.empty? || user.fainted?
+    next if !switched_battlers.empty? || user.fainted? || user.dummy
     newPkmn = battle.pbGetReplacementPokemonIndex(user.index, true)   # Random
     next if newPkmn < 0
     battle.pbCommonAnimation("HeldItem", battler)

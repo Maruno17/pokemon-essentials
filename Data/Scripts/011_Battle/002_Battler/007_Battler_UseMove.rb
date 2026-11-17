@@ -501,6 +501,7 @@ class Battle::Battler
 
   # true=failure, false=continue
   def pbUseMove_FailByBlockingEffect?(move, user, targets)
+    return false if @battle.futureSight
     # Dazzling/Queenly Majesty/Armor Tail make the move fail here
     @battle.pbPriority(true).each do |b|
       next if !b || !b.abilityActive?
@@ -625,6 +626,7 @@ class Battle::Battler
   end
 
   def pbUseMove_RepeatUsedMove(move, choice, user, targets, actual_hits)
+    return if @battle.futureSight
     # Instruct
     @battle.allBattlers.each do |b|
       next if !b.effects[PBEffects::Instruct] || !b.lastMoveUsed

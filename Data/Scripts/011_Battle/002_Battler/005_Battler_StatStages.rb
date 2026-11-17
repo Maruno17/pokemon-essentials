@@ -11,7 +11,7 @@ class Battle::Battler
   end
 
   def pbCanRaiseStatStage?(stat, user = nil, move = nil, showFailMsg = false, ignoreContrary = false)
-    return false if fainted?
+    return false if fainted? || @dummy
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !beingMoldBroken?
       return pbCanLowerStatStage?(stat, user, move, showFailMsg, true)
@@ -105,7 +105,7 @@ class Battle::Battler
   end
 
   def pbRaiseStatStageByAbility(stat, increment, user, splashAnim = true)
-    return false if fainted?
+    return false if fainted? || @dummy
     ret = false
     @battle.pbShowAbilitySplash(user) if splashAnim
     if pbCanRaiseStatStage?(stat, user, nil, Battle::Visuals::USE_ABILITY_SPLASH)
@@ -129,7 +129,7 @@ class Battle::Battler
 
   def pbCanLowerStatStage?(stat, user = nil, move = nil, showFailMsg = false,
                            ignoreContrary = false, ignoreMirrorArmor = false)
-    return false if fainted?
+    return false if fainted? || @dummy
     if !beingMoldBroken?
       # Contrary
       if hasActiveAbility?(:CONTRARY) && !ignoreContrary
@@ -298,6 +298,7 @@ class Battle::Battler
   end
 
   def pbLowerStatStageByAbility(stat, increment, user, splashAnim = true, checkContact = false)
+    return false if fainted? || @dummy
     ret = false
     @battle.pbShowAbilitySplash(user) if splashAnim
     if pbCanLowerStatStage?(stat, user, nil, Battle::Visuals::USE_ABILITY_SPLASH) &&

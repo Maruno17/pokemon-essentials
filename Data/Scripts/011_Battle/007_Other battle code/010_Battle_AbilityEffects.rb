@@ -2074,7 +2074,7 @@ Battle::AbilityEffects::OnBeingHit.add(:COTTONDOWN,
 
 Battle::AbilityEffects::OnBeingHit.add(:CURSEDBODY,
   proc { |ability, user, target, move, battle|
-    next if user.fainted?
+    next if user.fainted? || user.dummy
     next if user.effects[PBEffects::Disable] > 0
     regularMove = nil
     user.eachMove do |m|
@@ -2202,7 +2202,7 @@ Battle::AbilityEffects::OnBeingHit.add(:ILLUSION,
 
 Battle::AbilityEffects::OnBeingHit.add(:INNARDSOUT,
   proc { |ability, user, target, move, battle|
-    next if !target.fainted? || user.dummy
+    next if !target.fainted?
     next if !user.takesIndirectDamage?
     battle.pbShowAbilitySplash(target)
     battle.visuals.pbDamageAnimation(user)

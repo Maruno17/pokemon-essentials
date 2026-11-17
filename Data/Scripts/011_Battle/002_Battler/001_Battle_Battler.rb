@@ -703,12 +703,13 @@ class Battle::Battler
   end
 
   def affectedByAdditionalEffects?
+    return false if @dummy
     return false if hasActiveItem?(:COVERTCLOAK)
     return true
   end
 
   def takesIndirectDamage?(showMsg = false)
-    return false if fainted?
+    return false if fainted? || @dummy
     if hasActiveAbility?(:MAGICGUARD)
       if showMsg
         @battle.pbShowAbilitySplash(self)
@@ -765,7 +766,7 @@ class Battle::Battler
   end
 
   def affectedByPowder?(showMsg = false)
-    return false if fainted?
+    return false if fainted? || @dummy
     if pbHasType?(:GRASS) && Settings::MORE_TYPE_EFFECTS
       @battle.pbDisplay(_INTL("{1} is unaffected!", pbThis)) if showMsg
       return false
@@ -794,13 +795,13 @@ class Battle::Battler
   end
 
   def canHeal?
-    return false if fainted? || @hp >= @totalhp
+    return false if fainted? || @hp >= @totalhp || @dummy
     return false if @effects[PBEffects::HealBlock] > 0
     return true
   end
 
   def affectedByContactEffect?(showMsg = false)
-    return false if fainted?
+    return false if fainted? || @dummy
     if hasActiveItem?(:PROTECTIVEPADS)
       @battle.pbDisplay(_INTL("{1} protected itself with the {2}!", pbThis, itemName)) if showMsg
       return false
@@ -827,6 +828,7 @@ class Battle::Battler
   # Returns whether this battler can be made to switch out because of another
   # battler's move or Red Card.
   def canBeForcedOutOfBattle?(show_message = true)
+    return false if @dummy
     if semiInvulnerable?
       @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return false

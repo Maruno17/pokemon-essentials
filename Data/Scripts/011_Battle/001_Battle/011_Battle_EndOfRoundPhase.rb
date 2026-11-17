@@ -89,12 +89,10 @@ class Battle
     if !moveUser   # User isn't in battle, get it from the party
       party = pbParty(position.effects[PBEffects::FutureSightUserIndex])
       pkmn = party[position.effects[PBEffects::FutureSightUserPartyIndex]]
-      if pkmn&.able?
-        moveUser = Battler.new(self, position.effects[PBEffects::FutureSightUserIndex])
-        moveUser.pbInitDummyPokemon(pkmn, position.effects[PBEffects::FutureSightUserPartyIndex])
-      end
+      moveUser = Battler.new(self, position.effects[PBEffects::FutureSightUserIndex])
+      moveUser.pbInitDummyPokemon(pkmn, position.effects[PBEffects::FutureSightUserPartyIndex])
     end
-    return if !moveUser   # User is fainted
+    return if !moveUser
     move = position.effects[PBEffects::FutureSightMove]
     pbDisplay(_INTL("{1} took the {2} attack!", @battlers[position_index].pbThis,
                     GameData::Move.get(move).name))
@@ -110,6 +108,7 @@ class Battle
     position.effects[PBEffects::FutureSightMove]           = nil
     position.effects[PBEffects::FutureSightUserIndex]      = -1
     position.effects[PBEffects::FutureSightUserPartyIndex] = -1
+    pbJudge
   end
 
   #-----------------------------------------------------------------------------
@@ -648,6 +647,7 @@ class Battle
     pbEOREndWeather(priority)
     # Future Sight/Doom Desire
     @positions.each_with_index { |pos, idxPos| pbEORUseFutureSight(pos, idxPos) }
+    return if decided?
     # Wish
     pbEORWishHealing
     # Sea of Fire damage (Fire Pledge + Grass Pledge combination)
