@@ -1,0 +1,58 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,SUBSTITUTE]
+Name = Essentials
+NoTarget = true
+Scripts = substitute
+Credit = Maruno
+<User>
+    SetZoomX = 0,100
+    SetZoomY = 0,100
+    MoveZoomX = 0,4,0
+    MoveZoomY = 0,4,60
+    SetVisible = 4,false
+    SetZoomX = 27,100
+    SetZoomY = 27,100
+    SetVisible = 27,true
+<Substitute>
+    Focus = UserPosition
+    Graphic = substitute
+    InitialAngle = None
+    SetX = 14,8
+    SetY = 14,-384
+    SetVisible = 14,true
+    SetFrame = 14,1
+    MoveY = 14,6,-44,EaseIn
+    SetY = 21,-44
+    MoveY = 21,3,-114,EaseOut
+    MoveY = 24,3,-44,EaseIn
+<SE>
+    Play = 0,Normal/Substitute,80
+#-------------------------------
+[OppMove,SUBSTITUTE]
+Name = Essentials
+NoTarget = true
+Scripts = substitute
+Credit = Maruno
+<User>
+    SetZoomX = 0,100
+    SetZoomY = 0,100
+    MoveZoomX = 0,4,0
+    MoveZoomY = 0,4,60
+    SetVisible = 4,false
+    SetZoomX = 27,100
+    SetZoomY = 27,100
+    SetVisible = 27,true
+<Substitute>
+    Focus = UserPosition
+    Graphic = substitute
+    InitialAngle = None
+    SetX = 14,-8
+    SetY = 14,-384
+    SetVisible = 14,true
+    MoveY = 14,6,-26,EaseIn
+    SetY = 21,-26
+    MoveY = 21,3,-76,EaseOut
+    MoveY = 24,3,-26,EaseIn
+<SE>
+    Play = 0,Normal/Substitute,80

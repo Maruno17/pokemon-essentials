@@ -33,7 +33,8 @@ class AnimationPlayer
   attr_accessor :looping
   attr_reader   :slowdown   # 1 = normal speed, 2 = half speed, 3 = one third speed, etc.
   attr_reader   :sprites, :particle_sprites, :emitters
-  attr_reader   :visuals, :user
+  attr_reader   :user, :targets
+  attr_reader   :visuals
   attr_reader   :forceInvisibilities, :forceSubstitutes
 
   # animation is either a GameData::Animation or a hash made from one.

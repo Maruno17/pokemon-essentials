@@ -1,0 +1,41 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[Move,HARDEN]
+Name = Essentials
+NoTarget = true
+Credit = Maruno
+<User>
+    MaskGraphic = Masks/metallic
+    SetMaskOpacity = 0,184
+    SetMaskX = 0,0
+    MoveMaskX = 0,24,1350
+    SetMaskOpacity = 16,184
+    MoveMaskOpacity = 16,8,0
+<Shine emitter>
+    Focus = User
+    Graphic = shine 3
+    SecondLayer = true
+    InitialAngle = None
+    Emitter = NoMovement
+    EmitterRate = 15
+    SetZ = 0,10
+    SetZoomX = 0,15
+    SetZoomY = 0,15
+    SetVisible = 0,true
+    MoveZoomX = 0,2,30
+    MoveZoomY = 0,2,30
+    MoveZoomX = 2,7,0
+    MoveZoomY = 2,7,0
+    SetOpacity = 5,255
+    MoveOpacity = 5,4,0
+    SetVisible = 9,false
+    SetZ2 = 0,-1
+    SetZoomX2 = 0,140
+    SetZoomY2 = 0,140
+    SetColor2 = 2,0000F844
+    SetEmitting = 0,true
+    SetEmitting = 12,false
+    SetSpawnXRange = 0,64
+    SetSpawnYRange = 0,64
+<SE>
+    Play = 0,Normal/Harden,90

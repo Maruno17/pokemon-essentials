@@ -78,6 +78,24 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("roost") { |player, time|
 
 #===============================================================================
 
+# Sets the Substitute doll's x coordinate to be the default x coordinate of the
+# position the user is in, rather than the user's x coordinate (which can vary
+# depending on the user's sprite metrics).
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("substitute") { |player, time|
+  player.particle_sprites.each do |particle|
+    next if !particle.name[/Substitute/]
+    side_size = 1
+    if player.visuals.is_a?(Battle::Visuals)
+      side_size = player.visuals.battle.pbSideSize(player.user.index)
+    elsif player.visuals.is_a?(AnimationEditor::Canvas)
+      side_size = player.visuals.side_size(player.user.index)
+    end
+    particle.sprite[0].x = Battle::Visuals.pbBattlerPosition(player.user.index, side_size)[0]
+  end
+}
+
+#===============================================================================
+
 # Make ParticleSprites spawned by emitters called "Star trail emitter #" inherit
 # their original color from the ParticleSprite called "Launched star #".
 # Make ParticleSprites spawned by emitters called "Hit sparks emitter #" inherit
