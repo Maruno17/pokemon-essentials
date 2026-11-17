@@ -637,7 +637,6 @@ module UI
       return ret
     end
 
-    # TODO: Rewrite this. Include align: :vertical parameter.
     def choose_number(help_text, maximum, init_value = 1)
       if maximum.is_a?(ChooseNumberParams)
         return pbMessageChooseNumber(help_text, maximum) { update_visuals }

@@ -370,9 +370,6 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
     return !PROPERTY_GROUPS[group]&.include?(row)
   end
 
-  # TODO: Hide rows for properties that are disabled? e.g. :focus if the graphic
-  #       isn't a spritesheet (determined elsewhere). I don't think any other
-  #       properties would need this.
   def row_always_hidden?(row)
     # Cartesian or polar coordinates - hide the unused ones
     if @particle[:polar_coordinates]
@@ -1115,7 +1112,6 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
     mouse_y += @timeline_viewport.oy
     if @clickable_area.left_clicked?
       this_row, this_keyframe = row_and_keyframe_for_coords(mouse_x, mouse_y, true)
-      # TODO: Maybe allow dragging commands in group rows/:main?
       if this_row && (row_is_property?(this_row) || (@particle[:name] == "SE"))
         cmds = commands_for_row(this_row)
         if cmds && cmds[this_keyframe]

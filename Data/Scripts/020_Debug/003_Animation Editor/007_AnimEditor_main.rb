@@ -403,7 +403,6 @@ class AnimationEditor
     # Emitter
     part_properties.add_underlined_label(:emitter_label, _INTL("Emitter properties"))
     emitter_types = {}
-    # TODO: Is this okay using the in-PBS name of the emitter type?
     GameData::Animation::EMITTER_TYPES.each_pair { |name, key| emitter_types[key] = name }
     part_properties.add_labelled_dropdown_list(:emitter_type, _INTL("Emitter type"), emitter_types, defaults[:emitter_type])
     part_properties.add_labelled_number_text_box(:emitter_rate, _INTL("Emissions/second"), 1, 500, defaults[:emitter_rate])

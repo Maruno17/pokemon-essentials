@@ -1,6 +1,5 @@
 #===============================================================================
-# TODO: TEXT_OFFSET_Y was replaced with ((@row_height - 16) / 2) here. Can it be
-#       replaced with something similar elsewhere too?
+#
 #===============================================================================
 class UIControls::List < UIControls::BaseControl
   attr_reader :options

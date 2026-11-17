@@ -496,7 +496,6 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
     fly_spot_text = ""
     if spot
       map_infos = pbLoadMapInfos
-      # TODO: Crop map_name if the full string ends ups too long.
       map_name = map_infos[spot[0]].name
       fly_spot_text = sprintf("%03d: %s (%d,%d)", spot[0], map_name, spot[1], spot[2])
     end
@@ -586,7 +585,6 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
     return if !switches
     Settings::REGION_MAP_EXTRAS.each do |graphic|
       next if graphic[0] != @region_id
-      # TODO: Add a checkbox to mimic the Town Map being a wall map?
 #      next if !graphic[5] && @mode == :wall_map
       next if graphic[1] <= 0 || !switches[graphic[1]]
       @sprites[:map_extras_overlay].draw_image(
