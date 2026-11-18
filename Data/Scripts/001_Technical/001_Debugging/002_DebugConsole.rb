@@ -9,7 +9,7 @@ module Console
   def setup_console
     return unless $DEBUG
     echoln "GPU Cache Max: #{Bitmap.max_size}"
-    echoln Console.markup_style("You can ignore any messages above about fluidsynth.", text: :brown)
+    echoln Console.markup_style("You can ignore any warnings and error messages above.", text: :brown)
     echoln ""
     echoln Console.markup_style("===============================================================================", text: :yellow)
     echoln Console.markup_style("\"#{System.game_title}\" Debug Console Window", text: :yellow)
