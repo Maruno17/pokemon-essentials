@@ -193,9 +193,7 @@ class Battle
           switched.push(idxBattler)
         else   # Player's Pokémon has fainted in a wild battle
           switch = false
-          if pbPlayerBattlerCount > 0
-            switch = true
-          elsif pbDisplayConfirm(_INTL("Use next Pokémon?"))
+          if pbPlayerBattlerCount > 0 || pbDisplayConfirm(_INTL("Use next Pokémon?"))
             switch = true
           else
             switch = (pbRun(idxBattler, true) <= 0)
@@ -207,7 +205,7 @@ class Battle
           end
         end
       end
-      break if switched.length == 0
+      break if switched.empty?
       pbOnBattlerEnteringBattle(switched)
     end
   end
@@ -218,7 +216,7 @@ class Battle
       eachInTeamFromBattlerIndex(idxBattler) do |_pkmn, i|
         choices.push(i) if pbCanSwitchIn?(idxBattler, i)
       end
-      return -1 if choices.length == 0
+      return -1 if choices.empty?
       return choices[pbRandom(choices.length)]
     else
       return pbSwitchInBetween(idxBattler, true)

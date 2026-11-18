@@ -57,7 +57,7 @@ class UI::PauseMenuVisuals < UI::BaseVisuals
   # Used in Safari Zone and Bug-Catching Contest to show extra information.
   def show_info(text)
     @sprites[:info_text].resizeToFit(text, Graphics.height)
-    @sprites[:info_text].text    = text
+    @sprites[:info_text].text = text
     @sprites[:info_text].y = Graphics.height - @sprites[:info_text].height
     @sprites[:info_text].visible = true
     @info_text_visible = true

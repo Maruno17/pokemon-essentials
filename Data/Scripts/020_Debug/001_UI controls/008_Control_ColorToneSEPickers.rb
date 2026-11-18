@@ -255,15 +255,15 @@ class UIControls::ColorPicker < UIControls::BaseControl
         this_x = arrow_x - 2 + i
         this_y = [4, 2, 0, 2, 4][i]
         @picker_box.bitmap.fill_rect(PICKER_BOX_SLIDER_X + this_x,
-                                    slider_start_y + (j * PICKER_BOX_ROW_HEIGHT) + PICKER_BOX_SLIDER_HEIGHT - (arrow_height / 2) + this_y,
-                                    1, arrow_height - this_y, get_color_of(:negative_text))
+                                     slider_start_y + (j * PICKER_BOX_ROW_HEIGHT) + PICKER_BOX_SLIDER_HEIGHT - (arrow_height / 2) + this_y,
+                                     1, arrow_height - this_y, get_color_of(:negative_text))
       end
       @picker_box.bitmap.fill_rect(PICKER_BOX_SLIDER_X + arrow_x,
                                    slider_start_y + (j * PICKER_BOX_ROW_HEIGHT) + PICKER_BOX_SLIDER_HEIGHT - 1,
                                    1, 4, get_color_of(:line))
       @picker_box.bitmap.fill_rect(PICKER_BOX_SLIDER_X + arrow_x - 1,
-                                  slider_start_y + (j * PICKER_BOX_ROW_HEIGHT) + PICKER_BOX_SLIDER_HEIGHT + 1,
-                                  3, 2, get_color_of(:line))
+                                   slider_start_y + (j * PICKER_BOX_ROW_HEIGHT) + PICKER_BOX_SLIDER_HEIGHT + 1,
+                                   3, 2, get_color_of(:line))
     end
   end
 
@@ -655,15 +655,15 @@ class UIControls::TonePicker < UIControls::BaseControl
         this_x = arrow_x - 2 + i
         this_y = [4, 2, 0, 2, 4][i]
         @picker_box.bitmap.fill_rect(PICKER_BOX_SLIDER_X + this_x,
-                                    slider_start_y + (j * PICKER_BOX_ROW_HEIGHT) + PICKER_BOX_SLIDER_HEIGHT - (arrow_height / 2) + this_y,
-                                    1, arrow_height - this_y, get_color_of(:negative_text))
+                                     slider_start_y + (j * PICKER_BOX_ROW_HEIGHT) + PICKER_BOX_SLIDER_HEIGHT - (arrow_height / 2) + this_y,
+                                     1, arrow_height - this_y, get_color_of(:negative_text))
       end
       @picker_box.bitmap.fill_rect(PICKER_BOX_SLIDER_X + arrow_x,
                                    slider_start_y + (j * PICKER_BOX_ROW_HEIGHT) + PICKER_BOX_SLIDER_HEIGHT - 1,
                                    1, 4, get_color_of(:line))
       @picker_box.bitmap.fill_rect(PICKER_BOX_SLIDER_X + arrow_x - 1,
-                                  slider_start_y + (j * PICKER_BOX_ROW_HEIGHT) + PICKER_BOX_SLIDER_HEIGHT + 1,
-                                  3, 2, get_color_of(:line))
+                                   slider_start_y + (j * PICKER_BOX_ROW_HEIGHT) + PICKER_BOX_SLIDER_HEIGHT + 1,
+                                   3, 2, get_color_of(:line))
     end
   end
 
@@ -671,9 +671,9 @@ class UIControls::TonePicker < UIControls::BaseControl
     this_color = Color.black
     PICKER_BOX_PREVIEW_HEIGHT.times do |j|
       cols = {
-        :red => 0,
+        :red   => 0,
         :green => 0,
-        :blue => 0
+        :blue  => 0
       }
       3.times do |col|
         col_j = (j - (col * PICKER_BOX_PREVIEW_HEIGHT / 3)) % PICKER_BOX_PREVIEW_HEIGHT
@@ -1002,16 +1002,9 @@ class UIControls::SEPicker < UIControls::BaseControl
                              @button_rect.width, @button_rect.height,
                              get_color_of(:line))
     # Draw button graphic
-    btmp_graphic = %w(
-      . . . . . . . . . . . . . . . .
-      . . . . . . . . . . . . X . . .
-      . . . . . . X . . . . . . X . .
-      . . . . . X X . . . X . . . X .
-      . . . . X . X . . . . X . . X .
-      X X X X . . X . X . . X . . . X
-      X . . . . . X . . X . . X . . X
-      X . . . . . X . . X . . X . . X
-    )
+    btmp_graphic = [
+      '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X', '.', '.', '.', '.', '.', '.', 'X', '.', '.', '.', '.', '.', '.', '.', 'X', 'X', '.', '.', '.', 'X', '.', '.', '.', 'X', '.', '.', '.', '.', '.', 'X', '.', 'X', '.', '.', '.', '.', 'X', '.', '.', 'X', '.', 'X', 'X', 'X', 'X', '.', '.', 'X', '.', 'X', '.', '.', 'X', '.', '.', '.', 'X', 'X', '.', '.', '.', '.', '.', 'X', '.', '.', 'X', '.', '.', 'X', '.', '.', 'X', 'X', '.', '.', '.', '.', '.', 'X', '.', '.', 'X', '.', '.', 'X', '.', '.', 'X'
+    ]
     icon_color = get_color_of(:text)
     btmp_width = BUTTON_WIDTH - 4
     btmp_graphic.length.times do |i|

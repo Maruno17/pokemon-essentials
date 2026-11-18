@@ -656,7 +656,7 @@ def pbImportAllAnimations
         pbSafeCopyFile(image, RTP.getImagePath("Graphics/Animations/" + File.basename(image)), "Graphics/Animations/" + File.basename(image))
       end
       Dir.glob(folder + "/*.anm") do |f|
-        textdata = BattleAnimationEditor.loadBase64Anim(IO.read(f)) rescue nil
+        textdata = BattleAnimationEditor.loadBase64Anim(File.read(f)) rescue nil
         if textdata.is_a?(PBAnimation)
           index = pbAllocateAnimation(animations, textdata.name)
           missingFiles = []

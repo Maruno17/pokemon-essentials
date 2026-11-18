@@ -529,13 +529,14 @@ module Compiler
             file.write(value) if !has_enum
           end
         else
-          if value.is_a?(String)
+          case value
+          when String
             file.write((schema[1][i, 1].downcase == "q") ? value : csvQuote(value))
-          elsif value.is_a?(Symbol)
+          when Symbol
             file.write(csvQuote(value.to_s))
-          elsif value == true
+          when true
             file.write("true")
-          elsif value == false
+          when false
             file.write("false")
           else
             file.write(value.inspect)

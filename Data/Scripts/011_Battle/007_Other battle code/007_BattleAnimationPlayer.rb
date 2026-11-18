@@ -296,14 +296,18 @@ class AnimationPlayer
     case particle[:graphic]
     when "USER", "USER_OPP", "USER_FRONT", "USER_BACK"
       sprite = @sprites["pokemon_#{@user.index}"]
-      particle_sprite.sprite.each { |spr| spr.ox = sprite.ox }
-      particle_sprite.sprite.each { |spr| spr.oy = sprite.oy }
+      particle_sprite.sprite.each do |spr|
+        spr.ox = sprite.ox
+        spr.oy = sprite.oy
+      end
       offset_xy[0] += sprite.ox - (sprite.bitmap.width / 2)
       offset_xy[1] += sprite.oy - sprite.bitmap.height
     when "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"
       sprite = @sprites["pokemon_#{target_idx}"]
-      particle_sprite.sprite.each { |spr| spr.ox = sprite.ox }
-      particle_sprite.sprite.each { |spr| spr.oy = sprite.oy }
+      particle_sprite.sprite.each do |spr|
+        spr.ox = sprite.ox
+        spr.oy = sprite.oy
+      end
       offset_xy[0] += sprite.ox - (sprite.bitmap.width / 2)
       offset_xy[1] += sprite.oy - sprite.bitmap.height
     end
@@ -617,7 +621,7 @@ class AnimationPlayer::ParticleSprite
           process[4], start_val, end_val, process[2],
           process[1], elapsed_time
         )
-        new_val.push((val >= 0 ? "+" : "-") + sprintf("%02X", val.abs))
+        new_val.push(((val >= 0) ? "+" : "-") + sprintf("%02X", val.abs))
       end
       @values[process[0]] = new_val.join
     else
@@ -634,7 +638,7 @@ class AnimationPlayer::ParticleSprite
   def update_emitter_type_properties(elapsed_time, changed_properties)
     return if (@emitter_params[:type] || :none) == :none
     delta_t = (elapsed_time - @emitter_params[:start_time]) / @slowdown.to_f
-    case (@emitter_params[:type] || :none)
+    case @emitter_params[:type]
     when :no_movement
       # NOTE: This doesn't change any properties.
     when :straight
@@ -678,7 +682,7 @@ class AnimationPlayer::ParticleSprite
     when :helix
       if @emitter_params[:period_x] != 0
         new_angle = @emitter_params[:direction] || 0
-        new_angle += (360 * delta_t / @emitter_params[:period_x]) * (@emitter_params[:clockwise] ? -1 : 1)
+        new_angle += (360 * delta_t / @emitter_params[:period_x]) * ((@emitter_params[:clockwise]) ? -1 : 1)
         new_x = @values[:radius_x] * @emitter_params[:radius_x_mult] * Math.sin(new_angle * Math::PI / 180)
         @values[:auto_movement_x] = new_x
         changed_properties.push(:x)
@@ -690,7 +694,7 @@ class AnimationPlayer::ParticleSprite
       end
       if @emitter_params[:period_z] != 0
         new_angle = @emitter_params[:direction] || 0
-        new_angle += (360 * delta_t / @emitter_params[:period_z]) * (@emitter_params[:clockwise] ? -1 : 1)
+        new_angle += (360 * delta_t / @emitter_params[:period_z]) * ((@emitter_params[:clockwise]) ? -1 : 1)
         new_z = @values[:radius_z] * @emitter_params[:radius_z_mult] * Math.cos(new_angle * Math::PI / 180)
         @values[:auto_movement_z] = new_z
         changed_properties.push(:z)
@@ -698,7 +702,7 @@ class AnimationPlayer::ParticleSprite
     when :polar
       if @emitter_params[:period_x] != 0
         new_angle = @emitter_params[:direction] || 0
-        new_angle += (360 * delta_t / @emitter_params[:period_x]) * (@emitter_params[:clockwise] ? -1 : 1)
+        new_angle += (360 * delta_t / @emitter_params[:period_x]) * ((@emitter_params[:clockwise]) ? -1 : 1)
         new_x = @values[:radius_x] * @emitter_params[:radius_x_mult] * Math.cos(new_angle * Math::PI / 180)
         @values[:auto_movement_x] = new_x
         changed_properties.push(:x)
@@ -731,7 +735,7 @@ class AnimationPlayer::ParticleSprite
       spawn_offset = (@property_offsets[:spawn_x] || 0) + (@values[:spawn_x_offset] || 0)
       spawn_offset *= @values[:spawn_x_multiplier] / 100.0
       value += spawn_offset   # Emitter to spawn point
-      value += (@property_offsets[:emitter_x] || 0)   # Focus to emitter
+      value += @property_offsets[:emitter_x] || 0   # Focus to emitter
       value *= @emitter_params[:x_multiplier] || 1
       value *= -1 if @foe_invert_x
       AnimationPlayer::Helper.apply_xy_value_using_focus_to_sprite(@sprite[0], :x, value, @focus_xy)   # Screen to focus
@@ -759,7 +763,7 @@ class AnimationPlayer::ParticleSprite
       spawn_offset = (@property_offsets[:spawn_y] || 0) + (@values[:spawn_y_offset] || 0)
       spawn_offset *= @values[:spawn_y_multiplier] / 100.0
       value += spawn_offset   # Emitter to spawn point
-      value += (@property_offsets[:emitter_y] || 0)   # Focus to emitter
+      value += @property_offsets[:emitter_y] || 0   # Focus to emitter
       value *= @emitter_params[:y_multiplier] || 1
       value *= -1 if @foe_invert_y
       AnimationPlayer::Helper.apply_xy_value_using_focus_to_sprite(@sprite[0], :y, value, @focus_xy)   # Screen to focus
@@ -793,14 +797,14 @@ class AnimationPlayer::ParticleSprite
       dist *= @values[:spawn_r_multiplier] / 100.0
       dir = (@property_offsets[:spawn_theta] || 0) + (@values[:spawn_theta_offset] || 0)
       @values[:spawn_x_offset] = dist * Math.cos(dir * Math::PI / 180)
-      @values[:spawn_x_offset] -= (@property_offsets[:spawn_x] || 0)
+      @values[:spawn_x_offset] -= @property_offsets[:spawn_x] || 0
       @values[:spawn_y_offset] = -dist * Math.sin(dir * Math::PI / 180)
-      @values[:spawn_y_offset] -= (@property_offsets[:spawn_y] || 0)
+      @values[:spawn_y_offset] -= @property_offsets[:spawn_y] || 0
       apply_sprite_property(:x, @values[:x])
       apply_sprite_property(:y, @values[:y])
     when :z
       value += @values[:auto_movement_z] || 0   # Used by emitters
-      value += (@property_offsets[property] || 0)
+      value += @property_offsets[property] || 0
       value += @emitter_params[:z] || 0
       if @foe_invert_z
         if @focus_z.is_a?(Array)
@@ -817,7 +821,7 @@ class AnimationPlayer::ParticleSprite
     when :z2
       @sprite[1].z = @sprite[0].z + value if @sprite[1]
     when :zoom_x
-      value += (@property_offsets[property] || 0)
+      value += @property_offsets[property] || 0
       value *= @emitter_params[:zoom_multiplier] || 1
       value *= @emitter_params[:zoom_mult] || 1
       value *= @emitter_params[:zoom_x_mult] || 1
@@ -826,7 +830,7 @@ class AnimationPlayer::ParticleSprite
     when :zoom_x2
       @sprite[1].zoom_x = @sprite[0].zoom_x * value / 100.0 if @sprite[1]
     when :zoom_y
-      value += (@property_offsets[property] || 0)
+      value += @property_offsets[property] || 0
       value *= @emitter_params[:zoom_multiplier] || 1
       value *= @emitter_params[:zoom_mult] || 1
       value *= @emitter_params[:zoom_y_mult] || 1
@@ -838,14 +842,14 @@ class AnimationPlayer::ParticleSprite
       if @initial_angle == :always_particle_to_focus
         apply_sprite_property_override(:angle)
       else
-        value += (@property_offsets[property] || 0)
+        value += @property_offsets[property] || 0
         value += @emitter_params[:angle] || 0
         @sprite[0].angle = value
       end
       @sprite[0].angle *= -1 if @random_invert_angle
       apply_sprite_property(:angle2, @values[:angle2])
     when :angle2
-     if @sprite[1]
+      if @sprite[1]
         new_val = value
         new_val *= -1 if @random_invert_angle
         @sprite[1].angle = @sprite[0].angle + new_val
@@ -859,7 +863,7 @@ class AnimationPlayer::ParticleSprite
         @tiled_sprites.each { |spr| spr.mirror = @sprite[0].mirror }
       end
     when :flip2
-     if @sprite[1]
+      if @sprite[1]
         @sprite[1].mirror = @sprite[0].mirror
         @sprite[1].mirror = !@sprite[1].mirror if value
       end
@@ -1245,7 +1249,7 @@ class AnimationPlayer::Emitter
       [:emit_deceleration, :deceleration],
       [:emit_period_x, :period_x],
       [:emit_period_y, :period_y],
-      [:emit_period_z, :period_z],
+      [:emit_period_z, :period_z]
     ].each do |property|
       val = @values[property[0]]
       val_range = @values[(property[0].to_s + "_range").to_sym]
@@ -1534,6 +1538,7 @@ module AnimationPlayer::Helper
     ret = nil
     case particle[:focus]
     when :foreground, :midground, :background
+      # No battler to focus on; focus point is the top left of the screen
     when :user
       ret = [user_coords.clone]
     when :user_position

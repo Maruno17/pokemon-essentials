@@ -171,11 +171,11 @@ class UIControls::List < UIControls::BaseControl
       next if i < @top_row || i >= @top_row + @rows_count
       if @selected == i
         self.bitmap.fill_rect(
-           @interactions[i].x,
-           @interactions[i].y - (@top_row * @row_height),
-           @interactions[i].width, @interactions[i].height,
-           get_color_of(:highlight)
-         )
+          @interactions[i].x,
+          @interactions[i].y - (@top_row * @row_height),
+          @interactions[i].width, @interactions[i].height,
+          get_color_of(:highlight)
+        )
       end
       txt = (val.is_a?(Array)) ? val[1] : val.to_s
       old_text_color = self.bitmap.font.color.clone
@@ -529,7 +529,7 @@ class UIControls::DropdownList < UIControls::BaseControl
   #-----------------------------------------------------------------------------
 
   def mouse_in_control?
-    return @dropdown_menu&.mouse_in_control?
+    return true if @dropdown_menu&.mouse_in_control?
     return super
   end
 
@@ -701,7 +701,7 @@ class UIControls::TextBoxDropdownList < UIControls::TextBox
   #-----------------------------------------------------------------------------
 
   def mouse_in_control?
-    return @dropdown_menu&.mouse_in_control?
+    return true if @dropdown_menu&.mouse_in_control?
     return super
   end
 
@@ -719,7 +719,7 @@ class UIControls::TextBoxDropdownList < UIControls::TextBox
                             BUTTON_WIDTH, BUTTON_HEIGHT)
     @interactions = {
       :text_box => @text_box_rect,
-      :button => @button_rect
+      :button   => @button_rect
     }
   end
 

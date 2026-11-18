@@ -157,6 +157,7 @@ class Battle::AI
         return false if !meaningful
       end
     when :EVASION
+      # Assume raising evasion is always worthwhile
     end
     return true
   end
@@ -452,6 +453,7 @@ class Battle::AI
       end
       return false if !meaningful
     when :EVASION
+      # Assume lowering evasion is always worthwhile
     end
     return true
   end

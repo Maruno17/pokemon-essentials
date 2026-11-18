@@ -114,7 +114,7 @@ module UI
 
     def draw_paragraph_text(string, text_x, text_y, text_width, num_lines, theme: :default, overlay: :overlay)
       drawTextEx(@sprites[overlay].bitmap, text_x, text_y, text_width, num_lines,
-                string, *get_text_color_theme(theme))
+                 string, *get_text_color_theme(theme))
     end
 
     # NOTE: This also draws string in a paragraph, but with no limit on the
@@ -135,14 +135,14 @@ module UI
       raise _INTL("Can't draw {1} as a number.", string) if !string.scan(/[^\d\/]/).empty?
       char_width  = bitmap.width / 11
       char_height = bitmap.height
-      chars = string.split(//)
+      chars = string.chars
       chars.reverse! if align == :right
       chars.length.times do |i|
         char = chars[i]
         index = (char == "/") ? 10 : char.to_i
         char_x = (align == :right) ? text_x - ((i + 1) * char_width) : text_x + (i * char_width)
         draw_image(bitmap, char_x, text_y,
-                  index * char_width, 0, char_width, char_height, overlay: overlay)
+                   index * char_width, 0, char_width, char_height, overlay: overlay)
       end
     end
 
@@ -255,11 +255,9 @@ module UI
       refresh_sprites_values
     end
 
-    def initialize_bitmaps
-    end
+    def initialize_bitmaps; end
 
-    def initialize_sprites
-    end
+    def initialize_sprites; end
 
     #---------------------------------------------------------------------------
 
@@ -380,8 +378,7 @@ module UI
       pbBottomLeftLines(@sprites[:speech_box], 2)
     end
 
-    def initialize_sprites
-    end
+    def initialize_sprites; end
 
     #---------------------------------------------------------------------------
 
@@ -712,8 +709,7 @@ module UI
 
     #---------------------------------------------------------------------------
 
-    def refresh_on_index_changed(old_index)
-    end
+    def refresh_on_index_changed(old_index); end
 
     def draw_input_icon(input_x, input_y, input, text = nil, text_spacing = 6,
                         align: :left, theme: :default, overlay: :overlay)
@@ -726,9 +722,9 @@ module UI
       end
       input_index = UI::BaseVisuals::INPUT_ICONS_ORDER.index(input) || 0
       draw_image(@bitmaps[:input_icons], input_x, input_y,
-                input_index * @bitmaps[:input_icons].height, 0,
-                @bitmaps[:input_icons].height, @bitmaps[:input_icons].height,
-                overlay: overlay)
+                 input_index * @bitmaps[:input_icons].height, 0,
+                 @bitmaps[:input_icons].height, @bitmaps[:input_icons].height,
+                 overlay: overlay)
       if text
         draw_text(text, input_x + @bitmaps[:input_icons].height + text_spacing, input_y + 8,
                   theme: theme, overlay: overlay)
@@ -922,11 +918,9 @@ module UI
       end_screen
     end
 
-    def main_skipped
-    end
+    def main_skipped; end
 
-    def on_start_main_loop
-    end
+    def on_start_main_loop; end
 
     def perform_action(command)
       return nil if !self.class::ACTIONS

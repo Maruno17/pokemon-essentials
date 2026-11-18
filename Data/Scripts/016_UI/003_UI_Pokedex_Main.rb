@@ -230,7 +230,6 @@ end
 #
 #===============================================================================
 class UI::PokedexVisuals < UI::BaseVisuals
-  attr_reader :index
   attr_reader :display_dex
 
   GRAPHICS_FOLDER            = "Pokedex/"   # Subfolder in Graphics/UI
@@ -828,7 +827,7 @@ class UI::PokedexVisuals < UI::BaseVisuals
       button_y = metrics[:start_pos][1] + ((blank_index / metrics[:columns]) * (metrics[:size][1] + metrics[:spacing][1]))
       src_x = metrics[:src_pos][0]
       src_x += 184 if (filter_value.is_a?(Array) && filter_value.include?(nil)) ||
-                      (!filter_value.is_a?(Array) && filter_value == nil)
+                      (!filter_value.is_a?(Array) && filter_value.nil?)
       draw_image(@bitmaps[:search_buttons], button_x, button_y,
                  src_x, metrics[:src_pos][1], *metrics[:size])
       if blank_text != ""
@@ -909,26 +908,26 @@ class UI::PokedexVisuals < UI::BaseVisuals
     draw_text(min_text, 286, 66, align: :center, theme: :search, outline: :outline)
     draw_text(max_text, 414, 66, align: :center, theme: :search, outline: :outline)
     draw_image(@bitmaps[:height_weight], 462, 52,
-              (is_weight) ? 32 : 0, (imperial_offset) ? 44 : 0, 32, 44)
+               (is_weight) ? 32 : 0, (imperial_offset) ? 44 : 0, 32, 44)
     # Draw min left/right arrows
     draw_image(@bitmaps[:size_sliders], 16, 264,
-              0, 192, 32, 44) if min_index > 0
+               0, 192, 32, 44) if min_index > 0
     draw_image(@bitmaps[:size_sliders], 464, 264,
-              32, 192, 32, 44) if min_index < max_index
+               32, 192, 32, 44) if min_index < max_index
     # Draw max left/right arrows
     draw_image(@bitmaps[:size_sliders], 16, 120,
-              0, 192, 32, 44) if max_index > min_index
+               0, 192, 32, 44) if max_index > min_index
     draw_image(@bitmaps[:size_sliders], 464, 120,
-              32, 192, 32, 44) if max_index < intervals.length - 1
+               32, 192, 32, 44) if max_index < intervals.length - 1
     # Draw slider boxes and their texts
     start_x = 44
     end_x = 348
     min_x = lerp(start_x, end_x, intervals.length - 1, min_index)
     max_x = lerp(start_x, end_x, intervals.length - 1, max_index)
     draw_image(@bitmaps[:size_sliders], min_x, 222,
-              0, 96, 120, 96)
+               0, 96, 120, 96)
     draw_image(@bitmaps[:size_sliders], max_x, 110,
-              0, 0, 120, 96)
+               0, 0, 120, 96)
     draw_text(min_text, min_x + 60, 290, align: :center, theme: :search, outline: :none)
     draw_text(max_text, max_x + 60, 146, align: :center, theme: :search, outline: :none)
   end
@@ -991,8 +990,8 @@ class UI::PokedexVisuals < UI::BaseVisuals
       pbSEPlay("GUI pokedex open")
       return :open_search
     when Input::BACK
+      pbPlayCloseMenuSE
       if list_filtered?
-        pbPlayCloseMenuSE
         pbFadeOutIn do
           clear_filters
           refresh_display_dex
@@ -1000,7 +999,6 @@ class UI::PokedexVisuals < UI::BaseVisuals
           refresh
         end
       else
-        pbPlayCloseMenuSE
         return :quit
       end
     end
@@ -1139,10 +1137,10 @@ class UI::PokedexVisuals < UI::BaseVisuals
       @search_sub_index = 0
     when :height
       @old_filter = [@filters[:min_height], @filters[:max_height]]
-      @search_sub_index = 100 + (HEIGHT_INTERVALS.index(@filters[:max_height]) || HEIGHT_INTERVALS.length - 1)
+      @search_sub_index = 100 + (HEIGHT_INTERVALS.index(@filters[:max_height]) || (HEIGHT_INTERVALS.length - 1))
     when :weight
       @old_filter = [@filters[:min_weight], @filters[:max_weight]]
-      @search_sub_index = 100 + (WEIGHT_INTERVALS.index(@filters[:max_weight]) || WEIGHT_INTERVALS.length - 1)
+      @search_sub_index = 100 + (WEIGHT_INTERVALS.index(@filters[:max_weight]) || (WEIGHT_INTERVALS.length - 1))
     else
       @old_filter = @filters[new_page]
       @search_sub_index = 0

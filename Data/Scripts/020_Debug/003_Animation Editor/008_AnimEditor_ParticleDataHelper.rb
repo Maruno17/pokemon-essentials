@@ -1,5 +1,3 @@
-class AnimationEditor; end
-
 #===============================================================================
 #
 #===============================================================================
@@ -506,9 +504,8 @@ module AnimationEditor::ParticleDataHelper
         # Turn the MoveXYZ command into a SetXYZ at its end point (or just
         # delete it if a SetXYZ already exists at frame or if a MoveXYZ ends at
         # frame)
-        if set_now
-          particle[property].delete(move_starting_now)
-        elsif particle[property].any? { |cmd| cmd[1] > 0 && cmd[0] + cmd[1] == frame }
+        if set_now ||
+           particle[property].any? { |cmd| cmd[1] > 0 && cmd[0] + cmd[1] == frame }
           particle[property].delete(move_starting_now)
         else
           # Just for the sake of keeping a command diamond at frame
@@ -628,7 +625,7 @@ module AnimationEditor::ParticleDataHelper
   # brings all commands after the given frame earlier by 1, and reduces the
   # duration of all commands that overlap the given frame.
   def remove_frame(particle, frame, property = nil)
-    particle.keys.each do |prop|
+    particle.each_key do |prop|
       next if !particle[prop].is_a?(Array) || particle[prop].empty?
       next if !property.nil? && prop != property
       delete_command(particle, prop, frame, true)

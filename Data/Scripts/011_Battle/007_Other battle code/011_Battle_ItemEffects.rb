@@ -658,8 +658,10 @@ Battle::ItemEffects::StatusCure.add(:RAWSTBERRY,
 
 Battle::ItemEffects::StatLossImmunity.add(:CLEARAMULET,
   proc { |item, battler, stat, battle, showMessages|
-    battle.pbDisplay(_INTL("The effects of {1} {2} prevent its stats from being lowered!",
-                           battler.pbOfThis, GameData::Item.get(item).name)) if showMessages
+    if showMessages
+      battle.pbDisplay(_INTL("The effects of {1} {2} prevent its stats from being lowered!",
+                             battler.pbOfThis, GameData::Item.get(item).name))
+    end
     next true
   }
 )

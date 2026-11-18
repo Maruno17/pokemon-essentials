@@ -60,7 +60,7 @@ module BattleAnimationEditor
       cmdwin.update
       if Input.trigger?(Input::USE) && animfiles.length > 0
         begin
-          textdata = loadBase64Anim(IO.read(animfiles[cmdwin.index]))
+          textdata = loadBase64Anim(File.read(animfiles[cmdwin.index]))
           throw "Bad data" if !textdata.is_a?(PBAnimation)
           textdata.id = -1 # this is not an RPG Maker XP animation
           pbConvertAnimToNewFormat(textdata)

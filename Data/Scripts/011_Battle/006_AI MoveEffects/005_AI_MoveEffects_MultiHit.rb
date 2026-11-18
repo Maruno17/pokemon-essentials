@@ -371,7 +371,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackChargeRaise
     next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for raising the user's stat
     score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserDefense1",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score
   }
 )
@@ -387,7 +387,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackChargeRaise
     next score if score == Battle::AI::MOVE_USELESS_SCORE
     # Score for raising the user's stat
     score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserSpAtk1",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score
   }
 )
@@ -405,7 +405,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("TwoTurnAttackOneTurnInRa
     end
     # Score for raising the user's stat
     score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserSpAtk1",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score
   }
 )

@@ -757,7 +757,7 @@ class Battle::Visuals
       @sprites["dataBox_#{i}"].visible = false if anim_data.hides_data_boxes
     end
     # Create animation player
-    PBDebug.logonerr {
+    PBDebug.logonerr do
       anim_player = AnimationPlayer.new(anim_data, user, targets, self)
       if user
         if @sprites["pokemon_#{user.index}"].forceSubstitute
@@ -785,7 +785,7 @@ class Battle::Visuals
         break if anim_player.can_continue_battle?
       end
       anim_player.dispose
-    }
+    end
     # Restore old battler coordinates
     old_battler_coords.each_with_index do |values, i|
       next if !values

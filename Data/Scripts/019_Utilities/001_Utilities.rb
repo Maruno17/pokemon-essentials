@@ -493,7 +493,7 @@ def pbConvertItemToItem(variable, array)
   (array.length / 2).times do |i|
     next if item != array[2 * i]
     pbSet(variable, array[(2 * i) + 1])
-    return
+    break
   end
 end
 
@@ -503,7 +503,7 @@ def pbConvertItemToPokemon(variable, array)
   (array.length / 2).times do |i|
     next if item != array[2 * i]
     pbSet(variable, GameData::Species.get(array[(2 * i) + 1]).id)
-    return
+    break
   end
 end
 

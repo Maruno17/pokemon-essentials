@@ -128,8 +128,8 @@ class UI::PokemonStorageVisualsSidePane < UI::SpriteContainer
     mark_variants = @bitmaps[:markings].bitmap.height / MARK_HEIGHT
     (@bitmaps[:markings].bitmap.width / MARK_WIDTH).times do |i|
       draw_image(@bitmaps[:markings], 38 + (i * MARK_WIDTH), 262,
-                i * MARK_WIDTH, [(@pokemon.markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT,
-                MARK_WIDTH, MARK_HEIGHT)
+                 i * MARK_WIDTH, [(@pokemon.markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT,
+                 MARK_WIDTH, MARK_HEIGHT)
     end
   end
 
@@ -245,7 +245,7 @@ end
 #===============================================================================
 class UI::PokemonStorageVisualsPokemonIcon < PokemonIconSprite
   OUTLINE_COLOR = Color.new(248, 0, 0)
-  FULL_BORDER  = true   # true = draws the corners
+  FULL_BORDER   = true   # true = draws the corners
 
   def create_outline_bitmap
     @selected_bitmap = Bitmap.new(@animBitmap.height + 4, @animBitmap.height + 4)
@@ -962,7 +962,7 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
     timer_start = System.uptime
     loop do
       @sprites[:party_panel].y = lerp(start_y, start_y + @sprites[:party_panel].height,
-                                    0.4, timer_start, System.uptime)
+                                      0.4, timer_start, System.uptime)
       self.update
       Graphics.update
       break if @sprites[:party_panel].y == start_y + @sprites[:party_panel].height
@@ -1840,13 +1840,13 @@ class UI::PokemonStorage < UI::BaseScreen
           screen.show_message(_INTL("The Box is full."))
           next
         end
-        screen.visuals.store_pokemon(new_box, new_index) {
+        screen.visuals.store_pokemon(new_box, new_index) do
           if was_holding
             screen.storage.pbMoveCaughtToBox(pkmn, new_box)
           else
             screen.storage.pbMove(new_box, new_index, old_box, old_index)
           end
-        }
+        end
         screen.refresh
         screen.refresh_selected_pokemon
         break

@@ -55,8 +55,7 @@ class UI::MartStockWrapper
     return max_quantity
   end
 
-  def remove_from_stock(item, quantity)
-  end
+  def remove_from_stock(item, quantity); end
 
   def refresh
     @stock.delete_if { |itm| GameData::Item.get(itm).is_important? && $bag.has?(itm) }

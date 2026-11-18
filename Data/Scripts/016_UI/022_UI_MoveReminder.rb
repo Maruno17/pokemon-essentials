@@ -291,7 +291,7 @@ class UI::MoveReminder < UI::BaseScreen
       end
       @moves = first_moves + @moves   # List first moves before level-up moves
     end
-    @moves = @moves | []   # remove duplicates
+    @moves |= []   # remove duplicates
   end
 
   def refresh_move_list

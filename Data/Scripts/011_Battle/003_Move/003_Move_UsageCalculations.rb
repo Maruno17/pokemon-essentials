@@ -100,8 +100,8 @@ class Battle::Move
     return true if modifiers[:base_accuracy] == 0
     # Calculation
     max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
-    accStage = [[modifiers[:accuracy_stage], -max_stage].max, max_stage].min + max_stage
-    evaStage = [[modifiers[:evasion_stage], -max_stage].max, max_stage].min + max_stage
+    accStage = modifiers[:accuracy_stage].clamp(-max_stage, max_stage) + max_stage
+    evaStage = modifiers[:evasion_stage].clamp(-max_stage, max_stage) + max_stage
     stageMul = Battle::Battler::ACC_EVA_STAGE_MULTIPLIERS
     stageDiv = Battle::Battler::ACC_EVA_STAGE_DIVISORS
     accuracy = 100.0 * stageMul[accStage] / stageDiv[accStage]
@@ -391,16 +391,14 @@ class Battle::Move
   def pbCalcDamageMultipliersGymBadges(user, target, numTargets, type, baseDmg, multipliers)
     return if !@battle.internalBattle
     if user.pbOwnedByPlayer?
-      if physicalMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_ATTACK
-        multipliers[:attack_multiplier] *= 1.1
-      elsif specialMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPECIAL_ATTACK
+      if (physicalMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_ATTACK) ||
+         (specialMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPECIAL_ATTACK)
         multipliers[:attack_multiplier] *= 1.1
       end
     end
     if target.pbOwnedByPlayer?
-      if physicalMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_DEFENSE
-        multipliers[:defense_multiplier] *= 1.1
-      elsif specialMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPECIAL_DEFENSE
+      if (physicalMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_DEFENSE) ||
+         (specialMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPECIAL_DEFENSE)
         multipliers[:defense_multiplier] *= 1.1
       end
     end
@@ -489,19 +487,9 @@ class Battle::Move
     # Aurora Veil, Reflect, Light Screen
     if !ignoresReflect? && !target.damageState.critical &&
        !user.hasActiveAbility?(:INFILTRATOR)
-      if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
-        if @battle.singleBattle?
-          multipliers[:final_damage_multiplier] /= 2
-        else
-          multipliers[:final_damage_multiplier] *= 2 / 3.0
-        end
-      elsif target.pbOwnSide.effects[PBEffects::Reflect] > 0 && physicalMove?
-        if @battle.singleBattle?
-          multipliers[:final_damage_multiplier] /= 2
-        else
-          multipliers[:final_damage_multiplier] *= 2 / 3.0
-        end
-      elsif target.pbOwnSide.effects[PBEffects::LightScreen] > 0 && specialMove?
+      if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
+         (target.pbOwnSide.effects[PBEffects::Reflect] > 0 && physicalMove?) ||
+         (target.pbOwnSide.effects[PBEffects::LightScreen] > 0 && specialMove?)
         if @battle.singleBattle?
           multipliers[:final_damage_multiplier] /= 2
         else

@@ -52,7 +52,7 @@ class Battle
     end
 
     def self.should_black_out?(decision)
-      return decision == LOSE || decision == DRAW
+      return [LOSE, DRAW].include?(decision)
     end
 
     def self.success?(decision)

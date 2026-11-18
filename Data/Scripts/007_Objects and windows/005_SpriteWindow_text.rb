@@ -416,7 +416,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     return if @pausesprite
     arrow_filename = "Graphics/Windowskins/pause_arrow"
     if @windowskin_name
-      try_arrow_filename = "Graphics/Windowskins/#{File.basename(@windowskin_name, ".*")}_arrow"
+      try_arrow_filename = "Graphics/Windowskins/#{File.basename(@windowskin_name, '.*')}_arrow"
       arrow_filename = try_arrow_filename if pbResolveBitmap(try_arrow_filename)
     end
     @pausesprite = AnimatedSprite.create(arrow_filename, 4, 3)
@@ -645,7 +645,7 @@ class Window_InputNumberPokemon < SpriteWindow_Base
   end
 
   def number
-    @number * (@sign && @negative ? -1 : 1)
+    return @number * ((@sign && @negative) ? -1 : 1)
   end
 
   def number=(value)
@@ -654,15 +654,15 @@ class Window_InputNumberPokemon < SpriteWindow_Base
       @negative = (value < 0)
       @number = [value.abs, (10**@digits_max) - 1].min
     else
-      @number = [[value, 0].max, (10**@digits_max) - 1].min
+      @number = value.clamp(0, (10**@digits_max) - 1)
     end
     refresh
   end
 
   def sign=(value)
     @sign = value
-    self.width = (@digits_max * 24) + 8 + self.borderX + (@sign ? 24 : 0)
-    @index = (@digits_max - 1) + (@sign ? 1 : 0)
+    self.width = (@digits_max * 24) + 8 + self.borderX + ((@sign) ? 24 : 0)
+    @index = (@digits_max - 1) + ((@sign) ? 1 : 0)
     refresh
   end
 
@@ -673,17 +673,17 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     self.contents.clear
     s = sprintf("%0*d", @digits_max, @number.abs)
     if @sign
-      textHelper(0, 0, @negative ? "-" : "+", 0)
+      textHelper(0, 0, (@negative) ? "-" : "+", 0)
     end
     @digits_max.times do |i|
-      index = i + (@sign ? 1 : 0)
+      index = i + ((@sign) ? 1 : 0)
       textHelper(index * 24, 0, s[i, 1], index)
     end
   end
 
   def update
     super
-    digits = @digits_max + (@sign ? 1 : 0)
+    digits = @digits_max + ((@sign) ? 1 : 0)
     cursor_to_show = ((System.uptime - @cursor_timer_start) / 0.35).to_i.even?
     if cursor_to_show != @cursor_shown
       @cursor_shown = cursor_to_show
@@ -957,7 +957,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
     # This code makes the cursor stay in the middle of the visible list as much
     # as possible.
     new_top_row = row - ((self.page_row_max - 1) / 2).floor
-    new_top_row = [[new_top_row, self.row_max - self.page_row_max].min, 0].max
+    new_top_row = new_top_row.clamp(0, self.row_max - self.page_row_max)
     if self.top_row != new_top_row
       self.top_row = new_top_row
       dorefresh = true

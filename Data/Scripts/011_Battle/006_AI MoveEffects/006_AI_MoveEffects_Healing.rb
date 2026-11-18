@@ -59,7 +59,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnWeather",
   proc { |score, move, user, ai, battle|
     # Consider how much HP will be restored
     score = Battle::AI::Handlers.apply_move_effect_score("HealUserHalfOfTotalHP",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     if user.has_active_ability?(:MEGASOL)
       score += 5
     else
@@ -67,6 +67,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnWeather",
       when :Sun, :HarshSun
         score += 5
       when :None, :StrongWinds
+        # Don't change the score
       else
         score -= 10
       end
@@ -84,7 +85,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserDependingOnSandstorm",
   proc { |score, move, user, ai, battle|
     # Consider how much HP will be restored
     score = Battle::AI::Handlers.apply_move_effect_score("HealUserHalfOfTotalHP",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     score += 5 if user.battler.effectiveWeather == :Sandstorm
     next score
   }
@@ -99,7 +100,7 @@ Battle::AI::Handlers::MoveEffectScore.add("HealUserHalfOfTotalHPLoseFlyingTypeTh
   proc { |score, move, user, ai, battle|
     # Consider how much HP will be restored
     score = Battle::AI::Handlers.apply_move_effect_score("HealUserHalfOfTotalHP",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     # User loses the Flying type this round
     # NOTE: Not worth considering and scoring for.
     next score
@@ -118,7 +119,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("CureTargetStatusHealUser
   proc { |score, move, user, target, ai, battle|
     # Consider how much HP will be restored
     score = Battle::AI::Handlers.apply_move_effect_score("HealUserHalfOfTotalHP",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     # Will cure target's status
     score += (target.wants_status_problem?(target.status)) ? 10 : -8
     next score
@@ -209,10 +210,10 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealUserByHalfOfDamageDo
   proc { |score, move, user, target, ai, battle|
     # Score for healing
     score = Battle::AI::Handlers.apply_move_effect_score("HealUserByHalfOfDamageDone",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     # Score for causing a burn
     score = Battle::AI::Handlers.apply_move_effect_score("BurnTarget",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score
   }
 )
@@ -279,7 +280,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("HealUserAndAlliesQuarter
   proc { |score, move, user, target, ai, battle|
     # Consider how much HP will be restored
     score = Battle::AI::Handlers.apply_move_effect_score("HealUserAndAlliesQuarterOfTotalHP",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     # Check whether an existing status problem will be removed
     if target.status != :NONE
       score += (target.wants_status_problem?(target.status)) ? -10 : 10

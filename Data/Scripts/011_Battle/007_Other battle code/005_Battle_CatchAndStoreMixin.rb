@@ -212,7 +212,7 @@ module Battle::CatchAndStoreMixin
       mod_catch_rate *= [(36 - (2 * pkmn.level)) / 10.0, 1].max
     end
     # Higher wild level penalty if the player doesn't have enough Gym Badges (Gen 8 only)
-    if Settings::NUM_BADGES_TO_NOT_MAKE_HIGHER_LEVEL_CAPTURES_HARDER > $player.badge_count
+    if $player.badge_count < Settings::NUM_BADGES_TO_NOT_MAKE_HIGHER_LEVEL_CAPTURES_HARDER
       max_player_level = 0
       allSameSideBattlers(0, true).each { |b| max_player_level = b.level if b.level > max_player_level }
       mod_catch_rate /= 10.0 if pkmn.level > max_player_level

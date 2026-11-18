@@ -483,11 +483,11 @@ class UI::Save < UI::BaseScreen
       @save_data[slot_index] = [file, this_save_data]
       @visuals.set_index(slot_index, true)
       # Announce the save success
-      show_message(_INTL("{1} saved the game.", $player.name)) {
+      show_message(_INTL("{1} saved the game.", $player.name)) do
         pbSEStop
         pbMEPlay("GUI save game")
         wait(1)
-      }
+      end
       @result = true
     else
       pbSEPlay("GUI save choice")

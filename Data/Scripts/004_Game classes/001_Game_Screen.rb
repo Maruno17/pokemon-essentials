@@ -112,7 +112,7 @@ class Game_Screen
     if $game_temp.in_battle
       (51..100).each { |i| @pictures[i].update }
     else
-      (1..50).each { |i|  @pictures[i].update }
+      (1..50).each { |i| @pictures[i].update }
     end
   end
 end

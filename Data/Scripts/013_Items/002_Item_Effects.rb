@@ -1099,7 +1099,7 @@ ItemHandlers::UsableOnPokemon.add(:FRESHSTARTMOCHI, proc { |item, pkmn|
   next pkmn.ev.any? { |stat, value| value > 0 }
 })
 ItemHandlers::UseOnPokemon.add(:FRESHSTARTMOCHI, proc { |item, qty, pkmn, screen|
-  if !pkmn.ev.any? { |stat, value| value > 0 }
+  if pkmn.ev.none? { |stat, value| value > 0 }
     screen.show_message(_INTL("It won't have any effect."))
     next false
   end

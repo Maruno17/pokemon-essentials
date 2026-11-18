@@ -13,7 +13,7 @@ class TilemapRenderer
       return bitmap if bitmap.height == SOURCE_TILE_HEIGHT
       expanded_format = (bitmap.height == SOURCE_TILE_HEIGHT * 6)
       wrap = false
-      if MAX_TEXTURE_SIZE < TILES_PER_AUTOTILE * SOURCE_TILE_HEIGHT
+      if TILES_PER_AUTOTILE * SOURCE_TILE_HEIGHT > MAX_TEXTURE_SIZE
         wrap = true   # Each autotile will occupy two columns instead of one
       end
       frames_count = [bitmap.width / (3 * SOURCE_TILE_WIDTH), 1].max

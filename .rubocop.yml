@@ -6,6 +6,11 @@ AllCops:
 # Layout
 #===============================================================================
 
+# Sometimes you want a multiline block's } at the end of a line of code and not
+# on a new line (e.g. if the first line of code is in the same line as the {).
+Layout/BlockEndNewline:
+  Enabled: false
+
 # We don't need empty lines in methods to separate "return if"s from later code.
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
@@ -180,6 +185,10 @@ Style/PreferredHashMethods:
 # Explicit returns help to show whether a method returns a value.
 Style/RedundantReturn:
   Enabled: false
+
+# Lets us always define Regexps with //.
+Style/RegexpLiteral:
+  AllowInnerSlashes: true
 
 # Enforcing the names of variables? To single letter ones? Just no.
 Style/SingleLineBlockParams:

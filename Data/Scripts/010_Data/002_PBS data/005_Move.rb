@@ -110,12 +110,14 @@ module GameData
         when "TypeAndPowerDependOnUserBerry"
           item_data = pkmn.item
           if item_data
+            ret = nil
             item_data.flags.each do |flag|
               next if !flag[/^NaturalGift_(\w+)_(?:\d+)$/i]
               typ = $~[1].to_sym
               ret = typ if GameData::Type.exists?(typ)
               break
             end
+            return ret if ret
           end
           return :NORMAL
         when "TypeDependsOnUserPlate"
@@ -237,8 +239,8 @@ module GameData
           return [((255 - pkmn.happiness) * 2 / 5).floor, 1].max
         when "PowerHigherWithLessPP"
           dmgs = [200, 80, 60, 50, 40]
-          ppLeft = [[(move&.pp || @total_pp) - 1, 0].max, dmgs.length - 1].min
-          return dmgs[ppLeft]
+          pp_left = ((move&.pp || @total_pp) - 1).clamp(0, dmgs.length - 1)
+          return dmgs[pp_left]
         end
       end
       return @power

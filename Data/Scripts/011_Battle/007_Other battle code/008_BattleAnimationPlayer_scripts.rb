@@ -21,27 +21,27 @@ end
 #===============================================================================
 
 # Makes the background graphics grayscale during the animation.
-AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("darkpulse") { |player, time|
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("darkpulse") do |player, time|
   ["battle_bg", "battle_bg2", "base_0", "base_1"].each do |sprite|
     next if !player.sprites[sprite]
     player.sprites[sprite].tone.set(0, 0, 0, 255)   # Grayscale
   end
-}
-AnimationPlayer::END_ANIMATION_SCRIPTS.add("darkpulse") { |player|
+end
+AnimationPlayer::END_ANIMATION_SCRIPTS.add("darkpulse") do |player|
   ["battle_bg", "battle_bg2", "base_0", "base_1"].each do |sprite|
     next if !player.sprites[sprite]
     player.sprites[sprite].tone.set(0, 0, 0, 0)   # Back to normal
   end
-}
+end
 
 #===============================================================================
 
 # Make each ParticleSprite spawned by an emitter a random color.
-AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("protect") { |player, time|
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("protect") do |player, time|
   colors = [
     [0, 0, 0, 0],          # White
     [32, 168, 248, 160],   # Blue
-    [32, 248, 168, 160],   # Green
+    [32, 248, 168, 160]    # Green
   ]
   player.emitters.each do |emitter|
     emitter.particle_sprites.each do |emit_particle|
@@ -50,7 +50,7 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("protect") { |player, time|
       emit_particle.emitter_params[:color_set] = true
     end
   end
-}
+end
 
 #===============================================================================
 
@@ -60,28 +60,27 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("protect") { |player, time|
 #       begins with a random angle that can't be referenced except by this code.
 # NOTE: Setting emit_particle's angle directly is fine because it doesn't change
 #       its angle after being emitted.
-AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("roost") { |player, time|
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("roost") do |player, time|
   player.emitters.each do |emitter|
     emitter.particle_sprites.each do |emit_particle|
       next if emit_particle.emitter_params[:angle_set]
-      if emit_particle.name[/Feather echo emitter (\d)/]
-        number = $~[1]
-        player.particle_sprites.each do |particle|
-          next if particle.name != "Feather " + number
-          emit_particle.sprite[0].angle = particle.sprite[0].angle
-          emit_particle.emitter_params[:angle_set] = true
-        end
+      next if !emit_particle.name[/Feather echo emitter (\d)/]
+      number = $~[1]
+      player.particle_sprites.each do |particle|
+        next if particle.name != "Feather " + number
+        emit_particle.sprite[0].angle = particle.sprite[0].angle
+        emit_particle.emitter_params[:angle_set] = true
       end
     end
   end
-}
+end
 
 #===============================================================================
 
 # Sets the Substitute doll's x coordinate to be the default x coordinate of the
 # position the user is in, rather than the user's x coordinate (which can vary
 # depending on the user's sprite metrics).
-AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("substitute") { |player, time|
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("substitute") do |player, time|
   player.particle_sprites.each do |particle|
     next if !particle.name[/Substitute/]
     side_size = 1
@@ -92,7 +91,7 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("substitute") { |player, time|
     end
     particle.sprite[0].x = Battle::Visuals.pbBattlerPosition(player.user.index, side_size)[0]
   end
-}
+end
 
 #===============================================================================
 
@@ -102,7 +101,7 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("substitute") { |player, time|
 # their original color from the ParticleSprite called "Hit circle #".
 # NOTE: Setting emit_particle's color directly is fine because it doesn't change
 #       its color after being emitted.
-AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("swift") { |player, time|
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("swift") do |player, time|
   player.emitters.each do |emitter|
     emitter.particle_sprites.each do |emit_particle|
       next if emit_particle.emitter_params[:color_set]
@@ -123,14 +122,14 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("swift") { |player, time|
       end
     end
   end
-}
+end
 
 #===============================================================================
 
 # Makes all battlers on the side opposite to the user glow purple temporarily.
 # The coloring starts at start_time, fades in, remains colored briefly then
 # fades away.
-AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("toxicspikes") { |player, time|
+AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("toxicspikes") do |player, time|
   next if !player.user   # Just in case; there should be a user
   start_time = 34 / 20.0
   next if time < start_time
@@ -149,12 +148,12 @@ AnimationPlayer::UPDATE_ANIMATION_SCRIPTS.add("toxicspikes") { |player, time|
     next if !sprite.is_a?(Battle::Visuals::BattlerSprite) || (sprite.index & 1) == side
     sprite.color.set(poison_color.red, poison_color.green, poison_color.blue, poison_color.alpha)
   end
-}
-AnimationPlayer::END_ANIMATION_SCRIPTS.add("toxicspikes") { |player|
+end
+AnimationPlayer::END_ANIMATION_SCRIPTS.add("toxicspikes") do |player|
   next if !player.user   # Just in case; there should be a user
   side = player.user.idxOwnSide
   player.visuals.sprites.each_pair do |id, sprite|
     next if !sprite.is_a?(Battle::Visuals::BattlerSprite) || (sprite.index & 1) == side
     sprite.color.set(0, 0, 0, 0)   # Back to normal
   end
-}
+end

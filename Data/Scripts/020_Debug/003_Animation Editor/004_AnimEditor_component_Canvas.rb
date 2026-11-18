@@ -67,7 +67,7 @@ class AnimationEditor::Canvas < Sprite
   def initialize_bitmaps
     # Emitter bitmap
     btmp_size = 16
-    btmp_graphic = %w(
+    btmp_graphic = %w[
       . . . . . . . . . . . . . . . ~
       . . . . . . . . . . . . . . ~ X
       . . . . . . . . . . . . . . ~ X
@@ -84,7 +84,7 @@ class AnimationEditor::Canvas < Sprite
       . . . . . . . . . . . . . ~ X X
       . ~ ~ ~ ~ ~ ~ ~ ~ ~ . . ~ X ~ ~
       ~ X X X X X X X X X ~ . ~ X ~ X
-    )
+    ]
     btmp = Bitmap.new(btmp_size * 2, btmp_size * 2)
     red_color = Color.red
     white_color = Color.white
@@ -446,7 +446,7 @@ class AnimationEditor::Canvas < Sprite
   end
 
   def refresh_battler_graphics
-    if !@user_sprite_name || !@user_sprite_name || @user_sprite_name != @settings[:anim_editor][:user_sprite_name]
+    if !@user_bitmap_front || !@user_sprite_name || @user_sprite_name != @settings[:anim_editor][:user_sprite_name]
       @user_sprite_name = @settings[:anim_editor][:user_sprite_name]
       @user_bitmap_front_name = GameData::Species.front_sprite_filename(@user_sprite_name)
       @user_bitmap_back_name = GameData::Species.back_sprite_filename(@user_sprite_name)
@@ -527,13 +527,11 @@ class AnimationEditor::Canvas < Sprite
     case particle[:name]
     when "User"
       spr = @battler_sprites[user_index]
-      raise _INTL("Sprite for particle {1} not found somehow (battler index {2}).",
-                  particle[:name], user_index) if !spr
+      raise _INTL("Sprite for particle {1} not found somehow (battler index {2}).", particle[:name], user_index) if !spr
       frame = @battler_frame_sprites[user_index]
     when "Target"
       spr = @battler_sprites[target_idx]
-      raise _INTL("Sprite for particle {1} not found somehow (battler index {2}).",
-                  particle[:name], target_idx) if !spr
+      raise _INTL("Sprite for particle {1} not found somehow (battler index {2}).", particle[:name], target_idx) if !spr
       frame = @battler_frame_sprites[target_idx]
     else
       create_particle_sprite(index, target_idx)
@@ -1019,7 +1017,7 @@ class AnimationEditor::Canvas < Sprite
     @battler_frame_sprites.each_with_index do |sprite, index|
       next if !sprite || sprite.disposed? || !sprite.visible
       next if !mouse_in_sprite?(sprite, mouse_x, mouse_y)
-      dist = (sprite.x - mouse_x) ** 2 + (sprite.y - mouse_y) ** 2
+      dist = ((sprite.x - mouse_x)**2) + ((sprite.y - mouse_y)**2)
       next if nearest_distance >= 0 && nearest_distance < dist
       if index == user_index
         nearest_index = @anim[:particles].index { |particle| particle[:name] == "User" }
@@ -1033,7 +1031,7 @@ class AnimationEditor::Canvas < Sprite
       sprites.each do |spr|
         next if !spr || spr.disposed? || !spr.visible
         next if !mouse_in_sprite?(spr, mouse_x, mouse_y)
-        dist = (spr.x - mouse_x) ** 2 + (spr.y - mouse_y) ** 2
+        dist = ((spr.x - mouse_x)**2) + ((spr.y - mouse_y)**2)
         next if nearest_distance >= 0 && nearest_distance < dist
         nearest_index = index
         nearest_distance = dist
@@ -1075,11 +1073,6 @@ class AnimationEditor::Canvas < Sprite
       x_move = increment
     end
     if x_move != 0
-      if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-        sprite, frame = get_sprite_and_frame(@selected_particle, first_target_index)
-      else
-        sprite, frame = get_sprite_and_frame(@selected_particle)
-      end
       x_move *= -1 if particle[:polar_coordinates]
       if (particle[:emitter_type] || :none) == :none
         property = (particle[:polar_coordinates]) ? :theta : :x
@@ -1098,11 +1091,6 @@ class AnimationEditor::Canvas < Sprite
       y_move = increment
     end
     if y_move != 0
-      if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-        sprite, frame = get_sprite_and_frame(@selected_particle, first_target_index)
-      else
-        sprite, frame = get_sprite_and_frame(@selected_particle)
-      end
       y_move *= -1 if particle[:polar_coordinates]
       if (particle[:emitter_type] || :none) == :none
         property = (particle[:polar_coordinates]) ? :r : :y
@@ -1149,9 +1137,9 @@ class AnimationEditor::Canvas < Sprite
     return if @captured[0] == new_canvas_x && @captured[1] == new_canvas_y
     particle = @anim[:particles][@selected_particle]
     if GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(particle[:focus])
-      sprite, frame = get_sprite_and_frame(@selected_particle, first_target_index)
+      sprite, _frame = get_sprite_and_frame(@selected_particle, first_target_index)
     else
-      sprite, frame = get_sprite_and_frame(@selected_particle)
+      sprite, _frame = get_sprite_and_frame(@selected_particle)
     end
     spr2 = get_second_sprite(@selected_particle, first_target_index)
     # Check if moved at all (in polar coordinates)
@@ -1161,6 +1149,7 @@ class AnimationEditor::Canvas < Sprite
       new_pos_y = new_canvas_y
       case particle[:focus]
       when :foreground, :midground, :background
+        # No focus to shift the sprite relative to
       when :user
         new_pos_x -= @user_coords[0]
         new_pos_y -= @user_coords[1]
@@ -1229,7 +1218,7 @@ class AnimationEditor::Canvas < Sprite
         new_r = new_pos_y.abs
         new_theta = (new_pos_y > 0) ? 270 : 90
       else
-        new_r = Math.sqrt((new_pos_x ** 2) + (new_pos_y ** 2)).round
+        new_r = Math.sqrt((new_pos_x**2) + (new_pos_y**2)).round
         new_theta = (Math.atan(-new_pos_y / new_pos_x.to_f) * 180 / Math::PI).round
         new_theta += 180 if new_pos_x < 0
         new_theta += 360 if new_theta < 0
@@ -1253,6 +1242,7 @@ class AnimationEditor::Canvas < Sprite
       new_pos_x = new_canvas_x
       case particle[:focus]
       when :foreground, :midground, :background
+        # No focus to shift the sprite relative to
       when :user, :user_position
         new_pos_x -= @user_coords[0]
       when :target, :target_position
@@ -1303,6 +1293,7 @@ class AnimationEditor::Canvas < Sprite
       new_pos_y = new_canvas_y
       case particle[:focus]
       when :foreground, :midground, :background
+        # No focus to shift the sprite relative to
       when :user
         new_pos_y -= @user_coords[1]
       when :user_position
@@ -1401,12 +1392,10 @@ class AnimationEditor::Canvas < Sprite
     case @anim[:particles][@selected_particle][:name]
     when "User"
       target = @battler_sprites[user_index]
-      raise _INTL("Sprite for particle \"{1}\" not found somehow.",
-                  @anim[:particles][@selected_particle][:name]) if !target
+      raise _INTL("Sprite for particle \"{1}\" not found somehow.", @anim[:particles][@selected_particle][:name]) if !target
     when "Target"
       target = @battler_sprites[target_indices[0]]
-      raise _INTL("Sprite for particle \"{1}\" not found somehow.",
-                  @anim[:particles][@selected_particle][:name]) if !target
+      raise _INTL("Sprite for particle \"{1}\" not found somehow.", @anim[:particles][@selected_particle][:name]) if !target
     else
       target = @particle_sprites[@selected_particle]
       if target && GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(@anim[:particles][@selected_particle][:focus])

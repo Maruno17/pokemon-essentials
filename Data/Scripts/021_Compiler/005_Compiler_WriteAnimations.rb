@@ -70,17 +70,15 @@ module Compiler
           # Write particle commands (in keyframe order)
           cmds = element.get_particle_property_for_PBS("AllCommands", i)
           cmds.each do |cmd|
+            f.write(sprintf("    %s = ", cmd[0]))
             if cmd[2] == 0   # Duration of 0
-              f.write(sprintf("    %s = ", cmd[0]))
               new_cmd = cmd[1..-1]
               new_cmd.delete_at(1)
               pbWriteCsvRecord(new_cmd, f, sub_schema[cmd[0]])
-              f.write("\r\n")
             else   # Has a duration
-              f.write(sprintf("    %s = ", cmd[0]))
               pbWriteCsvRecord(cmd[1..-1], f, sub_schema[cmd[0]])
-              f.write("\r\n")
             end
+            f.write("\r\n")
           end
         end
       end

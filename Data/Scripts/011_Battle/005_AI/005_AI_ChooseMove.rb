@@ -284,7 +284,7 @@ class Battle::AI
       # Modify the score according to the move's effect
       old_score = score
       score = Battle::AI::Handlers.apply_move_effect_score(@move.function_code,
-         score, @move, @user, self, @battle)
+                                                           score, @move, @user, self, @battle)
       PBDebug.log_score_change(score - old_score, "function code modifier (generic)")
       # Modify the score according to various other effects
       score = Battle::AI::Handlers.apply_general_move_score_modifiers(
@@ -313,11 +313,11 @@ class Battle::AI
       # Modify the score according to the move's effect against the target
       old_score = score
       score = Battle::AI::Handlers.apply_move_effect_against_target_score(@move.function_code,
-         score, @move, @user, @target, self, @battle)
+                                                                          score, @move, @user, @target, self, @battle)
       PBDebug.log_score_change(score - old_score, "function code modifier (against target)")
       # Modify the score according to various other effects against the target
       score = Battle::AI::Handlers.apply_general_move_against_target_score_modifiers(
-         score, @move, @user, @target, self, @battle)
+        score, @move, @user, @target, self, @battle)
     end
     # Add the score against the target to the overall score
     target_data = @move.pbTarget(@user.battler)

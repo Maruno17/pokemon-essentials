@@ -110,7 +110,7 @@ class Battle::Battler
     if Battle::AbilityEffects.triggerStatusImmunityNonIgnorable(self.ability, self, newStatus)
       immuneByAbility = true
     elsif abilityActive? && (self_inflicted || !beingMoldBroken?) &&
-       Battle::AbilityEffects.triggerStatusImmunity(self.ability, self, newStatus)
+          Battle::AbilityEffects.triggerStatusImmunity(self.ability, self, newStatus)
       immuneByAbility = true
     else
       allAllies.each do |b|

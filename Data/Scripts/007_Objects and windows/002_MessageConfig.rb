@@ -231,9 +231,7 @@ def pbPositionNearMsgWindow(cmdwindow, msgwindow, side)
     case side
     when :left
       cmdwindow.x = msgwindow.x
-    when :right
-      cmdwindow.x = msgwindow.x + msgwindow.width - cmdwindow.width
-    else
+    else   # :right
       cmdwindow.x = msgwindow.x + msgwindow.width - cmdwindow.width
     end
   else

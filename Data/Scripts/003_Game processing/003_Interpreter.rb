@@ -60,6 +60,7 @@ class Interpreter
       return
     end
     # Check all map events for one that wants to start, and set it up
+    event_set_up = false
     $game_map.events.each_value do |event|
       next if !event.starting
       if event.trigger < 3   # Isn't autorun or parallel processing
@@ -67,13 +68,15 @@ class Interpreter
         event.clear_starting
       end
       setup(event.list, event.id, event.map.map_id)
-      return
+      event_set_up = true
+      break
     end
+    return if event_set_up
     # Check all common events for one that is autorun, and set it up
     $data_common_events.compact.each do |common_event|
       next if common_event.trigger != 1 || !$game_switches[common_event.switch_id]
       setup(common_event.list, 0)
-      return
+      break
     end
   end
 
@@ -105,12 +108,14 @@ class Interpreter
       # Do nothing if any event or the player is in the middle of a move route
       if @move_route_waiting
         return if $game_player.move_route_forcing
-        $game_map.events.each_value do |event|
-          return if event.move_route_forcing
-        end
+        return if $game_map.events.any? { |id, event| event.move_route_forcing }
+        follower_forcing = false
         $game_temp.followers.each_follower do |event, follower|
-          return if event.move_route_forcing
+          next if !event.move_route_forcing
+          follower_forcing = true
+          break
         end
+        return if follower_forcing
         @move_route_waiting = false
       end
       # Do nothing if the player is jumping out of surfing
@@ -285,7 +290,7 @@ class Interpreter
 
   # Helper function that shows a picture in a script.
   def pbShowPicture(number, name, origin, x, y, zoomX = 100, zoomY = 100, opacity = 255, blendType = 0)
-    number += ($game_temp.in_battle ? 50 : 0)
+    number += ($game_temp.in_battle) ? 50 : 0
     $game_screen.pictures[number].show(name, origin, x, y, zoomX, zoomY, opacity, blendType)
   end
 

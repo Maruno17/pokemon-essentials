@@ -216,13 +216,11 @@ def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheig
   if havenl
     firstspace = -1
     characters.length.times do |i|
-      if characters[i][5] != false # If not a character
+      if characters[i][5] != false   # If not a character
         firstspace = -1
       elsif (characters[i][0] == "\n" || isWaitChar(characters[i][0])) &&
             firstspace >= 0
-        (firstspace...i).each do |j|
-          characters[j] = nil
-        end
+        (firstspace...i).each { |j| characters[j] = nil }
         firstspace = -1
       elsif characters[i][0][/[ \r\t]/]
         firstspace = i if firstspace < 0
@@ -231,9 +229,7 @@ def getFormattedTextFast(bitmap, xDst, yDst, widthDst, heightDst, text, lineheig
       end
     end
     if firstspace > 0
-      (firstspace...characters.length).each do |j|
-        characters[j] = nil
-      end
+      (firstspace...characters.length).each { |j| characters[j] = nil }
     end
     characters.compact!
   end
@@ -267,7 +263,7 @@ def getLastColors(colorstack, opacitystack, defaultcolors)
   if opacity != 255
     colors = [
       Color.new(colors[0].red, colors[0].green, colors[0].blue, colors[0].alpha * opacity / 255),
-      colors[1] ? Color.new(colors[1].red, colors[1].green, colors[1].blue, colors[1].alpha * opacity / 255) : nil
+      (colors[1]) ? Color.new(colors[1].red, colors[1].green, colors[1].blue, colors[1].alpha * opacity / 255) : nil
     ]
   end
   return colors
@@ -650,13 +646,15 @@ def getFormattedText(bitmap, xDst, yDst, widthDst, heightDst, text, lineheight =
     if heightDst < 0 || texty < yDst + heightDst
       havenl = true if !graphic && isWaitChar(textchars[position])
       extraspace = (!graphic && italiccount > 0) ? 2 + (width / 2) : 2
-      characters.push([graphic || textchars[position],
-                       x + xStart, texty, width + extraspace, lineheight,
-                       graphic ? true : false,
-                       (boldcount > 0), (italiccount > 0), colors[0], colors[1],
-                       (underlinecount > 0), (strikecount > 0), fontname, fontsize,
-                       position, graphicRect,
-                       ((outlinecount > 0) ? 1 : 0) + ((outline2count > 0) ? 2 : 0)]) if graphic || textchars[position]
+      if graphic || textchars[position]
+        characters.push([graphic || textchars[position],
+                         x + xStart, texty, width + extraspace, lineheight,
+                         graphic ? true : false,
+                         (boldcount > 0), (italiccount > 0), colors[0], colors[1],
+                         (underlinecount > 0), (strikecount > 0), fontname, fontsize,
+                         position, graphicRect,
+                         ((outlinecount > 0) ? 1 : 0) + ((outline2count > 0) ? 2 : 0)])
+      end
       charactersInternal.push([alignment, y, xStart, textchars[position], extraspace])
     end
     x += width

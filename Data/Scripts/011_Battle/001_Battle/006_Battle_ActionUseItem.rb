@@ -15,7 +15,7 @@ class Battle
     if battler && battler.effects[PBEffects::Embargo] > 0
       if showMessages
         visuals.pbDisplay(_INTL("Embargo's effect prevents the item's use on {1}!",
-                              battler.pbThis(true)))
+                                battler.pbThis(true)))
       end
       return false
     end
@@ -76,7 +76,6 @@ class Battle
 
   def pbUseItemMessage(item, trainer_name, battler = nil)
     item_data = GameData::Item.get(item)
-    one_target_of_many =
     item_name = item_data.portion_name
     if battler && !battler.allAllies.empty?
       # Specify which Pokémon the item was used on (only for Pokémon in battle,

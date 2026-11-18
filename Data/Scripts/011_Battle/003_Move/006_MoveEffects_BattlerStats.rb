@@ -101,7 +101,7 @@ class Battle::Move::MaxUserAttackLoseHalfOfTotalHP < Battle::Move
       user.statsDropped = true
       @battle.pbCommonAnimation("StatDown", user)
       @battle.pbDisplay(_INTL("{1} cut its own HP and minimized its {2}!",
-         user.pbThis, GameData::Stat.get(@statUp[0]).name))
+                              user.pbThis, GameData::Stat.get(@statUp[0]).name))
     else
       user.stagesChangeRecord[0][@statUp[0]] ||= 0
       user.stagesChangeRecord[0][@statUp[0]] += Battle::Battler::STAT_STAGE_MAXIMUM - user.stages[@statUp[0]]
@@ -109,7 +109,7 @@ class Battle::Move::MaxUserAttackLoseHalfOfTotalHP < Battle::Move
       user.statsRaisedThisRound = true
       @battle.pbCommonAnimation("StatUp", user)
       @battle.pbDisplay(_INTL("{1} cut its own HP and maximized its {2}!",
-         user.pbThis, GameData::Stat.get(@statUp[0]).name))
+                              user.pbThis, GameData::Stat.get(@statUp[0]).name))
     end
     user.pbItemHPHealCheck
   end

@@ -436,10 +436,10 @@ class SafariBattle
       @visuals.pbCommonAnimation(weather_data.animation) if weather_data
       safariBall = GameData::Item.get(:SAFARIBALL).id
       catch_rate = pkmn.species_data.catch_rate
-      catchFactor  = (catch_rate * 100) / 1275
-      catchFactor  = [[catchFactor, 3].max, 20].min
+      catchFactor = (catch_rate * 100) / 1275
+      catchFactor = catchFactor.clamp(3, 20)
       escapeFactor = (pbEscapeRate(catch_rate) * 100) / 1275
-      escapeFactor = [[escapeFactor, 2].max, 20].min
+      escapeFactor = escapeFactor.clamp(2, 20)
       loop do
         cmd = @visuals.pbSafariCommandMenu(0)
         case cmd
@@ -453,7 +453,7 @@ class SafariBattle
           rare = (catchFactor * 1275) / 100
           if safariBall
             pbThrowPokeBall(1, safariBall, rare, true)
-            if @caughtPokemon.length > 0
+            if !@caughtPokemon.empty?
               pbRecordAndStoreCaughtPokemon
               @decision = Battle::Outcome::CATCH
             end
@@ -475,8 +475,8 @@ class SafariBattle
         else
           next
         end
-        catchFactor  = [[catchFactor, 3].max, 20].min
-        escapeFactor = [[escapeFactor, 2].max, 20].min
+        catchFactor  = catchFactor.clamp(3, 20)
+        escapeFactor = escapeFactor.clamp(2, 20)
         # End of round
         if !decided?
           if @ballCount <= 0

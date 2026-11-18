@@ -534,7 +534,7 @@ MenuHandlers.add(:debug_menu, :set_battle_rules, {
         end
       when :backdrop_name, :base_name
         text = pbMessageFreeText(_INTL("Enter a value for battle rule \"{1}\".", rule),
-                                    applied_rules[rule_sym] || "", false, 100, Graphics.width)
+                                 applied_rules[rule_sym] || "", false, 100, Graphics.width)
         applied_rules[rule_sym] = (text && text != "") ? text : nil
       when :outcome_variable
         params = ChooseNumberParams.new

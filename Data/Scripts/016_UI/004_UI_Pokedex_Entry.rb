@@ -8,7 +8,7 @@ class UI::PokedexEntryVisuals < UI::BaseVisuals
   GRAPHICS_FOLDER     = "Pokedex/"   # Subfolder in Graphics/UI
   BACKGROUND_FILENAME = "bg_entry"
   TEXT_COLOR_THEMES   = {   # Themes not in DEFAULT_TEXT_COLOR_THEMES
-    :white        => [Color.new(248, 248, 248), Color.new(0, 0, 0)],
+    :white => [Color.new(248, 248, 248), Color.new(0, 0, 0)]
   }
   POKEDEX_TYPE_ICON_SIZE = [96, 32]
   MAP_TOP_LEFT           = [16, 48]
@@ -352,7 +352,6 @@ class UI::PokedexEntryVisuals < UI::BaseVisuals
     @viewable_forms.clear
     @form_index = 0
     has_multiple_forms = false
-    has_gender_differences = (GameData::Species.front_sprite_filename(@species, 0, 0) != GameData::Species.front_sprite_filename(@species, 0, 1))
     # Find all genders/forms/shininesses of @species that have been seen
     GameData::Species.each_form_for_species(@species) do |sp|
       next if sp.form != 0 && (!sp.real_form_name || sp.real_form_name.empty?)   # Unnamed form
@@ -396,7 +395,7 @@ class UI::PokedexEntryVisuals < UI::BaseVisuals
     @viewable_forms.sort! do |a, b|
       if a[2] == b[2]   # Same form
         if a[1] == b[1]   # Same gender
-          (a[3] ? 1 : 0) <=> (b[3] ? 1 : 0)   # Sort by shininess
+          ((a[3]) ? 1 : 0) <=> ((b[3]) ? 1 : 0)   # Sort by shininess
         else
           a[1] <=> b[1]   # Sort by gender
         end
@@ -492,13 +491,13 @@ class UI::PokedexEntryVisuals < UI::BaseVisuals
     if @sprites[:back_form]
       @sprites[:back_form].setSpeciesBitmap(@species, @gender, @form, @shiny, false, true)
       metrics_data = GameData::SpeciesMetrics.get_species_form(@species, @form)
-      @sprites[:back_form].y = 256 + metrics_data.back_sprite[1] * 2
+      @sprites[:back_form].y = 256 + (metrics_data.back_sprite[1] * 2)
     end
     @sprites[:icon_form]&.pbSetParams(@species, @gender, @form, @shiny)
   end
 
   def refresh_sprite_visibility
-    @sprites[:pokemon].visible     = (@page == :info)
+    @sprites[:pokemon].visible = (@page == :info)
     @sprites[:area_map]&.visible        = (@page == :area)
     @sprites[:area_map_extras]&.visible = (@page == :area)
     @sprites[:area_highlights]&.visible = (@page == :area)

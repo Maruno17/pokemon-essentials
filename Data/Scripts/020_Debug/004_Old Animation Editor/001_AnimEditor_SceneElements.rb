@@ -210,8 +210,9 @@ module BattleAnimationEditor
         @selected = @start + i
         @changed = true
         refresh
-        return
+        break
       end
+      return if @changed
       # Left arrow
       if left.contains?(mousepos[0], mousepos[1])
         if repeattime > 0.75

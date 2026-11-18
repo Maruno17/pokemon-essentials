@@ -593,7 +593,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveUserBindingAndEntryHazards",
     # Score for raising user's Speed
     if Settings::MECHANICS_GENERATION >= 8
       score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserSpeed1",
-         score, move, user, ai, battle)
+                                                           score, move, user, ai, battle)
     end
     # Score for removing various effects
     score += 10 if user.effects[PBEffects::Trapping] > 0
@@ -682,7 +682,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTur
     score -= 20 * ally_hp_lost / foe_hp_lost
     # Recharging
     score = Battle::AI::Handlers.apply_move_effect_score("AttackAndSkipNextTurn",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score
   }
 )
@@ -693,7 +693,7 @@ Battle::AI::Handlers::MoveEffectScore.add("AllBattlersLoseHalfHPUserSkipsNextTur
 Battle::AI::Handlers::MoveEffectScore.add("UserLosesHalfHP",
   proc { |score, move, user, ai, battle|
     score = Battle::AI::Handlers.apply_move_effect_score("UserLosesHalfOfTotalHP",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score
   }
 )
@@ -747,11 +747,11 @@ Battle::AI::Handlers::MoveEffectScore.add("RemoveAllScreensAndSafeguard",
     end
     # Prefer removing opposing screens
     score = Battle::AI::Handlers.apply_move_effect_score("RemoveScreens",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     # Don't prefer removing same side screens
     ai.each_foe_battler(user.side) do |b, i|
       score -= Battle::AI::Handlers.apply_move_effect_score("RemoveScreens",
-         0, move, b, ai, battle)
+                                                            0, move, b, ai, battle)
       break
     end
     # Safeguard

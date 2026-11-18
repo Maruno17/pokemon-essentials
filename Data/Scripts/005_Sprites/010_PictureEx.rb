@@ -147,12 +147,10 @@ class PictureEx
 
   def callback(cb)
     case cb
-    when Proc
+    when Proc, Method
       cb.call(self)
     when Array
       cb[0].method(cb[1]).call(self, *cb[2])
-    when Method
-      cb.call(self)
     end
   end
 

@@ -1010,6 +1010,7 @@ module RandomDungeon
             tile_version = (tile_type.is_a?(Array)) ? tile_type[1] : -1
             case real_tile_type
             when :ignore
+              # Ignore the layer
             when :none
               map.data[i, j, layer] = 0
             when :void_decoration_large, :floor_decoration_large

@@ -313,12 +313,14 @@ class Spriteset_Map
   end
 
   def addUserSprite(new_sprite)
+    added = false
     @usersprites.each_with_index do |sprite, i|
       next if sprite && !sprite.disposed?
       @usersprites[i] = new_sprite
-      return
+      added = true
+      break
     end
-    @usersprites.push(new_sprite)
+    @usersprites.push(new_sprite) if !added
   end
 
   def dispose

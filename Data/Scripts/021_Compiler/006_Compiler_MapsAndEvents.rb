@@ -154,7 +154,7 @@ module Compiler
       next if GameData::MapMetadata.exists?(map_id)
       data_hash = {
         :id        => map_id,
-        :real_name => map_infos[map_id].name,
+        :real_name => map_infos[map_id].name
       }
       GameData::MapMetadata.register(data_hash)
       added_count += 1

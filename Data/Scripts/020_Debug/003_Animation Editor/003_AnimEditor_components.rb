@@ -38,7 +38,7 @@ class AnimationEditor::MenuBar < UIControls::BaseContainer
     btmp_width = (SETTINGS_BUTTON_WIDTH / 2) - UIControls::BitmapButton::BUTTON_FRAME_THICKNESS   # 9
     btmp_height = (SETTINGS_BUTTON_HEIGHT / 2) - UIControls::BitmapButton::BUTTON_FRAME_THICKNESS   # 9
     # The top left quarter of a cog
-    btmp_graphic = %w(
+    btmp_graphic = %w[
       . . . . . . . . X
       . . . . . . . X X
       . . X X X . . X X
@@ -48,7 +48,7 @@ class AnimationEditor::MenuBar < UIControls::BaseContainer
       . . . . X X X X .
       . X X X X X X . .
       X X X X X X . . .
-    )
+    ]
     @bitmaps[:settings] = Bitmap.new(btmp_width * 2, btmp_height * 2) if !@bitmaps[:settings]
     btmp = @bitmaps[:settings]
     icon_color = get_color_of(:text)
@@ -218,7 +218,7 @@ class AnimationEditor::PlayControls < UIControls::BaseContainer
     loop_btmp_size = LOOP_BUTTON_SIZE - (UIControls::BitmapButton::BUTTON_FRAME_THICKNESS * 2)   # 16
     @bitmaps[:play_once] = Bitmap.new(loop_btmp_size, loop_btmp_size) if !@bitmaps[:play_once]
     @bitmaps[:play_once].clear
-    %w(
+    %w[
       . . . . . . . . . . . . . . . .
       . . . . . . . . . . . . . X X .
       . . . . . . . . . . . . . X X .
@@ -236,14 +236,14 @@ class AnimationEditor::PlayControls < UIControls::BaseContainer
       . . . . . . . . . . . . . X X .
       . . . . . . . . . . . . . . . .
 
-    ).each_with_index do |val, i|
+    ].each_with_index do |val, i|
       next if val == "."
       @bitmaps[:play_once].fill_rect(i % loop_btmp_size, i / loop_btmp_size, 1, 1, icon_color)
     end
     # Loop button (looping)
     @bitmaps[:play_loop] = Bitmap.new(loop_btmp_size, loop_btmp_size) if !@bitmaps[:play_loop]
     @bitmaps[:play_loop].clear
-    %w(
+    %w[
       . . . . . . . . . . . . . . . .
       . . . . . . . . . X X . . . . .
       . . . . . . . . . X X X . . . .
@@ -260,7 +260,7 @@ class AnimationEditor::PlayControls < UIControls::BaseContainer
       . . . . X X X . . . . . . . . .
       . . . . . X X . . . . . . . . .
       . . . . . . . . . . . . . . . .
-    ).each_with_index do |val, i|
+    ].each_with_index do |val, i|
       next if val == "."
       @bitmaps[:play_loop].fill_rect(i % loop_btmp_size, i / loop_btmp_size, 1, 1, icon_color)
     end
@@ -381,7 +381,7 @@ class AnimationEditor::PlayControls < UIControls::BaseContainer
   def update
     super
     if @changed_controls
-      @changed_controls.keys.each { |key| make_control_change(key) }
+      @changed_controls.each_key { |key| make_control_change(key) }
       @changed_controls = nil if @changed_controls.empty?
     end
   end
@@ -429,9 +429,9 @@ class AnimationEditor::BatchEdits < UIControls::BaseContainer
                    UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, "<"))
     add_control_at(:shift_all_right, CONTROL_X + LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING, ctrl_y + BUTTON_Y_OFFSET,
                    UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, ">"))
-    add_control_at(:shift_all_after_left, CONTROL_X + (LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 2, ctrl_y + BUTTON_Y_OFFSET,
+    add_control_at(:shift_all_after_left, CONTROL_X + ((LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 2), ctrl_y + BUTTON_Y_OFFSET,
                    UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, "|<"))
-    add_control_at(:shift_all_after_right, CONTROL_X + (LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 3, ctrl_y + BUTTON_Y_OFFSET,
+    add_control_at(:shift_all_after_right, CONTROL_X + ((LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 3), ctrl_y + BUTTON_Y_OFFSET,
                    UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, "|>"))
     ctrl_y += LINE_SPACING
     # Shift selected particle
@@ -441,26 +441,26 @@ class AnimationEditor::BatchEdits < UIControls::BaseContainer
                    UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, "<"))
     add_control_at(:shift_one_right, CONTROL_X + LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING, ctrl_y + BUTTON_Y_OFFSET,
                    UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, ">"))
-    add_control_at(:shift_one_after_left, CONTROL_X + (LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 2, ctrl_y + BUTTON_Y_OFFSET,
+    add_control_at(:shift_one_after_left, CONTROL_X + ((LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 2), ctrl_y + BUTTON_Y_OFFSET,
                    UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, "|<"))
-    add_control_at(:shift_one_after_right, CONTROL_X + (LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 3, ctrl_y + BUTTON_Y_OFFSET,
+    add_control_at(:shift_one_after_right, CONTROL_X + ((LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 3), ctrl_y + BUTTON_Y_OFFSET,
                    UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, "|>"))
     ctrl_y += LINE_SPACING
     # Shift selected row
     add_control_at(:shift_row_label, LABEL_X, ctrl_y,
-                  UIControls::Label.new(label_width, LINE_SPACING, @viewport, _INTL("Selected row")))
+                   UIControls::Label.new(label_width, LINE_SPACING, @viewport, _INTL("Selected row")))
     add_control_at(:shift_row_left, CONTROL_X, ctrl_y + BUTTON_Y_OFFSET,
-                  UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, "<"))
+                   UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, "<"))
     add_control_at(:shift_row_right, CONTROL_X + LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING, ctrl_y + BUTTON_Y_OFFSET,
-                  UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, ">"))
-    add_control_at(:shift_row_after_left, CONTROL_X + (LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 2, ctrl_y + BUTTON_Y_OFFSET,
+                   UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, ">"))
+    add_control_at(:shift_row_after_left, CONTROL_X + ((LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 2), ctrl_y + BUTTON_Y_OFFSET,
                    UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, "|<"))
-    add_control_at(:shift_row_after_right, CONTROL_X + (LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 3, ctrl_y + BUTTON_Y_OFFSET,
+    add_control_at(:shift_row_after_right, CONTROL_X + ((LEFT_RIGHT_BUTTON_WIDTH + BUTTON_SPACING) * 3), ctrl_y + BUTTON_Y_OFFSET,
                    UIControls::Button.new(LEFT_RIGHT_BUTTON_WIDTH, BUTTON_HEIGHT, @viewport, "|>"))
     ctrl_y += LINE_SPACING
     # Command values header
     add_control_at(:command_values_label, LABEL_X, ctrl_y,
-                  UIControls::Label.new(@width, LINE_SPACING, @viewport, _INTL("Command values")))
+                   UIControls::Label.new(@width, LINE_SPACING, @viewport, _INTL("Command values")))
     get_control(:command_values_label).underlined = true
     ctrl_y += LINE_SPACING
     # Edit command values button

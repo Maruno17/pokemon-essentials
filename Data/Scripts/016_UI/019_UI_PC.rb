@@ -187,6 +187,7 @@ module UI::PC
       break if command < 0
       case commands.keys[command]
       when :organize
+        # Can always organize boxes
       when :withdraw
         if $PokemonStorage.party_full?
           pbMessage(_INTL("Your party is full!"))

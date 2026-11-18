@@ -60,7 +60,7 @@ class Battle
       pbMessageOnRecall(b)
       # Pursuit interrupts switching
       pbPursuit(b.index)
-      return if decided?
+      break if decided?
       # Switch Pokémon
       allBattlers(true).each do |b2|
         b2.droppedBelowHalfHP = false
@@ -90,8 +90,9 @@ class Battle
       else
         next
       end
-      return if decided?
+      break if decided?
     end
+    return if decided?
     checkStatChangeResponses
     pbCalculatePriority if Settings::RECALCULATE_TURN_ORDER_AFTER_SPEED_CHANGES
   end

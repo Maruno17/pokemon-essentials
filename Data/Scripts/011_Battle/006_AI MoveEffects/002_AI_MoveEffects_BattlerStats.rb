@@ -489,7 +489,7 @@ Battle::AI::Handlers::MoveEffectScore.add("RaiseUserAtkSpd1RemoveEntryHazardsAnd
   proc { |score, move, user, ai, battle|
     # Score for raising user's Attack and Speed
     score = Battle::AI::Handlers.apply_move_effect_score("RaiseUserAtkSpd1",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     # Score for removing substitutes
     battle.allBattlers.each do |b|
       next if b.effects[PBEffects::Substitute] == 0

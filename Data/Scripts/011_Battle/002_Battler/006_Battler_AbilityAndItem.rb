@@ -421,9 +421,8 @@ class Battle::Battler
     return if fainted?
     return if !item_to_use && !itemActive?
     itm = item_to_use || self.item
-    if Battle::ItemEffects.triggerOnEndOfUsingMove(itm, self, @battle, !item_to_use.nil?)
-      pbHeldItemTriggered(itm, item_to_use.nil?, fling)
-    elsif Battle::ItemEffects.triggerOnEndOfUsingMoveStatRestore(itm, self, @battle, !item_to_use.nil?)   # White Herb
+    if Battle::ItemEffects.triggerOnEndOfUsingMove(itm, self, @battle, !item_to_use.nil?) ||
+       Battle::ItemEffects.triggerOnEndOfUsingMoveStatRestore(itm, self, @battle, !item_to_use.nil?)   # White Herb
       pbHeldItemTriggered(itm, item_to_use.nil?, fling)
     end
   end

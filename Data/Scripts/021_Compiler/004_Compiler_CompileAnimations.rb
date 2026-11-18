@@ -111,12 +111,11 @@ module Compiler
           key = $~[1]
           if schema[key]   # Property of the animation
             value = get_csv_record($~[2], schema[key])
+            value = nil if value.is_a?(Array) && value.empty?
             if schema[key][1][0] == "^"
-              value = nil if value.is_a?(Array) && value.empty?
               data_hash[schema[key][0]] ||= []
               data_hash[schema[key][0]].push(value) if value
             else
-              value = nil if value.is_a?(Array) && value.empty?
               data_hash[schema[key][0]] = value
             end
           elsif sub_schema[key]   # Property of a particle
@@ -124,12 +123,11 @@ module Compiler
               raise _INTL("Particle hasn't been defined yet!") + "\n" + FileLineData.linereport
             end
             value = get_csv_record($~[2], sub_schema[key])
+            value = nil if value.is_a?(Array) && value.empty?
             if sub_schema[key][1][0] == "^"
-              value = nil if value.is_a?(Array) && value.empty?
               current_particle[sub_schema[key][0]] ||= []
               current_particle[sub_schema[key][0]].push(value) if value
             else
-              value = nil if value.is_a?(Array) && value.empty?
               current_particle[sub_schema[key][0]] = value
             end
           end
@@ -187,7 +185,7 @@ module Compiler
     hash[:particles].each do |particle|
       # Ensure the second layer-exclusive commands are only on particles with one
       if !particle[:second_layer]
-        particle.keys.each do |property|
+        particle.each_key do |property|
           next if !GameData::Animation::SECOND_LAYER_PROPERTIES.include?(property)
           raise _INTL("Particle \"{1}\" doesn't have a second layer but has a second layer command.",
                       particle[:name]) + "\n" + FileLineData.linereport
@@ -195,7 +193,7 @@ module Compiler
       end
       # Ensure the emitter-exclusive commands are only on emitter particles
       if !particle[:emitter_type] || particle[:emitter_type] == :none
-        particle.keys.each do |property|
+        particle.each_key do |property|
           next if !@@emitter_only_properties.include?(property)
           raise _INTL("Particle \"{1}\" isn't an emitter but has an emitter-only command.",
                       particle[:name]) + "\n" + FileLineData.linereport
@@ -244,7 +242,7 @@ module Compiler
       # Ensure the "Play"-type commands are exclusive to the "SE" particle, and
       # that the "SE" particle has no other commands
       if particle[:name] == "SE"
-        particle.keys.each do |property|
+        particle.each_key do |property|
           next if [:name, :se, :user_cry, :target_cry].include?(property)
           raise _INTL("Particle \"{1}\" has a command that isn't a \"Play\"-type command.",
                       particle[:name]) + "\n" + FileLineData.linereport
@@ -365,7 +363,7 @@ module Compiler
       end
       # Convert all "SetXYZ" particle commands to "MoveXYZ" by giving them a
       # duration of 0 (even ones that can't have a "MoveXYZ" command)
-      GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.keys.each do |prop|
+      GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES.each_key do |prop|
         next if !particle[prop]
         particle[prop].each do |cmd|
           cmd.insert(1, 0) if cmd.length == 2 || particle[:name] == "SE"
@@ -375,7 +373,7 @@ module Compiler
         end
       end
       # Sort each particle's commands by their keyframe and duration
-      particle.keys.each do |key|
+      particle.each_key do |key|
         next if !particle[key].is_a?(Array)
         particle[key].sort! { |a, b| a[0] == b[0] ? a[1] == b[1] ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
         next if particle[:name] == "SE"

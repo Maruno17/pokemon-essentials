@@ -275,7 +275,7 @@ end
 #===============================================================================
 class Battle::Move::PowerHigherWithTargetFasterThanUser < Battle::Move
   def pbBasePower(base_power, user, target)
-    return [[(25 * target.pbSpeed / user.pbSpeed).floor, 150].min, 1].max
+    return (25 * target.pbSpeed / user.pbSpeed).floor.clamp(1, 150)
   end
 end
 

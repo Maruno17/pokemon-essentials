@@ -10,10 +10,8 @@ class Pokemon
     ret = 0
     GameData::Species.each do |data|
       next if data.species != @species || data.unmega_form != form_simple
-      if data.mega_stone && hasItem?(data.mega_stone)
-        ret = data.form
-        break
-      elsif data.mega_move && hasMove?(data.mega_move)
+      if (data.mega_stone && hasItem?(data.mega_stone)) ||
+         (data.mega_move && hasMove?(data.mega_move))
         ret = data.form
         break
       end

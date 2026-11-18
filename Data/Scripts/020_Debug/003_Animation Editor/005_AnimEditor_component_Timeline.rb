@@ -67,7 +67,7 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
   # NOTE: This method is also called when changing the color scheme.
   def initialize_bitmaps
     bitmap_size = BUTTON_SIZE - (UIControls::BitmapButton::BUTTON_FRAME_THICKNESS * 2)   # 12
-    arrow_graphic = %w(
+    arrow_graphic = %w[
       . . . . . . . . . . . .
       . . . . . . . . . . . .
       . . . . . . . . . . . .
@@ -80,7 +80,7 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
       . . . . . . . . . . . .
       . . . . . . . . . . . .
       . . . . . . . . . . . .
-    )
+    ]
     # "Add Particle" bitmap
     @bitmaps[:add_particle] = Bitmap.new(bitmap_size, bitmap_size) if !@bitmaps[:add_particle]
     @bitmaps[:add_particle].clear

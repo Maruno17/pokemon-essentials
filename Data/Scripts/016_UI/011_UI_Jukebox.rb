@@ -82,10 +82,7 @@ class PokemonJukeboxScreen
     @scene.pbStartScene(commands)
     loop do
       cmd = @scene.pbScene
-      if cmd < 0
-        pbPlayCloseMenuSE
-        break
-      elsif cmdMarch >= 0 && cmd == cmdMarch
+      if cmdMarch >= 0 && cmd == cmdMarch
         pbPlayDecisionSE
         pbBGMPlay(HIGHER_ENCOUNTER_RATE_BGM, 100, 100)
         if $PokemonMap

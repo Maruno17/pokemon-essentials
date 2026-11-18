@@ -7,8 +7,8 @@ class UI::PartyVisualsPanel < UI::SpriteContainer
 
   GRAPHICS_FOLDER = "Party/"
   TEXT_COLOR_THEMES = {   # Themes not in DEFAULT_TEXT_COLOR_THEMES
-    :male    => [Color.new(0, 112, 248), Color.new(120, 184, 232)],
-    :female  => [Color.new(232, 32, 16), Color.new(248, 168, 184)]
+    :male   => [Color.new(0, 112, 248), Color.new(120, 184, 232)],
+    :female => [Color.new(232, 32, 16), Color.new(248, 168, 184)]
   }
 
   def initialize(pokemon, index, viewport)
@@ -246,7 +246,7 @@ class UI::PartyVisualsPanel < UI::SpriteContainer
     end
     if status >= 0
       draw_image(UI_FOLDER + _INTL("statuses"), 86, 68,
-                0, status * GameData::Status::ICON_SIZE[1], *GameData::Status::ICON_SIZE)
+                 0, status * GameData::Status::ICON_SIZE[1], *GameData::Status::ICON_SIZE)
     end
   end
 
@@ -326,7 +326,7 @@ class UI::PartyVisuals < UI::BaseVisuals
 
   GRAPHICS_FOLDER = "Party/"   # Subfolder in Graphics/UI
   TEXT_COLOR_THEMES = {   # Themes not in DEFAULT_TEXT_COLOR_THEMES
-    :input_helper => [Color.new(248, 248, 248), Color.black],
+    :input_helper => [Color.new(248, 248, 248), Color.black]
   }
 
   def initialize(party, mode = :normal)
@@ -1054,7 +1054,12 @@ class UI::Party < UI::BaseScreen
   #-----------------------------------------------------------------------------
 
   # NOTE: This code adds a number of ACTIONS, one per move usable in the
-  #       overworld.
+  #       overworld. For example:
+  #       ACTIONS.add(:use_FLY), {
+  #         :effect => proc { |screen|
+  #           screen.use_field_move(:FLY)
+  #         }
+  #       })
   HiddenMoveHandlers.eachHandler do |move_id|
     eval <<-__END__
       ACTIONS.add(:use_#{move_id}, {
@@ -1377,7 +1382,7 @@ MenuHandlers.add(:party_screen_interact, :field_moves, {
     screen.pokemon.moves.each do |move|
       next if !HiddenMoveHandlers.hasHandler(move.id) &&
               ![:MILKDRINK, :SOFTBOILED].include?(move.id)
-      ret.push(["use_#{move.id}".to_sym, "<c3=0050A0,80C0F0>" + move.name + "</c3>"])
+      ret.push([:"use_#{move.id}", "<c3=0050A0,80C0F0>" + move.name + "</c3>"])
     end
     next ret
   }

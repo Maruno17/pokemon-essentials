@@ -80,7 +80,7 @@ class ChooseNumberParams
   end
 
   def negativesAllowed
-    @negativeAllowed ? true : false
+    return (@negativeAllowed) ? true : false
   end
 
   def setRange(minNumber, maxNumber)
@@ -158,7 +158,7 @@ def pbChooseNumber(msgwindow, params)
   defaultNumber = params.initialNumber
   cancelNumber = params.cancelNumber
   cmdwindow = Window_InputNumberPokemon.new(params.maxDigits)
-  cmdwindow.z = 99999
+  cmdwindow.z = 99_999
   cmdwindow.visible = true
   cmdwindow.setSkin(params.skin) if params.skin
   cmdwindow.sign = params.negativesAllowed # must be set before number
@@ -173,9 +173,7 @@ def pbChooseNumber(msgwindow, params)
     yield if block_given?
     if Input.trigger?(Input::USE)
       ret = cmdwindow.number
-      if ret > maximum
-        pbPlayBuzzerSE
-      elsif ret < minimum
+      if ret < minimum || ret > maximum
         pbPlayBuzzerSE
       else
         pbPlayDecisionSE
@@ -559,15 +557,13 @@ def pbMessageDisplay_SetDefaultProperties(msg_window, text, control_params)
     next ""
   end
   # Get default text color based on the windowskin
-  colortag = ""
   if $game_system && $game_system.message_frame != 0
     main_color, shadow_color = get_text_colors_for_windowskin(msg_window.windowskin, 0, true)
-    colortag = shadowc3tag(main_color, shadow_color)
   else
     isDarkSkin = isDarkWindowskin(msg_window.windowskin)
     main_color, shadow_color = get_text_colors_for_windowskin(msg_window.windowskin, 0, isDarkSkin)
-    colortag = shadowc3tag(main_color, shadow_color)
   end
+  colortag = shadowc3tag(main_color, shadow_color)
   control_params[:color_tag] = colortag
   # Get number of lines of text
   loop do

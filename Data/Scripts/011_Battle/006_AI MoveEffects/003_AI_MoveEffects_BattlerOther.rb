@@ -130,9 +130,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("PoisonTarget",
                             user.battler.pbCanPoisonSynchronize?(target.battler)
       poison_score -= 4 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
                                                           "CureUserBurnPoisonParalysis")
-      poison_score -= 8 if target.check_for_move { |m|
+      poison_score -= 8 if target.check_for_move do |m|
         m.function_code == "GiveUserStatusToTarget" && user.battler.pbCanPoison?(target.battler, false, m)
-      }
+      end
       # Don't prefer if the target won't take damage from the poison
       poison_score -= 10 if !target.battler.takesIndirectDamage?
       # Don't prefer if the target can heal itself (or be healed by an ally)
@@ -248,9 +248,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("ParalyzeTarget",
                               user.battler.pbCanParalyzeSynchronize?(target.battler)
       paralyze_score -= 4 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
                                                             "CureUserBurnPoisonParalysis")
-      paralyze_score -= 8 if target.check_for_move { |m|
+      paralyze_score -= 8 if target.check_for_move do |m|
         m.function_code == "GiveUserStatusToTarget" && user.battler.pbCanParalyze?(target.battler, false, m)
-      }
+      end
       # Don't prefer if the target can heal itself (or be healed by an ally)
       if target.has_active_ability?(:SHEDSKIN)
         paralyze_score -= 5
@@ -347,9 +347,9 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("BurnTarget",
                           user.battler.pbCanBurnSynchronize?(target.battler)
       burn_score -= 4 if target.has_move_with_function?("DoublePowerIfUserPoisonedBurnedParalyzed",
                                                         "CureUserBurnPoisonParalysis")
-      burn_score -= 8 if target.check_for_move { |m|
+      burn_score -= 8 if target.check_for_move do |m|
         m.function_code == "GiveUserStatusToTarget" && user.battler.pbCanBurn?(target.battler, false, m)
-      }
+      end
       # Don't prefer if the target won't take damage from the burn
       burn_score -= 10 if !target.battler.takesIndirectDamage?
       # Don't prefer if the target can heal itself (or be healed by an ally)

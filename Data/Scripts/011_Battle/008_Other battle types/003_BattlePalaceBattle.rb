@@ -188,8 +188,7 @@ class Battle::AI
     shouldswitch = false
     if thispkmn.effects[PBEffects::PerishSong] == 1
       shouldswitch = true
-    elsif !@battle.pbCanChooseAnyMove?(idxBattler) &&
-          thispkmn.turnCount && thispkmn.turnCount > 5
+    elsif !@battle.pbCanChooseAnyMove?(idxBattler) && thispkmn.turnCount && thispkmn.turnCount > 5
       shouldswitch = true
     else
       hppercent = thispkmn.hp * 100 / thispkmn.totalhp

@@ -282,8 +282,7 @@ module Compiler
     GameData::TownMap.save
   end
 
-  def validate_compiled_town_map(hash)
-  end
+  def validate_compiled_town_map(hash); end
 
   def validate_all_compiled_town_maps
     # Get town map names and descriptions for translating
@@ -390,8 +389,7 @@ module Compiler
     end
   end
 
-  def validate_compiled_ability(hash)
-  end
+  def validate_compiled_ability(hash); end
 
   def validate_all_compiled_abilities
     # Get abilty names/descriptions for translating
@@ -485,11 +483,9 @@ module Compiler
     end
   end
 
-  def validate_compiled_berry_plant(hash)
-  end
+  def validate_compiled_berry_plant(hash); end
 
-  def validate_all_compiled_berry_plants
-  end
+  def validate_all_compiled_berry_plants; end
 
   #-----------------------------------------------------------------------------
   # Compile Pokémon data.
@@ -773,8 +769,7 @@ module Compiler
     end
   end
 
-  def validate_all_compiled_pokemon_metrics
-  end
+  def validate_all_compiled_pokemon_metrics; end
 
   #-----------------------------------------------------------------------------
   # Compile Shadow Pokémon data.
@@ -798,8 +793,7 @@ module Compiler
     end
   end
 
-  def validate_all_compiled_shadow_pokemon
-  end
+  def validate_all_compiled_shadow_pokemon; end
 
   #-----------------------------------------------------------------------------
   # Compile Regional Dexes.
@@ -851,8 +845,7 @@ module Compiler
     end
   end
 
-  def validate_compiled_ribbon(hash)
-  end
+  def validate_compiled_ribbon(hash); end
 
   def validate_all_compiled_ribbons
     # Get ribbon names/descriptions for translating
@@ -1369,8 +1362,7 @@ module Compiler
     end
   end
 
-  def validate_compiled_player_metadata(hash)
-  end
+  def validate_compiled_player_metadata(hash); end
 
   # Should be used to check both global metadata and player character metadata.
   def validate_all_compiled_metadata
@@ -1420,11 +1412,9 @@ module Compiler
     end
   end
 
-  def validate_compiled_dungeon_tileset(hash)
-  end
+  def validate_compiled_dungeon_tileset(hash); end
 
-  def validate_all_compiled_dungeon_tilesets
-  end
+  def validate_all_compiled_dungeon_tilesets; end
 
   #-----------------------------------------------------------------------------
   # Compile dungeon parameters data.
@@ -1449,8 +1439,7 @@ module Compiler
     end
   end
 
-  def validate_all_compiled_dungeon_parameters
-  end
+  def validate_all_compiled_dungeon_parameters; end
 
   #-----------------------------------------------------------------------------
   # Compile phone messages.

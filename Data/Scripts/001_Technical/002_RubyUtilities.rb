@@ -92,11 +92,11 @@ class Numeric
 
   def to_ordinal
     ret = [_INTL("zeroth"), _INTL("first"), _INTL("second"), _INTL("third"),
-          _INTL("fourth"), _INTL("fifth"), _INTL("sixth"), _INTL("seventh"),
-          _INTL("eighth"), _INTL("ninth"), _INTL("tenth"), _INTL("eleventh"),
-          _INTL("twelfth"), _INTL("thirteenth"), _INTL("fourteenth"), _INTL("fifteenth"),
-          _INTL("sixteenth"), _INTL("seventeenth"), _INTL("eighteenth"), _INTL("nineteenth"),
-          _INTL("twentieth")]
+           _INTL("fourth"), _INTL("fifth"), _INTL("sixth"), _INTL("seventh"),
+           _INTL("eighth"), _INTL("ninth"), _INTL("tenth"), _INTL("eleventh"),
+           _INTL("twelfth"), _INTL("thirteenth"), _INTL("fourteenth"), _INTL("fifteenth"),
+           _INTL("sixteenth"), _INTL("seventeenth"), _INTL("eighteenth"), _INTL("nineteenth"),
+           _INTL("twentieth")]
     return ret[self] if self.is_a?(Integer) && self >= 0 && self <= ret.length - 1
     return self.to_ord
   end
@@ -321,7 +321,7 @@ class Color
     b = self.blue
     yuv = [
       (r * 0.299) + (g * 0.587) + (b * 0.114),
-      (r * -0.1687) + (g * -0.3313) + (b *  0.500) + 0.5,
+      (r * -0.1687) + (g * -0.3313) + (b * 0.500) + 0.5,
       (r * 0.500) + (g * -0.4187) + (b * -0.0813) + 0.5
     ]
     if yuv[0] < 127.5
@@ -451,11 +451,10 @@ class Bitmap
           error += dy
           draw_x += 1
         end
-        if e2 <= dx
-          break if draw_y == end_y
-          error += dx
-          draw_y += (gradient) ? -1 : 1
-        end
+        next if e2 > dx
+        break if draw_y == end_y
+        error += dx
+        draw_y += (gradient) ? -1 : 1
       end
     when :ease_in, :ease_out, :ease_both   # Quadratic
       gradient = !gradient if type == :ease_out
@@ -467,17 +466,17 @@ class Bitmap
         x = frame / (width - 1).to_f
         case type
         when :ease_in
-          y = ((end_y - start_y) * x ** 2.5).round
+          y = ((end_y - start_y) * (x**2.5)).round
           line_height = (frame == 0) ? 1 : [(y - points.last[1]).abs, 1].max
           points.push([frame, y, line_height])
         when :ease_out
-          y = ((end_y - start_y) * x ** 2.5).round
+          y = ((end_y - start_y) * (x**2.5)).round
           line_height = (frame == 0) ? 1 : [(y - points.last[1]).abs, 1].max
           points.push([width - frame - 1, y, line_height])
         when :ease_both
           break if frame >= (width + 1) / 2
           x = [frame / ((width.to_f / 2) - 1).to_f, 1].min
-          y = (((end_y - start_y) / 2.0) * x ** 2.5).round
+          y = (((end_y - start_y) / 2.0) * (x**2.5)).round
           y = -((height - 1) / 2) if y < -((height - 1) / 2)
           line_height = (frame == 0) ? 1 : [(y - points.last[1]).abs, 1].max
           points.push([width - frame - 1, (end_y - start_y) - y - line_height + 1, line_height])
@@ -554,7 +553,7 @@ class << Kernel
 end
 
 def nil_or_empty?(string)
-  return string.nil? || !string.is_a?(String) || string.size == 0
+  return string.nil? || !string.is_a?(String) || string.empty?
 end
 
 #===============================================================================

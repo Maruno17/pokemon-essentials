@@ -41,12 +41,14 @@ module RPG
     end
 
     def pushAnimation(array, anim)
+      added = false
       array.length.times do |i|
         next if array[i]&.active?
         array[i] = anim
-        return
+        added = true
+        break
       end
-      array.push(anim)
+      array.push(anim) if !added
     end
 
     def animation(animation, hit, height = 3, no_tone = false)

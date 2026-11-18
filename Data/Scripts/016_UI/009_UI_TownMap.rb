@@ -91,7 +91,7 @@ class UI::TownMapVisuals < UI::BaseVisuals
     @pins_pos.delete_if { |key, sprite| key.to_s.include?("mark_") }
     $PokemonGlobal.townMapMarkings[@region].each do |marking|
       next if !marking || marking[2].all?(0)
-      key = "mark_#{marking[0]}_#{marking[1]}".to_sym
+      key = :"mark_#{marking[0]}_#{marking[1]}"
       create_pin(key, marking[0], marking[1], graphics_folder + themed_filename("icon_marking"), 50)
     end
     # Roamer icons
@@ -104,7 +104,7 @@ class UI::TownMapVisuals < UI::BaseVisuals
         roamer_map = GameData::MapMetadata.try_get($PokemonGlobal.roamPosition[i])
         next if !roamer_map || !roamer_map.town_map_position
         next if roamer_map.town_map_position[0] != @region
-        key = "roamer_#{i}".to_sym
+        key = :"roamer_#{i}"
         @pins_pos[key] = [roamer_map.town_map_position[1], roamer_map.town_map_position[2]]
         if roamer_map.town_map_size
           area_width = roamer_map.town_map_size[0]
@@ -370,10 +370,10 @@ class UI::TownMapVisuals < UI::BaseVisuals
     start_oy = @map_viewport.oy
     max_ox = (@map_data.size[0] * @map_data.point_size[0]) + (@map_data.margins[0] * 2) - MAP_SIZE[0]
     max_oy = (@map_data.size[1] * @map_data.point_size[1]) + (@map_data.margins[1] * 2) - MAP_SIZE[1]
-    end_ox = @sprites[:cursor].x - MAP_SIZE[0] / 2
+    end_ox = @sprites[:cursor].x - (MAP_SIZE[0] / 2)
     end_ox = 0 if end_ox < 0
     end_ox = max_ox if end_ox > max_ox
-    end_oy = @sprites[:cursor].y - MAP_SIZE[1] / 2
+    end_oy = @sprites[:cursor].y - (MAP_SIZE[1] / 2)
     end_oy = 0 if end_oy < 0
     end_oy = max_oy if end_oy > max_oy
     # Animate the zoom in
@@ -429,7 +429,7 @@ class UI::TownMapVisuals < UI::BaseVisuals
   def apply_new_markings(new_markings)
     if new_markings[2].all?(0)
       $PokemonGlobal.townMapMarkings[@region].delete_if { |marking| marking[0] == new_markings[0] && marking[1] == new_markings[1] }
-      former_key = "mark_#{new_markings[0]}_#{new_markings[1]}".to_sym
+      former_key = :"mark_#{new_markings[0]}_#{new_markings[1]}"
       @sprites.each_pair { |key, sprite| sprite.dispose if key == former_key }
       @sprites.delete(former_key)
       @pins_pos.delete(former_key)
@@ -443,7 +443,7 @@ class UI::TownMapVisuals < UI::BaseVisuals
       end
       if !found_existing
         $PokemonGlobal.townMapMarkings[@region].push(new_markings)
-        key = "mark_#{new_markings[0]}_#{new_markings[1]}".to_sym
+        key = :"mark_#{new_markings[0]}_#{new_markings[1]}"
         create_pin(key, new_markings[0], new_markings[1], graphics_folder + themed_filename("icon_marking"), 50)
       end
     end
@@ -488,7 +488,7 @@ class UI::TownMapVisuals < UI::BaseVisuals
       @fly_coords.push(point[:position])
       next if point[:hide_fly_icon]
       counter += 1
-      sprite_key = "fly_icon_#{counter}".to_sym
+      sprite_key = :"fly_icon_#{counter}"
       @sprites[sprite_key] = AnimatedSprite.create(
         graphics_folder + "icon_fly", 2, 10, @map_viewport   # 2 frames, 10/20 seconds per frame
       )
@@ -660,16 +660,16 @@ class UI::TownMapVisuals < UI::BaseVisuals
     MARKINGS_COUNT.times do |i|
       middle_x = (Graphics.width / 2) + ((@bitmaps[:details_marking_bg].width + MARKING_SPACING) * (i - ((MARKINGS_COUNT.to_f - 1) / 2)))
       draw_image(@bitmaps[:details_marking_bg],
-                middle_x - (@bitmaps[:details_marking_bg].width / 2),
-                middle_y - (@bitmaps[:details_marking_bg].height / 2),
-                overlay: :marking_overlay)
+                 middle_x - (@bitmaps[:details_marking_bg].width / 2),
+                 middle_y - (@bitmaps[:details_marking_bg].height / 2),
+                 overlay: :marking_overlay)
       if @markings[2][i] > 0
         draw_image(@bitmaps[:map_markings],
-                  middle_x - (@bitmaps[:map_markings].height / 2),
-                  middle_y - (@bitmaps[:map_markings].height / 2),
-                  @bitmaps[:map_markings].height * (@markings[2][i] - 1), 0,
-                  @bitmaps[:map_markings].height, @bitmaps[:map_markings].height,
-                  overlay: :marking_overlay)
+                   middle_x - (@bitmaps[:map_markings].height / 2),
+                   middle_y - (@bitmaps[:map_markings].height / 2),
+                   @bitmaps[:map_markings].height * (@markings[2][i] - 1), 0,
+                   @bitmaps[:map_markings].height, @bitmaps[:map_markings].height,
+                   overlay: :marking_overlay)
       end
     end
   end
@@ -681,16 +681,16 @@ class UI::TownMapVisuals < UI::BaseVisuals
     icons_count.times do |i|
       middle_x = (Graphics.width / 2) + ((@bitmaps[:details_marking_bg].width + MARKING_SPACING) * (i - ((icons_count.to_f - 1) / 2)))
       draw_image(@bitmaps[:details_marking_bg],
-                middle_x - (@bitmaps[:details_marking_bg].width / 2),
-                middle_y - (@bitmaps[:details_marking_bg].height / 2),
-                overlay: :marking_overlay)
+                 middle_x - (@bitmaps[:details_marking_bg].width / 2),
+                 middle_y - (@bitmaps[:details_marking_bg].height / 2),
+                 overlay: :marking_overlay)
       next if i == 0
       draw_image(@bitmaps[:map_markings],
-                middle_x - (@bitmaps[:map_markings].height / 2),
-                middle_y - (@bitmaps[:map_markings].height / 2),
-                @bitmaps[:map_markings].height * (i - 1), 0,
-                @bitmaps[:map_markings].height, @bitmaps[:map_markings].height,
-                overlay: :marking_overlay)
+                 middle_x - (@bitmaps[:map_markings].height / 2),
+                 middle_y - (@bitmaps[:map_markings].height / 2),
+                 @bitmaps[:map_markings].height * (i - 1), 0,
+                 @bitmaps[:map_markings].height, @bitmaps[:map_markings].height,
+                 overlay: :marking_overlay)
     end
   end
 
@@ -882,11 +882,10 @@ class UI::TownMapVisuals < UI::BaseVisuals
           refresh_markings_panel
         end
         @marking_new_index = -1
-        refresh_markings_cursor
       else   # Start to choose a new marking
         @marking_new_index = @markings[2][@marking_index]
-        refresh_markings_cursor
       end
+      refresh_markings_cursor
     elsif Input.trigger?(Input::BACK)
       if @marking_new_index >= 0   # Cancel choosing a new marking
         pbPlayCancelSE

@@ -13,7 +13,6 @@ class Battle::AI::AIBattler
   end
 
   def refresh_battler
-    old_party_index = @party_index
     @battler = @ai.battle.battlers[@index]
     @party_index = battler.pokemonIndex
   end
@@ -125,7 +124,7 @@ class Battle::AI::AIBattler
     else
       @ai.each_battler(true) do |b, i|
         next if i == @index || b.effects[PBEffects::LeechSeed] != @index
-        amt = [[b.totalhp / 8, b.hp].min, 1].max
+        amt = (b.totalhp / 8).clamp(1, b.hp)
         amt = (amt * 1.3).floor if has_active_item?(:BIGROOT)
         ret -= [amt, 1].max
       end

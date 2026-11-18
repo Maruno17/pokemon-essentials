@@ -265,7 +265,7 @@ class VoltorbFlip
 
   def display_game_info
     loop do
-      case pbMessage(_INTL("Which set of info?"), [_INTL("How to Play"), _INTL("Hint!"),_INTL("About Memos"),_INTL("Return")], 4)
+      case pbMessage(_INTL("Which set of info?"), [_INTL("How to Play"), _INTL("Hint!"), _INTL("About Memos"), _INTL("Return")], 4)
       when 0
         pbMessage(_INTL("Voltorb Flip is a game in which you flip over cards to find numbers hidden beneath them."))
         pbMessage(_INTL("The cards are hiding the numbers 1 through 3... and Voltorb as well."))

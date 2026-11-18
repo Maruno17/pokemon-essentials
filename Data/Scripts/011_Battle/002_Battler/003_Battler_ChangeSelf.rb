@@ -157,7 +157,7 @@ class Battle::Battler
     end
     @effects[PBEffects::BurnUp] = false
     @effects[PBEffects::DoubleShock] = false
-    @effects[PBEffects::Roost]  = false
+    @effects[PBEffects::Roost] = false
   end
 
   def pbResetTypes
@@ -165,7 +165,7 @@ class Battle::Battler
     @effects[PBEffects::ExtraType] = nil
     @effects[PBEffects::BurnUp] = false
     @effects[PBEffects::DoubleShock] = false
-    @effects[PBEffects::Roost]  = false
+    @effects[PBEffects::Roost] = false
   end
 
   #-----------------------------------------------------------------------------
@@ -249,8 +249,7 @@ class Battle::Battler
     end
   end
 
-  def pbCheckFormOnTerrainChange(ability_changed = false)
-  end
+  def pbCheckFormOnTerrainChange(ability_changed = false); end
 
   # Checks the Pokémon's form and updates it if necessary. Used for when a
   # Pokémon enters battle (endOfRound=false) and at the end of each round

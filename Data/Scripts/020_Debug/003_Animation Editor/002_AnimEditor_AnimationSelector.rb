@@ -22,7 +22,7 @@ class AnimationEditor::AnimationSelector
   MENU_BAR_X                  = CONTAINER_BORDER
   MENU_BAR_Y                  = CONTAINER_BORDER
   MENU_BAR_WIDTH              = WINDOW_WIDTH - (CONTAINER_BORDER * 2)
-  MENU_BAR_HEIGHT             = MENU_BAR_BUTTON_HEIGHT + (ELEMENT_SPACING - EDGE_BUFFER) * 2   # 28
+  MENU_BAR_HEIGHT             = MENU_BAR_BUTTON_HEIGHT + ((ELEMENT_SPACING - EDGE_BUFFER) * 2)   # 28
   COLOR_SCHEME_CONTROL_WIDTH  = 100
   COLOR_SCHEME_CONTROL_HEIGHT = 24
   COLOR_SCHEME_CONTROL_X      = MENU_BAR_X + MENU_BAR_WIDTH - COLOR_SCHEME_CONTROL_WIDTH - (ELEMENT_SPACING - EDGE_BUFFER) - 3
@@ -100,7 +100,7 @@ class AnimationEditor::AnimationSelector
 
   def initialize_viewports
     @viewport = Viewport.new(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @pop_up_viewport = Viewport.new(0, 0, AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
     @pop_up_viewport.z = @viewport.z + 50
   end
@@ -436,10 +436,10 @@ class AnimationEditor::AnimationSelector
         @full_common_animations[anim.move].push(hash)
       end
     end
-    @full_move_animations.values.each do |val|
+    @full_move_animations.each_value do |val|
       val.sort! { |a, b| a[:display_name] <=> b[:display_name] }
     end
-    @full_common_animations.values.each do |val|
+    @full_common_animations.each_value do |val|
       val.sort! { |a, b| a[:display_name] <=> b[:display_name] }
     end
     apply_list_filter
@@ -502,11 +502,11 @@ class AnimationEditor::AnimationSelector
   end
 
   def selected_move_display_animations
-    val = @components.get_control(:moves_list).value
-    return [] if !val
+    value = @components.get_control(:moves_list).value
+    return [] if !value
     ret = []
-    ret = @move_animations[val] if @animation_type == 0
-    ret = @common_animations[val] if @animation_type == 1
+    ret = @move_animations[value] if @animation_type == 0
+    ret = @common_animations[value] if @animation_type == 1
     ret = ret.map { |val| val[:display_name] }
     return ret
   end

@@ -124,7 +124,7 @@ class PurifyChamberSet
       @list.insert(index + 1, value)
       @list.compact!
       @facing += 1 if @facing > index && value
-      @facing = [[@facing, @list.length - 1].min, 0].max
+      @facing = @facing.clamp(0, @list.length - 1)
     end
   end
 
@@ -133,7 +133,7 @@ class PurifyChamberSet
     unless value&.shadowPokemon?
       @list[index] = value
       @list.compact!
-      @facing = [[@facing, @list.length - 1].min, 0].max
+      @facing = @facing.clamp(0, @list.length - 1)
     end
   end
 

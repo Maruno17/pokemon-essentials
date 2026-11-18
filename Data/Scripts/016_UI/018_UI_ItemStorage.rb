@@ -20,7 +20,7 @@ class Window_PokemonItemStorage < Window_DrawableCommand
 
   def item
     item = @bag[self.index]
-    return item ? item[0] : nil
+    return (item) ? item[0] : nil
   end
 
   def itemCount
@@ -70,7 +70,7 @@ class ItemStorage_Scene
 
   def pbStartScene(bag)
     @viewport   = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @bag = bag
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
@@ -154,7 +154,7 @@ class ItemStorage_Scene
         Graphics.update
         Input.update
         olditem = itemwindow.item
-        self.update
+        update
         pbRefresh if itemwindow.item != olditem
         if Input.trigger?(Input::BACK)
           return nil
@@ -208,9 +208,7 @@ class ItemStorageScreen
 
   # UI logic for withdrawing an item in the item storage screen.
   def pbWithdrawItemScreen
-    if !$PokemonGlobal.pcItemStorage
-      $PokemonGlobal.pcItemStorage = PCItemStorage.new
-    end
+    $PokemonGlobal.pcItemStorage ||= PCItemStorage.new
     storage = $PokemonGlobal.pcItemStorage
     @scene.pbStartScene(storage)
     loop do
@@ -223,12 +221,8 @@ class ItemStorageScreen
       end
       next if qty <= 0
       if @bag.can_add?(item, qty)
-        if !storage.remove(item, qty)
-          raise "Can't delete items from storage"
-        end
-        if !@bag.add(item, qty)
-          raise "Can't withdraw items from storage"
-        end
+        raise "Can't delete items from storage" if !storage.remove(item, qty)
+        raise "Can't withdraw items from storage" if !@bag.add(item, qty)
         @scene.pbRefresh
         dispqty = (itm.is_important?) ? 1 : qty
         itemname = (dispqty > 1) ? itm.portion_name_plural : itm.portion_name
@@ -242,9 +236,7 @@ class ItemStorageScreen
 
   # UI logic for tossing an item in the item storage screen.
   def pbTossItemScreen
-    if !$PokemonGlobal.pcItemStorage
-      $PokemonGlobal.pcItemStorage = PCItemStorage.new
-    end
+    $PokemonGlobal.pcItemStorage ||= PCItemStorage.new
     storage = $PokemonGlobal.pcItemStorage
     @scene.pbStartScene(storage)
     loop do
@@ -258,23 +250,17 @@ class ItemStorageScreen
       qty = storage.quantity(item)
       itemname       = itm.portion_name
       itemnameplural = itm.portion_name_plural
-      if qty > 1
-        qty = @scene.pbChooseNumber(_INTL("Toss out how many {1}?", itemnameplural), qty)
-      end
+      qty = @scene.pbChooseNumber(_INTL("Toss out how many {1}?", itemnameplural), qty) if qty > 1
       next if qty <= 0
       itemname = itemnameplural if qty > 1
       next if !pbConfirm(_INTL("Is it OK to throw away {1} {2}?", qty, itemname))
-      if !storage.remove(item, qty)
-        raise "Can't delete items from storage"
-      end
+      raise "Can't delete items from storage" if !storage.remove(item, qty)
       @scene.pbRefresh
       pbDisplay(_INTL("Threw away {1} {2}.", qty, itemname))
     end
     @scene.pbEndScene
   end
 end
-
-
 
 #===============================================================================
 # Common UI functions used in both the Bag and item storage screens.
@@ -296,9 +282,7 @@ module UIHelper
       Graphics.update
       Input.update
       (block_given?) ? yield : cw.update
-      if !cw.busy? && (brief || (Input.trigger?(Input::USE) && cw.resume))
-        break
-      end
+      break if !cw.busy? && (brief || (Input.trigger?(Input::USE) && cw.resume))
     end
     cw.visible = oldvisible
   end
@@ -315,9 +299,7 @@ module UIHelper
       Graphics.update
       Input.update
       (block_given?) ? yield : msgwindow.update
-      if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
-        break
-      end
+      break if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
     end
     msgwindow.visible = oldvisible
     Input.update
@@ -417,7 +399,7 @@ module UIHelper
   def pbShowCommands(helpwindow, helptext, commands, initcmd = 0)
     ret = -1
     oldvisible = helpwindow.visible
-    helpwindow.visible        = helptext ? true : false
+    helpwindow.visible        = (helptext) ? true : false
     helpwindow.letterbyletter = false
     helpwindow.text           = helptext || ""
     cmdwindow = Window_CommandPokemon.new(commands)

@@ -30,7 +30,7 @@ end
 # Command menu (Fight/Pokémon/Bag/Run).
 #===============================================================================
 class Battle::Visuals::CommandMenu < Battle::Visuals::MenuBase
-  attr_accessor :commands
+  attr_reader :commands
 
   GRAPHICS_FOLDER = "Battle/"
   # The order of command buttons as drawn in cursor_command.png. If one is in an
@@ -134,7 +134,7 @@ class Battle::Visuals::CommandMenu < Battle::Visuals::MenuBase
 
   def full_refresh
     super
-    @sprites[:party_overlay].bitmap.clear if @sprites[:party_overlay]
+    @sprites[:party_overlay]&.bitmap&.clear
     draw_player_party_icons
     draw_opponent_party_icons
   end
@@ -310,10 +310,10 @@ class Battle::Visuals::FightMenu < Battle::Visuals::MenuBase
     Pokemon::MAX_MOVES.times do |i|
       button_x = 4 + ((i % 2) * (BUTTON_WIDTH - BUTTON_OVERLAP[0]))
       button_y = 6 + ((i / 2) * (BUTTON_HEIGHT - BUTTON_OVERLAP[1]))
-      add_icon_sprite("move_#{i}".to_sym, button_x, button_y, graphics_folder + _INTL("cursor_fight"))
-      @sprites["move_#{i}".to_sym].src_rect.width = BUTTON_WIDTH
-      @sprites["move_#{i}".to_sym].src_rect.height = BUTTON_HEIGHT
-      record_values("move_#{i}".to_sym)
+      add_icon_sprite(:"move_#{i}", button_x, button_y, graphics_folder + _INTL("cursor_fight"))
+      @sprites[:"move_#{i}"].src_rect.width = BUTTON_WIDTH
+      @sprites[:"move_#{i}"].src_rect.height = BUTTON_HEIGHT
+      record_values(:"move_#{i}")
     end
   end
 
@@ -333,7 +333,6 @@ class Battle::Visuals::FightMenu < Battle::Visuals::MenuBase
   end
 
   def mega_evolution_state=(value)
-    old_value = @mega_evolution_state
     @mega_evolution_state = value
     refresh_mega_evolution_button
   end
@@ -362,7 +361,7 @@ class Battle::Visuals::FightMenu < Battle::Visuals::MenuBase
     moves = (@battler) ? @battler.moves : []
     # Choose appropriate button graphics and z positions
     Pokemon::MAX_MOVES.times do |i|
-      button = @sprites["move_#{i}".to_sym]
+      button = @sprites[:"move_#{i}"]
       button.visible = !!moves[i]
       next if !moves[i]
       button.src_rect.x = (i == @index) ? BUTTON_WIDTH : 0
@@ -382,7 +381,7 @@ class Battle::Visuals::FightMenu < Battle::Visuals::MenuBase
     moves = (@battler) ? @battler.moves : []
     Pokemon::MAX_MOVES.times do |i|
       next if !moves[i]
-      button = @sprites["move_#{i}".to_sym]
+      button = @sprites[:"move_#{i}"]
       text_x = button.x - self.x + (button.src_rect.width / 2)
       text_y = button.y - self.y + 14
       name_theme = :default
@@ -451,7 +450,7 @@ class Battle::Visuals::TargetMenu < Battle::Visuals::MenuBase
 
   GRAPHICS_FOLDER = "Battle/"
   TEXT_COLOR_THEMES = {   # These color themes are added to @sprites[:overlay]
-    :default   => [Color.new(240, 248, 224), Color.new(64, 64, 64)]   # Base and shadow colour
+    :default => [Color.new(240, 248, 224), Color.new(64, 64, 64)]   # Base and shadow colour
   }
   BUTTON_WIDTHS = [236, 170]   # 1-2 buttons in row, 3+ buttons in row
   # Number of pixels that adjacent buttons overlap each other.
@@ -491,15 +490,15 @@ class Battle::Visuals::TargetMenu < Battle::Visuals::MenuBase
       #       that side's trainer, so index is different for each side for the
       #       same value of i/2.
       index = (i.even?) ? i / 2 : num_buttons - 1 - (i / 2)
-      add_icon_sprite("button_#{i}".to_sym, 0, 0, graphics_folder + _INTL("cursor_target"))
-      button = @sprites["button_#{i}".to_sym]
+      add_icon_sprite(:"button_#{i}", 0, 0, graphics_folder + _INTL("cursor_target"))
+      button = @sprites[:"button_#{i}"]
       button.src_rect.width = (@use_small_buttons) ? BUTTON_WIDTHS[1] : BUTTON_WIDTHS[0]
       button.src_rect.height = BUTTON_HEIGHT
       total_width = (num_buttons * button.src_rect.width) - ((num_buttons - 1) * BUTTON_OVERLAP[0])
       button.x = (@sprites[:overlay].width - total_width) / 2
       button.x += index * (button.src_rect.width - BUTTON_OVERLAP[0])
       button.y = 6 + (((i + 1) % 2) * (BUTTON_HEIGHT - BUTTON_OVERLAP[1]))
-      record_values("button_#{i}".to_sym)
+      record_values(:"button_#{i}")
     end
   end
 
@@ -522,7 +521,7 @@ class Battle::Visuals::TargetMenu < Battle::Visuals::MenuBase
   def refresh_selected_button
     # Choose appropriate button graphics and z positions
     (@max_index + 1).times do |i|
-      button = @sprites["button_#{i}".to_sym]
+      button = @sprites[:"button_#{i}"]
       next if !button
       selected = false
       button_type = 0
@@ -541,7 +540,7 @@ class Battle::Visuals::TargetMenu < Battle::Visuals::MenuBase
   def draw_target_names_on_buttons
     (@max_index + 1).times do |i|
       next if nil_or_empty?(@texts[i])
-      button = @sprites["button_#{i}".to_sym]
+      button = @sprites[:"button_#{i}"]
       next if !button
       text_x = button.x - self.x + (button.src_rect.width / 2)
       text_y = button.y - self.y + 14
@@ -569,13 +568,13 @@ class Battle::Visuals::TargetMenu < Battle::Visuals::MenuBase
       end
     elsif (Input.repeat?(Input::UP) && @index.even?) ||
           (Input.repeat?(Input::DOWN) && @index.odd?)
-      sel_sprite = @sprites["button_#{@index}".to_sym]
+      sel_sprite = @sprites[:"button_#{@index}"]
       old_x = sel_sprite.x + (sel_sprite.src_rect.width / 2)   # Middle of button
       difference = 999   # Very high to begin with
       new_index = @index
       (@max_index + 1).times do |i|
         next if (i % 2) == (@index % 2) || @texts[i].nil?
-        this_sprite = @sprites["button_#{i}".to_sym]
+        this_sprite = @sprites[:"button_#{i}"]
         next if !this_sprite
         this_x = this_sprite.x + (this_sprite.src_rect.width / 2)   # Middle of button
         if (this_x - old_x).abs < difference

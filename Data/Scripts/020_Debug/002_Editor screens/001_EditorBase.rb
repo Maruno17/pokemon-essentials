@@ -1,16 +1,14 @@
 module Debug
   DEBUG_SETTINGS_FILE_PATH = if File.directory?(System.data_directory)
-                              System.data_directory + "debug_settings.rxdata"
-                            else
-                              "./debug_settings.rxdata"
-                            end
+                               System.data_directory + "debug_settings.rxdata"
+                             else
+                               "./debug_settings.rxdata"
+                             end
   MAP_ZOOM_FACTORS = [1, 2, 4]
 
   def self.load_settings
     ret = {}
-    if File.file?(DEBUG_SETTINGS_FILE_PATH)
-      ret = SaveData.get_data_from_file(DEBUG_SETTINGS_FILE_PATH)
-    end
+    ret = SaveData.get_data_from_file(DEBUG_SETTINGS_FILE_PATH) if File.file?(DEBUG_SETTINGS_FILE_PATH)
     ret[:color_scheme]    ||= :light
     ret[:map_zoom_factor] ||= 1
     return ret
@@ -53,7 +51,7 @@ class Debug::EditorBase
   MENU_BAR_X                  = CONTAINER_BORDER
   MENU_BAR_Y                  = CONTAINER_BORDER
   MENU_BAR_WIDTH              = WINDOW_WIDTH - (CONTAINER_BORDER * 2)
-  MENU_BAR_HEIGHT             = MENU_BAR_BUTTON_HEIGHT + (ELEMENT_SPACING - EDGE_BUFFER) * 2   # 28
+  MENU_BAR_HEIGHT             = MENU_BAR_BUTTON_HEIGHT + ((ELEMENT_SPACING - EDGE_BUFFER) * 2)   # 28
   COLOR_SCHEME_CONTROL_WIDTH  = 100
   COLOR_SCHEME_CONTROL_HEIGHT = 24
   COLOR_SCHEME_CONTROL_X      = MENU_BAR_X + MENU_BAR_WIDTH - COLOR_SCHEME_CONTROL_WIDTH - (ELEMENT_SPACING - EDGE_BUFFER) - 3
@@ -71,7 +69,7 @@ class Debug::EditorBase
   GRAPHIC_CHOOSER_FILE_LIST_Y      = HEADER_HEIGHT
   GRAPHIC_CHOOSER_FILE_LIST_WIDTH  = (BIG_BUTTON_WIDTH * 2) + (UIControls::List::LIST_FRAME_THICKNESS * 2)
   GRAPHIC_CHOOSER_FILE_LIST_HEIGHT = (ROW_HEIGHT * 15) + (UIControls::List::LIST_FRAME_THICKNESS * 2)
-  GRAPHIC_CHOOSER_WINDOW_WIDTH     = GRAPHIC_CHOOSER_FILE_LIST_X + GRAPHIC_CHOOSER_FILE_LIST_WIDTH + (ELEMENT_SPACING + GRAPHIC_CHOOSER_PREVIEW_BORDER * 2) + GRAPHIC_CHOOSER_PREVIEW_SIZE[0] + EDGE_BUFFER
+  GRAPHIC_CHOOSER_WINDOW_WIDTH     = GRAPHIC_CHOOSER_FILE_LIST_X + GRAPHIC_CHOOSER_FILE_LIST_WIDTH + (ELEMENT_SPACING + (GRAPHIC_CHOOSER_PREVIEW_BORDER * 2)) + GRAPHIC_CHOOSER_PREVIEW_SIZE[0] + EDGE_BUFFER
   GRAPHIC_CHOOSER_WINDOW_HEIGHT    = GRAPHIC_CHOOSER_FILE_LIST_Y + GRAPHIC_CHOOSER_FILE_LIST_HEIGHT + ELEMENT_SPACING + 20 + EDGE_BUFFER
 
   LOCATION_CHOOSER_VIEWPORT_SIZE   = [512, 384]
@@ -80,7 +78,7 @@ class Debug::EditorBase
   LOCATION_CHOOSER_MAP_LIST_Y      = HEADER_HEIGHT
   LOCATION_CHOOSER_MAP_LIST_WIDTH  = (BIG_BUTTON_WIDTH * 2) + (UIControls::List::LIST_FRAME_THICKNESS * 2) + 3
   LOCATION_CHOOSER_MAP_LIST_HEIGHT = (ROW_HEIGHT * 20) + (UIControls::List::LIST_FRAME_THICKNESS * 2)
-  LOCATION_CHOOSER_WINDOW_WIDTH    = LOCATION_CHOOSER_MAP_LIST_X + LOCATION_CHOOSER_MAP_LIST_WIDTH + (ELEMENT_SPACING + LOCATION_CHOOSER_PREVIEW_BORDER * 2) + LOCATION_CHOOSER_VIEWPORT_SIZE[0] + SCROLLBAR_THICKNESS + EDGE_BUFFER + 3
+  LOCATION_CHOOSER_WINDOW_WIDTH    = LOCATION_CHOOSER_MAP_LIST_X + LOCATION_CHOOSER_MAP_LIST_WIDTH + (ELEMENT_SPACING + (LOCATION_CHOOSER_PREVIEW_BORDER * 2)) + LOCATION_CHOOSER_VIEWPORT_SIZE[0] + SCROLLBAR_THICKNESS + EDGE_BUFFER + 3
   LOCATION_CHOOSER_WINDOW_HEIGHT   = LOCATION_CHOOSER_MAP_LIST_Y + LOCATION_CHOOSER_MAP_LIST_HEIGHT + ELEMENT_SPACING + 20 + EDGE_BUFFER
 
   GRAPHICS_FILE_TYPES = [".png", ".jpg", ".jpeg"]
@@ -105,18 +103,16 @@ class Debug::EditorBase
     refresh
   end
 
-  def initialize_parameters
-  end
+  def initialize_parameters; end
 
   def initialize_viewports
     @viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @pop_up_viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
     @pop_up_viewport.z = @viewport.z + 50
   end
 
-  def initialize_bitmaps
-  end
+  def initialize_bitmaps; end
 
   def initialize_background
     # Background
@@ -130,11 +126,9 @@ class Debug::EditorBase
     draw_background
   end
 
-  def initialize_overlay
-  end
+  def initialize_overlay; end
 
-  def initialize_sprites
-  end
+  def initialize_sprites; end
 
   def initialize_controls
     @components = UIControls::ListedContainer.new(
@@ -166,8 +160,7 @@ class Debug::EditorBase
     @components.add_control_at(:editor_label, 0, COLOR_SCHEME_CONTROL_Y, label)
   end
 
-  def initialize_values
-  end
+  def initialize_values; end
 
   def dispose
     @components.dispose
@@ -356,9 +349,9 @@ class Debug::EditorBase
     # List of files
     list = UIControls::List.new(GRAPHIC_CHOOSER_FILE_LIST_WIDTH, GRAPHIC_CHOOSER_FILE_LIST_HEIGHT, control_container.viewport, [])
     control_container.add_control_at(:list,
-                                    control_container.x + GRAPHIC_CHOOSER_FILE_LIST_X,
-                                    control_container.y + GRAPHIC_CHOOSER_FILE_LIST_Y,
-                                    list)
+                                     control_container.x + GRAPHIC_CHOOSER_FILE_LIST_X,
+                                     control_container.y + GRAPHIC_CHOOSER_FILE_LIST_Y,
+                                     list)
     # Filter
     filter_y = control_container.y + GRAPHIC_CHOOSER_FILE_LIST_Y + GRAPHIC_CHOOSER_FILE_LIST_HEIGHT + ELEMENT_SPACING - 2
     filter_label_width = 60
@@ -382,9 +375,10 @@ class Debug::EditorBase
     [[:ok, _INTL("OK")], [:cancel, _INTL("Cancel")]].each_with_index do |option, i|
       btn = UIControls::Button.new(BIG_BUTTON_WIDTH, BIG_BUTTON_HEIGHT, control_container.viewport, option[1])
       control_container.add_control_at(option[0],
-                                      control_container.x + control_container.width - (BIG_BUTTON_WIDTH * 2) - ELEMENT_SPACING - EDGE_BUFFER + ((BIG_BUTTON_WIDTH + ELEMENT_SPACING) * i),
-                                      control_container.y + control_container.height - BIG_BUTTON_HEIGHT - EDGE_BUFFER,
-                                      btn)
+        control_container.x + control_container.width - (BIG_BUTTON_WIDTH * 2) - ELEMENT_SPACING - EDGE_BUFFER + ((BIG_BUTTON_WIDTH + ELEMENT_SPACING) * i),
+        control_container.y + control_container.height - BIG_BUTTON_HEIGHT - EDGE_BUFFER,
+        btn
+      )
     end
     return control_container
   end
@@ -439,7 +433,7 @@ class Debug::EditorBase
       sprite.visible = true
       sprite.bitmap = preview_bitmap.bitmap
       zoom = [[GRAPHIC_CHOOSER_PREVIEW_SIZE[0].to_f / preview_bitmap.width,
-              GRAPHIC_CHOOSER_PREVIEW_SIZE[1].to_f / preview_bitmap.height].min, 1.0].min
+               GRAPHIC_CHOOSER_PREVIEW_SIZE[1].to_f / preview_bitmap.height].min, 1.0].min
       sprite.zoom_x = sprite.zoom_y = zoom
       sprite.ox = sprite.width / 2
       sprite.oy = sprite.height / 2
@@ -533,7 +527,7 @@ class Debug::EditorBase
     ret = []
     stack = []
     stack.push(0, 0)
-    while stack.length > 0
+    while !stack.empty?
       parent = stack[stack.length - 1]
       index = stack[stack.length - 2]
       if index >= map_levels.length
@@ -580,9 +574,9 @@ class Debug::EditorBase
     # List of maps
     list = UIControls::List.new(LOCATION_CHOOSER_MAP_LIST_WIDTH, LOCATION_CHOOSER_MAP_LIST_HEIGHT, control_container.viewport, [])
     control_container.add_control_at(:list,
-                                    control_container.x + LOCATION_CHOOSER_MAP_LIST_X,
-                                    control_container.y + LOCATION_CHOOSER_MAP_LIST_Y,
-                                    list)
+                                     control_container.x + LOCATION_CHOOSER_MAP_LIST_X,
+                                     control_container.y + LOCATION_CHOOSER_MAP_LIST_Y,
+                                     list)
     # Filter
     filter_y = control_container.y + LOCATION_CHOOSER_MAP_LIST_Y + LOCATION_CHOOSER_MAP_LIST_HEIGHT + ELEMENT_SPACING - 2
     filter_label_width = 60
@@ -605,14 +599,14 @@ class Debug::EditorBase
     # Zoom buttons
     Debug::MAP_ZOOM_FACTORS.each_with_index do |factor, i|
       btn = UIControls::Button.new(INLINE_BUTTON_WIDTH, BIG_BUTTON_HEIGHT, control_container.viewport, "1/#{factor}")
-      control_container.add_control_at("zoom_factor_#{factor}".to_sym,
-                                      list.x + list.width + ELEMENT_SPACING + ((INLINE_BUTTON_WIDTH + ELEMENT_SPACING) * i),
-                                      list.y,
-                                      btn)
+      control_container.add_control_at(:"zoom_factor_#{factor}",
+                                       list.x + list.width + ELEMENT_SPACING + ((INLINE_BUTTON_WIDTH + ELEMENT_SPACING) * i),
+                                       list.y,
+                                       btn)
       if factor == @settings[:map_zoom_factor]
-        control_container.get_control("zoom_factor_#{factor}".to_sym).set_highlighted
+        control_container.get_control(:"zoom_factor_#{factor}").set_highlighted
       else
-        control_container.get_control("zoom_factor_#{factor}".to_sym).set_not_highlighted
+        control_container.get_control(:"zoom_factor_#{factor}").set_not_highlighted
       end
     end
     # Clickable map area
@@ -630,9 +624,10 @@ class Debug::EditorBase
     [[:ok, _INTL("OK")], [:cancel, _INTL("Cancel")]].each_with_index do |option, i|
       btn = UIControls::Button.new(BIG_BUTTON_WIDTH, BIG_BUTTON_HEIGHT, control_container.viewport, option[1])
       control_container.add_control_at(option[0],
-                                      control_container.x + control_container.width - (BIG_BUTTON_WIDTH * 2) - ELEMENT_SPACING - EDGE_BUFFER + ((BIG_BUTTON_WIDTH + ELEMENT_SPACING) * i),
-                                      control_container.y + control_container.height - BIG_BUTTON_HEIGHT - EDGE_BUFFER,
-                                      btn)
+        control_container.x + control_container.width - (BIG_BUTTON_WIDTH * 2) - ELEMENT_SPACING - EDGE_BUFFER + ((BIG_BUTTON_WIDTH + ELEMENT_SPACING) * i),
+        control_container.y + control_container.height - BIG_BUTTON_HEIGHT - EDGE_BUFFER,
+        btn
+      )
     end
     return control_container
   end
@@ -699,7 +694,7 @@ class Debug::EditorBase
     cursor_sprite.bitmap = cursor_bitmaps[1]
     # Create lambda function that refreshes the map sprite
     set_map_bitmap = lambda do |map_id|
-      bitmap_sym = "map_#{map_id}".to_sym
+      bitmap_sym = :"map_#{map_id}"
       @bitmaps[bitmap_sym] ||= createMapBitmap(map_id)
       map_sprite.bitmap = @bitmaps[bitmap_sym]
       map_sprite.zoom_x = 1.0 / @settings[:map_zoom_factor]
@@ -796,7 +791,7 @@ class Debug::EditorBase
               set_cursor_position.call(*coordinates)
               controls.get_control(ctrl).set_highlighted
               Debug::MAP_ZOOM_FACTORS.each do |factor|
-                controls.get_control("zoom_factor_#{factor}".to_sym).set_highlight(factor == @settings[:map_zoom_factor])
+                controls.get_control(:"zoom_factor_#{factor}").set_highlight(factor == @settings[:map_zoom_factor])
               end
             end
           end
@@ -848,8 +843,7 @@ class Debug::EditorBase
 
   #-----------------------------------------------------------------------------
 
-  def refresh
-  end
+  def refresh; end
 
   #-----------------------------------------------------------------------------
 
@@ -871,8 +865,7 @@ class Debug::EditorBase
     end
   end
 
-  def update_input
-  end
+  def update_input; end
 
   def update
     @components.update

@@ -390,7 +390,8 @@ module Translator
     end
     msg_window.textspeed = MessageConfig.pbSettingToTextSpeed($PokemonSystem.textspeed)
     pbMessageDisplay(msg_window,
-       _INTL("Text files in the folder \"Text_{1}\" were successfully compiled into file \"Data/messages_{2}.dat\".", dir_name, dat_filename))
+                     _INTL("Text files in the folder \"Text_{1}\" were successfully compiled into file \"Data/messages_{2}.dat\".",
+                           dir_name, dat_filename))
     pbMessageDisplay(msg_window, _INTL("You may need to close the game to see any changes to messages."))
     pbDisposeMessageWindow(msg_window)
   end

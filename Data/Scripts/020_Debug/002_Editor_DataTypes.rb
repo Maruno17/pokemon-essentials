@@ -930,7 +930,7 @@ module PocketProperty
   end
 
   def self.format(value)
-    return _INTL("No Pocket") if value == 0 || value == :None
+    return _INTL("No Pocket") if [0, :None].include?(value)
     return (value) ? GameData::BagPocket.get(value).name : value.inspect
   end
 end

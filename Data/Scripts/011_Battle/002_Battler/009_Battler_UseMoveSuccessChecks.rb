@@ -668,9 +668,8 @@ class Battle::Battler
     # Semi-invulnerable moves
     if target.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
                                "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
-                               "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
-      return move.hitsFlyingTargets?
-    elsif target.effects[PBEffects::SkyDrop] >= 0 && target.effects[PBEffects::SkyDrop] != user.index
+                               "TwoTurnAttackInvulnerableInSkyTargetCannotAct") ||
+       (target.effects[PBEffects::SkyDrop] >= 0 && target.effects[PBEffects::SkyDrop] != user.index)
       return move.hitsFlyingTargets?
     elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground")
       return move.hitsDiggingTargets?

@@ -464,23 +464,23 @@ class UI::OptionsVisuals < UI::BaseVisuals
 
   PAGE_HANDLERS = HandlerHash.new
   PAGE_HANDLERS.add(:gameplay, {
-    :name  => proc { next _INTL("Gameplay") },
-    :order => 10,
+    :name        => proc { next _INTL("Gameplay") },
+    :order       => 10,
     :description => proc { next _INTL("Change how the game behaves.") }
   })
   PAGE_HANDLERS.add(:audio, {
-    :name  => proc { next _INTL("Audio") },
-    :order => 20,
+    :name        => proc { next _INTL("Audio") },
+    :order       => 20,
     :description => proc { next _INTL("Change the game's volume.") }
   })
   PAGE_HANDLERS.add(:graphics, {
-    :name  => proc { next _INTL("Graphics") },
-    :order => 30,
+    :name        => proc { next _INTL("Graphics") },
+    :order       => 30,
     :description => proc { next _INTL("Change how the game appears.") }
   })
   PAGE_HANDLERS.add(:controls, {
-    :name  => proc { next _INTL("Controls") },
-    :order => 40,
+    :name        => proc { next _INTL("Controls") },
+    :order       => 40,
     :description => proc { next _INTL("Edit the keyboard controls.") }
   })
 
@@ -602,10 +602,9 @@ class UI::OptionsVisuals < UI::BaseVisuals
 
   def refresh_on_index_changed(old_index)
     refresh_selected_option
-    if (old_index < 0) != (index < 0)
-      refresh_page_cursor
-      refresh_options_list
-    end
+    return if (old_index < 0) == (index < 0)
+    refresh_page_cursor
+    refresh_options_list
   end
 
   def refresh_page_tabs
@@ -713,17 +712,17 @@ class UI::OptionsVisuals < UI::BaseVisuals
         break
       end
       # Check for key/button press
-      Input::REMAP_KEYBOARD_KEYS.keys.each do |key|
+      Input::REMAP_KEYBOARD_KEYS.each_key do |key|
         pressed_key = key if Input.triggerex?(key)
         break if pressed_key
       end
       break if pressed_key
-      Input::REMAP_GAMEPAD_BUTTONS.keys.each do |key|
+      Input::REMAP_GAMEPAD_BUTTONS.each_key do |key|
         pressed_button = key if Input::Controller.triggerex?(key)
         break if pressed_button
       end
       break if pressed_button
-      Input::REMAP_GAMEPAD_AXIS.keys.each do |key|
+      Input::REMAP_GAMEPAD_AXIS.each_key do |key|
         pressed_button = key if Input.axis_triggerex?(key)
         break if pressed_button
       end
@@ -732,7 +731,7 @@ class UI::OptionsVisuals < UI::BaseVisuals
     # Change input binding if key/button was pressed
     if pressed_key || pressed_button
       pbPlayDecisionSE
-      control_index = (pressed_key ? 0 : 1)
+      control_index = (pressed_key) ? 0 : 1
       if $PokemonSystem.controls[this_input][control_index] == (pressed_key || pressed_button)
         $PokemonSystem.controls[this_input][control_index] = nil
       else

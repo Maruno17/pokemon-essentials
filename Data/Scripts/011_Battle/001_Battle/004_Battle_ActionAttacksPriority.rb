@@ -122,9 +122,7 @@ class Battle
     when :NearFoe, :RandomNearFoe, :AllNearFoes
       return false if !opposes?(idxUser, idxTarget)
       return false if !nearBattlers?(idxUser, idxTarget)
-    when :Foe
-      return false if !opposes?(idxUser, idxTarget)
-    when :AllFoes
+    when :Foe, :AllFoes
       return false if !opposes?(idxUser, idxTarget)
     when :NearOther, :AllNearOthers
       return false if !nearBattlers?(idxUser, idxTarget)

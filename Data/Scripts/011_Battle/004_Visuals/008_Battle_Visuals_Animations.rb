@@ -874,11 +874,10 @@ class Battle::Visuals::Animation::SwapSubstitute < Battle::Visuals::Animation
 
   def createSlideProcesses
     batSprite = @sprites["pokemon_#{@idxBattler}"]
+    battler_x = batSprite.x
     if @side == 0
-      battler_x = batSprite.x
       off_screen_x = batSprite.ox - batSprite.width
     else
-      battler_x = batSprite.x
       off_screen_x = Graphics.width + batSprite.ox
     end
     duration = (battler_x - off_screen_x).abs / 40

@@ -63,7 +63,7 @@ class UIControls::TextBox < UIControls::BaseControl
   def get_cursor_index_from_mouse_position
     char_widths = []
     @value.to_s.length.times { |i| char_widths[i] = self.bitmap.text_size(@value.to_s[i]).width }
-    mouse_x, mouse_y = mouse_pos
+    mouse_x, _ = mouse_pos
     mouse_x -= @text_box_rect.x + TEXT_BOX_PADDING
     return 0 if mouse_x < 0
     (@display_pos...char_widths.length).each do |i|
@@ -353,18 +353,9 @@ class UIControls::NumberTextBox < UIControls::TextBox
   TEXT_BOX_X     = 0
   TEXT_BOX_WIDTH = 65
   ARROW_WIDTH    = 12
-  ARROW_GRAPHIC  = %w(
-    . . . . . . . . . . . .
-    . . . . . . . . . . . .
-    . . . . . X X . . . . .
-    . . . . X X X X . . . .
-    . . . X X X X X X . . .
-    . . X X X X X X X X . .
-    . X X X X X X X X X X .
-    . X X X X X X X X X X .
-    . X X X X X X X X X X .
-    . . . . . . . . . . . .
-  )
+  ARROW_GRAPHIC  = [
+    '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X', 'X', '.', '.', '.', '.', '.', '.', '.', '.', '.', 'X', 'X', 'X', 'X', '.', '.', '.', '.', '.', '.', '.', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.', '.', '.', '.', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.', '.', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'
+  ]
 
   def initialize(width, height, viewport, min_value, max_value, value)
     super(width, height, viewport, value)
@@ -412,8 +403,8 @@ class UIControls::NumberTextBox < UIControls::TextBox
     @minus_rect = Rect.new(TEXT_BOX_WIDTH, @text_box_rect.y + (TEXT_BOX_HEIGHT / 2), ARROW_WIDTH, TEXT_BOX_HEIGHT / 2)
     @interactions = {
       :text_box => @text_box_rect,
-      :plus => @plus_rect,
-      :minus => @minus_rect
+      :plus     => @plus_rect,
+      :minus    => @minus_rect
     }
   end
 
@@ -517,8 +508,8 @@ class UIControls::FittedNumberTextBox < UIControls::NumberTextBox
     @minus_rect = Rect.new(width - ARROW_WIDTH, @text_box_rect.y + (TEXT_BOX_HEIGHT / 2), ARROW_WIDTH, TEXT_BOX_HEIGHT / 2)
     @interactions = {
       :text_box => @text_box_rect,
-      :plus => @plus_rect,
-      :minus => @minus_rect
+      :plus     => @plus_rect,
+      :minus    => @minus_rect
     }
   end
 end

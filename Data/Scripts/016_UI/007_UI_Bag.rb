@@ -135,7 +135,7 @@ class UI::BagVisualsList < Window_DrawableCommand
       qtytext = _ISPRINTF("× {1:d}", qty)
       xQty    = rect.x + rect.width - self.contents.text_size(qtytext).width - 16
       pbDrawShadowText(self.contents, xQty, rect.y + 2, rect.width, rect.height,
-                      qtytext, this_base_color, this_shadow_color)
+                       qtytext, this_base_color, this_shadow_color)
       max_text_width = xQty - rect.x - 4
     end
     # Draw item name
@@ -474,7 +474,7 @@ class UI::BagVisuals < UI::BaseVisuals
     all_pockets.each_with_index do |pckt, i|
       icon_pos = GameData::BagPocket.get(pckt).icon_position
       draw_image(@bitmaps[:pocket_icons], icon_x + (i * (icon_size[0] - icon_overlap)), icon_y,
-                icon_pos * icon_size[0], icon_size[1], *icon_size, overlay: :pocket_icons)
+                 icon_pos * icon_size[0], icon_size[1], *icon_size, overlay: :pocket_icons)
     end
     # Draw disabled pocket icons
     if [:choose_item, :battle_choose_item].include?(@mode) && @filtered_list
@@ -496,7 +496,7 @@ class UI::BagVisuals < UI::BaseVisuals
       draw_image(@bitmaps[:pocket_icons], icon_x - (icon_size[0] - icon_overlap), icon_y,
                  0, icon_size[1] * 3, *icon_size, overlay: :pocket_icons)
       draw_image(@bitmaps[:pocket_icons], icon_x + (all_pockets.length * (icon_size[0] - icon_overlap)), icon_y,
-                icon_size[0], icon_size[1] * 3, *icon_size, overlay: :pocket_icons)
+                 icon_size[0], icon_size[1] * 3, *icon_size, overlay: :pocket_icons)
     end
   end
 

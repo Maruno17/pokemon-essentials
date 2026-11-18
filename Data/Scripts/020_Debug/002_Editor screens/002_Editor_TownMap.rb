@@ -4,7 +4,6 @@ module Debug::PBSEditor; end
 #
 #===============================================================================
 class Debug::PBSEditor::TownMap < Debug::EditorBase
-
   REGIONS_LIST_WIDTH    = 196
   REGIONS_LIST_HEIGHT   = (ROW_HEIGHT * 8) + ((EDGE_BUFFER + 1) * 2)   # 196
   REGIONS_BUTTON_WIDTH  = (REGIONS_LIST_WIDTH - ELEMENT_SPACING) / 2
@@ -12,7 +11,7 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
 
   REGIONS_LIST_AREA_X      = CONTAINER_BORDER
   REGIONS_LIST_AREA_Y      = MENU_BAR_Y + MENU_BAR_HEIGHT + (CONTAINER_BORDER * 2)
-  REGIONS_LIST_AREA_WIDTH  = REGIONS_LIST_WIDTH + (ELEMENT_SPACING - EDGE_BUFFER) * 2
+  REGIONS_LIST_AREA_WIDTH  = REGIONS_LIST_WIDTH + ((ELEMENT_SPACING - EDGE_BUFFER) * 2)
   REGIONS_LIST_AREA_HEIGHT = HEADER_HEIGHT + REGIONS_LIST_HEIGHT + ELEMENT_SPACING + REGIONS_BUTTON_HEIGHT + EDGE_BUFFER
 
   GAME_SWITCHES_LIST_WIDTH    = REGIONS_LIST_WIDTH
@@ -66,7 +65,7 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
   def initialize_parameters
     @data      = load_data("Data/#{GameData::TownMap::DATA_FILENAME}") || {}
     if @data.empty?
-      @data[0] = GameData::TownMap.new({ :id => 0 })
+      @data[0] = GameData::TownMap.new({:id => 0})
     end
     @region_id = @data.keys.first || 0
     @region    = @data[@region_id]   # An instance of GameData::TownMap
@@ -86,14 +85,14 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
     btmp_width = 6
     btmp_height = 6
     # Point and selected point bitmaps
-    btmp_graphic = %w(
+    btmp_graphic = %w[
       . . . . . .
       . . . . X X
       . . . X - -
       . . X - X X
       . X - X ~ ~
       . X - X ~ ~
-    )
+    ]
     @bitmaps[:point] = Bitmap.new(btmp_width * 2, btmp_height * 2) if !@bitmaps[:point]
     @bitmaps[:selected_point] = Bitmap.new(btmp_width * 2, btmp_height * 2) if !@bitmaps[:selected_point]
     btmps = [@bitmaps[:point], @bitmaps[:selected_point]]
@@ -180,8 +179,9 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
     # Game Switches list
     list = UIControls::CheckboxList.new(GAME_SWITCHES_LIST_WIDTH, GAME_SWITCHES_LIST_HEIGHT, @viewport, [], ROW_HEIGHT)
     @components.add_control_at(:game_switches,
-      DISPLAY_CONTROLS_X + EDGE_BUFFER, DISPLAY_CONTROLS_Y + HEADER_HEIGHT,
-      list
+                               DISPLAY_CONTROLS_X + EDGE_BUFFER,
+                               DISPLAY_CONTROLS_Y + HEADER_HEIGHT,
+                               list
     )
     # All and None buttons
     [
@@ -390,9 +390,9 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
     # Lines separating scrollbars from map
     [
       [VERTICAL_SCROLLBAR_X - EDGE_BUFFER - 1, VERTICAL_SCROLLBAR_Y - EDGE_BUFFER - 1,
-       1, VERTICAL_SCROLLBAR_HEIGHT + HORIZONTAL_SCROLLBAR_HEIGHT + (EDGE_BUFFER + 1) * 3],
+       1, VERTICAL_SCROLLBAR_HEIGHT + HORIZONTAL_SCROLLBAR_HEIGHT + ((EDGE_BUFFER + 1) * 3)],
       [HORIZONTAL_SCROLLBAR_X - EDGE_BUFFER - 1, HORIZONTAL_SCROLLBAR_Y - EDGE_BUFFER - 1,
-       HORIZONTAL_SCROLLBAR_WIDTH + VERTICAL_SCROLLBAR_WIDTH + (EDGE_BUFFER + 1) * 3, 1]
+       HORIZONTAL_SCROLLBAR_WIDTH + VERTICAL_SCROLLBAR_WIDTH + ((EDGE_BUFFER + 1) * 3), 1]
     ].each do |rect|
       @sprites[:background].bitmap.fill_rect(*rect, contrast_color)
     end
@@ -517,7 +517,7 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
   # Creates point data at @coordinate if it doesn't exist.
   def ensure_point_data
     return if @selected_point
-    @selected_point = { :position => @coordinate.clone, :real_name => "" }
+    @selected_point = {:position => @coordinate.clone, :real_name => ""}
     @region.points.push(@selected_point)
     refresh_map_points
   end
@@ -649,7 +649,7 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
     end
     # Go through all @region.points and create any missing sprites
     @region.points.each do |point|
-      key = "point_#{point[:position][0]}_#{point[:position][1]}".to_sym
+      key = :"point_#{point[:position][0]}_#{point[:position][1]}"
       next if @sprites[key] && !@sprites[key].disposed?
       spr = Sprite.new(@map_viewport)
       spr.bitmap = @bitmaps[:point]
@@ -787,8 +787,8 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
   def clamp_size_property
     margins = @region.margins
     point_size = @region.point_size
-    max_width = (@sprites[:map].width - margins[0] * 2) / point_size[0]
-    max_height = (@sprites[:map].height - margins[1] * 2) / point_size[1]
+    max_width = (@sprites[:map].width - (margins[0] * 2)) / point_size[0]
+    max_height = (@sprites[:map].height - (margins[1] * 2)) / point_size[1]
     return if @region.size[0] <= max_width && @region.size[1] <= max_height
     return if max_width < 2 || max_height < 2   # Avoids an error with clamp
     @region.instance_eval { @size = [@size[0].clamp(2, max_width), @size[1].clamp(2, max_height)] }
@@ -880,7 +880,6 @@ class Debug::PBSEditor::TownMap < Debug::EditorBase
     @map_viewport.oy = @components.get_control(:v_scrollbar).position
     @map_viewport.ox = @components.get_control(:h_scrollbar).position
   end
-
 end
 
 #===============================================================================

@@ -190,7 +190,7 @@ class AnimationEditor
       size = {
         :editor_settings      => [EDITOR_SETTINGS_X, EDITOR_SETTINGS_Y, EDITOR_SETTINGS_WIDTH, EDITOR_SETTINGS_HEIGHT],
         :animation_properties => [ANIM_PROPERTIES_X, ANIM_PROPERTIES_Y, ANIM_PROPERTIES_WIDTH, ANIM_PROPERTIES_HEIGHT],
-        :particle_properties  => [PARTICLE_PROPERTIES_X, PARTICLE_PROPERTIES_Y, PARTICLE_PROPERTIES_WIDTH, PARTICLE_PROPERTIES_HEIGHT],
+        :particle_properties  => [PARTICLE_PROPERTIES_X, PARTICLE_PROPERTIES_Y, PARTICLE_PROPERTIES_WIDTH, PARTICLE_PROPERTIES_HEIGHT]
       }[pop_up]
       @components[pop_up] = UIControls::ListedContainer.new(
         size[0] + 4, size[1], size[2] - 8, size[3], @pop_up_viewport
@@ -446,9 +446,9 @@ class AnimationEditor
     list = editor.get_control(:particles)
     button_width = (list.width - BATCH_EDITOR_SPACING) / 2
     [[:select_all_particles, _INTL("Select all")],
-    [:select_no_particles, _INTL("Select none")]].each_with_index do |btn, i|
+     [:select_no_particles, _INTL("Select none")]].each_with_index do |btn, i|
       editor.add_control_at(btn[0],
-        list.x + i * (button_width + BATCH_EDITOR_SPACING),
+        list.x + (i * (button_width + BATCH_EDITOR_SPACING)),
         list.y + list.height + BATCH_EDITOR_SPACING,
         UIControls::Button.new(button_width, BATCH_EDITOR_BUTTON_HEIGHT, editor.viewport, btn[1])
       )
@@ -528,9 +528,9 @@ class AnimationEditor
     # List of files
     list = UIControls::List.new(CHOOSER_FILE_LIST_WIDTH, CHOOSER_FILE_LIST_HEIGHT, graphic_chooser.viewport, [])
     graphic_chooser.add_control_at(:list,
-                                  graphic_chooser.x + CHOOSER_FILE_LIST_X,
-                                  graphic_chooser.y + CHOOSER_FILE_LIST_Y,
-                                  list)
+                                   graphic_chooser.x + CHOOSER_FILE_LIST_X,
+                                   graphic_chooser.y + CHOOSER_FILE_LIST_Y,
+                                   list)
     # Filter
     filter_y = graphic_chooser.y + CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 2
     graphic_chooser.add_control_at(:filter_label,
@@ -552,9 +552,9 @@ class AnimationEditor
     [[:ok, _INTL("OK")], [:cancel, _INTL("Cancel")]].each_with_index do |option, i|
       btn = UIControls::Button.new(CHOOSER_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, graphic_chooser.viewport, option[1])
       graphic_chooser.add_control_at(option[0],
-                                    graphic_chooser.x + graphic_chooser.width - (CHOOSER_BUTTON_WIDTH * 2) - 4 - 3 + ((CHOOSER_BUTTON_WIDTH + 4) * i),
-                                    list.y + list.height + CHOOSER_ROW_HEIGHT - MESSAGE_BOX_BUTTON_HEIGHT,
-                                    btn)
+                                     graphic_chooser.x + graphic_chooser.width - (CHOOSER_BUTTON_WIDTH * 2) - 4 - 3 + ((CHOOSER_BUTTON_WIDTH + 4) * i),
+                                     list.y + list.height + CHOOSER_ROW_HEIGHT - MESSAGE_BOX_BUTTON_HEIGHT,
+                                     btn)
     end
     graphic_chooser.visible = false
     graphic_chooser.z = 100
@@ -566,14 +566,14 @@ class AnimationEditor
     # List of files
     list = UIControls::List.new(CHOOSER_FILE_LIST_WIDTH, CHOOSER_FILE_LIST_HEIGHT, audio_chooser.viewport, [])
     audio_chooser.add_control_at(:list,
-                                audio_chooser.x + CHOOSER_FILE_LIST_X,
-                                audio_chooser.y + CHOOSER_FILE_LIST_Y,
-                                list)
+                                 audio_chooser.x + CHOOSER_FILE_LIST_X,
+                                 audio_chooser.y + CHOOSER_FILE_LIST_Y,
+                                 list)
     # Volume and pitch sliders
     [[:volume, _INTL("Volume"), 0, 100], [:pitch, _INTL("Pitch"), 0, 200]].each_with_index do |option, i|
       label = UIControls::Label.new(AUDIO_CHOOSER_LABEL_WIDTH, 28, audio_chooser.viewport, option[1])
       audio_chooser.add_control_at((option[0].to_s + "_label").to_sym,
-                                  list.x + list.width + 6, list.y + (28 * i), label)
+                                   list.x + list.width + 6, list.y + (28 * i), label)
       slider = UIControls::NumberSlider.new(AUDIO_CHOOSER_SLIDER_WIDTH, 28, audio_chooser.viewport, option[2], option[3], 100)
       audio_chooser.add_control_at(option[0], label.x + label.width + 9, label.y, slider)
     end
@@ -581,9 +581,9 @@ class AnimationEditor
     [[:play, _INTL("Play")], [:stop, _INTL("Stop")]].each_with_index do |option, i|
       btn = UIControls::Button.new(CHOOSER_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, audio_chooser.viewport, option[1])
       audio_chooser.add_control_at(option[0],
-                                  list.x + list.width + 4 + ((CHOOSER_BUTTON_WIDTH + 4) * i),
-                                  list.y + (28 * 2),
-                                  btn)
+                                   list.x + list.width + 4 + ((CHOOSER_BUTTON_WIDTH + 4) * i),
+                                   list.y + (28 * 2),
+                                   btn)
     end
     # Filter
     filter_y = audio_chooser.y + CHOOSER_FILE_LIST_Y + CHOOSER_FILE_LIST_HEIGHT + 2
@@ -606,9 +606,9 @@ class AnimationEditor
     [[:ok, _INTL("OK")], [:cancel, _INTL("Cancel")]].each_with_index do |option, i|
       btn = UIControls::Button.new(CHOOSER_BUTTON_WIDTH, MESSAGE_BOX_BUTTON_HEIGHT, audio_chooser.viewport, option[1])
       audio_chooser.add_control_at(option[0],
-                                  audio_chooser.x + audio_chooser.width - (CHOOSER_BUTTON_WIDTH * 2) - 4 - 3 + ((CHOOSER_BUTTON_WIDTH + 4) * i),
-                                  list.y + list.height + CHOOSER_ROW_HEIGHT - MESSAGE_BOX_BUTTON_HEIGHT,
-                                  btn)
+                                   audio_chooser.x + audio_chooser.width - (CHOOSER_BUTTON_WIDTH * 2) - 4 - 3 + ((CHOOSER_BUTTON_WIDTH + 4) * i),
+                                   list.y + list.height + CHOOSER_ROW_HEIGHT - MESSAGE_BOX_BUTTON_HEIGHT,
+                                   btn)
     end
     audio_chooser.visible = false
     audio_chooser.z = 100
@@ -693,7 +693,7 @@ class AnimationEditor
       end
     end
     # Create animation player
-    PBDebug.logonerr {
+    PBDebug.logonerr do
       anim_player = AnimationPlayer.new(@anim, user_battler, target_battlers, @components[:canvas])
       anim_player.looping = @components[:play_controls].looping
       anim_player.slowdown = @components[:play_controls].slowdown
@@ -720,7 +720,7 @@ class AnimationEditor
         break if anim_player.finished?
       end
       anim_player.dispose
-    }
+    end
     @components[:canvas].end_playing_animation
     play_controls.end_playing_animation
   end
@@ -730,7 +730,7 @@ class AnimationEditor
   def create_pop_up_window(width, height, ret = nil)
     if !ret
       ret = BitmapSprite.new(width + (CONTAINER_BORDER * 2),
-                            height + (CONTAINER_BORDER * 2), @pop_up_viewport)
+                             height + (CONTAINER_BORDER * 2), @pop_up_viewport)
       ret.x = (WINDOW_WIDTH - ret.width) / 2
       ret.y = (WINDOW_HEIGHT - ret.height) / 2
       ret.z = -1
@@ -740,7 +740,7 @@ class AnimationEditor
     ret.bitmap.font.size = text_size
     # Draw pop-up box border
     ret.bitmap.border_rect(CONTAINER_BORDER, CONTAINER_BORDER, width, height,
-                          CONTAINER_BORDER, get_color_of(:background), get_color_of(:line))
+                           CONTAINER_BORDER, get_color_of(:background), get_color_of(:line))
     # Fill pop-up box with white
     ret.bitmap.fill_rect(CONTAINER_BORDER, CONTAINER_BORDER, width, height, get_color_of(:background))
     return ret
@@ -778,7 +778,7 @@ class AnimationEditor
         captured = nil if !captured.busy?
       end
       if !captured || !captured.respond_to?("mouse_in_control?") ||
-        !captured.mouse_in_control?
+         !captured.mouse_in_control?
         buttons.each do |btn|
           next if captured && btn[1] == captured
           btn[1].update
@@ -1045,9 +1045,9 @@ class AnimationEditor
       preview_bitmap&.dispose
       sprite.visible = false
       bg_bitmap.bitmap.fill_rect(CONTAINER_BORDER - graphic_chooser.x + list.x + list.width + 4 + GRAPHIC_CHOOSER_PREVIEW_BORDER,
-                                CONTAINER_BORDER - graphic_chooser.y + list.y + GRAPHIC_CHOOSER_PREVIEW_BORDER,
-                                GRAPHIC_CHOOSER_PREVIEW_SIZE, GRAPHIC_CHOOSER_PREVIEW_SIZE,
-                                get_color_of(:background))
+                                 CONTAINER_BORDER - graphic_chooser.y + list.y + GRAPHIC_CHOOSER_PREVIEW_BORDER,
+                                 GRAPHIC_CHOOSER_PREVIEW_SIZE, GRAPHIC_CHOOSER_PREVIEW_SIZE,
+                                 get_color_of(:background))
       next if filename.nil? || filename == ""
       folder = sprite_folder + "/"
       fname = filename
@@ -1073,14 +1073,14 @@ class AnimationEditor
       sprite.visible = true
       sprite.bitmap = preview_bitmap.bitmap
       zoom = [[GRAPHIC_CHOOSER_PREVIEW_SIZE.to_f / preview_bitmap.width,
-              GRAPHIC_CHOOSER_PREVIEW_SIZE.to_f / preview_bitmap.height].min, 1.0].min
+               GRAPHIC_CHOOSER_PREVIEW_SIZE.to_f / preview_bitmap.height].min, 1.0].min
       sprite.zoom_x = sprite.zoom_y = zoom
       sprite.ox = sprite.width / 2
       sprite.oy = sprite.height / 2
       bg_bitmap.bitmap.fill_rect(CONTAINER_BORDER + sprite.x - graphic_chooser.x - (sprite.width * sprite.zoom_x / 2).round,
-                                CONTAINER_BORDER + sprite.y - graphic_chooser.y - (sprite.height * sprite.zoom_y / 2).round,
-                                sprite.width * sprite.zoom_x, sprite.height * sprite.zoom_y,
-                                Color.magenta)
+                                 CONTAINER_BORDER + sprite.y - graphic_chooser.y - (sprite.height * sprite.zoom_y / 2).round,
+                                 sprite.width * sprite.zoom_x, sprite.height * sprite.zoom_y,
+                                 Color.magenta)
     end
     set_preview_graphic.call(preview_sprite, list.value)
     # Interaction loop
@@ -1155,7 +1155,7 @@ class AnimationEditor
     list = audio_chooser.get_control(:list)
     all_files = get_all_files_in_folder(audio_folder, [".wav", ".ogg", ".mp3", ".wma"], ["USER", "TARGET"])
     all_files.prepend(["TARGET", _INTL("[[Target's cry]]")]) if !@anim[:no_target]
-    all_files.prepend(["USER",  _INTL("[[User's cry]]")]) if !@anim[:no_user]
+    all_files.prepend(["USER", _INTL("[[User's cry]]")]) if !@anim[:no_user]
     idx = 0
     all_files.each_with_index do |f, i|
       next if f[0] != selected
@@ -1687,8 +1687,8 @@ class AnimationEditor
       new_file = choose_graphic_file(this_particle[:graphic])
       if this_particle[:graphic] != new_file
         this_particle[:graphic] = new_file
-        if ["USER", "USER_OPP", "USER_BACK", "USER_FRONT",
-            "TARGET", "TARGET_OPP" "TARGET_FRONT", "TARGET_BACK",].include?(new_file)
+        if ["USER", "USER_OPP", "USER_FRONT", "USER_BACK",
+            "TARGET", "TARGET_OPP", "TARGET_FRONT", "TARGET_BACK"].include?(new_file)
           this_particle.delete(:frame)
           @components[:timeline].set_particles(@anim[:particles])
           refresh_component(:timeline)
@@ -1897,7 +1897,7 @@ class AnimationEditor
       "TARGET"       => _INTL("[[Target's sprite]]"),
       "TARGET_OPP"   => _INTL("[[Target's other side sprite]]"),
       "TARGET_FRONT" => _INTL("[[Target's front sprite]]"),
-      "TARGET_BACK"  => _INTL("[[Target's back sprite]]"),
+      "TARGET_BACK"  => _INTL("[[Target's back sprite]]")
     }
     graphic_name = this_particle[:graphic]
     graphic_name = graphic_override_names[graphic_name] if graphic_override_names.has_key?(graphic_name)
@@ -1945,7 +1945,7 @@ class AnimationEditor
     ctrls.get_control(:focus).options = focus_values
     # "If on opposing side..." properties
     if GameData::Animation::FOCUS_TYPES_WITH_USER_AND_TARGET.include?(this_particle[:focus]) ||
-      (GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(this_particle[:focus]) && @anim[:no_user])
+       (GameData::Animation::FOCUS_TYPES_OF_SCREEN.include?(this_particle[:focus]) && @anim[:no_user])
       ctrls.get_control(:foe_invert_x).disable
       ctrls.get_control(:foe_invert_y).disable
       ctrls.get_control(:foe_flip).disable
@@ -1956,9 +1956,9 @@ class AnimationEditor
     end
     # Tiled graphic
     if !this_particle[:second_layer] &&
-      (this_particle[:emitter_type] || :none) == :none &&
-      !GameData::Animation::FOCUS_TYPES_WITH_USER.include?(this_particle[:focus]) &&
-      !GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(this_particle[:focus])
+       (this_particle[:emitter_type] || :none) == :none &&
+       !GameData::Animation::FOCUS_TYPES_WITH_USER.include?(this_particle[:focus]) &&
+       !GameData::Animation::FOCUS_TYPES_WITH_TARGET.include?(this_particle[:focus])
       ctrls.get_control(:tiled_graphic).enable
     else
       this_particle[:tiled_graphic] = false
@@ -2019,7 +2019,7 @@ class AnimationEditor
     when :battlers_layout
       component.get_control(:side_size_1).value = @settings[:anim_editor][:side_sizes][0]
       component.get_control(:side_size_2).value = @settings[:anim_editor][:side_sizes][1]
-      user_indices = { 0 => "0" }
+      user_indices = {0 => "0"}
       user_indices[2] = "2" if @settings[:anim_editor][:side_sizes][0] >= 2
       user_indices[4] = "4" if @settings[:anim_editor][:side_sizes][0] >= 3
       component.get_control(:user_index).options = user_indices
@@ -2142,7 +2142,7 @@ class AnimationEditor
     end
     # Update controls (except the captured control)
     if !@captured || !@captured.respond_to?("mouse_in_control?") ||
-      !@captured.mouse_in_control?
+       !@captured.mouse_in_control?
       @components.each_value do |c|
         next if old_captured && c == old_captured
         c.update
@@ -2181,7 +2181,7 @@ class AnimationEditor
         @ready_to_play = false
       elsif @captured.nil? && @quit
         case message(_INTL("Do you want to save changes to the animation?"),
-                    [:yes, _INTL("Yes")], [:no, _INTL("No")], [:cancel, _INTL("Cancel")])
+                     [:yes, _INTL("Yes")], [:no, _INTL("No")], [:cancel, _INTL("Cancel")])
         when :yes
           save
         when :cancel

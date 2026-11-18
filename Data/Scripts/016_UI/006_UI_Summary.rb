@@ -456,7 +456,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     src_index = PAGE_HANDLERS[@page][:icon_index]
     if src_index
       draw_image(@bitmaps[:page_icons], start_x + (index * (icon_width + spacing_x)), start_y,
-                src_index * icon_width, icon_height, icon_width, icon_height)
+                 src_index * icon_width, icon_height, icon_width, icon_height)
     end
   end
 
@@ -511,7 +511,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
                  PARTY_ICON_SIZE[0] * 2, 0, *PARTY_ICON_SIZE)
     else   # Disabled arrow
       draw_image(@bitmaps[:party_icons], x_pos, arrow_y,
-                PARTY_ICON_SIZE[0] * 3, 0, *PARTY_ICON_SIZE)
+                 PARTY_ICON_SIZE[0] * 3, 0, *PARTY_ICON_SIZE)
     end
     # Draw up dots
     if @visible_top_index > 0
@@ -606,7 +606,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     end
     if status >= 0
       draw_image(UI_FOLDER + _INTL("statuses"), 12, 364,
-                0, status * GameData::Status::ICON_SIZE[1], *GameData::Status::ICON_SIZE)
+                 0, status * GameData::Status::ICON_SIZE[1], *GameData::Status::ICON_SIZE)
     end
   end
 
@@ -867,11 +867,11 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
       ribbon_data = GameData::Ribbon.get(@pokemon.ribbons[r_index])
       image_offset = ribbon_data.icon_position
       draw_image(graphics_folder + "ribbons",
-                RIBBON_X + ((RIBBON_SIZE[0] + RIBBON_SPACING_X) * (index % RIBBON_COLUMNS)),
-                RIBBON_Y + ((RIBBON_SIZE[1] + RIBBON_SPACING_Y) * (index / RIBBON_COLUMNS).floor),
-                RIBBON_SIZE[0] * (image_offset % RIBBON_COLUMNS_GRAPHIC),
-                RIBBON_SIZE[1] * (image_offset / RIBBON_COLUMNS_GRAPHIC).floor,
-                *RIBBON_SIZE)
+                 RIBBON_X + ((RIBBON_SIZE[0] + RIBBON_SPACING_X) * (index % RIBBON_COLUMNS)),
+                 RIBBON_Y + ((RIBBON_SIZE[1] + RIBBON_SPACING_Y) * (index / RIBBON_COLUMNS).floor),
+                 RIBBON_SIZE[0] * (image_offset % RIBBON_COLUMNS_GRAPHIC),
+                 RIBBON_SIZE[1] * (image_offset / RIBBON_COLUMNS_GRAPHIC).floor,
+                 *RIBBON_SIZE)
     end
   end
 
@@ -1259,7 +1259,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
   def clean_up_navigate_moves
     return if @mode == :choose_move
     @sprites[:move_cursor].visible = false
-    @sprites[:pokemon].visible  = true
+    @sprites[:pokemon].visible = true
     @sprites[:pokemon_icon].visible = false
     @move_index = nil
   end

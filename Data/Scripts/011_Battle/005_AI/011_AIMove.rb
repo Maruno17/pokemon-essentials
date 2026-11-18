@@ -85,8 +85,9 @@ class Battle::AI::AIMove
     ret = @move.power
     ret = 60 if ret == 1
     return ret if !@ai.trainer.medium_skill?
-    return Battle::AI::Handlers.get_base_power(function_code,
-       ret, self, @ai.user, @ai.target, @ai, @ai.battle)
+    return Battle::AI::Handlers.get_base_power(
+      function_code, ret, self, @ai.user, @ai.target, @ai, @ai.battle
+    )
   end
 
   # Full damage calculation.
@@ -296,16 +297,14 @@ class Battle::AI::AIMove
   def rough_damage_modifiers_gym_badges(user, target, calc_type, base_dmg, multipliers, is_critical)
     return if !@ai.battle.internalBattle
     if @ai.trainer.high_skill? && user.battler.pbOwnedByPlayer?
-      if physicalMove?(calc_type) && @ai.battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_ATTACK
-        multipliers[:attack_multiplier] *= 1.1
-      elsif specialMove?(calc_type) && @ai.battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPECIAL_ATTACK
+      if (physicalMove?(calc_type) && @ai.battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_ATTACK) ||
+         (specialMove?(calc_type) && @ai.battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPECIAL_ATTACK)
         multipliers[:attack_multiplier] *= 1.1
       end
     end
     if @ai.trainer.high_skill? && target.battler.pbOwnedByPlayer?
-      if physicalMove?(calc_type) && @ai.battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_DEFENSE
-        multipliers[:defense_multiplier] *= 1.1
-      elsif specialMove?(calc_type) && @ai.battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPECIAL_DEFENSE
+      if (physicalMove?(calc_type) && @ai.battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_DEFENSE) ||
+         (specialMove?(calc_type) && @ai.battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPECIAL_DEFENSE)
         multipliers[:defense_multiplier] *= 1.1
       end
     end
@@ -365,7 +364,7 @@ class Battle::AI::AIMove
     if @ai.trainer.medium_skill?
       weather_type = target.battler.effectiveWeather
       weather_type = :Sun if user.has_active_ability?(:MEGASOL)
-      case target.battler.effectiveWeather
+      case weather_type
       when :Sun, :HarshSun
         case calc_type
         when :FIRE
@@ -397,19 +396,9 @@ class Battle::AI::AIMove
     # Aurora Veil, Reflect, Light Screen
     if @ai.trainer.medium_skill? && !@move.ignoresReflect? && !is_critical &&
        !user.has_active_ability?(:INFILTRATOR)
-      if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
-        if @ai.battle.singleBattle?
-          multipliers[:final_damage_multiplier] /= 2
-        else
-          multipliers[:final_damage_multiplier] *= 2 / 3.0
-        end
-      elsif target.pbOwnSide.effects[PBEffects::Reflect] > 0 && physicalMove?(calc_type)
-        if @ai.battle.singleBattle?
-          multipliers[:final_damage_multiplier] /= 2
-        else
-          multipliers[:final_damage_multiplier] *= 2 / 3.0
-        end
-      elsif target.pbOwnSide.effects[PBEffects::LightScreen] > 0 && specialMove?(calc_type)
+      if target.pbOwnSide.effects[PBEffects::AuroraVeil] > 0 ||
+         (target.pbOwnSide.effects[PBEffects::Reflect] > 0 && physicalMove?(calc_type)) ||
+         (target.pbOwnSide.effects[PBEffects::LightScreen] > 0 && specialMove?(calc_type))
         if @ai.battle.singleBattle?
           multipliers[:final_damage_multiplier] /= 2
         else
@@ -453,10 +442,10 @@ class Battle::AI::AIMove
   def calc_type_mod(user, target, calc_type, base_dmg, multipliers, is_critical)
     ret = target.effectiveness_of_type_against_battler(calc_type, user, @move)
     if target.battler.isSpecies?(:TERAPAGOS) && target.battler.form == 1 &&
-      target.has_active_ability?(:TERASHELL) && !target.being_mold_broken? &&
-      target.hp == target.totalhp &&
-      move.damagingMove? && !move.is_a?(Battle::Move::FixedDamageMove) &&
-      !Effectiveness.not_very_effective?(ret) && !Effectiveness.ineffective?(ret)
+       target.has_active_ability?(:TERASHELL) && !target.being_mold_broken? &&
+       target.hp == target.totalhp &&
+       move.damagingMove? && !move.is_a?(Battle::Move::FixedDamageMove) &&
+       !Effectiveness.not_very_effective?(ret) && !Effectiveness.ineffective?(ret)
       ret = Effectiveness::NOT_VERY_EFFECTIVE_MULTIPLIER
     end
     return ret
@@ -473,9 +462,7 @@ class Battle::AI::AIMove
   def rough_accuracy
     # Determine user and target
     user = @ai.user
-    user_battler = user.battler
     target = @ai.target
-    target_battler = target.battler
     # OHKO move accuracy
     if @move.is_a?(Battle::Move::OHKO)
       ret = self.accuracy + user.level - target.level
@@ -506,8 +493,8 @@ class Battle::AI::AIMove
     return 100 if modifiers[:base_accuracy] == 0
     # Calculation
     max_stage = Battle::Battler::STAT_STAGE_MAXIMUM
-    accStage = [[modifiers[:accuracy_stage], -max_stage].max, max_stage].min + max_stage
-    evaStage = [[modifiers[:evasion_stage], -max_stage].max, max_stage].min + max_stage
+    accStage = modifiers[:accuracy_stage].clamp(-max_stage, max_stage) + max_stage
+    evaStage = modifiers[:evasion_stage].clamp(-max_stage, max_stage) + max_stage
     stageMul = Battle::Battler::ACC_EVA_STAGE_MULTIPLIERS
     stageDiv = Battle::Battler::ACC_EVA_STAGE_DIVISORS
     accuracy = 100.0 * stageMul[accStage] / stageDiv[accStage]
@@ -541,8 +528,8 @@ class Battle::AI::AIMove
     # Item effects that alter accuracy calculation
     if user.item_active?
       if user.item == :ZOOMLENS
-        if rough_priority(user) <= 0
-          modifiers[:accuracy_multiplier] *= 1.2 if target.faster_than?(user)
+        if rough_priority(user) <= 0 && target.faster_than?(user)
+          modifiers[:accuracy_multiplier] *= 1.2
         end
       else
         Battle::ItemEffects.triggerAccuracyCalcFromUser(
@@ -560,18 +547,16 @@ class Battle::AI::AIMove
       modifiers[:accuracy_multiplier] *= 5 / 3.0
     end
     if @ai.trainer.medium_skill?
-      if user.effects[PBEffects::MicleBerry]
-        modifiers[:accuracy_multiplier] *= 1.2
-      end
+      modifiers[:accuracy_multiplier] *= 1.2 if user.effects[PBEffects::MicleBerry]
       modifiers[:evasion_stage] = 0 if target.effects[PBEffects::Foresight] && modifiers[:evasion_stage] > 0
       modifiers[:evasion_stage] = 0 if target.effects[PBEffects::MiracleEye] && modifiers[:evasion_stage] > 0
     end
     # "AI-specific calculations below"
     modifiers[:evasion_stage] = 0 if function_code == "IgnoreTargetDefSpDefEvaStatStages" ||   # Chip Away
                                      function_code == "IgnoreTargetStatStagesNormalEffectiveAgainstFairy"   # Nihil Light
-    if @ai.trainer.medium_skill?
-      modifiers[:base_accuracy] = 0 if user.effects[PBEffects::LockOn] > 0 &&
-                                       user.effects[PBEffects::LockOnPos] == target.index
+    if @ai.trainer.medium_skill? && user.effects[PBEffects::LockOn] > 0 &&
+       user.effects[PBEffects::LockOnPos] == target.index
+      modifiers[:base_accuracy] = 0
     end
     if @ai.trainer.medium_skill?
       case function_code
@@ -595,24 +580,28 @@ class Battle::AI::AIMove
     crit_stage = 0
     # Ability effects that alter critical hit rate
     if user.ability_active?
-      crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromUser(user_battler.ability,
-         user_battler, target_battler, @move, crit_stage)
+      crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromUser(
+        user_battler.ability, user_battler, target_battler, @move, crit_stage
+      )
       return -1 if crit_stage < 0
     end
     if target.ability_active? && !target.being_mold_broken?
-      crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target_battler.ability,
-         user_battler, target_battler, @move, crit_stage)
+      crit_stage = Battle::AbilityEffects.triggerCriticalCalcFromTarget(
+        target_battler.ability, user_battler, target_battler, @move, crit_stage
+      )
       return -1 if crit_stage < 0
     end
     # Item effects that alter critical hit rate
     if user.item_active?
-      crit_stage = Battle::ItemEffects.triggerCriticalCalcFromUser(user_battler.item,
-         user_battler, target_battler, @move, crit_stage)
+      crit_stage = Battle::ItemEffects.triggerCriticalCalcFromUser(
+        user_battler.item, user_battler, target_battler, @move, crit_stage
+      )
       return -1 if crit_stage < 0
     end
     if target.item_active?
-      crit_stage = Battle::ItemEffects.triggerCriticalCalcFromTarget(user_battler.item,
-         user_battler, target_battler, @move, crit_stage)
+      crit_stage = Battle::ItemEffects.triggerCriticalCalcFromTarget(
+        user_battler.item, user_battler, target_battler, @move, crit_stage
+      )
       return -1 if crit_stage < 0
     end
     # Other effects

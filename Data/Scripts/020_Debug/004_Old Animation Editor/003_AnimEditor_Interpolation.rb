@@ -32,8 +32,8 @@ module BattleAnimationEditor
       end
       mouse = Mouse.getMousePos(true)
       return if !mouse
-      self.x = [[mouse[0], 0].max, 512].min
-      self.y = [[mouse[1], 0].max, 384].min
+      self.x = mouse[0].clamp(0, 512)
+      self.y = mouse[1].clamp(0, 384)
     end
 
     def hittest?

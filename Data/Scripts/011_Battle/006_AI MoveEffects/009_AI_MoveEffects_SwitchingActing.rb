@@ -109,7 +109,7 @@ Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("LowerTargetAtkSpAtk1Swit
   proc { |score, move, user, target, ai, battle|
     score = ai.get_score_for_target_stat_drop(score, target, move.move.statDown, false)
     score = Battle::AI::Handlers.apply_move_effect_score("SwitchOutUserDamagingMove",
-      score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score
   }
 )
@@ -178,10 +178,10 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("UserMakeSubstituteSwitc
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("UserMakeSubstituteSwitchOutUser",
   proc { |score, move, user, target, ai, battle|
     score = Battle::AI::Handlers.apply_move_effect_score("UserMakeSubstitute",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score if score == Battle::AI::MOVE_USELESS_SCORE
     score = Battle::AI::Handlers.apply_move_effect_score("SwitchOutUserStatusMove",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score
   }
 )
@@ -198,10 +198,10 @@ Battle::AI::Handlers::MoveFailureAgainstTargetCheck.add("StartSnowstormWeatherSw
 Battle::AI::Handlers::MoveEffectAgainstTargetScore.add("StartSnowstormWeatherSwitchOutUser",
   proc { |score, move, user, target, ai, battle|
     score = Battle::AI::Handlers.apply_move_effect_score("StartSnowstormWeather",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score if score == Battle::AI::MOVE_USELESS_SCORE
     score = Battle::AI::Handlers.apply_move_effect_score("SwitchOutUserStatusMove",
-       score, move, user, ai, battle)
+                                                         score, move, user, ai, battle)
     next score
   }
 )

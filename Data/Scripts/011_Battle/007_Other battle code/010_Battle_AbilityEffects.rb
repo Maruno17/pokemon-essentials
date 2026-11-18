@@ -285,9 +285,9 @@ module Battle::AbilityEffects
     return trigger(TrappingByTarget, ability, switcher, bearer, battle)
   end
 
-def self.triggerOnSwitchInNeutralizingGas(ability, battler, battle, switch_in = false)
-  OnSwitchInNeutralizingGas.trigger(ability, battler, battle, switch_in)
-end
+  def self.triggerOnSwitchInNeutralizingGas(ability, battler, battle, switch_in = false)
+    OnSwitchInNeutralizingGas.trigger(ability, battler, battle, switch_in)
+  end
 
   def self.triggerOnSwitchInUnnerve(ability, battler, battle, switch_in = false)
     OnSwitchInUnnerve.trigger(ability, battler, battle, switch_in)

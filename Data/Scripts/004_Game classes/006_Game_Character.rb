@@ -59,7 +59,7 @@ class Game_Character
     @lock_pattern              = false
     @move_route_forcing        = false
     @through                   = false
-    animation_id               = 0
+    self.animation_id          = 0
     @transparent               = false
     @original_direction        = 2
     @original_pattern          = 0
