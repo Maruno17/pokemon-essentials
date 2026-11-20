@@ -83,7 +83,7 @@ class Battle::DebugNoVisuals
     return 0                    # Fight
   end
 
-  def pbFightMenu(idxBattler, megaEvoPossible = false)
+  def pbFightMenu(idxBattler, special_actions)
     battler = @battle.battlers[idxBattler]
     50.times do
       break if yield rand(battler.move.length)

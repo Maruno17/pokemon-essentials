@@ -71,28 +71,37 @@ class Battle
     # Battle Palace only
     return true if pbAutoFightMenu(idxBattler)
     # Regular move selection
+    user = @battlers[idxBattler]
     ret = false
-    @visuals.pbFightMenu(idxBattler, pbCanMegaEvolve?(idxBattler)) do |cmd|
+    @visuals.pbFightMenu(idxBattler, pbFightMenu_PossibleSpecialActions(idxBattler)) do |cmd|
       case cmd
-      when -1   # Cancel
-      when -2   # Toggle Mega Evolution
-        pbToggleRegisteredMegaEvolution(idxBattler)
-        next false
-      when -3   # Shift
-        pbUnregisterMegaEvolution(idxBattler)
-        pbRegisterShift(idxBattler)
-        ret = true
-      else      # Chose a move to use
-        next false if cmd < 0 || !@battlers[idxBattler].moves[cmd] ||
-                      !@battlers[idxBattler].moves[cmd].id
+      when :cancel   # Cancel
+      when Symbol   # Toggle Mega Evolution
+        next pbFightMenu_ApplySpecialAction(idxBattler, cmd)
+      else   # Chose a move to use
+        move = user.moves[cmd]
+        next false if cmd < 0 || !move || !move.id
         next false if !pbRegisterMove(idxBattler, cmd)
-        next false if !singleBattle? &&
-                      !pbChooseTarget(@battlers[idxBattler], @battlers[idxBattler].moves[cmd])
+        next false if !singleBattle? && !pbChooseTarget(user, move)
         ret = true
       end
       next true
     end
     return ret
+  end
+
+  def pbFightMenu_PossibleSpecialActions(idxBattler)
+    ret = {}
+    ret[:mega_evolve] = pbCanMegaEvolve?(idxBattler)
+    return ret
+  end
+
+  def pbFightMenu_ApplySpecialAction(idxBattler, cmd)
+    case cmd
+    when :mega_evolve   # Toggle Mega Evolution
+      pbToggleRegisteredMegaEvolution(idxBattler)
+    end
+    return false
   end
 
   def pbAutoFightMenu(idxBattler); return false; end
