@@ -598,7 +598,13 @@ Pokémon poisoned by Pecharunt's moves will also become confused.
 Pokémon poisoned by Pecharunt's moves will also become confused.
 The Pokémon's Normal-type moves become Dragon-type and are powered up a little.
 The Pokémon's Normal-type moves become Dragon-type and are powered up a little.
+The Pokémon is immune to Ground-type moves. Dealing a KO raises its best stat.
+The Pokémon is immune to Ground-type moves. Dealing a KO raises its best stat.
 The Pokémon can use its moves as if the weather were harsh sunlight.
 The Pokémon can use its moves as if the weather were harsh sunlight.
+Powers up the Pokémon's Fire-type moves.
+Powers up the Pokémon's Fire-type moves.
 When the Pokémon takes damage from a move, it burns the attacker.
 When the Pokémon takes damage from a move, it burns the attacker.
+Halves the damage the Pokémon takes from contact moves.
+Halves the damage the Pokémon takes from contact moves.

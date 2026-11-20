@@ -88,6 +88,8 @@ nineteenth
 nineteenth
 twentieth
 twentieth
+Unknown interpolation type {1}.
+Unknown interpolation type {1}.
 The default core messages file "messages_core.dat" was not found.
 The default core messages file "messages_core.dat" was not found.
 The default game messages file "messages_game.dat" was not found.
@@ -802,6 +804,8 @@ If true, the bicycle will be mounted automatically on this map and cannot be dis
 If true, the bicycle will be mounted automatically on this map and cannot be dismounted.
 Weather conditions in effect for this map.
 Weather conditions in effect for this map.
+If true, reflections of events and the player will not be shown.
+If true, reflections of events and the player will not be shown.
 If true, reflections of events and the player will not ripple horizontally.
 If true, reflections of events and the player will not ripple horizontally.
 Specifies the underwater layer of this map. Use only if this map has deep water.
@@ -832,6 +836,154 @@ Default ME played after catching a wild Pokémon on this map.
 Default ME played after catching a wild Pokémon on this map.
 Words/phrases that distinguish this map from others.
 Words/phrases that distinguish this map from others.
+X
+X
+Y
+Y
+R
+R
+θ
+θ
+Priority
+Priority
+Zoom X
+Zoom X
+Zoom Y
+Zoom Y
+Angle
+Angle
+Flip
+Flip
+Visible
+Visible
+Opacity
+Opacity
+Color
+Color
+Tone
+Tone
+Invert color
+Invert color
+Frame
+Frame
+Blending
+Blending
+X ±
+X ±
+Y ±
+Y ±
+Priority ±
+Priority ±
+Zoom X ×%
+Zoom X ×%
+Zoom Y ×%
+Zoom Y ×%
+Angle ±
+Angle ±
+Opacity ±
+Opacity ±
+Emitter X
+Emitter X
+Emitter Y
+Emitter Y
+Emitter R
+Emitter R
+Emitter θ
+Emitter θ
+Emitting
+Emitting
+Spawn X
+Spawn X
+Spawn X ±
+Spawn X ±
+Spawn Y
+Spawn Y
+Spawn Y ±
+Spawn Y ±
+Spawn R
+Spawn R
+Spawn R ±
+Spawn R ±
+Spawn θ
+Spawn θ
+Spawn θ ±
+Spawn θ ±
+Speed ±
+Speed ±
+Direction
+Direction
+Direction ±
+Direction ±
+Gravity
+Gravity
+Gravity ±
+Gravity ±
+Decel'n
+Decel'n
+Decel'n ±
+Decel'n ±
+Radius X ±%
+Radius X ±%
+Radius Y ±%
+Radius Y ±%
+Radius Z ±%
+Radius Z ±%
+Period X
+Period X
+Period X ±
+Period X ±
+Period Y
+Period Y
+Period Y ±
+Period Y ±
+Period Z
+Period Z
+Period Z ±
+Period Z ±
+Clockwise
+Clockwise
+X ×%
+X ×%
+Y ×%
+Y ×%
+Priority +
+Priority +
+Zoom ±%
+Zoom ±%
+Zoom ×%
+Zoom ×%
+Zoom X ±%
+Zoom X ±%
+Zoom Y ±%
+Zoom Y ±%
+Angle +
+Angle +
+Opacity ×%
+Opacity ×%
+Spawn X ×%
+Spawn X ×%
+Spawn Y ×%
+Spawn Y ×%
+Spawn R ×%
+Spawn R ×%
+Radius X
+Radius X
+Radius Y
+Radius Y
+Radius Z
+Radius Z
+New animation
+New animation
+<<[>>Move]
+<<[>>Move]
+<<[>>Foe Move]
+<<[>>Foe Move]
+<<[>>Common]
+<<[>>Common]
+<<[>>Foe Common]
+<<[>>Foe Common]
+Unknown animation type.
+Unknown animation type.
 Party 1 has no Pokémon.
 Party 1 has no Pokémon.
 Party 2 has no Pokémon.
@@ -938,18 +1090,18 @@ You are challenged by {1} and {2}!
 You are challenged by {1} and {2}!
 You are challenged by {1}, {2} and {3}!
 You are challenged by {1}, {2} and {3}!
-{1} sent out {2}!
-{1} sent out {2}!
-{1} sent out {2} and {3}!
-{1} sent out {2} and {3}!
-{1} sent out {2}, {3} and {4}!
-{1} sent out {2}, {3} and {4}!
 Go! {1}!
 Go! {1}!
 Go! {1} and {2}!
 Go! {1} and {2}!
 Go! {1}, {2} and {3}!
 Go! {1}, {2} and {3}!
+{1} sent out {2}!
+{1} sent out {2}!
+{1} sent out {2} and {3}!
+{1} sent out {2} and {3}!
+{1} sent out {2}, {3} and {4}!
+{1} sent out {2}, {3} and {4}!
 The sunlight is strong.
 The sunlight is strong.
 It is raining.
@@ -1236,8 +1388,6 @@ Aqua Ring restored {1} HP!
 {1} Lucky Chant wore off!
 The rainbow on {1} side disappeared!
 The rainbow on {1} side disappeared!
-The sea of fire around {1} disappeared!
-The sea of fire around {1} disappeared!
 The swamp around {1} disappeared!
 The swamp around {1} disappeared!
 {1} Aurora Veil wore off!
@@ -1518,8 +1668,6 @@ But the uproar kept {1} awake!
 {1} is protected from {2} {3} by {4} {5}!
 The effects of the neutralizing gas wore off!
 The effects of the neutralizing gas wore off!
-{1} traced {2} {3}!
-{1} traced {2} {3}!
 {1} was swallowed by {2} and became {2} commander!
 {1} was swallowed by {2} and became {2} commander!
 {1} {2} made {3} ineffective!
@@ -1540,28 +1688,28 @@ The effects of the neutralizing gas wore off!
 {1} used {2}!
 But there was no PP left for the move!
 But there was no PP left for the move!
+But there was no target...
+But there was no target...
+{1} melted the ice!
+{1} melted the ice!
 {1} changed to Blade Forme!
 {1} changed to Blade Forme!
 {1} changed to Shield Forme!
 {1} changed to Shield Forme!
-{1} cannot use {2}!
-{1} cannot use {2}!
 {1} snatched {2} move!
 {1} snatched {2} move!
-{1} melted the ice!
-{1} melted the ice!
-When the flame touched the powder on the Pokémon, it exploded!
-When the flame touched the powder on the Pokémon, it exploded!
-{1} is hurt by Powder!
-{1} is hurt by Powder!
 The Fire-type attack fizzled out in the heavy rain!
 The Fire-type attack fizzled out in the heavy rain!
 The Water-type attack evaporated in the harsh sunlight!
 The Water-type attack evaporated in the harsh sunlight!
+When the flame touched the powder on the Pokémon, it exploded!
+When the flame touched the powder on the Pokémon, it exploded!
+{1} is hurt by Powder!
+{1} is hurt by Powder!
+{1} cannot use {2}!
+{1} cannot use {2}!
 {1}'s type changed to {2}!
 {1}'s type changed to {2}!
-But there was no target...
-But there was no target...
 Hit 1 time!
 Hit 1 time!
 Hit {1} times!
@@ -1640,10 +1788,10 @@ Wide Guard protected {1}!
 Wide Guard protected {1}!
 Quick Guard protected {1}!
 Quick Guard protected {1}!
-{1} protected itself!
-{1} protected itself!
 {1} was blocked by the kicked-up mat!
 {1} was blocked by the kicked-up mat!
+{1} protected itself!
+{1} protected itself!
 {1} was hurt!
 {1} was hurt!
 {1} avoided the attack!
@@ -1674,10 +1822,18 @@ It doesn't affect {1} because of its {2}.
 {1} became Ash-Greninja!
 {1} is unaffected because of {2} {3}!
 {1} is unaffected because of {2} {3}!
+It's extremely effective on {1}!
+It's extremely effective on {1}!
+It's extremely effective!
+It's extremely effective!
 It's super effective on {1}!
 It's super effective on {1}!
 It's super effective!
 It's super effective!
+It's mostly ineffective on {1}...
+It's mostly ineffective on {1}...
+It's mostly ineffective...
+It's mostly ineffective...
 It's not very effective on {1}...
 It's not very effective on {1}...
 It's not very effective...
@@ -2150,6 +2306,8 @@ But it failed because of {1} {2}!
 {1} was prevented from healing!
 {1} sealed any moves its target shares with it!
 {1} sealed any moves its target shares with it!
+You have to choose a Pokémon!
+You have to choose a Pokémon!
 Switch In
 Switch In
 Send to Boxes
@@ -2246,6 +2404,8 @@ But {1} couldn't sleep!
 But {1} couldn't sleep!
 {1}'s team was disqualified!
 {1}'s team was disqualified!
+Unknown interpolation method {1}.
+Unknown interpolation method {1}.
 {1} {2} poisoned {3}!
 {1} {2} poisoned {3}!
 {1} {2} burned {3}!
@@ -2364,18 +2524,22 @@ Both Pokémon will faint in three turns because of {1} {2}!
 {1} harvested one {2}!
 {1} found one {2}!
 {1} found one {2}!
+Neutralizing gas filled the area!
+Neutralizing gas filled the area!
+{1} has two Abilities!
+{1} has two Abilities!
+{1} is too nervous to eat Berries!
+{1} is too nervous to eat Berries!
 {1} has {2}!
 {1} has {2}!
 The effects of the weather disappeared.
 The effects of the weather disappeared.
 {1} shuddered with anticipation!
 {1} shuddered with anticipation!
-{1} has two Abilities!
-{1} has two Abilities!
-{1} is too nervous to eat Berries!
-{1} is too nervous to eat Berries!
 {1} reversed all other Pokémon's auras!
 {1} reversed all other Pokémon's auras!
+{1} {2} weakened the Sp. Def of all surrounding Pokémon!
+{1} {2} weakened the Sp. Def of all surrounding Pokémon!
 {1} is drowsing!
 {1} is drowsing!
 {1} stat changes were removed by {2} {3}!
@@ -2398,12 +2562,8 @@ The {1} worn by {2} shone brilliantly!
 {1} used the Electric Terrain to energize its futuristic engine!
 {1} turned the ground into Electric Terrain, energizing its futuristic engine!
 {1} turned the ground into Electric Terrain, energizing its futuristic engine!
-{1} drank down all the matcha that {2} made!
-{1} drank down all the matcha that {2} made!
 {1} breaks the mold!
 {1} breaks the mold!
-Neutralizing gas filled the area!
-Neutralizing gas filled the area!
 {1} basked in the sunlight, sending its ancient pulse into a frenzy!
 {1} basked in the sunlight, sending its ancient pulse into a frenzy!
 {1} turned the sunlight harsh, sending its ancient pulse into a frenzy!
@@ -2420,12 +2580,26 @@ A supersweet aroma is wafting from the syrup covering {1}!
 A supersweet aroma is wafting from the syrup covering {1}!
 {1} gained strength from the fallen!
 {1} gained strength from the fallen!
+{1} {2} weakened the Defense of all surrounding Pokémon!
+{1} {2} weakened the Defense of all surrounding Pokémon!
+{1} {2} weakened the Attack of all surrounding Pokémon!
+{1} {2} weakened the Attack of all surrounding Pokémon!
 {1} is radiating a bursting aura!
 {1} is radiating a bursting aura!
+{1} traced {2} {3}!
+{1} traced {2} {3}!
 {1} is radiating a blazing aura!
 {1} is radiating a blazing aura!
+{1} {2} weakened the Sp. Atk of all surrounding Pokémon!
+{1} {2} weakened the Sp. Atk of all surrounding Pokémon!
+{1} underwent a heroic transformation!
+{1} underwent a heroic transformation!
+{1} drank down all the matcha that {2} made!
+{1} drank down all the matcha that {2} made!
 {1} {2} was taken over!
 {1} {2} was taken over!
+{1} used its {2} to activate {3}!
+{1} used its {2} to activate {3}!
 The harsh sunlight activated {1} {2}!
 The harsh sunlight activated {1} {2}!
 {1} {2} was heightened!
@@ -2486,8 +2660,6 @@ The {1} was used up...
 {1} is switched out with the {2}!
 {1} held up its {2} against {3}!
 {1} held up its {2} against {3}!
-{1} lost some of its HP!
-{1} lost some of its HP!
 {1} {2} restored a little HP!
 {1} {2} restored a little HP!
 {1} restored PP to its move {2}.
@@ -2500,8 +2672,6 @@ The {1} was used up...
 {1} {2} returned its status to normal!
 {1} returned its status to normal using its {2}!
 {1} returned its status to normal using its {2}!
-{1} used its {2} to activate {3}!
-{1} used its {2} to activate {3}!
 {1} is hurt by its {2}!
 {1} is hurt by its {2}!
 {1} was burned by the {2}!
@@ -3184,8 +3354,6 @@ You have no Pokémon that can be purified.
 You have no Pokémon that can be purified.
 There's a Pokémon that may open the door to its heart!
 There's a Pokémon that may open the door to its heart!
-This item can't be used on that Pokémon.
-This item can't be used on that Pokémon.
 {1}'s emotions rose to a fever pitch!<<n>>It entered Hyper Mode!
 {1}'s emotions rose to a fever pitch!<<n>>It entered Hyper Mode!
 {1} turned friendly.
@@ -3362,8 +3530,6 @@ Height
 Height
 Weight
 Weight
-Color
-Color
 Shape
 Shape
 Reset
@@ -5086,6 +5252,92 @@ Player {1}
 {1} {2} ({3}) x{4}
 {1} {2} x{3}
 {1} {2} x{3}
+Light
+Light
+Dark
+Dark
+R:
+R:
+G:
+G:
+B:
+B:
+A:
+A:
+Hex:
+Hex:
+Add
+Add
+Color scheme
+Color scheme
+Editor
+Editor
+Choose a file
+Choose a file
+Filter:
+Filter:
+Clear
+Clear
+<<[>>[None]]
+<<[>>[None]]
+Choose a location
+Choose a location
+Do you want to save changes?
+Do you want to save changes?
+Regions
+Regions
+Game Switches
+Game Switches
+Select all
+Select all
+Select none
+Select none
+Region properties
+Region properties
+ID
+ID
+Filename
+Filename
+Margins
+Margins
+pixels
+pixels
+Point size
+Point size
+Map size
+Map size
+points
+points
+Point properties
+Point properties
+Position
+Position
+Description
+Description
+Image filename
+Image filename
+Game Switch
+Game Switch
+Using Fly
+Using Fly
+Fly destination
+Fly destination
+Hide Fly icon?
+Hide Fly icon?
+Fly icon offset
+Fly icon offset
+Delete point
+Delete point
+Town Map Editor
+Town Map Editor
+Are you sure you want to delete this region?
+Are you sure you want to delete this region?
+You can't delete your only region!
+You can't delete your only region!
+Edit town_map.txt
+Edit town_map.txt
+Edit the contents of the Town Maps.
+Edit the contents of the Town Maps.
 Edit wild encounters
 Edit wild encounters
 <<[>>Add new encounter set]
@@ -5234,8 +5486,6 @@ Shadow
 Shadow
 If set to true, the Pokémon is a Shadow Pokémon.
 If set to true, the Pokémon is a Shadow Pokémon.
-Move {1}
-Move {1}
 A move known by the Pokémon. Leave all moves blank (use Z key to delete) for a wild moveset.
 A move known by the Pokémon. Leave all moves blank (use Z key to delete) for a wild moveset.
 Ability of the Pokémon. Overrides the ability index.
@@ -5286,8 +5536,6 @@ Failed to create the item. Choose a different name.
 Failed to create the item. Choose a different name.
 Purchase price
 Purchase price
-Description
-Description
 The item {1} was created (ID: {2}).
 The item {1} was created (ID: {2}).
 Put the item's graphic ({1}.png) in Graphics/Items, or it will be blank.
@@ -5306,8 +5554,6 @@ Z+Up/Down: Rearrange entries<<n>>Z+Right: Insert new entry<<n>>Z+Left: Delete en
 Z+Up/Down: Rearrange entries<<n>>Z+Right: Insert new entry<<n>>Z+Left: Delete entry
 Do what with this entry?
 Do what with this entry?
-Clear
-Clear
 Insert entry
 Insert entry
 Delete entry
@@ -5380,6 +5626,8 @@ Set Ally Position
 Set Ally Position
 Set Enemy Position
 Set Enemy Position
+Set Enemy Altitude
+Set Enemy Altitude
 Set Shadow Size
 Set Shadow Size
 Set Shadow Position
@@ -5388,6 +5636,350 @@ Auto-Position Sprites
 Auto-Position Sprites
 {1} (form {2})
 {1} (form {2})
+New
+New
+Anim types
+Anim types
+Moves
+Moves
+Common
+Common
+Move names
+Move names
+Animations
+Animations
+Edit animation
+Edit animation
+Copy animation
+Copy animation
+Delete animation
+Delete animation
+Filters
+Filters
+Move name contains
+Move name contains
+Animation name contains
+Animation name contains
+Credit text contains
+Credit text contains
+Usable in battle?
+Usable in battle?
+Number of hit versions
+Number of hit versions
+Exactly 1
+Exactly 1
+More than 1
+More than 1
+Has foe version?
+Has foe version?
+Clear all filters
+Clear all filters
+<<[>>Foe]
+<<[>>Foe]
+Common names
+Common names
+Common name contains
+Common name contains
+(copy)
+(copy)
+Are you sure you want to delete this animation?
+Are you sure you want to delete this animation?
+Help
+Help
+Battler positions
+Battler positions
+Side sizes
+Side sizes
+vs.
+vs.
+User index
+User index
+Target indices
+Target indices
+User is opposing?
+User is opposing?
+Slowdown factor
+Slowdown factor
+Duration:
+Duration:
+{1:.02f}s
+{1:.02f}s
+Batch edits
+Batch edits
+Time shifts
+Time shifts
+All particles
+All particles
+Selected particle
+Selected particle
+Selected row
+Selected row
+Command values
+Command values
+Apply offset
+Apply offset
+Clear selected row
+Clear selected row
+Sprite for particle {1} not found somehow (battler index {2}).
+Sprite for particle {1} not found somehow (battler index {2}).
+Sprite for particle "{1}" not found somehow.
+Sprite for particle "{1}" not found somehow.
+Transformation
+Transformation
+Appearance
+Appearance
+Bitmap mask
+Bitmap mask
+Second layer
+Second layer
+Emitter
+Emitter
+Emitted spawn location
+Emitted spawn location
+Emitted auto-movement
+Emitted auto-movement
+Emitted modifiers
+Emitted modifiers
+Sub
+Sub
+Couldn't decide what kind of control to make for property {1}.
+Couldn't decide what kind of control to make for property {1}.
+Mouse controls
+Mouse controls
+Left click
+Left click
+Select/change something.
+Select/change something.
+Left click and drag
+Left click and drag
+Move a command in the timeline, move a particle in the canvas, move through keyframes in the time bar.
+Move a command in the timeline, move a particle in the canvas, move through keyframes in the time bar.
+Right click
+Right click
+Change the type of interpolation between two commands.
+Change the type of interpolation between two commands.
+Right click and drag
+Right click and drag
+Rotate the selected particle in the canvas.
+Rotate the selected particle in the canvas.
+Scroll wheel
+Scroll wheel
+Scroll up/down in places where there is a scrollbar, change a particle's size in the canvas.
+Scroll up/down in places where there is a scrollbar, change a particle's size in the canvas.
+Keyboard controls
+Keyboard controls
+Esc
+Esc
+Close any pop-up window (such as this one).
+Close any pop-up window (such as this one).
+Play the animation, or stop it if it's playing.
+Play the animation, or stop it if it's playing.
+Up/Down/Left/Right
+Up/Down/Left/Right
+Change which keyframe and row is selected. Hold Ctrl to move faster.
+Change which keyframe and row is selected. Hold Ctrl to move faster.
+Select the next particle. Hold Shift to select the previous particle instead.
+Select the next particle. Hold Shift to select the previous particle instead.
+W/A/S/D
+W/A/S/D
+Move the selected particle in the canvas. Hold Ctrl to move faster.
+Move the selected particle in the canvas. Hold Ctrl to move faster.
+Remove the command selected in the timeline.
+Remove the command selected in the timeline.
+Add a command at the selected point in the timeline.
+Add a command at the selected point in the timeline.
+Ctrl + Z
+Ctrl + Z
+Undo.
+Undo.
+Ctrl + Y
+Ctrl + Y
+Redo.
+Redo.
+Close
+Close
+Editor settings
+Editor settings
+Default interpolation
+Default interpolation
+Canvas graphics
+Canvas graphics
+Background graphic
+Background graphic
+User graphic
+User graphic
+Target graphic
+Target graphic
+Animation properties
+Animation properties
+Identity
+Identity
+Animation type
+Animation type
+PBS filepath
+PBS filepath
+User and target
+User and target
+Involves a user?
+Involves a user?
+User is on far side?
+User is on far side?
+Involves a target?
+Involves a target?
+Playing
+Playing
+FPS
+FPS
+Hides data boxes?
+Hides data boxes?
+Scripts
+Scripts
+Completion
+Completion
+Can be used in battle?
+Can be used in battle?
+Credit
+Credit
+Particle properties
+Particle properties
+Focus
+Focus
+Use polar coordinates?
+Use polar coordinates?
+Graphic filename
+Graphic filename
+Mask graphic filename
+Mask graphic filename
+Tiled graphic?
+Tiled graphic?
+Has second layer?
+Has second layer?
+If on opposing side...
+If on opposing side...
+Invert X?
+Invert X?
+Invert Y?
+Invert Y?
+Invert Z?
+Invert Z?
+Flip sprite?
+Flip sprite?
+Property base values
+Property base values
+Initial angle
+Initial angle
+Property randomization
+Property randomization
+Random angle offset
+Random angle offset
+Randomly invert angle?
+Randomly invert angle?
+Randomly invert flip?
+Randomly invert flip?
+Random frame (max)
+Random frame (max)
+Emitter properties
+Emitter properties
+Emitter type
+Emitter type
+Emissions/second
+Emissions/second
+Sprites/emission
+Sprites/emission
+Polar coords (position)?
+Polar coords (position)?
+Polar coords (spawn area)?
+Polar coords (spawn area)?
+Duplicate this particle
+Duplicate this particle
+Delete this particle
+Delete this particle
+Apply offset to particle commands
+Apply offset to particle commands
+Particles:
+Particles:
+Keyframes:
+Keyframes:
+Apply
+Apply
+Volume
+Volume
+Pitch
+Pitch
+<<[>>[Target's sprite]]
+<<[>>[Target's sprite]]
+<<[>>[Target's other side sprite]]
+<<[>>[Target's other side sprite]]
+<<[>>[Target's front sprite]]
+<<[>>[Target's front sprite]]
+<<[>>[Target's back sprite]]
+<<[>>[Target's back sprite]]
+<<[>>[User's sprite]]
+<<[>>[User's sprite]]
+<<[>>[User's other side sprite]]
+<<[>>[User's other side sprite]]
+<<[>>[User's front sprite]]
+<<[>>[User's front sprite]]
+<<[>>[User's back sprite]]
+<<[>>[User's back sprite]]
+<<[>>[Target's cry]]
+<<[>>[Target's cry]]
+<<[>>[User's cry]]
+<<[>>[User's cry]]
+Are you sure you want to delete this particle?
+Are you sure you want to delete this particle?
+Common animation
+Common animation
+Foreground
+Foreground
+Midground
+Midground
+Background
+Background
+User's position
+User's position
+Target
+Target
+Target's position
+Target's position
+User pos and target
+User pos and target
+User and target pos
+User and target pos
+User pos and target pos
+User pos and target pos
+In front of user's side
+In front of user's side
+Behind user's side
+Behind user's side
+In front of non-user's side
+In front of non-user's side
+Behind non-user's side
+Behind non-user's side
+In front of target's side
+In front of target's side
+Behind target's side
+Behind target's side
+User and other side
+User and other side
+Do you want to save changes to the animation?
+Do you want to save changes to the animation?
+Couldn't get default value for property {1} for particle {2}.
+Couldn't get default value for property {1} for particle {2}.
+No default value for property {1} in PARTICLE_KEYFRAME_DEFAULT_VALUES.
+No default value for property {1} in PARTICLE_KEYFRAME_DEFAULT_VALUES.
+Couldn't get default value for property {1}.
+Couldn't get default value for property {1}.
+Querying SEs for a non-SE particle.
+Querying SEs for a non-SE particle.
+Unhandled property {1} for SE particle found.
+Unhandled property {1} for SE particle found.
+(volume: {1})
+(volume: {1})
+(pitch: {1})
+(pitch: {1})
+New particle
+New particle
 Name: {1}
 Name: {1}
 Frame:
@@ -5434,8 +6026,6 @@ Load Animation
 Load Animation
 Rename
 Rename
-Are you sure you want to delete this animation?
-Are you sure you want to delete this animation?
 Old Number: {1}
 Old Number: {1}
 New Number:
@@ -5482,10 +6072,6 @@ Above focus
 Above focus
 Priority:
 Priority:
-Target
-Target
-User and target
-User and target
 Screen
 Screen
 Focus:
@@ -5524,8 +6110,6 @@ Stop Sound
 Stop Sound
 <<[>>Erase background graphic]
 <<[>>Erase background graphic]
-Duration:
-Duration:
 First Frame:
 First Frame:
 Last Frame:
@@ -5574,8 +6158,6 @@ Import Anim...
 Import Anim...
 Export Anim...
 Export Anim...
-Help
-Help
 Set Animation Sheet
 Set Animation Sheet
 List of Animations
@@ -5776,6 +6358,34 @@ Change this trainer?
 Change this trainer?
 Delete this trainer?
 Delete this trainer?
+Set rules for next battle
+Set rules for next battle
+Set the battle rules that will be applied to the next battle.
+Set the battle rules that will be applied to the next battle.
+<<[>>Clear all]
+<<[>>Clear all]
+Side sizes: {1}
+Side sizes: {1}
+<<[>>Not set]
+<<[>>Not set]
+Enter a value for battle rule "{1}".
+Enter a value for battle rule "{1}".
+Choose the Game Variable to store the battle's outcome in.
+Choose the Game Variable to store the battle's outcome in.
+Set partner trainer
+Set partner trainer
+Choose a trainer to fight alongside in battles.
+Choose a trainer to fight alongside in battles.
+Your partner trainer is {1}. Remove them?
+Your partner trainer is {1}. Remove them?
+Your partner trainer was removed.
+Your partner trainer was removed.
+You don't have a partner trainer. Do you want one?
+You don't have a partner trainer. Do you want one?
+Choose a partner trainer
+Choose a partner trainer
+You gained a partner trainer.
+You gained a partner trainer.
 Set wild encounters version
 Set wild encounters version
 Choose which version of wild encounters should be used.
@@ -6098,24 +6708,14 @@ Other editors...
 Other editors...
 Edit battle animations, terrain tags, map data, etc.
 Edit battle animations, terrain tags, map data, etc.
-New battle animation editor
-New battle animation editor
+Battle animation editor
+Battle animation editor
 Edit the battle animations.
 Edit the battle animations.
-Old battle animation editor
-Old battle animation editor
-Old battle animation organiser
-Old battle animation organiser
-Rearrange/add/delete old battle animations.
-Rearrange/add/delete old battle animations.
-Import all battle animations
-Import all battle animations
-Import all battle animations from the "Animations" folder.
-Import all battle animations from the "Animations" folder.
-Export all battle animations
-Export all battle animations
-Export all battle animations individually to the "Animations" folder.
-Export all battle animations individually to the "Animations" folder.
+Old battle animation editor...
+Old battle animation editor...
+Edit old battle animations from before Essentials v22.
+Edit old battle animations from before Essentials v22.
 Edit terrain tags
 Edit terrain tags
 Edit the terrain tags of tiles in tilesets. Required for tags 8+.
@@ -6124,6 +6724,22 @@ Fix invalid tiles
 Fix invalid tiles
 Scans all maps and erases non-existent tiles.
 Scans all maps and erases non-existent tiles.
+Old battle animation editor
+Old battle animation editor
+Edit the old-style battle animations. If in doubt, don't bother using this.
+Edit the old-style battle animations. If in doubt, don't bother using this.
+Old battle animation organiser
+Old battle animation organiser
+Rearrange/add/delete old-style battle animations.
+Rearrange/add/delete old-style battle animations.
+Import all old battle animations
+Import all old battle animations
+Import all old-style battle animations from the "Animations" folder.
+Import all old-style battle animations from the "Animations" folder.
+Export all old battle animations
+Export all old battle animations
+Export all old-style battle animations individually to the "Animations" folder.
+Export all old-style battle animations individually to the "Animations" folder.
 Files options...
 Files options...
 Compile, generate PBS files, translations, Mystery Gifts, etc.
@@ -6142,14 +6758,6 @@ Choose one or all PBS files and create it.
 <<[>>Create all]
 File written.
 File written.
-Rename outdated files
-Rename outdated files
-Check for files with outdated names and rename/move them. Can alter map data.
-Check for files with outdated names and rename/move them. Can alter map data.
-Are you sure you want to automatically rename outdated files?
-Are you sure you want to automatically rename outdated files?
-Done.
-Done.
 Extract text for translation
 Extract text for translation
 Extract all text in the game to text files for translating.
@@ -6188,6 +6796,8 @@ Reload system cache
 Reload system cache
 Refreshes the system's file cache. Use if you change a file while playing.
 Refreshes the system's file cache. Use if you change a file while playing.
+Done.
+Done.
 WARP TO MAP
 WARP TO MAP
 Set variable {1}.
@@ -6862,18 +7472,6 @@ The duplicated Pokémon was moved to box "{1}."
 The duplicated Pokémon was moved to box "{1}."
 Are you sure you want to delete this Pokémon?
 Are you sure you want to delete this Pokémon?
-Renaming berry tree charsets...
-Renaming berry tree charsets...
-Checking {1} maps for used berry tree charsets...
-Checking {1} maps for used berry tree charsets...
-Map {1}: '{2}' was modified and saved.
-Map {1}: '{2}' was modified and saved.
-Updating file names and locations
-Updating file names and locations
-Berry plant charset files were renamed.
-Berry plant charset files were renamed.
-Finished updating file names and locations
-Finished updating file names and locations
 File {1}, section {2}<<n>>{3}
 File {1}, section {2}<<n>>{3}
 File {1}, section {2}, key {3}<<n>>{4}
@@ -7032,6 +7630,18 @@ Particle "{1}" doesn't have a second layer but has a second layer command.
 Particle "{1}" doesn't have a second layer but has a second layer command.
 Particle "{1}" isn't an emitter but has an emitter-only command.
 Particle "{1}" isn't an emitter but has an emitter-only command.
+Particle "{1}" uses polar coordinates but has an X/Y command.
+Particle "{1}" uses polar coordinates but has an X/Y command.
+Particle "{1}" doesn't use polar coordinates but has an R/Theta command.
+Particle "{1}" doesn't use polar coordinates but has an R/Theta command.
+Emitter "{1}" uses position polar coordinates but has an EmitterX/EmitterY command.
+Emitter "{1}" uses position polar coordinates but has an EmitterX/EmitterY command.
+Emitter "{1}" doesn't use position polar coordinates but has an EmitterR/EmitterTheta command.
+Emitter "{1}" doesn't use position polar coordinates but has an EmitterR/EmitterTheta command.
+Emitter "{1}" uses spawn polar coordinates but has a Spawn X/Y command.
+Emitter "{1}" uses spawn polar coordinates but has a Spawn X/Y command.
+Emitter "{1}" doesn't use spawn polar coordinates but has a Spawn R/Theta command.
+Emitter "{1}" doesn't use spawn polar coordinates but has a Spawn R/Theta command.
 Particle "{1}" has a command that isn't a "Play"-type command.
 Particle "{1}" has a command that isn't a "Play"-type command.
 Particle "{1}" has a "Play" command but shouldn't.
@@ -7060,8 +7670,6 @@ Particle "{1}" can't set "FoeFlip" if its focus isn't exactly 1 thing.
 Particle "{1}" can't set "FoeFlip" if its focus isn't exactly 1 thing.
 Particle "{1}" can't can't set "TiledGraphic" if it is an emitter or has a non-screen focus.
 Particle "{1}" can't can't set "TiledGraphic" if it is an emitter or has a non-screen focus.
-Particle "{1}" can't set "AngleOverride" if its focus isn't a specific thing(s).
-Particle "{1}" can't set "AngleOverride" if its focus isn't a specific thing(s).
 Particle "{1}" can't have any "Frame" commands if its graphic is a Pokémon's sprite.
 Particle "{1}" can't have any "Frame" commands if its graphic is a Pokémon's sprite.
 SE "{1}" should not play twice in the same frame ({2}).
@@ -7118,427 +7726,7 @@ You have no room left in the Bag.
 \GYou don't have enough money.
 Processing {1} maps...
 Processing {1} maps...
+Map {1}: '{2}' was modified and saved.
+Map {1}: '{2}' was modified and saved.
 Processing common events...
 Processing common events...
-Light
-Light
-Dark
-Dark
-R:
-R:
-G:
-G:
-B:
-B:
-A:
-A:
-Hex:
-Hex:
-Add
-Add
-Frame
-Frame
-Blending
-Blending
-Flip
-Flip
-X
-X
-Y
-Y
-Priority
-Priority
-Zoom X
-Zoom X
-Zoom Y
-Zoom Y
-Angle
-Angle
-Visible
-Visible
-Opacity
-Opacity
-Tone
-Tone
-X ±
-X ±
-Y ±
-Y ±
-Priority ±
-Priority ±
-Zoom X ×%
-Zoom X ×%
-Zoom Y ×%
-Zoom Y ×%
-Angle ±
-Angle ±
-Opacity ±
-Opacity ±
-Emitting
-Emitting
-Speed ±
-Speed ±
-Gravity
-Gravity
-Gravity ±
-Gravity ±
-Period X
-Period X
-Period X ±
-Period X ±
-Period Y
-Period Y
-Period Y ±
-Period Y ±
-Period Z
-Period Z
-Period Z ±
-Period Z ±
-Rad. X ±%
-Rad. X ±%
-Rad. Y ±%
-Rad. Y ±%
-Rad. Z ±%
-Rad. Z ±%
-Clockwise
-Clockwise
-Zoom ±%
-Zoom ±%
-Zoom X ±%
-Zoom X ±%
-Zoom Y ±%
-Zoom Y ±%
-Radius X
-Radius X
-Radius Y
-Radius Y
-Radius Z
-Radius Z
-New animation
-New animation
-<<[>>Move]
-<<[>>Move]
-<<[>>Foe Move]
-<<[>>Foe Move]
-<<[>>Common]
-<<[>>Common]
-<<[>>Foe Common]
-<<[>>Foe Common]
-Unknown animation type.
-Unknown animation type.
-Unknown interpolation type {1}.
-Unknown interpolation type {1}.
-Couldn't get default value for property {1} for particle {2}.
-Couldn't get default value for property {1} for particle {2}.
-No default value for property {1} in PARTICLE_KEYFRAME_DEFAULT_VALUES.
-No default value for property {1} in PARTICLE_KEYFRAME_DEFAULT_VALUES.
-Couldn't get default value for property {1}.
-Couldn't get default value for property {1}.
-Querying SEs for a non-SE particle.
-Querying SEs for a non-SE particle.
-<<[>>[User's cry]]
-<<[>>[User's cry]]
-<<[>>[Target's cry]]
-<<[>>[Target's cry]]
-Unhandled property {1} for SE particle found.
-Unhandled property {1} for SE particle found.
-(volume: {1})
-(volume: {1})
-(pitch: {1})
-(pitch: {1})
-New particle
-New particle
-Unknown interpolation method {1}.
-Unknown interpolation method {1}.
-New
-New
-Color scheme
-Color scheme
-Anim types
-Anim types
-Moves
-Moves
-Common
-Common
-Move names
-Move names
-Animations
-Animations
-Edit animation
-Edit animation
-Copy animation
-Copy animation
-Delete animation
-Delete animation
-Filters
-Filters
-Move name contains
-Move name contains
-Animation name contains
-Animation name contains
-Credit text contains
-Credit text contains
-Usable in battle?
-Usable in battle?
-Number of animations
-Number of animations
-Exactly 1
-Exactly 1
-More than 1
-More than 1
-Clear all filters
-Clear all filters
-<<[>>Foe]
-<<[>>Foe]
-Common names
-Common names
-Common name contains
-Common name contains
-(copy)
-(copy)
-Battler positions
-Battler positions
-Side sizes
-Side sizes
-vs.
-vs.
-User index
-User index
-Target indices
-Target indices
-User is opposing?
-User is opposing?
-Slowdown factor
-Slowdown factor
-{1:.02f}s
-{1:.02f}s
-Sprite for particle {1} not found somehow (battler index {2}).
-Sprite for particle {1} not found somehow (battler index {2}).
-Sprite for particle "{1}" not found somehow.
-Sprite for particle "{1}" not found somehow.
-Batch edits
-Batch edits
-Time shifts
-Time shifts
-All particles
-All particles
-Selected particle
-Selected particle
-Selected row
-Selected row
-Command values
-Command values
-Apply offset
-Apply offset
-Position
-Position
-Transformation
-Transformation
-Appearance
-Appearance
-Second layer
-Second layer
-Emitter
-Emitter
-Emit parameters
-Emit parameters
-Sub
-Sub
-Couldn't decide what kind of control to make for property {1}.
-Couldn't decide what kind of control to make for property {1}.
-Mouse controls
-Mouse controls
-Left click
-Left click
-Select/change something.
-Select/change something.
-Left click and drag
-Left click and drag
-Move a command in the timeline, move a particle in the canvas, move through keyframes in the time bar.
-Move a command in the timeline, move a particle in the canvas, move through keyframes in the time bar.
-Right click
-Right click
-Change the type of interpolation between two commands.
-Change the type of interpolation between two commands.
-Right click and drag
-Right click and drag
-Rotate the selected particle in the canvas.
-Rotate the selected particle in the canvas.
-Scroll wheel
-Scroll wheel
-Scroll up/down in places where there is a scrollbar, change a particle's size in the canvas.
-Scroll up/down in places where there is a scrollbar, change a particle's size in the canvas.
-Keyboard controls
-Keyboard controls
-Esc
-Esc
-Close any pop-up window (such as this one).
-Close any pop-up window (such as this one).
-Play the animation, or stop it if it's playing.
-Play the animation, or stop it if it's playing.
-Up/Down/Left/Right
-Up/Down/Left/Right
-Change which keyframe and row is selected. Hold Ctrl to move faster.
-Change which keyframe and row is selected. Hold Ctrl to move faster.
-Select the next particle. Hold Shift to select the previous particle instead.
-Select the next particle. Hold Shift to select the previous particle instead.
-W/A/S/D
-W/A/S/D
-Move the selected particle in the canvas. Hold Ctrl to move faster.
-Move the selected particle in the canvas. Hold Ctrl to move faster.
-Remove the command selected in the timeline.
-Remove the command selected in the timeline.
-Add a command at the selected point in the timeline.
-Add a command at the selected point in the timeline.
-Ctrl + Z
-Ctrl + Z
-Undo.
-Undo.
-Ctrl + Y
-Ctrl + Y
-Redo.
-Redo.
-Close
-Close
-Editor settings
-Editor settings
-Default interpolation
-Default interpolation
-Canvas graphics
-Canvas graphics
-Background graphic
-Background graphic
-User graphic
-User graphic
-Target graphic
-Target graphic
-Animation properties
-Animation properties
-Identity
-Identity
-Animation type
-Animation type
-PBS filepath
-PBS filepath
-Involves a user?
-Involves a user?
-User is on far side?
-User is on far side?
-Involves a target?
-Involves a target?
-Completion
-Completion
-Can be used in battle?
-Can be used in battle?
-FPS
-FPS
-Credit
-Credit
-Particle properties
-Particle properties
-Graphic
-Graphic
-Focus
-Focus
-If on opposing side...
-If on opposing side...
-Invert X
-Invert X
-Invert Y
-Invert Y
-Flip sprite
-Flip sprite
-Property overrides
-Property overrides
-Tiled graphic
-Tiled graphic
-Angle override
-Angle override
-Randomization of properties
-Randomization of properties
-Random frame (max)
-Random frame (max)
-Random angle offset
-Random angle offset
-Randomly invert angle
-Randomly invert angle
-Randomly invert flip
-Randomly invert flip
-Emitter properties
-Emitter properties
-Emitter type
-Emitter type
-Emissions/second
-Emissions/second
-Sprites/emission
-Sprites/emission
-Duplicate this particle
-Duplicate this particle
-Delete this particle
-Delete this particle
-Apply offset to particle commands
-Apply offset to particle commands
-Particles:
-Particles:
-Select all
-Select all
-Select none
-Select none
-Keyframes:
-Keyframes:
-Apply
-Apply
-Choose a file
-Choose a file
-Filter:
-Filter:
-Volume
-Volume
-Pitch
-Pitch
-<<[>>[Target's sprite]]
-<<[>>[Target's sprite]]
-<<[>>[Target's other side sprite]]
-<<[>>[Target's other side sprite]]
-<<[>>[Target's front sprite]]
-<<[>>[Target's front sprite]]
-<<[>>[Target's back sprite]]
-<<[>>[Target's back sprite]]
-<<[>>[User's sprite]]
-<<[>>[User's sprite]]
-<<[>>[User's other side sprite]]
-<<[>>[User's other side sprite]]
-<<[>>[User's front sprite]]
-<<[>>[User's front sprite]]
-<<[>>[User's back sprite]]
-<<[>>[User's back sprite]]
-Are you sure you want to delete this particle?
-Are you sure you want to delete this particle?
-Common animation
-Common animation
-Foreground
-Foreground
-Midground
-Midground
-Background
-Background
-User's position
-User's position
-Target's position
-Target's position
-User pos and target
-User pos and target
-User and target pos
-User and target pos
-User pos and target pos
-User pos and target pos
-In front of user's side
-In front of user's side
-Behind user's side
-Behind user's side
-In front of target's side
-In front of target's side
-Behind target's side
-Behind target's side
-Do you want to save changes to the animation?
-Do you want to save changes to the animation?

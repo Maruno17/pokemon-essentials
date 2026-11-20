@@ -1670,6 +1670,10 @@ A very convenient map that can be viewed anytime. It even shows you your present
 A very convenient map that can be viewed anytime. It even shows you your present location in the region.
 A long and durable rope. Use it to escape instantly from locations like caves or dungeons.
 A long and durable rope. Use it to escape instantly from locations like caves or dungeons.
+This special device allows all the Pokémon on your team to share in Exp. Points gained.
+This special device allows all the Pokémon on your team to share in Exp. Points gained.
+Turning on this special device will allow all the Pokémon on your team to share in Exp. Points gained.
+Turning on this special device will allow all the Pokémon on your team to share in Exp. Points gained.
 A case for holding coins obtained at the Game Corner. It can hold up to 99,999 coins.
 A case for holding coins obtained at the Game Corner. It can hold up to 99,999 coins.
 A flute that can play with such a beautiful tone that even sleeping Pokémon find themselves woken up.
