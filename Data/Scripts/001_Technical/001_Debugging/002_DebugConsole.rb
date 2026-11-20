@@ -9,20 +9,15 @@ module Console
   def setup_console
     return unless $DEBUG
     echoln "GPU Cache Max: #{Bitmap.max_size}"
-    echoln Console.markup_style("You can ignore any warnings and error messages above.", text: :brown)
-    echoln ""
-    echoln Console.markup_style("===============================================================================", text: :yellow)
+    echoln Console.markup_style("The above warnings/error messages in white are from mkxp-z. You can ignore them.", text: :brown)
+    echoln Console.markup_style("================================================================================", text: :yellow)
     echoln Console.markup_style("\"#{System.game_title}\" Debug Console Window", text: :yellow)
-    echoln Console.markup_style("===============================================================================", text: :yellow)
-    echoln "You are playing in Debug Mode, probably because you clicked the \"Playtest\""
-    echoln "button in RPG Maker XP. If you want to play as a regular player, run Game.exe"
-    echoln "directly."
-    echoln ""
-    echoln "Closing this window will close the game."
-    echoln ""
-    echoln Console.markup_style("===============================================================================", text: :yellow)
+    echoln Console.markup_style("================================================================================", text: :yellow)
+    echoln "You are playing in Debug Mode. Closing this window will close the game."
+    echoln "If you want to play as a regular player, run Game.exe directly."
+    echoln Console.markup_style("================================================================================", text: :yellow)
     echoln Console.markup_style("Debug Output:", text: :yellow)
-    echoln Console.markup_style("===============================================================================", text: :yellow)
+    echoln Console.markup_style("================================================================================", text: :yellow)
     echoln ""
   end
 
