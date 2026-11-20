@@ -10,6 +10,7 @@ class PokemonGlobalMetadata
   attr_accessor :ice_sliding
   attr_accessor :descending_waterfall
   attr_accessor :ascending_waterfall
+  attr_accessor :riding_water_current
   attr_accessor :fishing
   # Player data
   attr_accessor :startTime
@@ -61,6 +62,7 @@ class PokemonGlobalMetadata
     @ice_sliding          = false
     @descending_waterfall = false
     @ascending_waterfall  = false
+    @riding_water_current = false
     @fishing              = false
     # Player data
     @startTime            = Time.now
@@ -117,7 +119,7 @@ class PokemonGlobalMetadata
   end
 
   def forced_movement?
-    return @ice_sliding || @descending_waterfall || @ascending_waterfall
+    return @ice_sliding || @descending_waterfall || @ascending_waterfall || @riding_water_current
   end
 end
 

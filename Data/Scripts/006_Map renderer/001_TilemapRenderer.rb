@@ -43,6 +43,7 @@ class TilemapRenderer
 #    1 => [["Sand shore"], ["Flowers2"]],
 #    2 => [[], ["Flowers2", "Waterfall", "Waterfall crest", "Waterfall bottom"]],
 #    6 => [["Water rock", "Sea deep"], []]
+    2 => [[], ["Water current north", "Water current west", "Water current east", "Water current south"]]
   }
 
   #=============================================================================

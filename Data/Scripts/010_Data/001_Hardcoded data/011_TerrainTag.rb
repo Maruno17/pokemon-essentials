@@ -20,6 +20,8 @@ module GameData
     attr_reader :battle_environment
     attr_reader :ledge
     attr_reader :ice
+    attr_reader :water_current
+    attr_reader :force_direction
     attr_reader :bridge
     attr_reader :shows_reflections
     attr_reader :must_walk
@@ -64,6 +66,8 @@ module GameData
       @battle_environment      = hash[:battle_environment]
       @ledge                   = hash[:ledge]                   || false
       @ice                     = hash[:ice]                     || false
+      @water_current           = hash[:water_current]           || false
+      @force_direction         = hash[:force_direction]
       @bridge                  = hash[:bridge]                  || false
       @shows_reflections       = hash[:shows_reflections]       || false
       @must_walk               = hash[:must_walk]               || false
@@ -215,4 +219,36 @@ GameData::TerrainTag.register({
 GameData::TerrainTag.register({
   :id                      => :NoEffect,
   :id_number               => 17
+})
+
+GameData::TerrainTag.register({
+  :id                      => :WaterCurrentUp,
+  :id_number               => 18,
+  :can_surf                => true,
+  :water_current           => true,
+  :force_direction         => :up
+})
+
+GameData::TerrainTag.register({
+  :id                      => :WaterCurrentDown,
+  :id_number               => 19,
+  :can_surf                => true,
+  :water_current           => true,
+  :force_direction         => :down
+})
+
+GameData::TerrainTag.register({
+  :id                      => :WaterCurrentLeft,
+  :id_number               => 20,
+  :can_surf                => true,
+  :water_current           => true,
+  :force_direction         => :left
+})
+
+GameData::TerrainTag.register({
+  :id                      => :WaterCurrentRight,
+  :id_number               => 21,
+  :can_surf                => true,
+  :water_current           => true,
+  :force_direction         => :right
 })

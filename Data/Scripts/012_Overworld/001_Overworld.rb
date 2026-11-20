@@ -237,6 +237,8 @@ EventHandlers.add(:on_step_taken, :auto_move_player,
       pbTraverseWaterfall
     elsif currentTag.ice || $PokemonGlobal.ice_sliding
       pbSlideOnIce
+    elsif currentTag.water_current || $PokemonGlobal.riding_water_current
+      pbRideWaterCurrent
     end
   }
 )
@@ -636,6 +638,27 @@ def pbSlideOnIce
   end
   $PokemonGlobal.ice_sliding = false
   $game_player.walk_anime = true
+end
+
+def pbRideWaterCurrent
+  if !$DEBUG || !Input.press?(Input::CTRL)
+    current_tag = $game_player.pbTerrainTag
+    if current_tag.water_current
+      direction = {
+        :down  => 2,
+        :left  => 4,
+        :right => 6,
+        :up    => 8
+      }[current_tag.force_direction]
+      if $game_player.can_move_in_direction?(direction)
+        $PokemonGlobal.riding_water_current = true
+        $game_player.straighten
+        $game_player.direction = direction
+        return
+      end
+    end
+  end
+  $PokemonGlobal.riding_water_current = false
 end
 
 def pbTurnTowardEvent(event, otherEvent)
