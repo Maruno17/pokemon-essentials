@@ -384,7 +384,7 @@ class AnimationEditor::Timeline < UIControls::BaseContainer
 
   def timeline_oy=(value)
     old_val = @timeline_oy
-    total_height = (rows_count * (AnimationEditor::ListedParticle::FULL_ROW_HEIGHT)) + AnimationEditor::ListedParticle::ROW_SPACING
+    total_height = (rows_count * AnimationEditor::ListedParticle::FULL_ROW_HEIGHT) + AnimationEditor::ListedParticle::ROW_SPACING
     if total_height <= @list_viewport.rect.height
       @timeline_oy = 0
     else

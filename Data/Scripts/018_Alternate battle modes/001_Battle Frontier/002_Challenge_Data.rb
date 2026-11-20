@@ -153,7 +153,7 @@ class PBPokemon
   def initialize(species, item, nature, move1, move2, move3, move4, ev)
     @species = species
     itm = GameData::Item.try_get(item)
-    @item    = itm ? itm.id : nil
+    @item    = itm&.id
     @nature  = nature
     @move1   = move1
     @move2   = move2

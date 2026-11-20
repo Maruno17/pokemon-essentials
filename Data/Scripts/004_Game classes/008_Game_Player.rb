@@ -217,8 +217,8 @@ class Game_Player < Game_Character
   def pbFacingEvent(ignoreInterpreter = false)
     return nil if $game_system.map_interpreter.running? && !ignoreInterpreter
     # Check the tile in front of the player for events
-    new_x = @x + (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)
-    new_y = @y + (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
+    new_x = @x + ((@direction == 6) ? 1 : (@direction == 4) ? -1 : 0)
+    new_y = @y + ((@direction == 2) ? 1 : (@direction == 8) ? -1 : 0)
     return nil if !$game_map.valid?(new_x, new_y)
     $game_map.events.each_value do |event|
       next if !event.at_coordinate?(new_x, new_y)
@@ -227,8 +227,8 @@ class Game_Player < Game_Character
     end
     # If the tile in front is a counter, check one tile beyond that for events
     if $game_map.counter?(new_x, new_y)
-      new_x += (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)
-      new_y += (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
+      new_x += ((@direction == 6) ? 1 : (@direction == 4) ? -1 : 0)
+      new_y += ((@direction == 2) ? 1 : (@direction == 8) ? -1 : 0)
       $game_map.events.each_value do |event|
         next if !event.at_coordinate?(new_x, new_y)
         next if event.jumping? || event.over_trigger?
@@ -252,8 +252,8 @@ class Game_Player < Game_Character
   #         * 0 = Determines if all directions are impassable (for jumping)
   def passable?(x, y, dir, strict = false)
     # Get new coordinates
-    new_x = x + (dir == 6 ? 1 : dir == 4 ? -1 : 0)
-    new_y = y + (dir == 2 ? 1 : dir == 8 ? -1 : 0)
+    new_x = x + ((dir == 6) ? 1 : (dir == 4) ? -1 : 0)
+    new_y = y + ((dir == 2) ? 1 : (dir == 8) ? -1 : 0)
     # If coordinates are outside of map
     return false if !$game_map.validLax?(new_x, new_y)
     if !$game_map.valid?(new_x, new_y)
@@ -367,8 +367,8 @@ class Game_Player < Game_Character
     # If event is running
     return result if $game_system.map_interpreter.running?
     # Calculate front event coordinates
-    new_x = @x + (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)
-    new_y = @y + (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
+    new_x = @x + ((@direction == 6) ? 1 : (@direction == 4) ? -1 : 0)
+    new_y = @y + ((@direction == 2) ? 1 : (@direction == 8) ? -1 : 0)
     return false if !$game_map.valid?(new_x, new_y)
     # All event loops
     $game_map.events.each_value do |event|
@@ -383,8 +383,8 @@ class Game_Player < Game_Character
     # If fitting event is not found
     if result == false && $game_map.counter?(new_x, new_y)
       # Calculate coordinates of 1 tile further away
-      new_x += (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)
-      new_y += (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
+      new_x += ((@direction == 6) ? 1 : (@direction == 4) ? -1 : 0)
+      new_y += ((@direction == 2) ? 1 : (@direction == 8) ? -1 : 0)
       return false if !$game_map.valid?(new_x, new_y)
       # All event loops
       $game_map.events.each_value do |event|

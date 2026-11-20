@@ -280,9 +280,9 @@ def pbWriteCup(id, rules)
   trlists.length.times do |i|
     tr = trlists[i]
     if tr[5]
-      list.push("*" + (tr[3].sub(/\.txt$/, "")))
+      list.push("*" + tr[3].sub(/\.txt$/, ""))
     else
-      list.push((tr[3].sub(/\.txt$/, "")))
+      list.push(tr[3].sub(/\.txt$/, ""))
     end
   end
   cmd = 0

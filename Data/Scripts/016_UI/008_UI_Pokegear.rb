@@ -70,7 +70,7 @@ class PokemonPokegear_Scene
     @commands = commands
     @index = 0
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @sprites = {}
     @sprites["background"] = IconSprite.new(0, 0, @viewport)
     if $player.female? && pbResolveBitmap("Graphics/UI/Pokegear/bg_f")
@@ -169,7 +169,7 @@ MenuHandlers.add(:pokegear_menu, :map, {
       if town_map_screen.result
         $game_temp.fly_destination = town_map_screen.result
         menu.dispose
-        next 99999
+        next 99_999
       end
     end
     next $game_temp.fly_destination

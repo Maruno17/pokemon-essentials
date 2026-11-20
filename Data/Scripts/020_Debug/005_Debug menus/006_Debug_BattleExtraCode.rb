@@ -285,7 +285,7 @@ class Battle::DebugSetEffects
       @variables = @battle.battlers[@side].effects
     end
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @window = SpriteWindow_DebugBattleFieldEffects.new(@viewport, @battle, @variables, @variables_data)
     @window.active = true
   end

@@ -115,7 +115,7 @@ module GameData
       return nil if !item_data
       # Check for files
       ret = sprintf("Graphics/UI/Mail/mail_%s", item_data.id)
-      return pbResolveBitmap(ret) ? ret : nil
+      return (pbResolveBitmap(ret)) ? ret : nil
     end
 
     #---------------------------------------------------------------------------

@@ -353,7 +353,7 @@ def pbCreateStatusWindow(viewport = nil)
   if viewport
     msgwindow.viewport = viewport
   else
-    msgwindow.z = 99999
+    msgwindow.z = 99_999
   end
   msgwindow.visible = false
   msgwindow.letterbyletter = false
@@ -368,7 +368,7 @@ def pbCreateMessageWindow(viewport = nil, skin = nil)
   if viewport
     msgwindow.viewport = viewport
   else
-    msgwindow.z = 99999
+    msgwindow.z = 99_999
   end
   msgwindow.visible = true
   msgwindow.letterbyletter = true
@@ -830,7 +830,7 @@ end
 def pbShowCommands(msgwindow, commands = nil, cmdIfCancel = 0, defaultCmd = 0)
   return 0 if !commands
   cmdwindow = Window_AdvancedCommandPokemon.new(commands)
-  cmdwindow.z = 99999
+  cmdwindow.z = 99_999
   cmdwindow.visible = true
   cmdwindow.resizeToFit(cmdwindow.commands)
   pbPositionNearMsgWindow(cmdwindow, msgwindow, :right)
@@ -870,7 +870,7 @@ def pbShowCommandsWithHelp(msgwindow, commands, help, cmdIfCancel = 0, defaultCm
   msgwin.letterbyletter = false
   if commands
     cmdwindow = Window_AdvancedCommandPokemon.new(commands)
-    cmdwindow.z = 99999
+    cmdwindow.z = 99_999
     cmdwindow.visible = true
     cmdwindow.resizeToFit(cmdwindow.commands)
     cmdwindow.height = msgwin.y if cmdwindow.height > msgwin.y
@@ -932,7 +932,7 @@ def pbFreeText(msgwindow, currenttext, passwordbox, maxlength, width = 240)
   ret = ""
   window.maxlength = maxlength
   window.visible = true
-  window.z = 99999
+  window.z = 99_999
   pbPositionNearMsgWindow(window, msgwindow, :right)
   window.text = currenttext
   window.passwordChar = "*" if passwordbox

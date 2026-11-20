@@ -152,18 +152,16 @@ MenuHandlers.add(:battle_debug_menu, :trainer_items, {
       commands = []
       item_arrays = []
       trainer_indices = []
-      if battle.opponent
-        battle.opponent.each_with_index do |trainer, i|
-          items = battle.items ? battle.items[i].clone : []
-          commands.push(_INTL("Opponent {1}: {2} ({3} items)", i + 1, trainer.full_name, items.length))
-          item_arrays.push(items)
-          trainer_indices.push([1, i])
-        end
+      battle.opponent&.each_with_index do |trainer, i|
+        items = (battle.items) ? battle.items[i].clone : []
+        commands.push(_INTL("Opponent {1}: {2} ({3} items)", i + 1, trainer.full_name, items.length))
+        item_arrays.push(items)
+        trainer_indices.push([1, i])
       end
       if battle.player.length > 1
         battle.player.each_with_index do |trainer, i|
           next if i == 0   # Player
-          items = battle.ally_items ? battle.ally_items[i].clone : []
+          items = (battle.ally_items) ? battle.ally_items[i].clone : []
           commands.push(_INTL("Ally {1}: {2} ({3} items)", i, trainer.full_name, items.length))
           item_arrays.push(items)
           trainer_indices.push([0, i])

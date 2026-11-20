@@ -74,7 +74,7 @@ end
 def pbHiddenMoveAnimation(pokemon)
   return false if !pokemon
   viewport = Viewport.new(0, 0, Graphics.width, 0)
-  viewport.z = 99999
+  viewport.z = 99_999
   # Set up sprites
   bg = Sprite.new(viewport)
   bg.bitmap = RPG::Cache.ui("Field move/bg")
@@ -92,7 +92,7 @@ def pbHiddenMoveAnimation(pokemon)
   15.times do |i|
     strobe = BitmapSprite.new(52, 16, viewport)
     strobe.bitmap.blt(0, 0, strobebitmap.bitmap, Rect.new(0, (i % 2) * 16, 52, 16))
-    strobe.z = (i.even? ? 2 : 0)
+    strobe.z = (i.even?) ? 2 : 0
     strobe.visible = false
     strobes.push(strobe)
   end
@@ -799,7 +799,7 @@ def pbSweetScent
     return
   end
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   viewport.color.red   = 255
   viewport.color.green = 32
   viewport.color.blue  = 32

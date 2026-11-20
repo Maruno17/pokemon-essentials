@@ -397,19 +397,19 @@ class SpriteWindow < Window
   def bottomEdge; self.borderY - self.topEdge; end
 
   def startX
-    return !@trim || skinformat == 0  ? 16 : @trim[0]
+    return (!@trim || skinformat == 0)  ? 16 : @trim[0]
   end
 
   def startY
-    return !@trim || skinformat == 0  ? 16 : @trim[1]
+    return (!@trim || skinformat == 0)  ? 16 : @trim[1]
   end
 
   def endX
-    return !@trim || skinformat == 0  ? 16 : @trim[2]
+    return (!@trim || skinformat == 0)  ? 16 : @trim[2]
   end
 
   def endY
-    return !@trim || skinformat == 0  ? 16 : @trim[3]
+    return (!@trim || skinformat == 0)  ? 16 : @trim[3]
   end
 
   def startX=(value)

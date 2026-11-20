@@ -215,25 +215,25 @@ module Input
 
   def self.multi_pressex?(*key)
     return true if key[0].any? { |k| pressex?(k) }
-    return true if key[1].any? { |k| AXIS_HASH.key?(k) ? axis_pressex?(k) : Controller.pressex?(k) }
+    return true if key[1].any? { |k| (AXIS_HASH.key?(k)) ? axis_pressex?(k) : Controller.pressex?(k) }
     return false
   end
 
   def self.multi_triggerex?(*key)
     return true if key[0].any? { |k| triggerex?(k) }
-    return true if key[1].any? { |k| AXIS_HASH.key?(k) ? axis_triggerex?(k) : Controller.triggerex?(k) }
+    return true if key[1].any? { |k| (AXIS_HASH.key?(k)) ? axis_triggerex?(k) : Controller.triggerex?(k) }
     return false
   end
 
   def self.multi_repeatex?(*key)
     return true if key[0].any? { |k| triggerex?(k) || repeatex?(k) }
-    return true if key[1].any? { |k| AXIS_HASH.key?(k) ? axis_triggerex?(k) || axis_repeatex?(k) : Controller.triggerex?(k) || Controller.repeatex?(k) }
+    return true if key[1].any? { |k| (AXIS_HASH.key?(k)) ? axis_triggerex?(k) || axis_repeatex?(k) : Controller.triggerex?(k) || Controller.repeatex?(k) }
     return false
   end
 
   def self.multi_releaseex?(*key)
     return true if key[0].any? { |k| releaseex?(k) }
-    return true if key[1].any? { |k| AXIS_HASH.key?(k) ? axis_releaseex?(k) : Controller.releaseex?(k) }
+    return true if key[1].any? { |k| (AXIS_HASH.key?(k)) ? axis_releaseex?(k) : Controller.releaseex?(k) }
     return false
   end
 
@@ -247,7 +247,7 @@ module Input
   ENABLE_GAMEPAD_AXIS = true
 
   # Used hash for higher performance when checking keys.
-  AXIS_HASH = ENABLE_GAMEPAD_AXIS ? [
+  AXIS_HASH = (ENABLE_GAMEPAD_AXIS) ? [
     :LSTICK_LEFT, :LSTICK_RIGHT, :LSTICK_UP, :LSTICK_DOWN,
     :RSTICK_LEFT, :RSTICK_RIGHT, :RSTICK_UP, :RSTICK_DOWN,
     :LEFTTRIGGER, :RIGHTTRIGGER

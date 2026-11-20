@@ -24,7 +24,7 @@ class TilePuzzleCursor < BitmapSprite
 
   def initialize(game, position, tilewidth, tileheight, boardwidth, boardheight)
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     super(Graphics.width, Graphics.height, @viewport)
     @game = game
     @position = position
@@ -51,7 +51,7 @@ class TilePuzzleCursor < BitmapSprite
     x += @tilewidth * (@position % @boardwidth)
     y = ((Graphics.height - (@tileheight * @boardheight)) / 2) - 32
     y += @tileheight * ((@position % (@boardwidth * @boardheight)) / @boardwidth)
-    self.tone.set(0, (@holding ? 64 : 0), (@holding ? 64 : 0), 0)
+    self.tone.set(0, ((@holding) ? 64 : 0), ((@holding) ? 64 : 0), 0)
     # Cursor
     if @game != 3
       expand = (@holding) ? 0 : 4
@@ -148,7 +148,7 @@ class TilePuzzleScene
   def pbStartScene
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     if pbResolveBitmap("Graphics/UI/Tile Puzzle/bg#{@board}")
       addBackgroundPlane(@sprites, "bg", "Tile Puzzle/bg#{@board}", @viewport)
     else
@@ -476,7 +476,7 @@ class TilePuzzleScene
       temp.push(@tiles[i])
     end
     temp.length.times do |i|
-      @tiles[tiles[(i + 1) % (temp.length)]] = temp[i]
+      @tiles[tiles[(i + 1) % temp.length]] = temp[i]
     end
     if anim
       update

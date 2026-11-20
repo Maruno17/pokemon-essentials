@@ -9,7 +9,7 @@ class BattleSwapScene
     @rentals = rentals
     @mode = 0   # rental (pick 3 out of 6 initial Pokémon)
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @sprites = {}
     addBackgroundPlane(@sprites, "bg", "rentbg", @viewport)
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
@@ -35,7 +35,7 @@ class BattleSwapScene
     @newPokemon = newPokemon
     @mode = 1   # swap (pick 1 out of 3 opponent's Pokémon to take)
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @sprites = {}
     addBackgroundPlane(@sprites, "bg", "swapbg", @viewport)
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(

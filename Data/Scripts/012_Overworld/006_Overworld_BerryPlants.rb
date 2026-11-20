@@ -122,7 +122,7 @@ class BerryPlantData
     # Do replants
     done_replant = false
     loop do
-      stages_this_life = stages_growing + stages_fully_grown - (replanted? ? 1 : 0)
+      stages_this_life = stages_growing + stages_fully_grown - ((replanted?) ? 1 : 0)
       break if new_time_alive < stages_this_life * time_per_stage
       if @replant_count >= max_replants
         reset

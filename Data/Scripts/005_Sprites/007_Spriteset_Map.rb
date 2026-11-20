@@ -120,9 +120,7 @@ class Spriteset_Map
     @fog.tone       = @map.fog_tone
     @panorama.update
     @fog.update
-    @character_sprites.each do |sprite|
-      sprite.update
-    end
+    @character_sprites.each { |sprite| sprite.update }
     @@viewport1.tone = $game_screen.tone
     @@viewport3.color = $game_screen.flash_color
     @@viewport1.update

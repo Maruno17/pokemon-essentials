@@ -12,7 +12,7 @@ end
 
 def pbListScreen(title, lister)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   list = pbListWindow([])
   list.viewport = viewport
   list.z        = 2
@@ -60,7 +60,7 @@ end
 
 def pbListScreenBlock(title, lister)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   list = pbListWindow([], Graphics.width / 2)
   list.viewport = viewport
   list.z        = 2
@@ -493,7 +493,7 @@ class TrainerTypeLister
       cmds.push([idx, tr_type.id, tr_type.real_name])
       idx += 1
     end
-    cmds.sort! { |a, b| a[2] == b[2] ? a[0] <=> b[0] : a[2].downcase <=> b[2].downcase }
+    cmds.sort! { |a, b| (a[2] == b[2]) ? a[0] <=> b[0] : a[2].downcase <=> b[2].downcase }
     if @includeNew
       @commands.push(_INTL("[NEW TRAINER TYPE]"))
       @ids.push(true)
@@ -633,11 +633,9 @@ class TrainerBattleLister
     text = ""
     if !@includeNew || index > 0
       tr_data = GameData::Trainer.get(@ids[index][0], @ids[index][1], @ids[index][2])
-      if tr_data
-        tr_data.pokemon.each_with_index do |pkmn, i|
-          text += "\n" if i > 0
-          text += sprintf("%s Lv.%d", GameData::Species.get(pkmn[:species]).real_name, pkmn[:level])
-        end
+      tr_data&.pokemon.each_with_index do |pkmn, i|
+        text += "\n" if i > 0
+        text += sprintf("%s Lv.%d", GameData::Species.get(pkmn[:species]).real_name, pkmn[:level])
       end
     end
     @pkmnList.text = text

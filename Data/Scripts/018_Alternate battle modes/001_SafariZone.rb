@@ -17,7 +17,7 @@ class SafariState
   end
 
   def pbReceptionMap
-    return @inProgress ? @start[0] : 0
+    return (@inProgress) ? @start[0] : 0
   end
 
   def inProgress?

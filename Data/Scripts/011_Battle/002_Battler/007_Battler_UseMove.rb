@@ -505,12 +505,11 @@ class Battle::Battler
     # Dazzling/Queenly Majesty/Armor Tail make the move fail here
     @battle.pbPriority(true).each do |b|
       next if !b || !b.abilityActive?
-      if Battle::AbilityEffects.triggerMoveBlocking(b.ability, b, user, targets, move, @battle)
-        @battle.pbShowAbilitySplash(b)
-        @battle.pbDisplay(_INTL("{1} cannot use {2}!", user.pbThis, move.name))
-        @battle.pbHideAbilitySplash(b)
-        return true
-      end
+      next if !Battle::AbilityEffects.triggerMoveBlocking(b.ability, b, user, targets, move, @battle)
+      @battle.pbShowAbilitySplash(b)
+      @battle.pbDisplay(_INTL("{1} cannot use {2}!", user.pbThis, move.name))
+      @battle.pbHideAbilitySplash(b)
+      return true
     end
     return false
   end

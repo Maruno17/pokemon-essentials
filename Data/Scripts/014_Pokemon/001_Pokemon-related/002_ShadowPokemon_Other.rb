@@ -84,7 +84,7 @@ class RelicStoneScene
   def pbStartScene(pokemon)
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @pokemon = pokemon
     addBackgroundPlane(@sprites, "bg", "relicstonebg", @viewport)
     @sprites["msgwindow"] = Window_AdvancedTextPokemon.new("")

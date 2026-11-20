@@ -214,7 +214,7 @@ module UI
     end
 
     def refresh_overlay
-      @sprites[:overlay].bitmap.clear if @sprites[:overlay]
+      @sprites[:overlay]&.bitmap&.clear
     end
 
     def full_refresh
@@ -350,7 +350,7 @@ module UI
 
     def new_viewport(view_x, view_y, view_width, view_height)
       ret = Viewport.new(view_x, view_y, view_width, view_height)
-      ret.z = 99999
+      ret.z = 99_999
       @viewports.push(ret)
       return ret
     end

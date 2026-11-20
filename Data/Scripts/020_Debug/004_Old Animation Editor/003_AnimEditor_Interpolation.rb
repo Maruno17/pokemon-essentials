@@ -264,9 +264,7 @@ module BattleAnimationEditor
           points.compact!
         end
       elsif sliderwin2.changed?(defcurvebutton)
-        points.each do |point|
-          point.dispose
-        end
+        points.each { |point| point.dispose }
         points.clear
         30.times do
           point = PointSprite.new(0, 0, canvas.viewport)
@@ -312,9 +310,7 @@ module BattleAnimationEditor
           window.text = newtext if window.text != newtext
           if curve[0].visible && curve[3].visible &&
              !curve[0].dragging && !curve[3].dragging
-            points.each do |point|
-              point.visible = true
-            end
+            points.each { |point| point.visible = true }
             if !showline
               curve[1].visible = true
               curve[2].visible = true
@@ -338,9 +334,7 @@ module BattleAnimationEditor
         end
         window.dispose
         # dispose temporary path
-        points.each do |point|
-          point.dispose
-        end
+        points.each { |point| point.dispose }
         points.clear
         if showline
           path = curveToPointPath(curve, sliderwin2.value(0))
@@ -349,17 +343,13 @@ module BattleAnimationEditor
             points.push(PointSprite.new(point[0], point[1], canvas.viewport))
           end
         end
-        curve.each do |point|
-          point.dispose
-        end
+        curve.each { |point| point.dispose }
         sliderwin2.visible = true
         next
       elsif sliderwin2.changed?(defpathbutton)
         canceled = false
         pointpath = PointPath.new
-        points.each do |point|
-          point.dispose
-        end
+        points.each { |point| point.dispose }
         points.clear
         window = Window_UnformattedTextPokemon.newWithSize(
           "", 0, 320 - 64, 128, 64, canvas.viewport
@@ -393,9 +383,7 @@ module BattleAnimationEditor
         end
         window.dispose
         # dispose temporary path
-        points.each do |point|
-          point.dispose
-        end
+        points.each { |point| point.dispose }
         points.clear
         # generate smooth path from temporary path
         path = pointpath.smoothPointPath(sliderwin2.value(0), true)
@@ -429,9 +417,7 @@ module BattleAnimationEditor
       end
     end
     # dispose all points
-    points.each do |point|
-      point.dispose
-    end
+    points.each { |point| point.dispose }
     points.clear
     sliderwin2.dispose
     return

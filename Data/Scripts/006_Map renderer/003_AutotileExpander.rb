@@ -17,8 +17,8 @@ class TilemapRenderer
         wrap = true   # Each autotile will occupy two columns instead of one
       end
       frames_count = [bitmap.width / (3 * SOURCE_TILE_WIDTH), 1].max
-      new_bitmap = Bitmap.new(frames_count * (wrap ? 2 : 1) * SOURCE_TILE_WIDTH,
-                              TILES_PER_AUTOTILE * SOURCE_TILE_HEIGHT / (wrap ? 2 : 1))
+      new_bitmap = Bitmap.new(frames_count * ((wrap) ? 2 : 1) * SOURCE_TILE_WIDTH,
+                              TILES_PER_AUTOTILE * SOURCE_TILE_HEIGHT / ((wrap) ? 2 : 1))
       rect = Rect.new(0, 0, SOURCE_TILE_WIDTH / 2, SOURCE_TILE_HEIGHT / 2)
       TILES_PER_AUTOTILE.times do |id|
         pattern = TileDrawingHelper::AUTOTILE_PATTERNS[id >> 3][id % TILESET_TILES_PER_ROW]
@@ -26,7 +26,7 @@ class TilemapRenderer
         wrap_offset_y = (wrap && id >= TILES_PER_AUTOTILE / 2) ? (TILES_PER_AUTOTILE / 2) * SOURCE_TILE_HEIGHT : 0
         frames_count.times do |frame|
           if expanded_format && [1, 2, 4, 8].include?(id)
-            dest_x = frame * SOURCE_TILE_WIDTH * (wrap ? 2 : 1)
+            dest_x = frame * SOURCE_TILE_WIDTH * ((wrap) ? 2 : 1)
             dest_x += wrap_offset_x
             next if dest_x > MAX_TEXTURE_SIZE
             dest_y = id * SOURCE_TILE_HEIGHT
@@ -55,7 +55,7 @@ class TilemapRenderer
           pattern.each_with_index do |src_chunk, i|
             real_src_chunk = src_chunk - 1
             dest_x = (i % 2) * SOURCE_TILE_WIDTH / 2
-            dest_x += frame * SOURCE_TILE_WIDTH * (wrap ? 2 : 1)
+            dest_x += frame * SOURCE_TILE_WIDTH * ((wrap) ? 2 : 1)
             dest_x += wrap_offset_x
             next if dest_x > MAX_TEXTURE_SIZE
             dest_y = (i / 2) * SOURCE_TILE_HEIGHT / 2

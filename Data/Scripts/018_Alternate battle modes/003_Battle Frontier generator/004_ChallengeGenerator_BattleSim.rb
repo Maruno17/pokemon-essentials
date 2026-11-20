@@ -147,7 +147,7 @@ class PlayerRatingElo
   def winChancePercent
     return @estimatedRating if @estimatedRating
     x = (1 + (10.0**((@rating - 1600.0) / 400.0)))
-    @estimatedRating = (x == 0 ? 1.0 : 1.0 / x)
+    @estimatedRating = (x == 0) ? 1.0 : 1.0 / x
     return @estimatedRating
   end
 

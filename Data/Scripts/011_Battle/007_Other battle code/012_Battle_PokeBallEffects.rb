@@ -9,12 +9,12 @@ module Battle::PokeBallEffects
 
   def self.isUnconditional?(ball, battle, battler)
     ret = IsUnconditional.trigger(ball, battle, battler)
-    return (!ret.nil?) ? ret : false
+    return (ret.nil?) ? false : ret
   end
 
   def self.modifyCatchRate(ball, catchRate, battle, battler)
     ret = ModifyCatchRate.trigger(ball, catchRate, battle, battler)
-    return (!ret.nil?) ? ret : catchRate
+    return (ret.nil?) ? catchRate : ret
   end
 
   def self.onCatch(ball, battle, pkmn)

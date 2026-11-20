@@ -749,10 +749,10 @@ MenuHandlers.add(:pokemon_debug_menu, :species_and_form, {
           form_commands[sp.form] = form_name
           form_cmd = sp.form if pkmn.form == sp.form
         end
-        form_commands[99999] = _INTL("Choose custom number")
+        form_commands[99_999] = _INTL("Choose custom number")
         form_cmd = screen.show_menu(_INTL("Set the Pokémon's form."), form_commands, form_commands.keys.index(form_cmd))
         next if form_cmd.nil?
-        if form_cmd == 99999
+        if form_cmd == 99_999
           params = ChooseNumberParams.new
           params.setRange(0, 999)
           params.setDefaultValue(pkmn.form)
@@ -797,7 +797,7 @@ MenuHandlers.add(:pokemon_debug_menu, :set_shininess, {
     }
     cmd = commands.keys.first
     loop do
-      msg_idx = pkmn.shiny? ? (pkmn.super_shiny? ? 1 : 0) : 2
+      msg_idx = (pkmn.shiny?) ? ((pkmn.super_shiny?) ? 1 : 0) : 2
       msg = [_INTL("Is shiny."), _INTL("Is super shiny."), _INTL("Is normal (not shiny).")][msg_idx]
       cmd = screen.show_menu(msg, commands, commands.keys.index(cmd))
       break if cmd.nil?
@@ -851,7 +851,7 @@ MenuHandlers.add(:pokemon_debug_menu, :set_ribbons, {
     loop do
       commands = {}
       GameData::Ribbon.each do |ribbon|
-        commands[ribbon.id] = (pkmn.hasRibbon?(ribbon.id) ? "[Y]" : "[  ]") + " " + ribbon.name
+        commands[ribbon.id] = ((pkmn.hasRibbon?(ribbon.id)) ? "[Y]" : "[  ]") + " " + ribbon.name
       end
       commands[:give_all]  = _INTL("Give all")
       commands[:clear_all] = _INTL("Clear all")
@@ -864,7 +864,7 @@ MenuHandlers.add(:pokemon_debug_menu, :set_ribbons, {
       when :clear_all
         pkmn.clearAllRibbons
       else   # Toggle a specific ribbon
-        pkmn.hasRibbon?(cmd) ? pkmn.takeRibbon(cmd) : pkmn.giveRibbon(cmd)
+        (pkmn.hasRibbon?(cmd)) ? pkmn.takeRibbon(cmd) : pkmn.giveRibbon(cmd)
       end
     end
     next false
@@ -883,7 +883,7 @@ MenuHandlers.add(:pokemon_debug_menu, :set_nickname, {
     loop do
       species_name = pkmn.speciesName
       msg = [_INTL("{1} has the nickname {2}.", species_name, pkmn.name),
-             _INTL("{1} has no nickname.", species_name)][pkmn.nicknamed? ? 0 : 1]
+             _INTL("{1} has no nickname.", species_name)][(pkmn.nicknamed?) ? 0 : 1]
       cmd = screen.show_menu(msg, commands, commands.keys.index(cmd))
       break if cmd.nil?
       case cmd
@@ -920,7 +920,7 @@ MenuHandlers.add(:pokemon_debug_menu, :ownership, {
       msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})",
                    pkmn.owner.name, gender_text, public_id_text, pkmn.owner.id),
              _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})",
-                   pkmn.owner.name, gender_text, public_id_text, pkmn.owner.id)][pkmn.foreign?($player) ? 1 : 0]
+                   pkmn.owner.name, gender_text, public_id_text, pkmn.owner.id)][(pkmn.foreign?($player)) ? 1 : 0]
       cmd = screen.show_menu(msg, commands, commands.keys.index(cmd))
       break if cmd.nil?
       case cmd
@@ -999,7 +999,7 @@ MenuHandlers.add(:pokemon_debug_menu, :set_egg, {
     cmd = commands.keys.first
     loop do
       msg = [_INTL("Not an egg."),
-             _INTL("Egg (hatches in {1} steps).", pkmn.steps_to_hatch)][pkmn.egg? ? 1 : 0]
+             _INTL("Egg (hatches in {1} steps).", pkmn.steps_to_hatch)][(pkmn.egg?) ? 1 : 0]
       cmd = screen.show_menu(msg, commands, commands.keys.index(cmd))
       break if cmd.nil?
       case cmd
@@ -1043,7 +1043,7 @@ MenuHandlers.add(:pokemon_debug_menu, :shadow_pkmn, {
     cmd = commands.keys.first
     loop do
       msg = [_INTL("Not a Shadow Pokémon."),
-             _INTL("Heart gauge is {1} (stage {2}).", pkmn.heart_gauge, pkmn.heartStage)][pkmn.shadowPokemon? ? 1 : 0]
+             _INTL("Heart gauge is {1} (stage {2}).", pkmn.heart_gauge, pkmn.heartStage)][(pkmn.shadowPokemon?) ? 1 : 0]
       cmd = screen.show_menu(msg, commands, commands.keys.index(cmd))
       break if cmd.nil?
       case cmd

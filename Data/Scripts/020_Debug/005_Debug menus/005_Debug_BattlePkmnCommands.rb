@@ -740,7 +740,7 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_gender, {
     end
     cmd = 0
     loop do
-      msg = [_INTL("Gender is male."), _INTL("Gender is female.")][pkmn.male? ? 0 : 1]
+      msg = [_INTL("Gender is male."), _INTL("Gender is female.")][(pkmn.male?) ? 0 : 1]
       cmd = pbMessage("\\ts[]" + msg,
                       [_INTL("Make male"), _INTL("Make female"), _INTL("Reset")], -1, nil, cmd)
       break if cmd < 0
@@ -816,7 +816,7 @@ MenuHandlers.add(:battle_pokemon_debug_menu, :set_shininess, {
   "effect" => proc { |pkmn, battler, battle|
     cmd = 0
     loop do
-      msg_idx = pkmn.shiny? ? (pkmn.super_shiny? ? 1 : 0) : 2
+      msg_idx = (pkmn.shiny?) ? ((pkmn.super_shiny?) ? 1 : 0) : 2
       msg = [_INTL("Is shiny."), _INTL("Is super shiny."), _INTL("Is normal (not shiny).")][msg_idx]
       cmd = pbMessage("\\ts[]" + msg,
                       [_INTL("Make shiny"),

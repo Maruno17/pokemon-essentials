@@ -28,7 +28,7 @@ class Sprite_Timer
         @timer.width = @timer.borderX + 96
         @timer.x = Graphics.width - @timer.width
         @timer.viewport = @viewport
-        @timer.z = 99998
+        @timer.z = 99_998
       end
       curtime = $game_system.timer
       curtime = 0 if curtime < 0

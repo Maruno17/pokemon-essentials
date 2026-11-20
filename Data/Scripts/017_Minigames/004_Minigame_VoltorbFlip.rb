@@ -298,7 +298,7 @@ class VoltorbFlip
 
   def pbCreateSprites
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @sprites["bg"] = Sprite.new(@viewport)
     @sprites["bg"].bitmap = RPG::Cache.load_bitmap(GRAPHICS_DIRECTORY, _INTL("Voltorb Flip bg"))
     @sprites["text"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
@@ -306,22 +306,22 @@ class VoltorbFlip
     @sprites["level"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     pbSetSystemFont(@sprites["level"].bitmap)
     @sprites["curtain"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-    @sprites["curtain"].z = 99999
+    @sprites["curtain"].z = 99_999
     @sprites["curtain"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.black)
     @sprites["curtain"].opacity = 0
     @sprites["curtainL"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-    @sprites["curtainL"].z = 99999
+    @sprites["curtainL"].z = 99_999
     @sprites["curtainL"].x = Graphics.width / 2
     @sprites["curtainL"].angle = -90
     @sprites["curtainL"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.black)
     @sprites["curtainR"] = BitmapSprite.new(Graphics.width, Graphics.height * 2, @viewport)
-    @sprites["curtainR"].z = 99999
+    @sprites["curtainR"].z = 99_999
     @sprites["curtainR"].x = Graphics.width / 2
     @sprites["curtainR"].bitmap.fill_rect(0, 0, Graphics.width, Graphics.height * 2, Color.black)
     @sprites["cursor"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-    @sprites["cursor"].z = 99998
+    @sprites["cursor"].z = 99_998
     @sprites["icon"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-    @sprites["icon"].z = 99997
+    @sprites["icon"].z = 99_997
     @sprites["mark"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["memo"] = Sprite.new(@viewport)
     @sprites["memo"].bitmap = RPG::Cache.load_bitmap(GRAPHICS_DIRECTORY, _INTL("memo"))
@@ -332,10 +332,10 @@ class VoltorbFlip
     @sprites["totalCoins"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["currentCoins"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["animation"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-    @sprites["animation"].z = 99999
+    @sprites["animation"].z = 99_999
     6.times do |i|
       @sprites[i] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @sprites[i].z = 99996
+      @sprites[i].z = 99_996
       @sprites[i].visible = false
     end
     # Creates images ahead of time for the display-all animation (reduces lag)
@@ -627,7 +627,7 @@ class VoltorbFlip
       @sprites[i].visible = true
       pbWait(0.05) if i < 3
       @sprites[i].bitmap.clear
-      @sprites[i].z = 99997
+      @sprites[i].z = 99_997
     end
     pbSEPlay("Voltorb Flip tile")
     @sprites[5].visible = true

@@ -76,7 +76,7 @@ module Battle::AbilityEffects
 
   def self.trigger(hash, *args, ret: false)
     new_ret = hash.trigger(*args)
-    return (!new_ret.nil?) ? new_ret : ret
+    return (new_ret.nil?) ? ret : new_ret
   end
 
   #-----------------------------------------------------------------------------
@@ -2746,19 +2746,18 @@ Battle::AbilityEffects::EndOfRoundHealing.add(:HEALER,
       showing_splash = true
       old_status = ally.status
       ally.pbCureStatus(Battle::Visuals::USE_ABILITY_SPLASH)
-      if !Battle::Visuals::USE_ABILITY_SPLASH
-        case old_status
-        when :SLEEP
-          battle.pbDisplay(_INTL("{1} {2} woke its partner up!", battler.pbOfThis, battler.abilityName))
-        when :POISON
-          battle.pbDisplay(_INTL("{1} {2} cured its partner's poison!", battler.pbOfThis, battler.abilityName))
-        when :BURN
-          battle.pbDisplay(_INTL("{1} {2} healed its partner's burn!", battler.pbOfThis, battler.abilityName))
-        when :PARALYSIS
-          battle.pbDisplay(_INTL("{1} {2} cured its partner's paralysis!", battler.pbOfThis, battler.abilityName))
-        when :FROZEN
-          battle.pbDisplay(_INTL("{1} {2} defrosted its partner!", battler.pbOfThis, battler.abilityName))
-        end
+      next if Battle::Visuals::USE_ABILITY_SPLASH
+      case old_status
+      when :SLEEP
+        battle.pbDisplay(_INTL("{1} {2} woke its partner up!", battler.pbOfThis, battler.abilityName))
+      when :POISON
+        battle.pbDisplay(_INTL("{1} {2} cured its partner's poison!", battler.pbOfThis, battler.abilityName))
+      when :BURN
+        battle.pbDisplay(_INTL("{1} {2} healed its partner's burn!", battler.pbOfThis, battler.abilityName))
+      when :PARALYSIS
+        battle.pbDisplay(_INTL("{1} {2} cured its partner's paralysis!", battler.pbOfThis, battler.abilityName))
+      when :FROZEN
+        battle.pbDisplay(_INTL("{1} {2} defrosted its partner!", battler.pbOfThis, battler.abilityName))
       end
     end
     battle.pbHideAbilitySplash(battler) if showing_splash
@@ -3490,7 +3489,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:SLOWSTART,
 
 Battle::AbilityEffects::OnSwitchIn.add(:SNOWWARNING,
   proc { |ability, battler, battle, switch_in|
-    battle.pbStartWeatherAbility((Settings::USE_SNOWSTORM_WEATHER_INSTEAD_OF_HAIL ? :Snowstorm : :Hail), battler)
+    battle.pbStartWeatherAbility(((Settings::USE_SNOWSTORM_WEATHER_INSTEAD_OF_HAIL) ? :Snowstorm : :Hail), battler)
   }
 )
 

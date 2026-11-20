@@ -219,7 +219,7 @@ class UI::PartyVisualsPanel < UI::SpriteContainer
     bar_total_width = 96
     bar_height = 8
     bar_width = [@pokemon.hp * bar_total_width / @pokemon.totalhp.to_f, 1.0].max
-    bar_width = ((bar_width / 2).round) * 2   # Make the bar's length a multiple of 2 pixels
+    bar_width = (bar_width / 2).round * 2   # Make the bar's length a multiple of 2 pixels
     bar_width -= 2 if bar_width == bar_total_width && @pokemon.hp < @pokemon.totalhp
     hp_zone = 0                                                  # Green
     hp_zone = 1 if @pokemon.hp <= (@pokemon.totalhp / 2).floor   # Yellow

@@ -11,7 +11,7 @@ def pbEncountersEditor
   help_window = Window_UnformattedTextPokemon.newWithSize(
     _INTL("Edit wild encounters"), Graphics.width / 2, 0, Graphics.width / 2, 96
   )
-  help_window.z = 99999
+  help_window.z = 99_999
   ret = 0
   need_refresh = true
   loop do
@@ -133,7 +133,7 @@ def pbEncounterMapVersionEditor(enc_data)
   help_window = Window_UnformattedTextPokemon.newWithSize(
     _INTL("Edit map's encounters"), Graphics.width / 2, 0, Graphics.width / 2, 96
   )
-  help_window.z = 99999
+  help_window.z = 99_999
   ret = 0
   need_refresh = true
   loop do
@@ -259,7 +259,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
   help_window = Window_UnformattedTextPokemon.newWithSize(
     _INTL("Edit encounter slots"), Graphics.width / 2, 0, Graphics.width / 2, 96
   )
-  help_window.z = 99999
+  help_window.z = 99_999
   enc_type_name = ""
   ret = 0
   need_refresh = true
@@ -982,7 +982,7 @@ end
 #===============================================================================
 def pbRegionalDexEditor(dex)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   cmd_window = pbListWindow([])
   info = Window_AdvancedTextPokemon.newWithSize(
     _INTL("Z+Up/Down: Rearrange entries\nZ+Right: Insert new entry\nZ+Left: Delete entry"),
@@ -1084,7 +1084,7 @@ end
 
 def pbRegionalDexEditorMain
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   cmd_window = pbListWindow([])
   cmd_window.viewport = viewport
   cmd_window.z        = 2
@@ -1242,7 +1242,7 @@ def pbAnimationsOrganiser
     return
   end
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   cmdwin = pbListWindow([])
   cmdwin.viewport = viewport
   cmdwin.z        = 2

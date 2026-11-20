@@ -233,7 +233,7 @@ class MiningGameScene
   def pbStartScene
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     addBackgroundPlane(@sprites, "bg", "Mining/bg", @viewport)
     @sprites["itemlayer"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
     @sprites["itemlayer"].z = 10

@@ -44,7 +44,7 @@ class HallOfFame_Scene
   def pbStartScene
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     # Comment the below line to doesn't use a background
     addBackgroundPlane(@sprites, "bg", "Hall of Fame/bg", @viewport)
     @sprites["hallbars"] = IconSprite.new(@viewport)
@@ -284,9 +284,9 @@ class HallOfFame_Scene
     textPositions = [
       [dexnumber, 32, Graphics.height - 74, :left, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR],
       [pokename, Graphics.width - 192, Graphics.height - 74, :center, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR],
-      [_INTL("Lv. {1}", pokemon.egg? ? "?" : pokemon.level),
+      [_INTL("Lv. {1}", (pokemon.egg?) ? "?" : pokemon.level),
        64, Graphics.height - 42, :left, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR],
-      [_INTL("ID No. {1}", pokemon.egg? ? "?????" : idno),
+      [_INTL("ID No. {1}", (pokemon.egg?) ? "?????" : idno),
        Graphics.width - 192, Graphics.height - 42, :center, TEXT_BASE_COLOR, TEXT_SHADOW_COLOR]
     ]
     if hallNumber > -1

@@ -227,7 +227,7 @@ class SpriteAnimation
       when 1
         self.flash(timing.flash_color, timing.flash_duration * 2)
       when 2
-        self.viewport.flash(timing.flash_color, timing.flash_duration * 2) if self.viewport
+        self.viewport&.flash(timing.flash_color, timing.flash_duration * 2)
       when 3
         self.flash(nil, timing.flash_duration * 2)
       end

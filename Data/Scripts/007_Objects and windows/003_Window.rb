@@ -548,8 +548,8 @@ class Window
         @sprites["cursor"].src_rect.set(0, 0, 0, 0)
       end
       4.times do |i|
-        dwidth  = [0, 3].include?(i) ? @width - 32 : 16
-        dheight = [0, 3].include?(i) ? 16 : @height - 32
+        dwidth  = ([0, 3].include?(i)) ? @width - 32 : 16
+        dheight = ([0, 3].include?(i)) ? 16 : @height - 32
         @sidebitmaps[i] = ensureBitmap(@sidebitmaps[i], dwidth, dheight)
         @sprites["side#{i}"].bitmap = @sidebitmaps[i]
         @sprites["side#{i}"].src_rect.set(0, 0, dwidth, dheight)

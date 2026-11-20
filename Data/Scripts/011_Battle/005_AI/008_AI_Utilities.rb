@@ -53,7 +53,7 @@ class Battle::AI
     when :FLASHFIRE, :WELLBAKEDBODY
       return move_type == :FIRE
     when :GOODASGOLD
-      return move.is_a?(Pokemon::Move) ? move.status_move? : move.statusMove?
+      return (move.is_a?(Pokemon::Move)) ? move.status_move? : move.statusMove?
     when :LIGHTNINGROD, :MOTORDRIVE, :VOLTABSORB
       return move_type == :ELECTRIC
     when :SAPSIPPER

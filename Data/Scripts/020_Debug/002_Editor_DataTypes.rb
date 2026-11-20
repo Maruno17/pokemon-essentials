@@ -132,7 +132,7 @@ end
 #===============================================================================
 module BooleanProperty
   def self.set(settingname, _oldsetting)
-    return pbConfirmMessage(_INTL("Enable the setting {1}?", settingname)) ? true : false
+    return (pbConfirmMessage(_INTL("Enable the setting {1}?", settingname))) ? true : false
   end
 
   def self.format(value)
@@ -739,7 +739,7 @@ end
 
 def chooseMapPoint(map, rgnmap = false)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   title = Window_UnformattedTextPokemon.newWithSize(
     _INTL("Click a point on the map."), 0, Graphics.height - 64, Graphics.width, 64, viewport
   )
@@ -1064,7 +1064,7 @@ class GameDataPoolProperty
     loop do
       if need_refresh
         if @auto_sort
-          values.sort! { |a, b| (a[0].nil?) ? -1 : b[0].nil? ? 1 : a[1] <=> b[1] }
+          values.sort! { |a, b| (a[0].nil?) ? -1 : (b[0].nil?) ? 1 : a[1] <=> b[1] }
         end
         commands = values.map { |entry| entry[1] }
         need_refresh = false
@@ -1620,7 +1620,7 @@ end
 #===============================================================================
 def pbPropertyList(title, data, properties, saveprompt = false)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   list = pbListWindow([], Graphics.width / 2)
   list.viewport = viewport
   list.z        = 2

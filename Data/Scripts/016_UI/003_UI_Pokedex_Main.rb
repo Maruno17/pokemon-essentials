@@ -91,7 +91,7 @@ class UI::PokedexVisualsList < Window_DrawableCommand
                      num_text, self.baseColor, self.shadowColor)
     # Draw species name
     name_text = ($player.seen?(@dex[this_index][1])) ? GameData::Species.get(@dex[this_index][1]).name : "----------"
-    pbDrawShadowText(self.contents, rect.x + 84 + (@dex[this_index][0] >= 1000 ? 8 : 0), rect.y + 6, rect.width, rect.height,
+    pbDrawShadowText(self.contents, rect.x + 84 + ((@dex[this_index][0] >= 1000) ? 8 : 0), rect.y + 6, rect.width, rect.height,
                      name_text, self.baseColor, self.shadowColor)
   end
 
@@ -580,13 +580,13 @@ class UI::PokedexVisuals < UI::BaseVisuals
     when :alphabetical
       @display_dex.sort! { |a, b| a[:name] <=> b[:name] }
     when :heaviest
-      @display_dex.sort! { |a, b| a[:weight] == b[:weight] ? a[:number] <=> b[:number] : b[:weight] <=> a[:weight] }
+      @display_dex.sort! { |a, b| (a[:weight] == b[:weight]) ? a[:number] <=> b[:number] : b[:weight] <=> a[:weight] }
     when :lightest
-      @display_dex.sort! { |a, b| a[:weight] == b[:weight] ? a[:number] <=> b[:number] : a[:weight] <=> b[:weight] }
+      @display_dex.sort! { |a, b| (a[:weight] == b[:weight]) ? a[:number] <=> b[:number] : a[:weight] <=> b[:weight] }
     when :tallest
-      @display_dex.sort! { |a, b| a[:height] == b[:height] ? a[:number] <=> b[:number] : b[:height] <=> a[:height] }
+      @display_dex.sort! { |a, b| (a[:height] == b[:height]) ? a[:number] <=> b[:number] : b[:height] <=> a[:height] }
     when :shortest
-      @display_dex.sort! { |a, b| a[:height] == b[:height] ? a[:number] <=> b[:number] : a[:height] <=> b[:height] }
+      @display_dex.sort! { |a, b| (a[:height] == b[:height]) ? a[:number] <=> b[:number] : a[:height] <=> b[:height] }
     end
     # Condense into an array of [number, species]
     @display_dex.map! { |entry| [entry[:number], entry[:species]] }
@@ -796,14 +796,14 @@ class UI::PokedexVisuals < UI::BaseVisuals
     # Draw filter value at top
     if draw_text
       if !filter_value.is_a?(Array)
-        filter_text = (options.is_a?(Hash) ? options[filter_value] : filter_value) || blank_text
+        filter_text = ((options.is_a?(Hash)) ? options[filter_value] : filter_value) || blank_text
         draw_text(filter_text, 362, 66, align: :center, theme: :search, outline: :outline)
       end
     else
       yield -1, 0, 0 if block_given?
     end
     # Draw buttons with text
-    (options.is_a?(Hash) ? options.keys : options).each_with_index do |value, i|
+    ((options.is_a?(Hash)) ? options.keys : options).each_with_index do |value, i|
       button_x = metrics[:start_pos][0] + ((i % metrics[:columns]) * (metrics[:size][0] + metrics[:spacing][0]))
       button_y = metrics[:start_pos][1] + ((i / metrics[:columns]) * (metrics[:size][1] + metrics[:spacing][1]))
       src_x = metrics[:src_pos][0]
@@ -830,10 +830,10 @@ class UI::PokedexVisuals < UI::BaseVisuals
                       (!filter_value.is_a?(Array) && filter_value.nil?)
       draw_image(@bitmaps[:search_buttons], button_x, button_y,
                  src_x, metrics[:src_pos][1], *metrics[:size])
-      if blank_text != ""
-        draw_text(blank_text, button_x + ((metrics[:size][0] - 4) / 2), button_y + 12, align: :center, theme: :search, outline: :outline)
-      else
+      if blank_text.empty?
         yield options.length, button_x, button_y if block_given?
+      else
+        draw_text(blank_text, button_x + ((metrics[:size][0] - 4) / 2), button_y + 12, align: :center, theme: :search, outline: :outline)
       end
     end
   end
@@ -1165,7 +1165,7 @@ class UI::PokedexVisuals < UI::BaseVisuals
   end
 
   def update_input_button_grid(filter, options, columns, has_blank)
-    max_index = options.length - 1 + (has_blank ? 1 : 0)
+    max_index = options.length - 1 + ((has_blank) ? 1 : 0)
     rows = (max_index / columns) + 1
     if Input.repeat?(Input::UP)
       if @search_sub_index == -2   # OK
@@ -1240,7 +1240,7 @@ class UI::PokedexVisuals < UI::BaseVisuals
       if @search_sub_index >= 0
         new_value = (@search_sub_index < options.length) ? options[@search_sub_index] : nil
         if @search_sub_index >= options.length   # Blank/nil button
-          filter_to_change = (@filters[:type2] != new_value) ? :type2 : :type1
+          filter_to_change = (@filters[:type2] == new_value) ? :type1 : :type2
           if @filters[filter_to_change] != new_value
             pbPlayDecisionSE
             @filters[filter_to_change] = new_value

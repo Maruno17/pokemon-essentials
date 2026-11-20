@@ -240,7 +240,7 @@ def getPassabilityMinimap(mapid)
           break
         end
       end
-      passtable[i, j] = pass ? 1 : 0
+      passtable[i, j] = (pass) ? 1 : 0
     end
   end
   neighbors = TileDrawingHelper::NEIGHBORS_TO_AUTOTILE_INDEX

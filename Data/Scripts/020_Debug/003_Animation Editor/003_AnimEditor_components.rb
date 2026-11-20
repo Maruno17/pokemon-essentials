@@ -80,7 +80,7 @@ class AnimationEditor::MenuBar < UIControls::BaseContainer
 
   def anim_name=(val)
     ctrl = get_control(:name)
-    ctrl.set_text(val) if ctrl
+    ctrl&.set_text(val)
   end
 
   def color_scheme=(value)

@@ -152,9 +152,7 @@ class Scene_Map
   end
 
   def updateMaps
-    $map_factory.maps.each do |map|
-      map.update
-    end
+    $map_factory.maps.each { |map| map.update }
     $map_factory.updateMaps(self)
   end
 

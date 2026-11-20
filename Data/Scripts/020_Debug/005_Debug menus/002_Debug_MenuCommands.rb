@@ -83,13 +83,13 @@ MenuHandlers.add(:debug_menu, :safari_zone_and_bug_contest, {
         when 0   # Steps remaining
           if Settings::SAFARI_STEPS > 0
             params = ChooseNumberParams.new
-            params.setRange(0, 99999)
+            params.setRange(0, 99_999)
             params.setDefaultValue(safari.steps)
             safari.steps = pbMessageChooseNumber(_INTL("Set the steps remaining in this Safari game."), params)
           end
         when 1   # Safari Balls
           params = ChooseNumberParams.new
-          params.setRange(0, 99999)
+          params.setRange(0, 99_999)
           params.setDefaultValue(safari.ballcount)
           safari.ballcount = pbMessageChooseNumber(
             _INTL("Set the quantity of {1}.", GameData::Item.get(:SAFARIBALL).name_plural), params)
@@ -117,7 +117,7 @@ MenuHandlers.add(:debug_menu, :safari_zone_and_bug_contest, {
         when 0   # Steps remaining
           if Settings::BUG_CONTEST_TIME > 0
             params = ChooseNumberParams.new
-            params.setRange(0, 99999)
+            params.setRange(0, 99_999)
             params.setDefaultValue(min)
             new_time = pbMessageChooseNumber(_INTL("Set the time remaining (in minutes) in this Bug-Catching Contest."), params)
             contest.timer_start += (new_time - min) * 60
@@ -129,7 +129,7 @@ MenuHandlers.add(:debug_menu, :safari_zone_and_bug_contest, {
           end
         when 1   # Sport Balls
           params = ChooseNumberParams.new
-          params.setRange(0, 99999)
+          params.setRange(0, 99_999)
           params.setDefaultValue(contest.ballcount)
           contest.ballcount = pbMessageChooseNumber(
             _INTL("Set the quantity of {1}.", GameData::Item.get(:SPORTBALL).name_plural), params)
@@ -150,18 +150,18 @@ MenuHandlers.add(:debug_menu, :edit_field_effects, {
     loop do
       cmds = []
       cmds.push(_INTL("Repel steps: {1}", $PokemonGlobal.repel))
-      cmds.push(($PokemonMap.strengthUsed ? "[Y]" : "[  ]") + " " + _INTL("Strength used"))
-      cmds.push(($PokemonGlobal.flashUsed ? "[Y]" : "[  ]") + " " + _INTL("Flash used"))
-      cmds.push(($PokemonMap.lower_encounter_rate ? "[Y]" : "[  ]") + " " + _INTL("Lower encounter rate"))
-      cmds.push(($PokemonMap.higher_encounter_rate ? "[Y]" : "[  ]") + " " + _INTL("Higher encounter rate"))
-      cmds.push(($PokemonMap.lower_level_wild_pokemon ? "[Y]" : "[  ]") + " " + _INTL("Lower level wild Pokémon"))
-      cmds.push(($PokemonMap.higher_level_wild_pokemon ? "[Y]" : "[  ]") + " " + _INTL("Higher level wild Pokémon"))
+      cmds.push((($PokemonMap.strengthUsed) ? "[Y]" : "[  ]") + " " + _INTL("Strength used"))
+      cmds.push((($PokemonGlobal.flashUsed) ? "[Y]" : "[  ]") + " " + _INTL("Flash used"))
+      cmds.push((($PokemonMap.lower_encounter_rate) ? "[Y]" : "[  ]") + " " + _INTL("Lower encounter rate"))
+      cmds.push((($PokemonMap.higher_encounter_rate) ? "[Y]" : "[  ]") + " " + _INTL("Higher encounter rate"))
+      cmds.push((($PokemonMap.lower_level_wild_pokemon) ? "[Y]" : "[  ]") + " " + _INTL("Lower level wild Pokémon"))
+      cmds.push((($PokemonMap.higher_level_wild_pokemon) ? "[Y]" : "[  ]") + " " + _INTL("Higher level wild Pokémon"))
       cmd = pbShowCommands(nil, cmds, -1, cmd)
       break if cmd < 0
       case cmd
       when 0   # Repel steps
         params = ChooseNumberParams.new
-        params.setRange(0, 99999)
+        params.setRange(0, 99_999)
         params.setDefaultValue($PokemonGlobal.repel)
         $PokemonGlobal.repel = pbMessageChooseNumber(_INTL("Set the number of steps remaining."), params)
       when 1   # Strength used
@@ -232,7 +232,7 @@ MenuHandlers.add(:debug_menu, :storage_wallpapers, {
       paperscmds.push(_INTL("Unlock all"))
       paperscmds.push(_INTL("Lock all"))
       (PokemonStorage::BASIC_WALLPAPER_COUNT...w.length).each do |i|
-        paperscmds.push((unlockarray[i] ? "[Y]" : "[  ]") + " " + w[i])
+        paperscmds.push(((unlockarray[i]) ? "[Y]" : "[  ]") + " " + w[i])
       end
       paperscmd = pbShowCommands(nil, paperscmds, -1, paperscmd)
       break if paperscmd < 0
@@ -509,7 +509,7 @@ MenuHandlers.add(:debug_menu, :set_battle_rules, {
         else
           ticked = applied_rules[rule_sym]
           ticked = !ticked if ["anims", "canrun", "canswitch", "switchstyle", "cannotlose"].include?(rule) && !applied_rules[rule_sym].nil?
-          rules.push((ticked ? "[Y]" : "[  ]") + " " + rule.to_s)
+          rules.push(((ticked) ? "[Y]" : "[  ]") + " " + rule.to_s)
         end
         rules_syms[0].push(rule_sym)
         rules_syms[1].push(rule)
@@ -1019,7 +1019,7 @@ MenuHandlers.add(:debug_menu, :set_badges, {
       badgecmds.push(_INTL("Give all"))
       badgecmds.push(_INTL("Remove all"))
       24.times do |i|
-        badgecmds.push(($player.badges[i] ? "[Y]" : "[  ]") + " " + _INTL("Badge {1}", i + 1))
+        badgecmds.push((($player.badges[i]) ? "[Y]" : "[  ]") + " " + _INTL("Badge {1}", i + 1))
       end
       badgecmd = pbShowCommands(nil, badgecmds, -1, badgecmd)
       break if badgecmd < 0
@@ -1054,12 +1054,12 @@ MenuHandlers.add(:debug_menu, :toggle_pokedex, {
     dexescmd = 0
     loop do
       dexescmds = []
-      dexescmds.push(_INTL("Have Pokédex: {1}", $player.has_pokedex ? "[YES]" : "[NO]"))
+      dexescmds.push(_INTL("Have Pokédex: {1}", ($player.has_pokedex) ? "[YES]" : "[NO]"))
       dex_names = Settings.pokedex_names
       dex_names.length.times do |i|
         name = (dex_names[i].is_a?(Array)) ? dex_names[i][0] : dex_names[i]
         unlocked = $player.pokedex.unlocked?(i)
-        dexescmds.push((unlocked ? "[Y]" : "[  ]") + " " + name)
+        dexescmds.push(((unlocked) ? "[Y]" : "[  ]") + " " + name)
       end
       dexescmd = pbShowCommands(nil, dexescmds, -1, dexescmd)
       break if dexescmd < 0
@@ -1102,7 +1102,7 @@ MenuHandlers.add(:debug_menu, :edit_phone_contacts, {
       min = time / 60
       sec = time % 60
       cmds.push(_INTL("Time until next call: {1}m {2}s", min, sec))
-      cmds.push((Phone.rematches_enabled ? "[Y]" : "[  ]") + " " + _INTL("Rematches possible"))
+      cmds.push(((Phone.rematches_enabled) ? "[Y]" : "[  ]") + " " + _INTL("Rematches possible"))
       cmds.push(_INTL("Maximum rematch version : {1}", Phone.rematch_variant))
       if $PokemonGlobal.phone.contacts.length > 0
         cmds.push(_INTL("Make all contacts ready for a rematch"))
@@ -1113,7 +1113,7 @@ MenuHandlers.add(:debug_menu, :edit_phone_contacts, {
       case cmd
       when 0   # Time until next call
         params = ChooseNumberParams.new
-        params.setRange(0, 99999)
+        params.setRange(0, 99_999)
         params.setDefaultValue(min)
         params.setCancelValue(-1)
         new_time = pbMessageChooseNumber(_INTL("Set the time (in minutes) until the next phone call."), params)
@@ -1152,9 +1152,9 @@ MenuHandlers.add(:debug_menu, :edit_phone_contacts, {
           edit_cmd = 0
           loop do
             edit_cmds = []
-            edit_cmds.push((contact.visible? ? "[Y]" : "[  ]") + " " + _INTL("Contact visible"))
+            edit_cmds.push(((contact.visible?) ? "[Y]" : "[  ]") + " " + _INTL("Contact visible"))
             if contact.trainer?
-              edit_cmds.push((contact.can_rematch? ? "[Y]" : "[  ]") + " " + _INTL("Can battle"))
+              edit_cmds.push(((contact.can_rematch?) ? "[Y]" : "[  ]") + " " + _INTL("Can battle"))
               ready_time = contact.time_to_ready   # time is in seconds
               ready_min = ready_time / 60
               ready_sec = ready_time % 60
@@ -1172,7 +1172,7 @@ MenuHandlers.add(:debug_menu, :edit_phone_contacts, {
               contact.time_to_ready = 0 if contact.can_rematch?
             when 2   # Time until ready to battle
               params = ChooseNumberParams.new
-              params.setRange(0, 99999)
+              params.setRange(0, 99_999)
               params.setDefaultValue(ready_min)
               params.setCancelValue(-1)
               new_time = pbMessageChooseNumber(_INTL("Set the time (in minutes) until this trainer is ready to battle."), params)

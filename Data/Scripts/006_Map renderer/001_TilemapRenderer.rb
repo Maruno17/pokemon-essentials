@@ -215,7 +215,7 @@ class TilemapRenderer
         tile.src_rect.x = SOURCE_TILE_WIDTH
         tile.src_rect.y -= SOURCE_TILE_HEIGHT * TILES_PER_AUTOTILE / 2
       end
-      tile.src_rect.x += frame * SOURCE_TILE_WIDTH * (wraps ? 2 : 1)
+      tile.src_rect.x += frame * SOURCE_TILE_WIDTH * ((wraps) ? 2 : 1)
     end
 
     def update

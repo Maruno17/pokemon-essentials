@@ -73,7 +73,7 @@ module BattleAnimationEditor
     mousepos = Mouse.getMousePos
     return -1 if !mousepos
     menuwindow = Window_Menu.new(commands, mousepos[0], mousepos[1])
-    menuwindow.z = 99999
+    menuwindow.z = 99_999
     loop do
       Graphics.update
       Input.update
@@ -468,15 +468,15 @@ module BattleAnimationEditor
                              pbCreateCel(Battle::Visuals::FOCUSTARGET_X,
                                          Battle::Visuals::FOCUSTARGET_Y, -2, 1),
                              @sprites["pokemon_0"], @sprites["pokemon_1"])
-        usersprite = @sprites["pokemon_#{oppmove ? 1 : 0}"]
-        targetsprite = @sprites["pokemon_#{oppmove ? 0 : 1}"]
-        olduserx = usersprite ? usersprite.x : 0
-        oldusery = usersprite ? usersprite.y : 0
-        oldtargetx = targetsprite ? targetsprite.x : 0
-        oldtargety = targetsprite ? targetsprite.y : 0
+        usersprite = @sprites["pokemon_#{(oppmove) ? 1 : 0}"]
+        targetsprite = @sprites["pokemon_#{(oppmove) ? 0 : 1}"]
+        olduserx = (usersprite) ? usersprite.x : 0
+        oldusery = (usersprite) ? usersprite.y : 0
+        oldtargetx = (targetsprite) ? targetsprite.x : 0
+        oldtargety = (targetsprite) ? targetsprite.y : 0
         @player = PBAnimationPlayerX.new(@animation,
-                                         @battle.battlers[oppmove ? 1 : 0],
-                                         @battle.battlers[oppmove ? 0 : 1],
+                                         @battle.battlers[(oppmove) ? 1 : 0],
+                                         @battle.battlers[(oppmove) ? 0 : 1],
                                          self, oppmove, true)
         @player.setLineTransform(
           Battle::Visuals::FOCUSUSER_X, Battle::Visuals::FOCUSUSER_Y,
@@ -676,7 +676,7 @@ module BattleAnimationEditor
       cel = @animation[self.currentframe]
       return false if !cel
       cel = cel[celindex]
-      return cel ? (cel[AnimFrame::LOCKED] != 0) : false
+      return (cel) ? (cel[AnimFrame::LOCKED] != 0) : false
     end
 
     def deletable?(celindex)

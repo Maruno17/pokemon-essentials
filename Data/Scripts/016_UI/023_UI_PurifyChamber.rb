@@ -84,7 +84,7 @@ class PurifyChamberSet
       ret += (PurifyChamberSet.isSuperEffective(@list[i], @list[(i + 1) % @list.length])) ? 1 : 0
     end
     if @list[@facing]
-      ret += PurifyChamberSet.isSuperEffective(@shadow, @list[@facing]) ? 1 : 0
+      ret += (PurifyChamberSet.isSuperEffective(@shadow, @list[@facing])) ? 1 : 0
     end
     return ret + (@list.length / 2)
   end
@@ -449,7 +449,7 @@ class PurifyChamberScreen
           end
           commands.push(_INTL("CANCEL"))
           choice = @scene.pbShowCommands(
-            _INTL("What shall I do with this {1}?", heldpkmn ? heldpkmn.name : curpkmn.name),
+            _INTL("What shall I do with this {1}?", (heldpkmn) ? heldpkmn.name : curpkmn.name),
             commands
           )
           if choice == 0
@@ -524,7 +524,7 @@ class PurifyChamberScreen
         chamber.currentSet = cmd[1]
       when 2   # Choose a Pokemon
         pos = @scene.pbChoosePokemon
-        pkmn = pos ? $PokemonStorage[pos[0], pos[1]] : nil
+        pkmn = (pos) ? $PokemonStorage[pos[0], pos[1]] : nil
         heldpkmn = pkmn if pkmn
       else   # cancel
         if heldpkmn
@@ -808,7 +808,7 @@ class FlowDiagram
       return (angle >= startAngle || angle <= endAngle) &&
              (angle >= 0 && angle <= 360)
     else
-      return (angle >= startAngle && angle <= endAngle)
+      return angle >= startAngle && angle <= endAngle
     end
   end
 
@@ -1048,24 +1048,16 @@ class PurifyChamberSetView < Sprite
 
   def update
     super
-    @__sprites.each do |sprite|
-      sprite&.update
-    end
-    @flows.each do |flow|
-      flow.update
-    end
+    @__sprites.each { |sprite| sprite&.update }
+    @flows.each { |flow| flow.update }
     @directflow.update
     @view.update
     @info.update
   end
 
   def dispose
-    @__sprites.each do |sprite|
-      sprite&.dispose
-    end
-    @flows.each do |flow|
-      flow.dispose
-    end
+    @__sprites.each { |sprite| sprite&.dispose }
+    @flows.each { |flow| flow.dispose }
     @directflow.dispose
     @view.dispose
     @info.dispose
@@ -1098,9 +1090,9 @@ class PurifyChamberScene
   def pbOpenSet(set)
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @viewportmsg = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewportmsg.z = 99999
+    @viewportmsg.z = 99_999
     addBackgroundOrColoredPlane(@sprites, "bg", "purifychamber_bg",
                                 Color.new(64, 48, 96), @viewport)
     @sprites["setwindow"] = Window_PurifyChamberSets.new(
@@ -1234,7 +1226,7 @@ class PurifyChamberScene
     @sprites["setwindow"].switching = set
     ret = pbChooseSet
     @sprites["setwindow"].switching = -1
-    return ret < 0 ? set : ret
+    return (ret < 0) ? set : ret
   end
 
   def pbSummary(pos, heldpkmn)

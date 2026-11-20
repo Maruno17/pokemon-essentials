@@ -26,11 +26,11 @@ class PokemonEvolutionScene
     @newspecies = newspecies
     @sprites = {}
     @bgviewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @bgviewport.z = 99999
+    @bgviewport.z = 99_999
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @msgviewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @msgviewport.z = 99999
+    @msgviewport.z = 99_999
     addBackgroundOrColoredPlane(@sprites, "background", "evolution_bg",
                                 Color.new(248, 248, 248), @bgviewport)
     rsprite1 = PokemonSprite.new(@viewport)

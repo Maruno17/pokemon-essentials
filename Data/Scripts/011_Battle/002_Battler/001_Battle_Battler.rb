@@ -138,11 +138,11 @@ class Battle::Battler
   # Properties from Pokémon.
   #-----------------------------------------------------------------------------
 
-  def happiness;       return @pokemon ? @pokemon.happiness : 0;       end
-  def affection_level; return @pokemon ? @pokemon.affection_level : 2; end
-  def gender;          return @pokemon ? @pokemon.gender : 0;          end
-  def nature;          return @pokemon ? @pokemon.nature : nil;        end
-  def pokerusStage;    return @pokemon ? @pokemon.pokerusStage : 0;    end
+  def happiness;       return (@pokemon) ? @pokemon.happiness : 0;       end
+  def affection_level; return (@pokemon) ? @pokemon.affection_level : 2; end
+  def gender;          return (@pokemon) ? @pokemon.gender : 0;          end
+  def nature;          return (@pokemon) ? @pokemon.nature : nil;        end
+  def pokerusStage;    return (@pokemon) ? @pokemon.pokerusStage : 0;    end
 
   def isSpecies?(*check_species)
     return @pokemon&.isSpecies?(*check_species)
@@ -229,12 +229,12 @@ class Battle::Battler
   def pbThis(lowerCase = false)
     if opposes?
       if @battle.trainerBattle?
-        return lowerCase ? _INTL("the opposing {1}", name) : _INTL("The opposing {1}", name)
+        return (lowerCase) ? _INTL("the opposing {1}", name) : _INTL("The opposing {1}", name)
       else
-        return lowerCase ? _INTL("the wild {1}", name) : _INTL("The wild {1}", name)
+        return (lowerCase) ? _INTL("the wild {1}", name) : _INTL("The wild {1}", name)
       end
     elsif !pbOwnedByPlayer?
-      return lowerCase ? _INTL("the ally {1}", name) : _INTL("The ally {1}", name)
+      return (lowerCase) ? _INTL("the ally {1}", name) : _INTL("The ally {1}", name)
     end
     return name
   end
@@ -242,42 +242,42 @@ class Battle::Battler
   def pbOfThis(lowerCase = false)
     if opposes?
       if @battle.trainerBattle?
-        return lowerCase ? _INTL("the opposing {1}'s", name) : _INTL("The opposing {1}'s", name)
+        return (lowerCase) ? _INTL("the opposing {1}'s", name) : _INTL("The opposing {1}'s", name)
       else
-        return lowerCase ? _INTL("the wild {1}'s", name) : _INTL("The wild {1}'s", name)
+        return (lowerCase) ? _INTL("the wild {1}'s", name) : _INTL("The wild {1}'s", name)
       end
     elsif !pbOwnedByPlayer?
-      return lowerCase ? _INTL("the ally {1}'s", name) : _INTL("The ally {1}'s", name)
+      return (lowerCase) ? _INTL("the ally {1}'s", name) : _INTL("The ally {1}'s", name)
     end
     return _INTL("{1}'s", name)
   end
 
   def pbTeam(lowerCase = false)
     if opposes?
-      return lowerCase ? _INTL("the opposing team") : _INTL("The opposing team")
+      return (lowerCase) ? _INTL("the opposing team") : _INTL("The opposing team")
     end
-    return lowerCase ? _INTL("your team") : _INTL("Your team")
+    return (lowerCase) ? _INTL("your team") : _INTL("Your team")
   end
 
   def pbOfTeam(lowerCase = false)
     if opposes?
-      return lowerCase ? _INTL("the opposing team's") : _INTL("The opposing team's")
+      return (lowerCase) ? _INTL("the opposing team's") : _INTL("The opposing team's")
     end
-    return lowerCase ? _INTL("your team's") : _INTL("Your team's")
+    return (lowerCase) ? _INTL("your team's") : _INTL("Your team's")
   end
 
   def pbOpposingTeam(lowerCase = false)
     if opposes?
-      return lowerCase ? _INTL("your team") : _INTL("Your team")
+      return (lowerCase) ? _INTL("your team") : _INTL("Your team")
     end
-    return lowerCase ? _INTL("the opposing team") : _INTL("The opposing team")
+    return (lowerCase) ? _INTL("the opposing team") : _INTL("The opposing team")
   end
 
   def pbOfOpposingTeam(lowerCase = false)
     if opposes?
-      return lowerCase ? _INTL("your team's") : _INTL("Your team's")
+      return (lowerCase) ? _INTL("your team's") : _INTL("Your team's")
     end
-    return lowerCase ? _INTL("the opposing team's") : _INTL("The opposing team's")
+    return (lowerCase) ? _INTL("the opposing team's") : _INTL("The opposing team's")
   end
 
   #-----------------------------------------------------------------------------

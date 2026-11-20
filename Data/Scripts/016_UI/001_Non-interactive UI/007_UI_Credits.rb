@@ -119,9 +119,9 @@ class Scene_Credits
     credit_lines = get_text
     # Make background and text sprites
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    viewport.z = 99999
+    viewport.z = 99_999
     text_viewport = Viewport.new(0, @trim, Graphics.width, Graphics.height - (@trim * 2))
-    text_viewport.z = 99999
+    text_viewport.z = 99_999
     @background_sprite = IconSprite.new(0, 0)
     @background_sprite.setBitmap("Graphics/Titles/" + BACKGROUNDS_LIST[0])
     @credit_sprites = []

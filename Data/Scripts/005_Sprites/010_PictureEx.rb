@@ -104,7 +104,7 @@ class PictureEx
     @processes.each do |p|
       next if ![Processes::XY, Processes::DELTA_XY].include?(p[0])
       pro = []
-      pro.push(p[0] == Processes::XY ? "XY" : "DELTA")
+      pro.push((p[0] == Processes::XY) ? "XY" : "DELTA")
       if p[1] == 0 && p[2] == 0
         pro.push("start " + p[7].to_i.to_s + ", " + p[8].to_i.to_s)
       else
@@ -449,11 +449,10 @@ class PictureEx
         @cropBottom = process[5]
       end
       # Erase process if its duration has elapsed
-      if process[1] + process[2] <= this_frame
-        callback(process[4]) if process[4]
-        @processes[i] = nil
-        procEnded = true
-      end
+      next if process[1] + process[2] > this_frame
+      callback(process[4]) if process[4]
+      @processes[i] = nil
+      procEnded = true
     end
     # Clear out empty spaces in @processes array caused by finished processes
     @processes.compact! if procEnded

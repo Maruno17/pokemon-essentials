@@ -995,7 +995,7 @@ module RandomDungeon
         map.height.times do |j|
           next if ![:room, :corridor].include?(@map_data[i, j, FLOOR_LAYER])
           if tile_is_wall?(@map_data[i, j, WALL_LAYER])
-            @map_data[i, j, FLOOR_LAYER] = @tileset.has_decoration?(:wall_floor) ? :wall_floor : :floor
+            @map_data[i, j, FLOOR_LAYER] = (@tileset.has_decoration?(:wall_floor)) ? :wall_floor : :floor
           else
             @map_data[i, j, FLOOR_LAYER] = :floor
           end

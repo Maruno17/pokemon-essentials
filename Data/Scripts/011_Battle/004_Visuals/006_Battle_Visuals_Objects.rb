@@ -61,7 +61,7 @@ class Battle::Visuals::PokemonDataBox < Sprite
     @sprites         = {}
     initializeSprites(viewport)
     self.visible     = false
-    self.z           = 10150 + ((@battler.index / 2) * 5)
+    self.z           = 10_150 + ((@battler.index / 2) * 5)
     refresh
   end
 
@@ -333,7 +333,7 @@ class Battle::Visuals::PokemonDataBox < Sprite
       w = 1 if w < 1
       # NOTE: The line below snaps the bar's width to the nearest 2 pixels, to
       #       fit in with the rest of the graphics which are doubled in size.
-      w = ((w / 2.0).round) * 2
+      w = (w / 2.0).round * 2
     end
     @hpBar.src_rect.width = w
     hpColor = 0                                      # Green bar
@@ -347,7 +347,7 @@ class Battle::Visuals::PokemonDataBox < Sprite
     w = exp_fraction * @expBarBitmap.width
     # NOTE: The line below snaps the bar's width to the nearest 2 pixels, to
     #       fit in with the rest of the graphics which are doubled in size.
-    w = ((w / 2).round) * 2
+    w = (w / 2).round * 2
     @expBar.src_rect.width = w
   end
 
@@ -457,7 +457,7 @@ class Battle::Visuals::AbilitySplashBar < Sprite
     # Position the bar
     self.x       = (side == 0) ? -Graphics.width / 2 : Graphics.width
     self.y       = (side == 0) ? 180 : 80
-    self.z       = 10120
+    self.z       = 10_120
     self.visible = false
   end
 

@@ -921,7 +921,7 @@ ItemHandlers::UsableOnPokemon.add(:HPUP, proc { |item, pkmn|
   ev_total = 0
   GameData::Stat.each_main { |s| ev_total += pkmn.ev[s.id] }
   next false if ev_total >= Pokemon::EV_LIMIT
-  next pkmn.ev[:HP] < (Settings::NO_VITAMIN_EV_CAP ? Pokemon::EV_STAT_LIMIT : 100)
+  next pkmn.ev[:HP] < ((Settings::NO_VITAMIN_EV_CAP) ? Pokemon::EV_STAT_LIMIT : 100)
 })
 ItemHandlers::UseOnPokemonMaximum.add(:HPUP, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:HP, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
@@ -938,7 +938,7 @@ ItemHandlers::UsableOnPokemon.add(:PROTEIN, proc { |item, pkmn|
   ev_total = 0
   GameData::Stat.each_main { |s| ev_total += pkmn.ev[s.id] }
   next false if ev_total >= Pokemon::EV_LIMIT
-  next pkmn.ev[:ATTACK] < (Settings::NO_VITAMIN_EV_CAP ? Pokemon::EV_STAT_LIMIT : 100)
+  next pkmn.ev[:ATTACK] < ((Settings::NO_VITAMIN_EV_CAP) ? Pokemon::EV_STAT_LIMIT : 100)
 })
 ItemHandlers::UseOnPokemonMaximum.add(:PROTEIN, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:ATTACK, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
@@ -955,7 +955,7 @@ ItemHandlers::UsableOnPokemon.add(:IRON, proc { |item, pkmn|
   ev_total = 0
   GameData::Stat.each_main { |s| ev_total += pkmn.ev[s.id] }
   next false if ev_total >= Pokemon::EV_LIMIT
-  next pkmn.ev[:DEFENSE] < (Settings::NO_VITAMIN_EV_CAP ? Pokemon::EV_STAT_LIMIT : 100)
+  next pkmn.ev[:DEFENSE] < ((Settings::NO_VITAMIN_EV_CAP) ? Pokemon::EV_STAT_LIMIT : 100)
 })
 ItemHandlers::UseOnPokemonMaximum.add(:IRON, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:DEFENSE, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
@@ -972,7 +972,7 @@ ItemHandlers::UsableOnPokemon.add(:CALCIUM, proc { |item, pkmn|
   ev_total = 0
   GameData::Stat.each_main { |s| ev_total += pkmn.ev[s.id] }
   next false if ev_total >= Pokemon::EV_LIMIT
-  next pkmn.ev[:SPECIAL_ATTACK] < (Settings::NO_VITAMIN_EV_CAP ? Pokemon::EV_STAT_LIMIT : 100)
+  next pkmn.ev[:SPECIAL_ATTACK] < ((Settings::NO_VITAMIN_EV_CAP) ? Pokemon::EV_STAT_LIMIT : 100)
 })
 ItemHandlers::UseOnPokemonMaximum.add(:CALCIUM, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:SPECIAL_ATTACK, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
@@ -989,7 +989,7 @@ ItemHandlers::UsableOnPokemon.add(:ZINC, proc { |item, pkmn|
   ev_total = 0
   GameData::Stat.each_main { |s| ev_total += pkmn.ev[s.id] }
   next false if ev_total >= Pokemon::EV_LIMIT
-  next pkmn.ev[:SPECIAL_DEFENSE] < (Settings::NO_VITAMIN_EV_CAP ? Pokemon::EV_STAT_LIMIT : 100)
+  next pkmn.ev[:SPECIAL_DEFENSE] < ((Settings::NO_VITAMIN_EV_CAP) ? Pokemon::EV_STAT_LIMIT : 100)
 })
 ItemHandlers::UseOnPokemonMaximum.add(:ZINC, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:SPECIAL_DEFENSE, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)
@@ -1006,7 +1006,7 @@ ItemHandlers::UsableOnPokemon.add(:CARBOS, proc { |item, pkmn|
   ev_total = 0
   GameData::Stat.each_main { |s| ev_total += pkmn.ev[s.id] }
   next false if ev_total >= Pokemon::EV_LIMIT
-  next pkmn.ev[:SPEED] < (Settings::NO_VITAMIN_EV_CAP ? Pokemon::EV_STAT_LIMIT : 100)
+  next pkmn.ev[:SPEED] < ((Settings::NO_VITAMIN_EV_CAP) ? Pokemon::EV_STAT_LIMIT : 100)
 })
 ItemHandlers::UseOnPokemonMaximum.add(:CARBOS, proc { |item, pkmn|
   next pbMaxUsesOfEVRaisingItem(:SPEED, 10, pkmn, Settings::NO_VITAMIN_EV_CAP)

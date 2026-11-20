@@ -313,7 +313,7 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
   #-----------------------------------------------------------------------------
 
   def mouse_in_container?
-    return true if @captured && @captured.respond_to?("mouse_in_control?") &&
+    return true if @captured&.respond_to?("mouse_in_control?") &&
                    @captured.mouse_in_control?
     return super
   end
@@ -572,7 +572,7 @@ class AnimationEditor::ListedParticle < UIControls::BaseContainer
       obj.y = y_pos + ((FULL_ROW_HEIGHT - obj.height) / 2) if vis
     end
     if @rows[row][LIST_ARROW] && @groups_expanded.has_key?(row)
-      @rows[row][LIST_ARROW].value = (@groups_expanded[row] ? 1 : 0)
+      @rows[row][LIST_ARROW].value = ((@groups_expanded[row]) ? 1 : 0)
     end
     refresh_values
   end

@@ -16,7 +16,7 @@ class PokemonTilesetScene
   def initialize
     @tilesets_data = load_data("Data/Tilesets.rxdata")
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @sprites = {}
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(
       _INTL("Tileset Editor\nA/S: SCROLL\nZ: MENU"),

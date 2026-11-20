@@ -232,8 +232,8 @@ class Game_Character
       @bush_depth = Game_Map::TILE_HEIGHT
     elsif moving? && @direction == 2
       # Moving down out of very tall grass
-      x_behind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
-      y_behind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
+      x_behind = @x + ((@direction == 4) ? 1 : (@direction == 6) ? -1 : 0)
+      y_behind = @y + ((@direction == 8) ? 1 : (@direction == 2) ? -1 : 0)
       behind_tile = self.map.real_map_and_coords_of(x_behind, y_behind)
       if behind_tile[0].deepBush?(behind_tile[1], behind_tile[2]) && !terrain_tag&.deep_bush
         @bush_depth = Game_Map::TILE_HEIGHT
@@ -259,8 +259,8 @@ class Game_Character
   #-----------------------------------------------------------------------------
 
   def passable?(x, y, dir, strict = false)
-    new_x = x + (dir == 6 ? 1 : dir == 4 ? -1 : 0)
-    new_y = y + (dir == 2 ? 1 : dir == 8 ? -1 : 0)
+    new_x = x + ((dir == 6) ? 1 : (dir == 4) ? -1 : 0)
+    new_y = y + ((dir == 2) ? 1 : (dir == 8) ? -1 : 0)
     return false unless self.map.valid?(new_x, new_y)
     return true if @through
     if strict
@@ -618,7 +618,7 @@ class Game_Character
 
   def move_upper_left
     unless @direction_fix
-      @direction = (@direction == 6 ? 4 : @direction == 2 ? 8 : @direction)
+      @direction = ((@direction == 6) ? 4 : (@direction == 2) ? 8 : @direction)
     end
     if can_move_in_direction?(7)
       @move_initial_x = @x
@@ -632,7 +632,7 @@ class Game_Character
 
   def move_upper_right
     unless @direction_fix
-      @direction = (@direction == 4 ? 6 : @direction == 2 ? 8 : @direction)
+      @direction = ((@direction == 4) ? 6 : (@direction == 2) ? 8 : @direction)
     end
     if can_move_in_direction?(9)
       @move_initial_x = @x
@@ -646,7 +646,7 @@ class Game_Character
 
   def move_lower_left
     unless @direction_fix
-      @direction = (@direction == 6 ? 4 : @direction == 8 ? 2 : @direction)
+      @direction = ((@direction == 6) ? 4 : (@direction == 8) ? 2 : @direction)
     end
     if can_move_in_direction?(1)
       @move_initial_x = @x
@@ -660,7 +660,7 @@ class Game_Character
 
   def move_lower_right
     unless @direction_fix
-      @direction = (@direction == 4 ? 6 : @direction == 8 ? 2 : @direction)
+      @direction = ((@direction == 4) ? 6 : (@direction == 8) ? 2 : @direction)
     end
     if can_move_in_direction?(3)
       @move_initial_x = @x

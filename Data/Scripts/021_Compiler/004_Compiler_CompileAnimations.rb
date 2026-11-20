@@ -375,7 +375,7 @@ module Compiler
       # Sort each particle's commands by their keyframe and duration
       particle.each_key do |key|
         next if !particle[key].is_a?(Array)
-        particle[key].sort! { |a, b| a[0] == b[0] ? a[1] == b[1] ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
+        particle[key].sort! { |a, b| (a[0] == b[0]) ? (a[1] == b[1]) ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
         next if particle[:name] == "SE"
         # Check for any overlapping particle commands
         last_frame = -1
@@ -394,12 +394,10 @@ module Compiler
         end
       end
       # Ensure valid values for "SetBlending" commands
-      if particle[:blending]
-        particle[:blending].each do |blend|
-          next if blend[2] <= 2
-          raise _INTL("Invalid blend value: {1} (must be 0, 1 or 2).\n{2}",
-                      blend[2], FileLineData.linereport)
-        end
+      particle[:blending]&.each do |blend|
+        next if blend[2] <= 2
+        raise _INTL("Invalid blend value: {1} (must be 0, 1 or 2).\n{2}",
+                    blend[2], FileLineData.linereport)
       end
     end
   end

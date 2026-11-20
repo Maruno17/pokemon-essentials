@@ -79,7 +79,7 @@ module GameData
     # @return [String] the translated name of the Pokémon Storage creator
     def storage_creator
       ret = pbGetMessageFromHash(MessageTypes::STORAGE_CREATOR_NAME, @real_storage_creator)
-      return nil_or_empty?(ret) ? _INTL("Bill") : ret
+      return (nil_or_empty?(ret)) ? _INTL("Bill") : ret
     end
   end
 end

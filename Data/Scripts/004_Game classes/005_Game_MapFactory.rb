@@ -431,7 +431,7 @@ module MapFactoryHelper
 
   def hasConnections?(id)
     conns = MapFactoryHelper.getMapConnections
-    return conns[id] ? true : false
+    return (conns[id]) ? true : false
   end
 
   def mapsConnected?(id1, id2)

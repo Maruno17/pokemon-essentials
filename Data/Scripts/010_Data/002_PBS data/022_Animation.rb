@@ -730,21 +730,20 @@ module GameData
             @@cmd_to_pbs_name[val[0]] ||= []
             @@cmd_to_pbs_name[val[0]].push([key, val[1].length])
             @@cmd_group[key] = 0   # Not a Set/Move command
-            if val[1].length > 1
-              @@cmd_group[key] = 1   # Set/Move commands for the regular particle
-              if val[0].to_s[0, 4] == "mask"
-                @@cmd_group[key] = 2
-              elsif val[0].to_s[-1] == "2"
-                @@cmd_group[key] = 3
-              elsif val[0].to_s[0, 8] == "emitting"
-                @@cmd_group[key] = 4
-              elsif val[0].to_s[0, 7] == "emitter"
-                @@cmd_group[key] = 5
-              elsif val[0].to_s[0, 4] == "emit" ||
-                    val[0].to_s[0, 5] == "spawn" ||
-                    val[0].to_s[0, 6] == "radius"
-                @@cmd_group[key] = 6
-              end
+            next if val[1].empty?
+            @@cmd_group[key] = 1   # Set/Move commands for the regular particle
+            if val[0].to_s[0, 4] == "mask"
+              @@cmd_group[key] = 2
+            elsif val[0].to_s[-1] == "2"
+              @@cmd_group[key] = 3
+            elsif val[0].to_s[0, 8] == "emitting"
+              @@cmd_group[key] = 4
+            elsif val[0].to_s[0, 7] == "emitter"
+              @@cmd_group[key] = 5
+            elsif val[0].to_s[0, 4] == "emit" ||
+                  val[0].to_s[0, 5] == "spawn" ||
+                  val[0].to_s[0, 6] == "radius"
+              @@cmd_group[key] = 6
             end
           end
           # For each property translation, put "SetXYZ" before "MoveXYZ"

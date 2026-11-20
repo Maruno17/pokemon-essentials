@@ -469,7 +469,7 @@ def pbMoveTutorChoose(move, movelist = nil, by_machine = false, one_use_machine 
         screen.show_message(_INTL("Eggs can't be taught any moves."))
       elsif pkmn.shadowPokemon?
         screen.show_message(_INTL("Shadow Pokémon can't be taught any moves."))
-      elsif movelist && movelist.none? { |j| j == pkmn.species }
+      elsif movelist&.none? { |j| j == pkmn.species }
         screen.show_message(_INTL("{1} can't learn {2}.", pkmn.name, move_name))
       elsif !pkmn.compatible_with_move?(move)
         screen.show_message(_INTL("{1} can't learn {2}.", pkmn.name, move_name))

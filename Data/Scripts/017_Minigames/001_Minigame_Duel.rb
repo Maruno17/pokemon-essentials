@@ -57,7 +57,7 @@ class PokemonDuel
   def pbStartDuel(opponent, event)
     @event = event
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @sprites = {}
     @sprites["player"] = IconSprite.new(-160, 96, @viewport)
     @sprites["player"].setBitmap(GameData::TrainerType.player_front_sprite_filename($player.trainer_type))

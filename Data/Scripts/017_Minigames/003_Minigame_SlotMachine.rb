@@ -14,7 +14,7 @@ class SlotMachineReel < BitmapSprite
 
   def initialize(x, y, reel_num, difficulty = 1)
     @viewport = Viewport.new(x, y, 64, 144)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     super(64, 144, @viewport)
     @reel_num = reel_num
     @difficulty = difficulty
@@ -110,7 +110,7 @@ class SlotMachineScore < BitmapSprite
 
   def initialize(x, y, score = 0)
     @viewport = Viewport.new(x, y, 70, 22)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     super(70, 22, @viewport)
     @numbers = AnimatedBitmap.new("Graphics/UI/Slot Machine/numbers")
     self.score = score

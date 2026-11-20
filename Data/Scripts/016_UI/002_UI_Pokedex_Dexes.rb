@@ -6,7 +6,7 @@ class UI::PokedexDexesVisualsList < Window_CommandPokemon
 
   def initialize(dexes, width)
     @dexes = dexes
-    commands = dexes.map { |dex| dex.is_a?(Array) ? dex[1] : dex }
+    commands = dexes.map { |dex| (dex.is_a?(Array)) ? dex[1] : dex }
     super(commands, width)
     @selarrow = AnimatedBitmap.new(UI::PokedexDexesVisuals::UI_FOLDER + "sel_arrow_white")
     self.baseColor   = Color.new(248, 248, 248)

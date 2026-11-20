@@ -55,7 +55,7 @@ class BugContestState
   end
 
   def undecided?
-    return (@inProgress && @decision == 0)
+    return @inProgress && @decision == 0
   end
 
   def decided?
@@ -232,7 +232,7 @@ class TimerDisplay # :nodoc:
 
   def initialize(start_time, max_time)
     @timer = Window_AdvancedTextPokemon.newWithSize("", Graphics.width - 120, 0, 120, 64)
-    @timer.z = 99999
+    @timer.z = 99_999
     @start_time = start_time
     @max_time = max_time
     @display_time = nil

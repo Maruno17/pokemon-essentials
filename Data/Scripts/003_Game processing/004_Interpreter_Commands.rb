@@ -937,7 +937,7 @@ class Interpreter
   # * Show Picture
   #-----------------------------------------------------------------------------
   def command_231
-    number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
+    number = @parameters[0] + (($game_temp.in_battle) ? 50 : 0)
     if @parameters[3] == 0   # Direct appointment
       x = @parameters[4]
       y = @parameters[5]
@@ -954,7 +954,7 @@ class Interpreter
   # * Move Picture
   #-----------------------------------------------------------------------------
   def command_232
-    number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
+    number = @parameters[0] + (($game_temp.in_battle) ? 50 : 0)
     if @parameters[3] == 0   # Direct appointment
       x = @parameters[4]
       y = @parameters[5]
@@ -972,7 +972,7 @@ class Interpreter
   # * Rotate Picture
   #-----------------------------------------------------------------------------
   def command_233
-    number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
+    number = @parameters[0] + (($game_temp.in_battle) ? 50 : 0)
     $game_screen.pictures[number].rotate(@parameters[1])
     return true
   end
@@ -981,7 +981,7 @@ class Interpreter
   # * Change Picture Color Tone
   #-----------------------------------------------------------------------------
   def command_234
-    number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
+    number = @parameters[0] + (($game_temp.in_battle) ? 50 : 0)
     $game_screen.pictures[number].start_tone_change(@parameters[1], @parameters[2])
     return true
   end
@@ -990,7 +990,7 @@ class Interpreter
   # * Erase Picture
   #-----------------------------------------------------------------------------
   def command_235
-    number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
+    number = @parameters[0] + (($game_temp.in_battle) ? 50 : 0)
     $game_screen.pictures[number].erase
     return true
   end

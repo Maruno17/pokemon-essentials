@@ -125,15 +125,11 @@ class Pokemon
     # Retrieve Shadow moveset for this Pokémon
     data = shadow_data
     # Record this Pokémon's Shadow moves
-    if data
-      data.moves.each do |m|
-        @shadow_moves.push(m) if GameData::Move.exists?(m)
-        break if @shadow_moves.length >= MAX_MOVES
-      end
+    data&.moves&.each do |m|
+      @shadow_moves.push(m) if GameData::Move.exists?(m)
+      break if @shadow_moves.length >= MAX_MOVES
     end
-    if @shadow_moves.empty? && GameData::Move.exists?(:SHADOWRUSH)
-      @shadow_moves.push(:SHADOWRUSH)
-    end
+    @shadow_moves.push(:SHADOWRUSH) if @shadow_moves.empty? && GameData::Move.exists?(:SHADOWRUSH)
     # Record this Pokémon's original moves
     if !@shadow_moves.empty?
       @moves.each_with_index { |m, i| @shadow_moves[MAX_MOVES + i] = m.id }

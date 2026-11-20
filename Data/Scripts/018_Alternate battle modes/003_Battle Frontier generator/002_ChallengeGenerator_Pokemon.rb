@@ -268,12 +268,12 @@ def pbRandomPokemonFromRule(rules, trainer)
       moves |= []
     else
       newmoves = []
-      rest = GameData::Move.exists?(:REST) ? :REST : nil
-      spitup = GameData::Move.exists?(:SPITUP) ? :SPITUP : nil
-      swallow = GameData::Move.exists?(:SWALLOW) ? :SWALLOW : nil
-      stockpile = GameData::Move.exists?(:STOCKPILE) ? :STOCKPILE : nil
-      snore = GameData::Move.exists?(:SNORE) ? :SNORE : nil
-      sleeptalk = GameData::Move.exists?(:SLEEPTALK) ? :SLEEPTALK : nil
+      rest = (GameData::Move.exists?(:REST)) ? :REST : nil
+      spitup = (GameData::Move.exists?(:SPITUP)) ? :SPITUP : nil
+      swallow = (GameData::Move.exists?(:SWALLOW)) ? :SWALLOW : nil
+      stockpile = (GameData::Move.exists?(:STOCKPILE)) ? :STOCKPILE : nil
+      snore = (GameData::Move.exists?(:SNORE)) ? :SNORE : nil
+      sleeptalk = (GameData::Move.exists?(:SLEEPTALK)) ? :SLEEPTALK : nil
       loop do
         newmoves.clear
         while newmoves.length < [moves.length, Pokemon::MAX_MOVES].min

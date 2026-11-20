@@ -241,7 +241,7 @@ module RPG
     def reset_sprite_position(sprite, index, is_new_sprite = false)
       weather_type = (is_new_sprite) ? @target_type : @type
       lifetimes = (is_new_sprite) ? @new_sprite_lifetimes : @sprite_lifetimes
-      if index < (is_new_sprite ? @new_max : @max)
+      if index < ((is_new_sprite) ? @new_max : @max)
         sprite.visible = true
       else
         sprite.visible = false
@@ -251,7 +251,7 @@ module RPG
       if @weatherTypes[weather_type][0].category == :Rain && index.odd?   # Splash
         sprite.x = @ox + @ox_offset - sprite.bitmap.width + rand(Graphics.width + (sprite.bitmap.width * 2))
         sprite.y = @oy + @oy_offset - sprite.bitmap.height + rand(Graphics.height + (sprite.bitmap.height * 2))
-        lifetimes[index] = (rand(30...50)) * 0.01   # 0.3-0.5 seconds
+        lifetimes[index] = rand(30...50) * 0.01   # 0.3-0.5 seconds
       else
         x_speed = @weatherTypes[weather_type][0].particle_delta_x
         y_speed = @weatherTypes[weather_type][0].particle_delta_y

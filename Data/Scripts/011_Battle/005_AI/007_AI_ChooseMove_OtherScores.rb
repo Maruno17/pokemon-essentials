@@ -301,10 +301,10 @@ Battle::AI::Handlers::GeneralMoveAgainstTargetScore.add(:predicted_damage,
       old_score = score
       if target.effects[PBEffects::Substitute] > 0
         target_hp = target.effects[PBEffects::Substitute]
-        score += ([25.0 * dmg / target_hp, 30].min).to_i
+        score += [25.0 * dmg / target_hp, 30].min.to_i
         PBDebug.log_score_change(score - old_score, "damaging move (predicted damage #{dmg} = #{100 * dmg / target_hp}% of target's Substitute)")
       else
-        score += ([35.0 * dmg / target.hp, 40].min).to_i
+        score += [35.0 * dmg / target.hp, 40].min.to_i
         PBDebug.log_score_change(score - old_score, "damaging move (predicted damage #{dmg} = #{100 * dmg / target.hp}% of target's HP)")
         if ai.trainer.has_skill_flag?("HPAware") && dmg > target.hp * 1.1   # Predicted to KO the target
           old_score = score

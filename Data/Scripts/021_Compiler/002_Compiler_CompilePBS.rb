@@ -444,7 +444,7 @@ module Compiler
 
   def validate_compiled_item(hash)
     # Support for pockets still being numbers
-    if hash[:pocket] && hash[:pocket].is_a?(Integer)
+    if hash[:pocket]&.is_a?(Integer)
       all_pockets = GameData::BagPocket.all_pockets
       if hash[:pocket] <= 0 || !all_pockets[hash[:pocket] - 1]
         raise _INTL("Invalid pocket number {1} for item {2}.", hash[:pocket], hash[:id])
@@ -520,13 +520,11 @@ module Compiler
     hash[:weight] = [(hash[:weight] * 10).round, 1].max if hash[:weight]
     # Ensure evolutions have a parameter if they need one (don't need to ensure
     # the parameter makes sense; that happens below)
-    if hash[:evolutions]
-      hash[:evolutions].each do |evo|
-        FileLineData.setSection(hash[:id].to_s, "Evolution", "Evolution = #{evo[0]},#{evo[1]}")   # For error reporting
-        param_type = GameData::Evolution.get(evo[1]).parameter
-        next if evo[2] || param_type.nil?
-        raise _INTL("Evolution method {1} requires a parameter, but none was given.", evo[1]) + "\n" + FileLineData.linereport
-      end
+    hash[:evolutions]&.each do |evo|
+      FileLineData.setSection(hash[:id].to_s, "Evolution", "Evolution = #{evo[0]},#{evo[1]}")   # For error reporting
+      param_type = GameData::Evolution.get(evo[1]).parameter
+      next if evo[2] || param_type.nil?
+      raise _INTL("Evolution method {1} requires a parameter, but none was given.", evo[1]) + "\n" + FileLineData.linereport
     end
     # Record all evolutions as not being prevolutions
     if hash[:evolutions].is_a?(Array)
@@ -1096,7 +1094,7 @@ module Compiler
                     pkmn[:real_name], Pokemon::MAX_NAME_SIZE) + "\n" + FileLineData.linereport
       end
       # Ensure no duplicate moves
-      pkmn[:moves].uniq! if pkmn[:moves]
+      pkmn[:moves]&.uniq!
       # Ensure valid IVs, convert IVs to hash format
       if pkmn[:iv]
         iv_hash = {}

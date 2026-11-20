@@ -45,7 +45,7 @@ end
 module Kernel
   def echo(string)
     return unless $DEBUG
-    printf(string.is_a?(String) ? string : string.inspect)
+    printf((string.is_a?(String)) ? string : string.inspect)
   end
 
   def echoln(string)
@@ -82,7 +82,7 @@ module Console
   # list item
   def echo_li(msg, pad = 0, color = :brown)
     echo markup_style("  -> ", text: color)
-    pad = (pad - msg.length) > 0 ? "." * (pad - msg.length) : ""
+    pad = (pad - msg.length > 0) ? "." * (pad - msg.length) : ""
     echo markup(msg + pad)
   end
 

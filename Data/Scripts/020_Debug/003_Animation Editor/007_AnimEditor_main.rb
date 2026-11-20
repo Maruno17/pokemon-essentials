@@ -132,7 +132,7 @@ class AnimationEditor
 
   def initialize_viewports
     @viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @canvas_viewport = Viewport.new(CANVAS_X, CANVAS_Y, CANVAS_WIDTH, CANVAS_HEIGHT)
     @canvas_viewport.z = @viewport.z
     @pop_up_viewport = Viewport.new(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -1318,8 +1318,8 @@ class AnimationEditor
       refresh
     when :x, :y, :r, :theta, :emitter_x, :emitter_y, :emitter_r, :emitter_theta, :angle
       particle = @anim[:particles][particle_index]
-      before_all = particle[property] && particle[property].none? { |cmd| cmd[0] <= keyframe }
-      after_all = particle[property] && particle[property].none? { |cmd| cmd[0] + cmd[1] >= keyframe }
+      before_all = particle[property]&.none? { |cmd| cmd[0] <= keyframe }
+      after_all = particle[property]&.none? { |cmd| cmd[0] + cmd[1] >= keyframe }
       new_cmds = AnimationEditor::ParticleDataHelper.add_command(particle, property, keyframe, value)
       if new_cmds
         particle[property] = new_cmds
@@ -1343,8 +1343,8 @@ class AnimationEditor
     when :zoom
       particle = @anim[:particles][particle_index]
       [:zoom_x, :zoom_y].each do |prop|
-        before_all = particle[prop] && particle[prop].none? { |cmd| cmd[0] <= keyframe }
-        after_all = particle[prop] && particle[prop].none? { |cmd| cmd[0] + cmd[1] >= keyframe }
+        before_all = particle[prop]&.none? { |cmd| cmd[0] <= keyframe }
+        after_all = particle[prop]&.none? { |cmd| cmd[0] + cmd[1] >= keyframe }
         val = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, prop, keyframe)[0]
         # NOTE: I'm aware that simply adding value to val for each of :zoom_x
         #       and :zoom_y won't keep their ratio constant, but I can't figure
@@ -1564,8 +1564,8 @@ class AnimationEditor
         # Change property value
         # NOTE: value is actually [particle_index, value].
         particle = @anim[:particles][value[0]]
-        before_all = particle[property] && particle[property].none? { |cmd| cmd[0] <= keyframe }
-        after_all = particle[property] && particle[property].none? { |cmd| cmd[0] + cmd[1] >= keyframe }
+        before_all = particle[property]&.none? { |cmd| cmd[0] <= keyframe }
+        after_all = particle[property]&.none? { |cmd| cmd[0] + cmd[1] >= keyframe }
         new_cmds = AnimationEditor::ParticleDataHelper.add_command(particle, property, keyframe, value[1])
         if new_cmds
           particle[property] = new_cmds
@@ -2154,11 +2154,7 @@ class AnimationEditor
       next if !component.changed?
       if component.respond_to?("changed_controls")
         changed_ctrls = component.changed_controls
-        if changed_ctrls
-          changed_ctrls.each_pair do |property, value|
-            apply_changed_value(sym, property, value)
-          end
-        end
+        changed_ctrls&.each_pair { |property, value| apply_changed_value(sym, property, value) }
       end
       component.clear_changed
       component.repaint if [:timeline, :menu_bar].include?(sym)

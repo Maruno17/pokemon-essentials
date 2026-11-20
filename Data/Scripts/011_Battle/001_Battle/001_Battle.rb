@@ -156,8 +156,8 @@ class Battle
     @priorityTrickRoom = false
     @choices           = []
     @megaEvolution     = [
-      [-1] * (@player ? @player.length : 1),
-      [-1] * (@opponent ? @opponent.length : 1)
+      [-1] * ((@player) ? @player.length : 1),
+      [-1] * ((@opponent) ? @opponent.length : 1)
     ]
     @initialItems      = [
       Array.new(@party1.length) { |i| [@party1[i]&.item_id, 0, i, false] },

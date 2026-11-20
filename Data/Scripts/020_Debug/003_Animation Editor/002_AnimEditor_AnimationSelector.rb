@@ -417,7 +417,7 @@ class AnimationEditor::AnimationSelector
     display_name += "\\c[2]" if anim.ignore
     display_name += _INTL("[Foe]") + " " if anim.opposing_animation?
     display_name += "[#{anim.version}]" + " " if anim.version > 0
-    display_name += (anim.name || anim.move)
+    display_name += anim.name || anim.move
     ret[:display_name] = display_name
     return ret
   end

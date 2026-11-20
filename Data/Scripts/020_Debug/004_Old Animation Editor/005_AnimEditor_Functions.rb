@@ -93,7 +93,7 @@ module BattleAnimationEditor
 
   def pbAnimName(animation, cmdwin)
     window = ControlWindow.new(320, 128, 320, 32 * 4)
-    window.z = 99999
+    window.z = 99_999
     window.addControl(TextField.new(_INTL("New Name:"), animation.name))
     Input.text_input = true
     okbutton = window.addButton(_INTL("OK"))
@@ -191,7 +191,7 @@ module BattleAnimationEditor
   def pbChooseNum(cel)
     ret = cel
     sliderwin2 = ControlWindow.new(0, 0, 320, 32 * 5)
-    sliderwin2.z = 99999
+    sliderwin2.z = 99_999
     sliderwin2.addLabel(_INTL("Old Number: {1}", cel))
     sliderwin2.addSlider(_INTL("New Number:"), 2, PBAnimation::MAX_SPRITES, cel)
     okbutton = sliderwin2.addButton(_INTL("OK"))
@@ -215,7 +215,7 @@ module BattleAnimationEditor
 
   def pbSetTone(cel, previewsprite)
     sliderwin2 = ControlWindow.new(0, 0, 320, 320)
-    sliderwin2.z = 99999
+    sliderwin2.z = 99_999
     sliderwin2.addSlider(_INTL("Red Offset:"), -255, 255, cel[AnimFrame::TONERED])
     sliderwin2.addSlider(_INTL("Green Offset:"), -255, 255, cel[AnimFrame::TONEGREEN])
     sliderwin2.addSlider(_INTL("Blue Offset:"), -255, 255, cel[AnimFrame::TONEBLUE])
@@ -245,7 +245,7 @@ module BattleAnimationEditor
 
   def pbSetFlash(cel, previewsprite)
     sliderwin2 = ControlWindow.new(0, 0, 320, 320)
-    sliderwin2.z = 99999
+    sliderwin2.z = 99_999
     sliderwin2.addSlider(_INTL("Red:"), 0, 255, cel[AnimFrame::COLORRED])
     sliderwin2.addSlider(_INTL("Green:"), 0, 255, cel[AnimFrame::COLORGREEN])
     sliderwin2.addSlider(_INTL("Blue:"), 0, 255, cel[AnimFrame::COLORBLUE])
@@ -505,8 +505,8 @@ module BattleAnimationEditor
   end
 
   def pbSelectSE(canvas, audio)
-    filename = (audio.name != "") ? audio.name : ""
-    displayname = (filename != "") ? filename : _INTL("<user's cry>")
+    filename = (audio.name == "") ? "" : audio.name
+    displayname = (filename == "") ? _INTL("<user's cry>") : filename
     animfiles = []
     ret = false
     pbRgssChdir(File.join("Audio", "SE", "Anim")) do
@@ -551,7 +551,7 @@ module BattleAnimationEditor
       break if maxsizewindow.changed?(6)   # Cancel
       if Input.trigger?(Input::USE) && animfiles.length > 0
         filename = (cmdwin.index == 0) ? "" : cmdwin.commands[cmdwin.index]
-        displayname = (filename != "") ? filename : _INTL("<user's cry>")
+        displayname = (filename == "") ? _INTL("<user's cry>") : filename
         maxsizewindow.controls[0].text = _INTL("File: \"{1}\"", displayname)
       elsif Input.trigger?(Input::BACK)
         break
@@ -937,7 +937,7 @@ module BattleAnimationEditor
                "from being moved or deleted.\nDEL - Deletes the cel.\nAlso press TAB to switch the selected cel."
     cmdwin = Window_UnformattedTextPokemon.newWithSize("", 0, 0, 640, 512)
     cmdwin.opacity = 224
-    cmdwin.z = 99999
+    cmdwin.z = 99_999
     cmdwin.text = helptext
     loop do
       Graphics.update
@@ -953,7 +953,7 @@ module BattleAnimationEditor
   #=============================================================================
   def animationEditorMain(animation)
     viewport = Viewport.new(0, 0, Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
-    viewport.z = 99999
+    viewport.z = 99_999
     # Canvas
     canvas = AnimationCanvas.new(animation[animation.selected] || animation[0], viewport)
     # Right hand menu

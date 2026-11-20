@@ -46,31 +46,31 @@ module PBDayNight
   # Returns true if it's day.
   def isDay?(time = nil)
     time = pbGetTimeNow if !time
-    return (time.hour >= 5 && time.hour < 20)
+    return time.hour >= 5 && time.hour < 20
   end
 
   # Returns true if it's night.
   def isNight?(time = nil)
     time = pbGetTimeNow if !time
-    return (time.hour >= 20 || time.hour < 5)
+    return time.hour >= 20 || time.hour < 5
   end
 
   # Returns true if it's morning.
   def isMorning?(time = nil)
     time = pbGetTimeNow if !time
-    return (time.hour >= 5 && time.hour < 10)
+    return time.hour >= 5 && time.hour < 10
   end
 
   # Returns true if it's the afternoon.
   def isAfternoon?(time = nil)
     time = pbGetTimeNow if !time
-    return (time.hour >= 14 && time.hour < 17)
+    return time.hour >= 14 && time.hour < 17
   end
 
   # Returns true if it's the evening.
   def isEvening?(time = nil)
     time = pbGetTimeNow if !time
-    return (time.hour >= 17 && time.hour < 20)
+    return time.hour >= 17 && time.hour < 20
   end
 
   # Gets a number representing the amount of daylight (0=full night, 255=full day).
@@ -263,7 +263,7 @@ def moonphase(time = nil)
   j -= (((yy / 100.0) + 49).floor * 0.75).floor - 38 if j > 2_299_160
   j += (((time.hour * 60) + (time.min * 60)) + time.sec) / 86_400.0
   v = (j - 2_451_550.1) / 29.530588853
-  v = ((v - v.floor) + (v < 0 ? 1 : 0))
+  v = v - v.floor + ((v < 0) ? 1 : 0)
   ag = v * 29.53
   transitions.length.times do |i|
     return i if ag <= transitions[i]

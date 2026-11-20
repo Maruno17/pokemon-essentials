@@ -109,7 +109,7 @@ class Battle
     a = level * defeatedBattler.pokemon.base_exp
     if expShare.length > 0 && (isPartic || hasExpShare)
       if numPartic == 0   # No participants, all Exp goes to Exp Share holders
-        exp = a / (Settings::SPLIT_EXP_BETWEEN_GAINERS ? expShare.length : 1)
+        exp = a / ((Settings::SPLIT_EXP_BETWEEN_GAINERS) ? expShare.length : 1)
       elsif Settings::SPLIT_EXP_BETWEEN_GAINERS   # Gain from participating and/or Exp Share
         exp = a / (2 * numPartic) if isPartic
         exp += a / (2 * expShare.length) if hasExpShare
@@ -117,7 +117,7 @@ class Battle
         exp = (isPartic) ? a : a / 2
       end
     elsif isPartic   # Participated in battle, no Exp Shares held by anyone
-      exp = a / (Settings::SPLIT_EXP_BETWEEN_GAINERS ? numPartic : 1)
+      exp = a / ((Settings::SPLIT_EXP_BETWEEN_GAINERS) ? numPartic : 1)
     elsif expAll   # Didn't participate in battle, gaining Exp due to Exp All
       # NOTE: Exp All works like the Exp Share from Gen 6+, not like the Exp All
       #       from Gen 1, i.e. Exp isn't split between all Pokémon gaining it.
@@ -149,8 +149,8 @@ class Battle
       exp /= 7
     end
     # Foreign Pokémon gain more Exp
-    isOutsider = (pkmn.owner.id != pbPlayer.id ||
-                 (pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language))
+    isOutsider = pkmn.owner.id != pbPlayer.id ||
+                 (pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language)
     if isOutsider
       if pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language
         exp = (exp * 1.7).floor

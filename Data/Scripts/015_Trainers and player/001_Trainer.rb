@@ -34,12 +34,12 @@ class Trainer
 
   # Portion of the ID which is visible on the Trainer Card
   def public_ID(id = nil)
-    return id ? id & 0xFFFF : @id & 0xFFFF
+    return (id) ? id & 0xFFFF : @id & 0xFFFF
   end
 
   # Other portion of the ID
   def secret_ID(id = nil)
-    return id ? id >> 16 : @id >> 16
+    return (id) ? id >> 16 : @id >> 16
   end
 
   # Random ID other than this Trainer's ID

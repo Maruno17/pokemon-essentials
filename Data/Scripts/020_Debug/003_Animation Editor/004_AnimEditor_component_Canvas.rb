@@ -130,7 +130,7 @@ class AnimationEditor::Canvas < Sprite
     @sel_frame_bitmap.outline_rect(2, 2, @sel_frame_bitmap.width - 4, @sel_frame_bitmap.height - 4, PARTICLE_FRAME_COLOR)
     @sel_frame_sprite = Sprite.new(viewport)
     @sel_frame_sprite.bitmap = @sel_frame_bitmap
-    @sel_frame_sprite.z = 99999
+    @sel_frame_sprite.z = 99_999
     @sel_frame_sprite.ox = @sel_frame_bitmap.width / 2
     @sel_frame_sprite.oy = @sel_frame_bitmap.height / 2
     # Frame for other particles
@@ -325,7 +325,7 @@ class AnimationEditor::Canvas < Sprite
         if particle_idx
           focus_z = AnimationPlayer::Helper.get_z_focus(@anim[:particles][particle_idx], idx, idx)
         else
-          focus_z = 1000 + ((100 * ((idx / 2) + 1)) * (idx.even? ? 1 : -1))
+          focus_z = 1000 + ((100 * ((idx / 2) + 1)) * ((idx.even?) ? 1 : -1))
         end
         AnimationPlayer::Helper.apply_z_focus_to_sprite(@battler_sprites[idx], 0, focus_z)
       end
@@ -393,7 +393,7 @@ class AnimationEditor::Canvas < Sprite
     end
     sprite = Sprite.new(viewport)
     sprite.bitmap = @frame_bitmap
-    sprite.z = 99998
+    sprite.z = 99_998
     sprite.ox = @frame_bitmap.width / 2
     sprite.oy = @frame_bitmap.height / 2
     if sub_index >= 0
@@ -417,7 +417,7 @@ class AnimationEditor::Canvas < Sprite
         @battler_sprites[i * 2] = Sprite.new(self.viewport)
         frame_sprite = Sprite.new(viewport)
         frame_sprite.bitmap = @frame_bitmap
-        frame_sprite.z = 99998
+        frame_sprite.z = 99_998
         frame_sprite.ox = @frame_bitmap.width / 2
         frame_sprite.oy = @frame_bitmap.height / 2
         @battler_frame_sprites[i * 2] = frame_sprite
@@ -432,7 +432,7 @@ class AnimationEditor::Canvas < Sprite
         @battler_sprites[(i * 2) + 1] = Sprite.new(self.viewport)
         frame_sprite = Sprite.new(viewport)
         frame_sprite.bitmap = @frame_bitmap
-        frame_sprite.z = 99998
+        frame_sprite.z = 99_998
         frame_sprite.ox = @frame_bitmap.width / 2
         frame_sprite.oy = @frame_bitmap.height / 2
         @battler_frame_sprites[(i * 2) + 1] = frame_sprite
@@ -493,7 +493,7 @@ class AnimationEditor::Canvas < Sprite
       form = $~[2].to_i
     end
     data = GameData::SpeciesMetrics.get_species_form(species, form)
-    data.apply_metrics_to_sprite(spr, index) if data
+    data&.apply_metrics_to_sprite(spr, index)
     ret = [spr.x - spr.ox, spr.y - spr.oy - (btmp.height / 2)]
     spr.dispose
     return ret
@@ -580,7 +580,7 @@ class AnimationEditor::Canvas < Sprite
       offset_xy = AnimationPlayer::Helper.get_xy_offset(particle, spr)
       spr.x -= offset_xy[0]
       spr.y -= offset_xy[1]
-      spr.z = 99997
+      spr.z = 99_997
       spr.opacity = 255
       spr.ox = spr.bitmap.width / 2
       spr.oy = spr.bitmap.height / 2
@@ -600,13 +600,11 @@ class AnimationEditor::Canvas < Sprite
       particle, spr2, user_index, target_idx,
       [@user_bitmap_front_name, @user_bitmap_back_name], [@target_bitmap_front_name, @target_bitmap_back_name]
     )
-    if @particle_tiled_sprites[index]
-      @particle_tiled_sprites[index].each do |ts|
-        AnimationPlayer::Helper.set_bitmap_and_origin(
-          particle, ts, user_index, target_idx,
-          [@user_bitmap_front_name, @user_bitmap_back_name], [@target_bitmap_front_name, @target_bitmap_back_name]
-        )
-      end
+    @particle_tiled_sprites[index]&.each do |ts|
+      AnimationPlayer::Helper.set_bitmap_and_origin(
+        particle, ts, user_index, target_idx,
+        [@user_bitmap_front_name, @user_bitmap_back_name], [@target_bitmap_front_name, @target_bitmap_back_name]
+      )
     end
     # Set properties of sprites
     SPRITE_PROPERTIES_TO_SET.each do |property|
@@ -776,9 +774,7 @@ class AnimationEditor::Canvas < Sprite
       end
       focus_z = AnimationPlayer::Helper.get_z_focus(particle, user_index, target_idx)
       AnimationPlayer::Helper.apply_z_focus_to_sprite(sprite1, value, focus_z)
-      if @particle_tiled_sprites[index]
-        @particle_tiled_sprites[index].each { |ts| ts.z = sprite1.z }
-      end
+      @particle_tiled_sprites[index]&.each { |ts| ts.z = sprite1.z }
     when :z2
       sprite2.z = sprite1.z + value if sprite2
     when :zoom_x
@@ -823,9 +819,7 @@ class AnimationEditor::Canvas < Sprite
       sprite1.mirror = value
       relative_to_index = index_that_particle_is_relative_to(particle, target_idx)
       sprite1.mirror = !sprite1.mirror if relative_to_index >= 0 && relative_to_index.odd? && particle[:foe_flip]
-      if @particle_tiled_sprites[index]
-        @particle_tiled_sprites[index].each { |ts| ts.mirror = sprite1.mirror }
-      end
+      @particle_tiled_sprites[index]&.each { |ts| ts.mirror = sprite1.mirror }
     when :flip2
       if sprite2
         sprite2.mirror = sprite1.mirror
@@ -842,23 +836,17 @@ class AnimationEditor::Canvas < Sprite
       if sprite2
         sprite2.visible = sprite1.visible && particle[:second_layer] && (particle[:emitter_type] || :none) == :none
       end
-      if @particle_tiled_sprites[index]
-        @particle_tiled_sprites[index].each { |ts| ts.visible = sprite1.visible }
-      end
+      @particle_tiled_sprites[index]&.each { |ts| ts.visible = sprite1.visible }
     when :opacity
       vis = AnimationEditor::ParticleDataHelper.get_keyframe_particle_value(particle, :visible, @display_keyframe)[0]
       sprite1.opacity = (vis) ? value : 0
-      if @particle_tiled_sprites[index]
-        @particle_tiled_sprites[index].each { |ts| ts.opacity = sprite1.opacity }
-      end
+      @particle_tiled_sprites[index]&.each { |ts| ts.opacity = sprite1.opacity }
     when :opacity2
       sprite2.opacity = sprite1.opacity + value if sprite2
     when :color
       col = Color.new_from_rgb(value)
       sprite1.color.set(col.red, col.green, col.blue, col.alpha)
-      if @particle_tiled_sprites[index]
-        @particle_tiled_sprites[index].each { |ts| ts.color.set(col.red, col.green, col.blue, col.alpha) }
-      end
+      @particle_tiled_sprites[index]&.each { |ts| ts.color.set(col.red, col.green, col.blue, col.alpha) }
     when :color2
       if sprite2
         col = Color.new_from_rgb(value)
@@ -867,9 +855,7 @@ class AnimationEditor::Canvas < Sprite
     when :tone
       ton = Tone.new_from_rgbg(value)
       sprite1.tone.set(ton.red, ton.green, ton.blue, ton.gray)
-      if @particle_tiled_sprites[index]
-        @particle_tiled_sprites[index].each { |ts| ts.tone.set(ton.red, ton.green, ton.blue, ton.gray) }
-      end
+      @particle_tiled_sprites[index]&.each { |ts| ts.tone.set(ton.red, ton.green, ton.blue, ton.gray) }
     when :tone2
       if sprite2
         ton = Tone.new_from_rgbg(value)
@@ -877,9 +863,7 @@ class AnimationEditor::Canvas < Sprite
       end
     when :invert_color
       sprite1.invert = value
-      if @particle_tiled_sprites[index]
-        @particle_tiled_sprites[index].each { |ts| ts.invert = sprite1.invert }
-      end
+      @particle_tiled_sprites[index]&.each { |ts| ts.invert = sprite1.invert }
     when :invert_color2
       if sprite2
         sprite2.invert = sprite1.invert
@@ -891,9 +875,7 @@ class AnimationEditor::Canvas < Sprite
       sprite2.src_rect.x = value.floor * sprite2.src_rect.width if sprite2
     when :blending
       sprite1.blend_type = value
-      if @particle_tiled_sprites[index]
-        @particle_tiled_sprites[index].each { |ts| ts.blend_type = sprite1.blend_type }
-      end
+      @particle_tiled_sprites[index]&.each { |ts| ts.blend_type = sprite1.blend_type }
     when :blending2
       sprite2.blend_type = value if sprite2
     when :mask_blending

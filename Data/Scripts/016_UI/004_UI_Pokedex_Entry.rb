@@ -450,11 +450,9 @@ class UI::PokedexEntryVisuals < UI::BaseVisuals
     if !@town_map_invalid_points[map_pos[0]]
       @town_map_invalid_points[map_pos[0]] = []
       this_town_map_data = GameData::TownMap.get(map_pos[0])
-      if this_town_map_data
-        this_town_map_data.points.each do |point|
-          next if !point[:switch] || $game_switches[point[:switch]]   # Point is visible
-          @town_map_invalid_points[map_pos[0]].push(point[:position])
-        end
+      this_town_map_data&.points.each do |point|
+        next if !point[:switch] || $game_switches[point[:switch]]   # Point is visible
+        @town_map_invalid_points[map_pos[0]].push(point[:position])
       end
     end
     # Remember encounter map's info
@@ -539,7 +537,7 @@ class UI::PokedexEntryVisuals < UI::BaseVisuals
     # Draw left arrow
     if can_go_left || can_go_right
       draw_image(@bitmaps[:page_arrows], start_x, start_y,
-                 arrow_width * (can_go_left ? 2 : 0), page_src_index * arrow_height,
+                 arrow_width * ((can_go_left) ? 2 : 0), page_src_index * arrow_height,
                  arrow_width, arrow_height)
     end
     # Draw page icons
@@ -553,7 +551,7 @@ class UI::PokedexEntryVisuals < UI::BaseVisuals
     if can_go_left || can_go_right
       arrow_x = start_x + arrow_width + (pages.length * icon_width) + ((pages.length - 1) * spacing_x)
       draw_image(@bitmaps[:page_arrows], arrow_x, start_y,
-                 arrow_width * (can_go_right ? 3 : 1), page_src_index * arrow_height,
+                 arrow_width * ((can_go_right) ? 3 : 1), page_src_index * arrow_height,
                  arrow_width, arrow_height)
     end
   end

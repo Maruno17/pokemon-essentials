@@ -171,7 +171,7 @@ class TriadScene
     @battle = battle
     # Allocate viewport
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     addBackgroundPlane(@sprites, "background", "Triple Triad/bg", @viewport)
     @sprites["helpwindow"] = Window_AdvancedTextPokemon.newWithSize(
       "", 0, Graphics.height - 64, Graphics.width, 64, @viewport
@@ -365,7 +365,7 @@ class TriadScene
       @sprites["opponent#{i}"].x      = 12
       @sprites["opponent#{i}"].y      = 44 + (44 * i)
       @sprites["opponent#{i}"].z      = 2
-      @sprites["opponent#{i}"].bitmap = @battle.openHand ? TriadCard.new(cards[i]).createBitmap(2) : TriadCard.createBack
+      @sprites["opponent#{i}"].bitmap = (@battle.openHand) ? TriadCard.new(cards[i]).createBitmap(2) : TriadCard.createBack
       @opponentCardBitmaps.push(@sprites["opponent#{i}"].bitmap)
       @opponentCardIndexes.push(i)
     end
@@ -649,11 +649,11 @@ class TriadScreen
 
   def flipBoard(x, y, attackerParam = nil, recurse = false)
     panels = [x - 1, y, x + 1, y, x, y - 1, x, y + 1]
-    panels[0] = (@wrapAround ? @width - 1 : 0) if panels[0] < 0            # left
-    panels[2] = (@wrapAround ? 0 : @width - 1) if panels[2] > @width - 1     # right
-    panels[5] = (@wrapAround ? @height - 1 : 0) if panels[5] < 0           # top
-    panels[7] = (@wrapAround ? 0 : @height - 1) if panels[7] > @height - 1   # bottom
-    attacker = attackerParam.nil? ? @board[(y * @width) + x] : attackerParam
+    panels[0] = ((@wrapAround) ? @width - 1 : 0) if panels[0] < 0            # left
+    panels[2] = ((@wrapAround) ? 0 : @width - 1) if panels[2] > @width - 1     # right
+    panels[5] = ((@wrapAround) ? @height - 1 : 0) if panels[5] < 0           # top
+    panels[7] = ((@wrapAround) ? 0 : @height - 1) if panels[7] > @height - 1   # bottom
+    attacker = (attackerParam.nil?) ? @board[(y * @width) + x] : attackerParam
     flips = []
     return nil if attackerParam && @board[(y * @width) + x].owner != 0
     return nil if !attacker.card || attacker.owner == 0
@@ -726,7 +726,7 @@ class TriadScreen
       count += item[1]   # Add item count to total count
     end
     @board = []
-    @playerName   = $player ? $player.name : "Trainer"
+    @playerName   = ($player) ? $player.name : "Trainer"
     @opponentName = opponentName
     type_keys = GameData::Type.keys
     (@width * @height).times do |i|
@@ -849,7 +849,7 @@ class TriadScreen
       end
       boardIndex = (position[1] * @width) + position[0]
       board[boardIndex].card  = triadCard
-      board[boardIndex].owner = playerTurn ? 1 : 2
+      board[boardIndex].owner = (playerTurn) ? 1 : 2
       flipBoard(position[0], position[1])
       if playerTurn
         cards.delete_at(cardIndex)
@@ -1067,14 +1067,14 @@ def pbBuyTriads
   # Scroll right before showing screen
   pbScrollMap(4, 3, 5)
   cmdwindow = Window_CommandPokemonEx.newWithSize(realcommands, 0, 0, Graphics.width / 2, Graphics.height)
-  cmdwindow.z = 99999
+  cmdwindow.z = 99_999
   goldwindow = Window_UnformattedTextPokemon.newWithSize(
     _INTL("Money:\n{1}", pbGetGoldString), 0, 0, 32, 32
   )
   goldwindow.resizeToFit(goldwindow.text, Graphics.width)
   goldwindow.x = Graphics.width - goldwindow.width
   goldwindow.y = 0
-  goldwindow.z = 99999
+  goldwindow.z = 99_999
   preview = Sprite.new
   preview.x = (Graphics.width * 3 / 4) - 40
   preview.y = (Graphics.height / 2) - 48
@@ -1157,14 +1157,14 @@ def pbSellTriads
   # Scroll right before showing screen
   pbScrollMap(4, 3, 5)
   cmdwindow = Window_CommandPokemonEx.newWithSize(commands, 0, 0, Graphics.width / 2, Graphics.height)
-  cmdwindow.z = 99999
+  cmdwindow.z = 99_999
   goldwindow = Window_UnformattedTextPokemon.newWithSize(
     _INTL("Money:\n{1}", pbGetGoldString), 0, 0, 32, 32
   )
   goldwindow.resizeToFit(goldwindow.text, Graphics.width)
   goldwindow.x = Graphics.width - goldwindow.width
   goldwindow.y = 0
-  goldwindow.z = 99999
+  goldwindow.z = 99_999
   preview = Sprite.new
   preview.x = (Graphics.width * 3 / 4) - 40
   preview.y = (Graphics.height / 2) - 48
@@ -1261,11 +1261,11 @@ def pbTriadList
     return
   end
   cmdwindow = Window_CommandPokemonEx.newWithSize(commands, 0, 0, Graphics.width / 2, Graphics.height)
-  cmdwindow.z = 99999
+  cmdwindow.z = 99_999
   sprite = Sprite.new
   sprite.x = (Graphics.width / 2) + 40
   sprite.y = 48
-  sprite.z = 99999
+  sprite.z = 99_999
   done = false
   lastIndex = -1
   until done

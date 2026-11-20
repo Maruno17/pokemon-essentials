@@ -67,15 +67,15 @@ end
 #===============================================================================
 class PokemonEntryScene
   @@Characters = [
-    [("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz").scan(/./), "[*]"],
-    [("0123456789   !@\#$%^&*()   ~`-_+={}[]   :;'\"<>,.?/   ").scan(/./), "[A]"]
+    ["ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".scan(/./), "[*]"],
+    ["0123456789   !@\#$%^&*()   ~`-_+={}[]   :;'\"<>,.?/   ".scan(/./), "[A]"]
   ]
   USEKEYBOARD = true
 
   def pbStartScene(helptext, minlength, maxlength, initialText, subject = 0, pokemon = nil)
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     if USEKEYBOARD
       @sprites["entry"] = Window_TextEntry_Keyboard.new(
         initialText, 0, 0, 400 - 112, 96, helptext, true
@@ -241,7 +241,7 @@ class PokemonEntryScene
   end
 
   def pbEntry
-    return USEKEYBOARD ? pbEntry1 : pbEntry2
+    return (USEKEYBOARD) ? pbEntry1 : pbEntry2
   end
 
   def pbEndScene
@@ -368,7 +368,7 @@ class PokemonEntryScene2
 
   def pbStartScene(helptext, minlength, maxlength, initialText, subject = 0, pokemon = nil)
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @helptext = helptext
     @helper = CharacterEntryHelper.new(initialText)
     # Create bitmaps
@@ -763,7 +763,7 @@ end
 
 def pbEnterPlayerName(helptext, minlength, maxlength, initialText = "", nofadeout = false)
   ret = ""
-  pbFadeOutIn(99999, nofadeout) do
+  pbFadeOutIn(99_999, nofadeout) do
     ret = pbEnterText(helptext, minlength, maxlength, initialText, 1, nil)
   end
   return ret
@@ -771,7 +771,7 @@ end
 
 def pbEnterPokemonName(helptext, minlength, maxlength, initialText = "", pokemon = nil, nofadeout = false)
   ret = ""
-  pbFadeOutIn(99999, nofadeout) do
+  pbFadeOutIn(99_999, nofadeout) do
     ret = pbEnterText(helptext, minlength, maxlength, initialText, 2, pokemon)
   end
   return ret
@@ -779,7 +779,7 @@ end
 
 def pbEnterNPCName(helptext, minlength, maxlength, initialText = "", id = 0, nofadeout = false)
   ret = ""
-  pbFadeOutIn(99999, nofadeout) do
+  pbFadeOutIn(99_999, nofadeout) do
     ret = pbEnterText(helptext, minlength, maxlength, initialText, 3, id)
   end
   return ret

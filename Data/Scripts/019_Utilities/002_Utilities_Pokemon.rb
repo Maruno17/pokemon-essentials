@@ -2,7 +2,7 @@
 # Nicknaming and storing Pokémon.
 #===============================================================================
 def pbBoxesFull?
-  return ($player.party_full? && $PokemonStorage.full?)
+  return $player.party_full? && $PokemonStorage.full?
 end
 
 def pbNickname(pkmn)

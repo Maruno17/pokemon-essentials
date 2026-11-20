@@ -482,8 +482,8 @@ class Battle::Move::TwoTurnAttackInvulnerableInSkyTargetCannotAct < Battle::Move
     # NOTE: Sky Drop doesn't benefit from Power Herb, probably because it works
     #       differently (i.e. immobilises the target during use too).
     @powerHerb = false
-    @chargingTurn = (user.effects[PBEffects::TwoTurnAttack].nil?)
-    @damagingTurn = (!user.effects[PBEffects::TwoTurnAttack].nil?)
+    @chargingTurn = user.effects[PBEffects::TwoTurnAttack].nil?
+    @damagingTurn = !user.effects[PBEffects::TwoTurnAttack].nil?
     return !@damagingTurn
   end
 

@@ -48,7 +48,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
   # maxwidth is maximum acceptable window width.
   def resizeToFitInternal(text, maxwidth)
     dims = [0, 0]
-    cwidth = maxwidth < 0 ? Graphics.width : maxwidth
+    cwidth = (maxwidth < 0) ? Graphics.width : maxwidth
     getLineBrokenChunks(self.contents, text,
                         cwidth - self.borderX - SpriteWindow_Base::TEXT_PADDING, dims, true)
     return dims
@@ -331,7 +331,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
           # can slow down letter-by-letter display
           if ch[5] || (ch[0] != "\r")
             @fmtchars.push(ch)
-            @textchars.push(ch[5] ? "" : ch[0])
+            @textchars.push((ch[5]) ? "" : ch[0])
           end
         end
         fmt.clear
@@ -345,7 +345,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
           chy = ch[2] + ch[4]
           width = chx if width < chx
           height = chy if height < chy
-          @textchars.push(ch[5] ? "" : ch[0])
+          @textchars.push((ch[5]) ? "" : ch[0])
         end
       end
       @bitmapwidth = width
@@ -420,7 +420,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       arrow_filename = try_arrow_filename if pbResolveBitmap(try_arrow_filename)
     end
     @pausesprite = AnimatedSprite.create(arrow_filename, 4, 3)
-    @pausesprite.z       = 100000
+    @pausesprite.z       = 100_000
     @pausesprite.visible = false
   end
 
@@ -447,13 +447,13 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       @pausesprite.x = self.x + self.startX + @endOfText.x + @endOfText.width - 2
       @pausesprite.y = self.y + self.startY + @endOfText.y - @scrollY
     when 1   # Lower right
-      pauseWidth  = @pausesprite.bitmap ? @pausesprite.framewidth : 16
-      pauseHeight = @pausesprite.bitmap ? @pausesprite.frameheight : 16
+      pauseWidth  = (@pausesprite.bitmap) ? @pausesprite.framewidth : 16
+      pauseHeight = (@pausesprite.bitmap) ? @pausesprite.frameheight : 16
       @pausesprite.x = self.x + self.width - 40 + (pauseWidth / 2)
       @pausesprite.y = self.y + self.height - 60 + (pauseHeight / 2)
     when 2   # Lower middle
-      pauseWidth  = @pausesprite.bitmap ? @pausesprite.framewidth : 16
-      pauseHeight = @pausesprite.bitmap ? @pausesprite.frameheight : 16
+      pauseWidth  = (@pausesprite.bitmap) ? @pausesprite.framewidth : 16
+      pauseHeight = (@pausesprite.bitmap) ? @pausesprite.frameheight : 16
       @pausesprite.x = self.x + (self.width / 2) - (pauseWidth / 2)
       @pausesprite.y = self.y + self.height - 36 + (pauseHeight / 2)
     end
@@ -957,7 +957,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
     # This code makes the cursor stay in the middle of the visible list as much
     # as possible.
     new_top_row = row - ((self.page_row_max - 1) / 2).floor
-    new_top_row = new_top_row.clamp(0, self.row_max - self.page_row_max)
+    new_top_row = [[new_top_row, self.row_max - self.page_row_max].min, 0].max
     if self.top_row != new_top_row
       self.top_row = new_top_row
       dorefresh = true
@@ -980,8 +980,8 @@ module UpDownArrowMixin
     @downarrow = AnimatedSprite.create("Graphics/UI/down_arrow", 8, 2, self.viewport)
     RPG::Cache.retain("Graphics/UI/up_arrow")
     RPG::Cache.retain("Graphics/UI/down_arrow")
-    @uparrow.z   = 99998
-    @downarrow.z = 99998
+    @uparrow.z   = 99_998
+    @downarrow.z = 99_998
     @uparrow.visible   = false
     @downarrow.visible = false
     @uparrow.play
@@ -1226,7 +1226,7 @@ class Window_CommandPokemon < Window_DrawableCommand
   end
 
   def itemCount
-    return @commands ? @commands.length : 0
+    return (@commands) ? @commands.length : 0
   end
 
   def drawItem(index, _count, rect)
@@ -1320,7 +1320,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
                              Graphics.width - self.borderX - SpriteWindow_Base::TEXT_PADDING - 16,
                              -1, text, self.rowHeight, true, true)
     chars.each do |ch|
-      dims[0] = dims[0] ? [dims[0], ch[1]].min : ch[1]
+      dims[0] = (dims[0]) ? [dims[0], ch[1]].min : ch[1]
       dims[1] = [dims[1], ch[1] + ch[3]].max
     end
     dims[0] = 0 if !dims[0]
@@ -1371,7 +1371,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
   end
 
   def itemCount
-    return @commands ? @commands.length : 0
+    return (@commands) ? @commands.length : 0
   end
 
   def drawItem(index, _count, rect)

@@ -53,9 +53,7 @@ class Battle::AI::AITrainer
   end
 
   def set_up_skill_flags
-    if @trainer
-      @trainer.flags.each { |flag| @skill_flags.push(flag) }
-    end
+    @trainer&.flags&.each { |flag| @skill_flags.push(flag) }
     if @skill > 0
       @skill_flags.push("PredictMoveFailure")
       @skill_flags.push("ScoreMoves")

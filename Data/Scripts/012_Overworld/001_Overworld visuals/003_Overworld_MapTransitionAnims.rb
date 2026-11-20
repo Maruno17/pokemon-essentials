@@ -4,7 +4,7 @@
 def pbCaveEntranceEx(exiting)
   # Create bitmap
   sprite = BitmapSprite.new(Graphics.width, Graphics.height)
-  sprite.z = 100000
+  sprite.z = 100_000
   # Define values used for the animation
   duration = 0.4
   totalBands = 15

@@ -244,7 +244,7 @@ end
 # internal function
 def pbRepositionMessageWindow(msgwindow, linecount = 2)
   msgwindow.height = (32 * linecount) + msgwindow.borderY
-  msgwindow.y = (Graphics.height) - (msgwindow.height)
+  msgwindow.y = Graphics.height - msgwindow.height
   case $game_system&.message_position || 2
   when 0   # top
     msgwindow.y = 0
@@ -563,7 +563,7 @@ end
 # pbFadeOutIn(z) { block }
 # Fades out the screen before a block is run and fades it back in after the
 # block exits. z indicates the z-coordinate of the viewport used for this effect.
-def pbFadeOutIn(z = 99999, nofadeout = false)
+def pbFadeOutIn(z = 99_999, nofadeout = false)
   duration = 0.4   # In seconds
   col = Color.new(0, 0, 0, 0)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -580,7 +580,7 @@ def pbFadeOutIn(z = 99999, nofadeout = false)
   begin
     val = 0
     val = yield if block_given?
-    nofadeout = true if val == 99999   # Ugly hack used by Town Map in the Bag/Pokégear
+    nofadeout = true if val == 99_999   # Ugly hack used by Town Map in the Bag/Pokégear
   ensure
     pbPopFade
     if !nofadeout
@@ -597,7 +597,7 @@ def pbFadeOutIn(z = 99999, nofadeout = false)
   end
 end
 
-def pbFadeOutInWithUpdate(sprites, z = 99999, nofadeout = false)
+def pbFadeOutInWithUpdate(sprites, z = 99_999, nofadeout = false)
   duration = 0.4   # In seconds
   col = Color.new(0, 0, 0, 0)
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -633,7 +633,7 @@ end
 
 # Similar to pbFadeOutIn, but pauses the music as it fades out.
 # Requires scripts "Audio" (for bgm_pause) and "SpriteWindow" (for pbFadeOutIn).
-def pbFadeOutInWithMusic(zViewport = 99999)
+def pbFadeOutInWithMusic(zViewport = 99_999)
   playingBGS = $game_system.getPlayingBGS
   playingBGM = $game_system.getPlayingBGM
   $game_system.bgm_pause(1.0)
@@ -672,12 +672,9 @@ end
 def pbFadeInAndShow(sprites, visiblesprites = nil)
   duration = 0.4   # In seconds
   col = Color.new(0, 0, 0, 0)
-  if visiblesprites
-    visiblesprites.each do |i|
-      if i[1] && sprites[i[0]] && !pbDisposed?(sprites[i[0]])
-        sprites[i[0]].visible = true
-      end
-    end
+  visiblesprites&.each do |i|
+    next if !i[1] || !sprites[i[0]] || pbDisposed?(sprites[i[0]])
+    sprites[i[0]].visible = true
   end
   pbDeactivateWindows(sprites) do
     timer_start = System.uptime
@@ -696,7 +693,7 @@ def pbRestoreActivations(sprites, activeStatuses)
   return if !sprites || !activeStatuses
   activeStatuses.each_key do |k|
     if sprites[k].is_a?(Window) && !pbDisposed?(sprites[k])
-      sprites[k].active = activeStatuses[k] ? true : false
+      sprites[k].active = (activeStatuses[k]) ? true : false
     end
   end
 end

@@ -128,7 +128,7 @@ class UI::PokemonStorageVisualsSidePane < UI::SpriteContainer
     mark_variants = @bitmaps[:markings].bitmap.height / MARK_HEIGHT
     (@bitmaps[:markings].bitmap.width / MARK_WIDTH).times do |i|
       draw_image(@bitmaps[:markings], 38 + (i * MARK_WIDTH), 262,
-                 i * MARK_WIDTH, [(@pokemon.markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT,
+                 i * MARK_WIDTH, [@pokemon.markings[i] || 0, mark_variants - 1].min * MARK_HEIGHT,
                  MARK_WIDTH, MARK_HEIGHT)
     end
   end
@@ -1338,7 +1338,7 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
     # Draw marking icons
     (@bitmaps[:markings].bitmap.width / MARKING_WIDTH).times do |i|
       src_x = i * MARKING_WIDTH
-      src_y = [(@markings[i] || 0), mark_variants - 1].min * MARKING_HEIGHT
+      src_y = [@markings[i] || 0, mark_variants - 1].min * MARKING_HEIGHT
       draw_image(@bitmaps[:markings],
                  marking_x + (marking_spacing_x * (i % markings_per_row)),
                  marking_y + (marking_spacing_y * (i / markings_per_row)),
@@ -1922,12 +1922,12 @@ class UI::PokemonStorage < UI::BaseScreen
     :effect => proc { |screen|
       next if !screen.slot_pokemon
       if screen.holding_item?
-        if screen.slot_pokemon && screen.slot_pokemon.hasItem?
+        if screen.slot_pokemon&.hasItem?
           screen.perform_action(:swap_items)
         else
           screen.perform_action(:put_down_item)
         end
-      elsif screen.slot_pokemon && screen.slot_pokemon.hasItem?
+      elsif screen.slot_pokemon&.hasItem?
         screen.perform_action(:pick_up_item)
       end
     }

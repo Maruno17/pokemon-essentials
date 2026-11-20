@@ -208,10 +208,8 @@ module GameData
           return pbHiddenPower(pkmn)[1]
         when "TypeAndPowerDependOnUserBerry"
           item_data = pkmn.item
-          if item_data
-            item_data.flags.each do |flag|
-              return [$~[1].to_i, 10].max if flag[/^NaturalGift_(?:\w+)_(\d+)$/i]
-            end
+          item_data&.flags.each do |flag|
+            return [$~[1].to_i, 10].max if flag[/^NaturalGift_(?:\w+)_(\d+)$/i]
           end
           return 1
         when "ThrowUserItemAtTarget"

@@ -73,7 +73,7 @@ class Battle::Visuals
       next if hash[:condition] && !hash[:condition].call(@battle, idxBattler, firstAction)
       options.push([key, hash[:row] || 0, hash[:order] || 0])
     end
-    options.sort! { |a, b| a[1] == b[1] ? a[2] <=> b[2] : a[1] <=> b[1] }
+    options.sort! { |a, b| (a[1] == b[1]) ? a[2] <=> b[2] : a[1] <=> b[1] }
     # Sort options by row and order, and insert "nil" to separate rows
     commands = []
     last_row = 0
@@ -282,25 +282,18 @@ class Battle::Visuals
           case useType
           when 1   # Use on Pokémon
             if @battle.pbTeamLengthFromBattlerIndex(idxBattler) == 1
-              if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, bag_screen
-                break
-              else
-                next
-              end
+              break if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, bag_screen
+              next
             end
           when 3   # Use on battler
             if @battle.pbPlayerBattlerCount == 1
-              if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, bag_screen
-                break
-              else
-                next
-              end
+              break if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, bag_screen
+              next
             end
           end
           # Fade out and hide Bag screen
           bag_sprites_status = pbFadeOutAndHide(bag_screen.sprites)
           # Get player's party
-          party    = @battle.pbParty(idxBattler)
           partyPos = @battle.pbPartyOrder(idxBattler)
           partyStart, _partyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
           modParty = @battle.pbPlayerDisplayParty(idxBattler)

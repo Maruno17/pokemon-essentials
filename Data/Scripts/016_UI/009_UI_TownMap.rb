@@ -29,7 +29,7 @@ class UI::TownMapVisuals < UI::BaseVisuals
   def initialize_viewport
     super
     @map_viewport = Viewport.new(*MAP_TOP_LEFT, *MAP_SIZE)
-    @map_viewport.z = 99999
+    @map_viewport.z = 99_999
     @viewport.z = @map_viewport.z + 1
   end
 

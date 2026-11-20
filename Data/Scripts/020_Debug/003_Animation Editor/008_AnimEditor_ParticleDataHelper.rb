@@ -11,48 +11,46 @@ module AnimationEditor::ParticleDataHelper
                   property, particle[:name])
     end
     ret = [GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[property], false]
-    if particle[property]
-      # NOTE: The commands are already in keyframe order, so we can just run
-      #       through them in order, applying their changes until we reach
-      #       frame.
-      particle[property].each do |cmd|
-        break if cmd[0] > frame   # Command is in the future; no more is needed
-        break if cmd[0] == frame && cmd[1] > 0   # Start of a "MoveXYZ" command; won't have changed yet
-        if cmd[0] + cmd[1] <= frame   # Command has finished; use its end value
-          ret[0] = cmd[2]
-          next
-        end
-        # In a "MoveXYZ" command; need to interpolate
-        if [:color, :color2].include?(property)
-          new_val = []
-          4.times do |i|   # R, G, B, A
-            start_val = ret[0][2 * i, 2].to_i(16)
-            end_val = cmd[2][2 * i, 2].to_i(16)
-            val = AnimationPlayer::Helper.interpolate(
-              (cmd[3] || :linear), start_val, end_val, cmd[1], cmd[0], frame
-            )
-            new_val.push(sprintf("%02X", val))
-          end
-          ret[0] = new_val.join
-        elsif [:tone, :tone2].include?(property)
-          new_val = []
-          4.times do |i|   # R, G, B, G
-            start_val = ret[0][3 * i, 3].to_i(16)
-            end_val = cmd[2][3 * i, 3].to_i(16)
-            val = AnimationPlayer::Helper.interpolate(
-              (cmd[3] || :linear), start_val, end_val, cmd[1], cmd[0], frame
-            )
-            new_val.push((val >= 0 ? "+" : "-") + sprintf("%02X", val.abs))
-          end
-          ret[0] = new_val.join
-        else
-          ret[0] = AnimationPlayer::Helper.interpolate(
-            (cmd[3] || :linear), ret[0], cmd[2], cmd[1], cmd[0], frame
-          )
-        end
-        ret[1] = true   # Interpolating
-        break
+    # NOTE: The commands are already in keyframe order, so we can just run
+    #       through them in order, applying their changes until we reach
+    #       frame.
+    particle[property]&.each do |cmd|
+      break if cmd[0] > frame   # Command is in the future; no more is needed
+      break if cmd[0] == frame && cmd[1] > 0   # Start of a "MoveXYZ" command; won't have changed yet
+      if cmd[0] + cmd[1] <= frame   # Command has finished; use its end value
+        ret[0] = cmd[2]
+        next
       end
+      # In a "MoveXYZ" command; need to interpolate
+      if [:color, :color2].include?(property)
+        new_val = []
+        4.times do |i|   # R, G, B, A
+          start_val = ret[0][2 * i, 2].to_i(16)
+          end_val = cmd[2][2 * i, 2].to_i(16)
+          val = AnimationPlayer::Helper.interpolate(
+            (cmd[3] || :linear), start_val, end_val, cmd[1], cmd[0], frame
+          )
+          new_val.push(sprintf("%02X", val))
+        end
+        ret[0] = new_val.join
+      elsif [:tone, :tone2].include?(property)
+        new_val = []
+        4.times do |i|   # R, G, B, G
+          start_val = ret[0][3 * i, 3].to_i(16)
+          end_val = cmd[2][3 * i, 3].to_i(16)
+          val = AnimationPlayer::Helper.interpolate(
+            (cmd[3] || :linear), start_val, end_val, cmd[1], cmd[0], frame
+          )
+          new_val.push(((val >= 0) ? "+" : "-") + sprintf("%02X", val.abs))
+        end
+        ret[0] = new_val.join
+      else
+        ret[0] = AnimationPlayer::Helper.interpolate(
+          (cmd[3] || :linear), ret[0], cmd[2], cmd[1], cmd[0], frame
+        )
+      end
+      ret[1] = true   # Interpolating
+      break
     end
     # NOTE: Particles are assumed to be not visible at the start of the
     #       animation, and automatically become visible when the particle has
@@ -101,7 +99,7 @@ module AnimationEditor::ParticleDataHelper
       raise _INTL("Couldn't get default value for property {1} for particle {2}.",
                   property, particle[:name])
     end
-    value = GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[:visible] ? 1 : 0
+    value = (GameData::Animation::PARTICLE_KEYFRAME_DEFAULT_VALUES[:visible]) ? 1 : 0
     value = 1 if ["User", "Target", "SE"].include?(particle[:name])
     ret = []
     if (particle[:emitter_type] || :none) == :none || whitelist_properties
@@ -114,18 +112,14 @@ module AnimationEditor::ParticleDataHelper
         end
         ret[earliest] = 1
       end
-      if particle[:visible]
-        particle[:visible].each { |cmd| ret[cmd[0]] = (cmd[2]) ? 1 : 0 }
-      end
+      particle[:visible]&.each { |cmd| ret[cmd[0]] = (cmd[2]) ? 1 : 0 }
       duration.times do |i|
         value = ret[i] if !ret[i].nil?
         ret[i] = value
       end
     else   # Emitter
       earliest = duration
-      if particle[:emitting]
-        particle[:emitting].each { |cmd| ret[cmd[0]] = (cmd[2]) ? 1 : 0 }
-      end
+      particle[:emitting]&.each { |cmd| ret[cmd[0]] = (cmd[2]) ? 1 : 0 }
       particle_start = AnimationPlayer::Helper.get_first_command_frame(particle, AnimationPlayer::Emitter::PARTICLE_PROPERTIES)
       particle_end = AnimationPlayer::Helper.get_last_command_frame(particle, AnimationPlayer::Emitter::PARTICLE_PROPERTIES)
       particle_dur = particle_end - particle_start
@@ -189,21 +183,17 @@ module AnimationEditor::ParticleDataHelper
   def has_se_command_at?(particles, frame)
     ret = false
     se_particle = particles.select { |particle| particle[:name] == "SE" }[0]
-    if se_particle
-      se_particle.each_pair do |property, values|
-        next if !values.is_a?(Array) || values.empty?
-        ret = values.any? { |value| value[0] == frame }
-        break if ret
-      end
+    se_particle&.each_pair do |property, values|
+      next if !values.is_a?(Array) || values.empty?
+      ret = values.any? { |value| value[0] == frame }
+      break if ret
     end
     return ret
   end
 
   def add_command(particle, property, frame, value)
     # Return a new set of commands if there isn't one
-    if !particle[property] || particle[property].empty?
-      return [[frame, 0, value]]
-    end
+    return [[frame, 0, value]] if !particle[property] || particle[property].empty?
     # Find all relevant commands
     set_now = nil
     move_ending_now = nil
@@ -241,7 +231,7 @@ module AnimationEditor::ParticleDataHelper
       move_overlapping_now[2] = value                             # Value
     end
     # Sort and return the commands
-    particle[property].sort! { |a, b| a[0] == b[0] ? a[1] == b[1] ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
+    particle[property].sort! { |a, b| (a[0] == b[0]) ? (a[1] == b[1]) ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
     return particle[property]
   end
 
@@ -531,7 +521,7 @@ module AnimationEditor::ParticleDataHelper
         particle[property].compact!
         break
       end
-      particle[property].sort! { |a, b| a[0] == b[0] ? a[1] == b[1] ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
+      particle[property].sort! { |a, b| (a[0] == b[0]) ? (a[1] == b[1]) ? 0 : a[1] <=> b[1] : a[0] <=> b[0] }
     end
     return particle[property]
   end

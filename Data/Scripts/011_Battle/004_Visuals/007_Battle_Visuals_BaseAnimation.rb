@@ -433,7 +433,7 @@ module Battle::Visuals::Animation::BallAnimationMixin
       particle2 = addNewSprite(ballX, ballY, "Graphics/Battle animations/#{variances[2]}", PictureOrigin::CENTER)
       [particle1, particle2].each_with_index do |particle, num|
         particle.setZ(0, 5110 + num)
-        particle.setZoom(0, (80 - (num * 20)) / (["circle 2"].include?(variances[5 - (3 * num)]) ? 2 : 1))
+        particle.setZoom(0, (80 - (num * 20)) / ((["circle 2"].include?(variances[5 - (3 * num)])) ? 2 : 1))
         particle.setTone(0, variances[6 - (3 * num)])
         particle.setVisible(0, false)
       end

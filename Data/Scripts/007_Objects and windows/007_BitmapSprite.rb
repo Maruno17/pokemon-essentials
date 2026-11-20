@@ -109,8 +109,8 @@ class BitmapSprite < Sprite
   # NOTE: Replaces def pbDrawImagePositions.
   def draw_image(filename, image_x, image_y, src_x = 0, src_y = 0, src_width = -1, src_height = -1)
     src_bitmap = (filename.is_a?(AnimatedBitmap)) ? filename : AnimatedBitmap.new(pbBitmapName(filename))
-    src_width = (src_width >= 0) ? src_width : src_bitmap.width
-    src_height = (src_height >= 0) ? src_height : src_bitmap.height
+    src_width = src_bitmap.width if src_width < 0
+    src_height = src_bitmap.height if src_height < 0
     src_rect = Rect.new(src_x, src_y, src_width, src_height)
     self.bitmap.blt(image_x, image_y, src_bitmap.bitmap, src_rect)
     src_bitmap.dispose if !filename.is_a?(AnimatedBitmap)
@@ -281,7 +281,7 @@ class IconSprite < Sprite
     else
       @_iconbitmap = AnimatedBitmap.new(file, hue)
       # for compatibility
-      self.bitmap = @_iconbitmap ? @_iconbitmap.bitmap : nil
+      self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
       self.src_rect = oldrc
     end
   end
@@ -341,7 +341,7 @@ class ChangelingSprite < Sprite
     raise ArgumentError.new(_INTL("wrong number of arguments (given {1}, expected 2 or 6)", data.length + 1)) if ![1, 5].include?(data.length)
     filepath = (data[0].is_a?(Array)) ? data[0][0] : data[0]
     @bitmaps[filepath] = AnimatedBitmap.new(filepath) if !@bitmaps[filepath]
-    @changeling_data[mode] = (data[0].is_a?(Array) ? data[0].clone : [data[0]])
+    @changeling_data[mode] = (data[0].is_a?(Array)) ? data[0].clone : [data[0]]
   end
 
   def change_bitmap(mode)

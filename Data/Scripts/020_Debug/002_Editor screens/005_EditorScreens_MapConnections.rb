@@ -310,7 +310,7 @@ class MapScreenScene
     @mapsprites = {}
     @mapspritepos = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @lasthitmap = -1
     @lastclick = -1
     @oldmousex = nil

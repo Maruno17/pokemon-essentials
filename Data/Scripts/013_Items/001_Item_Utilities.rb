@@ -74,7 +74,7 @@ module ItemHandlers
   # or deregistered.
   # @return [Symbol, nil] other items, or [nil] if there are none
   def getPairedItems(item)
-    return PairedItems[item].is_a?(Array) ? PairedItems[item] : [PairedItems[item]]
+    return (PairedItems[item].is_a?(Array)) ? PairedItems[item] : [PairedItems[item]]
   end
 
   # Return value:
@@ -160,7 +160,7 @@ def pbTopRightWindow(text, screen = nil)
   window.width = 198
   window.x     = Graphics.width - window.width
   window.y     = 0
-  window.z     = 99999
+  window.z     = 99_999
   pbPlayDecisionSE
   loop do
     Graphics.update
@@ -815,7 +815,7 @@ def pbRaiseHappinessAndLowerEV(pkmn, screen, stat, qty, messages)
     pkmn.calc_stats
   end
   screen.refresh
-  screen.show_message(messages[2 - (h ? 0 : 2) - (e ? 0 : 1)])
+  screen.show_message(messages[2 - ((h) ? 0 : 2) - ((e) ? 0 : 1)])
   return true
 end
 

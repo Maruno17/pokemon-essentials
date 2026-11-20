@@ -239,7 +239,7 @@ module GameData
       ret = nil
       if self.class::SCHEMA.include?(key) && self.respond_to?(self.class::SCHEMA[key][0])
         ret = self.send(self.class::SCHEMA[key][0])
-        ret = nil if ret == false || (ret.is_a?(Array) && ret.length == 0)
+        ret = nil if ret == false || (ret.is_a?(Array) && ret.empty?)
       end
       return ret
     end

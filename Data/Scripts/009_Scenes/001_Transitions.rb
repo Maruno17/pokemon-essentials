@@ -119,7 +119,7 @@ module Transitions
       initialize_bitmaps
       return if disposed?
       @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-      @viewport.z = 99999
+      @viewport.z = 99_999
       @sprites = []
       @overworld_sprite = new_sprite(0, 0, @overworld_bitmap)
       @overworld_sprite.z = -1
@@ -915,7 +915,7 @@ module Transitions
         @ball_sprites.each_with_index do |sprite, i|
           sprite.y = -@ball_bitmap.height - BALL_START_Y_OFFSETS[i]
           sprite.y += (Graphics.height + BALL_START_Y_OFFSETS.max + (@ball_bitmap.height * 2)) * proportion
-          sprite.angle = 1.5 * 360 * proportion * ([1, -1][(i == 2) ? 0 : 1])
+          sprite.angle = 1.5 * 360 * proportion * [1, -1][(i == 2) ? 0 : 1]
         end
       else
         if @ball_sprites[0].visible
@@ -1260,7 +1260,7 @@ module Transitions
 
     def initialize_sprites
       @flash_viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-      @flash_viewport.z     = 99999
+      @flash_viewport.z     = 99_999
       @flash_viewport.color = Color.new(255, 255, 255, 0)
       # Background black
       @rear_black_sprite = new_sprite(0, 0, @black_bitmap)
@@ -1458,7 +1458,7 @@ module Transitions
 
     def initialize_sprites
       @flash_viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-      @flash_viewport.z     = 99999
+      @flash_viewport.z     = 99_999
       @flash_viewport.color = Color.new(255, 255, 255, 0)
       # Background black
       @rear_black_sprite = new_sprite(0, 0, @black_bitmap)
@@ -1781,7 +1781,7 @@ module Transitions
 
     def initialize_sprites
       @flash_viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-      @flash_viewport.z     = 99999
+      @flash_viewport.z     = 99_999
       @flash_viewport.color = Color.new(255, 255, 255, 0)
       # Strobe sprites (need 2 of them to make them loop around)
       ((Graphics.width.to_f / @strobes_bitmap.width).ceil + 1).times do |i|

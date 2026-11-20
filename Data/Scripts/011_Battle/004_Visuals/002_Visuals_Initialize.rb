@@ -18,7 +18,7 @@ class Battle::Visuals
   def pbStartBattle(battle)
     @battle   = battle
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @lastCmd  = Array.new(@battle.battlers.length, 0)
     @lastMove = Array.new(@battle.battlers.length, 0)
     pbInitSprites
@@ -33,7 +33,7 @@ class Battle::Visuals
     messageBox = pbCreateMessageWindow(@viewport)
     messageBox.height = 92
     messageBox.y = Graphics.height - messageBox.height
-    messageBox.z = 10195
+    messageBox.z = 10_195
     @sprites["messageBox"] = messageBox
     $game_temp.message_window_showing = false if $game_temp
     # Create message window (displays the message)
@@ -41,29 +41,29 @@ class Battle::Visuals
       "", 0, Graphics.height - 96 + 2, Graphics.width, 96, @viewport
     )
     msgWindow.setSkin(MessageConfig.pbGetSpeechFrame)
-    msgWindow.z              = 10200
+    msgWindow.z              = 10_200
     msgWindow.baseColor      = MESSAGE_BASE_COLOR
     msgWindow.shadowColor    = MESSAGE_SHADOW_COLOR
     msgWindow.letterbyletter = true
     msgWindow.opacity        = 0
     @sprites["messageWindow"] = msgWindow
     # Create command window
-    @sprites["commandWindow"] = CommandMenu.new(@viewport, 10200, @battle)
+    @sprites["commandWindow"] = CommandMenu.new(@viewport, 10_200, @battle)
     # Create fight window
-    @sprites["fightWindow"] = FightMenu.new(@viewport, 10200)
+    @sprites["fightWindow"] = FightMenu.new(@viewport, 10_200)
     # Create targeting window
-    @sprites["targetWindow"] = TargetMenu.new(@viewport, 10200, @battle.sideSizes)
+    @sprites["targetWindow"] = TargetMenu.new(@viewport, 10_200, @battle.sideSizes)
     pbShowWindow(MESSAGE_BOX)
     # The party lineup graphics (bar and balls) for both sides
     2.times do |side|
       partyBar = pbAddSprite("partyBar_#{side}", 0, 0,
                              "Graphics/UI/Battle/overlay_lineup", @viewport)
-      partyBar.z       = 10120
+      partyBar.z       = 10_120
       partyBar.mirror  = true if side == 0   # Player's lineup bar only
       partyBar.visible = false
       NUM_BALLS.times do |i|
         ball = pbAddSprite("partyBall_#{side}_#{i}", 0, 0, nil, @viewport)
-        ball.z       = 10121
+        ball.z       = 10_121
         ball.visible = false
       end
       # Ability splash bars
@@ -157,7 +157,7 @@ class Battle::Visuals
       end
     end
     cmdBarBG = pbAddSprite("cmdBar_bg", 0, Graphics.height - 96, messageBG, @viewport)
-    cmdBarBG.z = 10180
+    cmdBarBG.z = 10_180
   end
 
   def pbCreateTrainerBackSprite(idxTrainer, trainerType, numTrainers = 1)

@@ -195,7 +195,7 @@ class Phone
 
   def self.increment_version(trainer_type, name, start_version = 0)
     contact = $PokemonGlobal.phone.get(trainer_type, name, start_version)
-    contact.increment_version if contact
+    contact&.increment_version
   end
 
   def self.battle(trainer_type, name, start_version = 0)

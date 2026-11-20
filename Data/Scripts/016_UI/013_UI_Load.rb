@@ -372,7 +372,7 @@ class UI::LoadVisuals < UI::BaseVisuals
     new_index = old_index
     loop do
       new_index = (new_index + 1) % @commands.length
-      break if @sprites[@commands.keys[new_index]] && @sprites[@commands.keys[new_index]].visible
+      break if @sprites[@commands.keys[new_index]]&.visible
       break if new_index == old_index
     end
     return if new_index == old_index
@@ -387,7 +387,7 @@ class UI::LoadVisuals < UI::BaseVisuals
     loop do
       new_index -= 1
       new_index += @commands.length if new_index < 0
-      break if @sprites[@commands.keys[new_index]] && @sprites[@commands.keys[new_index]].visible
+      break if @sprites[@commands.keys[new_index]]&.visible
       break if new_index == old_index
     end
     return if new_index == old_index

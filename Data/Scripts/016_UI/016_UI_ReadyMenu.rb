@@ -124,7 +124,7 @@ class PokemonReadyMenu_Scene
       @index[2] = 0
     end
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     @sprites = {}
     @sprites["cmdwindow"] = Window_CommandPokemon.new((@index[2] == 0) ? @movecommands : @itemcommands)
     @sprites["cmdwindow"].height = 192

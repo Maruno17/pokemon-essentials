@@ -8,7 +8,7 @@ class Dir
     filters = [filters] if !filters.is_a?(Array)
     self.chdir(dir) do
       filters.each do |filter|
-        self.glob(filter) { |f| files.push(full ? (dir + "/" + f) : f) }
+        self.glob(filter) { |f| files.push((full) ? dir + "/" + f : f) }
       end
     end
     return files.sort
@@ -58,7 +58,7 @@ class Dir
       dirs += self.all_dirs(file) if self.safe?(file)
     end
     # returns all found directories
-    return dirs.length > 0 ? (dirs + [dir]) : [dir]
+    return (dirs.length > 0) ? (dirs + [dir]) : [dir]
   end
 
   # Deletes all the files in a directory and all the sub directories (allows for non-empty dirs)
@@ -321,7 +321,7 @@ end
 
 def pbTryString(x)
   ret = pbGetFileChar(x)
-  return nil_or_empty?(ret) ? nil : x
+  return (nil_or_empty?(ret)) ? nil : x
 end
 
 # Gets the contents of a file. Doesn't check RTP, but does check
@@ -379,7 +379,7 @@ class StringInput
   end
 
   def inspect
-    return "#<#{self.class}:#{@closed ? 'closed' : 'open'},src=#{@string[0, 30].inspect}>"
+    return "#<#{self.class}:#{(@closed) ? 'closed' : 'open'},src=#{@string[0, 30].inspect}>"
   end
 
   def close

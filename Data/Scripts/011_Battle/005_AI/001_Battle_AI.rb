@@ -41,7 +41,7 @@ class Battle::AI
     @trainer = @trainers[(opposes) ? 1 : 0][trainer_index]
     # Find the AI battler for which the action is being chosen
     @user = @battlers[idxBattler]
-    @battlers.each { |b| b.refresh_battler if b }
+    @battlers.each { |b| b&.refresh_battler }
   end
 
   # Choose an action.

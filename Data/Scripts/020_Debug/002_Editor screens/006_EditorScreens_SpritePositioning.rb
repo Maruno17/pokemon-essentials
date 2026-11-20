@@ -47,7 +47,7 @@ class SpritePositioner
   def pbOpen
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     battlebg   = "Graphics/Battlebacks/indoor1_bg"
     playerbase = "Graphics/Battlebacks/indoor1_base0"
     enemybase  = "Graphics/Battlebacks/indoor1_base1"

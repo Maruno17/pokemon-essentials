@@ -38,14 +38,14 @@ class Module
     validate name => Symbol, aliased_method => Symbol, removal_in => [NilClass, String],
              class_method => [TrueClass, FalseClass]
 
-    target = class_method ? self.class : self
+    target = (class_method) ? self.class : self
     class_name = self.name
 
     unless target.method_defined?(aliased_method)
       raise ArgumentError, "#{class_name} does not have method #{aliased_method} defined"
     end
 
-    delimiter = class_method ? "." : "#"
+    delimiter = (class_method) ? "." : "#"
 
     target.define_method(name) do |*args, **kvargs|
       alias_name = sprintf("%s%s%s", class_name, delimiter, name)

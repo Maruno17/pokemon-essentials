@@ -80,7 +80,7 @@ def pbDebugMenu(show_all = true)
   end
   # Setup windows
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   sprites = {}
   sprites["textbox"] = pbCreateMessageWindow
   sprites["textbox"].letterbyletter = false
@@ -260,7 +260,7 @@ module Battle::DebugMixin
     end
     # Setup windows
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    viewport.z = 99999
+    viewport.z = 99_999
     sprites = {}
     sprites["textbox"] = pbCreateMessageWindow
     sprites["textbox"].letterbyletter = false
@@ -417,7 +417,7 @@ module Battle::DebugMixin
     end
     # Setup windows
     viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    viewport.z = 99999
+    viewport.z = 99_999
     sprites = {}
     sprites["infowindow"] = Window_AdvancedTextPokemon.new("")
     infowindow = sprites["infowindow"]

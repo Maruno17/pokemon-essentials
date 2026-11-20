@@ -275,11 +275,11 @@ class Battle::Visuals
         pbBattleArenaUpdate
         dimmingvp.update
       end
-      dimmingvp.z = 99999
+      dimmingvp.z = 99_999
       infowindow = SpriteWindow_Base.new(80, 0, 320, 224)
       infowindow.contents = Bitmap.new(infowindow.width - infowindow.borderX,
                                        infowindow.height - infowindow.borderY)
-      infowindow.z        = 99999
+      infowindow.z        = 99_999
       infowindow.visible  = false
       11.times do |i|
         Graphics.update

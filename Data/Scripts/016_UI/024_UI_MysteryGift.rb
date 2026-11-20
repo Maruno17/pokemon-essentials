@@ -241,7 +241,7 @@ end
 def pbDownloadMysteryGift(trainer)
   sprites = {}
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   addBackgroundPlane(sprites, "background", "mysterygift_bg", viewport)
   pbFadeInAndShow(sprites)
   sprites["msgwindow"] = pbCreateMessageWindow
@@ -336,14 +336,8 @@ end
 def pbMysteryGiftDecrypt(gift)
   return [] if nil_or_empty?(gift)
   ret = Marshal.restore(Zlib::Inflate.inflate(gift.unpack("m")[0]))
-  if ret
-    ret.each do |gft|
-      if gft[1] == 0   # Pokémon
-        gft[2] = gft[2]
-      else   # Item
-        gft[2] = GameData::Item.get(gft[2]).id
-      end
-    end
+  ret&.each do |gft|
+    gft[2] = (gft[1] == 0) ? gft[2] : GameData::Item.get(gft[2]).id   # Pokémon : item
   end
   return ret
 end

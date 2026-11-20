@@ -55,7 +55,7 @@ class Battle
       end
     else
       items = pbGetOwnerItems(idxBattler)
-      items.delete_at(items.index(item)) if items
+      items&.delete_at(items.index(item))
     end
   end
 

@@ -766,13 +766,11 @@ class Battle::Visuals
           anim_player.forceInvisibilities[user.index] = true
         end
       end
-      if targets
-        targets.each do |target|
-          if @sprites["pokemon_#{target.index}"].forceSubstitute
-            anim_player.forceSubstitutes[target.index] = true
-          elsif @sprites["pokemon_#{target.index}"].forceInvisible
-            anim_player.forceInvisibilities[target.index] = true
-          end
+      targets&.each do |target|
+        if @sprites["pokemon_#{target.index}"].forceSubstitute
+          anim_player.forceSubstitutes[target.index] = true
+        elsif @sprites["pokemon_#{target.index}"].forceInvisible
+          anim_player.forceInvisibilities[target.index] = true
         end
       end
       anim_player.set_up

@@ -281,13 +281,13 @@ MultipleForms.register(:ROTOM, {
 
 MultipleForms.register(:DIALGA, {
   "getForm" => proc { |pkmn|
-    next pkmn.hasItem?(:ADAMANTCRYSTAL) ? 1 : 0
+    next (pkmn.hasItem?(:ADAMANTCRYSTAL)) ? 1 : 0
   }
 })
 
 MultipleForms.register(:PALKIA, {
   "getForm" => proc { |pkmn|
-    next pkmn.hasItem?(:LUSTROUSGLOBE) ? 1 : 0
+    next (pkmn.hasItem?(:LUSTROUSGLOBE)) ? 1 : 0
   }
 })
 

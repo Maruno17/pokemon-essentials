@@ -33,7 +33,7 @@ class PokemonPhone_Scene
     @sprites = {}
     # Create viewport
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
     # Background
     addBackgroundPlane(@sprites, "bg", "Phone/bg", @viewport)
     # List of contacts

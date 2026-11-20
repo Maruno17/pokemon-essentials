@@ -36,7 +36,7 @@ class UIControls::BaseContainer
   def initialize_viewport
     return if @viewport
     @viewport = Viewport.new(@x, @y, @width, @height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
   end
 
   def initialize_bitmaps; end

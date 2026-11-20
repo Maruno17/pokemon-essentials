@@ -2,9 +2,7 @@
 # Methods that determine the duration of an audio file.
 #===============================================================================
 def getOggPage(file)
-  fgetdw = proc { |f|
-    (f.eof? ? 0 : (f.read(4).unpack("V")[0] || 0))
-  }
+  fgetdw = proc { |f| (f.eof?) ? 0 : (f.read(4).unpack("V")[0] || 0) }
   dw = fgetdw.call(file)
   return nil if dw != 0x5367674F
   header = file.read(22)
@@ -19,9 +17,7 @@ end
 
 # internal function
 def oggfiletime(file)
-  fgetdw = proc { |f|
-    (f.eof? ? 0 : (f.read(4).unpack("V")[0] || 0))
-  }
+  fgetdw = proc { |f| (f.eof?) ? 0 : (f.read(4).unpack("V")[0] || 0) }
   pages = []
   page = nil
   loop do
@@ -84,10 +80,10 @@ def getPlayTime2(filename)
   return -1 if !FileTest.exist?(filename)
   time = -1
   fgetdw = proc { |file|
-    (file.eof? ? 0 : (file.read(4).unpack("V")[0] || 0))
+    ((file.eof?) ? 0 : (file.read(4).unpack("V")[0] || 0))
   }
   fgetw = proc { |file|
-    (file.eof? ? 0 : (file.read(2).unpack("v")[0] || 0))
+    ((file.eof?) ? 0 : (file.read(2).unpack("v")[0] || 0))
   }
   File.open(filename, "rb") do |file|
     file.pos = 0

@@ -20,8 +20,8 @@ class BattleChallenge
     @numRounds = numrounds
     @rules = rules
     register(id, id[/double/], 3,
-             id[/^factory/] ? BATTLE_FACTORY_ID : BATTLE_TOWER_ID,
-             id[/open$/] ? 1 : 0)
+             (id[/^factory/]) ? BATTLE_FACTORY_ID : BATTLE_TOWER_ID,
+             (id[/open$/]) ? 1 : 0)
     pbWriteCup(id, rules)
   end
 

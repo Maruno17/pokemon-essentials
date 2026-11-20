@@ -34,7 +34,7 @@ end
 def pbDisplayMail(mail, _bearer = nil)
   sprites = {}
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-  viewport.z = 99999
+  viewport.z = 99_999
   addBackgroundPlane(sprites, "background", "Mail/bg", viewport)
   sprites["card"] = IconSprite.new(0, 0, viewport)
   sprites["card"].setBitmap(GameData::Item.mail_filename(mail.item))

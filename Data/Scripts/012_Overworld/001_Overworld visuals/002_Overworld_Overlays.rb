@@ -22,7 +22,7 @@ class LocationWindow
       return
     end
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
-    @viewport.z = 99999
+    @viewport.z = 99_999
   end
 
   def initialize_graphic(graphic_name)
@@ -152,7 +152,7 @@ class DarknessSprite < Sprite
     @darkness = Bitmap.new(*bitmap_size)
     @radius = radiusMin
     self.bitmap = @darkness
-    self.z      = 99998
+    self.z      = 99_998
     self.zoom_x = 2.0 if PIXELLATE_CIRCLE
     self.zoom_y = 2.0 if PIXELLATE_CIRCLE
     refresh

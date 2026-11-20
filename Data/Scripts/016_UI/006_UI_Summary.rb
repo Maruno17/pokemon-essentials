@@ -549,7 +549,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     markings = @pokemon.markings
     (@bitmaps[:markings].bitmap.width / MARKING_WIDTH).times do |i|
       src_x = i * MARKING_WIDTH
-      src_y = [(markings[i] || 0), mark_variants - 1].min * MARKING_HEIGHT
+      src_y = [markings[i] || 0, mark_variants - 1].min * MARKING_HEIGHT
       draw_image(@bitmaps[:markings], x + (i * MARKING_WIDTH), y,
                  src_x, src_y, MARKING_WIDTH, MARKING_HEIGHT)
     end
@@ -580,7 +580,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     bar_y = 352
     bar_total_width = 128
     bar_width = [@pokemon.hp * bar_total_width / @pokemon.totalhp.to_f, 1.0].max
-    bar_width = ((bar_width / 2).round) * 2   # Make the bar's length a multiple of 2 pixels
+    bar_width = (bar_width / 2).round * 2   # Make the bar's length a multiple of 2 pixels
     bar_width -= 2 if bar_width == bar_total_width && @pokemon.hp < @pokemon.totalhp
     hp_zone = 0                                                  # Green
     hp_zone = 1 if @pokemon.hp <= (@pokemon.totalhp / 2).floor   # Yellow
@@ -730,7 +730,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     # Draw Exp bar fill
     if @pokemon.level < GameData::GrowthRate.max_level
       exp_width = @pokemon.exp_fraction * 128
-      exp_width = ((exp_width / 2).round) * 2
+      exp_width = (exp_width / 2).round * 2
       draw_image(graphics_folder + "exp_bar_fill", 362, 372,
                  0, 0, exp_width, -1)
     end
@@ -1091,7 +1091,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     # Draw marking icons
     (@bitmaps[:markings].bitmap.width / MARKING_WIDTH).times do |i|
       src_x = i * MARKING_WIDTH
-      src_y = [(@markings[i] || 0), mark_variants - 1].min * MARKING_HEIGHT
+      src_y = [@markings[i] || 0, mark_variants - 1].min * MARKING_HEIGHT
       draw_image(@bitmaps[:markings],
                  marking_x + (marking_spacing_x * (i % markings_per_row)),
                  marking_y + (marking_spacing_y * (i / markings_per_row)),
