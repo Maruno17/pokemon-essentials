@@ -224,11 +224,10 @@ class UI::OptionsVisualsList < Window_DrawableCommand
   end
 
   def previous_value(this_index)
-    return @values[this_index] if @values[this_index] == 0
     option = @options[this_index]
     case option[:type]
     when :array, :array_one
-      return @values[this_index] - 1
+      return @values[this_index] - 1 if @values[this_index] > 0
     when :number_type
       case option[:parameters]
       when Range
