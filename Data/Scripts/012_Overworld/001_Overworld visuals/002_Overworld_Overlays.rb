@@ -143,18 +143,18 @@ end
 class DarknessSprite < Sprite
   attr_reader :radius
 
-  PIXELLATE_CIRCLE = true
+  PIXELATE_CIRCLE = true
 
   def initialize(viewport = nil)
     super(viewport)
     bitmap_size = [Graphics.width, Graphics.height]
-    bitmap_size = [Graphics.width / 2, Graphics.height / 2] if PIXELLATE_CIRCLE
+    bitmap_size = [Graphics.width / 2, Graphics.height / 2] if PIXELATE_CIRCLE
     @darkness = Bitmap.new(*bitmap_size)
     @radius = radiusMin
     self.bitmap = @darkness
     self.z      = 99_998
-    self.zoom_x = 2.0 if PIXELLATE_CIRCLE
-    self.zoom_y = 2.0 if PIXELLATE_CIRCLE
+    self.zoom_x = 2.0 if PIXELATE_CIRCLE
+    self.zoom_y = 2.0 if PIXELATE_CIRCLE
     refresh
   end
 
@@ -166,13 +166,13 @@ class DarknessSprite < Sprite
   # Before using Flash.
   def radiusMin
     ret = 64
-    return (PIXELLATE_CIRCLE) ? ret / 2 : ret
+    return (PIXELATE_CIRCLE) ? ret / 2 : ret
   end
 
   # After using Flash.
   def radiusMax
     ret = 176
-    return (PIXELLATE_CIRCLE) ? ret / 2 : ret
+    return (PIXELATE_CIRCLE) ? ret / 2 : ret
   end
 
   def radius=(value)
