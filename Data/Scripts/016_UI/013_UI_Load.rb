@@ -259,7 +259,7 @@ class UI::LoadContinuePanel < UI::LoadPanel
     draw_text(@save_data[:player].name, 78, 66, theme: gender_theme)
     # Location
     map_id = @save_data[:map_factory].map.map_id
-    map_name = pbGetMapNameFromId(map_id)
+    map_name = pbGetMapNameFromId(map_id, true)
     map_name = map_name.gsub(/\\PN/, @save_data[:player].name)
     map_name = map_name.gsub(/\\v\[(\d+)\]/) { |num| @save_data[:variables][$~[1].to_i].to_s }
     draw_text(map_name, 18, 114, theme: gender_theme)

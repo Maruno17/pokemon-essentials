@@ -235,7 +235,7 @@ class UI::SaveVisuals < UI::BaseVisuals
     this_index = @index
     @sprites[:continue] = create_slot_panel(this_index)
     # Continue panel to left
-    if !@save_data.empty?
+    if !@save_data.empty? && Settings::SAVE_SLOTS == :multiple
       previous_index = this_index - 1
       @sprites[:continue_previous] = create_slot_panel(this_index - 1)
       @sprites[:continue_previous].x = @sprites[:continue].x - @sprites[:continue].width - PANEL_SPACING
@@ -303,8 +303,8 @@ class UI::SaveVisuals < UI::BaseVisuals
 
   def start_choose_save_file
     @choosing_save_file = true
-    @sprites[:continue_previous].visible = true
-    @sprites[:continue_next].visible = true
+    @sprites[:continue_previous]&.visible = true
+    @sprites[:continue_next]&.visible = true
     @sprites[:continue].show_arrows = true
     set_index(@index, true)
   end

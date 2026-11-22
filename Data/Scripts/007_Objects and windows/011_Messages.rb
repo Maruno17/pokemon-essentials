@@ -237,11 +237,11 @@ def pbGetBasicMapNameFromId(id)
   end
 end
 
-def pbGetMapNameFromId(id)
+def pbGetMapNameFromId(id, no_substitutes = false)
   name = GameData::MapMetadata.try_get(id)&.name
   name = pbGetBasicMapNameFromId(id) if nil_or_empty?(name)
-  name = name.gsub(/\\PN/, $player.name) if $player
-  if $game_variables
+  name = name.gsub(/\\PN/, $player.name) if !no_substitutes && $player
+  if !no_substitutes && $game_variables
     name = name.gsub(/\\v\[(\d+)\]/) { |num| $game_variables[$~[1].to_i].to_s }
   end
   return name
