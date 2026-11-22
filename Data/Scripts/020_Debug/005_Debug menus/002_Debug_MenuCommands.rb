@@ -1406,8 +1406,9 @@ MenuHandlers.add(:debug_menu, :animation_editor, {
   "description" => _INTL("Edit the battle animations."),
   "effect"      => proc {
     pbBGMStop
-    Graphics.resize_screen(AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
     pbSetResizeFactor(1)
+    Graphics.resize_screen(AnimationEditor::WINDOW_WIDTH, AnimationEditor::WINDOW_HEIGHT)
+    Graphics.center
     screen = AnimationEditor::AnimationSelector.new
     screen.run
     Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)

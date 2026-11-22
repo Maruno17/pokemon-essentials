@@ -254,8 +254,9 @@ end
 #
 #===============================================================================
 def pbTilesetScreen
-  Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT * 2)
   pbSetResizeFactor(1)
+  Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT * 2)
+  Graphics.center
   scene = PokemonTilesetScene.new
   scene.pbStartScene
   Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)

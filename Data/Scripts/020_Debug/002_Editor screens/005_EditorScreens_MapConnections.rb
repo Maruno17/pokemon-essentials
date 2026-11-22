@@ -566,8 +566,9 @@ end
 #===============================================================================
 def pbConnectionsEditor
   pbCriticalCode do
-    Graphics.resize_screen(Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
     pbSetResizeFactor(1)
+    Graphics.resize_screen(Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
+    Graphics.center
     mapscreen = MapScreenScene.new
     mapscreen.mapScreen
     mapscreen.pbMapScreenLoop

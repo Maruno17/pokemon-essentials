@@ -891,8 +891,9 @@ MenuHandlers.add(:debug_menu, :set_town_map, {
   "description" => _INTL("Edit the contents of the Town Maps."),
   "effect"      => proc {
     pbBGMStop
-    Graphics.resize_screen(Debug::EditorBase::WINDOW_WIDTH, Debug::EditorBase::WINDOW_HEIGHT)
     pbSetResizeFactor(1)
+    Graphics.resize_screen(Debug::EditorBase::WINDOW_WIDTH, Debug::EditorBase::WINDOW_HEIGHT)
+    Graphics.center
     Debug::PBSEditor::TownMap.new.run
     Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
     pbSetResizeFactor($PokemonSystem.screensize)

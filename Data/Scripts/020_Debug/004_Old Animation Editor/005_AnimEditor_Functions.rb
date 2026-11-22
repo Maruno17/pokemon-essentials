@@ -1164,8 +1164,9 @@ def pbAnimationEditor
     animation = PBAnimations.new
     animation[0].graphic = ""
   end
-  Graphics.resize_screen(Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
   pbSetResizeFactor(1)
+  Graphics.resize_screen(Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
+  Graphics.center
   BattleAnimationEditor.animationEditorMain(animation)
   Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
   pbSetResizeFactor($PokemonSystem.screensize)
