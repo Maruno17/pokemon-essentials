@@ -5,6 +5,9 @@
 # Run with:      pbSlotMachine(1)
 # - The number is either 0 (easy), 1 (default) or 2 (hard).
 #===============================================================================
+Settings::AUDIO_ME_FILES[:slot_machine_win]     = "Slots win"
+Settings::AUDIO_ME_FILES[:slot_machine_big_win] = "Slots big win"
+
 class SlotMachineReel < BitmapSprite
   SCROLL_SPEED = 640   # Pixels moved per second
   ICONS_SETS = [[3, 2, 7, 6, 3, 1, 5, 2, 3, 0, 6, 4, 7, 5, 1, 3, 2, 3, 6, 0, 4, 5],   # Reel 1
@@ -194,9 +197,9 @@ class SlotMachineScene
     @sprites["payout"].score = payout
     if payout > 0 || @replay
       if bonus > 0
-        pbMEPlay("Slots big win")
+        pbMEPlay(:slot_machine_big_win)
       else
-        pbMEPlay("Slots win")
+        pbMEPlay(:slot_machine_win)
       end
       # Show winning animation
       timer_start = System.uptime

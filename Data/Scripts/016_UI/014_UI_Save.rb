@@ -1,3 +1,5 @@
+Settings::AUDIO_ME_FILES[:save_game] = "GUI save game"
+
 #===============================================================================
 #
 #===============================================================================
@@ -485,7 +487,7 @@ class UI::Save < UI::BaseScreen
       # Announce the save success
       show_message(_INTL("{1} saved the game.", $player.name)) do
         pbSEStop
-        pbMEPlay("GUI save game")
+        pbMEPlay(:save_game)
         wait(1)
       end
       @result = true
@@ -587,7 +589,7 @@ def pbEmergencySave
     end
   end
   if Game.save(filename_number)
-    pbMessage("\\se[]" + _INTL("The game was saved.") + "\\me[GUI save game]\\wtnp[20]")
+    pbMessage("\\se[]" + _INTL("The game was saved.") + "\\me[:save_game]\\wtnp[20]")
     pbMessage("\\se[]" + _INTL("The previous save file has been backed up.") + "\\wtnp[20]")
   else
     pbMessage("\\se[]" + _INTL("Save failed.") + "\\wtnp[30]")

@@ -463,9 +463,9 @@ def pbPickBerry(berry, qty = 1)
   end
   $bag.add(berry, qty)
   if qty > 1
-    pbMessage("\\me[Berry get]" + _INTL("You picked the {1} \\c[1]{2}\\c[0].", qty, berry_name) + "\\wtnp[30]")
+    pbMessage("\\me[:get_berry_item]" + _INTL("You picked the {1} \\c[1]{2}\\c[0].", qty, berry_name) + "\\wtnp[30]")
   else
-    pbMessage("\\me[Berry get]" + _INTL("You picked the \\c[1]{1}\\c[0].", berry_name) + "\\wtnp[30]")
+    pbMessage("\\me[:get_berry_item]" + _INTL("You picked the \\c[1]{1}\\c[0].", berry_name) + "\\wtnp[30]")
   end
   pocket = berry.bag_pocket
   pbMessage(_INTL("You put the {1} in\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",

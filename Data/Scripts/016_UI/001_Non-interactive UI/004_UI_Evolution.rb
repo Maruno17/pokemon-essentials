@@ -1,9 +1,11 @@
+Settings::AUDIO_BGM_FILES[:evolution] = "Evolution"
+Settings::AUDIO_ME_FILES[:evolution_start]   = "Evolution start"
+Settings::AUDIO_ME_FILES[:evolution_success] = "Evolution success"
+
 #===============================================================================
 # Evolution screen
 #===============================================================================
 class PokemonEvolutionScene
-  EVOLUTION_BGM = "Evolution"
-
   def self.pbDuplicatePokemon(pkmn, new_species)
     new_pkmn = pkmn.clone
     new_pkmn.species   = new_species
@@ -96,8 +98,8 @@ class PokemonEvolutionScene
       pbUpdate
       break if System.uptime - timer_start >= 1
     end
-    pbMEPlay("Evolution start")
-    pbBGMPlay(EVOLUTION_BGM)
+    pbMEPlay(:evolution_start)
+    pbBGMPlay(:evolution)
     canceled = false
     timer_start = System.uptime
     loop do
@@ -207,7 +209,7 @@ class PokemonEvolutionScene
     end
     pbBGMStop
     # Success jingle/message
-    pbMEPlay("Evolution success")
+    pbMEPlay(:evolution_success)
     newspeciesname = GameData::Species.get(@newspecies).name
     pbMessageDisplay(@sprites["msgwindow"],
                      "\\se[]" + _INTL("Congratulations! Your {1} evolved into {2}!",

@@ -9,9 +9,10 @@
 # sprite sheet) with egg sprite height and 5 times the egg sprite width at
 # Graphics/Battlers/eggCracks.
 #===============================================================================
-class PokemonEggHatch_Scene
-  EGG_HATCH_BGM = "Evolution"
+Settings::AUDIO_BGM_FILES[:egg_hatching] = "Evolution"
+Settings::AUDIO_ME_FILES[:egg_hatched] = "Evolution success"
 
+class PokemonEggHatch_Scene
   def pbStartScene(pokemon)
     @sprites = {}
     @pokemon = pokemon
@@ -54,7 +55,7 @@ class PokemonEggHatch_Scene
   end
 
   def pbMain
-    pbBGMPlay(EGG_HATCH_BGM)
+    pbBGMPlay(:egg_hatching)
     # Egg animation
     updateScene(1.5)
     pbPositionHatchMask(0)
@@ -103,7 +104,7 @@ class PokemonEggHatch_Scene
     @pokemon.play_cry
     updateScene(cry_duration + 0.1)
     pbBGMStop
-    pbMEPlay("Evolution success")
+    pbMEPlay(:egg_hatched)
     @pokemon.name = nil
     pbMessage("\\se[]" + _INTL("{1} hatched from the Egg!", @pokemon.name) + "\\wt[80]") { update }
     # Record the Pokémon's species as owned in the Pokédex

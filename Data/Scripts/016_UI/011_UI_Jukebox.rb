@@ -1,3 +1,7 @@
+Settings::AUDIO_BGM_FILES[:jukebox_higher_encounter_rate] = "Radio - March"
+Settings::AUDIO_BGM_FILES[:jukebox_lower_encounter_rate]  = "Radio - Lullaby"
+Settings::AUDIO_BGM_FILES[:jukebox_normal_encounter_rate] = "Radio - Oak"
+
 #===============================================================================
 #
 #===============================================================================
@@ -58,10 +62,6 @@ end
 #
 #===============================================================================
 class PokemonJukeboxScreen
-  HIGHER_ENCOUNTER_RATE_BGM = "Radio - March"
-  LOWER_ENCOUNTER_RATE_BGM  = "Radio - Lullaby"
-  NORMAL_ENCOUNTER_RATE_BGM = "Radio - Oak"
-
   def initialize(scene)
     @scene = scene
   end
@@ -84,21 +84,21 @@ class PokemonJukeboxScreen
       cmd = @scene.pbScene
       if cmdMarch >= 0 && cmd == cmdMarch
         pbPlayDecisionSE
-        pbBGMPlay(HIGHER_ENCOUNTER_RATE_BGM, 100, 100)
+        pbBGMPlay(:jukebox_higher_encounter_rate, 100, 100)
         if $PokemonMap
           $PokemonMap.lower_encounter_rate = false
           $PokemonMap.higher_encounter_rate = true
         end
       elsif cmdLullaby >= 0 && cmd == cmdLullaby
         pbPlayDecisionSE
-        pbBGMPlay(LOWER_ENCOUNTER_RATE_BGM, 100, 100)
+        pbBGMPlay(:jukebox_lower_encounter_rate, 100, 100)
         if $PokemonMap
           $PokemonMap.lower_encounter_rate = true
           $PokemonMap.higher_encounter_rate = false
         end
       elsif cmdOak >= 0 && cmd == cmdOak
         pbPlayDecisionSE
-        pbBGMPlay(NORMAL_ENCOUNTER_RATE_BGM, 100, 100)
+        pbBGMPlay(:jukebox_normal_encounter_rate, 100, 100)
         if $PokemonMap
           $PokemonMap.lower_encounter_rate = false
           $PokemonMap.higher_encounter_rate = false

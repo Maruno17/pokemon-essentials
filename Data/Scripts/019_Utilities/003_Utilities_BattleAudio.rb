@@ -15,7 +15,7 @@ def pbGetWildBattleBGM(_wildParty)
     music = GameData::Metadata.get.wild_battle_BGM
     ret = pbStringToAudioFile(music) if music && music != ""
   end
-  ret = pbStringToAudioFile(Settings::DEFAULT_WILD_BATTLE_BGM) if !ret
+  ret = :wild_battle if !ret
   return ret
 end
 
@@ -32,8 +32,8 @@ def pbGetWildVictoryBGM
     music = GameData::Metadata.get.wild_victory_BGM
     ret = pbStringToAudioFile(music) if music && music != ""
   end
-  ret = pbStringToAudioFile(Settings::DEFAULT_WILD_VICTORY_BGM) if !ret
-  ret.name = "../../Audio/BGM/" + ret.name
+  ret.name = "../../Audio/BGM/" + ret.name if ret
+  ret = :wild_battle_win if !ret
   return ret
 end
 
@@ -52,8 +52,8 @@ def pbGetWildCaptureME
     music = GameData::Metadata.get.wild_capture_ME
     ret = pbStringToAudioFile(music) if music && music != ""
   end
-  ret = pbStringToAudioFile(Settings::DEFAULT_WILD_CAPTURE_ME) if !ret
-  ret.name = "../../Audio/ME/" + ret.name
+  ret.name = "../../Audio/ME/" + ret.name if ret
+  ret = :capture_success if !ret
   return ret
 end
 
@@ -98,7 +98,7 @@ def pbGetTrainerBattleBGM(trainer)
     music = GameData::Metadata.get.trainer_battle_BGM
     ret = pbStringToAudioFile(music) if music && music != ""
   end
-  ret = pbStringToAudioFile(Settings::DEFAULT_TRAINER_BATTLE_BGM) if !ret
+  ret = :trainer_battle if !ret
   return ret
 end
 
@@ -116,7 +116,7 @@ def pbGetTrainerBattleBGMFromType(trainertype)
     music = GameData::Metadata.get.trainer_battle_BGM
     ret = pbStringToAudioFile(music) if music && music != ""
   end
-  ret = pbStringToAudioFile(Settings::DEFAULT_TRAINER_BATTLE_BGM) if !ret
+  ret = :trainer_battle if !ret
   return ret
 end
 
@@ -143,7 +143,7 @@ def pbGetTrainerVictoryBGM(trainer)
     music = GameData::Metadata.get.trainer_victory_BGM
     ret = pbStringToAudioFile(music) if music && music != ""
   end
-  ret = pbStringToAudioFile(Settings::DEFAULT_TRAINER_VICTORY_BGM) if !ret
-  ret.name = "../../Audio/BGM/" + ret.name
+  ret.name = "../../Audio/BGM/" + ret.name if ret
+  ret = :trainer_battle_win if !ret
   return ret
 end

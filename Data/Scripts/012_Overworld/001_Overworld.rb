@@ -771,16 +771,16 @@ def pbItemBall(item, quantity = 1)
   pocket = item.bag_pocket
   move = item.move
   if $bag.add(item, quantity)   # If item can be picked up
-    meName = (item.is_key_item?) ? "Key item get" : "Item get"
+    meName = (item.is_key_item?) ? ":get_key_item" : ":get_item"
     if item == :DNASPLICERS
       pbMessage("\\me[#{meName}]" + _INTL("You found \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
     elsif item.is_machine?   # TM or HM
       if quantity > 1
-        pbMessage("\\me[Machine get]" + _INTL("You found {1} \\c[1]{2} {3}\\c[0]!",
-                                              quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
+        pbMessage("\\me[:get_machine_item]" + _INTL("You found {1} \\c[1]{2} {3}\\c[0]!",
+                                                    quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
       else
-        pbMessage("\\me[Machine get]" + _INTL("You found \\c[1]{1} {2}\\c[0]!",
-                                              itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
+        pbMessage("\\me[:get_machine_item]" + _INTL("You found \\c[1]{1} {2}\\c[0]!",
+                                                    itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
       end
     elsif quantity > 1
       pbMessage("\\me[#{meName}]" + _INTL("You found {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[40]")
@@ -820,16 +820,16 @@ def pbReceiveItem(item, quantity = 1)
   itemname = (quantity > 1) ? item.portion_name_plural : item.portion_name
   pocket = item.bag_pocket
   move = item.move
-  meName = (item.is_key_item?) ? "Key item get" : "Item get"
+  meName = (item.is_key_item?) ? ":get_key_item" : ":get_item"
   if item == :DNASPLICERS
     pbMessage("\\me[#{meName}]" + _INTL("You obtained \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
   elsif item.is_machine?   # TM or HM
     if quantity > 1
-      pbMessage("\\me[Machine get]" + _INTL("You obtained {1} \\c[1]{2} {3}\\c[0]!",
-                                            quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
+      pbMessage("\\me[:get_machine_item]" + _INTL("You obtained {1} \\c[1]{2} {3}\\c[0]!",
+                                                  quantity, itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
     else
-      pbMessage("\\me[Machine get]" + _INTL("You obtained \\c[1]{1} {2}\\c[0]!",
-                                            itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
+      pbMessage("\\me[:get_machine_item]" + _INTL("You obtained \\c[1]{1} {2}\\c[0]!",
+                                                  itemname, GameData::Move.get(move).name) + "\\wtnp[70]")
     end
   elsif quantity > 1
     pbMessage("\\me[#{meName}]" + _INTL("You obtained {1} \\c[1]{2}\\c[0]!", quantity, itemname) + "\\wtnp[40]")

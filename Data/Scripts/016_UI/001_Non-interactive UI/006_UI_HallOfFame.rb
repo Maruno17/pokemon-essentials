@@ -10,6 +10,8 @@
 # the hall teams using a PC. You can also check the player Hall of Fame last
 # number using '$PokemonGlobal.hallOfFameLastNumber'.
 #===============================================================================
+Settings::AUDIO_BGM_FILES[:hall_of_fame] = "Hall of Fame"
+
 class HallOfFame_Scene
   # When true, all pokémon will be in one line.
   # When false, all pokémon will be in two lines.
@@ -27,8 +29,6 @@ class HallOfFame_Scene
   # Prefer to use larger numbers (like 500 and 1000) than don't put a limit.
   # If a player exceed this limit, the first one will be removed.
   HALL_ENTRIES_LIMIT = 50
-  # The entry music name. Put "" to doesn't play anything.
-  HALL_OF_FAME_BGM = "Hall of Fame"
   # Allow eggs to be show and saved in hall.
   ALLOW_EGGS = true
   # Remove the hallbars when the trainer sprite appears.
@@ -62,8 +62,8 @@ class HallOfFame_Scene
 
   def pbStartSceneEntry
     pbStartScene
-    @useMusic = (HALL_OF_FAME_BGM && HALL_OF_FAME_BGM != "")
-    pbBGMPlay(HALL_OF_FAME_BGM) if @useMusic
+    @useMusic = (Settings::AUDIO_BGM_FILES[:hall_of_fame] && Settings::AUDIO_BGM_FILES[:hall_of_fame] != "")
+    pbBGMPlay(:hall_of_fame) if @useMusic
     saveHallEntry
     @movements = []
     createBattlers

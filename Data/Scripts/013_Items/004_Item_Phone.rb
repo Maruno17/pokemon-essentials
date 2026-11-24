@@ -1,3 +1,5 @@
+Settings::AUDIO_ME_FILES[:register_phone_contact] = "Register phone"
+
 #===============================================================================
 #
 #===============================================================================
@@ -179,7 +181,7 @@ class Phone
       else
         contact = $PokemonGlobal.phone.get(false, args[1])
       end
-      pbMessage("\\me[Register phone]" + _INTL("Registered {1} in the Pokégear!", contact.display_name) + "\\wtnp[60]")
+      pbMessage("\\me[:register_phone_contact]" + _INTL("Registered {1} in the Pokégear!", contact.display_name) + "\\wtnp[60]")
     end
     return ret
   end

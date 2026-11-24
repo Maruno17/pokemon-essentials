@@ -2,6 +2,7 @@
 # "Triple Triad" mini-game.
 # By Unknown.
 #===============================================================================
+Settings::AUDIO_BGM_FILES[:triple_triad] = "Triple Triad"
 
 #===============================================================================
 # Card class.
@@ -163,8 +164,6 @@ end
 # Scene class for handling appearance of the screen.
 #===============================================================================
 class TriadScene
-  TRIPLE_TRIAD_BGM = "Triple Triad"
-
   def pbStartScene(battle)
     @sprites = {}
     @bitmaps = []
@@ -209,7 +208,7 @@ class TriadScene
     @sprites["score"] = Sprite.new(@viewport)
     @sprites["score"].bitmap = Bitmap.new(Graphics.width, Graphics.height)
     pbSetSystemFont(@sprites["score"].bitmap)
-    pbBGMPlay(TRIPLE_TRIAD_BGM)
+    pbBGMPlay(:triple_triad)
     # Fade in all sprites
     pbFadeInAndShow(@sprites) { pbUpdate }
   end

@@ -1,9 +1,10 @@
+Settings::AUDIO_BGM_FILES[:trade] = "Evolution"
+Settings::AUDIO_ME_FILES[:trade_success] = "Battle capture success"
+
 #===============================================================================
 #
 #===============================================================================
 class PokemonTrade_Scene
-  TRADE_BGM = "Evolution"
-
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
   end
@@ -183,7 +184,7 @@ class PokemonTrade_Scene
                                @pokemon.name, @pokemon.owner.public_id, @pokemon.owner.name) + "\\wtnp[0]") { pbUpdate }
     pbMessageWaitForInput(@sprites["msgwindow"], 50, true) { pbUpdate }
     pbPlayDecisionSE
-    pbBGMPlay(TRADE_BGM)
+    pbBGMPlay(:trade)
     pbScene1
     pbMessageDisplay(@sprites["msgwindow"],
                      _INTL("For {1}'s {2},\n{3} sends {4}.", @trader1, speciesname1, @trader2, speciesname2) + "\1") { pbUpdate }
@@ -191,7 +192,7 @@ class PokemonTrade_Scene
                      _INTL("{1} bids farewell to {2}.", @trader2, speciesname2)) { pbUpdate }
     pbScene2
     pbBGMStop
-    pbMEPlay("Battle capture success")
+    pbMEPlay(:trade_success)
     pbMessageDisplay(@sprites["msgwindow"],
                      _ISPRINTF("{1:s}\nID: {2:05d}   OT: {3:s}",
                                @pokemon2.name, @pokemon2.owner.public_id, @pokemon2.owner.name) + "\1") { pbUpdate }

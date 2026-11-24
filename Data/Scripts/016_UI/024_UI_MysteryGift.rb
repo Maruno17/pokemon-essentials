@@ -9,6 +9,8 @@ module MysteryGift
   URL = "https://pastebin.com/raw/w6BqqUsm"
 end
 
+Settings::AUDIO_ME_FILES[:mystery_gift_get] = "Battle capture success"
+
 #===============================================================================
 # Creating a new Mystery Gift for the Master file, and editing an existing one.
 #===============================================================================
@@ -295,7 +297,7 @@ def pbDownloadMysteryGift(trainer)
             sprite.update
             break if sprite.y >= Graphics.height / 2
           end
-          pbMEPlay("Battle capture success")
+          pbMEPlay(:mystery_gift_get)
           pbWait(3.0) { sprite.update }
           sprites["msgwindow"].visible = true
           pbMessageDisplay(sprites["msgwindow"], _INTL("The gift has been received!") + "\1") { sprite.update }
@@ -375,7 +377,7 @@ def pbReceiveMysteryGift(id)
     gift[2].obtain_map = $game_map&.map_id || 0
     was_owned = $player.owned?(gift[2].species)
     if pbAddPokemonSilent(gift[2])
-      pbMessage(_INTL("{1} received {2}!", $player.name, gift[2].name) + "\\me[Pkmn get]\\wtnp[80]")
+      pbMessage(_INTL("{1} received {2}!", $player.name, gift[2].name) + "\\me[:get_pokemon]\\wtnp[80]")
       $player.mystery_gifts[index] = [id]
       # Show Pokédex entry for new species if it hasn't been owned before
       if Settings::SHOW_NEW_SPECIES_POKEDEX_ENTRY_MORE_OFTEN && !was_owned &&
@@ -394,21 +396,21 @@ def pbReceiveMysteryGift(id)
       itm = GameData::Item.get(item)
       itemname = (qty > 1) ? itm.portion_name_plural : itm.portion_name
       if item == :DNASPLICERS
-        pbMessage("\\me[Item get]" + _INTL("You obtained \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
+        pbMessage("\\me[:get_item]" + _INTL("You obtained \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
       elsif itm.is_machine?   # TM or HM
         if qty > 1
-          pbMessage("\\me[Machine get]" + _INTL("You obtained {1} \\c[1]{2} {3}\\c[0]!",
-                                                qty, itemname, GameData::Move.get(itm.move).name) + "\\wtnp[70]")
+          pbMessage("\\me[:get_machine_item]" + _INTL("You obtained {1} \\c[1]{2} {3}\\c[0]!",
+                                                      qty, itemname, GameData::Move.get(itm.move).name) + "\\wtnp[70]")
         else
-          pbMessage("\\me[Machine get]" + _INTL("You obtained \\c[1]{1} {2}\\c[0]!", itemname,
-                                                GameData::Move.get(itm.move).name) + "\\wtnp[70]")
+          pbMessage("\\me[:get_machine_item]" + _INTL("You obtained \\c[1]{1} {2}\\c[0]!", itemname,
+                                                      GameData::Move.get(itm.move).name) + "\\wtnp[70]")
         end
       elsif qty > 1
-        pbMessage("\\me[Item get]" + _INTL("You obtained {1} \\c[1]{2}\\c[0]!", qty, itemname) + "\\wtnp[40]")
+        pbMessage("\\me[:get_item]" + _INTL("You obtained {1} \\c[1]{2}\\c[0]!", qty, itemname) + "\\wtnp[40]")
       elsif itemname.starts_with_vowel?
-        pbMessage("\\me[Item get]" + _INTL("You obtained an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
+        pbMessage("\\me[:get_item]" + _INTL("You obtained an \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
       else
-        pbMessage("\\me[Item get]" + _INTL("You obtained a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
+        pbMessage("\\me[:get_item]" + _INTL("You obtained a \\c[1]{1}\\c[0]!", itemname) + "\\wtnp[40]")
       end
       $player.mystery_gifts[index] = [id]
       return true

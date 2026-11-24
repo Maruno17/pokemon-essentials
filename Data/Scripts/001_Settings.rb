@@ -209,7 +209,8 @@ module Settings
   #       :water   = surfing, fishing
   #       :surfing = surfing
   #       :fishing = fishing
-  #   * :bgm - The BGM to play for the encounter. Optional.
+  #   * :bgm - The BGM to play for the encounter (either the filename or a
+  #            symbol defined in AUDIO_BGM_FILES below). Optional.
   #   * :areas - A hash of map IDs that determine where this Pokémon roams. Used
   #              instead of ROAMING_AREAS above. Optional.
   ROAMING_SPECIES = [
@@ -219,7 +220,7 @@ module Settings
       :icon           => "pin_latias",
       :game_switch    => 53,
       :encounter_type => :all,
-      :bgm            => "Battle roaming"
+      :bgm            => :roamer_battle
     },
     {
       :species        => :LATIOS,
@@ -227,7 +228,7 @@ module Settings
       :icon           => "pin_latios",
       :game_switch    => 53,
       :encounter_type => :all,
-      :bgm            => "Battle roaming"
+      :bgm            => :roamer_battle
     },
     {
       :species        => :KYOGRE,
@@ -407,11 +408,22 @@ module Settings
   # Files.
   #-----------------------------------------------------------------------------
 
-  DEFAULT_WILD_BATTLE_BGM     = "Battle wild"
-  DEFAULT_WILD_VICTORY_BGM    = "Battle victory"
-  DEFAULT_WILD_CAPTURE_ME     = "Battle capture success"
-  DEFAULT_TRAINER_BATTLE_BGM  = "Battle trainer"
-  DEFAULT_TRAINER_VICTORY_BGM = "Battle victory"
+  # TODO: Add :surfing and :cycling.
+  AUDIO_BGM_FILES = {
+    :wild_battle        => "Battle wild",
+    :wild_battle_win    => "Battle victory",
+    :trainer_battle     => "Battle trainer",
+    :trainer_battle_win => "Battle victory",
+    :roamer_battle      => "Battle roaming"
+  }
+  AUDIO_ME_FILES = {
+    :capture_success  => "Battle capture success",
+    :get_pokemon      => "Pkmn get",
+    :get_item         => "Item get",
+    :get_berry_item   => "Berry get",
+    :get_machine_item => "Machine get",
+    :get_key_item     => "Key item get"
+  }
 
   #-----------------------------------------------------------------------------
   # Languages.

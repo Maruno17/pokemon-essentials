@@ -2,7 +2,9 @@
 #
 #===============================================================================
 def pbStringToAudioFile(str)
-  if str[/^(.*)\:\s*(\d+)\s*\:\s*(\d+)\s*$/]   # Of the format "XXX: ###: ###"
+  if str[/^\:(.*)$/]   # Of the format ":XXX"
+    return $1.to_sym
+  elsif str[/^(.*)\:\s*(\d+)\s*\:\s*(\d+)\s*$/]   # Of the format "XXX: ###: ###"
     file   = $1
     volume = $2.to_i
     pitch  = $3.to_i
@@ -55,6 +57,10 @@ end
 # pitch -- Pitch of the file, normally 100
 def pbBGMPlay(param, volume = nil, pitch = nil)
   return if !param
+  if param.is_a?(Symbol)
+    param = Settings::AUDIO_BGM_FILES[param]
+    return if !param
+  end
   param = pbResolveAudioFile(param, volume, pitch)
   if param.name && param.name != ""
     if $game_system
@@ -106,6 +112,10 @@ end
 # pitch -- Pitch of the file, normally 100
 def pbMEPlay(param, volume = nil, pitch = nil)
   return if !param
+  if param.is_a?(Symbol)
+    param = Settings::AUDIO_ME_FILES[param]
+    return if !param
+  end
   param = pbResolveAudioFile(param, volume, pitch)
   if param.name && param.name != ""
     if $game_system

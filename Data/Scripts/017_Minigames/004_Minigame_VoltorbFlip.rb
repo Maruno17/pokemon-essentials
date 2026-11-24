@@ -4,6 +4,9 @@
 #-------------------------------------------------------------------------------
 # Run with:      pbVoltorbFlip
 #===============================================================================
+Settings::AUDIO_ME_FILES[:voltorb_flip_win]       = "Voltorb Flip win"
+Settings::AUDIO_ME_FILES[:voltorb_flip_game_over] = "Voltorb Flip game over"
+
 class VoltorbFlip
   GRAPHICS_DIRECTORY = "Graphics/UI/Voltorb Flip/"
   NUM_ROWS           = 5
@@ -444,7 +447,7 @@ class VoltorbFlip
                 @sprites["animation"].bitmap.clear
               end
               # Unskippable text block, parameter 2 = wait time (corresponds to ME length)
-              pbMessage("\\me[Voltorb Flip game over]" + _INTL("Oh no! You get 0 Coins!") + "\\wtnp[80]")
+              pbMessage("\\me[:voltorb_flip_game_over]" + _INTL("Oh no! You get 0 Coins!") + "\\wtnp[80]")
               pbShowAndDispose
               @sprites["mark"].bitmap.clear
               if @level > 1
@@ -499,7 +502,7 @@ class VoltorbFlip
       # Game cleared
       if count == 0
         @sprites["curtain"].opacity = 100
-        pbMessage("\\me[Voltorb Flip win]" + _INTL("Game clear!") + "\\wtnp[40]")
+        pbMessage("\\me[:voltorb_flip_win]" + _INTL("Game clear!") + "\\wtnp[40]")
 #        pbMessage(_INTL("You've found all of the hidden x2 and x3 cards."))
 #        pbMessage(_INTL("This means you've found all the Coins in this game, so the game is now over."))
         pbMessage("\\se[Voltorb Flip gain coins]" + _INTL("{1} received {2} Coins!", $player.name, @points.to_s_formatted) + "\\wtnp[10]")

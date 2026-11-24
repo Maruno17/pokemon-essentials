@@ -54,7 +54,7 @@ def pbAddPokemon(pkmn, level = 1, see_form = true)
   end
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   species_name = pkmn.speciesName
-  pbMessage(_INTL("{1} obtained {2}!", $player.name, species_name) + "\\me[Pkmn get]\\wtnp[80]")
+  pbMessage(_INTL("{1} obtained {2}!", $player.name, species_name) + "\\me[:get_pokemon]\\wtnp[80]")
   was_owned = $player.owned?(pkmn.species)
   $player.pokedex.set_seen(pkmn.species)
   $player.pokedex.set_owned(pkmn.species)
@@ -93,7 +93,7 @@ def pbAddToParty(pkmn, level = 1, see_form = true)
   return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   species_name = pkmn.speciesName
-  pbMessage(_INTL("{1} obtained {2}!", $player.name, species_name) + "\\me[Pkmn get]\\wtnp[80]")
+  pbMessage(_INTL("{1} obtained {2}!", $player.name, species_name) + "\\me[:get_pokemon]\\wtnp[80]")
   was_owned = $player.owned?(pkmn.species)
   $player.pokedex.set_seen(pkmn.species)
   $player.pokedex.set_owned(pkmn.species)
@@ -127,9 +127,9 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
   pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE] if !nil_or_empty?(nickname)
   pkmn.calc_stats
   if owner_name
-    pbMessage(_INTL("{1} received a Pokémon from {2}.", $player.name, owner_name) + "\\me[Pkmn get]\\wtnp[80]")
+    pbMessage(_INTL("{1} received a Pokémon from {2}.", $player.name, owner_name) + "\\me[:get_pokemon]\\wtnp[80]")
   else
-    pbMessage(_INTL("{1} received a Pokémon.", $player.name) + "\\me[Pkmn get]\\wtnp[80]")
+    pbMessage(_INTL("{1} received a Pokémon.", $player.name) + "\\me[:get_pokemon]\\wtnp[80]")
   end
   was_owned = $player.owned?(pkmn.species)
   $player.pokedex.set_seen(pkmn.species)
