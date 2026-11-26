@@ -123,7 +123,7 @@ class UI::PauseMenu < UI::BaseScreen
   def show_info; end
 
   def start_screen
-    pbSEPlay("GUI menu open")
+    pbPlayOpenMenuSE
   end
 
   def end_screen

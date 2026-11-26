@@ -228,7 +228,7 @@ class Battle
       pkmn.calc_stats
       battler&.pbUpdate(false)
       @visuals.pbRefreshOne(battler.index) if battler
-      pbDisplayPaused(_INTL("{1} grew to Lv. {2}!", pkmn.name, curLevel) + "\\se[Pkmn level up]\\wtnp[30]")
+      pbDisplayPaused(_INTL("{1} grew to Lv. {2}!", pkmn.name, curLevel) + "\\se[:level_up]\\wtnp[30]")
       @visuals.pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,
                          oldSpAtk, oldSpDef, oldSpeed)
       # Learn all moves learned at this level
@@ -253,7 +253,7 @@ class Battle
     # Pokémon has space for the new move; just learn it
     if pkmn.numMoves < Pokemon::MAX_MOVES
       pkmn.learn_move(newMove)
-      pbDisplay(_INTL("{1} learned {2}!", pkmnName, moveName) + "\\se[Pkmn move learnt]\\wtnp[30]")
+      pbDisplay(_INTL("{1} learned {2}!", pkmnName, moveName) + "\\se[:learn_move]\\wtnp[30]")
       if battler
         battler.moves.push(Move.from_pokemon_move(self, pkmn.moves.last))
         battler.pbCheckFormOnMovesetChange
@@ -270,9 +270,9 @@ class Battle
           oldMoveName = pkmn.moves[forgetMove].name
           pkmn.moves[forgetMove] = Pokemon::Move.new(newMove)   # Replaces current/total PP
           battler.moves[forgetMove] = Move.from_pokemon_move(self, pkmn.moves[forgetMove]) if battler
-          pbDisplayPaused(_INTL("1, 2, and... ... ... Ta-da!") + "\\se[Battle ball drop]\\wtnp[10]")
+          pbDisplayPaused(_INTL("1, 2, and... ... ... Ta-da!") + "\\se[:learn_move_suspense]\\wtnp[10]")
           pbDisplayPaused(_INTL("{1} forgot how to use {2}. And...", pkmnName, oldMoveName))
-          pbDisplay(_INTL("{1} learned {2}!", pkmnName, moveName) + "\\se[Pkmn move learnt]\\wtnp[30]")
+          pbDisplay(_INTL("{1} learned {2}!", pkmnName, moveName) + "\\se[:learn_move]\\wtnp[30]")
           battler&.pbCheckFormOnMovesetChange
           break
         elsif pbDisplayConfirm(_INTL("Give up on learning {1}?", moveName))

@@ -167,6 +167,10 @@ end
 # pitch -- Pitch of the file, normally 100
 def pbBGSPlay(param, volume = nil, pitch = nil)
   return if !param
+  if param.is_a?(Symbol)
+    param = Settings::AUDIO_BGS_FILES[param]
+    return if !param
+  end
   param = pbResolveAudioFile(param, volume, pitch)
   if param.name && param.name != ""
     if $game_system
@@ -218,6 +222,10 @@ end
 # pitch -- Pitch of the file, normally 100
 def pbSEPlay(param, volume = nil, pitch = nil)
   return if !param
+  if param.is_a?(Symbol)
+    param = Settings::AUDIO_SE_FILES[param]
+    return if !param
+  end
   param = pbResolveAudioFile(param, volume, pitch)
   if param.name && param.name != ""
     if $game_system
@@ -251,45 +259,48 @@ end
 
 # Plays a sound effect that plays when the player moves the cursor.
 def pbPlayCursorSE
-  if !nil_or_empty?($data_system&.cursor_se&.name)
+  if nil_or_empty?($data_system&.cursor_se&.name)
+    pbSEPlay(:ui_cursor, 80)
+  else
     pbSEPlay($data_system.cursor_se)
-  elsif FileTest.audio_exist?("Audio/SE/GUI sel cursor")
-    pbSEPlay("GUI sel cursor", 80)
   end
 end
 
 # Plays a sound effect that plays when a decision is confirmed or a choice is made.
 def pbPlayDecisionSE
-  if !nil_or_empty?($data_system&.decision_se&.name)
+  if nil_or_empty?($data_system&.decision_se&.name)
+    pbSEPlay(:ui_confirm, 80)
+  else
     pbSEPlay($data_system.decision_se)
-  elsif FileTest.audio_exist?("Audio/SE/GUI sel decision")
-    pbSEPlay("GUI sel decision", 80)
   end
 end
 
 # Plays a sound effect that plays when a choice is canceled.
 def pbPlayCancelSE
-  if !nil_or_empty?($data_system&.cancel_se&.name)
+  if nil_or_empty?($data_system&.cancel_se&.name)
+    pbSEPlay(:ui_cancel, 80)
+  else
     pbSEPlay($data_system.cancel_se)
-  elsif FileTest.audio_exist?("Audio/SE/GUI sel cancel")
-    pbSEPlay("GUI sel cancel", 80)
   end
 end
 
 # Plays a buzzer sound effect.
 def pbPlayBuzzerSE
-  if !nil_or_empty?($data_system&.buzzer_se&.name)
+  if nil_or_empty?($data_system&.buzzer_se&.name)
+    pbSEPlay(:ui_buzzer, 80)
+  else
     pbSEPlay($data_system.buzzer_se)
-  elsif FileTest.audio_exist?("Audio/SE/GUI sel buzzer")
-    pbSEPlay("GUI sel buzzer", 80)
   end
+end
+
+# Plays a sound effect that plays when the player opens a menu.
+def pbPlayOpenMenuSE
+  pbSEPlay(:ui_open, 80)
 end
 
 # Plays a sound effect that plays when the player closes a menu.
 def pbPlayCloseMenuSE
-  if FileTest.audio_exist?("Audio/SE/GUI menu close")
-    pbSEPlay("GUI menu close", 80)
-  end
+  pbSEPlay(:ui_close, 80)
 end
 
 def pbPokemonCryPlay(param, volume = nil, pitch = nil)

@@ -136,7 +136,7 @@ class PokemonReadyMenu_Scene
     @commands[1].length.times do |i|
       @sprites["itembutton#{i}"] = ReadyMenuButton.new(i, @commands[1][i], @index[1], @index[2], @viewport)
     end
-    pbSEPlay("GUI menu open")
+    pbPlayOpenMenuSE
   end
 
   def pbShowMenu

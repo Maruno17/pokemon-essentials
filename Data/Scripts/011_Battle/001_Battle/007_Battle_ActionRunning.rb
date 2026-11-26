@@ -44,7 +44,7 @@ class Battle
     when 2
       @decision = Outcome::DRAW
     when 3
-      pbSEPlay("Battle flee")
+      pbSEPlay(:battle_flee)
       pbDisplayPaused(_INTL("You got away safely!"))
       @decision = Outcome::FLEE
     when 4
@@ -88,7 +88,7 @@ class Battle
         end
         return 0
       elsif pbDisplayConfirm(_INTL("Would you like to forfeit the match and quit now?"))
-        pbSEPlay("Battle flee")
+        pbSEPlay(:battle_flee)
         pbDisplay(_INTL("{1} forfeited the match!", self.pbPlayer.name))
         @decision = Outcome::FLEE
         return 1
@@ -100,7 +100,7 @@ class Battle
     end
     if !duringBattle
       if battler.pbHasType?(:GHOST) && Settings::MORE_TYPE_EFFECTS
-        pbSEPlay("Battle flee")
+        pbSEPlay(:battle_flee)
         pbDisplayPaused(_INTL("You got away safely!"))
         @decision = Outcome::FLEE
         return 1
@@ -110,7 +110,7 @@ class Battle
          Battle::AbilityEffects.triggerCertainEscapeFromBattle(battler.ability, battler)
         pbShowAbilitySplash(battler, true)
         pbHideAbilitySplash(battler)
-        pbSEPlay("Battle flee")
+        pbSEPlay(:battle_flee)
         pbDisplayPaused(_INTL("You got away safely!"))
         @decision = Outcome::FLEE
         return 1
@@ -118,7 +118,7 @@ class Battle
       # Held items that guarantee escape
       if battler.itemActive? &&
          Battle::ItemEffects.triggerCertainEscapeFromBattle(battler.item, battler)
-        pbSEPlay("Battle flee")
+        pbSEPlay(:battle_flee)
         pbDisplayPaused(_INTL("{1} fled using its {2}!", battler.pbThis, battler.itemName))
         @decision = Outcome::FLEE
         return 1
@@ -162,7 +162,7 @@ class Battle
       rate += @runCommand * 30
     end
     if rate >= 256 || @battleAI.pbAIRandom(256) < rate
-      pbSEPlay("Battle flee")
+      pbSEPlay(:battle_flee)
       pbDisplayPaused(_INTL("You got away safely!"))
       @decision = Outcome::FLEE
       return 1

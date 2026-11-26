@@ -1,3 +1,11 @@
+Settings::AUDIO_SE_FILES[:storage_open]       = "PC access"
+Settings::AUDIO_SE_FILES[:storage_close]      = "PC close"
+Settings::AUDIO_SE_FILES[:storage_show_party] = "GUI storage show party panel"
+Settings::AUDIO_SE_FILES[:storage_hide_party] = "GUI storage hide party panel"
+Settings::AUDIO_SE_FILES[:storage_pick_up]    = "GUI storage pick up"
+Settings::AUDIO_SE_FILES[:storage_swap]       = "GUI storage pick up"
+Settings::AUDIO_SE_FILES[:storage_put_down]   = "GUI storage put down"
+
 #===============================================================================
 #
 #===============================================================================
@@ -935,7 +943,7 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
   end
 
   def show_party_panel
-    pbSEPlay("GUI storage show party panel")
+    pbSEPlay(:storage_show_party)
     @sprites[:cursor].visible = false
     @sprites[:side_pane].pokemon = nil if !holding_pokemon?
     start_y = @sprites[:party_panel].y   # Graphics.height
@@ -955,7 +963,7 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
   end
 
   def hide_party_panel
-    pbSEPlay("GUI storage hide party panel")
+    pbSEPlay(:storage_hide_party)
     @sprites[:cursor].visible = false
     @sprites[:side_pane].pokemon = nil if !holding_pokemon?
     start_y = @sprites[:party_panel].y   # Graphics.height - @sprites[:party_panel].height
@@ -986,7 +994,7 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
   end
 
   def pick_up_pokemon
-    pbSEPlay("GUI storage pick up")
+    pbSEPlay(:storage_pick_up)
     deselect_pokemon
     # Animate cursor moving down to grab the Pokémon
     animate_cursor(:pick_up_animation_1)
@@ -1002,7 +1010,7 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
   end
 
   def swap_pokemon
-    pbSEPlay("GUI storage pick up")
+    pbSEPlay(:storage_swap)
     # Move Pokémon between cursor and slot
     held_pkmn = pokemon
     slot_pkmn = slot_pokemon
@@ -1015,7 +1023,7 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
   end
 
   def put_down_pokemon
-    pbSEPlay("GUI storage put down")
+    pbSEPlay(:storage_put_down)
     # Animate cursor moving down to put down the held Pokémon
     animate_cursor(:put_down_animation_1)
     # Move Pokémon to slot
@@ -1086,7 +1094,7 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
   #-----------------------------------------------------------------------------
 
   def pick_up_item
-    pbSEPlay("GUI storage pick up")
+    pbSEPlay(:storage_pick_up)
     # Animate cursor moving down to grab the item
     animate_cursor(:pick_up_animation_1)
     # Move item to cursor
@@ -1101,13 +1109,13 @@ class UI::PokemonStorageVisuals < UI::BaseVisuals
   end
 
   def swap_items
-    pbSEPlay("GUI storage pick up")
+    pbSEPlay(:storage_swap)
     # Move item from slot Pokémon to cursor
     @sprites[:cursor].held_item = pokemon.item
   end
 
   def put_down_item
-    pbSEPlay("GUI storage put down")
+    pbSEPlay(:storage_put_down)
     # Animate cursor moving down to put down the held item
     animate_cursor(:put_down_animation_1)
     # Move item to slot Pokémon
@@ -1643,12 +1651,12 @@ class UI::PokemonStorage < UI::BaseScreen
   end
 
   def start_screen
-    pbSEPlay("PC access")
+    pbSEPlay(:storage_open)
     super
   end
 
   def end_screen
-    pbSEPlay("PC close")
+    pbSEPlay(:storage_close)
     super
   end
 

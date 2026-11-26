@@ -1,3 +1,5 @@
+Settings::AUDIO_SE_FILES[:mart_buy_item] = "Mart buy item"
+
 #===============================================================================
 #
 #===============================================================================
@@ -331,7 +333,7 @@ class UI::Mart < UI::BaseScreen
   end
 
   def start_screen
-    pbSEPlay("GUI menu open")
+    pbPlayOpenMenuSE
   end
 
   def end_screen
@@ -398,7 +400,7 @@ class UI::Mart < UI::BaseScreen
       screen.stock.remove_from_stock(item_data.id, quantity)
       screen.stock.refresh   # Removes bought important items
       screen.refresh
-      screen.show_message(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }
+      screen.show_message(_INTL("Here you are! Thank you!")) { pbSEPlay(:mart_buy_item) }
       # Give bonus Premier Ball(s)
       if quantity >= 10 && item_data.is_poke_ball? && GameData::Item.exists?(:PREMIERBALL)
         if Settings::MORE_BONUS_PREMIER_BALLS || item_data.id == :POKEBALL
@@ -517,7 +519,7 @@ class UI::BagSell < UI::Bag
         refresh
         sold_item_name = (quantity > 1) ? item_name_plural : item_name
         show_message(_INTL("You turned over the {1} and got ${2}.",
-                           sold_item_name, price.to_s_formatted)) { pbSEPlay("Mart buy item") }
+                           sold_item_name, price.to_s_formatted)) { pbSEPlay(:mart_buy_item) }
       end
       next false
     end

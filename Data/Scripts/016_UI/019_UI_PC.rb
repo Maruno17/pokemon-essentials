@@ -1,3 +1,6 @@
+Settings::AUDIO_SE_FILES[:pc_open]  = "PC access"
+Settings::AUDIO_SE_FILES[:pc_close] = "PC close"
+
 #===============================================================================
 #
 #===============================================================================
@@ -252,7 +255,7 @@ MenuHandlers.add(:pc_menu, :pokemon_storage, {
   },
   "order"  => 10,
   "effect" => proc { |menu|
-    pbMessage("\\se[PC access]" + _INTL("The Pokémon Storage System was opened."))
+    pbMessage("\\se[:pc_open]" + _INTL("The Pokémon Storage System was opened."))
     UI::PC.pokemon_storage
     next false
   }
@@ -262,7 +265,7 @@ MenuHandlers.add(:pc_menu, :player_pc, {
   "name"   => proc { next _INTL("{1}'s PC", $player.name) },
   "order"  => 20,
   "effect" => proc { |menu|
-    pbMessage("\\se[PC access]" + _INTL("Accessed {1}'s PC.", $player.name))
+    pbMessage("\\se[:pc_open]" + _INTL("Accessed {1}'s PC.", $player.name))
     UI::PC.trainer_pc_menu
     next false
   }
@@ -280,15 +283,15 @@ MenuHandlers.add(:pc_menu, :close, {
 # Methods for interacting with PCs in the overworld.
 #===============================================================================
 def pbTrainerPC
-  pbMessage("\\se[PC open]" + _INTL("{1} booted up the PC.", $player.name))
+  pbMessage("\\se[:pc_open]" + _INTL("{1} booted up the PC.", $player.name))
   UI::PC.trainer_pc_menu
-  pbSEPlay("PC close")
+  pbSEPlay(:pc_close)
 end
 
 def pbPokeCenterPC
-  pbMessage("\\se[PC open]" + _INTL("{1} booted up the PC.", $player.name))
+  pbMessage("\\se[:pc_open]" + _INTL("{1} booted up the PC.", $player.name))
   UI::PC.poke_center_pc_menu
-  pbSEPlay("PC close")
+  pbSEPlay(:pc_close)
 end
 
 def pbGetStorageCreator

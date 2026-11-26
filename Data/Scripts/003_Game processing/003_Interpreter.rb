@@ -415,7 +415,7 @@ class Interpreter
     end
     $PokemonMap&.addMovedEvent(@event_id)
     if old_x != event.x || old_y != event.y
-      pbSEPlay("Strength push") if strength
+      pbSEPlay(:push_boulder) if strength
       $game_player.lock
       loop do
         Graphics.update

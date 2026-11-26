@@ -175,7 +175,7 @@ class Battle::Visuals::Animation::LineupAppear < Battle::Visuals::Animation
     ball.setName(delay, graphicFilename)
     ball.setDelta(delay, dir * Graphics.width / 2, 0)
     ball.moveDelta(delay, 8, -dir * Graphics.width / 2, 0)
-    ball.setSE(delay + 8, "Battle lineup ball") if @fullAnim && !empty
+    ball.setSE(delay + 8, :battle_lineup_ball) if @fullAnim && !empty
   end
 end
 
@@ -229,7 +229,7 @@ class Battle::Visuals::Animation::AbilitySplashAppear < Battle::Visuals::Animati
     return if !@sprites["abilityBar_#{@side}"]
     bar = addSprite(@sprites["abilityBar_#{@side}"])
     bar.setVisible(0, true)
-    bar.setSE(0, "Battle ability")
+    bar.setSE(0, :battle_ability_bar_appear)
     dir = (@side == 0) ? 1 : -1
     bar.moveDelta(0, 8, dir * Graphics.width / 2, 0)
   end
@@ -592,9 +592,9 @@ class Battle::Visuals::Animation::BattlerDamage < Battle::Visuals::Animation
     # Animation
     delay = 0
     case @effectiveness
-    when 0 then battler.setSE(delay, "Battle damage normal")
-    when 1 then battler.setSE(delay, "Battle damage weak")
-    when 2 then battler.setSE(delay, "Battle damage super")
+    when 0 then battler.setSE(delay, :battle_normal_effective_hit)
+    when 1 then battler.setSE(delay, :battle_not_very_effective_hit)
+    when 2 then battler.setSE(delay, :battle_super_effective_hit)
     end
     4.times do   # 4 flashes, each lasting 0.2 (4/20) seconds
       battler.setVisible(delay, false)
@@ -648,7 +648,7 @@ class Battle::Visuals::Animation::BattlerFaint < Battle::Visuals::Animation
     delay += 2
     # Sprite drops down
     shadow.setVisible(delay, false)
-    battler.setSE(delay, "Pkmn faint")
+    battler.setSE(delay, :battle_faint)
     battler.moveOpacity(delay, duration, 0)
     battler.moveDelta(delay, duration, 0, cropY - battlerTop)
     battler.setCropBottom(delay, cropY)
@@ -704,14 +704,14 @@ class Battle::Visuals::Animation::PokeballThrowCapture < Battle::Visuals::Animat
     delay = ball.totalDuration   # 0 or 7
     # Poké Ball arc animation
     if @critCapture
-      ball.setSE(delay, "Battle critical catch throw")
+      ball.setSE(delay, :battle_poke_ball_critical_throw)
     else
-      ball.setSE(delay, "Battle throw")
+      ball.setSE(delay, :battle_poke_ball_throw)
     end
     createBallTrajectory(ball, delay, 16,
                          ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     ball.setZ(9, batSprite.z + 1)
-    ball.setSE(delay + 16, "Battle ball hit")
+    ball.setSE(delay + 16, :battle_poke_ball_hits_target)
     # Poké Ball opens up
     delay = ball.totalDuration + 6
     ballOpenUp(ball, delay, @poke_ball, true, false)
@@ -724,7 +724,7 @@ class Battle::Visuals::Animation::PokeballThrowCapture < Battle::Visuals::Animat
     #       Ball during a capture attempt. This may be an oversight in HGSS.
     #       It's hard to spot due to the ball burst animation being played on
     #       top of it.
-    battler.setSE(delay, "Battle jump to ball")
+    battler.setSE(delay, :battle_poke_ball_absorbs_pokemon)
     battler.moveXY(delay, 5, ballEndX, ballEndY)
     battler.moveZoom(delay, 5, 0)
     battler.setVisible(delay + 5, false)
@@ -744,11 +744,11 @@ class Battle::Visuals::Animation::PokeballThrowCapture < Battle::Visuals::Animat
     # Poké Ball critical capture animation
     delay = ball.totalDuration + 3
     if @critCapture
-      ball.setSE(delay, "Battle ball shake")
+      ball.setSE(delay, :battle_poke_ball_shake)
       ball.moveXY(delay, 1, ballEndX + 4, ballEndY)
       ball.moveXY(delay + 1, 2, ballEndX - 4, ballEndY)
       ball.moveXY(delay + 3, 2, ballEndX + 4, ballEndY)
-      ball.setSE(delay + 4, "Battle ball shake")
+      ball.setSE(delay + 4, :battle_poke_ball_shake)
       ball.moveXY(delay + 5, 2, ballEndX - 4, ballEndY)
       ball.moveXY(delay + 7, 1, ballEndX, ballEndY)
       delay = ball.totalDuration + 3
@@ -764,14 +764,14 @@ class Battle::Visuals::Animation::PokeballThrowCapture < Battle::Visuals::Animat
         ball.moveXY(delay, t, ballEndX, ballGroundY - ((ballGroundY - ballEndY) / d))
       end
       ball.moveXY(delay + t, t, ballEndX, ballGroundY)
-      ball.setSE(delay + (2 * t), "Battle ball drop", 100 - (i * 7))
+      ball.setSE(delay + (2 * t), :battle_poke_ball_hits_ground, 100 - (i * 7))
       delay = ball.totalDuration
     end
     battler.setXY(ball.totalDuration, ballEndX, ballGroundY)
     # Poké Ball shakes
     delay = ball.totalDuration + 12
     [@numShakes, 3].min.times do |i|
-      ball.setSE(delay, "Battle ball shake")
+      ball.setSE(delay, :battle_poke_ball_shake)
       ball.moveXY(delay, 2, ballEndX - (2 * (4 - i)), ballGroundY)
       ball.moveAngle(delay, 2, 5 * (4 - i))   # positive means counterclockwise
       ball.moveXY(delay + 2, 4, ballEndX + (2 * (4 - i)), ballGroundY)
@@ -839,12 +839,12 @@ class Battle::Visuals::Animation::PokeballThrowDeflect < Battle::Visuals::Animat
     ball = addBallSprite(ballStartX, ballStartY, @poke_ball)
     ball.setZ(0, 5090)
     # Poké Ball arc animation
-    ball.setSE(0, "Battle throw")
+    ball.setSE(0, :battle_poke_ball_throw)
     createBallTrajectory(ball, 0, 16,
                          ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     # Poké Ball knocked back
     delay = ball.totalDuration
-    ball.setSE(delay, "Battle ball drop")
+    ball.setSE(delay, :battle_poke_ball_deflected)
     ball.moveXY(delay, 8, -32, Graphics.height - 96 + 32)   # Back to player's corner
     createBallTumbling(ball, delay, 8)
   end

@@ -1,3 +1,6 @@
+Settings::AUDIO_SE_FILES[:summary_change_page]   = "GUI summary change page"
+Settings::AUDIO_SE_FILES[:summary_inspect_moves] = "GUI summary change page"
+
 #===============================================================================
 #
 #===============================================================================
@@ -338,7 +341,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     return if page_index.nil? || page_index >= pages.length - 1
     @page = pages[page_index + 1]
     @ribbon_offset = 0
-    pbSEPlay("GUI summary change page")
+    pbSEPlay(:summary_change_page)
     refresh
   end
 
@@ -349,7 +352,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
     return if page_index.nil? || page_index == 0
     @page = pages[page_index - 1]
     @ribbon_offset = 0
-    pbSEPlay("GUI summary change page")
+    pbSEPlay(:summary_change_page)
     refresh
   end
 
@@ -382,7 +385,7 @@ class UI::PokemonSummaryVisuals < UI::BaseVisuals
 
   def play_pokemon_cry
     pbSEStop
-    (@pokemon.egg?) ? pbSEPlay("GUI summary change page") : @pokemon.play_cry
+    (@pokemon.egg?) ? pbSEPlay(:summary_change_page) : @pokemon.play_cry
   end
 
   #-----------------------------------------------------------------------------
@@ -1652,7 +1655,7 @@ class UI::PokemonSummary < UI::BaseScreen
   end
 
   def choose_move
-    pbSEPlay("GUI summary change page")
+    pbSEPlay(:summary_inspect_moves)
     start_screen
     @result = perform_action(:navigate_moves)
     end_screen

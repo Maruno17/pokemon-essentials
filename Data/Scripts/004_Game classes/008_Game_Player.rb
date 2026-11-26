@@ -126,7 +126,7 @@ class Game_Player < Game_Character
   def bump_into_object
     return if @move_route_forcing
     return if @bump_time_start && (System.uptime - @bump_time_start < BUMP_DURATION)
-    pbSEPlay("Player bump")
+    pbSEPlay(:bump_into_wall)
     $stats.bump_count += 1
     @bump_time_start = System.uptime
   end
@@ -161,7 +161,7 @@ class Game_Player < Game_Character
         # Jump over ledges
         if pbFacingTerrainTag.ledge
           if jumpForward(2)
-            pbSEPlay("Player jump")
+            pbSEPlay(:jump)
             increase_steps
           end
           return
@@ -641,7 +641,7 @@ def pbMountBike
   pbUpdateVehicle
   bike_bgm = GameData::Metadata.get.bicycle_BGM
   pbCueBGM(bike_bgm, 0.4) if bike_bgm
-  pbSEPlay("Bicycle")
+  pbSEPlay(:start_cycling)
   pbPokeRadarCancel
 end
 

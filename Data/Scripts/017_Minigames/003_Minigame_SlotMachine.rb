@@ -7,6 +7,8 @@
 #===============================================================================
 Settings::AUDIO_ME_FILES[:slot_machine_win]     = "Slots win"
 Settings::AUDIO_ME_FILES[:slot_machine_big_win] = "Slots big win"
+Settings::AUDIO_SE_FILES[:slot_machine_insert_coin] = "Slots coin"
+Settings::AUDIO_SE_FILES[:slot_machine_stop_reel]   = "Slots stop"
 
 class SlotMachineReel < BitmapSprite
   SCROLL_SPEED = 640   # Pixels moved per second
@@ -336,7 +338,7 @@ class SlotMachineScene
           Input.update
           update
           if Input.trigger?(Input::USE)
-            pbSEPlay("Slots stop")
+            pbSEPlay(:slot_machine_stop_reel)
             if @sprites["reel1"].spinning?
               @sprites["reel1"].stopSpinning(@replay)
               @sprites["button1"].visible = true
@@ -378,7 +380,7 @@ class SlotMachineScene
           Input.update
           update
           if Input.trigger?(Input::DOWN) && @wager < 3 && @sprites["credit"].score > 0
-            pbSEPlay("Slots coin")
+            pbSEPlay(:slot_machine_insert_coin)
             @wager += 1
             @sprites["credit"].score -= 1
             if @wager >= 3

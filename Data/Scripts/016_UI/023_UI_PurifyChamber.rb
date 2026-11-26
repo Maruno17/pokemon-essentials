@@ -1,3 +1,5 @@
+Settings::AUDIO_SE_FILES[:purify_chamber_open]  = "PC access"
+
 #===============================================================================
 #
 #===============================================================================
@@ -1294,13 +1296,12 @@ end
 #===============================================================================
 #
 #===============================================================================
-
 MenuHandlers.add(:pc_menu, :purify_chamber, {
   "name"      => _INTL("Purify Chamber"),
   "order"     => 30,
   "condition" => proc { next $player.seen_purify_chamber },
   "effect"    => proc { |menu|
-    pbMessage("\\se[PC access]" + _INTL("Accessed the Purify Chamber."))
+    pbMessage("\\se[:purify_chamber_open]" + _INTL("Accessed the Purify Chamber."))
     pbPurifyChamber
     next false
   }

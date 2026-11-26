@@ -4,6 +4,18 @@
 #-------------------------------------------------------------------------------
 # Run with:      pbMiningGame
 #===============================================================================
+Settings::AUDIO_SE_FILES[:mining_start]          = "Mining ping"
+Settings::AUDIO_SE_FILES[:mining_end]            = "Mining collapse"
+Settings::AUDIO_SE_FILES[:mining_cursor]         = "Mining cursor"
+Settings::AUDIO_SE_FILES[:mining_change_tool]    = "Mining tool change"
+Settings::AUDIO_SE_FILES[:mining_use_pick]       = "Mining pick"
+Settings::AUDIO_SE_FILES[:mining_use_hammer]     = "Mining hammer"
+Settings::AUDIO_SE_FILES[:mining_hit_iron]       = "Mining iron"
+Settings::AUDIO_SE_FILES[:mining_partial_reveal] = "Mining reveal"
+Settings::AUDIO_SE_FILES[:mining_full_reveal]    = "Mining reveal full"
+Settings::AUDIO_SE_FILES[:mining_revealed_all]   = "Mining found all"
+Settings::AUDIO_SE_FILES[:mining_get_item]       = "Mining item get"
+
 class MiningGameCounter < BitmapSprite
   attr_accessor :hits
 
@@ -405,7 +417,7 @@ class MiningGameScene
     end
     if @sprites["tile#{position}"].layer <= pattern[4] && pbIsIronThere?(position)
       @sprites["tile#{position}"].layer -= pattern[4]
-      pbSEPlay("Mining iron")
+      pbSEPlay(:mining_hit_iron)
       hittype = 2
     else
       3.times do |i|
@@ -418,9 +430,9 @@ class MiningGameScene
         end
       end
       if @sprites["cursor"].mode == 1   # Hammer
-        pbSEPlay("Mining hammer")
+        pbSEPlay(:mining_use_hammer)
       else
-        pbSEPlay("Mining pick")
+        pbSEPlay(:mining_use_pick)
       end
     end
     update
@@ -430,10 +442,10 @@ class MiningGameScene
     @sprites["cursor"].animate(hittype)
     revealed = pbCheckRevealed
     if revealed.length > 0
-      pbSEPlay("Mining reveal full")
+      pbSEPlay(:mining_full_reveal)
       pbFlashItems(revealed)
     elsif hititem
-      pbSEPlay("Mining reveal")
+      pbSEPlay(:mining_partial_reveal)
     end
   end
 
@@ -527,7 +539,7 @@ class MiningGameScene
   end
 
   def pbMain
-    pbSEPlay("Mining ping")
+    pbSEPlay(:mining_start)
     pbMessage(_INTL("Something pinged in the wall!\n{1} confirmed!", @items.length))
     loop do
       update
@@ -537,7 +549,7 @@ class MiningGameScene
       # Check end conditions
       if @sprites["crack"].hits >= 49
         @sprites["cursor"].visible = false
-        pbSEPlay("Mining collapse")
+        pbSEPlay(:mining_end)
         @sprites["collapse"] = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
         @sprites["collapse"].z = 999
         timer_start = System.uptime
@@ -558,33 +570,33 @@ class MiningGameScene
       if foundall
         @sprites["cursor"].visible = false
         pbWait(0.75)
-        pbSEPlay("Mining found all")
+        pbSEPlay(:mining_revealed_all)
         pbMessage(_INTL("Everything was dug up!"))
         break
       end
       # Input
       if Input.trigger?(Input::UP) || Input.repeat?(Input::UP)
         if @sprites["cursor"].position >= BOARD_WIDTH
-          pbSEPlay("Mining cursor")
+          pbSEPlay(:mining_cursor)
           @sprites["cursor"].position -= BOARD_WIDTH
         end
       elsif Input.trigger?(Input::DOWN) || Input.repeat?(Input::DOWN)
         if @sprites["cursor"].position < (BOARD_WIDTH * (BOARD_HEIGHT - 1))
-          pbSEPlay("Mining cursor")
+          pbSEPlay(:mining_cursor)
           @sprites["cursor"].position += BOARD_WIDTH
         end
       elsif Input.trigger?(Input::LEFT) || Input.repeat?(Input::LEFT)
         if @sprites["cursor"].position % BOARD_WIDTH > 0
-          pbSEPlay("Mining cursor")
+          pbSEPlay(:mining_cursor)
           @sprites["cursor"].position -= 1
         end
       elsif Input.trigger?(Input::RIGHT) || Input.repeat?(Input::RIGHT)
         if @sprites["cursor"].position % BOARD_WIDTH < (BOARD_WIDTH - 1)
-          pbSEPlay("Mining cursor")
+          pbSEPlay(:mining_cursor)
           @sprites["cursor"].position += 1
         end
       elsif Input.trigger?(Input::ACTION)   # Change tool mode
-        pbSEPlay("Mining tool change")
+        pbSEPlay(:mining_change_tool)
         newmode = (@sprites["cursor"].mode + 1) % 2
         @sprites["cursor"].mode = newmode
         @sprites["tool"].src_rect.set(newmode * 68, 0, 68, 100)
@@ -602,7 +614,7 @@ class MiningGameScene
     if @itemswon.length > 0
       @itemswon.each do |i|
         if $bag.add(i)
-          pbMessage(_INTL("One {1} was obtained.", GameData::Item.get(i).name) + "\\se[Mining item get]\\wtnp[30]")
+          pbMessage(_INTL("One {1} was obtained.", GameData::Item.get(i).name) + "\\se[:mining_get_item]\\wtnp[30]")
         else
           pbMessage(_INTL("One {1} was found, but you have no room for it.",
                           GameData::Item.get(i).name))

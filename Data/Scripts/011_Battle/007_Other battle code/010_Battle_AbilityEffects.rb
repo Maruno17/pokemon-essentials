@@ -488,7 +488,7 @@ Battle::AbilityEffects::OnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
       next false if !battle.pbCanRun?(battler.index)
       battle.pbShowAbilitySplash(battler, true)
       battle.pbHideAbilitySplash(battler)
-      pbSEPlay("Battle flee")
+      pbSEPlay(:battle_flee)
       battle.pbDisplay(_INTL("{1} fled from battle!", battler.pbThis))
       battle.decision = Battle::Outcome::FLEE
       next true

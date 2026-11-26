@@ -229,7 +229,7 @@ module Battle::Visuals::Animation::BallAnimationMixin
       ball.moveZoom(delay + 5, 1, 100)     # Unsquish
       delay += 6
     end
-    ball.setSE(delay, "Battle recall") if playSE
+    ball.setSE(delay, :battle_poke_ball_opens) if playSE
     ballSetOpen(ball, delay, poke_ball)
   end
 
@@ -727,7 +727,7 @@ module Battle::Visuals::Animation::BallAnimationMixin
   # The animation shown over a thrown Poké Ball when it has successfully caught
   # a Pokémon.
   def ballCaptureSuccess(ball, delay, ballX, ballY)
-    ball.setSE(delay, "Battle catch click")
+    ball.setSE(delay, :battle_catch_success)
     ball.moveTone(delay, 4, Tone.new(-128, -128, -128))   # Ball goes darker
     delay = ball.totalDuration
     star_duration = 12   # In 20ths of a second

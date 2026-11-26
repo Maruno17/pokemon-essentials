@@ -6,6 +6,13 @@
 #===============================================================================
 Settings::AUDIO_ME_FILES[:voltorb_flip_win]       = "Voltorb Flip win"
 Settings::AUDIO_ME_FILES[:voltorb_flip_game_over] = "Voltorb Flip game over"
+Settings::AUDIO_SE_FILES[:voltorb_flip_mark_tile]  = "Voltorb Flip mark"
+Settings::AUDIO_SE_FILES[:voltorb_flip_flip_tile]  = "Voltorb Flip tile"
+Settings::AUDIO_SE_FILES[:voltorb_flip_add_points] = "Voltorb Flip point"
+Settings::AUDIO_SE_FILES[:voltorb_flip_explosion]  = "Voltorb Flip explosion"
+Settings::AUDIO_SE_FILES[:voltorb_flip_level_up]   = "Voltorb Flip level up"
+Settings::AUDIO_SE_FILES[:voltorb_flip_level_down] = "Voltorb Flip level down"
+Settings::AUDIO_SE_FILES[:voltorb_flip_payout]     = "Voltorb Flip gain coins"
 
 class VoltorbFlip
   GRAPHICS_DIRECTORY = "Graphics/UI/Voltorb Flip/"
@@ -402,7 +409,7 @@ class VoltorbFlip
       if @cursor[0][3] == 64   # If in mark mode
         @squares.length.times do |i|
           if (@index[0] * 64) + 128 == @squares[i][0] && @index[1] * 64 == @squares[i][1] && @squares[i][3] == false
-            pbSEPlay("Voltorb Flip mark")
+            pbSEPlay(:voltorb_flip_mark_tile)
           end
         end
         (@marks.length + 1).times do |i|
@@ -426,7 +433,7 @@ class VoltorbFlip
             @squares[i][3] = true
             # If Voltorb (0), display all tiles on the board
             if @squares[i][2] == 0
-              pbSEPlay("Voltorb Flip explosion")
+              pbSEPlay(:voltorb_flip_explosion)
               # Play explosion animation
               # Part1
               animation = []
@@ -456,7 +463,7 @@ class VoltorbFlip
                 newLevel = newLevel.clamp(1, @level)
                 if newLevel < @level
                   @level = newLevel
-                  pbMessage("\\se[Voltorb Flip level down]" + _INTL("Dropped to Game Lv. {1}!", @level.to_s) + "\\wtnp[20]")
+                  pbMessage("\\se[:voltorb_flip_level_down]" + _INTL("Dropped to Game Lv. {1}!", @level.to_s) + "\\wtnp[20]")
                 end
               end
               # Update level text
@@ -484,10 +491,10 @@ class VoltorbFlip
               end
               if @points == 0
                 @points += @squares[i][2]
-                pbSEPlay("Voltorb Flip point")
+                pbSEPlay(:voltorb_flip_add_points)
               elsif @squares[i][2] > 1
                 @points *= @squares[i][2]
-                pbSEPlay("Voltorb Flip point")
+                pbSEPlay(:voltorb_flip_add_points)
               end
               break
             end
@@ -505,7 +512,7 @@ class VoltorbFlip
         pbMessage("\\me[:voltorb_flip_win]" + _INTL("Game clear!") + "\\wtnp[40]")
 #        pbMessage(_INTL("You've found all of the hidden x2 and x3 cards."))
 #        pbMessage(_INTL("This means you've found all the Coins in this game, so the game is now over."))
-        pbMessage("\\se[Voltorb Flip gain coins]" + _INTL("{1} received {2} Coins!", $player.name, @points.to_s_formatted) + "\\wtnp[10]")
+        pbMessage("\\se[:voltorb_flip_payout]" + _INTL("{1} received {2} Coins!", $player.name, @points.to_s_formatted) + "\\wtnp[10]")
         # Update level text
         @sprites["level"].bitmap.clear
         pbDrawShadowText(@sprites["level"].bitmap, 8, 154, 118, 28, _INTL("Level {1}", @level.to_s),
@@ -524,7 +531,7 @@ class VoltorbFlip
         @sprites["curtain"].opacity = 100
         if @level < 8
           @level += 1
-          pbMessage("\\se[Voltorb Flip level up]" + _INTL("Advanced to Game Lv. {1}!", @level.to_s) + "\\wtnp[10]")
+          pbMessage("\\se[:voltorb_flip_level_up]" + _INTL("Advanced to Game Lv. {1}!", @level.to_s) + "\\wtnp[10]")
           if @firstRound
 #            pbMessage(_INTL("Congratulations!"))
 #            pbMessage(_INTL("You can receive even more Coins in the next game!"))
@@ -621,7 +628,7 @@ class VoltorbFlip
     end
     icons[3] = [GRAPHICS_DIRECTORY + "tiles", x, y, tile * 64, 0, 64, 64]
     pbDrawImagePositions(@sprites["icon"].bitmap, icons)
-    pbSEPlay("Voltorb Flip tile")
+    pbSEPlay(:voltorb_flip_flip_tile)
   end
 
   def pbShowAndDispose
@@ -632,7 +639,7 @@ class VoltorbFlip
       @sprites[i].bitmap.clear
       @sprites[i].z = 99_997
     end
-    pbSEPlay("Voltorb Flip tile")
+    pbSEPlay(:voltorb_flip_flip_tile)
     @sprites[5].visible = true
     @sprites["mark"].bitmap.clear
     pbWait(0.1)
@@ -648,7 +655,7 @@ class VoltorbFlip
     # "Dispose" of tiles by column
     NUM_COLUMNS.times do |i|
       icons = []
-      pbSEPlay("Voltorb Flip tile")
+      pbSEPlay(:voltorb_flip_flip_tile)
       NUM_ROWS.times do |j|
         icons[j] = [GRAPHICS_DIRECTORY + "tiles", @squares[i + (j * NUM_COLUMNS)][0], @squares[i + (j * NUM_COLUMNS)][1],
                     448 + (@squares[i + (j * NUM_COLUMNS)][2] * 64), 0, 64, 64]

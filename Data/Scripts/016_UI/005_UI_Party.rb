@@ -1,3 +1,5 @@
+Settings::AUDIO_SE_FILES[:party_swap] = "GUI party switch"
+
 #===============================================================================
 #
 #===============================================================================
@@ -447,7 +449,7 @@ class UI::PartyVisuals < UI::BaseVisuals
   end
 
   def animate_switch_panels_out(index1, index2)
-    pbSEPlay("GUI party switch")
+    pbSEPlay(:party_swap)
     # Setup values
     sprite1 = @sprites["pokemon#{index1}"]
     sprite2 = @sprites["pokemon#{index2}"]
@@ -469,7 +471,7 @@ class UI::PartyVisuals < UI::BaseVisuals
   end
 
   def animate_switch_panels_in(index1, index2)
-    pbSEPlay("GUI party switch")
+    pbSEPlay(:party_swap)
     # Setup values
     sprite1 = @sprites["pokemon#{index1}"]
     sprite2 = @sprites["pokemon#{index2}"]

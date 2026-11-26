@@ -1,3 +1,5 @@
+Settings::AUDIO_SE_FILES[:trainer_card_open] = "GUI trainer card open"
+
 #===============================================================================
 #
 #===============================================================================
@@ -103,7 +105,7 @@ class UI::TrainerCard < UI::BaseScreen
 
   def start_screen
     super
-    pbSEPlay("GUI trainer card open")
+    pbSEPlay(:trainer_card_open)
   end
 
   def end_screen

@@ -11,7 +11,7 @@ class Battle::Battler
     # Wild roaming Pokémon always flee if possible
     if tryFlee && wild? && @battle.rules[:roamer_flees] && @battle.pbCanRun?(@index)
       pbBeginTurn(choice)
-      pbSEPlay("Battle flee")
+      pbSEPlay(:battle_flee)
       @battle.pbDisplay(_INTL("{1} fled from battle!", pbThis))
       @battle.decision = Battle::Outcome::FLEE
       pbEndTurn(choice)

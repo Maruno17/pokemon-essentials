@@ -295,7 +295,7 @@ def pbUseItemOnPokemon(item, pkmn, screen)
     elsif !pkmn.compatible_with_move?(move)
       screen.show_message(_INTL("{1} can't learn {2}.", pkmn.name, move_name))
     else
-      pbSEPlay("PC access")
+      pbSEPlay(:use_machine_item)
       screen.show_message(_INTL("You booted up the {1}.", item_data.portion_name) + "\1")
       if screen.show_confirm_message(_INTL("Do you want to teach {1} to {2}?", move_name, pkmn.name))
         if pbLearnMove(pkmn, move, false, true) { screen.update }
@@ -652,7 +652,7 @@ def pbGainExpFromExpCandy(pkmn, base_amt, qty, screen)
     screen.show_message(_INTL("It won't have any effect."))
     return false
   end
-  pbSEPlay("Pkmn level up")
+  pbSEPlay(:gain_exp_from_item)
   screen.set_help_text("") if screen.is_a?(UI::Party)
   if qty > 1
     (qty - 1).times { pkmn.changeHappiness("vitamin") }
@@ -679,7 +679,7 @@ def pbHPItem(pkmn, restoreHP, screen)
     screen.show_message(_INTL("It won't have any effect."))
     return false
   end
-  pbSEPlay("Use item in party")
+  pbSEPlay(:use_item_in_party)
   hpGain = pbItemRestoreHP(pkmn, restoreHP)
   screen.refresh
   screen.show_message(_INTL("{1}'s HP was restored by {2} points.", pkmn.name, hpGain))
@@ -772,7 +772,7 @@ def pbUseEVRaisingItem(stat, amt_per_use, qty, pkmn, happiness_type, screen, no_
     screen.show_message(_INTL("It won't have any effect."))
     return false
   end
-  pbSEPlay("Use item in party")
+  pbSEPlay(:use_item_in_party)
   screen.refresh
   screen.show_message(_INTL("{1}'s {2} increased.", pkmn.name, GameData::Stat.get(stat).name))
   return true
@@ -936,7 +936,7 @@ def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, screen 
     return false
   elsif pkmn.numMoves < Pokemon::MAX_MOVES
     pkmn.learn_move(move)
-    pbMessage("\\se[]" + _INTL("{1} learned {2}!", pkmn_name, move_name) + "\\se[Pkmn move learnt]\\wtnp[30]", &block)
+    pbMessage("\\se[]" + _INTL("{1} learned {2}!", pkmn_name, move_name) + "\\se[:learn_move]\\wtnp[30]", &block)
     return true
   end
   # Pokémon needs to forget a move to learn this one
@@ -952,9 +952,9 @@ def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, screen 
         if by_machine && Settings::TAUGHT_MACHINES_KEEP_OLD_PP
           pkmn.moves[move_index].pp = [old_move_pp, pkmn.moves[move_index].total_pp].min
         end
-        pbMessage(_INTL("1, 2, and...\\wt[16] ...\\wt[16] ...\\wt[16] Ta-da!") + "\\se[Battle ball drop]\\wtnp[10]\1", &block)
+        pbMessage(_INTL("1, 2, and...\\wt[16] ...\\wt[16] ...\\wt[16] Ta-da!") + "\\se[:learn_move_suspense]\\wtnp[10]\1", &block)
         pbMessage(_INTL("{1} forgot how to use {2}.\nAnd...", pkmn_name, old_move_name) + "\1", &block)
-        pbMessage("\\se[]" + _INTL("{1} learned {2}!", pkmn_name, move_name) + "\\se[Pkmn move learnt]\\wtnp[30]", &block)
+        pbMessage("\\se[]" + _INTL("{1} learned {2}!", pkmn_name, move_name) + "\\se[:learn_move]\\wtnp[30]", &block)
         pkmn.changeHappiness("machine") if by_machine
         return true
       elsif pbConfirmMessage(_INTL("Give up on learning {1}?", move_name), &block)

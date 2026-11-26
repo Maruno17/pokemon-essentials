@@ -424,6 +424,53 @@ module Settings
     :get_machine_item => "Machine get",
     :get_key_item     => "Key item get"
   }
+  AUDIO_BGS_FILES = {}
+  AUDIO_SE_FILES = {
+    :jump                             => "Player jump",
+    :bump_into_wall                   => "Player bump",
+    :start_cycling                    => "Bicycle",
+    :step_poison_damage               => "Poison step",
+    :water_berry_plant                => "Water berry plant",
+    :cut_tree                         => "Cut",
+    :fly_to_map                       => "Fly",
+    :headbutt_tree                    => "Headbutt",
+    :push_boulder                     => "Strength push",
+    :smash_rock                       => "Rock Smash",
+    :sweet_scent                      => "Sweet Scent",
+    :take_screenshot                  => "Screenshot",
+    :ui_cursor                        => "GUI sel cursor",
+    :ui_confirm                       => "GUI sel decision",
+    :ui_cancel                        => "GUI sel cancel",
+    :ui_buzzer                        => "GUI sel buzzer",
+    :ui_open                          => "GUI menu open",
+    :ui_close                         => "GUI menu close",
+    :use_item_in_party                => "Use item in party",
+    :use_repel                        => "Repel",
+    :use_itemfinder                   => "Itemfinder",
+    :use_machine_item                 => "PC access",
+    :gain_exp_from_item               => "Pkmn level up",
+    :level_up                         => "Pkmn level up",
+    :learn_move_suspense              => "Battle ball drop",
+    :learn_move                       => "Pkmn move learnt",
+    :battle_lineup_ball               => "Battle lineup ball",
+    :battle_ability_bar_appear        => "Battle ability",
+    :battle_super_effective_hit       => "Battle damage super",
+    :battle_normal_effective_hit      => "Battle damage normal",
+    :battle_not_very_effective_hit    => "Battle damage weak",
+    :battle_poke_ball_throw           => "Battle throw",
+    :battle_poke_ball_critical_throw  => "Battle critical catch throw",
+    :battle_poke_ball_hits_target     => "Battle ball hit",
+    :battle_poke_ball_opens           => "Battle recall",
+    :battle_poke_ball_absorbs_pokemon => "Battle jump to ball",
+    :battle_poke_ball_hits_ground     => "Battle ball drop",
+    :battle_poke_ball_shake           => "Battle ball shake",
+    :battle_catch_success             => "Battle catch click",
+    :battle_poke_ball_deflected       => "Battle ball drop",
+    :battle_gain_exp                  => "Pkmn exp gain",
+    :battle_exp_filled                => "Pkmn exp full",
+    :battle_faint                     => "Pkmn faint",
+    :battle_flee                      => "Battle flee"
+  }
 
   #-----------------------------------------------------------------------------
   # Languages.

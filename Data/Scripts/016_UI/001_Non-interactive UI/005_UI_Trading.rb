@@ -1,5 +1,8 @@
 Settings::AUDIO_BGM_FILES[:trade] = "Evolution"
 Settings::AUDIO_ME_FILES[:trade_success] = "Battle capture success"
+Settings::AUDIO_SE_FILES[:trade_poke_ball_opens]           = Settings::AUDIO_SE_FILES[:battle_poke_ball_opens]
+Settings::AUDIO_SE_FILES[:trade_poke_ball_absorbs_pokemon] = Settings::AUDIO_SE_FILES[:battle_poke_ball_absorbs_pokemon]
+Settings::AUDIO_SE_FILES[:trade_poke_ball_hits_ground]     = Settings::AUDIO_SE_FILES[:battle_poke_ball_hits_ground]
 
 #===============================================================================
 #
@@ -76,13 +79,13 @@ class PokemonTrade_Scene
     picturePoke.moveColor(2, 5, Color.new(248, 176, 140))
     # Recall
     delay = picturePoke.totalDuration
-    picturePoke.setSE(delay, "Battle recall")
+    picturePoke.setSE(delay, :trade_poke_ball_opens)
     pictureBall.setName(delay, ballopenimage)
     pictureBall.setSrcSize(delay, 32, 64)
     # Move sprite to ball
     picturePoke.moveZoom(delay, 8, 0)
     picturePoke.moveXY(delay, 8, Graphics.width / 2, 48)
-    picturePoke.setSE(delay + 5, "Battle jump to ball")
+    picturePoke.setSE(delay + 5, :trade_poke_ball_absorbs_pokemon)
     picturePoke.setVisible(delay + 8, false)
     delay = picturePoke.totalDuration + 1
     pictureBall.setName(delay, ballimage)
@@ -128,13 +131,13 @@ class PokemonTrade_Scene
         pictureBall.moveXY(delay, t, Graphics.width / 2, y - (100 / d))
       end
       pictureBall.moveXY(delay + t, t, Graphics.width / 2, y)
-      pictureBall.setSE(delay + (2 * t), "Battle ball drop")
+      pictureBall.setSE(delay + (2 * t), :trade_poke_ball_hits_ground)
       delay = pictureBall.totalDuration
     end
     picturePoke.setXY(delay, Graphics.width / 2, y)
     # Open Poké Ball
     delay = pictureBall.totalDuration + 15
-    pictureBall.setSE(delay, "Battle recall")
+    pictureBall.setSE(delay, :trade_poke_ball_opens)
     pictureBall.setName(delay, ballopenimage)
     pictureBall.setSrcSize(delay, 32, 64)
     pictureBall.setVisible(delay + 5, false)

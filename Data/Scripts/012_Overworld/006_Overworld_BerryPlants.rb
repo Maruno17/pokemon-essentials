@@ -360,7 +360,7 @@ def pbBerryPlant
       break if !pbConfirmMessage(_INTL("Want to sprinkle some water with the {1}?",
                                        GameData::Item.get(item).name))
       berry_plant.water
-      pbMessage("\\se[Water berry plant]" + _INTL("{1} watered the plant.", $player.name) + "\\wtnp[40]")
+      pbMessage("\\se[:water_berry_plant]" + _INTL("{1} watered the plant.", $player.name) + "\\wtnp[40]")
       if Settings::NEW_BERRY_PLANT_MECHANICS
         pbMessage(_INTL("There! All happy!"))
       else

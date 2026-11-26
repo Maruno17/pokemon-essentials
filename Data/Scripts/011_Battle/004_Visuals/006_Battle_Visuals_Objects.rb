@@ -210,7 +210,7 @@ class Battle::Visuals::PokemonDataBox < Sprite
     @anim_exp_duration_mult = (new_val - old_val).abs / range.to_f
     @anim_exp_current = old_val
     @anim_exp_timer_start = System.uptime
-    pbSEPlay("Pkmn exp gain") if @show_exp_bar
+    pbSEPlay(:battle_gain_exp) if @show_exp_bar
   end
 
   def animating_exp?
@@ -389,7 +389,7 @@ class Battle::Visuals::PokemonDataBox < Sprite
         # Show the Exp full flash
         @anim_exp_flash_timer_start = System.uptime
         pbSEStop
-        pbSEPlay("Pkmn exp full")
+        pbSEPlay(:battle_exp_filled)
         flash_duration = EXP_FULL_FLASH_DURATION * Graphics.frame_rate   # Must be in frames, not seconds
         self.flash(Color.new(64, 200, 248, 192), flash_duration)
         @sprites.each do |i|

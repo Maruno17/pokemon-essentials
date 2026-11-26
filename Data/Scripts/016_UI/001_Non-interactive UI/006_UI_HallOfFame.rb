@@ -11,6 +11,7 @@
 # number using '$PokemonGlobal.hallOfFameLastNumber'.
 #===============================================================================
 Settings::AUDIO_BGM_FILES[:hall_of_fame] = "Hall of Fame"
+Settings::AUDIO_SE_FILES[:hall_of_fame_open] = "PC access"
 
 class HallOfFame_Scene
   # When true, all pokémon will be in one line.
@@ -62,7 +63,7 @@ class HallOfFame_Scene
 
   def pbStartSceneEntry
     pbStartScene
-    @useMusic = (Settings::AUDIO_BGM_FILES[:hall_of_fame] && Settings::AUDIO_BGM_FILES[:hall_of_fame] != "")
+    @useMusic = (!Settings::AUDIO_BGM_FILES[:hall_of_fame].nil?)
     pbBGMPlay(:hall_of_fame) if @useMusic
     saveHallEntry
     @movements = []
@@ -480,7 +481,7 @@ MenuHandlers.add(:pc_menu, :hall_of_fame, {
   "order"     => 40,
   "condition" => proc { next $PokemonGlobal.hallOfFameLastNumber > 0 },
   "effect"    => proc { |menu|
-    pbMessage("\\se[PC access]" + _INTL("Accessed the Hall of Fame."))
+    pbMessage("\\se[:hall_of_fame_open]" + _INTL("Accessed the Hall of Fame."))
     pbHallOfFamePC
     next false
   }

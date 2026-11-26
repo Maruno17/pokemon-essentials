@@ -505,7 +505,7 @@ ItemHandlers::BattleUseOnPokemon.add(:REVIVALHERB, proc { |item, pokemon, battle
 ItemHandlers::BattleUseOnPokemon.add(:ETHER, proc { |item, pokemon, battler, choices, visuals|
   idxMove = choices[3]
   pbBattleRestorePP(pokemon, battler, idxMove, 10)
-  pbSEPlay("Use item in party")
+  pbSEPlay(:use_item_in_party)
   if battler
     if battler.battle.pbOwnedByPlayer?(battler.index)
       visuals.pbDisplay(_INTL("The PP of {1}'s {2} was restored!",
@@ -525,7 +525,7 @@ ItemHandlers::BattleUseOnPokemon.copy(:ETHER, :LEPPABERRY)
 ItemHandlers::BattleUseOnPokemon.add(:MAXETHER, proc { |item, pokemon, battler, choices, visuals|
   idxMove = choices[3]
   pbBattleRestorePP(pokemon, battler, idxMove, pokemon.moves[idxMove].total_pp)
-  pbSEPlay("Use item in party")
+  pbSEPlay(:use_item_in_party)
   if battler
     if battler.battle.pbOwnedByPlayer?(battler.index)
       visuals.pbDisplay(_INTL("The PP of {1}'s {2} was restored!",
@@ -544,7 +544,7 @@ ItemHandlers::BattleUseOnPokemon.add(:ELIXIR, proc { |item, pokemon, battler, ch
   pokemon.moves.length.times do |i|
     pbBattleRestorePP(pokemon, battler, i, 10)
   end
-  pbSEPlay("Use item in party")
+  pbSEPlay(:use_item_in_party)
   if battler
     if battler.battle.pbOwnedByPlayer?(battler.index)
       visuals.pbDisplay(_INTL("All of {1}'s moves had their PP restored!", battler.name))
@@ -561,7 +561,7 @@ ItemHandlers::BattleUseOnPokemon.add(:MAXELIXIR, proc { |item, pokemon, battler,
   pokemon.moves.length.times do |i|
     pbBattleRestorePP(pokemon, battler, i, pokemon.moves[i].total_pp)
   end
-  pbSEPlay("Use item in party")
+  pbSEPlay(:use_item_in_party)
   if battler
     if battler.battle.pbOwnedByPlayer?(battler.index)
       visuals.pbDisplay(_INTL("All of {1}'s moves had their PP restored!", battler.name))

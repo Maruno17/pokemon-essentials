@@ -1,3 +1,7 @@
+Settings::AUDIO_SE_FILES[:pokedex_search_open] = "GUI pokedex open"
+Settings::AUDIO_SE_FILES[:pokedex_search_run]  = "GUI pokedex open"
+Settings::AUDIO_SE_FILES[:pokedex_entry_open]  = "GUI pokedex open"
+
 #===============================================================================
 #
 #===============================================================================
@@ -983,11 +987,11 @@ class UI::PokedexVisuals < UI::BaseVisuals
     case input
     when Input::USE
       if $player.pokedex.seen?(species)
-        pbSEPlay("GUI pokedex open")
+        pbSEPlay(:pokedex_entry_open)
         return :view_entry
       end
     when Input::ACTION
-      pbSEPlay("GUI pokedex open")
+      pbSEPlay(:pokedex_search_open)
       return :open_search
     when Input::BACK
       pbPlayCloseMenuSE
@@ -1072,7 +1076,7 @@ class UI::PokedexVisuals < UI::BaseVisuals
         clear_filters
         refresh
       when 8   # Start search
-        pbSEPlay("GUI pokedex open")
+        pbSEPlay(:pokedex_search_run)
         old_display_dex = @display_dex
         refresh_display_dex
         if @display_dex.empty?

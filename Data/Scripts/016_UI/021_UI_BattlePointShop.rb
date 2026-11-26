@@ -171,7 +171,7 @@ class UI::BPShop < UI::Mart
       screen.stock.remove_from_stock(item_data.id, quantity)
       screen.stock.refresh   # Removes bought important items
       screen.refresh
-      screen.show_message(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }
+      screen.show_message(_INTL("Here you are! Thank you!")) { pbSEPlay(:mart_buy_item) }
     }
   })
 end

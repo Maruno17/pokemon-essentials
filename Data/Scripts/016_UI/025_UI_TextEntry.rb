@@ -1,3 +1,7 @@
+Settings::AUDIO_SE_FILES[:text_entry_swap_tabs_start] = "GUI naming tab swap start"
+Settings::AUDIO_SE_FILES[:text_entry_swap_tabs_end]   = "GUI naming tab swap end"
+Settings::AUDIO_SE_FILES[:text_entry_confirm]         = "GUI naming confirm"
+
 #===============================================================================
 #
 #===============================================================================
@@ -516,7 +520,7 @@ class PokemonEntryScene2
   end
 
   def pbChangeTab(newtab = @mode + 1)
-    pbSEPlay("GUI naming tab swap start")
+    pbSEPlay(:text_entry_swap_tabs_start)
     @sprites["cursor"].visible = false
     @sprites["toptab"].bitmap = @bitmaps[(newtab % @@Characters.length) + @@Characters.length]
     # Move bottom (old) tab down off the screen, and move top (new) tab right
@@ -545,7 +549,7 @@ class PokemonEntryScene2
     @sprites["toptab"].bitmap = newtab
     @sprites["toptab"].x = 22 - 504
     @sprites["toptab"].y = 162
-    pbSEPlay("GUI naming tab swap end")
+    pbSEPlay(:text_entry_swap_tabs_end)
     pbDoUpdateOverlay2
   end
 
@@ -686,7 +690,7 @@ class PokemonEntryScene2
           pbPlayCancelSE
           pbUpdateOverlay
         when OK     # Done
-          pbSEPlay("GUI naming confirm")
+          pbSEPlay(:text_entry_confirm)
           if @helper.length >= @minlength
             ret = @helper.text
             break

@@ -218,9 +218,9 @@ HiddenMoveHandlers::UseMove.add(:CUT, proc { |move, pokemon|
 def pbSmashEvent(event)
   return if !event
   if event.name[/cuttree/i]
-    pbSEPlay("Cut")
+    pbSEPlay(:cut_tree)
   elsif event.name[/smashrock/i]
-    pbSEPlay("Rock Smash")
+    pbSEPlay(:smash_rock)
   end
   pbMoveRoute(event, [PBMoveRoute::WAIT, 2,
                       PBMoveRoute::TURN_LEFT, PBMoveRoute::WAIT, 2,
@@ -487,7 +487,7 @@ def pbFlyToNewLocation(pkmn = nil, move = :FLY)
   end
   $stats.fly_count += 1
   pbFadeOutIn do
-    pbSEPlay("Fly")
+    pbSEPlay(:fly_to_map)
     $game_temp.player_new_map_id    = $game_temp.fly_destination[0]
     $game_temp.player_new_x         = $game_temp.fly_destination[1]
     $game_temp.player_new_y         = $game_temp.fly_destination[2]
@@ -521,7 +521,7 @@ HiddenMoveHandlers::UseMove.add(:FLY, proc { |move, pkmn|
 # Headbutt.
 #===============================================================================
 def pbHeadbuttEffect(event = nil)
-  pbSEPlay("Headbutt")
+  pbSEPlay(:headbutt_tree)
   pbWait(1.0)
   event = $game_player.pbFacingEvent(true) if !event
   a = (event.x + (event.x / 24).floor + 1) * (event.y + (event.y / 24).floor + 1)
@@ -804,7 +804,7 @@ def pbSweetScent
   viewport.color.green = 32
   viewport.color.blue  = 32
   viewport.color.alpha -= 10
-  pbSEPlay("Sweet Scent")
+  pbSEPlay(:sweet_scent)
   start_alpha = viewport.color.alpha
   duration = 2.0
   fade_time = 0.4

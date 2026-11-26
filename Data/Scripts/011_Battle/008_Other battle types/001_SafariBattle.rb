@@ -1,3 +1,9 @@
+Settings::AUDIO_SE_FILES[:safari_throw_bait]   = Settings::AUDIO_SE_FILES[:battle_poke_ball_throw]
+Settings::AUDIO_SE_FILES[:safari_throw_rock]   = Settings::AUDIO_SE_FILES[:battle_poke_ball_throw]
+Settings::AUDIO_SE_FILES[:safari_rock_hit]     = Settings::AUDIO_SE_FILES[:battle_not_very_effective_hit]
+Settings::AUDIO_SE_FILES[:safari_pokemon_jump] = Settings::AUDIO_SE_FILES[:jump]
+Settings::AUDIO_SE_FILES[:safari_zone_end]     = "Safari Zone end"
+
 #===============================================================================
 # Simple battler class for the wild Pokémon in a Safari Zone battle.
 #===============================================================================
@@ -134,7 +140,7 @@ class Battle::Visuals::Animation::ThrowBait < Battle::Visuals::Animation
     end
     delay = ball.totalDuration   # 0 or 7
     # Bait arc animation
-    ball.setSE(delay, "Battle throw")
+    ball.setSE(delay, :safari_throw_bait)
     createBallTrajectory(ball, delay, 12,
                          ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     ball.setZ(9, batSprite.z + 1)
@@ -146,7 +152,7 @@ class Battle::Visuals::Animation::ThrowBait < Battle::Visuals::Animation
     # Show Pokémon jumping before eating the bait
     delay = ball.totalDuration + 3
     2.times do
-      battler.setSE(delay, "Player jump")
+      battler.setSE(delay, :safari_pokemon_jump)
       battler.moveDelta(delay, 3, 0, -16)
       battler.moveDelta(delay + 4, 3, 0, 16)
       delay = battler.totalDuration + 1
@@ -197,12 +203,12 @@ class Battle::Visuals::Animation::ThrowRock < Battle::Visuals::Animation
     end
     delay = ball.totalDuration   # 0 or 7
     # Bait arc animation
-    ball.setSE(delay, "Battle throw")
+    ball.setSE(delay, :safari_throw_rock)
     createBallTrajectory(ball, delay, 12,
                          ballStartX, ballStartY, ballMidX, ballMidY, ballEndX, ballEndY)
     ball.setZ(9, batSprite.z + 1)
     delay = ball.totalDuration
-    ball.setSE(delay, "Battle damage weak")
+    ball.setSE(delay, :safari_rock_hit)
     ball.moveOpacity(delay + 2, 2, 0)
     ball.setVisible(delay + 4, false)
     # Set up anger sprite
@@ -213,7 +219,7 @@ class Battle::Visuals::Animation::ThrowRock < Battle::Visuals::Animation
     # Show anger appearing
     delay = ball.totalDuration + 5
     2.times do
-      anger.setSE(delay, "Player jump")
+      anger.setSE(delay, :safari_pokemon_jump)
       anger.setVisible(delay, true)
       anger.moveZoom(delay, 3, 130)
       anger.moveZoom(delay + 3, 3, 100)
@@ -469,7 +475,7 @@ class SafariBattle
           catchFactor  *= 2                       # Easier to catch
           escapeFactor *= 2 if pbRandom(100) < 90   # More likely to escape
         when :run   # Run
-          pbSEPlay("Battle flee")
+          pbSEPlay(:battle_flee)
           pbDisplayPaused(_INTL("You got away safely!"))
           @decision = Battle::Outcome::FLEE
         else
@@ -480,11 +486,11 @@ class SafariBattle
         # End of round
         if !decided?
           if @ballCount <= 0
-            pbSEPlay("Safari Zone end")
+            pbSEPlay(:safari_zone_end)
             pbDisplay(_INTL("PA: You have no Safari Balls left! Game over!"))
             @decision = Battle::Outcome::LOSE
           elsif pbRandom(100) < 5 * escapeFactor
-            pbSEPlay("Battle flee")
+            pbSEPlay(:battle_flee)
             pbDisplay(_INTL("{1} fled!", pkmn.name))
             @decision = Battle::Outcome::FLEE
           elsif cmd == :throw_bait   # Bait

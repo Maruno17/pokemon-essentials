@@ -274,6 +274,9 @@ SpecialBattleIntroAnimations.register("vs_admin_animation", 60,   # Priority 60
 #===============================================================================
 ##### VS. animation, by Luka S.J. #####
 ##### Tweaked by Maruno           #####
+Settings::AUDIO_SE_FILES[:vs_trainer_sound1] = "Vs flash"
+Settings::AUDIO_SE_FILES[:vs_trainer_sound2] = "Vs sword"
+
 SpecialBattleIntroAnimations.register("alternate_vs_trainer_animation", 50,   # Priority 50
   proc { |battle_type, foe, location|   # Condition
     next false if battle_type.even? || foe.length != 1   # Trainer battle against 1 trainer
@@ -338,8 +341,8 @@ SpecialBattleIntroAnimations.register("alternate_vs_trainer_animation", 50,   # 
     bar1.dispose
     bar2.dispose
     # Make whole screen flash white
-    pbSEPlay("Vs flash")
-    pbSEPlay("Vs sword")
+    pbSEPlay(:vs_trainer_sound1)
+    pbSEPlay(:vs_trainer_sound2)
     flash.opacity = 255
     # Replace bar sprites with AnimatedPlanes, set up trainer sprites
     bar1 = AnimatedPlane.new(viewplayer)
@@ -365,7 +368,7 @@ SpecialBattleIntroAnimations.register("alternate_vs_trainer_animation", 50,   # 
     trainer.x = 0
     # Make whole screen flash white again
     flash.opacity = 255
-    pbSEPlay("Vs sword")
+    pbSEPlay(:vs_trainer_sound2)
     # Make the Vs logo and trainer names appear, and reset trainer's tone
     vs.visible = true
     trainer.tone = Tone.new(0, 0, 0)

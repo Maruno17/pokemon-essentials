@@ -90,7 +90,7 @@ EventHandlers.add(:on_player_step_taken_can_transfer, :poison_party,
     $player.able_party.each do |pkmn|
       next if pkmn.status != :POISON || pkmn.hasAbility?(:IMMUNITY)
       if !flashed
-        pbSEPlay("Poison step")
+        pbSEPlay(:step_poison_damage)
         pbFlash(Color.new(255, 0, 0, 128), 8)
         flashed = true
       end

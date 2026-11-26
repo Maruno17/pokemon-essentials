@@ -15,6 +15,8 @@
 # width,height = Optional, the number of tiles wide/high the puzzle is (0 for
 #                the default value of 4).
 #===============================================================================
+Settings::AUDIO_SE_FILES[:tile_game_cursor] = "Tile Game cursor"
+
 class TilePuzzleCursor < BitmapSprite
   attr_accessor :game
   attr_accessor :position
@@ -550,12 +552,12 @@ class TilePuzzleScene
       if dir > 0
         if @game == 3 || (@game != 3 && @sprites["cursor"].selected)
           if pbCanMoveInDir?(@sprites["cursor"].position, dir, true)
-            pbSEPlay("Tile Game cursor")
+            pbSEPlay(:tile_game_cursor)
             pbSwapTiles(dir)
           end
         else
           if pbCanMoveInDir?(@sprites["cursor"].position, dir, false)
-            pbSEPlay("Tile Game cursor")
+            pbSEPlay(:tile_game_cursor)
             @sprites["cursor"].position = pbMoveCursor(@sprites["cursor"].position, dir)
           end
         end

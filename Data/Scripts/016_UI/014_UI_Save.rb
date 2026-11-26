@@ -1,4 +1,5 @@
 Settings::AUDIO_ME_FILES[:save_game] = "GUI save game"
+Settings::AUDIO_SE_FILES[:save_failed] = "GUI save choice"
 
 #===============================================================================
 #
@@ -492,7 +493,7 @@ class UI::Save < UI::BaseScreen
       end
       @result = true
     else
-      pbSEPlay("GUI save choice")
+      pbSEPlay(:save_failed)
       show_message(_INTL("Save failed."))
       @result = false
     end

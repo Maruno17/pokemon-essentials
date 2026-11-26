@@ -11,6 +11,8 @@
 #===============================================================================
 Settings::AUDIO_BGM_FILES[:egg_hatching] = "Evolution"
 Settings::AUDIO_ME_FILES[:egg_hatched] = "Evolution success"
+Settings::AUDIO_SE_FILES[:egg_crack] = "Battle ball shake"
+Settings::AUDIO_SE_FILES[:egg_open]  = "Battle recall"
 
 class PokemonEggHatch_Scene
   def pbStartScene(pokemon)
@@ -53,29 +55,28 @@ class PokemonEggHatch_Scene
     # Start up scene
     pbFadeInAndShow(@sprites)
   end
-
   def pbMain
     pbBGMPlay(:egg_hatching)
     # Egg animation
     updateScene(1.5)
     pbPositionHatchMask(0)
-    pbSEPlay("Battle ball shake")
+    pbSEPlay(:egg_crack)
     swingEgg(4)
     updateScene(0.2)
     pbPositionHatchMask(1)
-    pbSEPlay("Battle ball shake")
+    pbSEPlay(:egg_crack)
     swingEgg(4)
     updateScene(0.4)
     pbPositionHatchMask(2)
-    pbSEPlay("Battle ball shake")
+    pbSEPlay(:egg_crack)
     swingEgg(8, 2)
     updateScene(0.4)
     pbPositionHatchMask(3)
-    pbSEPlay("Battle ball shake")
+    pbSEPlay(:egg_crack)
     swingEgg(16, 4)
     updateScene(0.2)
     pbPositionHatchMask(4)
-    pbSEPlay("Battle recall")
+    pbSEPlay(:egg_open)
     # Fade and change the sprite
     timer_start = System.uptime
     loop do

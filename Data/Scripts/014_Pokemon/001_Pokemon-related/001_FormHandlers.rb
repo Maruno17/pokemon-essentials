@@ -270,7 +270,7 @@ MultipleForms.register(:ROTOM, {
         pkmn.moves[old_move_index].id = new_move_id
         new_move_name = pkmn.moves[old_move_index].name
         pbMessage(_INTL("{1} forgot {2}...", pkmn.name, old_move_name) + "\1")
-        pbMessage("\\se[]" + _INTL("{1} learned {2}!", pkmn.name, new_move_name) + "\\se[Pkmn move learnt]\\wtnp[30]")
+        pbMessage("\\se[]" + _INTL("{1} learned {2}!", pkmn.name, new_move_name) + "\\se[:learn_move]\\wtnp[30]")
       end
     elsif !new_move_id.nil?
       # Just learn the new move

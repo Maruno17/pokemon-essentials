@@ -3,6 +3,8 @@
 # By Unknown.
 #===============================================================================
 Settings::AUDIO_BGM_FILES[:triple_triad] = "Triple Triad"
+Settings::AUDIO_SE_FILES[:triple_triad_buy_card]  = Settings::AUDIO_SE_FILES[:mart_buy_item]
+Settings::AUDIO_SE_FILES[:triple_triad_sell_card] = Settings::AUDIO_SE_FILES[:triple_triad_buy_card]
 
 #===============================================================================
 # Card class.
@@ -1127,7 +1129,7 @@ def pbBuyTriads
       $PokemonGlobal.triads.add(item, quantity)
       $player.money -= price
       goldwindow.text = _INTL("Money:\n{1}", pbGetGoldString)
-      pbMessage(_INTL("Here you are! Thank you!") + "\\se[Mart buy item]\\wtnp[20]")
+      pbMessage(_INTL("Here you are! Thank you!") + "\\se[:triple_triad_buy_card]\\wtnp[20]")
     end
   end
   cmdwindow.dispose
@@ -1221,7 +1223,7 @@ def pbSellTriads
             $player.money += price
             goldwindow.text = _INTL("Money:\n{1}", pbGetGoldString)
             $PokemonGlobal.triads.remove(item, quantity)
-            pbMessage(_INTL("Turned over the {1} card and received ${2}.", itemname, price.to_s_formatted) + "\\se[Mart buy item]\\wtnp[20]")
+            pbMessage(_INTL("Turned over the {1} card and received ${2}.", itemname, price.to_s_formatted) + "\\se[:triple_triad_sell_card]\\wtnp[20]")
             commands = []
             $PokemonGlobal.triads.length.times do |i|
               item = $PokemonGlobal.triads[i]
